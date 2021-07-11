@@ -1,0 +1,16 @@
+@import '../../App.scss';
+
+.user-search-form-container {
+	display: flex;
+	width: $sidebar-width;
+	background-color: $color-background;
+	border-radius: 5px;
+	justify-content: center;
+	// margin: 5px !important;
+	border: 1px solid $color-borders;
+}
+
+.found-users-list {
+	display: flex;
+	flex-direction: column;
+}
