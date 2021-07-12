@@ -1,8 +1,10 @@
-import { createContext, useState } from 'react';
 import jwt from 'jsonwebtoken';
-import { processContactData, typeCheckUser } from '../utilFns';
-import { getUserContacts } from '../../service/firebaseService';
+import { createContext, useState } from 'react';
 import { history } from '../../App';
+import { Game } from '../../components/Models/Game';
+import { User, userToObj } from '../../components/Models/User';
+import { getUserContacts } from '../../service/firebaseService';
+import { processContactData, typeCheckUser } from '../utilFns';
 
 interface AppContextInt {
 	user: User | null;
@@ -56,7 +58,7 @@ export const AppContextProvider = (props: any) => {
 	}
 
 	function login(user: User): void {
-		const token = jwt.sign(user, secretKey, {
+		const token = jwt.sign(userToObj(user), secretKey, {
 			// expiresIn: 1800, // 30mins
 			algorithm: 'HS256'
 		});

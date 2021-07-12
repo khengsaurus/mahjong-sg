@@ -1,4 +1,5 @@
 import { compare } from 'bcryptjs';
+import { User } from '../components/Models/User';
 import * as firebaseService from '../service/firebaseService';
 import { hashPassword } from './bcrypt';
 import { typeCheckContact, typeCheckUser } from './utilFns';

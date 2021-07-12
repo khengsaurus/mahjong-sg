@@ -14,12 +14,13 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React, { useContext, useState } from 'react';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
+import { User } from '../Models/User';
 import './UserSearchForm.scss';
 
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
-	const [userOptions, setUserOptions] = useState<Array<User>>([]);
+	const [foundUsers, setFoundUsers] = useState<Array<User>>([]);
 	const [searchFor, setSearchFor] = useState('');
 
 	async function search(username: string) {
@@ -27,10 +28,10 @@ const UserSearchForm: React.FC = () => {
 		await firebaseService.searchUser(username).then(data => {
 			if (!data.empty) {
 				data.docs.forEach(doc => {
-					foundUsers.push({ id: doc.id, username: doc.data().username, photoUrl: doc.data().photoUrl });
+					foundUsers.push(new User(doc.id, doc.data().username, doc.data().photoUrl));
 				});
 				if (foundUsers.length > 0) {
-					setUserOptions(foundUsers);
+					setFoundUsers(foundUsers);
 					setShowOptions(true);
 				}
 			}
@@ -44,6 +45,15 @@ const UserSearchForm: React.FC = () => {
 		} else {
 			setShowOptions(false);
 		}
+	}
+
+	function notSelected(user: User): boolean {
+		for (let i = 0; i < players.length; i++) {
+			if (user.username === players[i].username) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	function handleSelect(selectedPlayer: User) {
@@ -94,21 +104,21 @@ const UserSearchForm: React.FC = () => {
 				</ListItem>
 				<Collapse in={showOptions} timeout={300} unmountOnExit>
 					<List component="div" disablePadding>
-						{userOptions.length > 0 &&
-							userOptions.map(corres => {
-								if (user && user.id !== corres.id && !players.includes(corres)) {
+						{foundUsers.length > 0 &&
+							foundUsers.map(foundUser => {
+								if (user && user.id !== foundUser.id && notSelected(foundUser)) {
 									return (
 										<ListItem
 											button
-											key={corres.id}
+											key={foundUser.id}
 											onClick={() => {
-												handleSelect(corres);
+												handleSelect(foundUser);
 											}}
 										>
 											<ListItemIcon>
 												<FaceIcon />
 											</ListItemIcon>
-											<ListItemText primary={corres.username} />
+											<ListItemText primary={foundUser.username} />
 										</ListItem>
 									);
 								} else {

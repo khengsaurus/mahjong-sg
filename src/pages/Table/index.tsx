@@ -1,10 +1,13 @@
 import { Typography } from '@material-ui/core';
 import React, { useContext } from 'react';
 import HomeButton from '../../components/HomeButton';
+import { setUserGame } from '../../util/fbGameFns';
 import { AppContext } from '../../util/hooks/AppContext';
 
 const Table = () => {
 	const { user, game } = useContext(AppContext);
+	game && setUserGame(user, game);
+
 	let table = (
 		<div className="main">
 			{game && <Typography variant="h6">{`Game ${game.id}, stage ${game.stage}`}</Typography>}

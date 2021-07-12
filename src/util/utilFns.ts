@@ -1,5 +1,7 @@
 import firebase from 'firebase';
 import moment from 'moment';
+import { Game } from '../components/Models/Game';
+import { User } from '../components/Models/User';
 
 export interface ChatListObject {
 	corresId: string;
@@ -23,22 +25,14 @@ export function typeCheckUser(method: number, obj: unknown): User | null {
 		if (data.id === undefined || data.username === undefined || data.photoUrl === undefined) {
 			throw new Error('Failed to parse jwt');
 		} else {
-			return {
-				id: data.id,
-				username: data.username,
-				photoUrl: data.photoUrl
-			};
+			return new User(data.id, data.username, data.photoUrl);
 		}
 	} else if (method === 2) {
 		let data = obj as firebase.firestore.DocumentData;
 		if (data.docs[0].id === undefined || data.docs[0].data().username === undefined) {
 			throw new Error('Failed to retrieve user data');
 		} else {
-			return {
-				id: data.docs[0].id,
-				username: data.docs[0].data().username,
-				photoUrl: data.docs[0].data().photoUrl
-			};
+			return new User(data.docs[0].id, data.docs[0].data().username, data.docs[0].data().photoUrl);
 		}
 	} else {
 		return null;
@@ -46,11 +40,7 @@ export function typeCheckUser(method: number, obj: unknown): User | null {
 }
 
 export function typeCheckContact(contactId: string, contactData: any): User {
-	return {
-		id: contactId,
-		username: contactData.username,
-		photoUrl: contactData.photoUrl
-	};
+	return new User(contactId, contactData.username, contactData.photoUrl);
 }
 
 export function processContactData(user: User, contactData: firebase.firestore.DocumentData): Map<string, User> {
@@ -94,6 +84,20 @@ export function typeCheckChatListObject(corresId: string, msgData: any): ChatLis
 	}
 }
 
+export function objsToUsers(users: any[]): User[] {
+	return users.map(function (user) {
+		return new User(user.id, user.username, user.photoUrl);
+	});
+}
+
+export function typeCheckGame(data: firebase.firestore.DocumentData): Game | null {
+	if (data.docs[0].id === undefined || data.docs[0].data().players === undefined) {
+		throw new Error('Failed to retrieve game data');
+	} else {
+		return new Game(data.docs[0].id, data.docs[0].data().players);
+	}
+}
+
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffle(array: any[]) {
 	var currentIndex = array.length,
@@ -124,12 +128,12 @@ export function generateShuffledTiles(): Tile[] {
 	oneToFour.forEach(index => {
 		suits.forEach(suit => {
 			oneToNine.forEach(number => {
-				let tile: Tile = { card: `${number}-${suit}-${index}`, show: false };
+				let tile: Tile = { card: `${number}${suit}`, index, show: false };
 				tiles.push(tile);
 			});
 		});
 		daPai.forEach(pai => {
-			let tile: Tile = { card: `${pai}-${index}`, show: false };
+			let tile: Tile = { card: pai, index, show: false };
 			tiles.push(tile);
 		});
 	});
@@ -137,9 +141,42 @@ export function generateShuffledTiles(): Tile[] {
 	return shuffle(tiles);
 }
 
+export function giveTiles(tiles: Tile[], n: number, player: User) {
+	for (let i: number = 1; i <= n; i++) {
+		player.tiles = [...player.tiles, tiles.pop()];
+	}
+}
+
+export function distributeTiles(game: Game): Game {
+	const { tiles, player1, player2, player3, player4 } = game;
+	giveTiles(tiles, 4, player1);
+	giveTiles(tiles, 4, player2);
+	giveTiles(tiles, 4, player3);
+	giveTiles(tiles, 4, player4);
+	giveTiles(tiles, 4, player1);
+	giveTiles(tiles, 4, player2);
+	giveTiles(tiles, 4, player3);
+	giveTiles(tiles, 4, player4);
+	giveTiles(tiles, 4, player1);
+	giveTiles(tiles, 4, player2);
+	giveTiles(tiles, 4, player3);
+	giveTiles(tiles, 4, player4);
+	giveTiles(tiles, 1, player1);
+	giveTiles(tiles, 1, player2);
+	giveTiles(tiles, 1, player3);
+	giveTiles(tiles, 1, player4);
+	giveTiles(tiles, 1, player1);
+	console.log('Player 1 no. tiles: ', player1.tiles.length);
+	console.log('Player 2 no. tiles: ', player2.tiles.length);
+	console.log('Tiles left: ', tiles.length);
+	return game;
+}
+
 export function initRound(game: Game): Game {
 	game.stage += 1;
 	game.tiles = generateShuffledTiles();
-	//TODO: TODO: TODO: TODO: TODO: Distribute tiles
+	distributeTiles(game);
+	// Update game doc
+	// Update user doc x4
 	return game;
 }

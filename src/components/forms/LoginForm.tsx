@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Field, Form, Formik } from 'formik';
 import React, { useContext, useEffect, useState } from 'react';
-import { attemptLogin } from '../../util/firebaseServiceUtil';
+import { attemptLogin } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 import { FormField } from './FormField';
 

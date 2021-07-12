@@ -1,13 +1,13 @@
-interface User {
-	id: string;
-	username: string;
-	photoUrl: string;
-	tiles?: Tile[];
-	// contacts: Array<Contact>
-	// addToContacts: (user:User) => {}
-	// msgContact: (msg:String, contact:Contact) => {}
-	// msgGroup: (msg:String, group:Group) => {}
-}
+// interface User {
+// 	id: string;
+// 	username: string;
+// 	photoUrl: string;
+// 	tiles?: Tile[];
+// 	// contacts: Array<Contact>
+// 	// addToContacts: (user:User) => {}
+// 	// msgContact: (msg:String, contact:Contact) => {}
+// 	// msgGroup: (msg:String, group:Group) => {}
+// }
 
 interface alert {
 	status: Color;
@@ -21,21 +21,22 @@ type Suit = '万' | '筒' | '索';
 type Dragon = '红中' | '白般' | '发财';
 type Stage = `${Wind} ${OneToFour}`;
 
-type Tile = {
-	// card: `${`${OneToNine}-${Suit}` | `${Dragon}` | `${Wind}`}-${OneToFour}`;
+interface Tile {
+	// card: `${`${OneToNine}${Suit}` | `${Dragon}` | `${Wind}`}`;
 	card: string;
+	index: number;
 	show: boolean;
-};
-
-interface Game {
-	id: string;
-	// stage?: Stage;
-	stage: number;
-	ongoing: boolean;
-	players?: User[];
-	1?: User;
-	2?: User;
-	3?: User;
-	4?: User;
-	tiles?: Tile[];
 }
+
+// interface Game {
+// 	id: string;
+// 	// stage?: Stage;
+// 	stage: number;
+// 	ongoing: boolean;
+// 	players?: User[];
+// 	player1?: User;
+// 	player2?: User;
+// 	player3?: User;
+// 	player4?: User;
+// 	tiles?: Tile[];
+// }

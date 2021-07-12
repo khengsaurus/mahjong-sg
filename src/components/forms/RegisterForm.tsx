@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { attemptRegister } from '../../util/firebaseServiceUtil';
+import { attemptRegister } from '../../util/fbUserFns';
 import { FormField } from './FormField';
 
 const RegisterForm: React.FC = () => {

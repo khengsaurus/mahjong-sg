@@ -8,6 +8,7 @@ import UserSearchForm from '../../components/UserSearchForm';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
 import * as firebaseService from '../../service/firebaseService';
+import { User } from '../../components/Models/User';
 
 const NewGame = () => {
 	const { user, validateJWT, players, setPlayers, setGame } = useContext(AppContext);
@@ -25,6 +26,7 @@ const NewGame = () => {
 
 	const handleStartGame = async () => {
 		await firebaseService.createGame(players).then(game => {
+			console.log(game.id, players);
 			setGame(game);
 		});
 		history.push('/Table');
