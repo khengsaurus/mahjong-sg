@@ -9,6 +9,7 @@ import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
 import * as firebaseService from '../../service/firebaseService';
 import { User } from '../../components/Models/User';
+import './NewGame.scss';
 
 const NewGame = () => {
 	const { user, validateJWT, players, setPlayers, setGame } = useContext(AppContext);
@@ -26,7 +27,6 @@ const NewGame = () => {
 
 	const handleStartGame = async () => {
 		await firebaseService.createGame(players).then(game => {
-			console.log(game.id, players);
 			setGame(game);
 		});
 		history.push('/Table');
@@ -52,7 +52,7 @@ const NewGame = () => {
 					players.length > 0 &&
 					players.map(player => {
 						return player ? (
-							<ListItem style={{ padding: 0, height: '35px' }}>
+							<ListItem key={player.id} style={{ padding: 0, height: '35px' }}>
 								<ListItemText primary={player.username || ''} />
 								{player.username === user.username ? (
 									<IconButton color="primary" aria-label="Remove player" disabled={true}>

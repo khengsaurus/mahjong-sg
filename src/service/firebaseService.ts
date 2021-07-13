@@ -1,8 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Game } from '../components/Models/Game';
-import { User, userToObj } from '../components/Models/User';
-import { objsToUsers } from '../util/utilFns';
+import { User } from '../components/Models/User';
+import { objsToUsers, userToObj } from '../util/utilFns';
 import firebaseConfig from './firebaseConfig';
 
 if (!firebase.apps.length) {
@@ -16,7 +16,7 @@ const userRepr = db.collection('userRepr');
 const userContactsRef = db.collection('userContacts');
 const gameRef = db.collection('games');
 
-/* ------------------------- User related ------------------------- */
+/* ------------------------- Pure user related ------------------------- */
 export const register = async (username: string, password: string) => {
 	let userId = '';
 	try {
@@ -72,7 +72,7 @@ export const searchUser = (partUsername: string) => {
 		.get();
 };
 
-/* ------------------------- Game related ------------------------- */
+/* ------------------------- Pure game related ------------------------- */
 export const getGameById = async (game?: Game, gameId?: string) => {
 	if (!game && !gameId) {
 		return null;
@@ -83,22 +83,31 @@ export const getGameById = async (game?: Game, gameId?: string) => {
 };
 
 export const createGame = async (players: User[]): Promise<Game> => {
-	let playerObjs = players.map(function (player) {
-		return userToObj(player);
+	let playerIds: string[] = [];
+	let playersString: string = '';
+	players.forEach(player => {
+		playerIds.push(player.id);
+		playersString += player.username + ' ';
 	});
 	return new Promise((resolve, reject) => {
 		let gameId = '';
 		try {
 			gameRef
 				.add({
-					players: playerObjs,
+					stage: 0,
+					ongoing: true,
+					players: players.map(function (player: User) {
+						return userToObj(player);
+					}),
+					playerIds,
+					playersString,
 					player1: null,
 					player2: null,
 					player3: null,
 					player4: null,
-					stage: 0,
 					tiles: [],
-					ongoing: true
+					whoseMove: null,
+					createdAt: new Date()
 				})
 				.then(newGame => {
 					console.log('Game created successfully: gameId ' + gameId);
@@ -110,6 +119,36 @@ export const createGame = async (players: User[]): Promise<Game> => {
 			reject(err);
 		}
 	});
+};
+
+/* ------------------------- User-game related ------------------------- */
+
+export const getInvites = async (user: User) => {
+	if (user) {
+		return await gameRef
+			.where('playerIds', 'array-contains', user.id)
+			.where('ongoing', '==', true)
+			// .orderBy('createdAt', 'desc')
+			.limit(5)
+			.get();
+	} else {
+		return null;
+	}
+};
+
+export const listenInvitesSnapshot = (user: User, observer: any) => {
+	if (user) {
+		return (
+			gameRef
+				.where('playerIds', 'array-contains', user.id)
+				.where('ongoing', '==', true)
+				// .orderBy('createdAt', 'desc')
+				.limit(5)
+				.onSnapshot(observer)
+		);
+	} else {
+		return null;
+	}
 };
 
 // Update players in a game & player hands

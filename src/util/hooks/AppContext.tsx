@@ -2,9 +2,9 @@ import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { history } from '../../App';
 import { Game } from '../../components/Models/Game';
-import { User, userToObj } from '../../components/Models/User';
+import { User } from '../../components/Models/User';
 import { getUserContacts } from '../../service/firebaseService';
-import { processContactData, typeCheckUser } from '../utilFns';
+import { processContactData, typeCheckUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
 	user: User | null;

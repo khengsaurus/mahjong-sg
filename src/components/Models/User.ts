@@ -14,17 +14,6 @@ export class User {
 	}
 }
 
-export function userToObj(user: User) {
-	return {
-		id: user.id,
-		username: user.username,
-		photoUrl: user.photoUrl,
-		currentGameId: user.currentGameId || '',
-		currentSeat: user.currentSeat || 0,
-		tiles: user.tiles || []
-	};
-}
-
 // interface User {
 // 	id: string;
 // 	username: string;
