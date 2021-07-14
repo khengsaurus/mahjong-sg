@@ -2,20 +2,14 @@ export class User {
 	id: string;
 	username: string;
 	photoUrl: string;
-	currentGameId?: string;
 	currentSeat?: number;
-	tiles: Tile[] | null;
+	tiles?: Tile[] | null;
 
-	constructor(id: string, username: string, photoUrl: string, tiles?: Tile[]) {
+	constructor(id: string, username: string, photoUrl: string, currentSeat?: number, tiles?: Tile[]) {
 		this.id = id;
 		this.username = username;
 		this.photoUrl = photoUrl;
-		this.tiles = tiles;
+		this.currentSeat = currentSeat;
+		this.tiles = tiles || [];
 	}
 }
-
-// interface User {
-// 	id: string;
-// 	username: string;
-// 	photoUrl: string;
-// 	tiles?: Tile[];

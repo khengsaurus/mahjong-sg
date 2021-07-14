@@ -34,6 +34,13 @@ export function typeCheckUser(method: number, obj: unknown): User | null {
 		} else {
 			return new User(data.docs[0].id, data.docs[0].data().username, data.docs[0].data().photoUrl);
 		}
+	} else if (method === 3) {
+		let data = obj as any;
+		if (!data.id || !data.username) {
+			throw new Error('Failed to retrieve user data');
+		} else {
+			return new User(data.id, data.username, data.photoUrl, data.tiles);
+		}
 	} else {
 		return null;
 	}
@@ -100,19 +107,47 @@ export function userToObj(user: User) {
 		id: user.id,
 		username: user.username,
 		photoUrl: user.photoUrl,
-		currentGameId: user.currentGameId || '',
 		currentSeat: user.currentSeat || 0,
-		tiles: user.tiles || []
+		tiles: user.tiles
+			? user.tiles.map((tile: Tile) => {
+					return tileToObj(tile);
+			  })
+			: []
 	};
 }
 
-export function typeCheckGame(data: firebase.firestore.DocumentData): Game | null {
-	if (data.docs[0].id === undefined || data.docs[0].data().players === undefined) {
-		throw new Error('Failed to retrieve game data');
-	} else {
-		return new Game(data.docs[0].id, data.docs[0].data().players);
-	}
+export function tileToObj(tile: Tile) {
+	return {
+		card: tile.card,
+		index: tile.index,
+		show: tile.show
+	};
 }
+
+export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game => {
+	let ref = doc.data();
+	return new Game(
+		doc.id,
+		ref.createdAt.toDate() || null,
+		ref.stage,
+		ref.ongoing,
+		ref.midRound,
+		ref.whoseMove,
+		ref.playerIds,
+		ref.playersString,
+		ref.player1 && ref.player1.id ? typeCheckUser(3, ref.player1) : null,
+		ref.player2 && ref.player2.id ? typeCheckUser(3, ref.player2) : null,
+		ref.player3 && ref.player3.id ? typeCheckUser(3, ref.player3) : null,
+		ref.player4 && ref.player4.id ? typeCheckUser(3, ref.player4) : null,
+		ref.players.map((player: any) => {
+			return typeCheckUser(3, player);
+		}),
+		ref.tiles.map((tile: any) => {
+			return typeCheckTile(tile);
+		}),
+		ref.userBal
+	);
+};
 
 export function typeCheckTile(data: any): Tile {
 	let tile: Tile;

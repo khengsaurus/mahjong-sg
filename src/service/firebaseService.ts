@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Game } from '../components/Models/Game';
 import { User } from '../components/Models/User';
-import { objsToUsers, userToObj } from '../util/utilFns';
+import { tileToObj, userToObj } from '../util/utilFns';
 import firebaseConfig from './firebaseConfig';
 
 if (!firebase.apps.length) {
@@ -16,7 +16,7 @@ const userRepr = db.collection('userRepr');
 const userContactsRef = db.collection('userContacts');
 const gameRef = db.collection('games');
 
-/* ------------------------- Pure user related ------------------------- */
+/* ------------------------- User related ------------------------- */
 export const register = async (username: string, password: string) => {
 	let userId = '';
 	try {
@@ -72,55 +72,6 @@ export const searchUser = (partUsername: string) => {
 		.get();
 };
 
-/* ------------------------- Pure game related ------------------------- */
-export const getGameById = async (game?: Game, gameId?: string) => {
-	if (!game && !gameId) {
-		return null;
-	} else {
-		let game_id = game ? game.id : gameId;
-		return gameRef.doc(game_id).get();
-	}
-};
-
-export const createGame = async (players: User[]): Promise<Game> => {
-	let playerIds: string[] = [];
-	let playersString: string = '';
-	players.forEach(player => {
-		playerIds.push(player.id);
-		playersString += player.username + ' ';
-	});
-	return new Promise((resolve, reject) => {
-		let gameId = '';
-		try {
-			gameRef
-				.add({
-					stage: 0,
-					ongoing: true,
-					players: players.map(function (player: User) {
-						return userToObj(player);
-					}),
-					playerIds,
-					playersString,
-					player1: null,
-					player2: null,
-					player3: null,
-					player4: null,
-					tiles: [],
-					whoseMove: null,
-					createdAt: new Date()
-				})
-				.then(newGame => {
-					console.log('Game created successfully: gameId ' + gameId);
-					const game: Game = new Game(newGame.id, players);
-					resolve(game);
-				});
-		} catch (err) {
-			console.log('firebaseService: Game was not created');
-			reject(err);
-		}
-	});
-};
-
 /* ------------------------- User-game related ------------------------- */
 
 export const getInvites = async (user: User) => {
@@ -151,32 +102,109 @@ export const listenInvitesSnapshot = (user: User, observer: any) => {
 	}
 };
 
-// Update players in a game & player hands
-export const updateGame = (
-	game: Game,
-	player1: User,
-	player2?: User,
-	player3?: User,
-	player4?: User
-): Promise<Game> => {
+export const updateGameAndUsers = (game: Game): Promise<Game> => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const currentGameRef = gameRef.doc(game.id);
-			const playerRef1 = userRepr.doc(player1.id);
-			const playerRef2 = player2 ? userRepr.doc(player2.id) : null;
-			const playerRef3 = player3 ? userRepr.doc(player3.id) : null;
-			const playerRef4 = player4 ? userRepr.doc(player4.id) : null;
+			const playerRef1 = userRepr.doc(game.player1.id);
+			const playerRef2 = userRepr.doc(game.player2.id);
+			const playerRef3 = userRepr.doc(game.player3.id);
+			const playerRef4 = userRepr.doc(game.player4.id);
 			await db.runTransaction(async t => {
 				t.set(currentGameRef, { ...game });
-				t.set(playerRef1, { ...player1 });
-				playerRef2 && t.set(playerRef2, { ...player2 });
-				playerRef2 && t.set(playerRef3, { ...player3 });
-				playerRef2 && t.set(playerRef4, { ...player4 });
+				t.set(playerRef1, { ...game.player1 });
+				t.set(playerRef2, { ...game.player2 });
+				t.set(playerRef3, { ...game.player3 });
+				t.set(playerRef4, { ...game.player4 });
 			});
 			resolve(game);
 		} catch (err) {
-			console.log('firebaseService: Game was not updated');
+			reject(new Error('firebaseService: game and user docs were not updated'));
+		}
+	});
+};
+
+/* ------------------------- Game related ------------------------- */
+export const getGameById = async (game?: Game, gameId?: string) => {
+	if (!game && !gameId) {
+		return null;
+	} else {
+		let game_id = game ? game.id : gameId;
+		return gameRef.doc(game_id).get();
+	}
+};
+
+export const createGame = async (players: User[]): Promise<Game> => {
+	let playerIds: string[] = [];
+	let playersString: string = '';
+	players.forEach(player => {
+		playerIds.push(player.id);
+		playersString += player.username + ' ';
+	});
+	return new Promise((resolve, reject) => {
+		let gameId = '';
+		let createdAt = new Date();
+		try {
+			gameRef
+				.add({
+					createdAt,
+					stage: 0,
+					ongoing: true,
+					midRound: false,
+					whoseMove: null,
+					playerIds,
+					playersString,
+					player1: null,
+					player2: null,
+					player3: null,
+					player4: null,
+					players: players.map(function (player: User) {
+						return userToObj(player);
+					}),
+					tiles: [],
+					userBal: []
+				})
+				.then(newGame => {
+					console.log('Game created successfully: gameId ' + gameId);
+					const game: Game = new Game(newGame.id, createdAt, 0, true, false, null, playerIds, playersString);
+					resolve(game);
+				});
+		} catch (err) {
+			console.log('firebaseService: Game was not created');
 			reject(err);
 		}
 	});
+};
+
+export const updateGame = (game: Game): Promise<Game> => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			let gameObj = {
+				...game,
+				player1: userToObj(game.player1),
+				player2: userToObj(game.player2),
+				player3: userToObj(game.player3),
+				player4: userToObj(game.player4),
+				players: game.players.map((player: User) => {
+					return userToObj(player);
+				}),
+				tiles: game.tiles.map((tile: Tile) => {
+					return tileToObj(tile);
+				})
+			};
+			const currentGameRef = gameRef.doc(game.id);
+			await currentGameRef.set({ ...gameObj }).then(() => {
+				resolve(game);
+			});
+		} catch (err) {
+			console.log(err);
+			reject(new Error('firebaseService: game and user docs were not updated'));
+		}
+	});
+};
+
+export const listenToGame = (game: Game, observer: any) => {
+	if (game) {
+		return gameRef.doc(game.id).onSnapshot(observer);
+	}
 };

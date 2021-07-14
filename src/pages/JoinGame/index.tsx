@@ -1,4 +1,4 @@
-import { IconButton, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import firebase from 'firebase/app';
 import React, { useContext, useEffect, useState } from 'react';
@@ -6,27 +6,21 @@ import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import { Game } from '../../components/Models/Game';
 import * as firebaseService from '../../service/firebaseService';
-import { gameDataToGame } from '../../util/fbGameFns';
 import { AppContext } from '../../util/hooks/AppContext';
-import { formatDateToDay } from '../../util/utilFns';
+import { formatDateToDay, typeCheckGame } from '../../util/utilFns';
 import './JoinGame.scss';
 
 const JoinGame = () => {
 	const { user, setGame, validateJWT } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 
-	// useEffect(() => {
-	// 	validateJWT()
-	// }, [validateJWT]);
-
 	useEffect(() => {
-		console.log('E called');
 		validateJWT();
 		let games: Game[] = [];
 		const unsubscribe = firebaseService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
-					games.push(gameDataToGame(doc));
+					games.push(typeCheckGame(doc));
 				});
 				setGameInvites(games);
 			}
@@ -57,7 +51,6 @@ const JoinGame = () => {
 				{user &&
 					gameInvites.length > 0 &&
 					gameInvites.map(game => {
-						console.log(game.id);
 						return (
 							<ListItem
 								button

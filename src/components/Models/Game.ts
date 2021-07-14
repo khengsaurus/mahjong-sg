@@ -4,8 +4,8 @@ export function gameToObj(game: Game) {
 	return {
 		id: game.id,
 		stage: game.stage || null,
-		// isSet: game.isSet || false,
 		ongoing: game.ongoing || null,
+		midRound: game.midRound || null,
 		players: game.players || null,
 		playerIds: game.playerIds || null,
 		playersString: game.playersString || null,
@@ -20,43 +20,57 @@ export function gameToObj(game: Game) {
 
 export class Game {
 	id: string;
+	createdAt: Date;
 	stage?: number;
 	ongoing: boolean;
-	players?: User[];
+	midRound: boolean;
+	whoseMove?: 1 | 2 | 3 | 4;
 	playerIds?: string[];
 	playersString?: string;
 	player1?: User;
 	player2?: User;
 	player3?: User;
 	player4?: User;
+	players?: User[];
 	tiles?: Tile[];
-	whoseMove?: 1 | 2 | 3 | 4;
-	createdAt: Date;
+	userBal?: number[];
 
 	constructor(
 		id: string,
-		players?: User[],
-		playerIds?: string[],
-		playersString?: string,
+		createdAt?: Date,
 		stage?: number,
 		ongoing?: boolean,
-		tiles?: Tile[],
+		midRound?: boolean,
 		whoseMove?: 1 | 2 | 3 | 4,
-		createdAt?: Date
+		playerIds?: string[],
+		playersString?: string,
+		player1?: User,
+		player2?: User,
+		player3?: User,
+		player4?: User,
+		players?: User[],
+		tiles?: Tile[],
+		userBal?: number[]
 	) {
 		this.id = id;
-		this.players = players;
-		this.playerIds = playerIds;
-		this.playersString = playersString;
+		this.createdAt = createdAt;
 		this.stage = stage || 0;
 		this.ongoing = ongoing || true;
-		this.tiles = tiles;
-		this.whoseMove = whoseMove;
-		this.createdAt = createdAt;
+		this.midRound = midRound || true; // if false by default may cause initRound
+		this.whoseMove = whoseMove || null;
+		this.playerIds = playerIds || [];
+		this.playersString = playersString || '';
+		this.player1 = player1 || null;
+		this.player2 = player2 || null;
+		this.player3 = player3 || null;
+		this.player4 = player4 || null;
+		this.players = players || [];
+		this.tiles = tiles || [];
+		this.userBal = userBal || [];
 	}
 
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-	shuffle(array: any[]) {
+	async shuffle(array: any[]) {
 		var currentIndex = array.length,
 			randomIndex;
 		// While there remain elements to shuffle...
@@ -70,71 +84,129 @@ export class Game {
 		return array;
 	}
 
-	// export function assignUserSeats(newGame:Game):Game {
-	// 	game.1 = game.players[0];
-	// 	game.2 = game.players[1];
-	// 	return game
-	// }
-
-	generateShuffledTiles(): Tile[] {
-		let tiles: Tile[] = [];
-		const oneToFour = [1, 2, 3, 4];
-		const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-		const suits = ['万', '筒', '索'];
-		const daPai = ['东', '南', '西', '北', '红中', '白般', '发财'];
-		oneToFour.forEach(index => {
-			suits.forEach(suit => {
-				oneToNine.forEach(number => {
-					let tile: Tile = { card: `${number}${suit}`, index, show: false };
+	async generateShuffledTiles(): Promise<Tile[]> {
+		return new Promise(async (resolve, reject) => {
+			let tiles: Tile[] = [];
+			const oneToFour = [1, 2, 3, 4];
+			const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+			const suits = ['万', '筒', '索'];
+			const daPai = ['东', '南', '西', '北', '红中', '白般', '发财'];
+			const hua = [
+				'cat',
+				'mouse',
+				'rooster',
+				'worm',
+				'red1',
+				'red2',
+				'red3',
+				'red4',
+				'blue1',
+				'blue2',
+				'blue3',
+				'blue4'
+			];
+			oneToFour.forEach(index => {
+				suits.forEach(suit => {
+					oneToNine.forEach(number => {
+						let tile: Tile = { card: `${number}${suit}`, index, show: false };
+						tiles.push(tile);
+					});
+				});
+				daPai.forEach(pai => {
+					let tile: Tile = { card: pai, index, show: false };
 					tiles.push(tile);
 				});
 			});
-			daPai.forEach(pai => {
-				let tile: Tile = { card: pai, index, show: false };
+			hua.forEach(flower => {
+				let tile: Tile = { card: flower, index: 1, show: false };
 				tiles.push(tile);
 			});
+			console.log(`Generated ${tiles.length} tiles`);
+			if (tiles.length === 148) {
+				resolve(await this.shuffle(tiles));
+			} else {
+				reject(new Error('Tiles not generated'));
+			}
 		});
-		console.log(`Generated ${tiles.length} tiles`);
-		return this.shuffle(tiles);
 	}
 
-	giveTiles(tiles: Tile[], n: number, player: User) {
-		for (let i: number = 1; i <= n; i++) {
+	async giveTiles(tiles: Tile[], n: number, player: User) {
+		if (!player.tiles) {
+			player.tiles = [];
+		}
+		if (player.username === 'user1') {
+			console.log(player);
+			console.log(tiles.length);
+		}
+		for (let i: number = 0; i < n; i++) {
 			player.tiles = [...player.tiles, tiles.pop()];
+		}
+		return { tiles, player };
+	}
+
+	async assignPlayers() {
+		this.player1 = this.players[0];
+		this.player2 = this.players[1];
+		this.player3 = this.players[2];
+		this.player4 = this.players[3];
+		console.log('Players assigned');
+		console.log('Player 1', this.player1.username);
+		console.log('Player 2', this.player2.username);
+		console.log('Player 3', this.player3.username);
+		console.log('Player 4', this.player4.username);
+	}
+
+	async distributeTiles() {
+		console.log('Distrubute tiles called');
+		await this.giveTiles(this.tiles, 14, this.player1).then(res => {
+			this.tiles = res.tiles;
+			this.player1 = res.player;
+		});
+		console.log(`Player 1 received ${this.player1.tiles.length} tiles`);
+		// this.player1.tiles.forEach(tile => {
+		// 	console.log(tile.card);
+		// });
+		await this.giveTiles(this.tiles, 13, this.player2).then(res => {
+			this.tiles = res.tiles;
+			this.player2 = res.player;
+		});
+		console.log(`Player 2 received ${this.player2.tiles.length} tiles`);
+		await this.giveTiles(this.tiles, 13, this.player3).then(res => {
+			this.tiles = res.tiles;
+			this.player3 = res.player;
+		});
+		console.log(`Player 3 received ${this.player3.tiles.length} tiles`);
+		await this.giveTiles(this.tiles, 13, this.player4).then(res => {
+			this.tiles = res.tiles;
+			this.player4 = res.player;
+		});
+		console.log(`Player 4 received ${this.player4.tiles.length} tiles`);
+		console.log('Tiles left: ', this.tiles.length);
+	}
+
+	async startGame() {
+		if (this.stage === 0) {
+			this.stage += 1;
+		}
+		if (!this.player1) {
+			await this.assignPlayers();
 		}
 	}
 
-	distributeTiles(game: Game): Game {
-		const { tiles, player1, player2, player3, player4 } = game;
-		this.giveTiles(tiles, 4, player1);
-		this.giveTiles(tiles, 4, player2);
-		this.giveTiles(tiles, 4, player3);
-		this.giveTiles(tiles, 4, player4);
-		this.giveTiles(tiles, 4, player1);
-		this.giveTiles(tiles, 4, player2);
-		this.giveTiles(tiles, 4, player3);
-		this.giveTiles(tiles, 4, player4);
-		this.giveTiles(tiles, 4, player1);
-		this.giveTiles(tiles, 4, player2);
-		this.giveTiles(tiles, 4, player3);
-		this.giveTiles(tiles, 4, player4);
-		this.giveTiles(tiles, 1, player1);
-		this.giveTiles(tiles, 1, player2);
-		this.giveTiles(tiles, 1, player3);
-		this.giveTiles(tiles, 1, player4);
-		this.giveTiles(tiles, 1, player1);
-		console.log('Player 1 no. tiles: ', player1.tiles.length);
-		console.log('Player 2 no. tiles: ', player2.tiles.length);
-		console.log('Tiles left: ', tiles.length);
-		return game;
-	}
-
-	initRound(game: Game): Game {
-		game.stage += 1;
-		game.tiles = this.generateShuffledTiles();
-		this.distributeTiles(game);
-		// Update game doc
-		// Update user doc x4
-		return game;
+	async initRound() {
+		if (this.stage === 0 || !this.player1) {
+			await this.startGame();
+		}
+		await this.generateShuffledTiles()
+			.then(generatedTiles => {
+				this.tiles = generatedTiles;
+			})
+			.catch(err => {
+				// if(err.message === 'Tiles not generated'){
+				// 	this.generateShuffledTiles()
+				// }
+			});
+		await this.distributeTiles();
+		console.log('Round initialised');
 	}
 }
