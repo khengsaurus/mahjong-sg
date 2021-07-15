@@ -1,20 +1,33 @@
+import { tileToObj, userToObj } from '../../util/utilFns';
 import { User } from './User';
 
 export function gameToObj(game: Game) {
 	return {
 		id: game.id,
+		createdAt: game.createdAt || null,
 		stage: game.stage || null,
 		ongoing: game.ongoing || null,
+		dealer: game.dealer ? userToObj(game.dealer) : null,
 		midRound: game.midRound || null,
-		players: game.players || null,
-		playerIds: game.playerIds || null,
+		whoseMove: game.whoseMove || null,
+		playerIds: game.playerIds || [],
 		playersString: game.playersString || null,
-		player1: game.player1 || null,
-		player2: game.player2 || null,
-		player3: game.player3 || null,
-		player4: game.player4 || null,
-		tiles: game.tiles || null,
-		createdAt: game.createdAt || null
+		player1: game.player1 ? userToObj(game.player1) : null,
+		player2: game.player2 ? userToObj(game.player2) : null,
+		player3: game.player3 ? userToObj(game.player3) : null,
+		player4: game.player4 ? userToObj(game.player4) : null,
+		players: game.players
+			? game.players.map(player => {
+					return userToObj(player);
+			  })
+			: [],
+		tiles: game.tiles
+			? game.tiles.map(tile => {
+					return tileToObj(tile);
+			  })
+			: [],
+		lastThrown: game.lastThrown ? tileToObj(game.lastThrown) : null,
+		thrownBy: game.thrownBy || null
 	};
 }
 
@@ -23,6 +36,7 @@ export class Game {
 	createdAt: Date;
 	stage?: number;
 	ongoing: boolean;
+	dealer: User;
 	midRound: boolean;
 	whoseMove?: 1 | 2 | 3 | 4;
 	playerIds?: string[];
@@ -33,13 +47,16 @@ export class Game {
 	player4?: User;
 	players?: User[];
 	tiles?: Tile[];
-	userBal?: number[];
+	lastThrown?: Tile;
+	thrownBy?: number;
+	// userBal?: number[];
 
 	constructor(
 		id: string,
 		createdAt?: Date,
 		stage?: number,
 		ongoing?: boolean,
+		dealer?: User,
 		midRound?: boolean,
 		whoseMove?: 1 | 2 | 3 | 4,
 		playerIds?: string[],
@@ -50,12 +67,15 @@ export class Game {
 		player4?: User,
 		players?: User[],
 		tiles?: Tile[],
-		userBal?: number[]
+		lastThrown?: Tile,
+		thrownBy?: number
+		// userBal?: number[]
 	) {
 		this.id = id;
 		this.createdAt = createdAt;
 		this.stage = stage || 0;
 		this.ongoing = ongoing || true;
+		this.dealer = dealer || null;
 		this.midRound = midRound || true; // if false by default may cause initRound
 		this.whoseMove = whoseMove || null;
 		this.playerIds = playerIds || [];
@@ -66,7 +86,9 @@ export class Game {
 		this.player4 = player4 || null;
 		this.players = players || [];
 		this.tiles = tiles || [];
-		this.userBal = userBal || [];
+		this.lastThrown = lastThrown || null;
+		this.thrownBy = thrownBy || null;
+		// this.userBal = userBal || [];
 	}
 
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -108,17 +130,38 @@ export class Game {
 			oneToFour.forEach(index => {
 				suits.forEach(suit => {
 					oneToNine.forEach(number => {
-						let tile: Tile = { card: `${number}${suit}`, index, show: false };
+						let tile: Tile = {
+							card: `${number}${suit}`,
+							suit,
+							number,
+							index,
+							id: `${number}${suit}${index}`,
+							show: false
+						};
 						tiles.push(tile);
 					});
 				});
 				daPai.forEach(pai => {
-					let tile: Tile = { card: pai, index, show: false };
+					let tile: Tile = {
+						card: pai,
+						suit: '大牌',
+						number: 1,
+						index,
+						id: `${pai}${index}`,
+						show: false
+					};
 					tiles.push(tile);
 				});
 			});
 			hua.forEach(flower => {
-				let tile: Tile = { card: flower, index: 1, show: false };
+				let tile: Tile = {
+					card: flower,
+					suit: '花',
+					number: 1,
+					index: 1,
+					id: `${flower}`,
+					show: false
+				};
 				tiles.push(tile);
 			});
 			console.log(`Generated ${tiles.length} tiles`);
@@ -131,15 +174,15 @@ export class Game {
 	}
 
 	async giveTiles(tiles: Tile[], n: number, player: User) {
-		if (!player.tiles) {
-			player.tiles = [];
+		if (!player.hiddenTiles) {
+			player.hiddenTiles = [];
 		}
 		if (player.username === 'user1') {
 			console.log(player);
 			console.log(tiles.length);
 		}
 		for (let i: number = 0; i < n; i++) {
-			player.tiles = [...player.tiles, tiles.pop()];
+			player.hiddenTiles = [...player.hiddenTiles, tiles.pop()];
 		}
 		return { tiles, player };
 	}
@@ -162,7 +205,7 @@ export class Game {
 			this.tiles = res.tiles;
 			this.player1 = res.player;
 		});
-		console.log(`Player 1 received ${this.player1.tiles.length} tiles`);
+		console.log(`Player 1 received ${this.player1.hiddenTiles.length} tiles`);
 		// this.player1.tiles.forEach(tile => {
 		// 	console.log(tile.card);
 		// });
@@ -170,17 +213,17 @@ export class Game {
 			this.tiles = res.tiles;
 			this.player2 = res.player;
 		});
-		console.log(`Player 2 received ${this.player2.tiles.length} tiles`);
+		console.log(`Player 2 received ${this.player2.hiddenTiles.length} tiles`);
 		await this.giveTiles(this.tiles, 13, this.player3).then(res => {
 			this.tiles = res.tiles;
 			this.player3 = res.player;
 		});
-		console.log(`Player 3 received ${this.player3.tiles.length} tiles`);
+		console.log(`Player 3 received ${this.player3.hiddenTiles.length} tiles`);
 		await this.giveTiles(this.tiles, 13, this.player4).then(res => {
 			this.tiles = res.tiles;
 			this.player4 = res.player;
 		});
-		console.log(`Player 4 received ${this.player4.tiles.length} tiles`);
+		console.log(`Player 4 received ${this.player4.hiddenTiles.length} tiles`);
 		console.log('Tiles left: ', this.tiles.length);
 	}
 

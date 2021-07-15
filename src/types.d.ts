@@ -1,14 +1,3 @@
-// interface User {
-// 	id: string;
-// 	username: string;
-// 	photoUrl: string;
-// 	tiles?: Tile[];
-// 	// contacts: Array<Contact>
-// 	// addToContacts: (user:User) => {}
-// 	// msgContact: (msg:String, contact:Contact) => {}
-// 	// msgGroup: (msg:String, group:Group) => {}
-// }
-
 interface alert {
 	status: Color;
 	msg: string;
@@ -22,21 +11,12 @@ type Dragon = '红中' | '白般' | '发财';
 type Stage = `${Wind} ${OneToFour}`;
 
 interface Tile {
-	// card: `${`${OneToNine}${Suit}` | `${Dragon}` | `${Wind}`}`;
 	card: string;
+	suit: string;
+	number?: number;
+	id: string;
 	index: number;
 	show: boolean;
+	isValidFlower?: boolean;
+	// canBeTaken?: boolean;
 }
-
-// interface Game {
-// 	id: string;
-// 	// stage?: Stage;
-// 	stage: number;
-// 	ongoing: boolean;
-// 	players?: User[];
-// 	player1?: User;
-// 	player2?: User;
-// 	player3?: User;
-// 	player4?: User;
-// 	tiles?: Tile[];
-// }

@@ -108,8 +108,18 @@ export function userToObj(user: User) {
 		username: user.username,
 		photoUrl: user.photoUrl,
 		currentSeat: user.currentSeat || 0,
-		tiles: user.tiles
-			? user.tiles.map((tile: Tile) => {
+		hiddenTiles: user.hiddenTiles
+			? user.hiddenTiles.map((tile: Tile) => {
+					return tileToObj(tile);
+			  })
+			: [],
+		shownTiles: user.shownTiles
+			? user.shownTiles.map((tile: Tile) => {
+					return tileToObj(tile);
+			  })
+			: [],
+		discardedTiles: user.shownTiles
+			? user.shownTiles.map((tile: Tile) => {
 					return tileToObj(tile);
 			  })
 			: []
@@ -119,8 +129,13 @@ export function userToObj(user: User) {
 export function tileToObj(tile: Tile) {
 	return {
 		card: tile.card,
+		suit: tile.suit,
+		number: tile.number,
 		index: tile.index,
-		show: tile.show
+		id: tile.id,
+		show: tile.show,
+		isValidFlower: tile.isValidFlower
+		// canBeTaken: tile.canBeTaken
 	};
 }
 
@@ -131,6 +146,7 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.createdAt.toDate() || null,
 		ref.stage,
 		ref.ongoing,
+		ref.dealer,
 		ref.midRound,
 		ref.whoseMove,
 		ref.playerIds,
@@ -145,17 +161,38 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.tiles.map((tile: any) => {
 			return typeCheckTile(tile);
 		}),
-		ref.userBal
+		ref.lastThrown,
+		ref.thrownBy
+		// ref.userBal
 	);
 };
 
 export function typeCheckTile(data: any): Tile {
 	let tile: Tile;
 	try {
-		tile = { card: data.card, index: data.index, show: data.show };
+		tile = {
+			card: data.card,
+			suit: data.suit,
+			number: data.number,
+			index: data.index,
+			id: data.id,
+			show: data.show,
+			isValidFlower: data.isValidFlower
+			// canBeTaken: data.canBeTaken
+		};
 	} catch (err) {
 		console.log('Unable to create tile - ', err.msg);
 		tile = null;
 	}
 	return tile;
 }
+
+// interface Tile {
+// 	card: string;
+// 	index: number;
+// 	show: boolean;
+// 	suit: string;
+// 	id: string;
+// 	number?: number;
+// 	isValidFlower?: () => boolean;
+// }

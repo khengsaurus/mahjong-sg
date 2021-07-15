@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import { Game } from '../components/Models/Game';
+import { Game, gameToObj } from '../components/Models/Game';
 import { User } from '../components/Models/User';
 import { tileToObj, userToObj } from '../util/utilFns';
 import firebaseConfig from './firebaseConfig';
@@ -150,6 +150,7 @@ export const createGame = async (players: User[]): Promise<Game> => {
 					createdAt,
 					stage: 0,
 					ongoing: true,
+					dealer: null,
 					midRound: false,
 					whoseMove: null,
 					playerIds,
@@ -162,11 +163,23 @@ export const createGame = async (players: User[]): Promise<Game> => {
 						return userToObj(player);
 					}),
 					tiles: [],
-					userBal: []
+					lastThrown: null,
+					thrownBy: null
+					// userBal: []
 				})
 				.then(newGame => {
 					console.log('Game created successfully: gameId ' + gameId);
-					const game: Game = new Game(newGame.id, createdAt, 0, true, false, null, playerIds, playersString);
+					const game: Game = new Game(
+						newGame.id,
+						createdAt,
+						0,
+						true,
+						null,
+						false,
+						null,
+						playerIds,
+						playersString
+					);
 					resolve(game);
 				});
 		} catch (err) {
@@ -179,26 +192,14 @@ export const createGame = async (players: User[]): Promise<Game> => {
 export const updateGame = (game: Game): Promise<Game> => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let gameObj = {
-				...game,
-				player1: userToObj(game.player1),
-				player2: userToObj(game.player2),
-				player3: userToObj(game.player3),
-				player4: userToObj(game.player4),
-				players: game.players.map((player: User) => {
-					return userToObj(player);
-				}),
-				tiles: game.tiles.map((tile: Tile) => {
-					return tileToObj(tile);
-				})
-			};
+			let gameObj = gameToObj(game);
 			const currentGameRef = gameRef.doc(game.id);
 			await currentGameRef.set({ ...gameObj }).then(() => {
 				resolve(game);
 			});
 		} catch (err) {
 			console.log(err);
-			reject(new Error('firebaseService: game and user docs were not updated'));
+			reject(new Error('firebaseService: game doc was not updated'));
 		}
 	});
 };
