@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Game, gameToObj } from '../components/Models/Game';
 import { User } from '../components/Models/User';
-import { tileToObj, userToObj } from '../util/utilFns';
+import { tileToObj, typeCheckUser, userToObj } from '../util/utilFns';
 import firebaseConfig from './firebaseConfig';
 
 if (!firebase.apps.length) {
@@ -134,7 +134,7 @@ export const getGameById = async (game?: Game, gameId?: string) => {
 	}
 };
 
-export const createGame = async (players: User[]): Promise<Game> => {
+export const createGame = async (user: User, players: User[]): Promise<Game> => {
 	let playerIds: string[] = [];
 	let playersString: string = '';
 	players.forEach(player => {
@@ -147,11 +147,14 @@ export const createGame = async (players: User[]): Promise<Game> => {
 		try {
 			gameRef
 				.add({
+					// creator: userToObj(user),
+					creator: user.username,
 					createdAt,
 					stage: 0,
 					ongoing: true,
 					dealer: null,
 					midRound: false,
+					flagProgress: false,
 					whoseMove: null,
 					playerIds,
 					playersString,
@@ -171,10 +174,12 @@ export const createGame = async (players: User[]): Promise<Game> => {
 					console.log('Game created successfully: gameId ' + gameId);
 					const game: Game = new Game(
 						newGame.id,
+						user.username,
 						createdAt,
 						0,
 						true,
 						null,
+						false,
 						false,
 						null,
 						playerIds,

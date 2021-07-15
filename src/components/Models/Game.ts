@@ -4,10 +4,13 @@ import { User } from './User';
 export function gameToObj(game: Game) {
 	return {
 		id: game.id,
-		createdAt: game.createdAt || null,
+		// creator: userToObj(game.creator),
+		creator: game.creator,
+		createdAt: game.createdAt,
 		stage: game.stage || null,
 		ongoing: game.ongoing || null,
-		dealer: game.dealer ? userToObj(game.dealer) : null,
+		// dealer: game.dealer ? userToObj(game.dealer) : null,
+		dealer: game.dealer || null,
 		midRound: game.midRound || null,
 		whoseMove: game.whoseMove || null,
 		playerIds: game.playerIds || [],
@@ -33,11 +36,13 @@ export function gameToObj(game: Game) {
 
 export class Game {
 	id: string;
+	creator: string;
 	createdAt: Date;
 	stage?: number;
 	ongoing: boolean;
-	dealer: User;
+	dealer: 'player1' | 'player2' | 'player3' | 'player4';
 	midRound: boolean;
+	flagProgress: boolean;
 	whoseMove?: 1 | 2 | 3 | 4;
 	playerIds?: string[];
 	playersString?: string;
@@ -53,11 +58,13 @@ export class Game {
 
 	constructor(
 		id: string,
+		creator?: string,
 		createdAt?: Date,
 		stage?: number,
 		ongoing?: boolean,
-		dealer?: User,
+		dealer?: 'player1' | 'player2' | 'player3' | 'player4',
 		midRound?: boolean,
+		flagProgress?: boolean,
 		whoseMove?: 1 | 2 | 3 | 4,
 		playerIds?: string[],
 		playersString?: string,
@@ -72,11 +79,13 @@ export class Game {
 		// userBal?: number[]
 	) {
 		this.id = id;
+		this.creator = creator;
 		this.createdAt = createdAt;
 		this.stage = stage || 0;
 		this.ongoing = ongoing || true;
 		this.dealer = dealer || null;
-		this.midRound = midRound || true; // if false by default may cause initRound
+		this.midRound = midRound || true;
+		this.flagProgress = flagProgress || false;
 		this.whoseMove = whoseMove || null;
 		this.playerIds = playerIds || [];
 		this.playersString = playersString || '';
@@ -187,7 +196,7 @@ export class Game {
 		return { tiles, player };
 	}
 
-	async assignPlayers() {
+	async assignSeats() {
 		this.player1 = this.players[0];
 		this.player2 = this.players[1];
 		this.player3 = this.players[2];
@@ -227,18 +236,14 @@ export class Game {
 		console.log('Tiles left: ', this.tiles.length);
 	}
 
-	async startGame() {
-		if (this.stage === 0) {
-			this.stage += 1;
-		}
-		if (!this.player1) {
-			await this.assignPlayers();
-		}
-	}
-
-	async initRound() {
-		if (this.stage === 0 || !this.player1) {
-			await this.startGame();
+	async initRound(flagNextRound: boolean) {
+		console.log('initRound called');
+		this.midRound = true;
+		if (this.stage === 0 || !this.player1 || !this.dealer) {
+			this.whoseMove = 1;
+			this.dealer = 'player1';
+			await this.assignSeats();
+			console.log('Starting game');
 		}
 		await this.generateShuffledTiles()
 			.then(generatedTiles => {
@@ -250,6 +255,60 @@ export class Game {
 				// }
 			});
 		await this.distributeTiles();
-		console.log('Round initialised');
+		if (flagNextRound) {
+			this.stage += 1;
+		}
+		console.log('Round started');
+	}
+
+	rotateWinds() {
+		console.log('Rotating winds');
+		this.players.forEach(player => {
+			if (player.currentSeat < 4) {
+				player.currentSeat += 1;
+			} else if (player.currentSeat === 4) {
+				player.currentSeat = 1;
+			}
+		});
+		this.players.forEach(player => {
+			console.log(player.currentSeat);
+		});
+	}
+
+	async endRound(): Promise<boolean> {
+		// -> to continue
+		return new Promise((resolve, reject) => {
+			this.midRound = false;
+			if (this.flagProgress) {
+				if (this.dealer === 'player4' && this.stage === 16 && this.flagProgress) {
+					console.log('Game ended');
+					resolve(false);
+				} else {
+					switch (this.dealer) {
+						case 'player1':
+							this.dealer = 'player2';
+							break;
+						case 'player2':
+							this.dealer = 'player3';
+							break;
+						case 'player3':
+							this.dealer = 'player4';
+							break;
+						case 'player4':
+							if (this.stage < 16) {
+								this.dealer = 'player1';
+							}
+							break;
+						default:
+							break;
+					}
+					this.rotateWinds();
+					this.initRound(true);
+				}
+			} else {
+				this.initRound(false);
+			}
+			resolve(true);
+		});
 	}
 }

@@ -1,1 +1,33 @@
 @import '../../App.scss';
+
+.top-player-component {
+	height: 20vh;
+}
+
+.horizontal-tiles-hidden {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height: 15px;
+
+	.horizontal-tile-hidden {
+		height: 10px;
+		width: 5px;
+		border: double 2px black;
+		display: inline-block;
+	}
+}
+
+.horizontal-tiles-shown {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height: 120px;
+
+	.horizontal-tile-shown {
+		height: 30px;
+		width: 15px;
+		display: inline-block;
+		margin: 2px;
+	}
+}

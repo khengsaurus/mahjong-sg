@@ -26,7 +26,7 @@ const NewGame = () => {
 	};
 
 	const handleStartGame = async () => {
-		await firebaseService.createGame(players).then(game => {
+		await firebaseService.createGame(user, players).then(game => {
 			setGame(game);
 		});
 		history.push('/Table');

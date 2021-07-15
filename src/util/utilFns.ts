@@ -141,13 +141,17 @@ export function tileToObj(tile: Tile) {
 
 export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game => {
 	let ref = doc.data();
+	console.log(ref);
 	return new Game(
 		doc.id,
+		// typeCheckUser(3, ref.creator),
+		ref.creator,
 		ref.createdAt.toDate() || null,
 		ref.stage,
-		ref.ongoing,
+		ref.ongoing === true || ref.ongoing === 'true',
 		ref.dealer,
-		ref.midRound,
+		ref.midRound === true || ref.midRound === 'true',
+		ref.flagProgress === true || ref.flagProgress === 'true',
 		ref.whoseMove,
 		ref.playerIds,
 		ref.playersString,
