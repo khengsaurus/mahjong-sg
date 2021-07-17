@@ -17,11 +17,11 @@ const RightPlayer = (props: Player) => {
 			</div>
 			<div className="vertical-tiles-shown">
 				{player.shownTiles.map((tile: Tile, index: number) => {
-					return (
+					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
 							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
-					);
+					) : null;
 				})}
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
