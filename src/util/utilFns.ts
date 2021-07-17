@@ -30,16 +30,24 @@ export function typeCheckUser(method: number, obj: unknown): User | null {
 	} else if (method === 2) {
 		let data = obj as firebase.firestore.DocumentData;
 		if (data.docs[0].id === undefined || data.docs[0].data().username === undefined) {
-			throw new Error('Failed to retrieve user data');
+			throw new Error('Failed to retrieve user data from user document');
 		} else {
 			return new User(data.docs[0].id, data.docs[0].data().username, data.docs[0].data().photoUrl);
 		}
 	} else if (method === 3) {
 		let data = obj as any;
 		if (!data.id || !data.username) {
-			throw new Error('Failed to retrieve user data');
+			throw new Error('Failed to retrieve user data from game document');
 		} else {
-			return new User(data.id, data.username, data.photoUrl, data.tiles);
+			return new User(
+				data.id,
+				data.username,
+				data.photoUrl,
+				data.currentSeat,
+				data.shownTiles,
+				data.hiddenTiles,
+				data.discardedTiles
+			);
 		}
 	} else {
 		return null;
@@ -113,16 +121,19 @@ export function userToObj(user: User) {
 					return tileToObj(tile);
 			  })
 			: [],
+		// hiddenTiles: user.hiddenTiles || [],
 		shownTiles: user.shownTiles
 			? user.shownTiles.map((tile: Tile) => {
 					return tileToObj(tile);
 			  })
 			: [],
-		discardedTiles: user.shownTiles
-			? user.shownTiles.map((tile: Tile) => {
+		// shownTiles: user.shownTiles || [],
+		discardedTiles: user.discardedTiles
+			? user.discardedTiles.map((tile: Tile) => {
 					return tileToObj(tile);
 			  })
 			: []
+		// discardedTiles: user.discardedTiles || []
 	};
 }
 
@@ -141,33 +152,28 @@ export function tileToObj(tile: Tile) {
 
 export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game => {
 	let ref = doc.data();
-	console.log(ref);
 	return new Game(
 		doc.id,
-		// typeCheckUser(3, ref.creator),
 		ref.creator,
-		ref.createdAt.toDate() || null,
+		ref.createdAt.toDate(),
 		ref.stage,
-		ref.ongoing === true || ref.ongoing === 'true',
+		ref.ongoing,
+		ref.midRound,
+		ref.flagProgress,
 		ref.dealer,
-		ref.midRound === true || ref.midRound === 'true',
-		ref.flagProgress === true || ref.flagProgress === 'true',
 		ref.whoseMove,
 		ref.playerIds,
 		ref.playersString,
-		ref.player1 && ref.player1.id ? typeCheckUser(3, ref.player1) : null,
-		ref.player2 && ref.player2.id ? typeCheckUser(3, ref.player2) : null,
-		ref.player3 && ref.player3.id ? typeCheckUser(3, ref.player3) : null,
-		ref.player4 && ref.player4.id ? typeCheckUser(3, ref.player4) : null,
+		// ref.player1 && ref.player1.id ? typeCheckUser(3, ref.player1) : null,
+		// ref.player2 && ref.player2.id ? typeCheckUser(3, ref.player2) : null,
+		// ref.player3 && ref.player3.id ? typeCheckUser(3, ref.player3) : null,
+		// ref.player4 && ref.player4.id ? typeCheckUser(3, ref.player4) : null,
 		ref.players.map((player: any) => {
 			return typeCheckUser(3, player);
 		}),
-		ref.tiles.map((tile: any) => {
-			return typeCheckTile(tile);
-		}),
+		ref.tiles,
 		ref.lastThrown,
 		ref.thrownBy
-		// ref.userBal
 	);
 };
 

@@ -1,33 +1,41 @@
 @import '../../App.scss';
 
-.top-player-component {
+.top-player-container {
+	position: fixed;
 	height: 20vh;
+	width: 100%;
+	top: 0;
+	background-color: rosybrown;
 }
-
-.horizontal-tiles-hidden {
+.row-section {
 	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	height: 15px;
+	flex-direction: column;
 
-	.horizontal-tile-hidden {
-		height: 10px;
-		width: 5px;
-		border: double 2px black;
-		display: inline-block;
+	.horizontal-tiles-hidden {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		height: 15px;
+
+		.horizontal-tile-hidden {
+			height: 10px;
+			width: 5px;
+			border: double 2px black;
+			display: inline-block;
+		}
 	}
-}
 
-.horizontal-tiles-shown {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	height: 120px;
+	.horizontal-tiles-shown {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		height: 120px;
 
-	.horizontal-tile-shown {
-		height: 30px;
-		width: 15px;
-		display: inline-block;
-		margin: 2px;
+		.horizontal-tile-shown {
+			height: 30px;
+			width: 15px;
+			display: inline-block;
+			margin: 2px;
+		}
 	}
 }

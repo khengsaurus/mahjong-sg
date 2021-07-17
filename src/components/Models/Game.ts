@@ -4,33 +4,33 @@ import { User } from './User';
 export function gameToObj(game: Game) {
 	return {
 		id: game.id,
-		// creator: userToObj(game.creator),
 		creator: game.creator,
 		createdAt: game.createdAt,
-		stage: game.stage || null,
-		ongoing: game.ongoing || null,
-		// dealer: game.dealer ? userToObj(game.dealer) : null,
-		dealer: game.dealer || null,
-		midRound: game.midRound || null,
-		whoseMove: game.whoseMove || null,
-		playerIds: game.playerIds || [],
-		playersString: game.playersString || null,
-		player1: game.player1 ? userToObj(game.player1) : null,
-		player2: game.player2 ? userToObj(game.player2) : null,
-		player3: game.player3 ? userToObj(game.player3) : null,
-		player4: game.player4 ? userToObj(game.player4) : null,
+		stage: game.stage,
+		ongoing: game.ongoing,
+		midRound: game.midRound,
+		flagProgress: game.flagProgress,
+		dealer: game.dealer,
+		whoseMove: game.whoseMove,
+		playerIds: game.playerIds,
+		playersString: game.playersString,
+		// player1: game.player1 ? userToObj(game.player1) : null,
+		// player2: game.player2 ? userToObj(game.player2) : null,
+		// player3: game.player3 ? userToObj(game.player3) : null,
+		// player4: game.player4 ? userToObj(game.player4) : null,
 		players: game.players
 			? game.players.map(player => {
 					return userToObj(player);
 			  })
 			: [],
-		tiles: game.tiles
-			? game.tiles.map(tile => {
-					return tileToObj(tile);
-			  })
-			: [],
-		lastThrown: game.lastThrown ? tileToObj(game.lastThrown) : null,
-		thrownBy: game.thrownBy || null
+		// tiles: game.tiles
+		// 	? game.tiles.map(tile => {
+		// 			return tileToObj(tile);
+		// 	  })
+		// 	: [],
+		tiles: game.tiles,
+		lastThrown: game.lastThrown,
+		thrownBy: game.thrownBy
 	};
 }
 
@@ -40,21 +40,20 @@ export class Game {
 	createdAt: Date;
 	stage?: number;
 	ongoing: boolean;
-	dealer: 'player1' | 'player2' | 'player3' | 'player4';
 	midRound: boolean;
 	flagProgress: boolean;
-	whoseMove?: 1 | 2 | 3 | 4;
+	dealer: 0 | 1 | 2 | 3 | 4;
+	whoseMove?: 0 | 1 | 2 | 3 | 4;
 	playerIds?: string[];
 	playersString?: string;
-	player1?: User;
-	player2?: User;
-	player3?: User;
-	player4?: User;
+	// player1?: User;
+	// player2?: User;
+	// player3?: User;
+	// player4?: User;
 	players?: User[];
 	tiles?: Tile[];
 	lastThrown?: Tile;
 	thrownBy?: number;
-	// userBal?: number[];
 
 	constructor(
 		id: string,
@@ -62,54 +61,42 @@ export class Game {
 		createdAt?: Date,
 		stage?: number,
 		ongoing?: boolean,
-		dealer?: 'player1' | 'player2' | 'player3' | 'player4',
+		dealer?: 0 | 1 | 2 | 3 | 4,
 		midRound?: boolean,
 		flagProgress?: boolean,
-		whoseMove?: 1 | 2 | 3 | 4,
+		whoseMove?: 0 | 1 | 2 | 3 | 4,
 		playerIds?: string[],
 		playersString?: string,
-		player1?: User,
-		player2?: User,
-		player3?: User,
-		player4?: User,
 		players?: User[],
 		tiles?: Tile[],
 		lastThrown?: Tile,
 		thrownBy?: number
-		// userBal?: number[]
 	) {
 		this.id = id;
 		this.creator = creator;
 		this.createdAt = createdAt;
-		this.stage = stage || 0;
-		this.ongoing = ongoing || true;
-		this.dealer = dealer || null;
-		this.midRound = midRound || true;
-		this.flagProgress = flagProgress || false;
-		this.whoseMove = whoseMove || null;
-		this.playerIds = playerIds || [];
-		this.playersString = playersString || '';
-		this.player1 = player1 || null;
-		this.player2 = player2 || null;
-		this.player3 = player3 || null;
-		this.player4 = player4 || null;
-		this.players = players || [];
-		this.tiles = tiles || [];
-		this.lastThrown = lastThrown || null;
-		this.thrownBy = thrownBy || null;
-		// this.userBal = userBal || [];
+		this.stage = stage;
+		this.ongoing = ongoing;
+		this.dealer = dealer;
+		this.midRound = midRound;
+		this.flagProgress = flagProgress;
+		this.whoseMove = whoseMove;
+		this.playerIds = playerIds;
+		this.playersString = playersString;
+		this.players = players;
+		this.tiles = tiles;
+		this.lastThrown = lastThrown;
+		this.thrownBy = thrownBy;
+		// this.userBal = userBal
 	}
 
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 	async shuffle(array: any[]) {
 		var currentIndex = array.length,
 			randomIndex;
-		// While there remain elements to shuffle...
 		while (0 !== currentIndex) {
-			// Pick a remaining element...
 			randomIndex = Math.floor(Math.random() * currentIndex);
 			currentIndex--;
-			// And swap it with the current element.
 			[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
 		}
 		return array;
@@ -122,20 +109,9 @@ export class Game {
 			const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 			const suits = ['万', '筒', '索'];
 			const daPai = ['东', '南', '西', '北', '红中', '白般', '发财'];
-			const hua = [
-				'cat',
-				'mouse',
-				'rooster',
-				'worm',
-				'red1',
-				'red2',
-				'red3',
-				'red4',
-				'blue1',
-				'blue2',
-				'blue3',
-				'blue4'
-			];
+			const animals = ['cat', 'mouse', 'rooster', 'worm'];
+			const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
+
 			oneToFour.forEach(index => {
 				suits.forEach(suit => {
 					oneToNine.forEach(number => {
@@ -144,6 +120,7 @@ export class Game {
 							suit,
 							number,
 							index,
+							isValidFlower: false,
 							id: `${number}${suit}${index}`,
 							show: false
 						};
@@ -156,18 +133,32 @@ export class Game {
 						suit: '大牌',
 						number: 1,
 						index,
+						isValidFlower: false,
 						id: `${pai}${index}`,
 						show: false
 					};
 					tiles.push(tile);
 				});
 			});
-			hua.forEach(flower => {
+			animals.forEach(animal => {
+				let tile: Tile = {
+					card: animal,
+					suit: '动物',
+					number: 1,
+					index: 1,
+					isValidFlower: true,
+					id: `${animal}`,
+					show: false
+				};
+				tiles.push(tile);
+			});
+			flowers.forEach(flower => {
 				let tile: Tile = {
 					card: flower,
 					suit: '花',
 					number: 1,
 					index: 1,
+					isValidFlower: false,
 					id: `${flower}`,
 					show: false
 				};
@@ -182,66 +173,108 @@ export class Game {
 		});
 	}
 
-	async giveTiles(tiles: Tile[], n: number, player: User) {
+	async giveTiles(n: number, playerIndex: number, buHua?: boolean) {
+		let player = this.players[playerIndex];
 		if (!player.hiddenTiles) {
 			player.hiddenTiles = [];
 		}
-		if (player.username === 'user1') {
-			console.log(player);
-			console.log(tiles.length);
-		}
 		for (let i: number = 0; i < n; i++) {
-			player.hiddenTiles = [...player.hiddenTiles, tiles.pop()];
+			let newTile: Tile;
+			if (buHua) {
+				newTile = this.tiles.shift();
+			} else {
+				newTile = this.tiles.pop();
+			}
+			if (newTile.suit === '花' && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
+				newTile.isValidFlower = true;
+			}
+			if (newTile.suit === '花' || newTile.suit === '动物') {
+				player.shownTiles = [...player.shownTiles, newTile];
+			} else {
+				player.hiddenTiles = [...player.hiddenTiles, newTile];
+			}
 		}
-		return { tiles, player };
 	}
 
 	async assignSeats() {
-		this.player1 = this.players[0];
-		this.player2 = this.players[1];
-		this.player3 = this.players[2];
-		this.player4 = this.players[3];
+		this.players[0].currentSeat = 1;
+		this.players[1].currentSeat = 2;
+		this.players[2].currentSeat = 3;
+		this.players[3].currentSeat = 4;
 		console.log('Players assigned');
-		console.log('Player 1', this.player1.username);
-		console.log('Player 2', this.player2.username);
-		console.log('Player 3', this.player3.username);
-		console.log('Player 4', this.player4.username);
+		console.log('Player 1: ', this.players[0].username);
+		console.log('Player 2: ', this.players[0].username);
+		console.log('Player 3: ', this.players[1].username);
+		console.log('Player 4: ', this.players[2].username);
 	}
 
 	async distributeTiles() {
 		console.log('Distrubute tiles called');
-		await this.giveTiles(this.tiles, 14, this.player1).then(res => {
-			this.tiles = res.tiles;
-			this.player1 = res.player;
-		});
-		console.log(`Player 1 received ${this.player1.hiddenTiles.length} tiles`);
-		// this.player1.tiles.forEach(tile => {
-		// 	console.log(tile.card);
-		// });
-		await this.giveTiles(this.tiles, 13, this.player2).then(res => {
-			this.tiles = res.tiles;
-			this.player2 = res.player;
-		});
-		console.log(`Player 2 received ${this.player2.hiddenTiles.length} tiles`);
-		await this.giveTiles(this.tiles, 13, this.player3).then(res => {
-			this.tiles = res.tiles;
-			this.player3 = res.player;
-		});
-		console.log(`Player 3 received ${this.player3.hiddenTiles.length} tiles`);
-		await this.giveTiles(this.tiles, 13, this.player4).then(res => {
-			this.tiles = res.tiles;
-			this.player4 = res.player;
-		});
-		console.log(`Player 4 received ${this.player4.hiddenTiles.length} tiles`);
+		await this.giveTiles(14, 0);
+		await this.giveTiles(13, 1);
+		await this.giveTiles(13, 2);
+		await this.giveTiles(13, 3);
+		while (
+			this.players[0].hiddenTiles.length < 14 ||
+			this.players[1].hiddenTiles.length < 13 ||
+			this.players[2].hiddenTiles.length < 13 ||
+			this.players[3].hiddenTiles.length < 13
+		) {
+			this.buHua();
+		}
+		// LOGGING
+		console.log(`Player 1 has ${this.players[0].hiddenTiles.length} tiles`);
+		if (this.players[0].shownTiles.length > 0) {
+			console.log(`Player 1 has ${this.players[0].shownTiles.length} flowers: `);
+			this.players[0].shownTiles.forEach(hua => {
+				console.log(hua.card);
+			});
+		}
+		console.log(`Player 2 has ${this.players[1].hiddenTiles.length} tiles`);
+		if (this.players[1].shownTiles.length > 0) {
+			console.log(`Player 2 has ${this.players[1].shownTiles.length} flowers: `);
+			this.players[1].shownTiles.forEach(hua => {
+				console.log(hua.card);
+			});
+		}
+		console.log(`Player 3 has ${this.players[2].hiddenTiles.length} tiles`);
+		if (this.players[2].shownTiles.length > 0) {
+			console.log(`Player 3 has ${this.players[2].shownTiles.length} flowers: `);
+			this.players[2].shownTiles.forEach(hua => {
+				console.log(hua.card);
+			});
+		}
+		console.log(`Player 4 has ${this.players[3].hiddenTiles.length} tiles`);
+		if (this.players[3].shownTiles.length > 0) {
+			console.log(`Player 4 has ${this.players[3].shownTiles.length} flowers: `);
+			this.players[3].shownTiles.forEach(hua => {
+				console.log(hua.card);
+			});
+		}
 		console.log('Tiles left: ', this.tiles.length);
+	}
+
+	async buHua() {
+		if (this.players[0].hiddenTiles.length < 14) {
+			this.giveTiles(this.players[0].shownTiles.length, 0, true);
+		}
+		if (this.players[1].hiddenTiles.length < 13) {
+			this.giveTiles(this.players[1].shownTiles.length, 1, true);
+		}
+		if (this.players[2].hiddenTiles.length < 13) {
+			this.giveTiles(this.players[2].shownTiles.length, 2, true);
+		}
+		if (this.players[3].hiddenTiles.length < 13) {
+			this.giveTiles(this.players[3].shownTiles.length, 3, true);
+		}
 	}
 
 	async initRound(flagNextRound: boolean) {
 		console.log('initRound called');
 		this.midRound = true;
-		if (this.stage === 0 || !this.player1 || !this.dealer) {
+		if (this.stage === 0 || !this.dealer) {
+			this.dealer = 1;
 			this.whoseMove = 1;
-			this.dealer = 'player1';
 			await this.assignSeats();
 			console.log('Starting game');
 		}
@@ -271,7 +304,7 @@ export class Game {
 			}
 		});
 		this.players.forEach(player => {
-			console.log(player.currentSeat);
+			console.log(`${player.username}'s current seat: ${player.currentSeat}`);
 		});
 	}
 
@@ -280,23 +313,23 @@ export class Game {
 		return new Promise((resolve, reject) => {
 			this.midRound = false;
 			if (this.flagProgress) {
-				if (this.dealer === 'player4' && this.stage === 16 && this.flagProgress) {
+				if (this.dealer === 4 && this.stage === 16 && this.flagProgress) {
 					console.log('Game ended');
 					resolve(false);
 				} else {
 					switch (this.dealer) {
-						case 'player1':
-							this.dealer = 'player2';
+						case 1:
+							this.dealer = 2;
 							break;
-						case 'player2':
-							this.dealer = 'player3';
+						case 2:
+							this.dealer = 3;
 							break;
-						case 'player3':
-							this.dealer = 'player4';
+						case 3:
+							this.dealer = 4;
 							break;
-						case 'player4':
+						case 4:
 							if (this.stage < 16) {
-								this.dealer = 'player1';
+								this.dealer = 1;
 							}
 							break;
 						default:

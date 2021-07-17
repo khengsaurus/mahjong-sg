@@ -106,16 +106,16 @@ export const updateGameAndUsers = (game: Game): Promise<Game> => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const currentGameRef = gameRef.doc(game.id);
-			const playerRef1 = userRepr.doc(game.player1.id);
-			const playerRef2 = userRepr.doc(game.player2.id);
-			const playerRef3 = userRepr.doc(game.player3.id);
-			const playerRef4 = userRepr.doc(game.player4.id);
+			// const playerRef1 = userRepr.doc(game.player1.id);
+			// const playerRef2 = userRepr.doc(game.player2.id);
+			// const playerRef3 = userRepr.doc(game.player3.id);
+			// const playerRef4 = userRepr.doc(game.player4.id);
 			await db.runTransaction(async t => {
 				t.set(currentGameRef, { ...game });
-				t.set(playerRef1, { ...game.player1 });
-				t.set(playerRef2, { ...game.player2 });
-				t.set(playerRef3, { ...game.player3 });
-				t.set(playerRef4, { ...game.player4 });
+				// t.set(playerRef1, { ...game.player1 });
+				// t.set(playerRef2, { ...game.player2 });
+				// t.set(playerRef3, { ...game.player3 });
+				// t.set(playerRef4, { ...game.player4 });
 			});
 			resolve(game);
 		} catch (err) {
@@ -152,23 +152,22 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					createdAt,
 					stage: 0,
 					ongoing: true,
-					dealer: null,
 					midRound: false,
+					dealer: 0,
 					flagProgress: false,
-					whoseMove: null,
+					whoseMove: 0,
 					playerIds,
 					playersString,
-					player1: null,
-					player2: null,
-					player3: null,
-					player4: null,
+					// player1: null,
+					// player2: null,
+					// player3: null,
+					// player4: null,
 					players: players.map(function (player: User) {
 						return userToObj(player);
 					}),
 					tiles: [],
-					lastThrown: null,
-					thrownBy: null
-					// userBal: []
+					lastThrown: {},
+					thrownBy: 0
 				})
 				.then(newGame => {
 					console.log('Game created successfully: gameId ' + gameId);
@@ -198,9 +197,11 @@ export const updateGame = (game: Game): Promise<Game> => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let gameObj = gameToObj(game);
+			console.log(gameObj);
 			const currentGameRef = gameRef.doc(game.id);
 			await currentGameRef.set({ ...gameObj }).then(() => {
 				resolve(game);
+				console.log('firebaseService: game doc was updated');
 			});
 		} catch (err) {
 			console.log(err);
