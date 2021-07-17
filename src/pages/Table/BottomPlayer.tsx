@@ -6,20 +6,20 @@ interface Player {
 	player: User;
 }
 
-const TopPlayer = (props: Player) => {
+const BottomPlayer = (props: Player) => {
 	const { player } = props;
 	return (
-		<div className="row-section">
+		<div className="row-section bottom">
 			<div className="horizontal-tiles-hidden">
 				{player.hiddenTiles.map((tile: Tile, index: number) => {
-					return <div key={`top-hidden-tile${index}`} className="horizontal-tile-hidden" />;
+					return <div key={`bottom-hidden-tile${index}`} className="horizontal-tile-hidden" />;
 				})}
 			</div>
-			<div className="horizontal-tiles-shown">
+			<div className="horizontal-tiles-shown bottom">
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
-							key={`top-shown-tile-${index}`}
+							key={`bottom-shown-tile-${index}`}
 							className="horizontal-tile-shown"
 							src={getTileSrc(tile.card)}
 							style={{
@@ -33,7 +33,7 @@ const TopPlayer = (props: Player) => {
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<img
-							key={`top-shown-tile-${index}`}
+							key={`bottom-shown-tile-${index}`}
 							className="horizontal-tile-shown"
 							src={getTileSrc(tile.card)}
 							alt="tile"
@@ -41,7 +41,7 @@ const TopPlayer = (props: Player) => {
 					) : null;
 				})}
 			</div>
-			<div className="discarded">
+			<div className="discarded bottom">
 				{player.discardedTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
@@ -57,4 +57,4 @@ const TopPlayer = (props: Player) => {
 	);
 };
 
-export default TopPlayer;
+export default BottomPlayer;

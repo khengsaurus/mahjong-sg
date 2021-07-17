@@ -7,6 +7,9 @@ import { Game } from '../../components/Models/Game';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { typeCheckGame } from '../../util/utilFns';
+import BottomPlayer from './BottomPlayer';
+import RightPlayer from './RightPlayer';
+import Self from './Self';
 import './table.scss';
 import TopPlayer from './TopPlayer';
 
@@ -62,21 +65,25 @@ const Table = () => {
 		console.log('Setting player positions');
 		switch (user.username) {
 			case game.players[0].username:
+				setSelfIndex(0);
 				setTopPlayerIndex(3);
 				setRightPlayerIndex(2);
 				setBottomPlayerIndex(1);
 				break;
 			case game.players[1].username:
+				setSelfIndex(1);
 				setTopPlayerIndex(0);
 				setRightPlayerIndex(3);
 				setBottomPlayerIndex(2);
 				break;
 			case game.players[2].username:
+				setSelfIndex(2);
 				setTopPlayerIndex(1);
 				setRightPlayerIndex(0);
 				setBottomPlayerIndex(3);
 				break;
 			case game.players[3].username:
+				setSelfIndex(3);
 				setTopPlayerIndex(2);
 				setRightPlayerIndex(1);
 				setBottomPlayerIndex(0);
@@ -104,21 +111,32 @@ const Table = () => {
 	};
 
 	const renderGame = () => {
-		return (
-			<div className="main">
-				{game && game.stage !== 0 ? (
-					<div className="main">
-						<div className="top-player-container">
-							<TopPlayer player={game.players[topPlayerIndex]} />
-						</div>
+		if (game && game.stage !== 0) {
+			return (
+				<div className="main">
+					<div className="top-player-container">
+						<TopPlayer player={game.players[topPlayerIndex]} />
 					</div>
-				) : (
+					<div className="bottom-player-container">
+						<BottomPlayer player={game.players[bottomPlayerIndex]} />
+					</div>
+					<div className="right-player-container">
+						<RightPlayer player={game.players[rightPlayerIndex]} />
+					</div>
+					<div className="self-container">
+						<Self player={game.players[selfIndex]} />
+					</div>
+				</div>
+			);
+		} else {
+			return (
+				<div className="main">
 					<Typography variant="h6">{`Game has not started`}</Typography>
-				)}
-				<br></br>
-				<HomeButton />
-			</div>
-		);
+					<br></br>
+					<HomeButton />
+				</div>
+			);
+		}
 	};
 
 	const noActiveGame = () => {

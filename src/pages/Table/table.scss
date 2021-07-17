@@ -1,41 +1,181 @@
 @import '../../App.scss';
 
+$rotate-transform: rotate(90deg) translateY(-14%) translateX(-22%);
+$rotate-simple: rotate(90deg);
+
 .top-player-container {
-	position: fixed;
-	height: 20vh;
+	position: absolute;
 	width: 100%;
 	top: 0;
-	background-color: rosybrown;
+	z-index: 0;
 }
+
+.bottom-player-container {
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	z-index: 1;
+}
+
+.right-player-container {
+	position: absolute;
+	right: 0;
+	z-index: 2;
+}
+
+.self-container {
+	position: absolute;
+	left: 0;
+	z-index: 3;
+}
+
 .row-section {
 	display: flex;
 	flex-direction: column;
+	padding: 0 5px;
 
+	&.bottom {
+		flex-direction: column-reverse;
+	}
 	.horizontal-tiles-hidden {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		height: 15px;
+		padding: 3px;
 
 		.horizontal-tile-hidden {
-			height: 10px;
-			width: 5px;
-			border: double 2px black;
-			display: inline-block;
+			height: $hidden-tile-height;
+			width: $hidden-tile-width;
+			background-color: $tile-back-color;
+			border: 1px solid rgb(65, 65, 65);
+			border-radius: 1px;
+			margin: 1px;
 		}
 	}
 
 	.horizontal-tiles-shown {
 		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		height: 120px;
+		align-items: flex-end;
+		flex-flow: row-reverse wrap;
+
+		&.bottom {
+			flex-flow: row-reverse wrap-reverse;
+		}
 
 		.horizontal-tile-shown {
-			height: 30px;
-			width: 15px;
-			display: inline-block;
-			margin: 2px;
+			height: $shown-tile-height;
+			width: $shown-tile-width;
+			border-radius: 8%;
+			background: $tile-front-color;
+		}
+	}
+
+	.discarded {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		align-self: center;
+		width: 8 * $shown-tile-width;
+		padding: 10px 0;
+
+		&.bottom {
+			flex-wrap: wrap-reverse;
+		}
+
+		.discarded-tile {
+			height: $shown-tile-height;
+			width: $shown-tile-width;
+			border-radius: 8%;
+			background: $tile-front-color;
+		}
+	}
+}
+
+.column-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	&.right {
+		flex-direction: row-reverse;
+	}
+
+	.vertical-tiles-hidden {
+		display: flex;
+		flex-direction: column;
+		width: 15px;
+		padding: 3px;
+
+		.vertical-tile-hidden {
+			width: $hidden-tile-height;
+			height: $hidden-tile-width;
+			margin: 1px;
+			border: 1px solid rgb(65, 65, 65);
+			border-radius: 1px;
+			background-color: $tile-back-color;
+		}
+	}
+
+	.vertical-tiles-shown {
+		display: flex;
+		flex-flow: column wrap-reverse;
+		justify-content: center;
+		height: 22 * $shown-tile-width;
+		width: $shown-tile-height;
+		padding: 0 5px;
+
+		.vertical-tile-shown {
+			height: $shown-tile-width;
+			width: $shown-tile-height;
+		}
+	}
+
+	.vertical-tile-shown-bg {
+		height: $shown-tile-height;
+		width: $shown-tile-width;
+		border-radius: 8%;
+		object-fit: contain;
+		transform: $rotate-transform;
+		background: $tile-front-color;
+	}
+
+	.discarded {
+		display: flex;
+		flex-flow: column wrap;
+		justify-content: flex-start;
+		height: 12 * $shown-tile-width;
+		padding: 0 5px;
+
+		&.right {
+			justify-content: flex-start;
+			flex-flow: column-reverse wrap-reverse;
+		}
+
+		.discarded-tile {
+			height: $shown-tile-width;
+			width: $shown-tile-height;
+			border-radius: 8%;
+			background: $tile-front-color;
+		}
+	}
+
+	.self-hidden-tiles {
+		display: flex;
+		flex-direction: column;
+
+		.self-hidden-tile {
+			height: $self-hidden-tile-width;
+			width: $self-hidden-tile-height;
+		}
+
+		.self-hidden-tile-bg {
+			height: $self-hidden-tile-height;
+			width: $self-hidden-tile-width;
+			border-radius: 8%;
+			background: $tile-front-color;
+			transform: $rotate-simple;
 		}
 	}
 }

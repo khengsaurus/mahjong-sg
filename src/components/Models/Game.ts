@@ -108,7 +108,7 @@ export class Game {
 			const oneToFour = [1, 2, 3, 4];
 			const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 			const suits = ['万', '筒', '索'];
-			const daPai = ['东', '南', '西', '北', '红中', '白般', '发财'];
+			const daPai = ['东', '南', '西', '北', '红中', '白板', '发财'];
 			const animals = ['cat', 'mouse', 'rooster', 'worm'];
 			const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
 
