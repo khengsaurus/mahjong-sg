@@ -121,7 +121,7 @@ export class Game {
 							number,
 							index,
 							isValidFlower: false,
-							id: `${number}${suit}${index}`,
+							id: `a${suit}${number}${index}`,
 							show: false
 						};
 						tiles.push(tile);
@@ -134,7 +134,7 @@ export class Game {
 						number: 1,
 						index,
 						isValidFlower: false,
-						id: `${pai}${index}`,
+						id: `b${pai}${index}`,
 						show: false
 					};
 					tiles.push(tile);
@@ -147,7 +147,7 @@ export class Game {
 					number: 1,
 					index: 1,
 					isValidFlower: true,
-					id: `${animal}`,
+					id: `y${animal}`,
 					show: false
 				};
 				tiles.push(tile);
@@ -159,7 +159,7 @@ export class Game {
 					number: 1,
 					index: 1,
 					isValidFlower: false,
-					id: `${flower}`,
+					id: `z${flower}`,
 					show: false
 				};
 				tiles.push(tile);
@@ -171,6 +171,10 @@ export class Game {
 				reject(new Error('Tiles not generated'));
 			}
 		});
+	}
+
+	sortTiles(tiles: Tile[]): Tile[] {
+		return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 	}
 
 	async giveTiles(n: number, playerIndex: number, buHua?: boolean) {
@@ -222,36 +226,9 @@ export class Game {
 		) {
 			this.buHua();
 		}
-		// LOGGING
-		console.log(`Player 1 has ${this.players[0].hiddenTiles.length} tiles`);
-		if (this.players[0].shownTiles.length > 0) {
-			console.log(`Player 1 has ${this.players[0].shownTiles.length} flowers: `);
-			this.players[0].shownTiles.forEach(hua => {
-				console.log(hua.card);
-			});
-		}
-		console.log(`Player 2 has ${this.players[1].hiddenTiles.length} tiles`);
-		if (this.players[1].shownTiles.length > 0) {
-			console.log(`Player 2 has ${this.players[1].shownTiles.length} flowers: `);
-			this.players[1].shownTiles.forEach(hua => {
-				console.log(hua.card);
-			});
-		}
-		console.log(`Player 3 has ${this.players[2].hiddenTiles.length} tiles`);
-		if (this.players[2].shownTiles.length > 0) {
-			console.log(`Player 3 has ${this.players[2].shownTiles.length} flowers: `);
-			this.players[2].shownTiles.forEach(hua => {
-				console.log(hua.card);
-			});
-		}
-		console.log(`Player 4 has ${this.players[3].hiddenTiles.length} tiles`);
-		if (this.players[3].shownTiles.length > 0) {
-			console.log(`Player 4 has ${this.players[3].shownTiles.length} flowers: `);
-			this.players[3].shownTiles.forEach(hua => {
-				console.log(hua.card);
-			});
-		}
-		console.log('Tiles left: ', this.tiles.length);
+		this.players.forEach((player: User) => {
+			player.hiddenTiles = this.sortTiles(player.hiddenTiles);
+		});
 	}
 
 	async buHua() {

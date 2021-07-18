@@ -1,7 +1,7 @@
 import { Button, Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import isEqual from 'lodash.isequal';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState, useMemo } from 'react';
 import HomeButton from '../../components/HomeButton';
 import { Game } from '../../components/Models/Game';
 import * as firebaseService from '../../service/firebaseService';
@@ -15,12 +15,12 @@ import TopPlayer from './TopPlayer';
 
 const Table = () => {
 	const { user, game, setGame } = useContext(AppContext);
-	const gameRef = useRef(game);
 
 	const [topPlayerIndex, setTopPlayerIndex] = useState(0);
 	const [rightPlayerIndex, setRightPlayerIndex] = useState(0);
 	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(0);
 	const [selfIndex, setSelfIndex] = useState(0);
+	const usernamesRef = useRef<string[]>([]);
 
 	// Only the creator can start the game
 	async function progressGame() {
@@ -34,22 +34,25 @@ const Table = () => {
 		}
 	}
 
-	function checkGameUpdated() {
-		return isEqual(gameRef.current, game);
-	}
-
 	useEffect(() => {
 		console.log('useEffect called');
 		const unsubscribe = firebaseService.listenToGame(game, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
 				console.log(currentGame);
-				// if (!isEqual(gameRef.current, currentGame)) {
-				// 	setGame(currentGame);
-				// 	gameRef.current = currentGame;
-				// }
+
+				// Do not reset player positions if they have been set
+				let usernames: string[] =
+					game && game.players
+						? game.players.map(player => {
+								return player.username;
+						  })
+						: [];
+				if (game.players && !isEqual(usernamesRef.current, usernames)) {
+					usernamesRef.current = usernames;
+					setPlayerPositions();
+				}
 				setGame(currentGame);
-				game.players && setPlayerPositions();
 			}
 		});
 		return unsubscribe;
@@ -98,13 +101,6 @@ const Table = () => {
 			<div className="main">
 				<Button onClick={progressGame}>
 					{game.ongoing ? (game.stage === 0 ? 'Start game' : 'Next round') : 'Game has ended'}
-				</Button>
-				<Button
-					onClick={() => {
-						console.log(checkGameUpdated());
-					}}
-				>
-					Check isEqual
 				</Button>
 			</div>
 		);

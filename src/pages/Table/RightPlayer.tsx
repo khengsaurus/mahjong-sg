@@ -1,3 +1,4 @@
+import React from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
 import './table.scss';
@@ -7,6 +8,7 @@ interface Player {
 }
 
 const RightPlayer = (props: Player) => {
+	console.log('Rendering right player component');
 	const { player } = props;
 	return (
 		<div className="column-section right">
@@ -16,7 +18,7 @@ const RightPlayer = (props: Player) => {
 				})}
 			</div>
 			<div className="vertical-tiles-shown">
-				{player.shownTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
 							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
@@ -25,14 +27,14 @@ const RightPlayer = (props: Player) => {
 				})}
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
+						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
 							<img
-								className="vertical-tile-shown-bg"
+								className={
+									tile.isValidFlower
+										? 'vertical-tile-shown-bg animate-flower'
+										: 'vertical-tile-shown-bg'
+								}
 								src={getTileSrc(tile.card)}
-								style={{
-									background: tile.isValidFlower ? '#9ba6bd' : null,
-									borderRadius: tile.isValidFlower ? '8%' : null
-								}}
 								alt="tile"
 							/>
 						</div>
@@ -40,7 +42,7 @@ const RightPlayer = (props: Player) => {
 				})}
 			</div>
 			<div className="discarded right">
-				{player.discardedTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">
 							<img
@@ -57,4 +59,4 @@ const RightPlayer = (props: Player) => {
 	);
 };
 
-export default RightPlayer;
+export default React.memo(RightPlayer);

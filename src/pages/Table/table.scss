@@ -1,7 +1,8 @@
 @import '../../App.scss';
 
 $rotate-transform: rotate(90deg) translateY(-14%) translateX(-22%);
-$rotate-simple: rotate(90deg);
+$rotate-simple-90: rotate(90deg);
+$rotate-simple-180: rotate(180deg);
 
 .top-player-container {
 	position: absolute;
@@ -58,6 +59,7 @@ $rotate-simple: rotate(90deg);
 		display: flex;
 		align-items: flex-end;
 		flex-flow: row-reverse wrap;
+		justify-content: center; // Remove to align top and bottom shown tiles to the right
 
 		&.bottom {
 			flex-flow: row-reverse wrap-reverse;
@@ -68,6 +70,15 @@ $rotate-simple: rotate(90deg);
 			width: $shown-tile-width;
 			border-radius: 8%;
 			background: $tile-front-color;
+			transform: $rotate-simple-180;
+
+			&.animate-flower {
+				transition: 200ms;
+				border-radius: 8%;
+				background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+				background-size: 400% 400%;
+				animation: linear-gradient 20s ease infinite;
+			}
 		}
 	}
 
@@ -80,7 +91,8 @@ $rotate-simple: rotate(90deg);
 		padding: 10px 0;
 
 		&.bottom {
-			flex-wrap: wrap-reverse;
+			// flex-wrap: wrap-reverse;
+			transform: $rotate-simple-180;
 		}
 
 		.discarded-tile {
@@ -139,6 +151,14 @@ $rotate-simple: rotate(90deg);
 		object-fit: contain;
 		transform: $rotate-transform;
 		background: $tile-front-color;
+
+		&.animate-flower {
+			transform: $rotate-transform;
+			transition: 200ms;
+			background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+			background-size: 400% 400%;
+			animation: linear-gradient 15s ease infinite;
+		}
 	}
 
 	.discarded {
@@ -164,18 +184,56 @@ $rotate-simple: rotate(90deg);
 	.self-hidden-tiles {
 		display: flex;
 		flex-direction: column;
+		z-index: 10;
 
 		.self-hidden-tile {
 			height: $self-hidden-tile-width;
 			width: $self-hidden-tile-height;
+			// border: 3px solid teal;
+
+			&.unselected {
+				transition: 200ms;
+				background: $tile-front-color;
+				// border: 1px solid black;
+				border-radius: 8%;
+			}
+
+			&.selected {
+				transform: translateX(15%);
+				transition: 200ms;
+				// border: 1px solid black;
+				border-radius: 8%;
+				// background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+				background: linear-gradient(
+					135deg,
+					$tile-front-color,
+					$tile-front-color,
+					$tile-front-color,
+					$tile-front-color,
+					#e8cb83,
+					$tile-front-color
+				);
+				background-size: 600% 600%;
+				animation: linear-gradient 3s ease infinite;
+			}
 		}
 
 		.self-hidden-tile-bg {
 			height: $self-hidden-tile-height;
 			width: $self-hidden-tile-width;
-			border-radius: 8%;
-			background: $tile-front-color;
-			transform: $rotate-simple;
+			transform: $rotate-simple-90;
 		}
+	}
+}
+
+@keyframes linear-gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
 	}
 }

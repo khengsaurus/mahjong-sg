@@ -19,6 +19,8 @@ interface AppContextInt {
 	setContacts: (contacts: Map<string, User>) => void;
 	game?: Game;
 	setGame: (game: Game) => void;
+	selectedTiles?: Tile[];
+	setSelectedTiles: (tiles: Tile[]) => void;
 }
 
 const initialContext: AppContextInt = {
@@ -33,7 +35,9 @@ const initialContext: AppContextInt = {
 	contacts: new Map(),
 	setContacts: (contacts: Map<string, User>) => {},
 	game: null,
-	setGame: (game: Game) => {}
+	setGame: (game: Game) => {},
+	selectedTiles: [],
+	setSelectedTiles: (tiles: Tile[]) => {}
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -44,6 +48,7 @@ export const AppContextProvider = (props: any) => {
 	const [contacts, setContacts] = useState<Map<string, User>>(new Map());
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [game, setGame] = useState<Game>(null);
+	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function validateJWT() {
@@ -91,7 +96,9 @@ export const AppContextProvider = (props: any) => {
 				contacts,
 				setContacts,
 				game,
-				setGame
+				setGame,
+				selectedTiles,
+				setSelectedTiles
 			}}
 			{...props}
 		/>

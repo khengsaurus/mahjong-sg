@@ -1,6 +1,8 @@
-import { IconButton } from '@material-ui/core';
+import { ButtonBase } from '@material-ui/core';
+import React, { useContext } from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
+import { AppContext } from '../../util/hooks/AppContext';
 import './table.scss';
 
 interface Player {
@@ -8,9 +10,18 @@ interface Player {
 }
 
 const Self = (props: Player) => {
+	console.log('Rendering left(self) player component');
+	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const { player } = props;
+
 	function selectTile(tile: Tile) {
-		console.log(tile.card);
+		if (!selectedTiles.includes(tile) && selectedTiles.length < 5) {
+			console.log('Selecting ', tile.card);
+			setSelectedTiles([...selectedTiles, tile]);
+		} else {
+			console.log('Deselecting ', tile.card);
+			setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.id !== tile.id));
+		}
 	}
 
 	return (
@@ -19,18 +30,23 @@ const Self = (props: Player) => {
 				{player.hiddenTiles &&
 					player.hiddenTiles.map((tile: Tile, index: number) => {
 						return (
-							<IconButton
+							<ButtonBase
 								key={`self-hidden-tile${index}`}
-								className="self-hidden-tile"
+								// className="self-hidden-tile"
+								className={
+									selectedTiles.includes(tile)
+										? 'self-hidden-tile selected'
+										: 'self-hidden-tile unselected'
+								}
 								onClick={() => selectTile(tile)}
 							>
 								<img className="self-hidden-tile-bg" src={getTileSrc(tile.card)} alt="tile" />
-							</IconButton>
+							</ButtonBase>
 						);
 					})}
 			</div>
 			<div className="vertical-tiles-shown">
-				{player.shownTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<div className="vertical-tile-shown">
 							<img
@@ -46,12 +62,12 @@ const Self = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
 							<img
-								className="vertical-tile-shown-bg"
+								className={
+									tile.isValidFlower
+										? 'vertical-tile-shown-bg animate-flower'
+										: 'vertical-tile-shown-bg'
+								}
 								src={getTileSrc(tile.card)}
-								style={{
-									background: tile.isValidFlower ? '#9ba6bd' : null,
-									borderRadius: tile.isValidFlower ? '8%' : null
-								}}
 								alt="tile"
 							/>
 						</div>
@@ -59,7 +75,7 @@ const Self = (props: Player) => {
 				})}
 			</div>
 			<div className="discarded">
-				{player.discardedTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">
 							<img
@@ -76,4 +92,4 @@ const Self = (props: Player) => {
 	);
 };
 
-export default Self;
+export default React.memo(Self);

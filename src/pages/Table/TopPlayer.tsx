@@ -1,3 +1,5 @@
+import isEqual from 'lodash.isequal';
+import React from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
 import './table.scss';
@@ -6,7 +8,12 @@ interface Player {
 	player: User;
 }
 
+function areEqual(oldPlayerRef: User, newPlayerRef: User) {
+	return isEqual(oldPlayerRef, newPlayerRef);
+}
+
 const TopPlayer = (props: Player) => {
+	console.log('Rendering top player component');
 	const { player } = props;
 	return (
 		<div className="row-section">
@@ -20,17 +27,15 @@ const TopPlayer = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
 							key={`top-shown-tile-${index}`}
-							className="horizontal-tile-shown"
+							className={
+								tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
+							}
 							src={getTileSrc(tile.card)}
-							style={{
-								background: tile.isValidFlower ? '#9ba6bd' : null,
-								borderRadius: tile.isValidFlower ? '8%' : null
-							}}
 							alt="tile"
 						/>
 					) : null;
 				})}
-				{player.shownTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<img
 							key={`top-shown-tile-${index}`}
@@ -42,7 +47,7 @@ const TopPlayer = (props: Player) => {
 				})}
 			</div>
 			<div className="discarded">
-				{player.discardedTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
 							key={`bottom-discarded-tile-${index}`}
@@ -57,4 +62,4 @@ const TopPlayer = (props: Player) => {
 	);
 };
 
-export default TopPlayer;
+export default React.memo(TopPlayer);
