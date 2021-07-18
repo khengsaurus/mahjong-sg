@@ -16,19 +16,17 @@ import TopPlayer from './TopPlayer';
 const Table = () => {
 	const { user, game, setGame } = useContext(AppContext);
 
-	const [topPlayerIndex, setTopPlayerIndex] = useState(0);
-	const [rightPlayerIndex, setRightPlayerIndex] = useState(0);
-	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(0);
-	const [selfIndex, setSelfIndex] = useState(0);
+	const [topPlayerIndex, setTopPlayerIndex] = useState(null);
+	const [rightPlayerIndex, setRightPlayerIndex] = useState(null);
+	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(null);
+	const [selfIndex, setSelfIndex] = useState(null);
 	const usernamesRef = useRef<string[]>([]);
 
 	// Only the creator can start the game
 	async function progressGame() {
-		console.log(game);
 		if (game.midRound === false) {
-			console.log('Creator calling progressGame');
+			console.log('Table: creator calling progressGame');
 			await game.initRound(true).then(() => {
-				console.log(game);
 				firebaseService.updateGame(game);
 			});
 		}
@@ -111,16 +109,16 @@ const Table = () => {
 			return (
 				<div className="main">
 					<div className="top-player-container">
-						<TopPlayer player={game.players[topPlayerIndex]} />
+						{game.players[topPlayerIndex] && <TopPlayer player={game.players[topPlayerIndex]} />}
 					</div>
 					<div className="bottom-player-container">
-						<BottomPlayer player={game.players[bottomPlayerIndex]} />
+						{game.players[bottomPlayerIndex] && <BottomPlayer player={game.players[bottomPlayerIndex]} />}
 					</div>
 					<div className="right-player-container">
-						<RightPlayer player={game.players[rightPlayerIndex]} />
+						{game.players[rightPlayerIndex] && <RightPlayer player={game.players[rightPlayerIndex]} />}
 					</div>
 					<div className="self-container">
-						<Self player={game.players[selfIndex]} />
+						{game.players[selfIndex] && <Self player={game.players[selfIndex]} />}
 					</div>
 				</div>
 			);

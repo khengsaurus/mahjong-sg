@@ -1,8 +1,9 @@
 import { ButtonBase } from '@material-ui/core';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
 import { AppContext } from '../../util/hooks/AppContext';
+import { generateUnusedTiles } from '../../util/utilFns';
 import './table.scss';
 
 interface Player {
@@ -10,9 +11,13 @@ interface Player {
 }
 
 const Self = (props: Player) => {
-	console.log('Rendering left(self) player component');
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const { player } = props;
+	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+
+	useEffect(() => {
+		console.log('Rendering left component');
+	});
 
 	function selectTile(tile: Tile) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 5) {
@@ -64,7 +69,9 @@ const Self = (props: Player) => {
 							<img
 								className={
 									tile.isValidFlower
-										? 'vertical-tile-shown-bg animate-flower'
+										? tile.suit === '动物'
+											? 'vertical-tile-shown-bg animate-flower animal'
+											: 'vertical-tile-shown-bg animate-flower'
 										: 'vertical-tile-shown-bg'
 								}
 								src={getTileSrc(tile.card)}
@@ -74,7 +81,27 @@ const Self = (props: Player) => {
 					) : null;
 				})}
 			</div>
+			{player.unusedTiles > 0 && (
+				<div className="vertical-tiles-hidden unused">
+					{unusedTiles.map(i => {
+						return <div key={`self-unused-tile${i}`} className="vertical-tile-hidden" />;
+					})}
+				</div>
+			)}
 			<div className="discarded">
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
+					return (
+						<div className="discarded-tile">
+							<img
+								key={`right-discarded-tile-${index}`}
+								className="vertical-tile-shown-bg"
+								src={getTileSrc(tile.card)}
+								alt="tile"
+							/>
+						</div>
+					);
+				})}
+				{/*  */}
 				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">

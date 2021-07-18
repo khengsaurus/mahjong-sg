@@ -46,7 +46,8 @@ export function typeCheckUser(method: number, obj: unknown): User | null {
 				data.currentSeat,
 				data.shownTiles,
 				data.hiddenTiles,
-				data.discardedTiles
+				data.discardedTiles,
+				data.unusedTiles
 			);
 		}
 	} else {
@@ -76,14 +77,6 @@ export function formatFirestoreTimestamp(date: firebase.firestore.Timestamp): st
 
 export function formatDateToDay(date: Date): string {
 	return moment(date).format('DD/MM/YY, h:mm a');
-	// let days: number = moment(date).diff(new Date(), 'days');
-	// if (days <= 1) {
-	// 	return 'Today';
-	// } else if (days < 7) {
-	// 	return moment(date).format('dddd');
-	// } else {
-	// 	return moment(date).format('DD/MM/YY');
-	// }
 }
 
 export function typeCheckChatListObject(corresId: string, msgData: any): ChatListObject {
@@ -93,7 +86,6 @@ export function typeCheckChatListObject(corresId: string, msgData: any): ChatLis
 		return {
 			corresId,
 			msg: msgData.msg || '',
-			// createdAt : msgData.createdAt,
 			createdAt: msgData.createdAt.toDate() || null,
 			sent: msgData.sent || ''
 		};
@@ -121,19 +113,17 @@ export function userToObj(user: User) {
 					return tileToObj(tile);
 			  })
 			: [],
-		// hiddenTiles: user.hiddenTiles || [],
 		shownTiles: user.shownTiles
 			? user.shownTiles.map((tile: Tile) => {
 					return tileToObj(tile);
 			  })
 			: [],
-		// shownTiles: user.shownTiles || [],
 		discardedTiles: user.discardedTiles
 			? user.discardedTiles.map((tile: Tile) => {
 					return tileToObj(tile);
 			  })
-			: []
-		// discardedTiles: user.discardedTiles || []
+			: [],
+		unusedTiles: user.unusedTiles || 0
 	};
 }
 
@@ -146,7 +136,6 @@ export function tileToObj(tile: Tile) {
 		id: tile.id,
 		show: tile.show,
 		isValidFlower: tile.isValidFlower
-		// canBeTaken: tile.canBeTaken
 	};
 }
 
@@ -164,14 +153,12 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.whoseMove,
 		ref.playerIds,
 		ref.playersString,
-		// ref.player1 && ref.player1.id ? typeCheckUser(3, ref.player1) : null,
-		// ref.player2 && ref.player2.id ? typeCheckUser(3, ref.player2) : null,
-		// ref.player3 && ref.player3.id ? typeCheckUser(3, ref.player3) : null,
-		// ref.player4 && ref.player4.id ? typeCheckUser(3, ref.player4) : null,
 		ref.players.map((player: any) => {
 			return typeCheckUser(3, player);
 		}),
 		ref.tiles,
+		ref.frontTiles,
+		ref.backTiles,
 		ref.lastThrown,
 		ref.thrownBy
 	);
@@ -188,7 +175,6 @@ export function typeCheckTile(data: any): Tile {
 			id: data.id,
 			show: data.show,
 			isValidFlower: data.isValidFlower
-			// canBeTaken: data.canBeTaken
 		};
 	} catch (err) {
 		console.log('Unable to create tile - ', err.msg);
@@ -197,12 +183,10 @@ export function typeCheckTile(data: any): Tile {
 	return tile;
 }
 
-// interface Tile {
-// 	card: string;
-// 	index: number;
-// 	show: boolean;
-// 	suit: string;
-// 	id: string;
-// 	number?: number;
-// 	isValidFlower?: () => boolean;
-// }
+export function generateUnusedTiles(n: number) {
+	let unusedTiles = [];
+	for (let i: number = 0; i < n; i++) {
+		unusedTiles.push(i);
+	}
+	return unusedTiles;
+}

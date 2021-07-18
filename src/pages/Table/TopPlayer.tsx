@@ -1,5 +1,4 @@
-import isEqual from 'lodash.isequal';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
 import './table.scss';
@@ -8,13 +7,13 @@ interface Player {
 	player: User;
 }
 
-function areEqual(oldPlayerRef: User, newPlayerRef: User) {
-	return isEqual(oldPlayerRef, newPlayerRef);
-}
-
 const TopPlayer = (props: Player) => {
-	console.log('Rendering top player component');
 	const { player } = props;
+
+	useEffect(() => {
+		console.log('Rendering top component');
+	});
+
 	return (
 		<div className="row-section">
 			<div className="horizontal-tiles-hidden">
@@ -27,8 +26,15 @@ const TopPlayer = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
 							key={`top-shown-tile-${index}`}
+							// className={
+							// 	tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
+							// }
 							className={
-								tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
+								tile.isValidFlower
+									? tile.suit === '动物'
+										? 'horizontal-tile-shown animate-flower animal'
+										: 'horizontal-tile-shown animate-flower'
+									: 'horizontal-tile-shown'
 							}
 							src={getTileSrc(tile.card)}
 							alt="tile"

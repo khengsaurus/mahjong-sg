@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
 import './table.scss';
+import { generateUnusedTiles } from '../../util/utilFns';
 
 interface Player {
 	player: User;
 }
 
 const BottomPlayer = (props: Player) => {
-	console.log('Rendering bottom player component');
 	const { player } = props;
+	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(37), [player.unusedTiles]);
+
+	useEffect(() => {
+		console.log('Rendering bottom component');
+	});
+
 	return (
 		<div className="row-section bottom">
 			<div className="horizontal-tiles-hidden">
@@ -22,8 +28,15 @@ const BottomPlayer = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
 							key={`bottom-shown-tile-${index}`}
+							// className={
+							// 	tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
+							// }
 							className={
-								tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
+								tile.isValidFlower
+									? tile.suit === '动物'
+										? 'horizontal-tile-shown animate-flower animal'
+										: 'horizontal-tile-shown animate-flower'
+									: 'horizontal-tile-shown'
 							}
 							src={getTileSrc(tile.card)}
 							alt="tile"
@@ -41,6 +54,14 @@ const BottomPlayer = (props: Player) => {
 					) : null;
 				})}
 			</div>
+			{/* {player.unusedTiles > 0 && ( */}
+			<div className="horizontal-tiles-hidden unused bottom">
+				{unusedTiles.map(i => {
+					console.log(i);
+					return <div key={`self-unused-tile${i}`} className="horizontal-tile-hidden" />;
+				})}
+			</div>
+			{/* )} */}
 			<div className="discarded bottom">
 				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (

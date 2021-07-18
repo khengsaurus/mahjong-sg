@@ -34,6 +34,7 @@ $rotate-simple-180: rotate(180deg);
 	display: flex;
 	flex-direction: column;
 	padding: 0 5px;
+	justify-content: center;
 
 	&.bottom {
 		flex-direction: column-reverse;
@@ -42,17 +43,26 @@ $rotate-simple-180: rotate(180deg);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
-		height: 15px;
-		padding: 3px;
-
-		.horizontal-tile-hidden {
-			height: $hidden-tile-height;
-			width: $hidden-tile-width;
-			background-color: $tile-back-color;
-			border: 1px solid rgb(65, 65, 65);
-			border-radius: 1px;
-			margin: 1px;
+		padding: 1px 0;
+		&.unused {
+			flex-flow: row wrap;
+			align-self: center;
+			align-content: center;
+			height: 2.5 * $hidden-tile-height;
+			width: 26 * $hidden-tile-width;
+			z-index: -1;
+			&.bottom {
+				flex-flow: column wrap;
+				justify-content: flex-end;
+			}
 		}
+	}
+	.horizontal-tile-hidden {
+		height: $hidden-tile-height;
+		width: $hidden-tile-width;
+		background-color: $tile-back-color;
+		border: 1px solid rgb(65, 65, 65);
+		border-radius: 1px;
 	}
 
 	.horizontal-tiles-shown {
@@ -63,6 +73,7 @@ $rotate-simple-180: rotate(180deg);
 
 		&.bottom {
 			flex-flow: row-reverse wrap-reverse;
+			transform: $rotate-simple-180;
 		}
 
 		.horizontal-tile-shown {
@@ -70,14 +81,20 @@ $rotate-simple-180: rotate(180deg);
 			width: $shown-tile-width;
 			border-radius: 8%;
 			background: $tile-front-color;
-			transform: $rotate-simple-180;
 
 			&.animate-flower {
 				transition: 200ms;
 				border-radius: 8%;
-				background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+				// background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+				background: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 				background-size: 400% 400%;
 				animation: linear-gradient 20s ease infinite;
+			}
+
+			&.animal {
+				height: $shown-tile-height - 2px;
+				width: $shown-tile-width - 2px;
+				border: 1px solid black;
 			}
 		}
 	}
@@ -88,7 +105,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: flex-end;
 		align-self: center;
 		width: 8 * $shown-tile-width;
-		padding: 10px 0;
+		padding: 1px 0;
 
 		&.bottom {
 			// flex-wrap: wrap-reverse;
@@ -117,17 +134,25 @@ $rotate-simple-180: rotate(180deg);
 	.vertical-tiles-hidden {
 		display: flex;
 		flex-direction: column;
-		width: 15px;
-		padding: 3px;
-
-		.vertical-tile-hidden {
-			width: $hidden-tile-height;
-			height: $hidden-tile-width;
-			margin: 1px;
-			border: 1px solid rgb(65, 65, 65);
-			border-radius: 1px;
-			background-color: $tile-back-color;
+		padding: 0 1px;
+		&.unused {
+			flex-flow: row wrap;
+			height: 26 * $hidden-tile-width;
+			width: 2.5 * $hidden-tile-height;
+			align-content: center;
+			align-items: flex-start;
+			z-index: -1;
+			&.right {
+				flex-flow: row-reverse wrap;
+			}
 		}
+	}
+	.vertical-tile-hidden {
+		width: $hidden-tile-height;
+		height: $hidden-tile-width;
+		border: 1px solid rgb(65, 65, 65);
+		border-radius: 1px;
+		background-color: $tile-back-color;
 	}
 
 	.vertical-tiles-shown {
@@ -136,7 +161,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: center;
 		height: 22 * $shown-tile-width;
 		width: $shown-tile-height;
-		padding: 0 5px;
+		padding: 0 1px;
 
 		.vertical-tile-shown {
 			height: $shown-tile-width;
@@ -155,9 +180,16 @@ $rotate-simple-180: rotate(180deg);
 		&.animate-flower {
 			transform: $rotate-transform;
 			transition: 200ms;
-			background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+			// background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+			background: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 			background-size: 400% 400%;
 			animation: linear-gradient 15s ease infinite;
+		}
+
+		&.animal {
+			height: $shown-tile-height - 2px;
+			width: $shown-tile-width - 2px;
+			border: 1px solid black;
 		}
 	}
 
@@ -166,7 +198,7 @@ $rotate-simple-180: rotate(180deg);
 		flex-flow: column wrap;
 		justify-content: flex-start;
 		height: 12 * $shown-tile-width;
-		padding: 0 5px;
+		padding: 0 1px;
 
 		&.right {
 			justify-content: flex-start;
@@ -189,29 +221,24 @@ $rotate-simple-180: rotate(180deg);
 		.self-hidden-tile {
 			height: $self-hidden-tile-width;
 			width: $self-hidden-tile-height;
-			// border: 3px solid teal;
 
 			&.unselected {
 				transition: 200ms;
 				background: $tile-front-color;
-				// border: 1px solid black;
 				border-radius: 8%;
 			}
 
 			&.selected {
 				transform: translateX(15%);
 				transition: 200ms;
-				// border: 1px solid black;
 				border-radius: 8%;
-				// background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
 				background: linear-gradient(
 					135deg,
 					$tile-front-color,
 					$tile-front-color,
 					$tile-front-color,
-					$tile-front-color,
-					#e8cb83,
-					$tile-front-color
+					#d2bc85,
+					#c49c36
 				);
 				background-size: 600% 600%;
 				animation: linear-gradient 3s ease infinite;

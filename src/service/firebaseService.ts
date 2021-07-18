@@ -147,7 +147,6 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 		try {
 			gameRef
 				.add({
-					// creator: userToObj(user),
 					creator: user.username,
 					createdAt,
 					stage: 0,
@@ -158,14 +157,12 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					whoseMove: 0,
 					playerIds,
 					playersString,
-					// player1: null,
-					// player2: null,
-					// player3: null,
-					// player4: null,
 					players: players.map(function (player: User) {
 						return userToObj(player);
 					}),
 					tiles: [],
+					frontTiles: 0,
+					backTiles: 0,
 					lastThrown: {},
 					thrownBy: 0
 				})
@@ -182,7 +179,13 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 						false,
 						null,
 						playerIds,
-						playersString
+						playersString,
+						[],
+						[],
+						null,
+						null,
+						null,
+						null
 					);
 					resolve(game);
 				});

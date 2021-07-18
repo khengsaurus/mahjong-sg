@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { User } from '../../components/Models/User';
 import getTileSrc from '../../images/tiles/index';
 import './table.scss';
+import { generateUnusedTiles } from '../../util/utilFns';
 
 interface Player {
 	player: User;
 }
 
 const RightPlayer = (props: Player) => {
-	console.log('Rendering right player component');
 	const { player } = props;
+	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+
+	useEffect(() => {
+		console.log('Rendering right component');
+	});
+
 	return (
 		<div className="column-section right">
 			<div className="vertical-tiles-hidden">
@@ -27,11 +33,18 @@ const RightPlayer = (props: Player) => {
 				})}
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
+						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
 							<img
+								// className={
+								// 	tile.isValidFlower
+								// 		? 'vertical-tile-shown-bg animate-flower'
+								// 		: 'vertical-tile-shown-bg'
+								// }
 								className={
 									tile.isValidFlower
-										? 'vertical-tile-shown-bg animate-flower'
+										? tile.suit === '动物'
+											? 'vertical-tile-shown-bg animate-flower animal'
+											: 'vertical-tile-shown-bg animate-flower'
 										: 'vertical-tile-shown-bg'
 								}
 								src={getTileSrc(tile.card)}
@@ -41,7 +54,27 @@ const RightPlayer = (props: Player) => {
 					) : null;
 				})}
 			</div>
+			{player.unusedTiles > 0 && (
+				<div className="vertical-tiles-hidden unused right">
+					{unusedTiles.map(i => {
+						return <div key={`right-unused-tile${i}`} className="vertical-tile-hidden" />;
+					})}
+				</div>
+			)}
 			<div className="discarded right">
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
+					return (
+						<div className="discarded-tile">
+							<img
+								key={`right-discarded-tile-${index}`}
+								className="vertical-tile-shown-bg"
+								src={getTileSrc(tile.card)}
+								alt="tile"
+							/>
+						</div>
+					);
+				})}
+				{/*  */}
 				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">
