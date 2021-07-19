@@ -4,7 +4,7 @@ import firebase from 'firebase/app';
 import React, { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
-import { Game } from '../../components/Models/Game';
+import { Game } from '../../Models/Game';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { formatDateToDay, typeCheckGame } from '../../util/utilFns';

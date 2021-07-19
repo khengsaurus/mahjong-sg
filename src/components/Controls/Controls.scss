@@ -1,0 +1,83 @@
+@import '../../App.scss';
+$control-sq-side: 60px;
+
+.overlay-main {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.top-right-controls {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 1.5 * $control-sq-side;
+	width: 1.5 * $control-sq-side;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-start;
+	z-index: 10;
+	// border: 1px solid grey;
+	.home-button {
+		height: $control-sq-side / 1.5;
+		width: $control-sq-side;
+		// transform: rotate(90deg) translateX(25%) translateY(-50%);
+		// background: $tile-back-color;
+	}
+}
+
+.top-left-controls {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 1.5 * $control-sq-side;
+	width: 1.5 * $control-sq-side;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	z-index: 10;
+	// border: 1px solid grey;
+	.button {
+		height: $control-sq-side / 1.5;
+		width: $control-sq-side;
+		// transform: rotate(90deg) translateX(25%);
+		// translateY(-60%);
+		// background-color: $tile-back-color;
+	}
+}
+
+.bottom-left-controls {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 1.5 * $control-sq-side;
+	width: 1.5 * $control-sq-side;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	z-index: 10;
+	// border: 1px solid grey;
+	.button {
+		height: $control-sq-side / 1.5;
+		width: $control-sq-side;
+	}
+}
+
+.bottom-right-controls {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	height: 1.5 * $control-sq-side;
+	width: 1.5 * $control-sq-side;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
+	z-index: 10;
+	.button {
+		height: $control-sq-side / 1.5;
+		width: $control-sq-side;
+	}
+}

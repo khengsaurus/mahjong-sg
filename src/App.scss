@@ -1,8 +1,7 @@
 $navbar-height: 60px;
 $sidebar-width: 200px;
 $color-navbar: #242526;
-// $color-background: rgb(235, 235, 235);
-$color-background: rgb(198, 183, 153);
+
 $color-message-sent-bg: #007bd3;
 $color-message-sent-text: white;
 $color-message-received-bg: rgb(190, 190, 190);
@@ -11,6 +10,10 @@ $color-grey-text: grey;
 $color-detail: rgb(88, 101, 144);
 $color-borders: rgb(170, 170, 170);
 
+$light-brown: rgb(215, 205, 190);
+$dark-brown: rgb(150, 125, 95);
+
+$color-background: $light-brown;
 $tile-back-color: teal;
 $tile-front-color: rgb(220, 220, 220);
 
@@ -18,9 +21,14 @@ $hidden-tile-height: 9px;
 $hidden-tile-width: 6px;
 $shown-tile-height: 32px;
 $shown-tile-width: 22px;
+$tile-border-px: 1px;
+$button-border-px: 1px;
 
-$self-hidden-tile-height: 50px;
-$self-hidden-tile-width: 35px;
+// $self-hidden-tile-height: 50px;
+// $self-hidden-tile-width: 35px;
+
+$self-hidden-tile-height: 46px;
+$self-hidden-tile-width: 32px;
 
 // $flower-highlight: #9ba6bd;
 $flower-highlight: #df9a94;
@@ -30,11 +38,16 @@ $flower-highlight: #df9a94;
 // $shown-tile-width: 25px;
 
 .main {
+	position: absolute;
+	top: 0;
+	left: 0;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 95vh;
-	width: 95vw;
+	// height: 95vh;
+	// width: 95vw;
+	height: 100%;
+	width: 100%;
 	background-color: $color-background;
 }

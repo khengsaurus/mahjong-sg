@@ -53,12 +53,12 @@ export class User {
 	}
 
 	canChi(tiles: Tile[]): boolean {
+		let sameSuit = tiles.every(tile => tile.card === tiles[0].card) ? true : false;
 		let sortedTiles = this.sort(tiles);
 		if (
+			sameSuit &&
 			sortedTiles[2].number === sortedTiles[1].number - 1 &&
-			sortedTiles[1].number === sortedTiles[0].number - 1 &&
-			sortedTiles[2].suit === sortedTiles[1].suit &&
-			sortedTiles[1].suit === sortedTiles[0].suit
+			sortedTiles[1].number === sortedTiles[0].number - 1
 		) {
 			return true;
 		} else {
@@ -67,11 +67,11 @@ export class User {
 	}
 
 	canPong(tiles: Tile[]): boolean {
-		if (tiles[2].card === tiles[1].card && tiles[1].card === tiles[0].card) {
-			return true;
-		} else {
-			return false;
-		}
+		return tiles.length === 3 && tiles.every(tile => tile.card === tiles[0].card) ? true : false;
+	}
+
+	canKang(tiles: Tile[]): boolean {
+		return tiles.length === 4 && tiles.every(tile => tile.card === tiles[0].card) ? true : false;
 	}
 
 	chi(selectedTiles: Tile[]) {

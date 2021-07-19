@@ -1,16 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
-import { User } from '../../components/Models/User';
+import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
-import './table.scss';
+import './playerComponents.scss';
 import { generateUnusedTiles } from '../../util/utilFns';
 
-interface Player {
-	player: User;
-}
-
-const RightPlayer = (props: Player) => {
-	const { player } = props;
+const RightPlayer = (props: PlayerComponentProps) => {
+	const { player, hasFront, hasBack } = props;
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
 
 	useEffect(() => {
 		console.log('Rendering right component');
@@ -24,7 +21,7 @@ const RightPlayer = (props: Player) => {
 				})}
 			</div>
 			<div className="vertical-tiles-shown">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
 							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
@@ -35,11 +32,6 @@ const RightPlayer = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
 							<img
-								// className={
-								// 	tile.isValidFlower
-								// 		? 'vertical-tile-shown-bg animate-flower'
-								// 		: 'vertical-tile-shown-bg'
-								// }
 								className={
 									tile.isValidFlower
 										? tile.suit === '动物'
@@ -55,14 +47,14 @@ const RightPlayer = (props: Player) => {
 				})}
 			</div>
 			{player.unusedTiles > 0 && (
-				<div className="vertical-tiles-hidden unused right">
+				<div className={`vertical-tiles-hidden unused right ${frontBackTag}`}>
 					{unusedTiles.map(i => {
 						return <div key={`right-unused-tile${i}`} className="vertical-tile-hidden" />;
 					})}
 				</div>
 			)}
 			<div className="discarded right">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.discardedTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">
 							<img
@@ -74,8 +66,8 @@ const RightPlayer = (props: Player) => {
 						</div>
 					);
 				})}
-				{/*  */}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{/* Extra discarded tiles */}
+				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">
 							<img
@@ -86,7 +78,7 @@ const RightPlayer = (props: Player) => {
 							/>
 						</div>
 					);
-				})}
+				})} */}
 			</div>
 		</div>
 	);

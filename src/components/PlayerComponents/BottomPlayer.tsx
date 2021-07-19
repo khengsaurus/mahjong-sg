@@ -1,17 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
-import { User } from '../../components/Models/User';
+import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
-import './table.scss';
+import './playerComponents.scss';
 import { generateUnusedTiles } from '../../util/utilFns';
 
-interface Player {
-	player: User;
-}
-
-const BottomPlayer = (props: Player) => {
-	const { player } = props;
-	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(37), [player.unusedTiles]);
-
+const BottomPlayer = (props: PlayerComponentProps) => {
+	const { player, hasFront, hasBack } = props;
+	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 	useEffect(() => {
 		console.log('Rendering bottom component');
 	});
@@ -28,9 +24,6 @@ const BottomPlayer = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
 							key={`bottom-shown-tile-${index}`}
-							// className={
-							// 	tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
-							// }
 							className={
 								tile.isValidFlower
 									? tile.suit === '动物'
@@ -43,7 +36,7 @@ const BottomPlayer = (props: Player) => {
 						/>
 					) : null;
 				})}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<img
 							key={`bottom-shown-tile-${index}`}
@@ -54,16 +47,15 @@ const BottomPlayer = (props: Player) => {
 					) : null;
 				})}
 			</div>
-			{/* {player.unusedTiles > 0 && ( */}
-			<div className="horizontal-tiles-hidden unused bottom">
-				{unusedTiles.map(i => {
-					console.log(i);
-					return <div key={`self-unused-tile${i}`} className="horizontal-tile-hidden" />;
-				})}
-			</div>
-			{/* )} */}
+			{player.unusedTiles > 0 && (
+				<div className={`horizontal-tiles-hidden unused bottom ${frontBackTag}`}>
+					{unusedTiles.map(i => {
+						return <div key={`bottom-unused-tile${i}`} className="horizontal-tile-hidden" />;
+					})}
+				</div>
+			)}
 			<div className="discarded bottom">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.discardedTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
 							key={`bottom-discarded-tile-${index}`}
@@ -73,6 +65,17 @@ const BottomPlayer = (props: Player) => {
 						/>
 					);
 				})}
+				{/* Extra discarded tiles */}
+				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
+					return (
+						<img
+							key={`bottom-discarded-tile-${index}`}
+							className="discarded-tile"
+							src={getTileSrc(tile.card)}
+							alt="tile"
+						/>
+					);
+				})} */}
 			</div>
 		</div>
 	);

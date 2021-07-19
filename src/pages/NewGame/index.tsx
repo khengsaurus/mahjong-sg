@@ -8,7 +8,7 @@ import UserSearchForm from '../../components/UserSearchForm';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
 import * as firebaseService from '../../service/firebaseService';
-import { User } from '../../components/Models/User';
+import { User } from '../../Models/User';
 import './NewGame.scss';
 
 const NewGame = () => {

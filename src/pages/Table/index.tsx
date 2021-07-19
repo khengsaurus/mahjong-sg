@@ -2,33 +2,40 @@ import { Button, Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import isEqual from 'lodash.isequal';
 import React, { useContext, useEffect, useRef, useState, useMemo } from 'react';
+import Controls from '../../components/Controls';
 import HomeButton from '../../components/HomeButton';
-import { Game } from '../../components/Models/Game';
+import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
+import LeftPlayer from '../../components/PlayerComponents/LeftPlayer';
+import RightPlayer from '../../components/PlayerComponents/RightPlayer';
+import TopPlayer from '../../components/PlayerComponents/TopPlayer';
+import { Game } from '../../Models/Game';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { typeCheckGame } from '../../util/utilFns';
-import BottomPlayer from './BottomPlayer';
-import RightPlayer from './RightPlayer';
-import Self from './Self';
-import './table.scss';
-import TopPlayer from './TopPlayer';
+import './Table.scss';
 
 const Table = () => {
 	const { user, game, setGame } = useContext(AppContext);
-
 	const [topPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [rightPlayerIndex, setRightPlayerIndex] = useState(null);
 	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(null);
-	const [selfIndex, setSelfIndex] = useState(null);
-	const usernamesRef = useRef<string[]>([]);
+	const [leftPlayerIndex, setLeftPlayerIndex] = useState(null);
+	const [front, setFront] = useState(null);
+	const [back, setBack] = useState(null);
+	const [usersRef, setUsersRef] = useState<SimpleUser[]>([]);
 
 	// Only the creator can start the game
 	async function progressGame() {
 		if (game.midRound === false) {
 			console.log('Table: creator calling progressGame');
-			await game.initRound(true).then(() => {
-				firebaseService.updateGame(game);
-			});
+			await game
+				.initRound(true)
+				.then(() => {
+					firebaseService.updateGame(game);
+				})
+				.then(() => {
+					setGame(game);
+				});
 		}
 	}
 
@@ -38,19 +45,30 @@ const Table = () => {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
 				console.log(currentGame);
+				setGame(currentGame);
 
 				// Do not reset player positions if they have been set
-				let usernames: string[] =
+				let simpleUsers: SimpleUser[] =
 					game && game.players
 						? game.players.map(player => {
-								return player.username;
+								return { username: player.username, id: player.id };
 						  })
 						: [];
-				if (game.players && !isEqual(usernamesRef.current, usernames)) {
-					usernamesRef.current = usernames;
-					setPlayerPositions();
-				}
-				setGame(currentGame);
+				setFront(game.frontTiles);
+				setBack(game.backTiles);
+				setUsersRef(simpleUsers);
+				// let usernames: string[] =
+				// 	game && game.players
+				// 		? game.players.map(player => {
+				// 				return player.username;
+				// 		  })
+				// 		: [];
+				// if (game.players && !isEqual(usernamesRef.current, usernames)) {
+				// 	usernamesRef.current = usernames;
+				// 	setPlayerPositions();
+				// 	setFront(game.frontTiles);
+				// 	setBack(game.backTiles);
+				// }
 			}
 		});
 		return unsubscribe;
@@ -62,42 +80,44 @@ const Table = () => {
 	 * player3: 2, 1, 4
 	 * player4: 1, 2, 3
 	 */
-	function setPlayerPositions() {
-		console.log('Setting player positions');
-		switch (user.username) {
-			case game.players[0].username:
-				setSelfIndex(0);
-				setTopPlayerIndex(3);
-				setRightPlayerIndex(2);
-				setBottomPlayerIndex(1);
-				break;
-			case game.players[1].username:
-				setSelfIndex(1);
-				setTopPlayerIndex(0);
-				setRightPlayerIndex(3);
-				setBottomPlayerIndex(2);
-				break;
-			case game.players[2].username:
-				setSelfIndex(2);
-				setTopPlayerIndex(1);
-				setRightPlayerIndex(0);
-				setBottomPlayerIndex(3);
-				break;
-			case game.players[3].username:
-				setSelfIndex(3);
-				setTopPlayerIndex(2);
-				setRightPlayerIndex(1);
-				setBottomPlayerIndex(0);
-				break;
-			default:
-				break;
+	useMemo(() => {
+		if (game && user && usersRef.length > 0) {
+			console.log('Setting player positions');
+			switch (user.username) {
+				case usersRef[0].username:
+					setLeftPlayerIndex(0);
+					setTopPlayerIndex(3);
+					setRightPlayerIndex(2);
+					setBottomPlayerIndex(1);
+					break;
+				case usersRef[1].username:
+					setLeftPlayerIndex(1);
+					setTopPlayerIndex(0);
+					setRightPlayerIndex(3);
+					setBottomPlayerIndex(2);
+					break;
+				case usersRef[2].username:
+					setLeftPlayerIndex(2);
+					setTopPlayerIndex(1);
+					setRightPlayerIndex(0);
+					setBottomPlayerIndex(3);
+					break;
+				case usersRef[3].username:
+					setLeftPlayerIndex(3);
+					setTopPlayerIndex(2);
+					setRightPlayerIndex(1);
+					setBottomPlayerIndex(0);
+					break;
+				default:
+					break;
+			}
 		}
-	}
+	}, [usersRef]);
 
-	const renderControl = () => {
+	const renderCenterControl = () => {
 		return (
 			<div className="main">
-				<Button onClick={progressGame}>
+				<Button onClick={progressGame} variant="outlined">
 					{game.ongoing ? (game.stage === 0 ? 'Start game' : 'Next round') : 'Game has ended'}
 				</Button>
 			</div>
@@ -109,17 +129,42 @@ const Table = () => {
 			return (
 				<div className="main">
 					<div className="top-player-container">
-						{game.players[topPlayerIndex] && <TopPlayer player={game.players[topPlayerIndex]} />}
+						{game.players[topPlayerIndex] && (
+							<TopPlayer
+								player={game.players[topPlayerIndex]}
+								hasFront={front === topPlayerIndex}
+								hasBack={back === topPlayerIndex}
+							/>
+						)}
 					</div>
 					<div className="bottom-player-container">
-						{game.players[bottomPlayerIndex] && <BottomPlayer player={game.players[bottomPlayerIndex]} />}
+						{game.players[bottomPlayerIndex] && (
+							<BottomPlayer
+								player={game.players[bottomPlayerIndex]}
+								hasFront={front === bottomPlayerIndex}
+								hasBack={back === bottomPlayerIndex}
+							/>
+						)}
 					</div>
 					<div className="right-player-container">
-						{game.players[rightPlayerIndex] && <RightPlayer player={game.players[rightPlayerIndex]} />}
+						{game.players[rightPlayerIndex] && (
+							<RightPlayer
+								player={game.players[rightPlayerIndex]}
+								hasFront={front === rightPlayerIndex}
+								hasBack={back === rightPlayerIndex}
+							/>
+						)}
 					</div>
 					<div className="self-container">
-						{game.players[selfIndex] && <Self player={game.players[selfIndex]} />}
+						{game.players[leftPlayerIndex] && (
+							<LeftPlayer
+								player={game.players[leftPlayerIndex]}
+								hasFront={front === leftPlayerIndex}
+								hasBack={back === leftPlayerIndex}
+							/>
+						)}
 					</div>
+					<Controls playerSeat={leftPlayerIndex} />
 				</div>
 			);
 		} else {
@@ -143,13 +188,17 @@ const Table = () => {
 		);
 	};
 
-	if (user && game) {
-		if (game.creator === user.username && (game.stage === 0 || !game.ongoing)) {
-			return renderControl();
+	try {
+		if (user && game) {
+			if (game.creator === user.username && (game.stage === 0 || !game.ongoing)) {
+				return renderCenterControl();
+			} else {
+				return renderGame();
+			}
 		} else {
-			return renderGame();
+			return noActiveGame();
 		}
-	} else {
+	} catch (err) {
 		return noActiveGame();
 	}
 };

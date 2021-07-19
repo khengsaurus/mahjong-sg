@@ -1,8 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import { Game, gameToObj } from '../components/Models/Game';
-import { User } from '../components/Models/User';
-import { tileToObj, typeCheckUser, userToObj } from '../util/utilFns';
+import { Game, gameToObj } from '../Models/Game';
+import { User } from '../Models/User';
+import { userToObj } from '../util/utilFns';
 import firebaseConfig from './firebaseConfig';
 
 if (!firebase.apps.length) {

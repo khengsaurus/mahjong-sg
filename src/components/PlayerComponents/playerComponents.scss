@@ -1,0 +1,256 @@
+@import '../../App.scss';
+
+$rotate-transform: rotate(90deg) translateY(-14%) translateX(-22%);
+$rotate-simple-90: rotate(90deg);
+$rotate-simple-180: rotate(180deg);
+
+.row-section {
+	display: flex;
+	flex-direction: column;
+	padding: 0 5px;
+	justify-content: center;
+
+	&.bottom {
+		flex-direction: column-reverse;
+	}
+	.horizontal-tiles-hidden {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		padding: 1px 0;
+		&.unused {
+			flex-flow: column-reverse wrap-reverse;
+			align-self: center;
+			align-content: center;
+			justify-content: flex-end;
+			height: (2 * $hidden-tile-height) + (4 * $tile-border-px);
+			width: (19 * $hidden-tile-width) + (4 * $tile-border-px);
+			z-index: -1;
+			&.front {
+				flex-flow: column-reverse wrap-reverse;
+				&.bottom {
+					flex-flow: column wrap;
+				}
+			}
+			&.back {
+				flex-flow: column-reverse wrap;
+				&.bottom {
+					flex-flow: column wrap-reverse;
+				}
+			}
+		}
+	}
+	.horizontal-tile-hidden {
+		height: $hidden-tile-height;
+		width: $hidden-tile-width;
+		background-color: $tile-back-color;
+		border: $tile-border-px solid rgb(65, 65, 65);
+		border-radius: 1px;
+	}
+
+	.horizontal-tiles-shown {
+		display: flex;
+		align-items: flex-end;
+		flex-flow: row-reverse wrap;
+		justify-content: center; // Remove to align top and bottom shown tiles to the right
+		height: $shown-tile-height;
+
+		&.bottom {
+			flex-flow: row-reverse wrap-reverse;
+			transform: $rotate-simple-180;
+		}
+
+		.horizontal-tile-shown {
+			height: $shown-tile-height;
+			width: $shown-tile-width;
+			border-radius: 8%;
+			background: $tile-front-color;
+
+			&.animate-flower {
+				transition: 200ms;
+				border-radius: 8%;
+				background: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
+				background-size: 400% 400%;
+				animation: linear-gradient 20s ease infinite;
+			}
+
+			&.animal {
+				height: $shown-tile-height - 2px;
+				width: $shown-tile-width - 2px;
+				border: $tile-border-px solid black;
+			}
+		}
+	}
+
+	.discarded {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		align-self: center;
+		width: 9 * $shown-tile-width;
+		padding: 1px 0;
+
+		&.bottom {
+			transform: $rotate-simple-180;
+		}
+
+		.discarded-tile {
+			height: $shown-tile-height;
+			width: $shown-tile-width;
+			border-radius: 8%;
+			background: $tile-front-color;
+		}
+	}
+}
+
+.column-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	&.right {
+		flex-direction: row-reverse;
+	}
+
+	.vertical-tiles-hidden {
+		display: flex;
+		flex-direction: column;
+		padding: 0 1px;
+		&.unused {
+			flex-flow: row-reverse wrap-reverse;
+			width: (2 * $hidden-tile-height) + (4 * $tile-border-px);
+			align-content: flex-start;
+			align-self: center;
+			z-index: -1;
+			&.front {
+				flex-flow: row wrap;
+				&.right {
+					flex-flow: row-reverse wrap-reverse;
+				}
+			}
+			&.back {
+				flex-flow: row wrap-reverse;
+				&.right {
+					flex-flow: row-reverse wrap;
+				}
+			}
+		}
+	}
+	.vertical-tile-hidden {
+		width: $hidden-tile-height;
+		height: $hidden-tile-width;
+		border: $tile-border-px solid rgb(65, 65, 65);
+		border-radius: 8%;
+		background-color: $tile-back-color;
+	}
+
+	.vertical-tiles-shown {
+		display: flex;
+		flex-flow: column wrap-reverse;
+		justify-content: center;
+		height: (19 * $shown-tile-width) + (2 * $tile-border-px);
+		width: $shown-tile-height;
+		padding: 0 1px;
+
+		.vertical-tile-shown {
+			height: $shown-tile-width;
+			width: $shown-tile-height;
+		}
+	}
+
+	.vertical-tile-shown-bg {
+		height: $shown-tile-height;
+		width: $shown-tile-width;
+		border-radius: 8%;
+		object-fit: contain;
+		transform: $rotate-transform;
+		background: $tile-front-color;
+
+		&.animate-flower {
+			transform: $rotate-transform;
+			transition: 200ms;
+			// background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
+			background: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
+			background-size: 400% 400%;
+			animation: linear-gradient 15s ease infinite;
+		}
+
+		&.animal {
+			height: $shown-tile-height - 2px;
+			width: $shown-tile-width - 2px;
+			border: $tile-border-px solid black;
+		}
+	}
+
+	.discarded {
+		display: flex;
+		flex-flow: column wrap;
+		justify-content: flex-start;
+		height: 12 * $shown-tile-width;
+		padding: 0 1px;
+
+		&.right {
+			justify-content: flex-start;
+			flex-flow: column-reverse wrap-reverse;
+		}
+
+		.discarded-tile {
+			height: $shown-tile-width;
+			width: $shown-tile-height;
+			border-radius: 8%;
+			background: $tile-front-color;
+		}
+	}
+
+	.self-hidden-tiles {
+		display: flex;
+		flex-direction: column;
+		z-index: 10;
+
+		.self-hidden-tile {
+			height: $self-hidden-tile-width;
+			width: $self-hidden-tile-height;
+
+			&.unselected {
+				transition: 200ms;
+				background: $tile-front-color;
+				border-radius: 8%;
+			}
+
+			&.selected {
+				transform: translateX(15%);
+				transition: 200ms;
+				border-radius: 8%;
+				background: linear-gradient(
+					135deg,
+					$tile-front-color,
+					$tile-front-color,
+					$tile-front-color,
+					#d2bc85,
+					#c49c36
+				);
+				background-size: 600% 600%;
+				animation: linear-gradient 3s ease infinite;
+			}
+		}
+
+		.self-hidden-tile-bg {
+			height: $self-hidden-tile-height;
+			width: $self-hidden-tile-width;
+			transform: $rotate-simple-90;
+		}
+	}
+}
+
+@keyframes linear-gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}

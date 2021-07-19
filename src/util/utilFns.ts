@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import moment from 'moment';
-import { Game } from '../components/Models/Game';
-import { User } from '../components/Models/User';
+import { Game } from '../Models/Game';
+import { User } from '../Models/User';
 
 export interface ChatListObject {
 	corresId: string;
@@ -89,6 +89,23 @@ export function typeCheckChatListObject(corresId: string, msgData: any): ChatLis
 			createdAt: msgData.createdAt.toDate() || null,
 			sent: msgData.sent || ''
 		};
+	}
+}
+
+export function objToFullUser(data: any): User {
+	try {
+		return new User(
+			data.id,
+			data.username,
+			data.photoUrl,
+			data.currentSeat,
+			data.shownTiles,
+			data.hiddenTiles,
+			data.discardedTiles,
+			data.unusedTiles
+		);
+	} catch (err) {
+		console.log('Unable to parse user object');
 	}
 }
 
@@ -189,4 +206,8 @@ export function generateUnusedTiles(n: number) {
 		unusedTiles.push(i);
 	}
 	return unusedTiles;
+}
+
+export function sortTiles(tiles: Tile[]): Tile[] {
+	return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 }

@@ -14,7 +14,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React, { useContext, useState } from 'react';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { User } from '../Models/User';
+import { User } from '../../Models/User';
 import './UserSearchForm.scss';
 
 const UserSearchForm: React.FC = () => {

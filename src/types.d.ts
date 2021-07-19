@@ -1,3 +1,8 @@
+interface SimpleUser {
+	username: string;
+	id: string;
+}
+
 interface alert {
 	status: Color;
 	msg: string;
@@ -19,4 +24,10 @@ interface Tile {
 	show: boolean;
 	isValidFlower?: boolean;
 	// canBeTaken?: boolean;
+}
+
+interface PlayerComponentProps {
+	player: User;
+	hasFront?: boolean;
+	hasBack?: boolean;
 }

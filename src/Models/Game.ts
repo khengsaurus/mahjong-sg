@@ -1,4 +1,4 @@
-import { tileToObj, userToObj } from '../../util/utilFns';
+import { sortTiles, userToObj } from '../util/utilFns';
 import { User } from './User';
 
 export function gameToObj(game: Game) {
@@ -44,7 +44,7 @@ export class Game {
 	frontTiles?: number;
 	backTiles?: number;
 	lastThrown?: Tile;
-	thrownBy?: 0 | 1 | 2 | 3;
+	thrownBy?: number;
 
 	constructor(
 		id: string,
@@ -63,7 +63,7 @@ export class Game {
 		frontTiles?: number,
 		backTiles?: number,
 		lastThrown?: Tile,
-		thrownBy?: 0 | 1 | 2 | 3
+		thrownBy?: number
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -181,11 +181,7 @@ export class Game {
 		});
 	}
 
-	sortTiles(tiles: Tile[]): Tile[] {
-		return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
-	}
-
-	async giveTiles(n: number, playerIndex: number, buHua?: boolean) {
+	async giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean) {
 		let player = this.players[playerIndex];
 		if (!player.hiddenTiles) {
 			player.hiddenTiles = [];
@@ -195,28 +191,32 @@ export class Game {
 			if (buHua) {
 				newTile = this.tiles.shift();
 				// Logic to update shortening stack of back(hua) tiles
-				if (this.players[this.backTiles].unusedTiles === 1) {
-					this.players[this.backTiles].unusedTiles = 0;
-					if (this.backTiles === 3) {
-						this.backTiles = 0;
+				if (offsetUnused) {
+					if (this.players[this.backTiles].unusedTiles === 1) {
+						this.players[this.backTiles].unusedTiles = 0;
+						if (this.backTiles === 3) {
+							this.backTiles = 0;
+						} else {
+							this.backTiles += 1;
+						}
 					} else {
-						this.backTiles += 1;
+						this.players[this.backTiles].unusedTiles -= 1;
 					}
-				} else {
-					this.players[this.backTiles].unusedTiles -= 1;
 				}
 			} else {
 				newTile = this.tiles.pop();
 				// Logic to update shortening stack of front tiles
-				if (this.players[this.frontTiles].unusedTiles === 1) {
-					this.players[this.frontTiles].unusedTiles = 0;
-					if (this.frontTiles === 0) {
-						this.frontTiles = 3;
+				if (offsetUnused) {
+					if (this.players[this.frontTiles].unusedTiles === 1) {
+						this.players[this.frontTiles].unusedTiles = 0;
+						if (this.frontTiles === 0) {
+							this.frontTiles = 3;
+						} else {
+							this.frontTiles -= 1;
+						}
 					} else {
-						this.frontTiles -= 1;
+						this.players[this.frontTiles].unusedTiles -= 1;
 					}
-				} else {
-					this.players[this.frontTiles].unusedTiles -= 1;
 				}
 			}
 			if (newTile.suit === '花' && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
@@ -228,7 +228,7 @@ export class Game {
 				player.hiddenTiles = [...player.hiddenTiles, newTile];
 			}
 		}
-		console.log(`${player.username} received ${n} tiles`);
+		console.log(`${player.username} received ${n} tile(s)`);
 	}
 
 	async assignSeats() {
@@ -247,7 +247,7 @@ export class Game {
 		if (n === 0) {
 			return 3;
 		} else {
-			return n - 0;
+			return n - 1;
 		}
 	}
 
@@ -255,7 +255,7 @@ export class Game {
 		if (n === 3) {
 			return 0;
 		} else {
-			return n + 0;
+			return n + 1;
 		}
 	}
 
@@ -291,8 +291,9 @@ export class Game {
 			case 0: // deal from left
 				console.log('Dealing from left');
 				this.backTiles = this.findLeft(this.dealer);
-				leftPlayer.unusedTiles = 36 - 2 * rolled;
-				toBeDealtByOpp = 53 - leftPlayer.unusedTiles;
+				toBeDealtByLeft = 36 - 2 * rolled;
+				leftPlayer.unusedTiles = 2 * rolled;
+				toBeDealtByOpp = 53 - toBeDealtByLeft;
 				if (toBeDealtByOpp > 38) {
 					oppPlayer.unusedTiles = 0;
 					toBeDealtByRight = toBeDealtByOpp - 38;
@@ -308,8 +309,9 @@ export class Game {
 			case 1: // deal from dealer
 				console.log('Dealing from dealer');
 				this.backTiles = this.dealer;
-				dealer.unusedTiles = 38 - 2 * rolled;
-				toBeDealtByLeft = 53 - dealer.unusedTiles;
+				toBeDealtByDealer = 38 - 2 * rolled;
+				dealer.unusedTiles = 2 * rolled;
+				toBeDealtByLeft = 53 - toBeDealtByDealer;
 				if (toBeDealtByLeft > 36) {
 					leftPlayer.unusedTiles = 0;
 					toBeDealtByOpp = toBeDealtByLeft - 36;
@@ -325,8 +327,9 @@ export class Game {
 			case 2: // deal from right
 				console.log('Dealing from right');
 				this.backTiles = this.findRight(this.dealer);
-				rightPlayer.unusedTiles = 36 - 2 * rolled;
-				toBeDealtByDealer = 53 - rightPlayer.unusedTiles;
+				toBeDealtByRight = 36 - 2 * rolled;
+				rightPlayer.unusedTiles = 2 * rolled;
+				toBeDealtByDealer = 53 - toBeDealtByRight;
 				if (toBeDealtByDealer > 38) {
 					dealer.unusedTiles = 0;
 					toBeDealtByLeft = toBeDealtByDealer - 38;
@@ -342,8 +345,9 @@ export class Game {
 			case 3: // deal from opposite
 				console.log('Dealing from opposite');
 				this.backTiles = this.findOpp(this.dealer);
-				oppPlayer.unusedTiles = 38 - 2 * rolled;
-				toBeDealtByRight = 53 - oppPlayer.unusedTiles;
+				oppPlayer.unusedTiles = 2 * rolled;
+				toBeDealtByOpp = 38 - 2 * rolled;
+				toBeDealtByRight = 53 - toBeDealtByOpp;
 				if (toBeDealtByRight > 36) {
 					rightPlayer.unusedTiles = 0;
 					toBeDealtByDealer = toBeDealtByRight - 36;
@@ -358,11 +362,18 @@ export class Game {
 				break;
 		}
 
+		console.log('front:', this.frontTiles);
+		console.log('back:', this.backTiles);
+		console.log(this.players[0].unusedTiles);
+		console.log(this.players[1].unusedTiles);
+		console.log(this.players[2].unusedTiles);
+		console.log(this.players[3].unusedTiles);
+
 		console.log('Distrubite tiles called');
-		await this.giveTiles(14, 0);
-		await this.giveTiles(13, 1);
-		await this.giveTiles(13, 2);
-		await this.giveTiles(13, 3);
+		await this.giveTiles(14, 0, false, false);
+		await this.giveTiles(13, 1, false, false);
+		await this.giveTiles(13, 2, false, false);
+		await this.giveTiles(13, 3, false, false);
 		while (
 			this.players[0].hiddenTiles.length < 14 ||
 			this.players[1].hiddenTiles.length < 13 ||
@@ -372,23 +383,30 @@ export class Game {
 			this.buHua();
 		}
 		this.players.forEach((player: User) => {
-			player.hiddenTiles = this.sortTiles(player.hiddenTiles);
-			player.shownTiles = this.sortTiles(player.shownTiles);
+			player.hiddenTiles = sortTiles(player.hiddenTiles);
+			player.shownTiles = sortTiles(player.shownTiles);
 		});
+
+		console.log('front:', this.frontTiles);
+		console.log('back:', this.backTiles);
+		console.log(this.players[0].unusedTiles);
+		console.log(this.players[1].unusedTiles);
+		console.log(this.players[2].unusedTiles);
+		console.log(this.players[3].unusedTiles);
 	}
 
 	async buHua() {
 		if (this.players[0].hiddenTiles.length < 14) {
-			this.giveTiles(this.players[0].shownTiles.length, 0, true);
+			this.giveTiles(this.players[0].shownTiles.length, 0, true, true);
 		}
 		if (this.players[1].hiddenTiles.length < 13) {
-			this.giveTiles(this.players[1].shownTiles.length, 1, true);
+			this.giveTiles(this.players[1].shownTiles.length, 1, true, true);
 		}
 		if (this.players[2].hiddenTiles.length < 13) {
-			this.giveTiles(this.players[2].shownTiles.length, 2, true);
+			this.giveTiles(this.players[2].shownTiles.length, 2, true, true);
 		}
 		if (this.players[3].hiddenTiles.length < 13) {
-			this.giveTiles(this.players[3].shownTiles.length, 3, true);
+			this.giveTiles(this.players[3].shownTiles.length, 3, true, true);
 		}
 	}
 
@@ -415,6 +433,14 @@ export class Game {
 			this.stage += 1;
 		}
 		console.log('Round started');
+	}
+
+	nextPlayerMove() {
+		if (this.whoseMove === 3) {
+			this.whoseMove = 0;
+		} else {
+			this.whoseMove += 1;
+		}
 	}
 
 	rotateWinds() {

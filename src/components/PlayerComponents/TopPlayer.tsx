@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
-import { User } from '../../components/Models/User';
+import React, { useEffect, useMemo } from 'react';
+import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
-import './table.scss';
+import { generateUnusedTiles } from '../../util/utilFns';
+import './playerComponents.scss';
 
-interface Player {
-	player: User;
-}
-
-const TopPlayer = (props: Player) => {
-	const { player } = props;
-
+const TopPlayer = (props: PlayerComponentProps) => {
+	const { player, hasFront, hasBack } = props;
+	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
 	useEffect(() => {
 		console.log('Rendering top component');
 	});
@@ -26,9 +24,6 @@ const TopPlayer = (props: Player) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
 							key={`top-shown-tile-${index}`}
-							// className={
-							// 	tile.isValidFlower ? 'horizontal-tile-shown animate-flower' : 'horizontal-tile-shown'
-							// }
 							className={
 								tile.isValidFlower
 									? tile.suit === '动物'
@@ -41,7 +36,7 @@ const TopPlayer = (props: Player) => {
 						/>
 					) : null;
 				})}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<img
 							key={`top-shown-tile-${index}`}
@@ -52,17 +47,35 @@ const TopPlayer = (props: Player) => {
 					) : null;
 				})}
 			</div>
+			{player.unusedTiles > 0 && (
+				<div className={`horizontal-tiles-hidden unused ${frontBackTag}`}>
+					{unusedTiles.map(i => {
+						return <div key={`top-unused-tile${i}`} className="horizontal-tile-hidden" />;
+					})}
+				</div>
+			)}
 			<div className="discarded">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.discardedTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
-							key={`bottom-discarded-tile-${index}`}
+							key={`top-discarded-tile-${index}`}
 							className="discarded-tile"
 							src={getTileSrc(tile.card)}
 							alt="tile"
 						/>
 					);
 				})}
+				{/* Extra discarded tiles */}
+				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
+					return (
+						<img
+							key={`top-discarded-tile-${index}`}
+							className="discarded-tile"
+							src={getTileSrc(tile.card)}
+							alt="tile"
+						/>
+					);
+				})} */}
 			</div>
 		</div>
 	);

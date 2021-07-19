@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { history } from '../../App';
-import { Game } from '../../components/Models/Game';
-import { User } from '../../components/Models/User';
+import { Game } from '../../Models/Game';
+import { User } from '../../Models/User';
 import { getUserContacts } from '../../service/firebaseService';
 import { processContactData, typeCheckUser, userToObj } from '../utilFns';
 

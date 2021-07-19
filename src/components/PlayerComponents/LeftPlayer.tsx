@@ -1,19 +1,16 @@
 import { ButtonBase } from '@material-ui/core';
 import React, { useContext, useEffect, useMemo } from 'react';
-import { User } from '../../components/Models/User';
+import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';
-import './table.scss';
+import './playerComponents.scss';
 
-interface Player {
-	player: User;
-}
-
-const Self = (props: Player) => {
+const LeftPlayer = (props: PlayerComponentProps) => {
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const { player } = props;
+	const { player, hasFront, hasBack } = props;
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
 	useEffect(() => {
 		console.log('Rendering left component');
@@ -51,15 +48,10 @@ const Self = (props: Player) => {
 					})}
 			</div>
 			<div className="vertical-tiles-shown">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<div className="vertical-tile-shown">
-							<img
-								key={`self-shown-tile-${index}`}
-								className="vertical-tile-shown-bg"
-								src={getTileSrc(tile.card)}
-								alt="tile"
-							/>
+						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					) : null;
 				})}
@@ -82,41 +74,36 @@ const Self = (props: Player) => {
 				})}
 			</div>
 			{player.unusedTiles > 0 && (
-				<div className="vertical-tiles-hidden unused">
+				<div className={`vertical-tiles-hidden unused ${frontBackTag}`}>
 					{unusedTiles.map(i => {
 						return <div key={`self-unused-tile${i}`} className="vertical-tile-hidden" />;
 					})}
 				</div>
 			)}
 			<div className="discarded">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.discardedTiles.map((tile: Tile, index: number) => {
+					return (
+						<div className="discarded-tile" key={`self-discarded-tile-${index}`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						</div>
+					);
+				})}
+				{/* Extra discarded tiles */}
+				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<div className="discarded-tile">
 							<img
-								key={`right-discarded-tile-${index}`}
+								key={`self-discarded-tile-${index}`}
 								className="vertical-tile-shown-bg"
 								src={getTileSrc(tile.card)}
 								alt="tile"
 							/>
 						</div>
 					);
-				})}
-				{/*  */}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
-					return (
-						<div className="discarded-tile">
-							<img
-								key={`right-discarded-tile-${index}`}
-								className="vertical-tile-shown-bg"
-								src={getTileSrc(tile.card)}
-								alt="tile"
-							/>
-						</div>
-					);
-				})}
+				})} */}
 			</div>
 		</div>
 	);
 };
 
-export default React.memo(Self);
+export default React.memo(LeftPlayer);
