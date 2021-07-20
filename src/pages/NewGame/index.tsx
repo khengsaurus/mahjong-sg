@@ -10,9 +10,12 @@ import Login from '../Login';
 import * as firebaseService from '../../service/firebaseService';
 import { User } from '../../Models/User';
 import './NewGame.scss';
+import { useDispatch } from 'react-redux';
+import { setGame } from '../../util/store/actions';
 
 const NewGame = () => {
-	const { user, validateJWT, players, setPlayers, setGame } = useContext(AppContext);
+	const dispatch = useDispatch();
+	const { user, validateJWT, players, setPlayers } = useContext(AppContext);
 
 	useEffect(() => {
 		validateJWT();
@@ -27,7 +30,7 @@ const NewGame = () => {
 
 	const handleStartGame = async () => {
 		await firebaseService.createGame(user, players).then(game => {
-			setGame(game);
+			dispatch(setGame(game));
 		});
 		history.push('/Table');
 	};

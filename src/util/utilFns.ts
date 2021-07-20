@@ -34,22 +34,6 @@ export function typeCheckUser(method: number, obj: unknown): User | null {
 		} else {
 			return new User(data.docs[0].id, data.docs[0].data().username, data.docs[0].data().photoUrl);
 		}
-	} else if (method === 3) {
-		let data = obj as any;
-		if (!data.id || !data.username) {
-			throw new Error('Failed to retrieve user data from game document');
-		} else {
-			return new User(
-				data.id,
-				data.username,
-				data.photoUrl,
-				data.currentSeat,
-				data.shownTiles,
-				data.hiddenTiles,
-				data.discardedTiles,
-				data.unusedTiles
-			);
-		}
 	} else {
 		return null;
 	}
@@ -92,7 +76,7 @@ export function typeCheckChatListObject(corresId: string, msgData: any): ChatLis
 	}
 }
 
-export function objToFullUser(data: any): User {
+export function userObjToPlayer(data: any): User {
 	try {
 		return new User(
 			data.id,
@@ -102,7 +86,8 @@ export function objToFullUser(data: any): User {
 			data.shownTiles,
 			data.hiddenTiles,
 			data.discardedTiles,
-			data.unusedTiles
+			data.unusedTiles,
+			data.pongs
 		);
 	} catch (err) {
 		console.log('Unable to parse user object');
@@ -140,7 +125,8 @@ export function userToObj(user: User) {
 					return tileToObj(tile);
 			  })
 			: [],
-		unusedTiles: user.unusedTiles || 0
+		unusedTiles: user.unusedTiles || 0,
+		pongs: user.pongs || []
 	};
 }
 
@@ -156,28 +142,35 @@ export function tileToObj(tile: Tile) {
 	};
 }
 
+export const typeCheckGameRepr = (doc: firebase.firestore.DocumentData | any): Game => {
+	let ref = doc.data();
+	return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersString, ref.ongoing);
+};
+
 export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game => {
 	let ref = doc.data();
 	return new Game(
 		doc.id,
 		ref.creator,
 		ref.createdAt.toDate(),
-		ref.stage,
+		ref.playersString,
 		ref.ongoing,
+		ref.stage,
 		ref.midRound,
 		ref.flagProgress,
 		ref.dealer,
 		ref.whoseMove,
 		ref.playerIds,
-		ref.playersString,
 		ref.players.map((player: any) => {
-			return typeCheckUser(3, player);
+			return userObjToPlayer(player);
 		}),
 		ref.tiles,
 		ref.frontTiles,
 		ref.backTiles,
 		ref.lastThrown,
-		ref.thrownBy
+		ref.thrownBy,
+		ref.thrownTile,
+		ref.takenTile
 	);
 };
 
@@ -210,4 +203,12 @@ export function generateUnusedTiles(n: number) {
 
 export function sortTiles(tiles: Tile[]): Tile[] {
 	return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
+}
+
+export function search(tile: Tile, tiles: Tile[]) {
+	for (var i = 0; i < tiles.length; i++) {
+		if (tiles[i].card === tile.card) {
+			return i;
+		}
+	}
 }

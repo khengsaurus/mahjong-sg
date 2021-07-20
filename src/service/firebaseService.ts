@@ -164,7 +164,9 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					frontTiles: 0,
 					backTiles: 0,
 					lastThrown: {},
-					thrownBy: 0
+					thrownBy: 0,
+					thrownTile: false,
+					takenTile: true
 				})
 				.then(newGame => {
 					console.log('Game created successfully: gameId ' + gameId);
@@ -172,16 +174,18 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 						newGame.id,
 						user.username,
 						createdAt,
-						0,
+						playersString,
 						true,
+						0,
 						null,
 						false,
 						false,
 						null,
 						playerIds,
-						playersString,
 						[],
 						[],
+						null,
+						null,
 						null,
 						null,
 						null,
@@ -213,8 +217,8 @@ export const updateGame = (game: Game): Promise<Game> => {
 	});
 };
 
-export const listenToGame = (game: Game, observer: any) => {
-	if (game) {
-		return gameRef.doc(game.id).onSnapshot(observer);
+export const listenToGame = (gameId: string, observer: any) => {
+	if (gameId) {
+		return gameRef.doc(gameId).onSnapshot(observer);
 	}
 };

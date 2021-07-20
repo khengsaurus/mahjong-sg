@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import { getUserContacts } from '../../service/firebaseService';
+import { setGameCache } from '../store/actions';
 import { processContactData, typeCheckUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
@@ -17,8 +19,8 @@ interface AppContextInt {
 	setPlayers: (players: User[]) => void;
 	contacts: Map<string, User>;
 	setContacts: (contacts: Map<string, User>) => void;
-	game?: Game;
-	setGame: (game: Game) => void;
+	gameId?: string;
+	setGameId: (gameId: string) => void;
 	selectedTiles?: Tile[];
 	setSelectedTiles: (tiles: Tile[]) => void;
 }
@@ -34,8 +36,8 @@ const initialContext: AppContextInt = {
 	setPlayers: (players: User[]) => {},
 	contacts: new Map(),
 	setContacts: (contacts: Map<string, User>) => {},
-	game: null,
-	setGame: (game: Game) => {},
+	gameId: null,
+	setGameId: (gameId: string) => {},
 	selectedTiles: [],
 	setSelectedTiles: (tiles: Tile[]) => {}
 };
@@ -43,13 +45,16 @@ const initialContext: AppContextInt = {
 export const AppContext = createContext<AppContextInt>(initialContext);
 
 export const AppContextProvider = (props: any) => {
+	const dispatch = useDispatch();
 	const [user, setUser] = useState<User | null>(null);
 	const [corres, setCorres] = useState<User | null>(null);
 	const [contacts, setContacts] = useState<Map<string, User>>(new Map());
 	const [players, setPlayers] = useState<User[]>([user]);
-	const [game, setGame] = useState<Game>(null);
+	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
+	// const gameRef = useRef<Game>(null);
 	const secretKey = 'shouldBeServerSideKey';
+	// const [cache, setCache] = useState<Game>(null);
 
 	async function validateJWT() {
 		let token = localStorage.getItem('jwt');
@@ -77,8 +82,9 @@ export const AppContextProvider = (props: any) => {
 
 	function logout(): void {
 		console.log('logout clicked');
-		localStorage.removeItem('jwt');
 		setUser(null);
+		dispatch(setGameCache(null));
+		localStorage.removeItem('jwt');
 		history.push('/');
 	}
 
@@ -95,8 +101,8 @@ export const AppContextProvider = (props: any) => {
 				setPlayers,
 				contacts,
 				setContacts,
-				game,
-				setGame,
+				gameId,
+				setGameId,
 				selectedTiles,
 				setSelectedTiles
 			}}

@@ -56,13 +56,8 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			<div className="discarded right">
 				{player.discardedTiles.map((tile: Tile, index: number) => {
 					return (
-						<div className="discarded-tile">
-							<img
-								key={`right-discarded-tile-${index}`}
-								className="vertical-tile-shown-bg"
-								src={getTileSrc(tile.card)}
-								alt="tile"
-							/>
+						<div className="discarded-tile" key={`right-discarded-tile-${index}`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					);
 				})}

@@ -3,27 +3,29 @@ import { User } from './User';
 
 export function gameToObj(game: Game) {
 	return {
-		id: game.id,
-		creator: game.creator,
-		createdAt: game.createdAt,
-		stage: game.stage,
-		ongoing: game.ongoing,
-		midRound: game.midRound,
-		flagProgress: game.flagProgress,
-		dealer: game.dealer,
-		whoseMove: game.whoseMove,
-		playerIds: game.playerIds,
-		playersString: game.playersString,
+		id: game.id || '',
+		creator: game.creator || '',
+		createdAt: game.createdAt || new Date(),
+		playersString: game.playersString || '',
+		ongoing: game.ongoing || false,
+		stage: game.stage || 0,
+		midRound: game.midRound || false,
+		flagProgress: game.flagProgress || false,
+		dealer: game.dealer || 0,
+		whoseMove: game.whoseMove || 0,
+		playerIds: game.playerIds || [],
 		players: game.players
 			? game.players.map(player => {
 					return userToObj(player);
 			  })
 			: [],
 		tiles: game.tiles,
-		frontTiles: game.frontTiles,
-		backTiles: game.backTiles,
-		lastThrown: game.lastThrown,
-		thrownBy: game.thrownBy
+		frontTiles: game.frontTiles || 0,
+		backTiles: game.backTiles || 0,
+		lastThrown: game.lastThrown || {},
+		thrownBy: game.thrownBy || 0,
+		thrownTile: game.thrownTile || false,
+		takenTile: game.takenTile || false
 	};
 }
 
@@ -31,57 +33,63 @@ export class Game {
 	id: string;
 	creator: string;
 	createdAt: Date;
-	stage?: number;
-	ongoing: boolean;
-	midRound: boolean;
-	flagProgress: boolean;
-	dealer: 0 | 1 | 2 | 3;
-	whoseMove?: 0 | 1 | 2 | 3;
-	playerIds?: string[];
 	playersString?: string;
+	ongoing?: boolean;
+	stage?: number;
+	midRound?: boolean;
+	flagProgress?: boolean;
+	dealer?: number;
+	whoseMove?: number;
+	playerIds?: string[];
 	players?: User[];
 	tiles?: Tile[];
 	frontTiles?: number;
 	backTiles?: number;
 	lastThrown?: Tile;
 	thrownBy?: number;
+	thrownTile?: boolean;
+	takenTile?: boolean;
 
 	constructor(
 		id: string,
 		creator?: string,
 		createdAt?: Date,
-		stage?: number,
+		playersString?: string,
 		ongoing?: boolean,
-		dealer?: 0 | 1 | 2 | 3,
+		stage?: number,
+		dealer?: number,
 		midRound?: boolean,
 		flagProgress?: boolean,
-		whoseMove?: 0 | 1 | 2 | 3,
+		whoseMove?: number,
 		playerIds?: string[],
-		playersString?: string,
 		players?: User[],
 		tiles?: Tile[],
 		frontTiles?: number,
 		backTiles?: number,
 		lastThrown?: Tile,
-		thrownBy?: number
+		thrownBy?: number,
+		thrownTile?: boolean,
+		takenTile?: boolean
 	) {
 		this.id = id;
 		this.creator = creator;
 		this.createdAt = createdAt;
-		this.stage = stage;
+		this.playersString = playersString;
 		this.ongoing = ongoing;
+		this.stage = stage;
 		this.dealer = dealer;
 		this.midRound = midRound;
 		this.flagProgress = flagProgress;
 		this.whoseMove = whoseMove;
 		this.playerIds = playerIds;
-		this.playersString = playersString;
 		this.players = players;
 		this.tiles = tiles;
 		this.frontTiles = frontTiles;
 		this.backTiles = backTiles;
 		this.lastThrown = lastThrown;
 		this.thrownBy = thrownBy;
+		this.thrownTile = thrownTile;
+		this.takenTile = takenTile;
 	}
 
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -278,7 +286,7 @@ export class Game {
 	async distributeTiles() {
 		let dealer = this.players[this.dealer];
 		let rolled = dealer.rollDice();
-		console.log(rolled);
+		console.log(`Dealer rolled: ${rolled}`);
 		let leftPlayer = this.players[this.findLeft(this.dealer)];
 		let rightPlayer = this.players[this.findRight(this.dealer)];
 		let oppPlayer = this.players[this.findOpp(this.dealer)];
@@ -362,15 +370,9 @@ export class Game {
 				break;
 		}
 
-		console.log('front:', this.frontTiles);
-		console.log('back:', this.backTiles);
-		console.log(this.players[0].unusedTiles);
-		console.log(this.players[1].unusedTiles);
-		console.log(this.players[2].unusedTiles);
-		console.log(this.players[3].unusedTiles);
-
 		console.log('Distrubite tiles called');
 		await this.giveTiles(14, 0, false, false);
+		this.takenTile = true;
 		await this.giveTiles(13, 1, false, false);
 		await this.giveTiles(13, 2, false, false);
 		await this.giveTiles(13, 3, false, false);
@@ -386,27 +388,20 @@ export class Game {
 			player.hiddenTiles = sortTiles(player.hiddenTiles);
 			player.shownTiles = sortTiles(player.shownTiles);
 		});
-
-		console.log('front:', this.frontTiles);
-		console.log('back:', this.backTiles);
-		console.log(this.players[0].unusedTiles);
-		console.log(this.players[1].unusedTiles);
-		console.log(this.players[2].unusedTiles);
-		console.log(this.players[3].unusedTiles);
 	}
 
 	async buHua() {
 		if (this.players[0].hiddenTiles.length < 14) {
-			this.giveTiles(this.players[0].shownTiles.length, 0, true, true);
+			this.giveTiles(14 - this.players[0].hiddenTiles.length, 0, true, true);
 		}
 		if (this.players[1].hiddenTiles.length < 13) {
-			this.giveTiles(this.players[1].shownTiles.length, 1, true, true);
+			this.giveTiles(13 - this.players[1].hiddenTiles.length, 1, true, true);
 		}
 		if (this.players[2].hiddenTiles.length < 13) {
-			this.giveTiles(this.players[2].shownTiles.length, 2, true, true);
+			this.giveTiles(13 - this.players[2].hiddenTiles.length, 2, true, true);
 		}
 		if (this.players[3].hiddenTiles.length < 13) {
-			this.giveTiles(this.players[3].shownTiles.length, 3, true, true);
+			this.giveTiles(13 - this.players[3].hiddenTiles.length, 3, true, true);
 		}
 	}
 

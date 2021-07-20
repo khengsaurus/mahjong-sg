@@ -7,11 +7,11 @@ import HomeButton from '../../components/HomeButton';
 import { Game } from '../../Models/Game';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { formatDateToDay, typeCheckGame } from '../../util/utilFns';
+import { formatDateToDay, typeCheckGameRepr } from '../../util/utilFns';
 import './JoinGame.scss';
 
 const JoinGame = () => {
-	const { user, setGame, validateJWT } = useContext(AppContext);
+	const { user, setGameId, validateJWT } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 
 	useEffect(() => {
@@ -20,7 +20,7 @@ const JoinGame = () => {
 		const unsubscribe = firebaseService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
-					games.push(typeCheckGame(doc));
+					games.push(typeCheckGameRepr(doc));
 				});
 				setGameInvites(games);
 			}
@@ -29,7 +29,7 @@ const JoinGame = () => {
 	}, [user, validateJWT]);
 
 	function handleJoinGame(game: Game) {
-		setGame(game);
+		setGameId(game.id);
 		history.push('/Table');
 	}
 

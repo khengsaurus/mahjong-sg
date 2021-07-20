@@ -1,10 +1,13 @@
 import { Button } from '@material-ui/core';
-import React, { useContext, useEffect, useMemo, useState, useRef } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../../App';
+import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { sortTiles } from '../../util/utilFns';
+import { setGame, setGameCache } from '../../util/store/actions';
+import { search, sortTiles } from '../../util/utilFns';
 import './Controls.scss';
 
 interface ControlsProps {
@@ -12,31 +15,18 @@ interface ControlsProps {
 }
 
 const Controls = (props: ControlsProps) => {
-	const { game, setGame, selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const { lastThrown, thrownBy } = game;
+	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const { playerSeat } = props;
-	const [player, setPlayer] = useState<User>(null);
+	const [meld, setMeld] = useState<Tile[]>([]);
 	const [canChi, setCanChi] = useState<boolean>(false);
 	const [canPong, setCanPong] = useState<boolean>(false);
 	const [canKang, setCanKang] = useState<boolean>(false);
-	const [considerLastThrown, setConsiderLastThrown] = useState<boolean>(true);
-	const [meld, setMeld] = useState<Tile[]>([]);
-	const gameRef = useRef(game);
-	const [gottenTile, setGottenTile] = useState(false);
-	const [thrownTile, setThrownTile] = useState(false);
 
-	useEffect(() => {
-		game && setPlayer(game.players[playerSeat]);
-	}, [game, playerSeat]);
-
-	useEffect(() => {
-		console.log(game);
-		console.log(gameRef.current);
-		if (!gameRef || game.whoseMove !== playerSeat) {
-			console.log('Caching game');
-			gameRef.current = game;
-		}
-	}, [game]);
+	const dispatch = useDispatch();
+	const game = useSelector((state: Store) => state.game);
+	const player = useSelector((state: Store) => state.player);
+	const gameCache = useSelector((state: Store) => state.gameCache);
+	const { lastThrown, thrownBy } = game;
 
 	const previousPlayer = useMemo(() => {
 		if (playerSeat === 0) {
@@ -47,55 +37,47 @@ const Controls = (props: ControlsProps) => {
 	}, [playerSeat]);
 
 	useEffect(() => {
-		if (player) {
-			// always consider unless after drawing
-			if (considerLastThrown) {
-				setMeld([...selectedTiles, lastThrown]);
+		if (player && game && gameCache) {
+			console.log('Controls: useEffect called');
+			let consideringTiles: Tile[];
+			if (selectedTiles.length === 0) {
+				consideringTiles = [lastThrown];
+			} else if (selectedTiles.length >= 3) {
+				consideringTiles = sortTiles(selectedTiles);
 			} else {
-				setMeld([...selectedTiles]);
+				consideringTiles = sortTiles([...selectedTiles, lastThrown]);
 			}
-			if (thrownBy && thrownBy === previousPlayer && player.canChi([...selectedTiles, lastThrown])) {
-				setCanChi(true);
-			} else {
-				setCanChi(false);
-			}
-			if (player.canKang(meld)) {
-				setCanKang(true);
-			} else if (player.canPong(meld)) {
-				setCanKang(false);
-				setCanPong(true);
-			} else {
-				setCanPong(false);
+			setMeld(consideringTiles);
+
+			if (!game.takenTile) {
+				if (thrownBy === previousPlayer && player.canChi(consideringTiles)) {
+					setCanChi(true);
+				} else {
+					setCanChi(false);
+				}
+				if (player.canKang(consideringTiles)) {
+					setCanKang(true);
+				} else if (player.canPong(consideringTiles)) {
+					setCanKang(false);
+					setCanPong(true);
+				} else {
+					setCanKang(false);
+					setCanPong(false);
+				}
 			}
 		}
-	}, [considerLastThrown, lastThrown, previousPlayer, thrownBy, selectedTiles, player]);
+	}, [game, player, selectedTiles]);
 
-	async function updateDoc() {
-		game.players[playerSeat] = player;
+	function finishAction(game: Game) {
 		firebaseService.updateGame(game);
 	}
 
-	async function handleChi() {
-		let tiles = sortTiles(meld);
-		player.hiddenTiles = player.hiddenTiles.filter(tileH => {
-			return !tiles
-				.map(tileM => {
-					return tileM.id;
-				})
-				.includes(tileH.id);
+	function takeLastThrown() {
+		game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
+			return tile.id !== lastThrown.id;
 		});
-		player.shownTiles = [...player.shownTiles, ...tiles];
-		setSelectedTiles([]);
-		setGottenTile(true);
-		if (gottenTile && thrownTile) {
-			endTurn();
-		} else {
-			updateDoc();
-		}
-	}
-
-	async function handlePong(kang: boolean) {
-		player.hiddenTiles = player.hiddenTiles.filter(tileH => {
+		game.lastThrown = { card: '', suit: '', id: '', index: 1, show: false };
+		player.hiddenTiles = player.hiddenTiles.filter((tileH: Tile) => {
 			return !meld
 				.map(tileM => {
 					return tileM.id;
@@ -103,67 +85,76 @@ const Controls = (props: ControlsProps) => {
 				.includes(tileH.id);
 		});
 		player.shownTiles = [...player.shownTiles, ...meld];
+		game.players[playerSeat] = player;
+		setSelectedTiles([]);
+	}
+
+	function handleTake(kang: boolean) {
+		takeLastThrown();
 		if (kang) {
 			game.giveTiles(1, playerSeat, true, true);
 		}
+		game.takenTile = true;
+		game.whoseMove = playerSeat;
+		game.players[playerSeat] = player;
+		finishAction(game);
 		setSelectedTiles([]);
-		setGottenTile(true);
-		if (gottenTile && thrownTile) {
-			endTurn();
-		} else {
-			updateDoc();
+	}
+
+	function selfKang() {
+		if (selectedTiles.length === 1 && player.canKang(selectedTiles)) {
+			let toKang = selectedTiles[0];
+			let atIndex: number = search(toKang, player.shownTiles);
+			player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => tile.id !== toKang.id);
+			player.shownTiles = player.shownTiles.splice(atIndex, 0, toKang);
+			game.giveTiles(1, playerSeat, true, true);
+			game.takenTile = true;
+			game.players[playerSeat] = player;
+			finishAction(game);
 		}
 	}
 
-	async function handleDraw() {
+	function handleDraw() {
 		console.log('Player is drawing a tile');
-		setConsiderLastThrown(false);
 		let initNoHiddenTiles = player.hiddenTiles.length;
-		await game.giveTiles(1, playerSeat, false, true);
+		game.giveTiles(1, playerSeat, false, true);
 		while (game.players[playerSeat].hiddenTiles.length === initNoHiddenTiles) {
 			console.log('Player drew a flower, drawing another tile');
-			await game.giveTiles(1, playerSeat, true, true);
+			game.giveTiles(1, playerSeat, true, true);
 		}
-		setGottenTile(true);
-		if (gottenTile && thrownTile) {
-			endTurn();
-		} else {
-			updateDoc();
-		}
+		game.takenTile = true;
+		game.players[playerSeat] = player;
+		finishAction(game);
 	}
 
-	async function handleThrow(tileToThrow: Tile) {
+	function handleThrow(tileToThrow: Tile) {
 		console.log('Player is throwing a tile');
-		player.hiddenTiles = player.hiddenTiles.filter(tile => {
+		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
 			return tile.id !== tileToThrow.id;
 		});
 		player.discardedTiles.push(tileToThrow);
 		player.hiddenTiles = sortTiles(player.hiddenTiles);
-		setSelectedTiles([]);
 		game.lastThrown = tileToThrow;
 		game.thrownBy = playerSeat;
-		setThrownTile(true);
-		if (gottenTile && thrownTile) {
-			endTurn();
-		} else {
-			updateDoc();
-		}
+		game.thrownTile = true;
+		game.players[playerSeat] = player;
+		finishAction(game);
+		setSelectedTiles([]);
 	}
 
 	function endTurn() {
+		game.takenTile = false;
+		game.thrownTile = false;
 		game.nextPlayerMove();
-		gameRef.current = game;
-		updateDoc();
-		setGottenTile(false);
-		setThrownTile(false);
+		game.players[playerSeat] = player;
+		finishAction(game);
+		setSelectedTiles([]);
 	}
 
 	function undo() {
-		//FIXME: TODO: HOW TO DO THIS
 		console.log('Undoing move');
-		setPlayer(gameRef.current.players[playerSeat]);
-		setGame(gameRef.current);
-		firebaseService.updateGame(gameRef.current);
+		console.log(gameCache);
+		firebaseService.updateGame(gameCache);
 	}
 
 	return game && player ? (
@@ -181,14 +172,25 @@ const Controls = (props: ControlsProps) => {
 			</div>
 
 			<div className="top-left-controls">
-				<Button className="button" variant="outlined" onClick={handleChi} disabled={!canChi}>
+				<Button
+					className="button"
+					variant="outlined"
+					onClick={() => {
+						handleTake(false);
+					}}
+					disabled={!canChi || game.whoseMove !== playerSeat}
+				>
 					Chi
 				</Button>
 				<Button
 					className="button"
 					variant="outlined"
 					onClick={() => {
-						handlePong(canKang);
+						if (selectedTiles.length === 1 && player.canKang(selectedTiles)) {
+							selfKang();
+						} else {
+							handleTake(canKang);
+						}
 					}}
 					disabled={!canPong && !canKang}
 				>
@@ -200,21 +202,31 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
-					onClick={() => {
-						handleThrow(selectedTiles[0]);
-					}}
-					disabled={selectedTiles.length !== 1}
-				>
-					Throw
-				</Button>
-				<Button
-					className="button"
-					variant="outlined"
 					onClick={handleDraw}
 					disabled={game.whoseMove !== playerSeat}
 				>
 					Draw
 				</Button>
+				<Button
+					className="button"
+					variant="outlined"
+					onClick={() => {
+						handleThrow(selectedTiles[0]);
+					}}
+					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat}
+				>
+					Throw
+				</Button>
+				{game.whoseMove === playerSeat && (
+					<Button
+						className="button"
+						variant="outlined"
+						onClick={endTurn}
+						// disabled={!game.takenTile || !game.thrownTile}
+					>
+						End turn
+					</Button>
+				)}
 			</div>
 
 			<div className="bottom-right-controls">
@@ -223,12 +235,18 @@ const Controls = (props: ControlsProps) => {
 					variant="outlined"
 					size="small"
 					onClick={() => {
-						console.log('Hu');
+						console.log(gameCache);
 					}}
 				>
 					Hu
 				</Button>
-				<Button className="button" variant="outlined" size="small" onClick={undo}>
+				<Button
+					className="button"
+					variant="outlined"
+					size="small"
+					onClick={undo}
+					disabled={game.whoseMove !== playerSeat || !gameCache}
+				>
 					Undo
 				</Button>
 			</div>

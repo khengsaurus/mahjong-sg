@@ -84,8 +84,8 @@ $rotate-simple-180: rotate(180deg);
 
 	.discarded {
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-end;
+		flex-flow: row-reverse wrap;
+		justify-content: flex-start;
 		align-self: center;
 		width: 9 * $shown-tile-width;
 		padding: 1px 0;

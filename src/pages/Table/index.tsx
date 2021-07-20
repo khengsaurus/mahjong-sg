@@ -1,7 +1,8 @@
 import { Button, Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import isEqual from 'lodash.isequal';
-import React, { useContext, useEffect, useRef, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Controls from '../../components/Controls';
 import HomeButton from '../../components/HomeButton';
 import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
@@ -9,110 +10,92 @@ import LeftPlayer from '../../components/PlayerComponents/LeftPlayer';
 import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
 import { Game } from '../../Models/Game';
+import { User } from '../../Models/User';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
+import { setGame, setGameCache, setPlayer } from '../../util/store/actions';
 import { typeCheckGame } from '../../util/utilFns';
 import './Table.scss';
 
 const Table = () => {
-	const { user, game, setGame } = useContext(AppContext);
+	const { user, gameId } = useContext(AppContext);
 	const [topPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [rightPlayerIndex, setRightPlayerIndex] = useState(null);
 	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(null);
 	const [leftPlayerIndex, setLeftPlayerIndex] = useState(null);
 	const [front, setFront] = useState(null);
 	const [back, setBack] = useState(null);
-	const [usersRef, setUsersRef] = useState<SimpleUser[]>([]);
 
-	// Only the creator can start the game
+	const dispatch = useDispatch();
+	const game = useSelector((state: Store) => state.game);
+	const gameCache = useSelector((state: Store) => state.gameCache);
+
 	async function progressGame() {
 		if (game.midRound === false) {
 			console.log('Table: creator calling progressGame');
-			await game
-				.initRound(true)
-				.then(() => {
-					firebaseService.updateGame(game);
-				})
-				.then(() => {
-					setGame(game);
-				});
+			await game.initRound(true).then(() => {
+				dispatch(setGame(game));
+				dispatch(setGameCache(game));
+				firebaseService.updateGame(game);
+			});
 		}
 	}
 
 	useEffect(() => {
-		console.log('useEffect called');
-		const unsubscribe = firebaseService.listenToGame(game, {
+		console.log('Table: useEffect called');
+		const unsubscribe = firebaseService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
-				console.log(currentGame);
-				setGame(currentGame);
+				console.log('Table: updating game');
 
-				// Do not reset player positions if they have been set
-				let simpleUsers: SimpleUser[] =
-					game && game.players
-						? game.players.map(player => {
-								return { username: player.username, id: player.id };
-						  })
-						: [];
-				setFront(game.frontTiles);
-				setBack(game.backTiles);
-				setUsersRef(simpleUsers);
-				// let usernames: string[] =
-				// 	game && game.players
-				// 		? game.players.map(player => {
-				// 				return player.username;
-				// 		  })
-				// 		: [];
-				// if (game.players && !isEqual(usernamesRef.current, usernames)) {
-				// 	usernamesRef.current = usernames;
-				// 	setPlayerPositions();
-				// 	setFront(game.frontTiles);
-				// 	setBack(game.backTiles);
-				// }
+				// setGame, setPlayer
+				dispatch(setGame(currentGame));
+				setFront(currentGame.frontTiles);
+				setBack(currentGame.backTiles);
+				let player: User;
+				switch (user.username) {
+					case currentGame.players[0].username:
+						player = currentGame.players[0];
+						setLeftPlayerIndex(0);
+						setTopPlayerIndex(3);
+						setRightPlayerIndex(2);
+						setBottomPlayerIndex(1);
+						break;
+					case currentGame.players[1].username:
+						player = currentGame.players[1];
+						setLeftPlayerIndex(1);
+						setTopPlayerIndex(0);
+						setRightPlayerIndex(3);
+						setBottomPlayerIndex(2);
+						break;
+					case currentGame.players[2].username:
+						player = currentGame.players[2];
+						setLeftPlayerIndex(2);
+						setTopPlayerIndex(1);
+						setRightPlayerIndex(0);
+						setBottomPlayerIndex(3);
+						break;
+					case currentGame.players[3].username:
+						player = currentGame.players[3];
+						setLeftPlayerIndex(3);
+						setTopPlayerIndex(2);
+						setRightPlayerIndex(1);
+						setBottomPlayerIndex(0);
+						break;
+					default:
+						break;
+				}
+				dispatch(setPlayer(player));
+
+				// setGameCache
+				if (currentGame.whoseMove !== player.currentSeat) {
+					console.log('dispatching cache');
+					dispatch(setGameCache(currentGame));
+				}
 			}
 		});
 		return unsubscribe;
 	}, []);
-
-	/**
-	 * player1: top=player4, right=player3, bottom=player2
-	 * player2: 1, 4, 3
-	 * player3: 2, 1, 4
-	 * player4: 1, 2, 3
-	 */
-	useMemo(() => {
-		if (game && user && usersRef.length > 0) {
-			console.log('Setting player positions');
-			switch (user.username) {
-				case usersRef[0].username:
-					setLeftPlayerIndex(0);
-					setTopPlayerIndex(3);
-					setRightPlayerIndex(2);
-					setBottomPlayerIndex(1);
-					break;
-				case usersRef[1].username:
-					setLeftPlayerIndex(1);
-					setTopPlayerIndex(0);
-					setRightPlayerIndex(3);
-					setBottomPlayerIndex(2);
-					break;
-				case usersRef[2].username:
-					setLeftPlayerIndex(2);
-					setTopPlayerIndex(1);
-					setRightPlayerIndex(0);
-					setBottomPlayerIndex(3);
-					break;
-				case usersRef[3].username:
-					setLeftPlayerIndex(3);
-					setTopPlayerIndex(2);
-					setRightPlayerIndex(1);
-					setBottomPlayerIndex(0);
-					break;
-				default:
-					break;
-			}
-		}
-	}, [usersRef]);
 
 	const renderCenterControl = () => {
 		return (
@@ -190,7 +173,7 @@ const Table = () => {
 
 	try {
 		if (user && game) {
-			if (game.creator === user.username && (game.stage === 0 || !game.ongoing)) {
+			if (game.creator === user.username && game.stage === 0) {
 				return renderCenterControl();
 			} else {
 				return renderGame();
@@ -204,5 +187,3 @@ const Table = () => {
 };
 
 export default Table;
-
-// <Typography variant="h6">{`Game ${game.id}, stage ${game.stage}`}</Typography>

@@ -7,6 +7,9 @@ export class User {
 	hiddenTiles?: Tile[] | null;
 	discardedTiles?: Tile[] | null;
 	unusedTiles?: number;
+	// gottenTile?: boolean;
+	// thrownTile?: boolean;
+	pongs?: string[];
 
 	constructor(
 		id: string,
@@ -16,7 +19,10 @@ export class User {
 		shownTiles?: Tile[],
 		hiddenTiles?: Tile[],
 		discardedTiles?: Tile[],
-		unusedTiles?: number
+		unusedTiles?: number,
+		// gottenTile?: boolean,
+		// thrownTile?: boolean,
+		pongs?: string[]
 	) {
 		this.id = id;
 		this.username = username;
@@ -26,6 +32,9 @@ export class User {
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
 		this.unusedTiles = unusedTiles || null;
+		// this.gottenTile = gottenTile || null;
+		// this.thrownTile = thrownTile || null;
+		this.pongs = pongs || [];
 	}
 
 	rollDice(): number {
@@ -46,24 +55,20 @@ export class User {
 	}
 
 	sort(tiles: Tile[]) {
-		tiles.sort(function (a, b) {
-			return a.number - b.number;
-		});
-		return tiles;
+		tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 	}
 
 	canChi(tiles: Tile[]): boolean {
-		let sameSuit = tiles.every(tile => tile.card === tiles[0].card) ? true : false;
-		let sortedTiles = this.sort(tiles);
 		if (
-			sameSuit &&
-			sortedTiles[2].number === sortedTiles[1].number - 1 &&
-			sortedTiles[1].number === sortedTiles[0].number - 1
+			tiles.length === 3 &&
+			tiles[0].suit === tiles[1].suit &&
+			tiles[1].suit === tiles[2].suit &&
+			tiles[2].number - 1 === tiles[1].number &&
+			tiles[1].number - 1 === tiles[0].number
 		) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	canPong(tiles: Tile[]): boolean {
@@ -71,7 +76,12 @@ export class User {
 	}
 
 	canKang(tiles: Tile[]): boolean {
-		return tiles.length === 4 && tiles.every(tile => tile.card === tiles[0].card) ? true : false;
+		if (tiles.length === 1) {
+			return this.pongs.includes(tiles[0].card);
+		} else if (tiles.length === 4) {
+			return tiles.every(tile => tile.card === tiles[0].card) ? true : false;
+		}
+		return false;
 	}
 
 	chi(selectedTiles: Tile[]) {
