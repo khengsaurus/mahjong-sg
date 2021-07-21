@@ -9,6 +9,7 @@ export function gameToObj(game: Game) {
 		playersString: game.playersString || '',
 		ongoing: game.ongoing || false,
 		stage: game.stage || 0,
+		previousStage: game.previousStage || 0,
 		midRound: game.midRound || false,
 		flagProgress: game.flagProgress || false,
 		dealer: game.dealer || 0,
@@ -25,7 +26,8 @@ export function gameToObj(game: Game) {
 		lastThrown: game.lastThrown || {},
 		thrownBy: game.thrownBy || 0,
 		thrownTile: game.thrownTile || false,
-		takenTile: game.takenTile || false
+		takenTile: game.takenTile || false,
+		uncachedAction: game.uncachedAction || false
 	};
 }
 
@@ -36,6 +38,7 @@ export class Game {
 	playersString?: string;
 	ongoing?: boolean;
 	stage?: number;
+	previousStage?: number;
 	midRound?: boolean;
 	flagProgress?: boolean;
 	dealer?: number;
@@ -49,6 +52,7 @@ export class Game {
 	thrownBy?: number;
 	thrownTile?: boolean;
 	takenTile?: boolean;
+	uncachedAction?: boolean;
 
 	constructor(
 		id: string,
@@ -57,6 +61,7 @@ export class Game {
 		playersString?: string,
 		ongoing?: boolean,
 		stage?: number,
+		previousStage?: number,
 		dealer?: number,
 		midRound?: boolean,
 		flagProgress?: boolean,
@@ -69,7 +74,8 @@ export class Game {
 		lastThrown?: Tile,
 		thrownBy?: number,
 		thrownTile?: boolean,
-		takenTile?: boolean
+		takenTile?: boolean,
+		uncachedAction?: boolean
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -77,6 +83,7 @@ export class Game {
 		this.playersString = playersString;
 		this.ongoing = ongoing;
 		this.stage = stage;
+		this.previousStage = previousStage;
 		this.dealer = dealer;
 		this.midRound = midRound;
 		this.flagProgress = flagProgress;
@@ -90,6 +97,7 @@ export class Game {
 		this.thrownBy = thrownBy;
 		this.thrownTile = thrownTile;
 		this.takenTile = takenTile;
+		this.uncachedAction = uncachedAction;
 	}
 
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -405,31 +413,6 @@ export class Game {
 		}
 	}
 
-	async initRound(flagNextRound: boolean) {
-		console.log('initRound called');
-		this.midRound = true;
-		if (this.stage === 0) {
-			this.dealer = 0;
-			this.whoseMove = 0;
-			await this.assignSeats();
-			console.log('Starting game');
-		}
-		await this.generateShuffledTiles()
-			.then(generatedTiles => {
-				this.tiles = generatedTiles;
-			})
-			.catch(err => {
-				// if(err.message === 'Tiles not generated'){
-				// 	this.generateShuffledTiles()
-				// }
-			});
-		await this.distributeTiles();
-		if (flagNextRound) {
-			this.stage += 1;
-		}
-		console.log('Round started');
-	}
-
 	nextPlayerMove() {
 		if (this.whoseMove === 3) {
 			this.whoseMove = 0;
@@ -438,25 +421,60 @@ export class Game {
 		}
 	}
 
-	rotateWinds() {
-		console.log('Rotating winds');
-		this.players.forEach(player => {
-			if (player.currentSeat === 3) {
-				player.currentSeat = 0;
-			} else {
-				player.currentSeat += 1;
-			}
+	repr(): any[] {
+		let res: any[];
+		if (this.stage <= 4) {
+			res = ['东', this.stage];
+		} else if (this.stage <= 8) {
+			res = ['南', this.stage];
+		} else if (this.stage <= 12) {
+			res = ['西', this.stage];
+		} else if (this.stage <= 16) {
+			res = ['北', this.stage];
+		}
+		if (this.stage === this.previousStage) {
+			res.push(['diao']);
+		}
+		return res;
+	}
+
+	async initRound(flagNextRound: boolean) {
+		this.ongoing = true;
+		this.midRound = true;
+		this.flagProgress = false;
+		// this.dealer?: number;
+		this.whoseMove = 0;
+		this.tiles = [];
+		this.frontTiles = 0;
+		this.backTiles = 0;
+		this.lastThrown = {};
+		this.thrownBy = 0;
+		this.thrownTile = false;
+		this.takenTile = true;
+		this.uncachedAction = false;
+
+		if (this.stage === 0) {
+			this.dealer = 0;
+			this.whoseMove = 0;
+			await this.assignSeats();
+		}
+		await this.generateShuffledTiles().then(generatedTiles => {
+			this.tiles = generatedTiles;
 		});
-		this.players.forEach(player => {
-			console.log(`${player.username}'s current seat: ${player.currentSeat}`);
-		});
+		await this.distributeTiles();
+		if (flagNextRound) {
+			this.stage += 1;
+		}
+		console.log(`Starting round ${this.stage}`);
 	}
 
 	async endRound(): Promise<boolean> {
 		// -> to continue
+		this.midRound = false;
 		return new Promise((resolve, reject) => {
 			this.midRound = false;
 			if (this.flagProgress) {
+				this.previousStage = this.stage;
 				if (this.dealer === 3 && this.stage === 16 && this.flagProgress) {
 					console.log('Game ended');
 					resolve(false);
@@ -479,13 +497,27 @@ export class Game {
 						default:
 							break;
 					}
-					this.rotateWinds();
+					this.rotateSeats();
 					this.initRound(true);
 				}
 			} else {
 				this.initRound(false);
 			}
 			resolve(true);
+		});
+	}
+
+	rotateSeats() {
+		console.log('Rotating seats');
+		this.players.forEach(player => {
+			if (player.currentSeat === 3) {
+				player.currentSeat = 0;
+			} else {
+				player.currentSeat += 1;
+			}
+		});
+		this.players.forEach(player => {
+			console.log(`${player.username}'s current seat: ${player.currentSeat}`);
 		});
 	}
 }

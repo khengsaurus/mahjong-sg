@@ -7,8 +7,6 @@ export class User {
 	hiddenTiles?: Tile[] | null;
 	discardedTiles?: Tile[] | null;
 	unusedTiles?: number;
-	// gottenTile?: boolean;
-	// thrownTile?: boolean;
 	pongs?: string[];
 
 	constructor(
@@ -20,8 +18,6 @@ export class User {
 		hiddenTiles?: Tile[],
 		discardedTiles?: Tile[],
 		unusedTiles?: number,
-		// gottenTile?: boolean,
-		// thrownTile?: boolean,
 		pongs?: string[]
 	) {
 		this.id = id;
@@ -32,8 +28,6 @@ export class User {
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
 		this.unusedTiles = unusedTiles || null;
-		// this.gottenTile = gottenTile || null;
-		// this.thrownTile = thrownTile || null;
 		this.pongs = pongs || [];
 	}
 

@@ -10,12 +10,12 @@ interface alert {
 }
 
 interface Tile {
-	card: string;
-	suit: string;
+	card?: string;
+	suit?: string;
 	number?: number;
-	id: string;
-	index: number;
-	show: boolean;
+	id?: string;
+	index?: number;
+	show?: boolean;
 	isValidFlower?: boolean;
 }
 

@@ -76,32 +76,18 @@ export function typeCheckChatListObject(corresId: string, msgData: any): ChatLis
 	}
 }
 
-export function userObjToPlayer(data: any): User {
-	try {
-		return new User(
-			data.id,
-			data.username,
-			data.photoUrl,
-			data.currentSeat,
-			data.shownTiles,
-			data.hiddenTiles,
-			data.discardedTiles,
-			data.unusedTiles,
-			data.pongs
-		);
-	} catch (err) {
-		console.log('Unable to parse user object');
-	}
-}
-
-export function objsToUsers(users: any[]): User[] {
-	if (users) {
-		return users.map(function (user) {
-			return new User(user.id, user.username, user.photoUrl);
-		});
-	} else {
-		return [];
-	}
+export function typeCheckPlayer(data: any): User {
+	return new User(
+		data.id,
+		data.username,
+		data.photoUrl,
+		data.currentSeat,
+		data.shownTiles,
+		data.hiddenTiles,
+		data.discardedTiles,
+		data.unusedTiles,
+		data.pongs
+	);
 }
 
 export function userToObj(user: User) {
@@ -156,13 +142,14 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.playersString,
 		ref.ongoing,
 		ref.stage,
+		ref.previousStage,
 		ref.midRound,
 		ref.flagProgress,
 		ref.dealer,
 		ref.whoseMove,
 		ref.playerIds,
 		ref.players.map((player: any) => {
-			return userObjToPlayer(player);
+			return typeCheckPlayer(player);
 		}),
 		ref.tiles,
 		ref.frontTiles,
@@ -170,7 +157,8 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.lastThrown,
 		ref.thrownBy,
 		ref.thrownTile,
-		ref.takenTile
+		ref.takenTile,
+		ref.uncachedAction
 	);
 };
 

@@ -142,7 +142,6 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 		playersString += player.username + ' ';
 	});
 	return new Promise((resolve, reject) => {
-		let gameId = '';
 		let createdAt = new Date();
 		try {
 			gameRef
@@ -150,6 +149,7 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					creator: user.username,
 					createdAt,
 					stage: 0,
+					previousStage: -1,
 					ongoing: true,
 					midRound: false,
 					dealer: 0,
@@ -166,10 +166,11 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					lastThrown: {},
 					thrownBy: 0,
 					thrownTile: false,
-					takenTile: true
+					takenTile: true,
+					uncachedAction: false
 				})
 				.then(newGame => {
-					console.log('Game created successfully: gameId ' + gameId);
+					console.log(`Game created successfully: gameId ${newGame.id}`);
 					const game: Game = new Game(
 						newGame.id,
 						user.username,
@@ -177,19 +178,21 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 						playersString,
 						true,
 						0,
+						0,
 						null,
 						false,
 						false,
-						null,
+						0,
 						playerIds,
+						players,
 						[],
-						[],
 						null,
 						null,
 						null,
 						null,
-						null,
-						null
+						false,
+						true,
+						false
 					);
 					resolve(game);
 				});
@@ -203,9 +206,8 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 export const updateGame = (game: Game): Promise<Game> => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let gameObj = gameToObj(game);
-			console.log(gameObj);
-			const currentGameRef = gameRef.doc(game.id);
+			let gameObj = await gameToObj(game);
+			const currentGameRef = await gameRef.doc(game.id);
 			await currentGameRef.set({ ...gameObj }).then(() => {
 				resolve(game);
 				console.log('firebaseService: game doc was updated');

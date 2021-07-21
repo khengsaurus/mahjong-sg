@@ -3,10 +3,8 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
-import { User } from '../../Models/User';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { setGame, setGameCache } from '../../util/store/actions';
 import { search, sortTiles } from '../../util/utilFns';
 import './Controls.scss';
 
@@ -25,7 +23,6 @@ const Controls = (props: ControlsProps) => {
 	const dispatch = useDispatch();
 	const game = useSelector((state: Store) => state.game);
 	const player = useSelector((state: Store) => state.player);
-	const gameCache = useSelector((state: Store) => state.gameCache);
 	const { lastThrown, thrownBy } = game;
 
 	const previousPlayer = useMemo(() => {
@@ -37,20 +34,23 @@ const Controls = (props: ControlsProps) => {
 	}, [playerSeat]);
 
 	useEffect(() => {
-		if (player && game && gameCache) {
+		if (game && player) {
 			console.log('Controls: useEffect called');
 			let consideringTiles: Tile[];
 			if (selectedTiles.length === 0) {
 				consideringTiles = [lastThrown];
-			} else if (selectedTiles.length >= 3) {
-				consideringTiles = sortTiles(selectedTiles);
 			} else {
 				consideringTiles = sortTiles([...selectedTiles, lastThrown]);
 			}
 			setMeld(consideringTiles);
 
 			if (!game.takenTile) {
-				if (thrownBy === previousPlayer && player.canChi(consideringTiles)) {
+				console.log(consideringTiles);
+				if (
+					game.whoseMove === player.currentSeat &&
+					thrownBy === previousPlayer &&
+					player.canChi(consideringTiles)
+				) {
 					setCanChi(true);
 				} else {
 					setCanChi(false);
@@ -66,11 +66,7 @@ const Controls = (props: ControlsProps) => {
 				}
 			}
 		}
-	}, [game, player, selectedTiles]);
-
-	function finishAction(game: Game) {
-		firebaseService.updateGame(game);
-	}
+	}, [game.lastThrown, selectedTiles]);
 
 	function takeLastThrown() {
 		game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
@@ -86,19 +82,18 @@ const Controls = (props: ControlsProps) => {
 		});
 		player.shownTiles = [...player.shownTiles, ...meld];
 		game.players[playerSeat] = player;
-		setSelectedTiles([]);
 	}
 
 	function handleTake(kang: boolean) {
 		takeLastThrown();
 		if (kang) {
 			game.giveTiles(1, playerSeat, true, true);
+			game.flagProgress = true;
 		}
 		game.takenTile = true;
 		game.whoseMove = playerSeat;
 		game.players[playerSeat] = player;
-		finishAction(game);
-		setSelectedTiles([]);
+		handleAction(game);
 	}
 
 	function selfKang() {
@@ -107,10 +102,11 @@ const Controls = (props: ControlsProps) => {
 			let atIndex: number = search(toKang, player.shownTiles);
 			player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => tile.id !== toKang.id);
 			player.shownTiles = player.shownTiles.splice(atIndex, 0, toKang);
-			game.giveTiles(1, playerSeat, true, true);
 			game.takenTile = true;
+			game.flagProgress = true;
+			game.giveTiles(1, playerSeat, true, true);
 			game.players[playerSeat] = player;
-			finishAction(game);
+			handleAction(game);
 		}
 	}
 
@@ -124,7 +120,7 @@ const Controls = (props: ControlsProps) => {
 		}
 		game.takenTile = true;
 		game.players[playerSeat] = player;
-		finishAction(game);
+		handleAction(game);
 	}
 
 	function handleThrow(tileToThrow: Tile) {
@@ -138,23 +134,37 @@ const Controls = (props: ControlsProps) => {
 		game.thrownBy = playerSeat;
 		game.thrownTile = true;
 		game.players[playerSeat] = player;
-		finishAction(game);
-		setSelectedTiles([]);
+		handleAction(game);
 	}
 
-	function endTurn() {
-		game.takenTile = false;
-		game.thrownTile = false;
-		game.nextPlayerMove();
-		game.players[playerSeat] = player;
-		finishAction(game);
+	function handleAction(game: Game) {
 		setSelectedTiles([]);
+		if (game.takenTile && game.thrownTile) {
+			game.takenTile = false;
+			game.thrownTile = false;
+			game.uncachedAction = false;
+			game.nextPlayerMove();
+			game.players[playerSeat] = player;
+		} else {
+			game.uncachedAction = true;
+			game.players[playerSeat] = player;
+		}
+		firebaseService.updateGame(game);
 	}
 
-	function undo() {
-		console.log('Undoing move');
-		console.log(gameCache);
-		firebaseService.updateGame(gameCache);
+	async function hu() {
+		// declare how many tai
+		if (game.dealer === playerSeat) {
+			game.flagProgress = false;
+		}
+		await game.endRound().then((continueGame: boolean) => {
+			//
+			if (continueGame) {
+				// display wind & round
+			} else {
+				// display game has ended
+			}
+		});
 	}
 
 	return game && player ? (
@@ -203,7 +213,7 @@ const Controls = (props: ControlsProps) => {
 					className="button"
 					variant="outlined"
 					onClick={handleDraw}
-					disabled={game.whoseMove !== playerSeat}
+					disabled={game.whoseMove !== playerSeat || game.takenTile}
 				>
 					Draw
 				</Button>
@@ -217,7 +227,7 @@ const Controls = (props: ControlsProps) => {
 				>
 					Throw
 				</Button>
-				{game.whoseMove === playerSeat && (
+				{/* {game.whoseMove === playerSeat && (
 					<Button
 						className="button"
 						variant="outlined"
@@ -226,7 +236,7 @@ const Controls = (props: ControlsProps) => {
 					>
 						End turn
 					</Button>
-				)}
+				)} */}
 			</div>
 
 			<div className="bottom-right-controls">
@@ -235,19 +245,10 @@ const Controls = (props: ControlsProps) => {
 					variant="outlined"
 					size="small"
 					onClick={() => {
-						console.log(gameCache);
+						'Hu';
 					}}
 				>
 					Hu
-				</Button>
-				<Button
-					className="button"
-					variant="outlined"
-					size="small"
-					onClick={undo}
-					disabled={game.whoseMove !== playerSeat || !gameCache}
-				>
-					Undo
 				</Button>
 			</div>
 		</div>

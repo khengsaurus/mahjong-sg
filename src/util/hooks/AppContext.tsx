@@ -52,9 +52,7 @@ export const AppContextProvider = (props: any) => {
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
-	// const gameRef = useRef<Game>(null);
 	const secretKey = 'shouldBeServerSideKey';
-	// const [cache, setCache] = useState<Game>(null);
 
 	async function validateJWT() {
 		let token = localStorage.getItem('jwt');

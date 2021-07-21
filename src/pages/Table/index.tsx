@@ -1,7 +1,6 @@
 import { Button, Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
-import isEqual from 'lodash.isequal';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Controls from '../../components/Controls';
 import HomeButton from '../../components/HomeButton';
@@ -13,7 +12,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { setGame, setGameCache, setPlayer } from '../../util/store/actions';
+import { setGame, setPlayer } from '../../util/store/actions';
 import { typeCheckGame } from '../../util/utilFns';
 import './Table.scss';
 
@@ -28,18 +27,6 @@ const Table = () => {
 
 	const dispatch = useDispatch();
 	const game = useSelector((state: Store) => state.game);
-	const gameCache = useSelector((state: Store) => state.gameCache);
-
-	async function progressGame() {
-		if (game.midRound === false) {
-			console.log('Table: creator calling progressGame');
-			await game.initRound(true).then(() => {
-				dispatch(setGame(game));
-				dispatch(setGameCache(game));
-				firebaseService.updateGame(game);
-			});
-		}
-	}
 
 	useEffect(() => {
 		console.log('Table: useEffect called');
@@ -47,7 +34,7 @@ const Table = () => {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
 				console.log('Table: updating game');
-
+				console.log(currentGame);
 				// setGame, setPlayer
 				dispatch(setGame(currentGame));
 				setFront(currentGame.frontTiles);
@@ -86,16 +73,19 @@ const Table = () => {
 						break;
 				}
 				dispatch(setPlayer(player));
-
-				// setGameCache
-				if (currentGame.whoseMove !== player.currentSeat) {
-					console.log('dispatching cache');
-					dispatch(setGameCache(currentGame));
-				}
 			}
 		});
 		return unsubscribe;
 	}, []);
+
+	async function progressGame() {
+		if (game.midRound === false) {
+			console.log('Table: creator calling progressGame');
+			await game.initRound(true).then(() => {
+				firebaseService.updateGame(game);
+			});
+		}
+	}
 
 	const renderCenterControl = () => {
 		return (
