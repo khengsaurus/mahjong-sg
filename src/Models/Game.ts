@@ -27,7 +27,8 @@ export function gameToObj(game: Game) {
 		thrownBy: game.thrownBy || 0,
 		thrownTile: game.thrownTile || false,
 		takenTile: game.takenTile || false,
-		uncachedAction: game.uncachedAction || false
+		uncachedAction: game.uncachedAction || false,
+		hu: game.hu || []
 	};
 }
 
@@ -53,6 +54,7 @@ export class Game {
 	thrownTile?: boolean;
 	takenTile?: boolean;
 	uncachedAction?: boolean;
+	hu?: number[];
 
 	constructor(
 		id: string,
@@ -75,7 +77,8 @@ export class Game {
 		thrownBy?: number,
 		thrownTile?: boolean,
 		takenTile?: boolean,
-		uncachedAction?: boolean
+		uncachedAction?: boolean,
+		hu?: number[]
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -98,6 +101,7 @@ export class Game {
 		this.thrownTile = thrownTile;
 		this.takenTile = takenTile;
 		this.uncachedAction = uncachedAction;
+		this.hu = hu;
 	}
 
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -433,7 +437,7 @@ export class Game {
 			res = ['北', this.stage];
 		}
 		if (this.stage === this.previousStage) {
-			res.push(['diao']);
+			res.push(['连']);
 		}
 		return res;
 	}
@@ -441,6 +445,7 @@ export class Game {
 	async initRound(flagNextRound: boolean) {
 		this.ongoing = true;
 		this.midRound = true;
+		this.hu = [];
 		this.flagProgress = false;
 		// this.dealer?: number;
 		this.whoseMove = 0;

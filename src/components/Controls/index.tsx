@@ -1,4 +1,18 @@
-import { Button } from '@material-ui/core';
+import {
+	Typography,
+	Button,
+	Checkbox,
+	createTheme,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	FormControlLabel,
+	IconButton,
+	TextField,
+	ThemeProvider
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../../App';
@@ -13,12 +27,17 @@ interface ControlsProps {
 }
 
 const Controls = (props: ControlsProps) => {
-	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const { playerSeat } = props;
+	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const [meld, setMeld] = useState<Tile[]>([]);
-	const [canChi, setCanChi] = useState<boolean>(false);
-	const [canPong, setCanPong] = useState<boolean>(false);
-	const [canKang, setCanKang] = useState<boolean>(false);
+	const [canChi, setCanChi] = useState(false);
+	const [canPong, setCanPong] = useState(false);
+	const [canKang, setCanKang] = useState(false);
+	const [showHuDialog, setShowHuDialog] = useState(false);
+	const [taiString, setTaiString] = useState('');
+	const [tai, setTai] = useState(null);
+	const [zimo, setZimo] = useState(false);
+	const [errorMsg, setErrorMsg] = useState('');
 
 	const dispatch = useDispatch();
 	const game = useSelector((state: Store) => state.game);
@@ -111,7 +130,7 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function handleDraw() {
-		console.log('Player is drawing a tile');
+		console.log(`${player.username} is drawing a tile`);
 		let initNoHiddenTiles = player.hiddenTiles.length;
 		game.giveTiles(1, playerSeat, false, true);
 		while (game.players[playerSeat].hiddenTiles.length === initNoHiddenTiles) {
@@ -124,7 +143,7 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function handleThrow(tileToThrow: Tile) {
-		console.log('Player is throwing a tile');
+		console.log(`${player.username} Player is throwing a tile`);
 		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
 			return tile.id !== tileToThrow.id;
 		});
@@ -152,20 +171,115 @@ const Controls = (props: ControlsProps) => {
 		firebaseService.updateGame(game);
 	}
 
+	/* -------------------- Start Hu -------------------- */
+	function declareHu() {
+		setShowHuDialog(true);
+		// show all tiles
+	}
+
 	async function hu() {
-		// declare how many tai
-		if (game.dealer === playerSeat) {
-			game.flagProgress = false;
-		}
-		await game.endRound().then((continueGame: boolean) => {
-			//
-			if (continueGame) {
-				// display wind & round
+		game.hu = [tai, zimo ? 1 : 0];
+		game.flagProgress = game.whoseMove === playerSeat ? false : true;
+		game.endRound();
+		// announcement dialog
+		// pay ??
+		// await game.endRound().then((continueGame: boolean) => {
+		// 	if (continueGame) {
+		// 		// display wind & round
+		// 	} else {
+		// 		// display game has ended
+		// 	}
+		// });
+	}
+
+	const renderHuDialog = () => {
+		function handleSetTai(tai: string) {
+			setTaiString(tai);
+			if (tai.trim() === '') {
+				setErrorMsg('');
+			} else if (!Number(tai) || parseInt(tai) <= 0 || parseInt(tai) > 5) {
+				setErrorMsg('Please enter 1-5');
 			} else {
-				// display game has ended
+				setErrorMsg('');
+				setTai(parseInt(tai));
+			}
+		}
+		const theme = createTheme({
+			overrides: {
+				MuiDialog: {
+					root: {
+						transform: 'rotate(90deg)',
+						display: 'flex',
+						flexDirection: 'column'
+					}
+				}
 			}
 		});
-	}
+
+		return (
+			<div className="hu-dialog-container">
+				<ThemeProvider theme={theme}>
+					<Dialog
+						open={showHuDialog}
+						BackdropProps={{ invisible: true }}
+						onClose={() => {
+							setShowHuDialog(false);
+						}}
+						PaperProps={{
+							style: {
+								backgroundColor: 'rgb(220, 190, 150)'
+							}
+						}}
+					>
+						<DialogContent>
+							<IconButton
+								style={{ position: 'absolute', top: '20px', right: '20px' }}
+								onClick={() => {
+									setShowHuDialog(false);
+								}}
+							>
+								<CloseIcon />
+							</IconButton>
+							<Typography variant="h6">{'Nice!'}</Typography>
+							<TextField
+								label="Tai"
+								error={errorMsg !== '' && taiString.trim() !== ''}
+								helperText={errorMsg}
+								value={taiString}
+								color="secondary"
+								onChange={e => {
+									handleSetTai(e.target.value);
+								}}
+							/>
+							<br></br>
+							<FormControlLabel
+								label="自摸"
+								control={
+									<Checkbox
+										// checked={}
+										onChange={() => {
+											setZimo(!zimo);
+										}}
+									/>
+								}
+							/>
+							<DialogActions>
+								<Button
+									variant="outlined"
+									onClick={hu}
+									disabled={tai <= 0 || tai > 5 || !Number(taiString)}
+									autoFocus
+								>
+									Hu
+								</Button>
+							</DialogActions>
+						</DialogContent>
+					</Dialog>
+				</ThemeProvider>
+			</div>
+		);
+	};
+	/* -------------------- End Hu -------------------- */
 
 	return game && player ? (
 		<div className="overlay-main">
@@ -220,6 +334,7 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
+					size="small"
 					onClick={() => {
 						handleThrow(selectedTiles[0]);
 					}}
@@ -240,17 +355,11 @@ const Controls = (props: ControlsProps) => {
 			</div>
 
 			<div className="bottom-right-controls">
-				<Button
-					className="button"
-					variant="outlined"
-					size="small"
-					onClick={() => {
-						'Hu';
-					}}
-				>
+				<Button className="button" variant="outlined" size="small" onClick={declareHu}>
 					Hu
 				</Button>
 			</div>
+			{showHuDialog && renderHuDialog()}
 		</div>
 	) : null;
 };
