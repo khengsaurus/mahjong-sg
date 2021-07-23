@@ -1,3 +1,4 @@
+import { createTheme } from '@material-ui/core';
 import firebase from 'firebase';
 import moment from 'moment';
 import { Game } from '../Models/Game';
@@ -158,7 +159,8 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.thrownBy,
 		ref.thrownTile,
 		ref.takenTile,
-		ref.uncachedAction
+		ref.uncachedAction,
+		ref.hu
 	);
 };
 
@@ -200,3 +202,13 @@ export function search(tile: Tile, tiles: Tile[]) {
 		}
 	}
 }
+
+export const rotatedMUI = createTheme({
+	overrides: {
+		MuiDialog: {
+			root: {
+				transform: 'rotate(90deg)'
+			}
+		}
+	}
+});

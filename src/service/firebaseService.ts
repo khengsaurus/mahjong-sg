@@ -153,7 +153,7 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					ongoing: true,
 					midRound: false,
 					dealer: 0,
-					flagProgress: false,
+					flagProgress: true,
 					whoseMove: 0,
 					playerIds,
 					playersString,
@@ -167,7 +167,9 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 					thrownBy: 0,
 					thrownTile: false,
 					takenTile: true,
-					uncachedAction: false
+					uncachedAction: false,
+					hu: [],
+					initRound: [true, false]
 				})
 				.then(newGame => {
 					console.log(`Game created successfully: gameId ${newGame.id}`);
@@ -181,7 +183,7 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 						0,
 						null,
 						false,
-						false,
+						true,
 						0,
 						playerIds,
 						players,
@@ -192,7 +194,8 @@ export const createGame = async (user: User, players: User[]): Promise<Game> => 
 						null,
 						false,
 						true,
-						false
+						false,
+						[]
 					);
 					resolve(game);
 				});

@@ -7,6 +7,14 @@ $control-sq-side: 60px;
 	left: 0;
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	.stage {
+		transform: rotate(90deg);
+	}
 }
 
 .top-right-controls {
@@ -19,12 +27,9 @@ $control-sq-side: 60px;
 	flex-direction: row-reverse;
 	justify-content: flex-start;
 	z-index: 10;
-	// border: 1px solid grey;
 	.home-button {
 		height: $control-sq-side / 1.5;
 		width: $control-sq-side;
-		// transform: rotate(90deg) translateX(25%) translateY(-50%);
-		// background: $tile-back-color;
 	}
 }
 
@@ -38,13 +43,9 @@ $control-sq-side: 60px;
 	flex-direction: column;
 	justify-content: flex-start;
 	z-index: 10;
-	// border: 1px solid grey;
 	.button {
 		height: $control-sq-side / 1.5;
 		width: $control-sq-side;
-		// transform: rotate(90deg) translateX(25%);
-		// translateY(-60%);
-		// background-color: $tile-back-color;
 	}
 }
 
@@ -59,7 +60,6 @@ $control-sq-side: 60px;
 	align-content: flex-start;
 	justify-content: flex-end;
 	z-index: 10;
-	// border: 1px solid grey;
 	.button {
 		height: $control-sq-side / 1.5;
 		width: $control-sq-side;
@@ -81,8 +81,4 @@ $control-sq-side: 60px;
 		height: $control-sq-side / 1.5;
 		width: $control-sq-side;
 	}
-}
-
-.hu-dialog-container {
-	transform: rotate(90deg);
 }

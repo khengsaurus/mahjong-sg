@@ -79,19 +79,18 @@ const Table = () => {
 	}, []);
 
 	async function progressGame() {
-		if (game.midRound === false) {
-			console.log('Table: creator calling progressGame');
-			await game.initRound(true).then(() => {
-				firebaseService.updateGame(game);
-			});
-		}
+		console.log('Table: creator calling progressGame');
+		await game.initRound().then(() => {
+			firebaseService.updateGame(game);
+			dispatch(setGame(game));
+		});
 	}
 
 	const renderCenterControl = () => {
 		return (
 			<div className="main">
 				<Button onClick={progressGame} variant="outlined">
-					{game.ongoing ? (game.stage === 0 ? 'Start game' : 'Next round') : 'Game has ended'}
+					{`Start game`}
 				</Button>
 			</div>
 		);

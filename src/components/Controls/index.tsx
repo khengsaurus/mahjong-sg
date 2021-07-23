@@ -1,26 +1,14 @@
-import {
-	Typography,
-	Button,
-	Checkbox,
-	createTheme,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	FormControlLabel,
-	IconButton,
-	TextField,
-	ThemeProvider
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { Button } from '@material-ui/core';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { search, sortTiles } from '../../util/utilFns';
 import './Controls.scss';
+import HuAnnouncement from './HuAnnouncement';
+import HuDialog from './HuDialog';
 
 interface ControlsProps {
 	playerSeat?: number;
@@ -33,13 +21,8 @@ const Controls = (props: ControlsProps) => {
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
-	const [showHuDialog, setShowHuDialog] = useState(false);
-	const [taiString, setTaiString] = useState('');
-	const [tai, setTai] = useState(null);
-	const [zimo, setZimo] = useState(false);
-	const [errorMsg, setErrorMsg] = useState('');
+	const [declareHu, setDeclareHu] = useState(false);
 
-	const dispatch = useDispatch();
 	const game = useSelector((state: Store) => state.game);
 	const player = useSelector((state: Store) => state.player);
 	const { lastThrown, thrownBy } = game;
@@ -171,115 +154,17 @@ const Controls = (props: ControlsProps) => {
 		firebaseService.updateGame(game);
 	}
 
-	/* -------------------- Start Hu -------------------- */
-	function declareHu() {
-		setShowHuDialog(true);
-		// show all tiles
+	function showHuDialog() {
+		console.log(playerSeat);
+		console.log('Player declaring hu');
+		setDeclareHu(true);
+		// show tiles
 	}
 
-	async function hu() {
-		game.hu = [tai, zimo ? 1 : 0];
-		game.flagProgress = game.whoseMove === playerSeat ? false : true;
-		game.endRound();
-		// announcement dialog
-		// pay ??
-		// await game.endRound().then((continueGame: boolean) => {
-		// 	if (continueGame) {
-		// 		// display wind & round
-		// 	} else {
-		// 		// display game has ended
-		// 	}
-		// });
+	function hideHuDialog() {
+		setDeclareHu(false);
+		// hide tiles
 	}
-
-	const renderHuDialog = () => {
-		function handleSetTai(tai: string) {
-			setTaiString(tai);
-			if (tai.trim() === '') {
-				setErrorMsg('');
-			} else if (!Number(tai) || parseInt(tai) <= 0 || parseInt(tai) > 5) {
-				setErrorMsg('Please enter 1-5');
-			} else {
-				setErrorMsg('');
-				setTai(parseInt(tai));
-			}
-		}
-		const theme = createTheme({
-			overrides: {
-				MuiDialog: {
-					root: {
-						transform: 'rotate(90deg)',
-						display: 'flex',
-						flexDirection: 'column'
-					}
-				}
-			}
-		});
-
-		return (
-			<div className="hu-dialog-container">
-				<ThemeProvider theme={theme}>
-					<Dialog
-						open={showHuDialog}
-						BackdropProps={{ invisible: true }}
-						onClose={() => {
-							setShowHuDialog(false);
-						}}
-						PaperProps={{
-							style: {
-								backgroundColor: 'rgb(220, 190, 150)'
-							}
-						}}
-					>
-						<DialogContent>
-							<IconButton
-								style={{ position: 'absolute', top: '20px', right: '20px' }}
-								onClick={() => {
-									setShowHuDialog(false);
-								}}
-							>
-								<CloseIcon />
-							</IconButton>
-							<Typography variant="h6">{'Nice!'}</Typography>
-							<TextField
-								label="Tai"
-								error={errorMsg !== '' && taiString.trim() !== ''}
-								helperText={errorMsg}
-								value={taiString}
-								color="secondary"
-								onChange={e => {
-									handleSetTai(e.target.value);
-								}}
-							/>
-							<br></br>
-							<FormControlLabel
-								label="自摸"
-								control={
-									<Checkbox
-										// checked={}
-										onChange={() => {
-											setZimo(!zimo);
-										}}
-									/>
-								}
-							/>
-							<DialogActions>
-								<Button
-									variant="outlined"
-									onClick={hu}
-									disabled={tai <= 0 || tai > 5 || !Number(taiString)}
-									autoFocus
-								>
-									Hu
-								</Button>
-							</DialogActions>
-						</DialogContent>
-					</Dialog>
-				</ThemeProvider>
-			</div>
-		);
-	};
-	/* -------------------- End Hu -------------------- */
 
 	return game && player ? (
 		<div className="overlay-main">
@@ -342,24 +227,22 @@ const Controls = (props: ControlsProps) => {
 				>
 					Throw
 				</Button>
-				{/* {game.whoseMove === playerSeat && (
-					<Button
-						className="button"
-						variant="outlined"
-						onClick={endTurn}
-						// disabled={!game.takenTile || !game.thrownTile}
-					>
-						End turn
-					</Button>
-				)} */}
 			</div>
 
 			<div className="bottom-right-controls">
-				<Button className="button" variant="outlined" size="small" onClick={declareHu}>
+				<Button
+					className="button"
+					variant="outlined"
+					size="small"
+					onClick={showHuDialog}
+					disabled={game.hu.length > 1 && game.hu[0] !== playerSeat}
+				>
 					Hu
 				</Button>
 			</div>
-			{showHuDialog && renderHuDialog()}
+			<div className="stage">{game.repr()}</div>
+			{<HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
+			{<HuAnnouncement playerSeat={playerSeat} game={game} />}
 		</div>
 	) : null;
 };
