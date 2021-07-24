@@ -2,7 +2,6 @@ export class User {
 	id: string;
 	username: string;
 	photoUrl: string;
-	currentSeat?: number;
 	shownTiles?: Tile[] | null;
 	hiddenTiles?: Tile[] | null;
 	discardedTiles?: Tile[] | null;
@@ -13,7 +12,6 @@ export class User {
 		id: string,
 		username: string,
 		photoUrl: string,
-		currentSeat?: number,
 		shownTiles?: Tile[],
 		hiddenTiles?: Tile[],
 		discardedTiles?: Tile[],
@@ -23,7 +21,6 @@ export class User {
 		this.id = id;
 		this.username = username;
 		this.photoUrl = photoUrl;
-		this.currentSeat = currentSeat;
 		this.shownTiles = shownTiles || [];
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];

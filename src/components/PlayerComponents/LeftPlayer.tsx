@@ -18,10 +18,8 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 
 	function selectTile(tile: Tile) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 5) {
-			console.log('Selecting ', tile.card);
 			setSelectedTiles([...selectedTiles, tile]);
 		} else {
-			console.log('Deselecting ', tile.card);
 			setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.id !== tile.id));
 		}
 	}

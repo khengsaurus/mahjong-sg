@@ -4,21 +4,6 @@ import * as firebaseService from '../service/firebaseService';
 import { hashPassword } from './bcrypt';
 import { typeCheckContact, typeCheckUser } from './utilFns';
 
-interface handleUserSelectRes {
-	change: boolean;
-	newContacts: Map<string, User>;
-}
-
-export interface loginParams {
-	username: string;
-	password: string;
-}
-
-export interface registerParams {
-	username: string;
-	password: string;
-}
-
 export async function getUser(userId: string) {
 	return new Promise<User>((resolve, reject) => {
 		firebaseService.getUserReprById(userId).then(res => {
@@ -28,40 +13,6 @@ export async function getUser(userId: string) {
 				reject(null);
 			}
 		});
-	});
-}
-
-/* On selecting a corres, if corres not in contacts or if username/photoUrl is different, add to/update contacts and initialise chat */
-export async function handleUserSelect(
-	user: User,
-	corres: User,
-	contacts: Map<string, User>
-): Promise<handleUserSelectRes> {
-	console.log('firebaseServiceUtil.handleUserSelect - called');
-	let change = false;
-	let newContacts = new Map(contacts);
-	return new Promise((resolve, reject) => {
-		let existingContact = contacts.get(corres.id);
-		if (existingContact) {
-			if (existingContact.username !== corres.username || existingContact.photoUrl !== corres.photoUrl) {
-				try {
-					firebaseService.addUserContact(user, corres);
-				} catch (err) {
-					reject(new Error('firebaseServiceUtil.handleUserSelect - Unable to update contact information'));
-				}
-				change = true;
-				newContacts.set(corres.id, corres);
-			}
-		} else {
-			try {
-				firebaseService.addUserContact(user, corres);
-			} catch (err) {
-				reject(new Error('firebaseServiceUtil.handleUserSelect - Unable to add user'));
-			}
-			change = true;
-			newContacts.set(corres.id, corres);
-		}
-		resolve({ change, newContacts });
 	});
 }
 
@@ -116,9 +67,6 @@ export function attemptRegister(values: registerParams): Promise<boolean> {
 						})
 						.then(() => {
 							resolve(true);
-							// resetForm();
-							// setUsernameTakenError('');
-							// setSuccess(true);
 						});
 				});
 			}

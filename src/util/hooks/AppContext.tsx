@@ -2,11 +2,9 @@ import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { history } from '../../App';
-import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
-import { getUserContacts } from '../../service/firebaseService';
 import { setGameCache } from '../store/actions';
-import { processContactData, typeCheckUser, userToObj } from '../utilFns';
+import { typeCheckUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
 	user: User | null;
@@ -73,9 +71,6 @@ export const AppContextProvider = (props: any) => {
 		localStorage.setItem('jwt', token);
 		setUser(user);
 		setPlayers([user]);
-		getUserContacts(user).then(contactData => {
-			setContacts(processContactData(user, contactData));
-		});
 	}
 
 	function logout(): void {

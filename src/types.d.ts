@@ -4,6 +4,11 @@ interface Store {
 	player: User;
 }
 
+interface Group {
+	name: string;
+	users: User[];
+}
+
 interface alert {
 	status: Color;
 	msg: string;
@@ -23,4 +28,14 @@ interface PlayerComponentProps {
 	player: User;
 	hasFront?: boolean;
 	hasBack?: boolean;
+}
+
+interface loginParams {
+	username: string;
+	password: string;
+}
+
+interface registerParams {
+	username: string;
+	password: string;
 }

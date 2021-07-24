@@ -15,26 +15,17 @@ import React, { useContext, useState } from 'react';
 import * as firebaseService from '../../service/firebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { User } from '../../Models/User';
-import './UserSearchForm.scss';
+import './SearchForms.scss';
 
-const UserSearchForm: React.FC = () => {
+const GroupSearchForm: React.FC = () => {
 	const { user, players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
-	const [foundUsers, setFoundUsers] = useState<Array<User>>([]);
+	const [foundGroups, setFoundGroups] = useState<Array<Group>>([]);
 	const [searchFor, setSearchFor] = useState('');
 
-	async function search(username: string) {
-		let foundUsers: Array<User> = [];
-		await firebaseService.searchUser(username).then(data => {
-			if (!data.empty) {
-				data.docs.forEach(doc => {
-					foundUsers.push(new User(doc.id, doc.data().username, doc.data().photoUrl));
-				});
-				if (foundUsers.length > 0) {
-					setFoundUsers(foundUsers);
-					setShowOptions(true);
-				}
-			}
+	async function search(groupName: string) {
+		await firebaseService.searchUser(groupName).then(groups => {
+			// setFoundGroups(groups)
 		});
 	}
 
@@ -56,32 +47,31 @@ const UserSearchForm: React.FC = () => {
 		return true;
 	}
 
-	function handleSelect(selectedPlayer: User) {
-		setPlayers([...players, selectedPlayer]);
+	function handleSelect(group: Group) {
+		setPlayers([...group.users]);
 		setSearchFor('');
 		setShowOptions(false);
 	}
 
 	const markup: JSX.Element = (
-		<div className="user-search-form-container">
+		<div className="search-form-container group">
 			<List>
 				<ListItem>
 					<div>
 						<TextField
 							id="foundUsersList"
-							label={players.length < 4 ? 'Find user' : '4 players selected'}
+							label={'Search groups'}
 							size="small"
 							onChange={e => {
 								handleFormChange(e.target.value);
 							}}
 							value={searchFor}
-							disabled={players.length === 4}
+							disabled={players.length > 0}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
 										<IconButton
 											color="primary"
-											aria-label="upload picture"
 											component="span"
 											size="small"
 											onClick={() => {
@@ -104,26 +94,22 @@ const UserSearchForm: React.FC = () => {
 				</ListItem>
 				<Collapse in={showOptions} timeout={300} unmountOnExit>
 					<List component="div" disablePadding>
-						{foundUsers.length > 0 &&
-							foundUsers.map(foundUser => {
-								if (user && user.id !== foundUser.id && notSelected(foundUser)) {
-									return (
-										<ListItem
-											button
-											key={foundUser.id}
-											onClick={() => {
-												handleSelect(foundUser);
-											}}
-										>
-											<ListItemIcon>
-												<FaceIcon />
-											</ListItemIcon>
-											<ListItemText primary={foundUser.username} />
-										</ListItem>
-									);
-								} else {
-									return null;
-								}
+						{foundGroups.length > 0 &&
+							foundGroups.map(group => {
+								return (
+									<ListItem
+										button
+										key={group.name}
+										onClick={() => {
+											handleSelect(group);
+										}}
+									>
+										<ListItemIcon>
+											<FaceIcon />
+										</ListItemIcon>
+										<ListItemText primary={group.name} />
+									</ListItem>
+								);
 							})}
 					</List>
 				</Collapse>
@@ -134,4 +120,4 @@ const UserSearchForm: React.FC = () => {
 	return markup;
 };
 
-export default UserSearchForm;
+export default GroupSearchForm;

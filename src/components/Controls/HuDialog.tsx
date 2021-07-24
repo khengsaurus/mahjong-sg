@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { Game } from '../../Models/Game';
 import * as firebaseService from '../../service/firebaseService';
-import { rotatedMUI } from '../../util/utilFns';
+import { rotatedMUIDialog } from '../../util/utilFns';
 import './Controls.scss';
 
 interface Props {
@@ -33,7 +33,14 @@ const HuDialog = (props: Props) => {
 
 	async function hu() {
 		game.hu = [playerSeat, tai, zimo ? 1 : 0];
-		game.flagProgress = Number(game.dealer) === playerSeat ? false : true;
+		game.flagProgress = Number(game.dealer) === playerSeat ? Boolean(false) : Boolean(true);
+		if (game.flagProgress) {
+			console.log(
+				`${game.players[playerSeat].username} hu, expecting next dealer: ${(Number(game.dealer) % 3) + 1}`
+			);
+		} else {
+			console.log(`${game.players[playerSeat].username} hu, expecting next dealer: ${Number(game.dealer)}`);
+		}
 		game.endRound();
 		firebaseService.updateGame(game);
 		onClose();
@@ -53,7 +60,7 @@ const HuDialog = (props: Props) => {
 
 	return (
 		<div>
-			<ThemeProvider theme={rotatedMUI}>
+			<ThemeProvider theme={rotatedMUIDialog}>
 				<Dialog
 					open={show}
 					BackdropProps={{ invisible: true }}
@@ -65,7 +72,7 @@ const HuDialog = (props: Props) => {
 					}}
 				>
 					<DialogContent>
-						<IconButton style={{ position: 'absolute', top: '5px', right: '5px' }} onClick={onClose}>
+						<IconButton style={{ position: 'absolute', top: '12px', right: '15px' }} onClick={onClose}>
 							<CloseIcon />
 						</IconButton>
 						<Typography variant="h6">{'Nice!'}</Typography>
@@ -74,7 +81,6 @@ const HuDialog = (props: Props) => {
 							error={errorMsg !== '' && taiString.trim() !== ''}
 							helperText={errorMsg}
 							value={taiString}
-							color="secondary"
 							onChange={e => {
 								handleSetTai(e.target.value);
 							}}
@@ -94,8 +100,15 @@ const HuDialog = (props: Props) => {
 						<DialogActions>
 							<Button
 								variant="outlined"
+								size="small"
 								onClick={hu}
-								disabled={taiString.trim() === '' || !Number(taiString) || tai <= 0 || tai > 5}
+								disabled={
+									taiString.trim() === '' ||
+									!Number(taiString) ||
+									tai <= 0 ||
+									tai > 5 ||
+									(game.hu.length === 3 && game.hu[0] !== playerSeat)
+								}
 								autoFocus
 							>
 								Hu

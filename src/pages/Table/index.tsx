@@ -2,6 +2,7 @@ import { Button, Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { history } from '../../App';
 import Controls from '../../components/Controls';
 import HomeButton from '../../components/HomeButton';
 import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
@@ -29,12 +30,11 @@ const Table = () => {
 	const game = useSelector((state: Store) => state.game);
 
 	useEffect(() => {
-		console.log('Table: useEffect called');
+		console.log('Table - game listener called');
 		const unsubscribe = firebaseService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
-				console.log('Table: updating game');
-				console.log(currentGame);
+				console.log('Table - game state updated:');
 				// setGame, setPlayer
 				dispatch(setGame(currentGame));
 				setFront(currentGame.frontTiles);
@@ -78,25 +78,30 @@ const Table = () => {
 		return unsubscribe;
 	}, []);
 
-	async function progressGame() {
-		console.log('Table: creator calling progressGame');
+	async function startGame() {
+		console.log('Table - creator calling startGame');
 		await game.initRound().then(() => {
-			firebaseService.updateGame(game);
-			dispatch(setGame(game));
+			firebaseService.updateGame(game).then(() => {
+				setTimeout(function () {
+					history.push('./Table');
+				}, 1000);
+			});
 		});
 	}
 
-	const renderCenterControl = () => {
+	const startControl = () => {
 		return (
 			<div className="main">
-				<Button onClick={progressGame} variant="outlined">
+				<Button onClick={startGame} variant="outlined">
 					{`Start game`}
 				</Button>
+				<br></br>
+				<HomeButton />
 			</div>
 		);
 	};
 
-	const renderGame = () => {
+	const gameMarkup = () => {
 		if (game && game.stage !== 0) {
 			return (
 				<div className="main">
@@ -153,24 +158,24 @@ const Table = () => {
 	const noActiveGame = () => {
 		return (
 			<div className="main">
-				<Typography variant="h6">No ongoing game</Typography>
+				<Typography variant="h6">{`No ongoing game`}</Typography>
 				<br></br>
 				<HomeButton />
 			</div>
 		);
 	};
 
-	try {
-		if (user && game) {
-			if (game.creator === user.username && game.stage === 0) {
-				return renderCenterControl();
-			} else {
-				return renderGame();
-			}
+	useEffect(() => {
+		console.log('Table - re-rendering game & controls');
+	}, [game, user, dispatch]);
+
+	if (user && game) {
+		if (game.creator === user.username && game.stage === 0) {
+			return startControl();
 		} else {
-			return noActiveGame();
+			return gameMarkup();
 		}
-	} catch (err) {
+	} else {
 		return noActiveGame();
 	}
 };

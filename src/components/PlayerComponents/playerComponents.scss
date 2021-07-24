@@ -50,10 +50,11 @@ $rotate-simple-180: rotate(180deg);
 
 	.horizontal-tiles-shown {
 		display: flex;
-		align-items: flex-end;
 		flex-flow: row-reverse wrap;
 		justify-content: center; // Remove to align top and bottom shown tiles to the right
-		height: $shown-tile-height;
+		align-items: flex-end;
+		align-self: center;
+		width: 70vw;
 
 		&.bottom {
 			flex-flow: row-reverse wrap-reverse;
@@ -71,7 +72,7 @@ $rotate-simple-180: rotate(180deg);
 				border-radius: 8%;
 				background: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 				background-size: 400% 400%;
-				animation: linear-gradient 20s ease infinite;
+				animation: linear-gradient 5s ease infinite;
 			}
 
 			&.animal {
@@ -173,7 +174,7 @@ $rotate-simple-180: rotate(180deg);
 			// background: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 			background: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 			background-size: 400% 400%;
-			animation: linear-gradient 15s ease infinite;
+			animation: linear-gradient 5s ease infinite;
 		}
 
 		&.animal {
@@ -206,7 +207,7 @@ $rotate-simple-180: rotate(180deg);
 	.self-hidden-tiles {
 		display: flex;
 		flex-direction: column;
-		z-index: 10;
+		z-index: 20;
 
 		.self-hidden-tile {
 			height: $self-hidden-tile-width;

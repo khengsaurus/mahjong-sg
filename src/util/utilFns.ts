@@ -82,7 +82,6 @@ export function typeCheckPlayer(data: any): User {
 		data.id,
 		data.username,
 		data.photoUrl,
-		data.currentSeat,
 		data.shownTiles,
 		data.hiddenTiles,
 		data.discardedTiles,
@@ -96,7 +95,6 @@ export function userToObj(user: User) {
 		id: user.id,
 		username: user.username,
 		photoUrl: user.photoUrl,
-		currentSeat: user.currentSeat || 0,
 		hiddenTiles: user.hiddenTiles
 			? user.hiddenTiles.map((tile: Tile) => {
 					return tileToObj(tile);
@@ -141,25 +139,25 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		ref.creator,
 		ref.createdAt.toDate(),
 		ref.playersString,
-		ref.ongoing,
-		ref.stage,
-		ref.previousStage,
-		ref.midRound,
-		ref.flagProgress,
-		ref.dealer,
-		ref.whoseMove,
+		Boolean(ref.ongoing),
+		Number(ref.stage),
+		Number(ref.previousStage),
+		Number(ref.dealer),
+		Boolean(ref.midRound),
+		Boolean(ref.flagProgress),
+		Number(ref.whoseMove),
 		ref.playerIds,
 		ref.players.map((player: any) => {
 			return typeCheckPlayer(player);
 		}),
 		ref.tiles,
-		ref.frontTiles,
-		ref.backTiles,
+		Number(ref.frontTiles),
+		Number(ref.backTiles),
 		ref.lastThrown,
-		ref.thrownBy,
-		ref.thrownTile,
-		ref.takenTile,
-		ref.uncachedAction,
+		Number(ref.thrownBy),
+		Boolean(ref.thrownTile),
+		Boolean(ref.takenTile),
+		Boolean(ref.uncachedAction),
 		ref.hu
 	);
 };
@@ -203,9 +201,19 @@ export function search(tile: Tile, tiles: Tile[]) {
 	}
 }
 
-export const rotatedMUI = createTheme({
+export const rotatedMUIDialog = createTheme({
 	overrides: {
 		MuiDialog: {
+			root: {
+				transform: 'rotate(90deg)'
+			}
+		}
+	}
+});
+
+export const rotatedMUIButton = createTheme({
+	overrides: {
+		MuiButton: {
 			root: {
 				transform: 'rotate(90deg)'
 			}

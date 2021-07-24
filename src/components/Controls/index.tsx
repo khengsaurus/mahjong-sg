@@ -28,6 +28,7 @@ const Controls = (props: ControlsProps) => {
 	const { lastThrown, thrownBy } = game;
 
 	const previousPlayer = useMemo(() => {
+		console.log('Controls - useMemo calculating previous player');
 		if (playerSeat === 0) {
 			return 3;
 		} else {
@@ -37,7 +38,7 @@ const Controls = (props: ControlsProps) => {
 
 	useEffect(() => {
 		if (game && player) {
-			console.log('Controls: useEffect called');
+			console.log('Controls - useEffect called');
 			let consideringTiles: Tile[];
 			if (selectedTiles.length === 0) {
 				consideringTiles = [lastThrown];
@@ -47,12 +48,7 @@ const Controls = (props: ControlsProps) => {
 			setMeld(consideringTiles);
 
 			if (!game.takenTile) {
-				console.log(consideringTiles);
-				if (
-					game.whoseMove === player.currentSeat &&
-					thrownBy === previousPlayer &&
-					player.canChi(consideringTiles)
-				) {
+				if (game.whoseMove === playerSeat && thrownBy === previousPlayer && player.canChi(consideringTiles)) {
 					setCanChi(true);
 				} else {
 					setCanChi(false);
@@ -75,6 +71,9 @@ const Controls = (props: ControlsProps) => {
 			return tile.id !== lastThrown.id;
 		});
 		game.lastThrown = { card: '', suit: '', id: '', index: 1, show: false };
+		meld.forEach(tile => {
+			tile.show = true;
+		});
 		player.hiddenTiles = player.hiddenTiles.filter((tileH: Tile) => {
 			return !meld
 				.map(tileM => {
@@ -127,6 +126,7 @@ const Controls = (props: ControlsProps) => {
 
 	function handleThrow(tileToThrow: Tile) {
 		console.log(`${player.username} Player is throwing a tile`);
+		tileToThrow.show = true;
 		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
 			return tile.id !== tileToThrow.id;
 		});
@@ -155,15 +155,24 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function showHuDialog() {
-		console.log(playerSeat);
-		console.log('Player declaring hu');
 		setDeclareHu(true);
-		// show tiles
+		player.shownTiles = [...player.shownTiles, ...player.hiddenTiles];
+		player.hiddenTiles = [];
+		game.players[playerSeat] = player;
+		handleAction(game);
 	}
 
 	function hideHuDialog() {
 		setDeclareHu(false);
-		// hide tiles
+		let hiddenTiles = player.shownTiles.filter((tile: Tile) => {
+			return tile.show === false;
+		});
+		player.hiddenTiles = hiddenTiles;
+		player.shownTiles = player.shownTiles.filter((tile: Tile) => {
+			return tile.show === true;
+		});
+		game.players[playerSeat] = player;
+		handleAction(game);
 	}
 
 	return game && player ? (
@@ -230,19 +239,13 @@ const Controls = (props: ControlsProps) => {
 			</div>
 
 			<div className="bottom-right-controls">
-				<Button
-					className="button"
-					variant="outlined"
-					size="small"
-					onClick={showHuDialog}
-					disabled={game.hu.length > 1 && game.hu[0] !== playerSeat}
-				>
-					Hu
+				<Button className="button" variant="outlined" size="small" onClick={showHuDialog}>
+					Show
 				</Button>
 			</div>
 			<div className="stage">{game.repr()}</div>
-			{<HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-			{<HuAnnouncement playerSeat={playerSeat} game={game} />}
+			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
+			{game.hu.length === 3 && <HuAnnouncement playerSeat={playerSeat} game={game} />}
 		</div>
 	) : null;
 };

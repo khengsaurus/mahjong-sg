@@ -7,13 +7,13 @@ export function gameToObj(game: Game) {
 		creator: game.creator || '',
 		createdAt: game.createdAt || new Date(),
 		playersString: game.playersString || '',
-		ongoing: game.ongoing || false,
-		stage: Number(game.stage) || 0,
-		previousStage: Number(game.previousStage) || 0,
+		ongoing: game.ongoing || true,
+		stage: game.stage || 0,
+		previousStage: game.previousStage || 0,
 		midRound: game.midRound || false,
 		flagProgress: game.flagProgress || false,
-		dealer: Number(game.dealer) || 0,
-		whoseMove: Number(game.whoseMove) || 0,
+		dealer: game.dealer || 0,
+		whoseMove: game.whoseMove || 0,
 		playerIds: game.playerIds || [],
 		players: game.players
 			? game.players.map(player => {
@@ -21,10 +21,10 @@ export function gameToObj(game: Game) {
 			  })
 			: [],
 		tiles: game.tiles,
-		frontTiles: Number(game.frontTiles) || 0,
-		backTiles: Number(game.backTiles) || 0,
+		frontTiles: game.frontTiles || 0,
+		backTiles: game.backTiles || 0,
 		lastThrown: game.lastThrown || {},
-		thrownBy: Number(game.thrownBy) || 0,
+		thrownBy: game.thrownBy || 0,
 		thrownTile: game.thrownTile || false,
 		takenTile: game.takenTile || false,
 		uncachedAction: game.uncachedAction || false,
@@ -104,8 +104,8 @@ export class Game {
 		this.hu = hu;
 	}
 
-	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 	async shuffle(array: any[]) {
+		// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 		var currentIndex = array.length,
 			randomIndex;
 		while (0 !== currentIndex) {
@@ -214,11 +214,7 @@ export class Game {
 				if (offsetUnused) {
 					if (this.players[this.backTiles].unusedTiles === 1) {
 						this.players[this.backTiles].unusedTiles = 0;
-						if (this.backTiles === 3) {
-							this.backTiles = 0;
-						} else {
-							this.backTiles += 1;
-						}
+						this.backTiles = this.findRight(this.backTiles);
 					} else {
 						this.players[this.backTiles].unusedTiles -= 1;
 					}
@@ -229,11 +225,7 @@ export class Game {
 				if (offsetUnused) {
 					if (this.players[this.frontTiles].unusedTiles === 1) {
 						this.players[this.frontTiles].unusedTiles = 0;
-						if (this.frontTiles === 0) {
-							this.frontTiles = 3;
-						} else {
-							this.frontTiles -= 1;
-						}
+						this.frontTiles = this.findLeft(this.frontTiles);
 					} else {
 						this.players[this.frontTiles].unusedTiles -= 1;
 					}
@@ -243,6 +235,7 @@ export class Game {
 				newTile.isValidFlower = true;
 			}
 			if (newTile.suit === '花' || newTile.suit === '动物') {
+				newTile.show = true;
 				player.shownTiles = [...player.shownTiles, newTile];
 			} else {
 				player.hiddenTiles = [...player.hiddenTiles, newTile];
@@ -251,67 +244,36 @@ export class Game {
 		console.log(`${player.username} received ${n} tile(s)`);
 	}
 
-	// TODO:
-	async assignSeats() {
-		this.players[0].currentSeat = 0;
-		this.players[1].currentSeat = 1;
-		this.players[2].currentSeat = 2;
-		this.players[3].currentSeat = 3;
-		console.log('Players assigned');
-		console.log('Player 1: ', this.players[0].username);
-		console.log('Player 2: ', this.players[1].username);
-		console.log('Player 3: ', this.players[2].username);
-		console.log('Player 4: ', this.players[3].username);
-	}
-
 	findLeft(n: number) {
-		if (n === 0) {
-			return 3;
-		} else {
-			return n - 1;
-		}
+		return (n + 3) % 4;
 	}
 
 	findRight(n: number) {
-		if (n === 3) {
-			return 0;
-		} else {
-			return n + 1;
-		}
+		return (n + 1) % 4;
 	}
 
 	findOpp(n: number) {
-		switch (n) {
-			case 0:
-				return 2;
-			case 1:
-				return 3;
-			case 2:
-				return 0;
-			case 3:
-				return 1;
-			default:
-				break;
-		}
+		return (n + 2) % 4;
 	}
 
 	//TODO: optimise
 	async distributeTiles() {
-		let dealer = this.players[Number(this.dealer)];
+		let dealer = this.players[this.dealer];
 		let rolled = dealer.rollDice();
-		console.log(`Dealer rolled: ${rolled}`);
-		let leftPlayer = this.players[this.findLeft(Number(this.dealer))];
-		let rightPlayer = this.players[this.findRight(Number(this.dealer))];
-		let oppPlayer = this.players[this.findOpp(Number(this.dealer))];
+		console.log(`${dealer.username} rolled: ${rolled}`);
+		let leftPlayer = this.players[this.findLeft(this.dealer)];
+		let rightPlayer = this.players[this.findRight(this.dealer)];
+		let oppPlayer = this.players[this.findOpp(this.dealer)];
 		let toBeDealtByLeft: number;
 		let toBeDealtByDealer: number;
 		let toBeDealtByRight: number;
 		let toBeDealtByOpp: number;
 
+		// Set front and back, and how many unused tiles each dealer has
 		switch (rolled % 4) {
 			case 0: // deal from left
 				console.log('Dealing from left');
-				this.backTiles = this.findLeft(Number(this.dealer));
+				this.backTiles = this.findLeft(this.dealer);
 				toBeDealtByLeft = 36 - 2 * rolled;
 				leftPlayer.unusedTiles = 2 * rolled;
 				toBeDealtByOpp = 53 - toBeDealtByLeft;
@@ -319,17 +281,17 @@ export class Game {
 					oppPlayer.unusedTiles = 0;
 					toBeDealtByRight = toBeDealtByOpp - 38;
 					rightPlayer.unusedTiles = 36 - toBeDealtByRight;
-					this.frontTiles = this.findRight(Number(this.dealer));
+					this.frontTiles = this.findRight(this.dealer);
 				} else {
 					oppPlayer.unusedTiles = 38 - toBeDealtByOpp;
 					rightPlayer.unusedTiles = 36;
-					this.frontTiles = this.findOpp(Number(this.dealer));
+					this.frontTiles = this.findOpp(this.dealer);
 				}
 				dealer.unusedTiles = 38;
 				break;
 			case 1: // deal from dealer
 				console.log('Dealing from dealer');
-				this.backTiles = Number(this.dealer);
+				this.backTiles = this.dealer;
 				toBeDealtByDealer = 38 - 2 * rolled;
 				dealer.unusedTiles = 2 * rolled;
 				toBeDealtByLeft = 53 - toBeDealtByDealer;
@@ -337,17 +299,17 @@ export class Game {
 					leftPlayer.unusedTiles = 0;
 					toBeDealtByOpp = toBeDealtByLeft - 36;
 					oppPlayer.unusedTiles = 38 - toBeDealtByOpp;
-					this.frontTiles = this.findOpp(Number(this.dealer));
+					this.frontTiles = this.findOpp(this.dealer);
 				} else {
 					leftPlayer.unusedTiles = 36 - toBeDealtByLeft;
 					oppPlayer.unusedTiles = 38;
-					this.frontTiles = this.findLeft(Number(this.dealer));
+					this.frontTiles = this.findLeft(this.dealer);
 				}
 				rightPlayer.unusedTiles = 36;
 				break;
 			case 2: // deal from right
 				console.log('Dealing from right');
-				this.backTiles = this.findRight(Number(this.dealer));
+				this.backTiles = this.findRight(this.dealer);
 				toBeDealtByRight = 36 - 2 * rolled;
 				rightPlayer.unusedTiles = 2 * rolled;
 				toBeDealtByDealer = 53 - toBeDealtByRight;
@@ -355,17 +317,17 @@ export class Game {
 					dealer.unusedTiles = 0;
 					toBeDealtByLeft = toBeDealtByDealer - 38;
 					leftPlayer.unusedTiles = 36 - toBeDealtByLeft;
-					this.frontTiles = this.findLeft(Number(this.dealer));
+					this.frontTiles = this.findLeft(this.dealer);
 				} else {
 					dealer.unusedTiles = 38 - toBeDealtByDealer;
 					leftPlayer.unusedTiles = 36;
-					this.frontTiles = Number(this.dealer);
+					this.frontTiles = this.dealer;
 				}
 				oppPlayer.unusedTiles = 38;
 				break;
 			case 3: // deal from opposite
 				console.log('Dealing from opposite');
-				this.backTiles = this.findOpp(Number(this.dealer));
+				this.backTiles = this.findOpp(this.dealer);
 				oppPlayer.unusedTiles = 2 * rolled;
 				toBeDealtByOpp = 38 - 2 * rolled;
 				toBeDealtByRight = 53 - toBeDealtByOpp;
@@ -373,26 +335,26 @@ export class Game {
 					rightPlayer.unusedTiles = 0;
 					toBeDealtByDealer = toBeDealtByRight - 36;
 					dealer.unusedTiles = 38 - toBeDealtByDealer;
-					this.frontTiles = Number(this.dealer);
+					this.frontTiles = this.dealer;
 				} else {
 					rightPlayer.unusedTiles = 36 - toBeDealtByRight;
 					dealer.unusedTiles = 38;
-					this.frontTiles = this.findRight(Number(this.dealer));
+					this.frontTiles = this.findRight(this.dealer);
 				}
 				leftPlayer.unusedTiles = 36;
 				break;
 		}
 
 		console.log('Distrubite tiles called');
-		await this.giveTiles(14, 0, false, false);
-		await this.giveTiles(13, 1, false, false);
-		await this.giveTiles(13, 2, false, false);
-		await this.giveTiles(13, 3, false, false);
+		await this.giveTiles(14, this.dealer, false, false);
+		await this.giveTiles(13, this.findRight(this.dealer), false, false);
+		await this.giveTiles(13, this.findOpp(this.dealer), false, false);
+		await this.giveTiles(13, this.findLeft(this.dealer), false, false);
 		while (
-			this.players[0].hiddenTiles.length < 14 ||
-			this.players[1].hiddenTiles.length < 13 ||
-			this.players[2].hiddenTiles.length < 13 ||
-			this.players[3].hiddenTiles.length < 13
+			this.players[this.dealer].hiddenTiles.length < 14 ||
+			this.players[this.findRight(this.dealer)].hiddenTiles.length < 13 ||
+			this.players[this.findOpp(this.dealer)].hiddenTiles.length < 13 ||
+			this.players[this.findLeft(this.dealer)].hiddenTiles.length < 13
 		) {
 			this.buHua();
 		}
@@ -405,39 +367,35 @@ export class Game {
 
 	async buHua() {
 		if (this.players[0].hiddenTiles.length < 14) {
-			this.giveTiles(14 - this.players[0].hiddenTiles.length, 0, true, true);
+			this.giveTiles(14 - this.players[this.dealer].hiddenTiles.length, 0, true, true);
 		}
 		if (this.players[1].hiddenTiles.length < 13) {
-			this.giveTiles(13 - this.players[1].hiddenTiles.length, 1, true, true);
+			this.giveTiles(13 - this.players[this.findRight(this.dealer)].hiddenTiles.length, 1, true, true);
 		}
 		if (this.players[2].hiddenTiles.length < 13) {
-			this.giveTiles(13 - this.players[2].hiddenTiles.length, 2, true, true);
+			this.giveTiles(13 - this.players[this.findOpp(this.dealer)].hiddenTiles.length, 2, true, true);
 		}
 		if (this.players[3].hiddenTiles.length < 13) {
-			this.giveTiles(13 - this.players[3].hiddenTiles.length, 3, true, true);
+			this.giveTiles(13 - this.players[this.findLeft(this.dealer)].hiddenTiles.length, 3, true, true);
 		}
 	}
 
 	nextPlayerMove() {
-		if (Number(this.whoseMove) === 3) {
-			this.whoseMove = 0;
-		} else {
-			this.whoseMove += 1;
-		}
+		this.whoseMove = this.findRight(this.whoseMove);
 	}
 
 	repr(): any[] {
 		let res: any[];
-		if (Number(this.stage) <= 4) {
+		if (this.stage <= 4) {
 			res = ['东', this.stage];
 		} else if (this.stage <= 8) {
-			res = ['南', this.stage];
+			res = ['南', ((this.stage - 1) % 4) + 1];
 		} else if (this.stage <= 12) {
-			res = ['西', this.stage];
+			res = ['西', ((this.stage - 1) % 8) + 1];
 		} else if (this.stage <= 16) {
-			res = ['北', this.stage];
+			res = ['北', ((this.stage - 1) % 12) + 1];
 		}
-		if (Number(this.stage) === Number(this.previousStage)) {
+		if (this.stage === this.previousStage) {
 			res.push(['连']);
 		}
 		return res;
@@ -448,12 +406,17 @@ export class Game {
 		if (this.flagProgress) {
 			this.stage += 1;
 		}
-		if (Number(this.stage) === 1) {
+		if (this.stage === 1) {
 			this.dealer = 0;
-			await this.assignSeats();
 		}
+		this.players.forEach(player => {
+			player.hiddenTiles = [];
+			player.shownTiles = [];
+			player.pongs = [];
+			player.unusedTiles = 0;
+		});
 		this.flagProgress = false;
-		this.whoseMove = Number(this.dealer);
+		this.whoseMove = this.dealer;
 		this.tiles = [];
 		this.frontTiles = 0;
 		this.backTiles = 0;
@@ -466,7 +429,7 @@ export class Game {
 		});
 		await this.distributeTiles();
 		this.hu = [];
-		console.log(`Starting round ${Number(this.stage)}`);
+		console.log(`Starting round ${this.stage}`);
 	}
 
 	/**
@@ -475,28 +438,12 @@ export class Game {
 	 */
 	endRound() {
 		this.midRound = false;
-		this.previousStage = Number(this.stage);
-		if (Number(this.dealer) === 3 && Number(this.stage) === 16 && this.flagProgress) {
+		this.previousStage = this.stage;
+		if (this.dealer === 3 && this.stage === 16 && this.flagProgress) {
 			console.log('Game ended');
 			this.ongoing = false;
 		} else if (this.flagProgress) {
-			this.dealer = (Number(this.dealer) % 3) + 1;
-			this.rotateSeats();
+			this.dealer = (this.dealer + 1) % 4;
 		}
-	}
-
-	// Rotate player.currentSeat
-	rotateSeats() {
-		console.log('Rotating seats');
-		this.players.forEach(player => {
-			if (player.currentSeat === 3) {
-				player.currentSeat = 0;
-			} else {
-				player.currentSeat += 1;
-			}
-		});
-		this.players.forEach(player => {
-			console.log(`${player.username}'s current seat: ${player.currentSeat}`);
-		});
 	}
 }

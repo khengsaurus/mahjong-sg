@@ -2,7 +2,7 @@ import { Button, Dialog, DialogContent, ThemeProvider, Typography } from '@mater
 import React from 'react';
 import { Game } from '../../Models/Game';
 import * as firebaseService from '../../service/firebaseService';
-import { rotatedMUI } from '../../util/utilFns';
+import { rotatedMUIDialog } from '../../util/utilFns';
 import './Controls.scss';
 
 interface Props {
@@ -21,7 +21,7 @@ const HuAnnouncement = (props: Props) => {
 
 	return (
 		<div>
-			<ThemeProvider theme={rotatedMUI}>
+			<ThemeProvider theme={rotatedMUIDialog}>
 				<Dialog
 					open={game.hu !== []}
 					BackdropProps={{ invisible: true }}
@@ -33,12 +33,18 @@ const HuAnnouncement = (props: Props) => {
 				>
 					{game.hu.length > 1 && (
 						<DialogContent>
-							<Typography variant="h5">{`${game.players[game.hu[0]].username} hu`}</Typography>
-							<Typography variant="h6">{`${game.hu[1]} 台${game.hu[2] === 1 ? ` 自摸` : ``}`}</Typography>
-							{playerSeat === Number(game.dealer) && (
-								<Button variant="outlined" size="small" onClick={nextRound} autoFocus>
-									Next round
-								</Button>
+							<Typography variant="h6">{`${game.players[game.hu[0]].username} hu`}</Typography>
+							<Typography variant="subtitle1">{`${game.hu[1]} 台${
+								game.hu[2] === 1 ? ` 自摸` : ``
+							}`}</Typography>
+							{game.ongoing ? (
+								playerSeat === Number(game.dealer) && (
+									<Button variant="outlined" size="small" onClick={nextRound} autoFocus>
+										Next round
+									</Button>
+								)
+							) : (
+								<Typography variant="h6">{`The game has ended, thank you for playing!`}</Typography>
 							)}
 						</DialogContent>
 					)}
