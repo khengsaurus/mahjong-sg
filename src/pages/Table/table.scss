@@ -1,5 +1,17 @@
 @import '../../App.scss';
 
+.wind-background {
+	transform: rotate(90deg);
+	color: rgb(160, 160, 160);
+	display: flex;
+	flex-direction: column;
+	p {
+		font-size: 60px;
+		color: #a2a2a2;
+		// animation: color-change 5s infinite;
+	}
+}
+
 .top-player-container {
 	position: absolute;
 	width: 100%;
@@ -24,4 +36,22 @@
 	position: absolute;
 	left: 0;
 	z-index: 3;
+}
+
+@keyframes color-change {
+	0% {
+		color: #aeaeae;
+	}
+	25% {
+		color: #a2a2a2;
+	}
+	50% {
+		color: #9a9a9a;
+	}
+	75% {
+		color: #a2a2a2;
+	}
+	100% {
+		color: #aeaeae;
+	}
 }

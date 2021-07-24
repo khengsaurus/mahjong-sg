@@ -179,13 +179,13 @@ const Controls = (props: ControlsProps) => {
 		<div className="overlay-main">
 			<div className="top-right-controls">
 				<Button
-					className="home-button"
+					className="button"
 					variant="outlined"
 					onClick={() => {
 						history.push('/');
 					}}
 				>
-					Home
+					<p>Home</p>
 				</Button>
 			</div>
 
@@ -198,7 +198,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={!canChi || game.whoseMove !== playerSeat}
 				>
-					Chi
+					<p>Chi</p>
 				</Button>
 				<Button
 					className="button"
@@ -212,7 +212,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={!canPong && !canKang}
 				>
-					{canKang ? `Kang` : `Pong`}
+					<p>{canKang ? `Kang` : `Pong`}</p>
 				</Button>
 			</div>
 
@@ -223,7 +223,7 @@ const Controls = (props: ControlsProps) => {
 					onClick={handleDraw}
 					disabled={game.whoseMove !== playerSeat || game.takenTile}
 				>
-					Draw
+					<p>Draw</p>
 				</Button>
 				<Button
 					className="button"
@@ -234,16 +234,15 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat}
 				>
-					Throw
+					<p>Throw</p>
 				</Button>
 			</div>
 
 			<div className="bottom-right-controls">
 				<Button className="button" variant="outlined" size="small" onClick={showHuDialog}>
-					Show
+					<p>Show</p>
 				</Button>
 			</div>
-			<div className="stage">{game.repr()}</div>
 			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
 			{game.hu.length === 3 && <HuAnnouncement playerSeat={playerSeat} game={game} />}
 		</div>

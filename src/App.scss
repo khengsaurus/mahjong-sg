@@ -53,3 +53,18 @@ $flower-highlight: #df9a94;
 	width: 100%;
 	background-color: $color-background;
 }
+
+@keyframes linear-gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+$linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
+$linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);

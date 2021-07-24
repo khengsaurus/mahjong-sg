@@ -12,25 +12,34 @@ $control-sq-side: 60px;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	.stage {
-		transform: rotate(90deg);
-	}
 	z-index: 1;
+	.stage {
+		font-size: 16px;
+		width: 80px;
+		border: 2px solid teal;
+		transform: rotate(90deg);
+		color: rgb(25, 25, 25);
+	}
 }
 
 .top-right-controls {
 	position: absolute;
 	top: 0;
 	right: 0;
-	height: 1.5 * $control-sq-side;
-	width: 1.5 * $control-sq-side;
+	height: 2 * $control-sq-side;
+	width: 2 * $control-sq-side;
 	display: flex;
-	flex-direction: row-reverse;
-	justify-content: flex-start;
+	flex-direction: column;
+	align-items: flex-end;
 	z-index: 10;
-	.home-button {
-		height: $control-sq-side / 1.5;
-		width: $control-sq-side;
+	.button {
+		max-width: $control-sq-side / 1.2;
+		max-height: $control-sq-side;
+		min-width: $control-sq-side / 1.2;
+		min-height: $control-sq-side;
+		p {
+			transform: rotate(90deg);
+		}
 	}
 }
 
@@ -38,15 +47,20 @@ $control-sq-side: 60px;
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 1.5 * $control-sq-side;
-	width: 1.5 * $control-sq-side;
+	height: 2 * $control-sq-side;
+	width: 2 * $control-sq-side;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	z-index: 10;
 	.button {
-		height: $control-sq-side / 1.5;
-		width: $control-sq-side;
+		max-width: $control-sq-side / 1.2;
+		max-height: $control-sq-side;
+		min-width: $control-sq-side / 1.2;
+		min-height: $control-sq-side;
+		p {
+			transform: rotate(90deg);
+		}
 	}
 }
 
@@ -55,15 +69,20 @@ $control-sq-side: 60px;
 	bottom: 0;
 	left: 0;
 	height: 2 * $control-sq-side;
-	width: 2.5 * $control-sq-side;
+	width: 2 * $control-sq-side;
 	display: flex;
 	flex-flow: column wrap;
 	align-content: flex-start;
 	justify-content: flex-end;
 	z-index: 10;
 	.button {
-		height: $control-sq-side / 1.5;
-		width: $control-sq-side;
+		max-width: $control-sq-side / 1.2;
+		max-height: $control-sq-side;
+		min-width: $control-sq-side / 1.2;
+		min-height: $control-sq-side;
+		p {
+			transform: rotate(90deg);
+		}
 	}
 }
 
@@ -71,15 +90,20 @@ $control-sq-side: 60px;
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	height: 1.5 * $control-sq-side;
-	width: 1.5 * $control-sq-side;
+	height: 2 * $control-sq-side;
+	width: 2 * $control-sq-side;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: flex-end;
 	z-index: 10;
 	.button {
-		height: $control-sq-side / 1.5;
-		width: $control-sq-side;
+		max-width: $control-sq-side / 1.2;
+		max-height: $control-sq-side;
+		min-width: $control-sq-side / 1.2;
+		min-height: $control-sq-side;
+		p {
+			transform: rotate(90deg);
+		}
 	}
 }

@@ -73,6 +73,18 @@ const RightPlayer = (props: PlayerComponentProps) => {
 							/>
 						</div>
 					);
+				})}
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
+					return (
+						<div className="discarded-tile">
+							<img
+								key={`right-discarded-tile-${index}`}
+								className="vertical-tile-shown-bg"
+								src={getTileSrc(tile.card)}
+								alt="tile"
+							/>
+						</div>
+					);
 				})} */}
 			</div>
 		</div>

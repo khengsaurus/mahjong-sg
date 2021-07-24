@@ -75,6 +75,16 @@ const TopPlayer = (props: PlayerComponentProps) => {
 							alt="tile"
 						/>
 					);
+				})}
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
+					return (
+						<img
+							key={`top-discarded-tile-${index}`}
+							className="discarded-tile"
+							src={getTileSrc(tile.card)}
+							alt="tile"
+						/>
+					);
 				})} */}
 			</div>
 		</div>

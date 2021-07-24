@@ -27,7 +27,7 @@ const Table = () => {
 	const [back, setBack] = useState(null);
 
 	const dispatch = useDispatch();
-	const game = useSelector((state: Store) => state.game);
+	const game: Game = useSelector((state: Store) => state.game);
 
 	useEffect(() => {
 		console.log('Table - game listener called');
@@ -103,8 +103,12 @@ const Table = () => {
 
 	const gameMarkup = () => {
 		if (game && game.stage !== 0) {
+			let currentWind = game.repr()[0];
 			return (
-				<div className="main">
+				<div className={`main ${game.dealer}`}>
+					<div className="wind-background">
+						<p>{currentWind}</p>
+					</div>
 					<div className="top-player-container">
 						{game.players[topPlayerIndex] && (
 							<TopPlayer
