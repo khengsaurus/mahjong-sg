@@ -13,7 +13,6 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 const userVal = db.collection('userVal');
 const userRepr = db.collection('userRepr');
-// const userContactsRef = db.collection('userContacts');
 const gameRef = db.collection('games');
 
 /* ------------------------- User related ------------------------- */
@@ -25,11 +24,9 @@ export const register = async (username: string, password: string) => {
 		});
 		const userValNew = userVal.doc(userId);
 		const userReprNew = userRepr.doc(userId);
-		// const userContactsRefNew = userContactsRef.doc('user: ' + userId);
 		await db.runTransaction(async t => {
 			t.set(userValNew, { username, password });
 			t.set(userReprNew, { username, photoUrl: '', groups: [] });
-			// t.set(userContactsRefNew, { [`${userId}`]: { username, photoUrl: '' } });
 		});
 		console.log('User created successfully');
 	} catch (err) {

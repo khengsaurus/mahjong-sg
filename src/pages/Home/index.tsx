@@ -6,7 +6,7 @@ import Login from '../Login';
 import './home.scss';
 
 const Home = () => {
-	const { user, validateJWT, logout } = useContext(AppContext);
+	const { user, authToken, validateJWT, logout } = useContext(AppContext);
 
 	useEffect(() => {
 		validateJWT();
@@ -24,6 +24,16 @@ const Home = () => {
 			<br></br>
 			<Button variant={'outlined'} onClick={logout}>
 				Logout
+			</Button>
+			<br></br>
+			<Button
+				variant={'outlined'}
+				onClick={() => {
+					console.log(user);
+					console.log(authToken);
+				}}
+			>
+				Log user
 			</Button>
 		</div>
 	);

@@ -25,7 +25,7 @@ export function attemptLogin(values: loginParams): Promise<User> {
 					reject(new Error('Username or password incorrect'));
 				} else {
 					/* If entered password matches stored user password, accept sign in, proceed to retrieve userRepr & 
-					userContacts data, calling 2 more reads. If all are successful, update AppContext.user */
+					userContacts data, calling 2 more reads. If all are successful, resolve with user object */
 					compare(values.password, data.docs[0].data().password)
 						.catch(err => {
 							reject(err.toString());

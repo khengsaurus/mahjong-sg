@@ -13,6 +13,10 @@ $control-sq-side: 60px;
 	align-items: center;
 	text-align: center;
 	z-index: 1;
+	padding-top: env(safe-area-inset-top);
+	padding-right: env(safe-area-inset-right);
+	padding-bottom: env(safe-area-inset-bottom);
+	padding-left: env(safe-area-inset-left);
 	.stage {
 		font-size: 16px;
 		width: 80px;

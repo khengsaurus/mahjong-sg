@@ -105,7 +105,7 @@ const Table = () => {
 		if (game && game.stage !== 0) {
 			let currentWind = game.repr()[0];
 			return (
-				<div className={`main ${game.dealer}`}>
+				<div className="main">
 					<div className="wind-background">
 						<p>{currentWind}</p>
 					</div>

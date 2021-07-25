@@ -1,22 +1,20 @@
+import firebase from 'firebase/app';
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { history } from '../../App';
 import { User } from '../../Models/User';
-import { setGameCache } from '../store/actions';
+import { AuthService } from '../../service/auth';
 import { typeCheckUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
 	user: User | null;
+	authToken: firebase.auth.UserCredential | null;
+	setAuthToken: (token: firebase.auth.UserCredential) => void;
 	login: (user: User) => void;
 	logout: () => void;
 	validateJWT: () => void;
-	corres: User | null;
-	setCorres: (corres: User | null) => void;
 	players: User[];
 	setPlayers: (players: User[]) => void;
-	contacts: Map<string, User>;
-	setContacts: (contacts: Map<string, User>) => void;
 	gameId?: string;
 	setGameId: (gameId: string) => void;
 	selectedTiles?: Tile[];
@@ -25,15 +23,13 @@ interface AppContextInt {
 
 const initialContext: AppContextInt = {
 	user: null,
+	authToken: null,
+	setAuthToken: (token: firebase.auth.UserCredential) => {},
 	login: (user: User) => {},
 	logout: () => {},
 	validateJWT: async () => {},
-	corres: null,
-	setCorres: (corres: User | null) => {},
 	players: [],
 	setPlayers: (players: User[]) => {},
-	contacts: new Map(),
-	setContacts: (contacts: Map<string, User>) => {},
 	gameId: null,
 	setGameId: (gameId: string) => {},
 	selectedTiles: [],
@@ -43,10 +39,8 @@ const initialContext: AppContextInt = {
 export const AppContext = createContext<AppContextInt>(initialContext);
 
 export const AppContextProvider = (props: any) => {
-	const dispatch = useDispatch();
-	const [user, setUser] = useState<User | null>(null);
-	const [corres, setCorres] = useState<User | null>(null);
-	const [contacts, setContacts] = useState<Map<string, User>>(new Map());
+	const [user, setUser] = useState<User>(null);
+	const [authToken, setAuthToken] = useState<firebase.auth.UserCredential>(null);
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
@@ -57,43 +51,48 @@ export const AppContextProvider = (props: any) => {
 		if (token) {
 			var decoded = await jwt.verify(token, secretKey);
 			let user1: User = typeCheckUser(1, decoded);
-			if (!user || user.username !== user1.username) {
-				login(user1);
+			if (!user || !authToken || user.username !== user1.username) {
+				await login(user1);
 			}
 		}
 	}
 
-	function login(user: User): void {
-		const token = jwt.sign(userToObj(user), secretKey, {
+	async function login(user: User) {
+		const token = await jwt.sign(userToObj(user), secretKey, {
 			// expiresIn: 1800, // 30mins
 			algorithm: 'HS256'
 		});
 		localStorage.setItem('jwt', token);
-		setUser(user);
-		setPlayers([user]);
+		await AuthService.loginAnon()
+			.then((token: firebase.auth.UserCredential) => {
+				setAuthToken(token);
+				setPlayers([user]);
+				setUser(user);
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	}
 
 	function logout(): void {
-		console.log('logout clicked');
+		setAuthToken(null);
+		setPlayers([]);
 		setUser(null);
-		dispatch(setGameCache(null));
 		localStorage.removeItem('jwt');
 		history.push('/');
+		console.log('User logged out');
 	}
 
 	return (
 		<AppContext.Provider
 			value={{
 				user,
+				authToken,
 				login,
 				logout,
 				validateJWT,
-				corres,
-				setCorres,
 				players,
 				setPlayers,
-				contacts,
-				setContacts,
 				gameId,
 				setGameId,
 				selectedTiles,

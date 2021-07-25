@@ -1,6 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 /src/service/firebaseConfig.ts
 
+#builds
+/android
+/ios
+
 # dependencies
 /node_modules
 /.pnp
