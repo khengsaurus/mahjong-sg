@@ -1,15 +1,13 @@
-import firebase from 'firebase/app';
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { history } from '../../App';
 import { User } from '../../Models/User';
-import { AuthService } from '../../service/auth';
+import FBService from '../../service/FirebaseService';
 import { typeCheckUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
-	user: User | null;
-	authToken: firebase.auth.UserCredential | null;
-	setAuthToken: (token: firebase.auth.UserCredential) => void;
+	user: User;
+	loading: boolean;
 	login: (user: User) => void;
 	logout: () => void;
 	validateJWT: () => void;
@@ -23,8 +21,7 @@ interface AppContextInt {
 
 const initialContext: AppContextInt = {
 	user: null,
-	authToken: null,
-	setAuthToken: (token: firebase.auth.UserCredential) => {},
+	loading: false,
 	login: (user: User) => {},
 	logout: () => {},
 	validateJWT: async () => {},
@@ -40,42 +37,41 @@ export const AppContext = createContext<AppContextInt>(initialContext);
 
 export const AppContextProvider = (props: any) => {
 	const [user, setUser] = useState<User>(null);
-	const [authToken, setAuthToken] = useState<firebase.auth.UserCredential>(null);
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
+	const [loading, setLoading] = useState(false);
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function validateJWT() {
+		// setLoading(true);
 		let token = localStorage.getItem('jwt');
 		if (token) {
 			var decoded = await jwt.verify(token, secretKey);
 			let user1: User = typeCheckUser(1, decoded);
-			if (!user || !authToken || user.username !== user1.username) {
+			if (!user || user.username !== user1.username) {
 				await login(user1);
 			}
 		}
+		// setLoading(false);
 	}
 
 	async function login(user: User) {
+		// setLoading(true);
 		const token = await jwt.sign(userToObj(user), secretKey, {
 			// expiresIn: 1800, // 30mins
 			algorithm: 'HS256'
 		});
 		localStorage.setItem('jwt', token);
-		await AuthService.loginAnon()
-			.then((token: firebase.auth.UserCredential) => {
-				setAuthToken(token);
-				setPlayers([user]);
-				setUser(user);
-			})
-			.catch(err => {
-				console.log(err);
-			});
+		await FBService.loginAnon().catch(err => {
+			console.log(err);
+		});
+		setPlayers([user]);
+		setUser(user);
+		// setLoading(false);
 	}
 
 	function logout(): void {
-		setAuthToken(null);
 		setPlayers([]);
 		setUser(null);
 		localStorage.removeItem('jwt');
@@ -87,7 +83,7 @@ export const AppContextProvider = (props: any) => {
 		<AppContext.Provider
 			value={{
 				user,
-				authToken,
+				loading,
 				login,
 				logout,
 				validateJWT,

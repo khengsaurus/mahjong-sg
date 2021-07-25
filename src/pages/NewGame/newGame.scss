@@ -1,1 +1,46 @@
 @import '../../App.scss';
+
+.new-game-panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	text-align: center;
+	transform: rotate(90deg);
+	height: 90vw;
+
+	.panel-row {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		margin-top: 20px;
+		.panel-segment {
+			flex-direction: column;
+			justify-content: center;
+			width: $panel-segment-width;
+			margin: 0 15px;
+			&.right {
+				padding-top: 10px;
+				border: 1px solid grey;
+				border-radius: 5px;
+			}
+			.list {
+				display: flex;
+				flex-direction: column;
+				width: $panel-segment-width;
+				margin-bottom: 10px;
+				padding: 0 20px;
+			}
+		}
+	}
+}
+
+.button-container {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	bottom: env(safe-area-inset-left);
+	.margin-left {
+		margin-left: 20px;
+	}
+}

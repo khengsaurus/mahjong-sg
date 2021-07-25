@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';

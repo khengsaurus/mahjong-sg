@@ -1,5 +1,7 @@
 @import '../../App.scss';
 $control-sq-side: 60px;
+$button-width: 45px;
+$button-height: 55px;
 
 .overlay-main {
 	position: absolute;
@@ -37,10 +39,10 @@ $control-sq-side: 60px;
 	align-items: flex-end;
 	z-index: 10;
 	.button {
-		max-width: $control-sq-side / 1.2;
-		max-height: $control-sq-side;
-		min-width: $control-sq-side / 1.2;
-		min-height: $control-sq-side;
+		max-width: $button-width;
+		max-height: $button-height;
+		min-width: $button-width;
+		min-height: $button-height;
 		p {
 			transform: rotate(90deg);
 		}
@@ -54,14 +56,14 @@ $control-sq-side: 60px;
 	height: 2 * $control-sq-side;
 	width: 2 * $control-sq-side;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	justify-content: flex-start;
 	z-index: 10;
 	.button {
-		max-width: $control-sq-side / 1.2;
-		max-height: $control-sq-side;
-		min-width: $control-sq-side / 1.2;
-		min-height: $control-sq-side;
+		max-width: $button-width;
+		max-height: $button-height;
+		min-width: $button-width;
+		min-height: $button-height;
 		p {
 			transform: rotate(90deg);
 		}
@@ -75,15 +77,14 @@ $control-sq-side: 60px;
 	height: 2 * $control-sq-side;
 	width: 2 * $control-sq-side;
 	display: flex;
-	flex-flow: column wrap;
-	align-content: flex-start;
-	justify-content: flex-end;
+	flex-direction: row;
+	align-items: flex-end;
 	z-index: 10;
 	.button {
-		max-width: $control-sq-side / 1.2;
-		max-height: $control-sq-side;
-		min-width: $control-sq-side / 1.2;
-		min-height: $control-sq-side;
+		max-width: $button-width;
+		max-height: $button-height;
+		min-width: $button-width;
+		min-height: $button-height;
 		p {
 			transform: rotate(90deg);
 		}
@@ -102,10 +103,10 @@ $control-sq-side: 60px;
 	align-items: flex-end;
 	z-index: 10;
 	.button {
-		max-width: $control-sq-side / 1.2;
-		max-height: $control-sq-side;
-		min-width: $control-sq-side / 1.2;
-		min-height: $control-sq-side;
+		max-width: $button-width;
+		max-height: $button-height;
+		min-width: $button-width;
+		min-height: $button-height;
 		p {
 			transform: rotate(90deg);
 		}

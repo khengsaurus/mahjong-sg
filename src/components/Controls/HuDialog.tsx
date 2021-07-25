@@ -13,7 +13,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { Game } from '../../Models/Game';
-import * as firebaseService from '../../service/firebaseService';
+import FBService from '../../service/FirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
 import './Controls.scss';
 
@@ -42,7 +42,7 @@ const HuDialog = (props: Props) => {
 			console.log(`${game.players[playerSeat].username} hu, expecting next dealer: ${Number(game.dealer)}`);
 		}
 		game.endRound();
-		firebaseService.updateGame(game);
+		FBService.updateGame(game);
 		onClose();
 	}
 

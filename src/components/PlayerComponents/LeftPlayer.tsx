@@ -1,6 +1,5 @@
 import { ButtonBase } from '@material-ui/core';
 import React, { useContext, useEffect, useMemo } from 'react';
-import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';

@@ -5,9 +5,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import { Game } from '../../Models/Game';
-import * as firebaseService from '../../service/firebaseService';
+import FBService from '../../service/FirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { formatDateToDay, typeCheckGameRepr } from '../../util/utilFns';
+import Login from '../Login';
 import './JoinGame.scss';
 
 const JoinGame = () => {
@@ -15,9 +16,11 @@ const JoinGame = () => {
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 
 	useEffect(() => {
-		validateJWT();
+		if (!user) {
+			validateJWT();
+		}
 		let games: Game[] = [];
-		const unsubscribe = firebaseService.listenInvitesSnapshot(user, {
+		const unsubscribe = FBService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
 					games.push(typeCheckGameRepr(doc));
@@ -33,44 +36,39 @@ const JoinGame = () => {
 		history.push('/Table');
 	}
 
-	return (
+	let markup = (
 		<div className="main">
-			<Typography variant="subtitle1">Available games:</Typography>
-			<List
-				component="div"
-				aria-labelledby="available-games"
-				dense
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					width: '250px',
-					marginBottom: '10px',
-					marginTop: '8px'
-				}}
-			>
-				{user &&
-					gameInvites.length > 0 &&
-					gameInvites.map(game => {
-						return (
-							<ListItem
-								button
-								key={game.playersString + game.createdAt.toString()}
-								style={{ border: '1px solid grey', marginBottom: '4px' }}
-								onClick={() => handleJoinGame(game)}
-							>
-								<ListItemText
-									primary={formatDateToDay(game.createdAt)}
-									secondary={game.playersString}
-								/>
-								<ArrowForwardIcon />
-							</ListItem>
-						);
-					})}
-			</List>
-			<br></br>
-			<HomeButton />
+			<div className="join-game-panel">
+				<Typography variant="subtitle1">Available games:</Typography>
+				{user && gameInvites.length > 0 && (
+					<List dense className="list">
+						{gameInvites.map(game => {
+							return (
+								<ListItem
+									button
+									key={game.playersString + game.createdAt.toString()}
+									// style={{ border: '1px solid grey' }}
+									onClick={() => handleJoinGame(game)}
+								>
+									<ListItemText
+										primary={formatDateToDay(game.createdAt)}
+										secondary={game.playersString}
+									/>
+									<ArrowForwardIcon />
+								</ListItem>
+							);
+						})}
+					</List>
+				)}
+				<div className="button-container">
+					<HomeButton />
+				</div>
+			</div>
+			{/* <LoadingSpinner show={loading} /> */}
 		</div>
 	);
+
+	return user ? markup : <Login />;
 };
 
 export default JoinGame;

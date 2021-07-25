@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import LoginForm from '../../components/Forms/LoginForm';
 import RegisterForm from '../../components/Forms/RegisterForm';
-import './login.scss';
+import './Login.scss';
 
 const Login: React.FC = () => {
 	const [showRegister, setShowRegister] = useState(false);

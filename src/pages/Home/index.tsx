@@ -3,40 +3,36 @@ import React, { useContext, useEffect } from 'react';
 import { history } from '../../App';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
-import './home.scss';
+import './Home.scss';
 
 const Home = () => {
-	const { user, authToken, validateJWT, logout } = useContext(AppContext);
+	const { user, validateJWT, logout } = useContext(AppContext);
 
 	useEffect(() => {
-		validateJWT();
-	}, [user, validateJWT]);
+		if (!user) {
+			validateJWT();
+		}
+	}, [user]);
 
 	let markup = (
 		<div className="main">
-			<Button variant={'outlined'} onClick={() => history.push('/NewGame')}>
-				New game
-			</Button>
-			<br></br>
-			<Button variant={'outlined'} onClick={() => history.push('/JoinGame')}>
-				Join game
-			</Button>
-			<br></br>
-			<Button variant={'outlined'} onClick={logout}>
-				Logout
-			</Button>
-			<br></br>
-			<Button
-				variant={'outlined'}
-				onClick={() => {
-					console.log(user);
-					console.log(authToken);
-				}}
-			>
-				Log user
-			</Button>
+			<div className="rotated">
+				<Button variant={'outlined'} onClick={() => history.push('/NewGame')}>
+					New game
+				</Button>
+				<br></br>
+				<Button variant={'outlined'} onClick={() => history.push('/JoinGame')}>
+					Join game
+				</Button>
+				<br></br>
+				<Button variant={'outlined'} onClick={logout}>
+					Logout
+				</Button>
+			</div>
+			{/* <LoadingSpinner show={loading} /> */}
 		</div>
 	);
+
 	return user ? markup : <Login />;
 };
 

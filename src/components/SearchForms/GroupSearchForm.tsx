@@ -12,9 +12,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React, { useContext, useState } from 'react';
-import * as firebaseService from '../../service/firebaseService';
-import { AppContext } from '../../util/hooks/AppContext';
 import { User } from '../../Models/User';
+import FBService from '../../service/FirebaseService';
+import { AppContext } from '../../util/hooks/AppContext';
 import './SearchForms.scss';
 
 const GroupSearchForm: React.FC = () => {
@@ -24,7 +24,7 @@ const GroupSearchForm: React.FC = () => {
 	const [searchFor, setSearchFor] = useState('');
 
 	async function search(groupName: string) {
-		await firebaseService.searchUser(groupName).then(groups => {
+		await FBService.searchUser(groupName).then(groups => {
 			// setFoundGroups(groups)
 		});
 	}

@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, ThemeProvider, Typography } from '@material-ui/core';
 import React from 'react';
 import { Game } from '../../Models/Game';
-import * as firebaseService from '../../service/firebaseService';
+import FBService from '../../service/FirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
 import './Controls.scss';
 
@@ -15,7 +15,7 @@ const HuAnnouncement = (props: Props) => {
 
 	async function nextRound() {
 		await game.initRound().then(() => {
-			firebaseService.updateGame(game);
+			FBService.updateGame(game);
 		});
 	}
 

@@ -2,11 +2,20 @@
 
 .search-form-container {
 	display: flex;
-	width: $sidebar-width;
+	width: $panel-segment-width;
 	background-color: $color-background;
 	justify-content: center;
-	border: 1px solid $color-borders;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	// align-items: flex-start;
 	border-radius: 5px;
+	border: 1px solid grey;
+
+	.search-box {
+		justify-self: center;
+		width: $panel-segment-width - 40px;
+	}
 
 	&.group {
 		border-bottom: none;
@@ -16,9 +25,4 @@
 		border-top: none;
 		border-radius: 0 0 5px 5px;
 	}
-}
-
-.found-users-list {
-	display: flex;
-	flex-direction: column;
 }

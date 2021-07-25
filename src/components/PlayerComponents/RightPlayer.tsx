@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
-import { User } from '../../Models/User';
 import getTileSrc from '../../images/tiles/index';
-import './playerComponents.scss';
 import { generateUnusedTiles } from '../../util/utilFns';
+import './playerComponents.scss';
 
 const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, hasFront, hasBack } = props;

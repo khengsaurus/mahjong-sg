@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
-import * as firebaseService from '../../service/firebaseService';
+import FBService from '../../service/FirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { search, sortTiles } from '../../util/utilFns';
 import './Controls.scss';
@@ -151,7 +151,7 @@ const Controls = (props: ControlsProps) => {
 			game.uncachedAction = true;
 			game.players[playerSeat] = player;
 		}
-		firebaseService.updateGame(game);
+		FBService.updateGame(game);
 	}
 
 	function showHuDialog() {

@@ -1,8 +1,7 @@
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import firebase from 'firebase/app';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { history } from '../../App';
 import Controls from '../../components/Controls';
 import HomeButton from '../../components/HomeButton';
 import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
@@ -11,7 +10,7 @@ import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
-import * as firebaseService from '../../service/firebaseService';
+import FBService from '../../service/FirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { setGame, setPlayer } from '../../util/store/actions';
 import { typeCheckGame } from '../../util/utilFns';
@@ -31,7 +30,7 @@ const Table = () => {
 
 	useEffect(() => {
 		console.log('Table - game listener called');
-		const unsubscribe = firebaseService.listenToGame(gameId, {
+		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
 				console.log('Table - game state updated:');
@@ -77,29 +76,6 @@ const Table = () => {
 		});
 		return unsubscribe;
 	}, []);
-
-	async function startGame() {
-		console.log('Table - creator calling startGame');
-		await game.initRound().then(() => {
-			firebaseService.updateGame(game).then(() => {
-				setTimeout(function () {
-					history.push('./Table');
-				}, 1000);
-			});
-		});
-	}
-
-	const startControl = () => {
-		return (
-			<div className="main">
-				<Button onClick={startGame} variant="outlined">
-					{`Start game`}
-				</Button>
-				<br></br>
-				<HomeButton />
-			</div>
-		);
-	};
 
 	const gameMarkup = () => {
 		if (game && game.stage !== 0) {
@@ -162,9 +138,11 @@ const Table = () => {
 	const noActiveGame = () => {
 		return (
 			<div className="main">
-				<Typography variant="h6">{`No ongoing game`}</Typography>
-				<br></br>
-				<HomeButton />
+				<div className="rotated">
+					<Typography variant="h6">{`No ongoing game`}</Typography>
+					<br></br>
+					<HomeButton />
+				</div>
 			</div>
 		);
 	};
@@ -174,11 +152,7 @@ const Table = () => {
 	}, [game, user, dispatch]);
 
 	if (user && game) {
-		if (game.creator === user.username && game.stage === 0) {
-			return startControl();
-		} else {
-			return gameMarkup();
-		}
+		return gameMarkup();
 	} else {
 		return noActiveGame();
 	}
