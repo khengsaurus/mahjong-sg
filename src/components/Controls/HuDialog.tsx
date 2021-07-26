@@ -59,7 +59,7 @@ const HuDialog = (props: Props) => {
 	}
 
 	return (
-		<div>
+		<div className="main transparent">
 			<ThemeProvider theme={rotatedMUIDialog}>
 				<Dialog
 					open={show}

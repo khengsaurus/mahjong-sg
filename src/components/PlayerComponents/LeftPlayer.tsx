@@ -44,24 +44,24 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						);
 					})}
 			</div>
-			<div className="vertical-tiles-shown">
+			<div className="vertical-tiles-shown self">
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
-							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						<div className="vertical-tile-shown self" key={`self-shown-tile-${index}`}>
+							<img className="vertical-tile-shown-bg self" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					) : null;
 				})}
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
+						<div className="vertical-tile-shown self" key={`self-shown-tile-${index}`}>
 							<img
 								className={
 									tile.isValidFlower
 										? tile.suit === '动物'
-											? 'vertical-tile-shown-bg animate-flower animal'
-											: 'vertical-tile-shown-bg animate-flower'
-										: 'vertical-tile-shown-bg'
+											? 'vertical-tile-shown-bg self animate-flower animal'
+											: 'vertical-tile-shown-bg self animate-flower'
+										: 'vertical-tile-shown-bg self'
 								}
 								src={getTileSrc(tile.card)}
 								alt="tile"

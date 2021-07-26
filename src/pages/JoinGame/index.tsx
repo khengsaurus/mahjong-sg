@@ -39,7 +39,7 @@ const JoinGame = () => {
 	let markup = (
 		<div className="main">
 			<div className="join-game-panel">
-				<Typography variant="subtitle1">Available games:</Typography>
+				<Typography variant="subtitle1">{`Available games:`}</Typography>
 				{user && gameInvites.length > 0 && (
 					<List dense className="list">
 						{gameInvites.map(game => {
@@ -47,7 +47,6 @@ const JoinGame = () => {
 								<ListItem
 									button
 									key={game.playersString + game.createdAt.toString()}
-									// style={{ border: '1px solid grey' }}
 									onClick={() => handleJoinGame(game)}
 								>
 									<ListItemText
@@ -60,9 +59,9 @@ const JoinGame = () => {
 						})}
 					</List>
 				)}
-				<div className="button-container">
-					<HomeButton />
-				</div>
+				<br></br>
+				<br></br>
+				<HomeButton />
 			</div>
 			{/* <LoadingSpinner show={loading} /> */}
 		</div>

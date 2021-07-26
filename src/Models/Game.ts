@@ -104,7 +104,7 @@ export class Game {
 		this.hu = hu;
 	}
 
-	async shuffle(array: any[]) {
+	shuffle(array: any[]) {
 		// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 		var currentIndex = array.length,
 			randomIndex;
@@ -116,98 +116,98 @@ export class Game {
 		return array;
 	}
 
-	async generateShuffledTiles(): Promise<Tile[]> {
-		return new Promise(async (resolve, reject) => {
-			let tiles: Tile[] = [];
-			const oneToFour = [1, 2, 3, 4];
-			const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-			const suits = ['万', '筒', '索'];
-			const winds = ['东', '南', '西', '北'];
-			const daPai = ['红中', '白板', '发财'];
-			const animals = ['cat', 'mouse', 'rooster', 'worm'];
-			const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
+	generateShuffledTiles(): Tile[] {
+		let tiles: Tile[] = [];
+		const oneToFour = [1, 2, 3, 4];
+		const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+		const suits = ['万', '筒', '索'];
+		const winds = ['东', '南', '西', '北'];
+		const daPai = ['红中', '白板', '发财'];
+		const animals = ['cat', 'mouse', 'rooster', 'worm'];
+		const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
 
-			oneToFour.forEach(index => {
-				suits.forEach(suit => {
-					oneToNine.forEach(number => {
-						let tile: Tile = {
-							card: `${number}${suit}`,
-							suit,
-							number,
-							index,
-							isValidFlower: false,
-							id: `a${suit}${number}${index}`,
-							show: false
-						};
-						tiles.push(tile);
-					});
-				});
-				winds.forEach(pai => {
+		oneToFour.forEach(index => {
+			suits.forEach(suit => {
+				oneToNine.forEach(number => {
 					let tile: Tile = {
-						card: pai,
-						suit: '大牌',
-						number: 1,
+						card: `${number}${suit}`,
+						suit,
+						number,
 						index,
 						isValidFlower: false,
-						id: `b${pai}${index}`,
-						show: false
-					};
-					tiles.push(tile);
-				});
-				daPai.forEach(pai => {
-					let tile: Tile = {
-						card: pai,
-						suit: '大牌',
-						number: 1,
-						index,
-						isValidFlower: false,
-						id: `c${pai}${index}`,
+						id: `a${suit}${number}${index}`,
 						show: false
 					};
 					tiles.push(tile);
 				});
 			});
-			flowers.forEach(flower => {
+			winds.forEach(pai => {
 				let tile: Tile = {
-					card: flower,
-					suit: '花',
+					card: pai,
+					suit: '大牌',
 					number: 1,
-					index: 1,
+					index,
 					isValidFlower: false,
-					id: `y${flower}`,
+					id: `b${pai}${index}`,
 					show: false
 				};
 				tiles.push(tile);
 			});
-
-			animals.forEach(animal => {
+			daPai.forEach(pai => {
 				let tile: Tile = {
-					card: animal,
-					suit: '动物',
+					card: pai,
+					suit: '大牌',
 					number: 1,
-					index: 1,
-					isValidFlower: true,
-					id: `z${animal}`,
+					index,
+					isValidFlower: false,
+					id: `c${pai}${index}`,
 					show: false
 				};
 				tiles.push(tile);
 			});
-			console.log(`Generated ${tiles.length} tiles`);
-			if (tiles.length === 148) {
-				resolve(await this.shuffle(tiles));
-			} else {
-				reject(new Error('Tiles not generated'));
-			}
 		});
+		flowers.forEach(flower => {
+			let tile: Tile = {
+				card: flower,
+				suit: '花',
+				number: 1,
+				index: 1,
+				isValidFlower: false,
+				id: `y${flower}`,
+				show: false
+			};
+			tiles.push(tile);
+		});
+
+		animals.forEach(animal => {
+			let tile: Tile = {
+				card: animal,
+				suit: '动物',
+				number: 1,
+				index: 1,
+				isValidFlower: true,
+				id: `z${animal}`,
+				show: false
+			};
+			tiles.push(tile);
+		});
+		console.log(`Generated ${tiles.length} tiles`);
+
+		if (tiles.length === 148) {
+			return this.shuffle(tiles);
+		} else {
+			console.log('Tiles not generated');
+			return null;
+		}
 	}
 
-	async giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean) {
+	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): Tile {
 		let player = this.players[playerIndex];
+		let newTile: Tile;
 		if (!player.hiddenTiles) {
 			player.hiddenTiles = [];
 		}
 		for (let i: number = 0; i < n; i++) {
-			let newTile: Tile;
 			if (buHua) {
 				newTile = this.tiles.shift();
 				// Logic to update shortening stack of back(hua) tiles
@@ -242,6 +242,7 @@ export class Game {
 			}
 		}
 		console.log(`${player.username} received ${n} tile(s)`);
+		return newTile;
 	}
 
 	findLeft(n: number) {
@@ -257,7 +258,7 @@ export class Game {
 	}
 
 	//TODO: optimise
-	async distributeTiles() {
+	distributeTiles() {
 		let dealer = this.players[this.dealer];
 		let rolled = dealer.rollDice();
 		console.log(`${dealer.username} rolled: ${rolled}`);
@@ -346,10 +347,10 @@ export class Game {
 		}
 
 		console.log('Distrubite tiles called');
-		await this.giveTiles(14, this.dealer, false, false);
-		await this.giveTiles(13, this.findRight(this.dealer), false, false);
-		await this.giveTiles(13, this.findOpp(this.dealer), false, false);
-		await this.giveTiles(13, this.findLeft(this.dealer), false, false);
+		this.giveTiles(14, this.dealer, false, false);
+		this.giveTiles(13, this.findRight(this.dealer), false, false);
+		this.giveTiles(13, this.findOpp(this.dealer), false, false);
+		this.giveTiles(13, this.findLeft(this.dealer), false, false);
 		while (
 			this.players[this.dealer].hiddenTiles.length < 14 ||
 			this.players[this.findRight(this.dealer)].hiddenTiles.length < 13 ||
@@ -401,7 +402,7 @@ export class Game {
 		return res;
 	}
 
-	async initRound() {
+	initRound() {
 		this.midRound = true;
 		if (this.flagProgress) {
 			this.stage += 1;
@@ -424,10 +425,8 @@ export class Game {
 		this.thrownBy = 0;
 		this.thrownTile = false;
 		this.uncachedAction = false;
-		await this.generateShuffledTiles().then(generatedTiles => {
-			this.tiles = generatedTiles;
-		});
-		await this.distributeTiles();
+		this.tiles = this.generateShuffledTiles();
+		this.distributeTiles();
 		this.hu = [];
 		console.log(`Starting round ${this.stage}`);
 	}

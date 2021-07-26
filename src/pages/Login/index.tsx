@@ -8,25 +8,23 @@ const Login: React.FC = () => {
 	const [showRegister, setShowRegister] = useState(false);
 	const markup = (
 		<div className="main">
-			<div className="login-panel">
-				{showRegister ? (
-					<div>
-						<RegisterForm />
-					</div>
-				) : (
-					<div>
-						<LoginForm />
-					</div>
-				)}
-				<Button
-					variant="outlined"
-					onClick={() => {
-						setShowRegister(!showRegister);
-					}}
-				>
-					{showRegister ? 'Back to login' : 'Register now'}
-				</Button>
-			</div>
+			{showRegister ? (
+				<div>
+					<RegisterForm />
+				</div>
+			) : (
+				<div>
+					<LoginForm />
+				</div>
+			)}
+			<Button
+				variant="outlined"
+				onClick={() => {
+					setShowRegister(!showRegister);
+				}}
+			>
+				{showRegister ? 'Back to login' : 'Register now'}
+			</Button>
 		</div>
 	);
 

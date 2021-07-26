@@ -34,13 +34,12 @@ const NewGame = () => {
 	async function startGame() {
 		console.log('Newgame - creator calling startGame');
 		await FBService.createGame(user, players).then(game => {
-			game.initRound().then(() => {
-				FBService.updateGame(game).then(() => {
-					dispatch(setGame(game));
-					setGameId(game.id);
-				});
-				setStartedGame(true);
+			game.initRound();
+			FBService.updateGame(game).then(() => {
+				dispatch(setGame(game));
+				setGameId(game.id);
 			});
+			setStartedGame(true);
 		});
 	}
 
@@ -56,47 +55,46 @@ const NewGame = () => {
 		<div className="main">
 			<div className="new-game-panel">
 				<Typography variant="h6">Create a new game</Typography>
-				<div className="panel-row">
-					<div className="panel-segment">
-						<UserSearchForm />
-					</div>
-					<div className="panel-segment right">
-						<Typography variant="subtitle1">Players:</Typography>
-						<List className="list">
-							{user &&
-								players.length > 0 &&
-								players.map(player => {
-									return player ? (
-										<ListItem className="list-item" key={player.id}>
-											<ListItemText primary={player.username} />
-											{player.username === user.username ? (
-												<IconButton color="primary" disabled={true}>
-													<MoodIcon />
-												</IconButton>
-											) : (
-												<IconButton color="primary" onClick={() => handleRemovePlayer(player)}>
-													<ClearIcon />
-												</IconButton>
-											)}
-										</ListItem>
-									) : null;
-								})}
-						</List>
-					</div>
+				<div className="panel-segment">
+					<UserSearchForm />
+				</div>
+				<div className="panel-segment">
+					<Typography variant="subtitle1">Players:</Typography>
+					<List className="list">
+						{user &&
+							players.length > 0 &&
+							players.map(player => {
+								return player ? (
+									<ListItem className="list-item" key={player.id}>
+										<ListItemText primary={player.username} />
+										{player.username === user.username ? (
+											<IconButton color="primary" disabled={true}>
+												<MoodIcon />
+											</IconButton>
+										) : (
+											<IconButton color="primary" onClick={() => handleRemovePlayer(player)}>
+												<ClearIcon />
+											</IconButton>
+										)}
+									</ListItem>
+								) : null;
+							})}
+					</List>
 				</div>
 
-				<div className="button-container">
-					<HomeButton />
-					<Button
-						className="margin-left"
-						size="small"
-						variant="outlined"
-						onClick={handleButtonClick}
-						disabled={players.length < 4}
-					>
-						{startedGame ? 'Join game' : 'Start game'}
-					</Button>
-				</div>
+				<br></br>
+				<br></br>
+				<Button
+					className="margin-left"
+					size="small"
+					variant="outlined"
+					onClick={handleButtonClick}
+					disabled={players.length < 4}
+				>
+					{startedGame ? 'Join game' : 'Start game'}
+				</Button>
+				<br></br>
+				<HomeButton />
 			</div>
 		</div>
 	);

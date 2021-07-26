@@ -7,6 +7,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 	const { player, hasFront, hasBack } = props;
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
+
 	useEffect(() => {
 		console.log('Rendering top component');
 	});

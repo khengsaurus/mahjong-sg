@@ -16,20 +16,17 @@ const Home = () => {
 
 	let markup = (
 		<div className="main">
-			<div className="rotated">
-				<Button variant={'outlined'} onClick={() => history.push('/NewGame')}>
-					New game
-				</Button>
-				<br></br>
-				<Button variant={'outlined'} onClick={() => history.push('/JoinGame')}>
-					Join game
-				</Button>
-				<br></br>
-				<Button variant={'outlined'} onClick={logout}>
-					Logout
-				</Button>
-			</div>
-			{/* <LoadingSpinner show={loading} /> */}
+			<Button variant={'outlined'} onClick={() => history.push('/NewGame')}>
+				New game
+			</Button>
+			<br></br>
+			<Button variant={'outlined'} onClick={() => history.push('/JoinGame')}>
+				Join game
+			</Button>
+			<br></br>
+			<Button variant={'outlined'} onClick={logout}>
+				Logout
+			</Button>
 		</div>
 	);
 

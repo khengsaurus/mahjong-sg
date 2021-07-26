@@ -39,7 +39,8 @@ $flower-highlight: #df9a94;
 // $shown-tile-height: 36px;
 // $shown-tile-width: 25px;
 
-$panel-segment-width: 180px;
+$panel-segment-width: 200px;
+$main-padding: 2px;
 
 .main {
 	position: absolute;
@@ -49,21 +50,21 @@ $panel-segment-width: 180px;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 100%;
-	width: 100%;
-	padding-top: env(safe-area-inset-top);
-	padding-right: env(safe-area-inset-right);
-	padding-bottom: env(safe-area-inset-bottom);
-	padding-left: env(safe-area-inset-left);
-	background-color: $color-background;
-}
-
-.rotated {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 	text-align: center;
-	transform: rotate(90deg);
+	height: calc(100% - 4px);
+	width: calc(100% - 4px);
+	padding-top: calc(env(safe-area-inset-top) + 2px);
+	padding-right: calc(env(safe-area-inset-right) + 2px);
+	padding-bottom: calc(env(safe-area-inset-bottom) + 2px);
+	padding-left: calc(env(safe-area-inset-left)+2px);
+	background-color: $color-background;
+
+	&.transparent {
+		background-color: transparent;
+	}
+	&.rotated {
+		transform: rotate(90deg);
+	}
 }
 
 .list-item {

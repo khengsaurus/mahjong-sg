@@ -176,7 +176,7 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	return game && player ? (
-		<div className="overlay-main">
+		<div className="main transparent">
 			<div className="top-right-controls">
 				<Button
 					className="button"

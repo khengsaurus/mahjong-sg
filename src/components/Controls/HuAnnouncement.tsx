@@ -14,13 +14,12 @@ const HuAnnouncement = (props: Props) => {
 	const { game, playerSeat } = props;
 
 	async function nextRound() {
-		await game.initRound().then(() => {
-			FBService.updateGame(game);
-		});
+		game.initRound();
+		FBService.updateGame(game);
 	}
 
 	return (
-		<div>
+		<div className="main transparent">
 			<ThemeProvider theme={rotatedMUIDialog}>
 				<Dialog
 					open={game.hu !== []}

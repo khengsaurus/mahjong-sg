@@ -1,6 +1,5 @@
 @import '../../App.scss';
 
-$rotate-transform: rotate(90deg) translateY(-14%) translateX(-22%);
 $rotate-simple-90: rotate(90deg);
 $rotate-simple-180: rotate(180deg);
 
@@ -19,7 +18,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: center;
 		padding: 1px 0;
 		&.unused {
-			flex-flow: column-reverse wrap-reverse;
+			// flex-flow: column wrap;
 			align-self: center;
 			align-content: center;
 			justify-content: flex-end;
@@ -27,15 +26,15 @@ $rotate-simple-180: rotate(180deg);
 			width: (19 * $hidden-tile-width) + (4 * $tile-border-px);
 			z-index: -1;
 			&.front {
-				flex-flow: column-reverse wrap-reverse;
+				flex-flow: column wrap-reverse;
 				&.bottom {
-					flex-flow: column wrap;
+					flex-flow: column-reverse wrap;
 				}
 			}
 			&.back {
-				flex-flow: column-reverse wrap;
+				flex-flow: column wrap;
 				&.bottom {
-					flex-flow: column wrap-reverse;
+					flex-flow: column-reverse wrap-reverse;
 				}
 			}
 		}
@@ -153,10 +152,18 @@ $rotate-simple-180: rotate(180deg);
 		height: (19 * $shown-tile-width) + (2 * $tile-border-px);
 		max-width: $shown-tile-height;
 		padding: 0 1px;
+		&.self {
+			height: (19 * $self-hidden-tile-width) + (2 * $tile-border-px);
+			max-width: $self-hidden-tile-height;
+		}
 
 		.vertical-tile-shown {
 			height: $shown-tile-width;
 			width: $shown-tile-height;
+			&.self {
+				height: $self-hidden-tile-width;
+				width: $self-hidden-tile-height;
+			}
 		}
 	}
 
@@ -165,11 +172,15 @@ $rotate-simple-180: rotate(180deg);
 		width: $shown-tile-width;
 		border-radius: 8%;
 		object-fit: contain;
-		transform: $rotate-transform;
+		transform: $rotate-simple-90;
 		background: $tile-front-color;
+		&.self {
+			height: $self-hidden-tile-height;
+			width: $self-hidden-tile-width;
+		}
 
 		&.animate-flower {
-			transform: $rotate-transform;
+			transform: $rotate-simple-90;
 			transition: 200ms;
 			background: $linear-gradient-multi;
 			background-size: 400% 400%;
@@ -180,6 +191,10 @@ $rotate-simple-180: rotate(180deg);
 			height: $shown-tile-height - 2px;
 			width: $shown-tile-width - 2px;
 			border: $tile-border-px solid black;
+			&.self {
+				height: $self-hidden-tile-height - 2px;
+				width: $self-hidden-tile-width - 2px;
+			}
 		}
 	}
 

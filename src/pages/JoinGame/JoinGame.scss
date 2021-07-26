@@ -1,25 +1,24 @@
 @import '../../App.scss';
 
 .join-game-panel {
-	position: absolute;
-	padding-top: env(safe-area-inset-right);
+	// position: absolute;
+	// padding-top: env(safe-area-inset-right);
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-content: flex-start;
 	align-items: center;
 	text-align: center;
-	transform: rotate(90deg);
-	height: 90vw;
-
+	max-height: 80vh;
 	.list {
 		display: flex;
 		flex-direction: column;
-		max-height: 250px;
+		max-height: 65vh;
 		margin: 10px 0;
 		width: 250px;
 		overflow: scroll;
 		border: 1px solid grey;
+		border-radius: 5px;
 	}
 
 	.button-container {
