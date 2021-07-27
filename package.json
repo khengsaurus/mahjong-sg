@@ -51,7 +51,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "buildios": "ionic capacitor add ios",
+    "buildios": "react-scripts build && ionic capacitor build ios",
     "test": "jest",
     "eject": "react-scripts eject"
   },

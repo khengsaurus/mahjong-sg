@@ -51,12 +51,14 @@ $main-padding: 2px;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	height: calc(100% - 4px);
-	width: calc(100% - 4px);
+	// height: calc(100vh - 4px);
+	// width: calc(100vw - 4px);
+	height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 4px);
+	width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 4px);
 	padding-top: calc(env(safe-area-inset-top) + 2px);
 	padding-right: calc(env(safe-area-inset-right) + 2px);
 	padding-bottom: calc(env(safe-area-inset-bottom) + 2px);
-	padding-left: calc(env(safe-area-inset-left)+2px);
+	padding-left: calc(env(safe-area-inset-left) + 2px);
 	background-color: $color-background;
 
 	&.transparent {

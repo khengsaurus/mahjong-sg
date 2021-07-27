@@ -1,6 +1,7 @@
 @import '../../App.scss';
 
 $rotate-simple-90: rotate(90deg);
+$transform-rotate: rotate(90deg) translateX(-22%);
 $rotate-simple-180: rotate(180deg);
 
 .row-section {
@@ -18,7 +19,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: center;
 		padding: 1px 0;
 		&.unused {
-			// flex-flow: column wrap;
+			flex-flow: column wrap;
 			align-self: center;
 			align-content: center;
 			justify-content: flex-end;
@@ -171,16 +172,15 @@ $rotate-simple-180: rotate(180deg);
 		height: $shown-tile-height;
 		width: $shown-tile-width;
 		border-radius: 8%;
-		object-fit: contain;
-		transform: $rotate-simple-90;
-		background: $tile-front-color;
+		transform: $transform-rotate;
+		background-color: $tile-front-color;
+		align-self: flex-start;
 		&.self {
 			height: $self-hidden-tile-height;
 			width: $self-hidden-tile-width;
 		}
 
 		&.animate-flower {
-			transform: $rotate-simple-90;
 			transition: 200ms;
 			background: $linear-gradient-multi;
 			background-size: 400% 400%;
