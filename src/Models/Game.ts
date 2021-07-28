@@ -28,7 +28,8 @@ export function gameToObj(game: Game) {
 		thrownTile: game.thrownTile || false,
 		takenTile: game.takenTile || false,
 		uncachedAction: game.uncachedAction || false,
-		hu: game.hu || []
+		hu: game.hu || [],
+		draw: game.draw || false
 	};
 }
 
@@ -55,6 +56,7 @@ export class Game {
 	takenTile?: boolean;
 	uncachedAction?: boolean;
 	hu?: number[];
+	draw?: boolean;
 
 	constructor(
 		id: string,
@@ -78,7 +80,8 @@ export class Game {
 		thrownTile?: boolean,
 		takenTile?: boolean,
 		uncachedAction?: boolean,
-		hu?: number[]
+		hu?: number[],
+		draw?: boolean
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -102,6 +105,7 @@ export class Game {
 		this.takenTile = takenTile;
 		this.uncachedAction = uncachedAction;
 		this.hu = hu;
+		this.draw = draw;
 	}
 
 	shuffle(array: any[]) {
@@ -364,21 +368,19 @@ export class Game {
 			player.shownTiles = sortTiles(player.shownTiles);
 		});
 		this.takenTile = true;
+		this.tiles = this.tiles.slice(0, 17);
 	}
 
-	async buHua() {
-		if (this.players[0].hiddenTiles.length < 14) {
-			this.giveTiles(14 - this.players[this.dealer].hiddenTiles.length, 0, true, true);
+	buHua() {
+		if (this.players[this.dealer].hiddenTiles.length < 14) {
+			this.giveTiles(14 - this.players[this.dealer].hiddenTiles.length, this.dealer, true, true);
 		}
-		if (this.players[1].hiddenTiles.length < 13) {
-			this.giveTiles(13 - this.players[this.findRight(this.dealer)].hiddenTiles.length, 1, true, true);
-		}
-		if (this.players[2].hiddenTiles.length < 13) {
-			this.giveTiles(13 - this.players[this.findOpp(this.dealer)].hiddenTiles.length, 2, true, true);
-		}
-		if (this.players[3].hiddenTiles.length < 13) {
-			this.giveTiles(13 - this.players[this.findLeft(this.dealer)].hiddenTiles.length, 3, true, true);
-		}
+		let others: number[] = [this.findRight(this.dealer), this.findOpp(this.dealer), this.findLeft(this.dealer)];
+		others.forEach((n: number) => {
+			if (this.players[n].hiddenTiles.length < 13) {
+				this.giveTiles(13 - this.players[n].hiddenTiles.length, n, true, true);
+			}
+		});
 	}
 
 	nextPlayerMove() {
@@ -413,6 +415,7 @@ export class Game {
 		this.players.forEach(player => {
 			player.hiddenTiles = [];
 			player.shownTiles = [];
+			player.discardedTiles = [];
 			player.pongs = [];
 			player.unusedTiles = 0;
 		});
@@ -428,6 +431,7 @@ export class Game {
 		this.tiles = this.generateShuffledTiles();
 		this.distributeTiles();
 		this.hu = [];
+		this.draw = false;
 		console.log(`Starting round ${this.stage}`);
 	}
 

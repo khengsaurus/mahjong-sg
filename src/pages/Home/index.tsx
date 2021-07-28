@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import React, { useContext, useEffect } from 'react';
 import { history } from '../../App';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -16,6 +16,8 @@ const Home = () => {
 
 	let markup = (
 		<div className="main">
+			{user && <Typography variant="h6">{`Welcome ${user.username}`}</Typography>}
+			<br></br>
 			<Button variant={'outlined'} onClick={() => history.push('/NewGame')}>
 				New game
 			</Button>

@@ -54,7 +54,12 @@ const LoginForm: React.FC = () => {
 						</Button>
 						<br></br>
 						<br></br>
-						{alert.msg !== '' ? <Alert severity={alert.status}>{alert.msg}</Alert> : null}
+						{alert.msg !== '' ? (
+							<>
+								<Alert severity={alert.status}>{alert.msg}</Alert>
+								<br></br>
+							</>
+						) : null}
 					</Form>
 				)}
 			</Formik>

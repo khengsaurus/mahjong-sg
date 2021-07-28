@@ -7,6 +7,8 @@ import { typeCheckUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
 	user: User;
+	userEmail: string;
+	setUserEmail: (email: string) => void;
 	loading: boolean;
 	login: (user: User) => void;
 	logout: () => void;
@@ -21,6 +23,8 @@ interface AppContextInt {
 
 const initialContext: AppContextInt = {
 	user: null,
+	userEmail: '',
+	setUserEmail: (email: string) => {},
 	loading: false,
 	login: (user: User) => {},
 	logout: () => {},
@@ -37,6 +41,7 @@ export const AppContext = createContext<AppContextInt>(initialContext);
 
 export const AppContextProvider = (props: any) => {
 	const [user, setUser] = useState<User>(null);
+	const [userEmail, setUserEmail] = useState('');
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
@@ -46,6 +51,9 @@ export const AppContextProvider = (props: any) => {
 	async function validateJWT() {
 		// setLoading(true);
 		let token = localStorage.getItem('jwt');
+		if (!FBService.userAuthenticated()) {
+			history.push('/');
+		}
 		if (token) {
 			var decoded = await jwt.verify(token, secretKey);
 			let user1: User = typeCheckUser(1, decoded);
@@ -63,18 +71,35 @@ export const AppContextProvider = (props: any) => {
 			algorithm: 'HS256'
 		});
 		localStorage.setItem('jwt', token);
-		await FBService.loginAnon().catch(err => {
-			console.log(err);
-		});
+		if (!FBService.userAuthenticated()) {
+			console.log('Logging into firebase anonymously');
+			await FBService.loginAnon().catch(err => {
+				console.log(err);
+			});
+		}
 		setPlayers([user]);
 		setUser(user);
 		// setLoading(false);
 	}
 
+	function deleteAllCookies() {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i];
+			var eqPos = cookie.indexOf('=');
+			var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+			document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+		}
+	}
+
 	function logout(): void {
+		FBService.logout();
 		setPlayers([]);
 		setUser(null);
-		localStorage.removeItem('jwt');
+		setUserEmail('');
+		localStorage.clear();
+		sessionStorage.clear();
+		deleteAllCookies();
 		history.push('/');
 		console.log('User logged out');
 	}
@@ -83,6 +108,8 @@ export const AppContextProvider = (props: any) => {
 		<AppContext.Provider
 			value={{
 				user,
+				userEmail,
+				setUserEmail,
 				loading,
 				login,
 				logout,

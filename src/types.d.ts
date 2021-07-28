@@ -35,7 +35,12 @@ interface loginParams {
 	password: string;
 }
 
-interface registerParams {
+interface RegisterEmail {
+	username: string;
+	email: string;
+}
+
+interface RegisterUserPass {
 	username: string;
 	password: string;
 }

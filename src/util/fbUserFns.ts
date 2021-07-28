@@ -16,7 +16,13 @@ export async function getUser(userId: string) {
 	});
 }
 
-export function attemptLogin(values: loginParams): Promise<User> {
+export async function attemptLogin(values: loginParams): Promise<User> {
+	if (!FBService.userAuthenticated()) {
+		console.log('Logging into firebase anonymously');
+		await FBService.loginAnon().catch(err => {
+			console.log(err);
+		});
+	}
 	return new Promise((resolve, reject) => {
 		try {
 			/* Access validation data from firebase - 1 read */
@@ -56,14 +62,20 @@ export function attemptLogin(values: loginParams): Promise<User> {
 	});
 }
 
-export async function attemptRegister(values: registerParams): Promise<boolean> {
+export async function attemptRegister(values: RegisterUserPass): Promise<boolean> {
+	if (!FBService.userAuthenticated()) {
+		console.log('Logging into firebase anonymously');
+		await FBService.loginAnon().catch(err => {
+			console.log(err);
+		});
+	}
 	return new Promise((resolve, reject) => {
 		FBService.getUserReprByUsername(values.username).then(data => {
 			if (!data.empty) {
 				reject(new Error('Username already taken'));
 			} else {
 				hashPassword(values.password).then(hashedPassword => {
-					FBService.register(values.username, hashedPassword)
+					FBService.registerByUserPass(values.username, hashedPassword)
 						.catch(err => {
 							reject(new Error('Unable to register user'));
 						})
@@ -71,6 +83,40 @@ export async function attemptRegister(values: registerParams): Promise<boolean> 
 							resolve(true);
 						});
 				});
+			}
+		});
+	});
+}
+
+export function attemptLoginByEmail(email: string): Promise<User> {
+	return new Promise((resolve, reject) => {
+		try {
+			FBService.getUserReprByEmail(email).then((userData: any) => {
+				if (userData.docs.length === 0) {
+					reject(new Error('Email not registered -> RegisterWithGoogleForm'));
+				} else {
+					resolve(typeCheckUser(2, userData));
+				}
+			});
+		} catch (err) {
+			reject(new Error('Login attempt failed'));
+		}
+	});
+}
+
+export async function attemptRegisterByEmail(values: RegisterEmail): Promise<boolean> {
+	return new Promise((resolve, reject) => {
+		FBService.getUserReprByUsername(values.username).then(data => {
+			if (!data.empty) {
+				reject(new Error('Username already taken'));
+			} else {
+				FBService.registerByEmail(values.username, values.email)
+					.then(() => {
+						resolve(true);
+					})
+					.catch(err => {
+						reject(new Error('Unable to register user'));
+					});
 			}
 		});
 	});

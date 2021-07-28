@@ -39,9 +39,7 @@ const Announcement = (props: Props) => {
 								}`}</Typography>
 							</>
 						)}
-						{game.hu === [] && game.tiles.length === 15 && game.thrownTile && (
-							<Typography variant="h6">{`15 tiles left`}</Typography>
-						)}
+						{game.draw && <Typography variant="h6">{`15 tiles left`}</Typography>}
 						{game.ongoing ? (
 							playerSeat === Number(game.dealer) && (
 								<Button variant="outlined" size="small" onClick={nextRound} autoFocus>

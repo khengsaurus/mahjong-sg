@@ -7,19 +7,26 @@ import { userToObj } from '../util/utilFns';
 import FirebaseConfig from './FirebaseConfig';
 
 class FirebaseService {
-	public user: firebase.User;
-	public db: firebase.firestore.Firestore;
-	public userVal: firebase.firestore.CollectionReference;
-	public userRepr: firebase.firestore.CollectionReference;
-	public gameRef: firebase.firestore.CollectionReference;
-	public app: firebase.app.App = null;
+	private user: firebase.User;
+	private db: firebase.firestore.Firestore;
+	private userVal: firebase.firestore.CollectionReference;
+	private userRepr: firebase.firestore.CollectionReference;
+	private gameRef: firebase.firestore.CollectionReference;
+	private app: firebase.app.App = null;
+	private auth: firebase.auth.Auth = null;
+	private authProvider: firebase.auth.GoogleAuthProvider = null;
 
 	constructor() {
 		this.init().then(() => {
+			this.auth = firebase.auth();
+			this.authProvider = new firebase.auth.GoogleAuthProvider();
 			this.db = firebase.firestore();
 			this.userVal = this.db.collection('userVal');
 			this.userRepr = this.db.collection('userRepr');
 			this.gameRef = this.db.collection('games');
+			this.auth.onAuthStateChanged(user => {
+				this.user = user;
+			});
 		});
 	}
 
@@ -29,7 +36,28 @@ class FirebaseService {
 		} else {
 			this.app = firebase.app();
 		}
-		this.loginAnon();
+		// this.loginAnon();
+	}
+
+	async loginWithGoogle(): Promise<string> {
+		return new Promise((resolve, reject) => {
+			this.auth
+				.signInWithPopup(this.authProvider)
+				.then((values: firebase.auth.UserCredential) => {
+					resolve(values.user.email);
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		});
+	}
+
+	logout() {
+		this.auth.signOut();
+	}
+
+	userAuthenticated() {
+		return this.user !== null;
 	}
 
 	async loginAnon(): Promise<firebase.auth.UserCredential> {
@@ -41,7 +69,7 @@ class FirebaseService {
 	}
 
 	/* ------------------------- User related ------------------------- */
-	async register(username: string, password: string) {
+	async registerByUserPass(username: string, password: string) {
 		let userId = '';
 		try {
 			await this.userVal.add({}).then(user => {
@@ -59,12 +87,25 @@ class FirebaseService {
 		}
 	}
 
+	async registerByEmail(username: string, email: string) {
+		try {
+			await this.userRepr.add({ username, email, photoUrl: '', groups: [] });
+			console.log('User created successfully');
+		} catch (err) {
+			console.log('firebaseService: User was not created - ', +err);
+		}
+	}
+
 	getUserValByUsername(username: string) {
 		return this.userVal.where('username', '==', username).get();
 	}
 
 	getUserReprByUsername(username: string) {
 		return this.userRepr.where('username', '==', username).get();
+	}
+
+	getUserReprByEmail(email: string) {
+		return this.userRepr.where('email', '==', email).get();
 	}
 
 	getUserReprById(id: string) {
@@ -177,7 +218,8 @@ class FirebaseService {
 						takenTile: true,
 						uncachedAction: false,
 						hu: [],
-						initRound: [true, false]
+						initRound: [true, false],
+						draw: false
 					})
 					.then(newGame => {
 						console.log(`Game created successfully: gameId ${newGame.id}`);
@@ -203,7 +245,8 @@ class FirebaseService {
 							false,
 							true,
 							false,
-							[]
+							[],
+							false
 						);
 						resolve(game);
 					});

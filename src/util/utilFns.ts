@@ -158,7 +158,8 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		Boolean(ref.thrownTile),
 		Boolean(ref.takenTile),
 		Boolean(ref.uncachedAction),
-		ref.hu
+		ref.hu,
+		Boolean(ref.draw)
 	);
 };
 
