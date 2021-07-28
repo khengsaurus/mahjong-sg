@@ -50,8 +50,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "buildios": "react-scripts build && ionic capacitor build ios",
+    "build": "react-scripts build && npx cap copy",
     "test": "jest",
     "eject": "react-scripts eject"
   },

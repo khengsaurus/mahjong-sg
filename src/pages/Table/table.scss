@@ -2,7 +2,6 @@
 
 .wind-background {
 	transform: rotate(90deg);
-	color: rgb(160, 160, 160);
 	display: flex;
 	flex-direction: column;
 	p {
@@ -15,26 +14,26 @@
 .top-player-container {
 	position: absolute;
 	width: 100%;
-	top: 0;
+	top: calc(env(safe-area-inset-top));
 	z-index: 0;
+}
+
+.right-player-container {
+	position: absolute;
+	right: calc(env(safe-area-inset-right));
+	z-index: 1;
 }
 
 .bottom-player-container {
 	position: absolute;
 	width: 100%;
-	bottom: 0;
-	z-index: 1;
-}
-
-.right-player-container {
-	position: absolute;
-	right: 0;
+	bottom: calc(env(safe-area-inset-bottom));
 	z-index: 2;
 }
 
 .self-container {
 	position: absolute;
-	left: 0;
+	left: calc(env(safe-area-inset-left));
 	z-index: 3;
 }
 

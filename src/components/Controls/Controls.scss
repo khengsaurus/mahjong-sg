@@ -13,8 +13,8 @@ $button-height: 55px;
 
 .top-right-controls {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: calc(env(safe-area-inset-top));
+	right: calc(env(safe-area-inset-right));
 	height: 2 * $control-sq-side;
 	width: 2 * $control-sq-side;
 	display: flex;
@@ -34,8 +34,8 @@ $button-height: 55px;
 
 .top-left-controls {
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: calc(env(safe-area-inset-top));
+	left: calc(env(safe-area-inset-left));
 	height: 2 * $control-sq-side;
 	width: 2 * $control-sq-side;
 	display: flex;
@@ -55,8 +55,8 @@ $button-height: 55px;
 
 .bottom-left-controls {
 	position: absolute;
-	bottom: 0;
-	left: 0;
+	bottom: calc(env(safe-area-inset-bottom));
+	left: calc(env(safe-area-inset-left));
 	height: 2 * $control-sq-side;
 	width: 2 * $control-sq-side;
 	display: flex;
@@ -76,8 +76,8 @@ $button-height: 55px;
 
 .bottom-right-controls {
 	position: absolute;
-	bottom: 0;
-	right: 0;
+	bottom: calc(env(safe-area-inset-bottom));
+	right: calc(env(safe-area-inset-right));
 	height: 2 * $control-sq-side;
 	width: 2 * $control-sq-side;
 	display: flex;

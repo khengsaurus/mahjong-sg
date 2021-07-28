@@ -7,7 +7,7 @@ import FBService from '../../service/FirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { search, sortTiles } from '../../util/utilFns';
 import './Controls.scss';
-import HuAnnouncement from './HuAnnouncement';
+import Announcement from './Announcement';
 import HuDialog from './HuDialog';
 
 interface ControlsProps {
@@ -82,6 +82,9 @@ const Controls = (props: ControlsProps) => {
 				.includes(tileH.id);
 		});
 		player.shownTiles = [...player.shownTiles, ...meld];
+		if (player.canPong(meld) || player.canKang(meld)) {
+			player.pongs.push(meld[0].card);
+		}
 		game.players[playerSeat] = player;
 	}
 
@@ -244,7 +247,9 @@ const Controls = (props: ControlsProps) => {
 				</Button>
 			</div>
 			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-			{game.hu.length === 3 && <HuAnnouncement playerSeat={playerSeat} game={game} />}
+			{(game.hu.length === 3 || (game.tiles.lengt === 15 && game.thrownTile)) && (
+				<Announcement playerSeat={playerSeat} game={game} />
+			)}
 		</div>
 	) : null;
 };

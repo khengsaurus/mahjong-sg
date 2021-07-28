@@ -29,9 +29,8 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 				{player.hiddenTiles &&
 					player.hiddenTiles.map((tile: Tile, index: number) => {
 						return (
-							<ButtonBase
+							<div
 								key={`self-hidden-tile${index}`}
-								// className="self-hidden-tile"
 								className={
 									selectedTiles.includes(tile)
 										? 'self-hidden-tile selected'
@@ -40,7 +39,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 								onClick={() => selectTile(tile)}
 							>
 								<img className="self-hidden-tile-bg" src={getTileSrc(tile.card)} alt="tile" />
-							</ButtonBase>
+							</div>
 						);
 					})}
 			</div>

@@ -150,12 +150,13 @@ $rotate-simple-180: rotate(180deg);
 		display: flex;
 		flex-flow: column wrap-reverse;
 		justify-content: center;
-		height: (19 * $shown-tile-width) + (2 * $tile-border-px);
-		max-width: $shown-tile-height;
+		height: (20 * $shown-tile-width) + (2 * $tile-border-px);
+		max-width: 2 * $shown-tile-height;
 		padding: 0 1px;
 		&.self {
-			height: (19 * $self-hidden-tile-width) + (2 * $tile-border-px);
-			max-width: $self-hidden-tile-height;
+			flex-flow: column wrap;
+			height: (20 * $self-hidden-tile-width) + (2 * $tile-border-px);
+			max-width: 2 * $self-hidden-tile-height;
 		}
 
 		.vertical-tile-shown {
@@ -253,7 +254,7 @@ $rotate-simple-180: rotate(180deg);
 		.self-hidden-tile-bg {
 			height: $self-hidden-tile-height;
 			width: $self-hidden-tile-width;
-			transform: $rotate-simple-90;
+			transform: $transform-rotate;
 		}
 	}
 }

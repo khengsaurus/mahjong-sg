@@ -6,17 +6,12 @@
 	justify-content: flex-start;
 	align-items: center;
 	text-align: center;
-	height: 90vw;
 
 	.panel-segment {
 		flex-direction: column;
 		justify-content: center;
 		margin-top: 20px;
 		width: $panel-segment-width;
-		&.right {
-			padding-top: 10px;
-			border-radius: 5px;
-		}
 		.list {
 			display: flex;
 			flex-direction: column;
@@ -26,11 +21,4 @@
 			border-radius: 5px;
 		}
 	}
-}
-
-.button-container {
-	display: flex;
-	flex-direction: column;
-	position: absolute;
-	bottom: 30px;
 }

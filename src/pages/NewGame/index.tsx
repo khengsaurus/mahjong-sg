@@ -29,6 +29,7 @@ const NewGame = () => {
 			return player.username !== userToRemove.username;
 		}
 		setPlayers(players.filter(isNotUserToRemove));
+		setStartedGame(false);
 	}
 
 	async function startGame() {
@@ -36,7 +37,6 @@ const NewGame = () => {
 		await FBService.createGame(user, players).then(game => {
 			game.initRound();
 			FBService.updateGame(game).then(() => {
-				dispatch(setGame(game));
 				setGameId(game.id);
 			});
 			setStartedGame(true);
@@ -81,8 +81,6 @@ const NewGame = () => {
 							})}
 					</List>
 				</div>
-
-				<br></br>
 				<br></br>
 				<Button
 					className="margin-left"
