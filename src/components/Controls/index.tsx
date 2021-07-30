@@ -304,7 +304,7 @@ const Controls = (props: ControlsProps) => {
 					onClick={() => {
 						handleThrow(selectedTiles[0]);
 					}}
-					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat}
+					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat || !game.takenTile}
 				>
 					<p>Throw</p>
 				</Button>
@@ -319,12 +319,8 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
-					// onClick={() => {
-					// 	setOkToShow(!okToShow);
-					// }}
 					onClick={() => {
-						game.newLog(`test ${Math.random()}`);
-						FBService.updateGame(game);
+						setOkToShow(!okToShow);
 					}}
 					// onTouchStart={() => {
 					// 	setOkToShow(true);
