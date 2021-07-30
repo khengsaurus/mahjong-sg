@@ -125,7 +125,7 @@ export class Game {
 		const oneToFour = [1, 2, 3, 4];
 		const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 		const suits = ['万', '筒', '索'];
-		const winds = ['东', '南', '西', '北'];
+		const winds = ['東', '南', '西', '北'];
 		const daPai = ['红中', '白板', '发财'];
 		const animals = ['cat', 'mouse', 'rooster', 'worm'];
 		const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
@@ -368,7 +368,7 @@ export class Game {
 			player.shownTiles = sortTiles(player.shownTiles);
 		});
 		this.takenTile = true;
-		this.tiles = this.tiles.slice(0, 17);
+		this.tiles = this.tiles.slice(0, 20);
 	}
 
 	buHua() {
@@ -390,7 +390,7 @@ export class Game {
 	repr(): any[] {
 		let res: any[];
 		if (this.stage <= 4) {
-			res = ['东', this.stage];
+			res = ['東', this.stage];
 		} else if (this.stage <= 8) {
 			res = ['南', ((this.stage - 1) % 4) + 1];
 		} else if (this.stage <= 12) {

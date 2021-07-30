@@ -24,18 +24,20 @@ const Table = () => {
 	const [leftPlayerIndex, setLeftPlayerIndex] = useState(null);
 	const [front, setFront] = useState(null);
 	const [back, setBack] = useState(null);
+	const [dealer, setDealer] = useState(null);
 
 	const dispatch = useDispatch();
 	const game: Game = useSelector((state: Store) => state.game);
 
 	useEffect(() => {
-		console.log('Table - game listener called');
+		console.log('Table/index - game listener called');
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = typeCheckGame(gameData);
-				console.log('Table - game state updated:');
+				console.log('Table/index - game state updated');
 				// setGame, setPlayer
 				dispatch(setGame(currentGame));
+				setDealer(currentGame.dealer);
 				setFront(currentGame.frontTiles);
 				setBack(currentGame.backTiles);
 				let player: User;
@@ -89,6 +91,7 @@ const Table = () => {
 						{game.players[topPlayerIndex] && (
 							<TopPlayer
 								player={game.players[topPlayerIndex]}
+								dealer={dealer === topPlayerIndex}
 								hasFront={front === topPlayerIndex}
 								hasBack={back === topPlayerIndex}
 							/>
@@ -98,6 +101,7 @@ const Table = () => {
 						{game.players[bottomPlayerIndex] && (
 							<BottomPlayer
 								player={game.players[bottomPlayerIndex]}
+								dealer={dealer === bottomPlayerIndex}
 								hasFront={front === bottomPlayerIndex}
 								hasBack={back === bottomPlayerIndex}
 							/>
@@ -107,6 +111,7 @@ const Table = () => {
 						{game.players[rightPlayerIndex] && (
 							<RightPlayer
 								player={game.players[rightPlayerIndex]}
+								dealer={dealer === rightPlayerIndex}
 								hasFront={front === rightPlayerIndex}
 								hasBack={back === rightPlayerIndex}
 							/>
@@ -116,6 +121,7 @@ const Table = () => {
 						{game.players[leftPlayerIndex] && (
 							<LeftPlayer
 								player={game.players[leftPlayerIndex]}
+								dealer={dealer === leftPlayerIndex}
 								hasFront={front === leftPlayerIndex}
 								hasBack={back === leftPlayerIndex}
 							/>
@@ -148,7 +154,7 @@ const Table = () => {
 	};
 
 	useEffect(() => {
-		console.log('Table - re-rendering game & controls');
+		console.log('Table/index - re-rendering game & controls');
 	}, [game, user, dispatch]);
 
 	if (user && game) {

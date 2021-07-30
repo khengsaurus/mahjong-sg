@@ -1,10 +1,11 @@
+import CasinoIcon from '@material-ui/icons/Casino';
 import React, { useEffect, useMemo } from 'react';
-import getTileSrc from '../../images/tiles/index';
+import getTileSrc from '../../images';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
 
 const RightPlayer = (props: PlayerComponentProps) => {
-	const { player, hasFront, hasBack } = props;
+	const { player, dealer, hasFront, hasBack } = props;
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
 
@@ -20,6 +21,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 				})}
 			</div>
 			<div className="vertical-tiles-shown">
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>

@@ -26,6 +26,7 @@ interface Tile {
 
 interface PlayerComponentProps {
 	player: User;
+	dealer?: boolean;
 	hasFront?: boolean;
 	hasBack?: boolean;
 }

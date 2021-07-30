@@ -1,34 +1,43 @@
 @import '../../App.scss';
-$control-sq-side: 60px;
 $button-width: 45px;
 $button-height: 55px;
 
-.stage {
-	font-size: 16px;
-	width: 80px;
-	border: 2px solid teal;
-	transform: rotate(90deg);
-	color: rgb(25, 25, 25);
-}
+$text-line-height: 16px;
+$text-line-width: 80px;
+$text-font-size: 14px;
+$text-line-height: 15px;
+
+$icon-button-size: 35px;
 
 .top-right-controls {
 	position: absolute;
 	top: calc(env(safe-area-inset-top));
 	right: calc(env(safe-area-inset-right));
-	height: 2 * $control-sq-side;
-	width: 2 * $control-sq-side;
+	height: 3 * $icon-button-size;
+	width: 3 * $icon-button-size;
 	display: flex;
-	flex-direction: column;
+	flex-flow: column wrap-reverse;
 	align-items: flex-end;
+	justify-content: flex-start;
 	z-index: 10;
-	.button {
-		max-width: $button-width;
-		max-height: $button-height;
-		min-width: $button-width;
-		min-height: $button-height;
-		p {
-			transform: rotate(90deg);
-		}
+	.icon-button {
+		width: $icon-button-size;
+		height: $icon-button-size;
+		transform: rotate(90deg);
+	}
+	.text-container {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: flex-end;
+		text-align: start;
+		transform-origin: top left;
+		transform: translateX($text-line-width) rotate(90deg);
+		height: $text-line-height * 2;
+		width: $text-line-width;
+		margin: 5px -2px !important;
+		font-size: $text-font-size;
+		color: grey;
+		line-height: $text-line-height;
 	}
 }
 
@@ -36,11 +45,13 @@ $button-height: 55px;
 	position: absolute;
 	top: calc(env(safe-area-inset-top));
 	left: calc(env(safe-area-inset-left));
-	height: 2 * $control-sq-side;
-	width: 2 * $control-sq-side;
+	height: 2 * $button-height;
+	width: 2 * $button-width;
 	display: flex;
-	flex-direction: row;
+	// flex-direction: row;
+	flex-flow: column wrap;
 	justify-content: flex-start;
+	align-items: flex-start;
 	z-index: 10;
 	.button {
 		max-width: $button-width;
@@ -57,11 +68,11 @@ $button-height: 55px;
 	position: absolute;
 	bottom: calc(env(safe-area-inset-bottom));
 	left: calc(env(safe-area-inset-left));
-	height: 2 * $control-sq-side;
-	width: 2 * $control-sq-side;
+	height: 2 * $button-height;
+	width: 2 * $button-width;
 	display: flex;
-	flex-direction: row;
-	align-items: flex-end;
+	flex-flow: column-reverse wrap;
+	align-items: flex-start;
 	z-index: 10;
 	.button {
 		max-width: $button-width;
@@ -78,8 +89,8 @@ $button-height: 55px;
 	position: absolute;
 	bottom: calc(env(safe-area-inset-bottom));
 	right: calc(env(safe-area-inset-right));
-	height: 2 * $control-sq-side;
-	width: 2 * $control-sq-side;
+	height: 2 * $button-height;
+	width: 2 * $button-width;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;

@@ -1,10 +1,11 @@
+import CasinoIcon from '@material-ui/icons/Casino';
 import React, { useEffect, useMemo } from 'react';
-import getTileSrc from '../../images/tiles/index';
+import getTileSrc from '../../images';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
 
 const BottomPlayer = (props: PlayerComponentProps) => {
-	const { player, hasFront, hasBack } = props;
+	const { player, dealer, hasFront, hasBack } = props;
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
@@ -48,25 +49,16 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 				})}
 				{/* Extra shown tiles */}
 				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
-					return (
+					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<img
-							key={`bottom-discarded-tile-${index}`}
+							key={`bottom-shown-tile-${index}`}
 							className="horizontal-tile-shown"
 							src={getTileSrc(tile.card)}
 							alt="tile"
 						/>
-					);
-				})}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
-					return (
-						<img
-							key={`bottom-discarded-tile-${index}`}
-							className="horizontal-tile-shown"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
-					);
+					) : null;
 				})} */}
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
 			{player.unusedTiles > 0 && (
 				<div className={`horizontal-tiles-hidden unused bottom ${frontBackTag}`}>

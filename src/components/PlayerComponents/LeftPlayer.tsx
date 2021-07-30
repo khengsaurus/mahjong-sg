@@ -1,13 +1,13 @@
-import { ButtonBase } from '@material-ui/core';
+import CasinoIcon from '@material-ui/icons/Casino';
 import React, { useContext, useEffect, useMemo } from 'react';
-import getTileSrc from '../../images/tiles/index';
+import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
 
 const LeftPlayer = (props: PlayerComponentProps) => {
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const { player, hasFront, hasBack } = props;
+	const { player, dealer, hasFront, hasBack } = props;
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
@@ -16,7 +16,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 	});
 
 	function selectTile(tile: Tile) {
-		if (!selectedTiles.includes(tile) && selectedTiles.length < 5) {
+		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
 			setSelectedTiles([...selectedTiles, tile]);
 		} else {
 			setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.id !== tile.id));
@@ -68,6 +68,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						</div>
 					) : null;
 				})}
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
 			{player.unusedTiles > 0 && (
 				<div className={`vertical-tiles-hidden unused ${frontBackTag}`}>

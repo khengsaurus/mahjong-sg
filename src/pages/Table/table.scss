@@ -1,12 +1,15 @@
 @import '../../App.scss';
 
+$wind-font-size: 60px;
+$wind-font-color: #a2a2a2;
+
 .wind-background {
-	transform: rotate(90deg);
+	transform: rotate(90deg) translateY(-20px);
 	display: flex;
 	flex-direction: column;
 	p {
-		font-size: 60px;
-		color: #a2a2a2;
+		font-size: $wind-font-size;
+		color: $wind-font-color;
 		// animation: color-change 5s infinite;
 	}
 }

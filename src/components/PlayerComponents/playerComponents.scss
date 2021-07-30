@@ -18,6 +18,7 @@ $rotate-simple-180: rotate(180deg);
 		flex-direction: row;
 		justify-content: center;
 		padding: 1px 0;
+		// max-height: $hidden-tile-height;
 		&.unused {
 			flex-flow: column wrap;
 			align-self: center;
@@ -54,7 +55,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: center; // Remove to align top and bottom shown tiles to the right
 		align-items: flex-end;
 		align-self: center;
-		width: 75vw;
+		width: 60vw;
 
 		&.bottom {
 			flex-flow: row-reverse wrap-reverse;
@@ -148,24 +149,15 @@ $rotate-simple-180: rotate(180deg);
 
 	.vertical-tiles-shown {
 		display: flex;
-		flex-flow: column wrap-reverse;
+		flex-flow: column wrap;
 		justify-content: center;
-		height: (20 * $shown-tile-width) + (2 * $tile-border-px);
-		max-width: 2 * $shown-tile-height;
+		max-height: 22 * ($shown-tile-width + (2 * $tile-border-px));
+		max-width: $shown-tile-height;
 		padding: 0 1px;
-		&.self {
-			flex-flow: column wrap;
-			height: (20 * $self-hidden-tile-width) + (2 * $tile-border-px);
-			max-width: 2 * $self-hidden-tile-height;
-		}
 
 		.vertical-tile-shown {
 			height: $shown-tile-width;
 			width: $shown-tile-height;
-			&.self {
-				height: $self-hidden-tile-width;
-				width: $self-hidden-tile-height;
-			}
 		}
 	}
 
@@ -176,10 +168,6 @@ $rotate-simple-180: rotate(180deg);
 		transform: $transform-rotate;
 		background-color: $tile-front-color;
 		align-self: flex-start;
-		&.self {
-			height: $self-hidden-tile-height;
-			width: $self-hidden-tile-width;
-		}
 
 		&.animate-flower {
 			transition: 200ms;
