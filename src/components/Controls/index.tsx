@@ -2,6 +2,7 @@ import { Button, IconButton } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SettingsIcon from '@material-ui/icons/Settings';
+import SubjectIcon from '@material-ui/icons/Subject';
 import * as _ from 'lodash';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -14,6 +15,7 @@ import { search, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './Controls.scss';
 import HuDialog from './HuDialog';
+import Logs from './Logs';
 import PaymentWindow from './PaymentWindow';
 
 interface ControlsProps {
@@ -30,10 +32,11 @@ const Controls = (props: ControlsProps) => {
 	const [declareHu, setDeclareHu] = useState(false);
 	const [okToShow, setOkToShow] = useState(false);
 	const [showPay, setShowPay] = useState(false);
+	const [showLogs, setShowLogs] = useState(false);
 
 	const game: Game = useSelector((state: Store) => state.game);
 	const player: User = useSelector((state: Store) => state.player);
-	const { lastThrown, thrownBy } = game;
+	const { lastThrown, thrownBy, logs } = game;
 
 	const previousPlayer = useMemo(() => {
 		console.log('Controls/index - useMemo calculating previous player');
@@ -243,15 +246,6 @@ const Controls = (props: ControlsProps) => {
 					<IconButton className="icon-button" size="small">
 						<SettingsIcon />
 					</IconButton>
-					<IconButton
-						className="icon-button"
-						size="small"
-						onClick={() => {
-							setShowPay(true);
-						}}
-					>
-						<MonetizationOnIcon />
-					</IconButton>
 					<div className="text-container">
 						{`Dealer: ${game.players[game.dealer].username}`}
 						<br></br>
@@ -325,8 +319,12 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
+					// onClick={() => {
+					// 	setOkToShow(!okToShow);
+					// }}
 					onClick={() => {
-						setOkToShow(!okToShow);
+						game.newLog(`test ${Math.random()}`);
+						FBService.updateGame(game);
 					}}
 					// onTouchStart={() => {
 					// 	setOkToShow(true);
@@ -339,7 +337,28 @@ const Controls = (props: ControlsProps) => {
 				</Button>
 			</div>
 
-			<div className="bottom-right-controls">{/*  */}</div>
+			<div className="bottom-right-controls">
+				<>
+					<IconButton
+						className="icon-button"
+						size="small"
+						onClick={() => {
+							setShowPay(true);
+						}}
+					>
+						<MonetizationOnIcon />
+					</IconButton>
+					<IconButton
+						className="icon-button"
+						size="small"
+						onClick={() => {
+							setShowLogs(true);
+						}}
+					>
+						<SubjectIcon />
+					</IconButton>
+				</>
+			</div>
 			{showPay && (
 				<PaymentWindow
 					game={game}
@@ -347,6 +366,15 @@ const Controls = (props: ControlsProps) => {
 					show={showPay}
 					onClose={() => {
 						setShowPay(false);
+					}}
+				/>
+			)}
+			{showLogs && (
+				<Logs
+					game={game}
+					show={showLogs}
+					onClose={() => {
+						setShowLogs(false);
 					}}
 				/>
 			)}

@@ -7,6 +7,11 @@ $text-line-width: 80px;
 $text-font-size: 14px;
 $text-line-height: 15px;
 
+$log-line-height: 14px;
+$log-line-width: 120px;
+$log-font-size: 12px;
+$log-line-height: 13px;
+
 $icon-button-size: 35px;
 
 .top-right-controls {
@@ -32,7 +37,7 @@ $icon-button-size: 35px;
 		text-align: start;
 		transform-origin: top left;
 		transform: translateX($text-line-width) rotate(90deg);
-		height: $text-line-height * 2;
+		height: $text-line-height * 4;
 		width: $text-line-width;
 		margin: 5px -2px !important;
 		font-size: $text-font-size;
@@ -89,20 +94,36 @@ $icon-button-size: 35px;
 	position: absolute;
 	bottom: calc(env(safe-area-inset-bottom));
 	right: calc(env(safe-area-inset-right));
-	height: 2 * $button-height;
-	width: 2 * $button-width;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
 	align-items: flex-end;
+	justify-content: flex-start;
 	z-index: 10;
-	.button {
-		max-width: $button-width;
-		max-height: $button-height;
-		min-width: $button-width;
-		min-height: $button-height;
-		p {
-			transform: rotate(90deg);
+	.buttons {
+		display: flex;
+		flex-direction: column;
+	}
+	.icon-button {
+		width: $icon-button-size;
+		height: $icon-button-size;
+		transform: rotate(90deg);
+	}
+}
+
+ul {
+	list-style-type: circle;
+	max-height: 65vw;
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	padding-left: 20px;
+	li {
+		color: rgb(100, 100, 100);
+		&.pay {
+			color: rgb(0, 100, 10);
+		}
+		&.turn {
+			color: rgb(30, 30, 30);
 		}
 	}
 }

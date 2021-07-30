@@ -425,6 +425,7 @@ export class Game {
 	}
 
 	initRound() {
+		this.logs = [];
 		this.midRound = true;
 		if (this.flagProgress) {
 			this.stage += 1;
