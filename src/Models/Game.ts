@@ -29,7 +29,8 @@ export function gameToObj(game: Game) {
 		takenTile: game.takenTile || false,
 		uncachedAction: game.uncachedAction || false,
 		hu: game.hu || [],
-		draw: game.draw || false
+		draw: game.draw || false,
+		logs: game.logs || []
 	};
 }
 
@@ -57,6 +58,7 @@ export class Game {
 	uncachedAction?: boolean;
 	hu?: number[];
 	draw?: boolean;
+	logs?: string[];
 
 	constructor(
 		id: string,
@@ -81,7 +83,8 @@ export class Game {
 		takenTile?: boolean,
 		uncachedAction?: boolean,
 		hu?: number[],
-		draw?: boolean
+		draw?: boolean,
+		logs?: string[]
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -106,9 +109,16 @@ export class Game {
 		this.uncachedAction = uncachedAction;
 		this.hu = hu;
 		this.draw = draw;
+		this.logs = logs;
+	}
+
+	newLog(log: string) {
+		console.log(log);
+		this.logs = [...this.logs, log];
 	}
 
 	shuffle(array: any[]) {
+		this.newLog('Shuffling tiles');
 		// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 		var currentIndex = array.length,
 			randomIndex;
@@ -195,17 +205,14 @@ export class Game {
 			};
 			tiles.push(tile);
 		});
-		console.log(`Generated ${tiles.length} tiles`);
-
-		if (tiles.length === 148) {
-			return this.shuffle(tiles);
-		} else {
-			console.log('Tiles not generated');
-			return null;
-		}
+		this.newLog(`Generated ${tiles.length} tiles`);
+		return this.shuffle(tiles);
 	}
 
 	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): Tile {
+		let flowerReceived = '';
+		let flowersReceived = ', including';
+		let receivedFlower: boolean = false;
 		let player = this.players[playerIndex];
 		let newTile: Tile;
 		if (!player.hiddenTiles) {
@@ -240,12 +247,24 @@ export class Game {
 			}
 			if (newTile.suit === '花' || newTile.suit === '动物') {
 				newTile.show = true;
+				receivedFlower = true;
+				flowerReceived = newTile.card;
+				flowersReceived += ` ${newTile.card}`;
 				player.shownTiles = [...player.shownTiles, newTile];
 			} else {
 				player.hiddenTiles = [...player.hiddenTiles, newTile];
 			}
 		}
-		console.log(`${player.username} received ${n} tile(s)`);
+		let log = `${player.username} received `;
+		if (n === 1 && receivedFlower) {
+			log += flowerReceived;
+		} else {
+			log += `${n} tile(s)`;
+			if (receivedFlower) {
+				log += flowersReceived;
+			}
+		}
+		this.newLog(log);
 		return newTile;
 	}
 
@@ -263,9 +282,11 @@ export class Game {
 
 	//TODO: optimise
 	distributeTiles() {
+		this.newLog('Distributing tiles');
+
 		let dealer = this.players[this.dealer];
 		let rolled = dealer.rollDice();
-		console.log(`${dealer.username} rolled: ${rolled}`);
+		this.newLog(`${dealer.username} rolled: ${rolled}`);
 		let leftPlayer = this.players[this.findLeft(this.dealer)];
 		let rightPlayer = this.players[this.findRight(this.dealer)];
 		let oppPlayer = this.players[this.findOpp(this.dealer)];
@@ -277,7 +298,7 @@ export class Game {
 		// Set front and back, and how many unused tiles each dealer has
 		switch (rolled % 4) {
 			case 0: // deal from left
-				console.log('Dealing from left');
+				this.newLog(`Dealing from ${this.players[this.findLeft(this.dealer)].username}`);
 				this.backTiles = this.findLeft(this.dealer);
 				toBeDealtByLeft = 36 - 2 * rolled;
 				leftPlayer.unusedTiles = 2 * rolled;
@@ -295,7 +316,7 @@ export class Game {
 				dealer.unusedTiles = 38;
 				break;
 			case 1: // deal from dealer
-				console.log('Dealing from dealer');
+				this.newLog(`Dealing from ${this.players[this.dealer].username}`);
 				this.backTiles = this.dealer;
 				toBeDealtByDealer = 38 - 2 * rolled;
 				dealer.unusedTiles = 2 * rolled;
@@ -313,7 +334,7 @@ export class Game {
 				rightPlayer.unusedTiles = 36;
 				break;
 			case 2: // deal from right
-				console.log('Dealing from right');
+				this.newLog(`Dealing from ${this.players[this.findRight(this.dealer)].username}`);
 				this.backTiles = this.findRight(this.dealer);
 				toBeDealtByRight = 36 - 2 * rolled;
 				rightPlayer.unusedTiles = 2 * rolled;
@@ -331,7 +352,7 @@ export class Game {
 				oppPlayer.unusedTiles = 38;
 				break;
 			case 3: // deal from opposite
-				console.log('Dealing from opposite');
+				this.newLog(`Dealing from ${this.players[this.findOpp(this.dealer)].username}`);
 				this.backTiles = this.findOpp(this.dealer);
 				oppPlayer.unusedTiles = 2 * rolled;
 				toBeDealtByOpp = 38 - 2 * rolled;
@@ -349,8 +370,6 @@ export class Game {
 				leftPlayer.unusedTiles = 36;
 				break;
 		}
-
-		console.log('Distrubite tiles called');
 		this.giveTiles(14, this.dealer, false, false);
 		this.giveTiles(13, this.findRight(this.dealer), false, false);
 		this.giveTiles(13, this.findOpp(this.dealer), false, false);
@@ -385,6 +404,7 @@ export class Game {
 
 	nextPlayerMove() {
 		this.whoseMove = this.findRight(this.whoseMove);
+		this.newLog(`${this.players[this.whoseMove].username}'s move`);
 	}
 
 	repr(): any[] {
@@ -412,6 +432,8 @@ export class Game {
 		if (this.stage === 1) {
 			this.dealer = 0;
 		}
+		this.newLog(`Starting round ${this.stage}${this.previousStage === this.stage ? ` 连` : ``}`);
+		this.newLog(`Dealer is ${this.players[this.dealer].username}`);
 		this.players.forEach(player => {
 			player.hiddenTiles = [];
 			player.shownTiles = [];
@@ -432,7 +454,6 @@ export class Game {
 		this.distributeTiles();
 		this.hu = [];
 		this.draw = false;
-		console.log(`Starting round ${this.stage}`);
 	}
 
 	/**
@@ -440,13 +461,20 @@ export class Game {
 	 * if game is to continue => this.midRound(false), this.stage+=1, next this.dealer
 	 */
 	endRound() {
+		this.hu.length === 3 &&
+			this.newLog(
+				`${this.players[this.hu[0]].username} won with ${this.hu[1]}台${
+					this.hu[2] === 1 ? ` 自摸` : `, last tile thrown by ${this.players[this.thrownBy].username}`
+				}`
+			);
 		this.midRound = false;
 		this.previousStage = this.stage;
 		if (this.dealer === 3 && this.stage === 16 && this.flagProgress) {
-			console.log('Game ended');
+			this.newLog('Game ended');
 			this.ongoing = false;
 		} else if (this.flagProgress) {
 			this.dealer = (this.dealer + 1) % 4;
+			this.newLog('Round ended');
 		}
 	}
 }

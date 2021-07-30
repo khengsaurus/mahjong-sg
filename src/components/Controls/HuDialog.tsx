@@ -36,10 +36,14 @@ const HuDialog = (props: Props) => {
 		game.flagProgress = Number(game.dealer) === playerSeat ? Boolean(false) : Boolean(true);
 		if (game.flagProgress) {
 			console.log(
-				`${game.players[playerSeat].username} hu, expecting next dealer: ${(Number(game.dealer) % 3) + 1}`
+				`${game.players[playerSeat].username} hu, next dealer: ${
+					game.players[(Number(game.dealer) % 3) + 1].username
+				}`
 			);
 		} else {
-			console.log(`${game.players[playerSeat].username} hu, expecting next dealer: ${Number(game.dealer)}`);
+			console.log(
+				`${game.players[playerSeat].username} hu, next dealer: ${game.players[Number(game.dealer)].username}`
+			);
 		}
 		game.endRound();
 		FBService.updateGame(game);

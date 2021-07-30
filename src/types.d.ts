@@ -29,6 +29,7 @@ interface PlayerComponentProps {
 	dealer?: boolean;
 	hasFront?: boolean;
 	hasBack?: boolean;
+	isPlayerTurn?: boolean;
 }
 
 interface loginParams {

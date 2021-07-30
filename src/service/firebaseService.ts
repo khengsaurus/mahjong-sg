@@ -83,7 +83,7 @@ class FirebaseService {
 			});
 			console.log('User created successfully');
 		} catch (err) {
-			console.log('firebaseService: User was not created - ', +err);
+			console.log('FirebaseService - user was not created: ', +err);
 		}
 	}
 
@@ -92,7 +92,7 @@ class FirebaseService {
 			await this.userRepr.add({ username, email, photoUrl: '', groups: [] });
 			console.log('User created successfully');
 		} catch (err) {
-			console.log('firebaseService: User was not created - ', +err);
+			console.log('FirebaseService - user was not created: ', +err);
 		}
 	}
 
@@ -183,7 +183,7 @@ class FirebaseService {
 		}
 	}
 
-	async createGame(user: User, players: User[]): Promise<Game> {
+	async createGame(user: User, players: User[], startingBal?: number): Promise<Game> {
 		let playerIds: string[] = [];
 		let playersString: string = '';
 		players.forEach(player => {
@@ -219,7 +219,8 @@ class FirebaseService {
 						uncachedAction: false,
 						hu: [],
 						initRound: [true, false],
-						draw: false
+						draw: false,
+						logs: []
 					})
 					.then(newGame => {
 						console.log(`Game created successfully: gameId ${newGame.id}`);
@@ -246,29 +247,31 @@ class FirebaseService {
 							true,
 							false,
 							[],
-							false
+							false,
+							[]
 						);
 						resolve(game);
 					});
 			} catch (err) {
-				console.log('firebaseService: Game was not created');
+				console.log('FirebaseService - game was not created');
 				reject(err);
 			}
 		});
 	}
 
 	updateGame(game: Game): Promise<Game> {
+		console.log('FirebaseService - updating game');
 		return new Promise(async (resolve, reject) => {
 			try {
-				let gameObj = await gameToObj(game);
-				const currentGameRef = await this.gameRef.doc(game.id);
+				let gameObj = gameToObj(game);
+				const currentGameRef = this.gameRef.doc(game.id);
 				await currentGameRef.set({ ...gameObj }).then(() => {
 					resolve(game);
-					console.log('firebaseService: game doc was updated');
+					console.log('FirebaseService - game doc was updated');
 				});
 			} catch (err) {
 				console.log(err);
-				reject(new Error('firebaseService: game doc was not updated'));
+				reject(new Error('FirebaseService - game doc was not updated'));
 			}
 		});
 	}

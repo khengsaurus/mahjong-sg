@@ -86,11 +86,12 @@ export function typeCheckPlayer(data: any): User {
 		data.hiddenTiles,
 		data.discardedTiles,
 		data.unusedTiles,
-		data.pongs
+		data.pongs,
+		data.balance
 	);
 }
 
-export function userToObj(user: User) {
+export function userToObj(user: User, startingBal?: number) {
 	return {
 		id: user.id,
 		username: user.username,
@@ -111,7 +112,8 @@ export function userToObj(user: User) {
 			  })
 			: [],
 		unusedTiles: user.unusedTiles || 0,
-		pongs: user.pongs || []
+		pongs: user.pongs || [],
+		balance: user.balance || startingBal || 0
 	};
 }
 
@@ -159,7 +161,8 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		Boolean(ref.takenTile),
 		Boolean(ref.uncachedAction),
 		ref.hu,
-		Boolean(ref.draw)
+		Boolean(ref.draw),
+		ref.logs
 	);
 };
 

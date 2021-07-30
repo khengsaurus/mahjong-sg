@@ -73,7 +73,7 @@ $rotate-simple-180: rotate(180deg);
 				border-radius: 8%;
 				background: $linear-gradient-multi;
 				background-size: 400% 400%;
-				animation: linear-gradient 5s ease infinite;
+				animation: linear-gradient 4s ease infinite;
 			}
 
 			&.animal {
@@ -173,7 +173,7 @@ $rotate-simple-180: rotate(180deg);
 			transition: 200ms;
 			background: $linear-gradient-multi;
 			background-size: 400% 400%;
-			animation: linear-gradient 5s ease infinite;
+			animation: linear-gradient 4s ease infinite;
 		}
 
 		&.animal {
@@ -181,8 +181,10 @@ $rotate-simple-180: rotate(180deg);
 			width: $shown-tile-width - 2px;
 			border: $tile-border-px solid black;
 			&.self {
-				height: $self-hidden-tile-height - 2px;
-				width: $self-hidden-tile-width - 2px;
+				// height: $self-hidden-tile-height - 2px;
+				// width: $self-hidden-tile-width - 2px;
+				height: $shown-tile-height - 2px;
+				width: $shown-tile-width - 2px;
 			}
 		}
 	}

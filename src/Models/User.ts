@@ -7,6 +7,7 @@ export class User {
 	discardedTiles?: Tile[] | null;
 	unusedTiles?: number;
 	pongs?: string[];
+	balance?: number;
 
 	constructor(
 		id: string,
@@ -16,7 +17,8 @@ export class User {
 		hiddenTiles?: Tile[],
 		discardedTiles?: Tile[],
 		unusedTiles?: number,
-		pongs?: string[]
+		pongs?: string[],
+		balance?: number
 	) {
 		this.id = id;
 		this.username = username;
@@ -26,6 +28,7 @@ export class User {
 		this.discardedTiles = discardedTiles || [];
 		this.unusedTiles = unusedTiles || null;
 		this.pongs = pongs || [];
+		this.balance = balance || 0;
 	}
 
 	rollDice(): number {

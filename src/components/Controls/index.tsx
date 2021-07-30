@@ -1,9 +1,10 @@
-import SettingsIcon from '@material-ui/icons/Settings';
-import HomeIcon from '@material-ui/icons/Home';
 import { Button, IconButton } from '@material-ui/core';
+import HomeIcon from '@material-ui/icons/Home';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import SettingsIcon from '@material-ui/icons/Settings';
 import * as _ from 'lodash';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
@@ -13,6 +14,7 @@ import { search, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './Controls.scss';
 import HuDialog from './HuDialog';
+import PaymentWindow from './PaymentWindow';
 
 interface ControlsProps {
 	playerSeat?: number;
@@ -27,6 +29,7 @@ const Controls = (props: ControlsProps) => {
 	const [canKang, setCanKang] = useState(false);
 	const [declareHu, setDeclareHu] = useState(false);
 	const [okToShow, setOkToShow] = useState(false);
+	const [showPay, setShowPay] = useState(false);
 
 	const game: Game = useSelector((state: Store) => state.game);
 	const player: User = useSelector((state: Store) => state.player);
@@ -54,23 +57,26 @@ const Controls = (props: ControlsProps) => {
 			}
 			setMeld(consideringTiles);
 
-			if (player.canKang(consideringTiles)) {
-				setCanKang(true);
-			} else {
-				setCanKang(false);
-			}
 			if (!game.takenTile) {
-				if (game.whoseMove === playerSeat && thrownBy === previousPlayer && player.canChi(consideringTiles)) {
-					setCanChi(true);
-				} else {
-					setCanChi(false);
-				}
-				if (player.canPong(consideringTiles)) {
+				if (player.canKang(consideringTiles)) {
+					// can kang
+					setCanKang(true);
+					setCanPong(false);
+				} else if (player.canPong(consideringTiles)) {
+					// can pong
 					setCanKang(false);
 					setCanPong(true);
+				} else if (
+					// can chi
+					game.whoseMove === playerSeat &&
+					thrownBy === previousPlayer &&
+					player.canChi(consideringTiles)
+				) {
+					setCanChi(true);
 				} else {
 					setCanKang(false);
 					setCanPong(false);
+					setCanChi(false);
 				}
 			}
 		}
@@ -78,10 +84,10 @@ const Controls = (props: ControlsProps) => {
 
 	function handleTake(kang: boolean) {
 		game.whoseMove = playerSeat;
-		game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
+		game.players[thrownBy].discardedTiles = game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
 			return tile.id !== lastThrown.id;
 		});
-		game.lastThrown = {};
+		console.log(game.players[thrownBy].discardedTiles);
 		meld.forEach(tile => {
 			tile.show = true;
 		});
@@ -95,11 +101,17 @@ const Controls = (props: ControlsProps) => {
 		player.shownTiles = [...player.shownTiles, ...meld];
 		if (player.canPong(meld) || player.canKang(meld)) {
 			player.pongs.push(meld[0].card);
+			if (kang) {
+				game.flagProgress = true;
+				game.newLog(`${player.username} kang'd ${meld[0].card}`);
+				buHua();
+			} else {
+				game.newLog(`${player.username} pong'd ${meld[0].card}`);
+			}
+		} else {
+			game.newLog(`${player.username} chi'd ${game.lastThrown.card}`);
 		}
-		if (kang) {
-			game.flagProgress = true;
-			buHua();
-		}
+		// game.lastThrown = {};
 		game.takenTile = true;
 		handleAction(game);
 	}
@@ -126,10 +138,9 @@ const Controls = (props: ControlsProps) => {
 		let initNoHiddenTiles = player.hiddenTiles.length;
 		while (player.hiddenTiles.length === initNoHiddenTiles) {
 			if (game.tiles.length > 15) {
-				console.log('Player drew a flower, drawing another tile');
 				drawnTile = game.giveTiles(1, playerSeat, true, true);
 			} else {
-				console.log('Player drew a flower but cannot bu hua');
+				game.newLog(`${player.username} drew a flower but cannot bu hua`);
 				game.draw = true;
 				game.endRound();
 				drawnTile = null;
@@ -142,7 +153,6 @@ const Controls = (props: ControlsProps) => {
 	function handleDraw() {
 		let drawnTile: Tile;
 		if (game.tiles.length > 15) {
-			console.log(`${player.username} is drawing a tile`);
 			drawnTile = game.giveTiles(1, playerSeat, false, true);
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
@@ -157,7 +167,6 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function handleThrow(tileToThrow: Tile) {
-		console.log(`${player.username} Player is throwing a tile`);
 		tileToThrow.show = true;
 		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
 			return tile.id !== tileToThrow.id;
@@ -167,6 +176,7 @@ const Controls = (props: ControlsProps) => {
 		game.lastThrown = tileToThrow;
 		game.thrownBy = playerSeat;
 		game.thrownTile = true;
+		game.newLog(`${player.username} discarded ${tileToThrow.card}`);
 		handleAction(game);
 	}
 
@@ -233,12 +243,23 @@ const Controls = (props: ControlsProps) => {
 					<IconButton className="icon-button" size="small">
 						<SettingsIcon />
 					</IconButton>
+					<IconButton
+						className="icon-button"
+						size="small"
+						onClick={() => {
+							setShowPay(true);
+						}}
+					>
+						<MonetizationOnIcon />
+					</IconButton>
 					<div className="text-container">
 						{`Dealer: ${game.players[game.dealer].username}`}
 						<br></br>
 						{`Tiles left: ${game.tiles.length}`}
 						<br></br>
 						{`Seat: ${playerWind()}`}
+						<br></br>
+						{`$${Math.round(Number(player.balance) * 100) / 100}`}
 					</div>
 				</>
 			</div>
@@ -314,11 +335,21 @@ const Controls = (props: ControlsProps) => {
 					// 	setOkToShow(false);
 					// }}
 				>
-					<p>{`Show?`}</p>
+					<p>{`Show`}</p>
 				</Button>
 			</div>
 
 			<div className="bottom-right-controls">{/*  */}</div>
+			{showPay && (
+				<PaymentWindow
+					game={game}
+					playerSeat={playerSeat}
+					show={showPay}
+					onClose={() => {
+						setShowPay(false);
+					}}
+				/>
+			)}
 			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
 			{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
 		</div>

@@ -25,7 +25,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 
 	return (
 		<div className="column-section">
-			<div className="self-hidden-tiles">
+			<div className={`self-hidden-tiles`}>
 				{player.hiddenTiles &&
 					player.hiddenTiles.map((tile: Tile, index: number) => {
 						return (
