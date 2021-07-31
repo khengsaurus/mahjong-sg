@@ -15,7 +15,7 @@ import { search, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './Controls.scss';
 import HuDialog from './HuDialog';
-import Logs from './Logs';
+import LogBox from './LogBox';
 import PaymentWindow from './PaymentWindow';
 
 interface ControlsProps {
@@ -319,15 +319,20 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
-					onClick={() => {
-						setOkToShow(!okToShow);
+					// onClick={() => {
+					// 	setOkToShow(!okToShow);
+					// }}
+					// onClick={e => {
+					// 	e.preventDefault();
+					// 	game.newLog(`Test: ${Math.random()}`);
+					// 	FBService.updateGame(game);
+					// }}
+					onTouchStart={() => {
+						setOkToShow(true);
 					}}
-					// onTouchStart={() => {
-					// 	setOkToShow(true);
-					// }}
-					// onTouchEnd={() => {
-					// 	setOkToShow(false);
-					// }}
+					onTouchEnd={() => {
+						setOkToShow(false);
+					}}
 				>
 					<p>{`Show`}</p>
 				</Button>
@@ -348,11 +353,17 @@ const Controls = (props: ControlsProps) => {
 						className="icon-button"
 						size="small"
 						onClick={() => {
-							setShowLogs(true);
+							setShowLogs(!showLogs);
 						}}
 					>
 						<SubjectIcon />
 					</IconButton>
+					<div className={showLogs ? `log-box-container expanded` : `log-box-container`}>
+						<LogBox
+							expanded={showLogs}
+							logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
+						/>
+					</div>
 				</>
 			</div>
 			{showPay && (
@@ -362,15 +373,6 @@ const Controls = (props: ControlsProps) => {
 					show={showPay}
 					onClose={() => {
 						setShowPay(false);
-					}}
-				/>
-			)}
-			{showLogs && (
-				<Logs
-					game={game}
-					show={showLogs}
-					onClose={() => {
-						setShowLogs(false);
 					}}
 				/>
 			)}

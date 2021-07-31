@@ -12,16 +12,11 @@
 	border: 1px solid grey;
 
 	.search-box {
-		justify-self: center;
 		width: $panel-segment-width - 40px;
+		margin-bottom: 5px;
 	}
 
-	&.group {
-		border-bottom: none;
-		border-radius: 5px 5px 0 0;
-	}
-	&.user {
-		border-top: none;
-		border-radius: 0 0 5px 5px;
+	.user {
+		width: $panel-segment-width - 40px;
 	}
 }

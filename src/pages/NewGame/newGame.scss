@@ -12,13 +12,18 @@
 		justify-content: center;
 		margin-top: 20px;
 		width: $panel-segment-width;
-		.list {
-			display: flex;
-			flex-direction: column;
-			width: $panel-segment-width;
-			margin: 10px 0;
-			border: 1px solid grey;
-			border-radius: 5px;
-		}
+	}
+
+	.list {
+		display: flex;
+		flex-direction: column;
+		width: $panel-segment-width;
+		margin: 10px 0;
+		border: 1px solid grey;
+		border-radius: 5px;
+	}
+
+	.user {
+		width: $panel-segment-width - 40px;
 	}
 }

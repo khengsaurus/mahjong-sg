@@ -77,7 +77,10 @@ const PaymentWindow = (props: Props) => {
 					}}
 				>
 					<DialogContent>
-						<IconButton style={{ position: 'absolute', top: '12px', right: '15px' }} onClick={onClose}>
+						<IconButton
+							style={{ color: 'black', position: 'absolute', top: '12px', right: '15px' }}
+							onClick={onClose}
+						>
 							<CloseIcon />
 						</IconButton>
 						<Typography variant="subtitle1">{'Send money'}</Typography>

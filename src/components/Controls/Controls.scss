@@ -7,10 +7,9 @@ $text-line-width: 80px;
 $text-font-size: 14px;
 $text-line-height: 15px;
 
-$log-line-height: 14px;
-$log-line-width: 120px;
-$log-font-size: 12px;
-$log-line-height: 13px;
+$log-line-width: 150px;
+$log-line-height: 15px;
+$log-font-size: 14px;
 
 $icon-button-size: 35px;
 
@@ -95,7 +94,7 @@ $icon-button-size: 35px;
 	bottom: calc(env(safe-area-inset-bottom));
 	right: calc(env(safe-area-inset-right));
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	align-items: flex-end;
 	justify-content: flex-start;
 	z-index: 10;
@@ -114,10 +113,10 @@ ul {
 	list-style-type: circle;
 	max-height: 65vw;
 	width: 250px;
+	padding-left: 20px;
 	display: flex;
 	flex-direction: column;
 	overflow-y: scroll;
-	padding-left: 20px;
 	li {
 		color: rgb(100, 100, 100);
 		&.pay {
@@ -127,4 +126,65 @@ ul {
 			color: rgb(30, 30, 30);
 		}
 	}
+}
+
+.log-box-container {
+	transform-origin: bottom right;
+	transform: rotate(90deg) translateY($icon-button-size);
+	&.expanded {
+		transform: rotate(90deg) translateY(4 * $icon-button-size);
+	}
+}
+
+.log-box {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	text-align: end;
+	height: $icon-button-size;
+	width: $log-line-width;
+	overflow-y: scroll;
+	scroll-behavior: smooth;
+	transition: 200ms;
+	font-size: $log-font-size;
+	$log-line-height: $log-line-height;
+	&.expanded {
+		height: 4 * $icon-button-size;
+		border: 1px solid grey;
+		border-radius: 5px;
+		background-color: $color-background;
+		align-items: flex-start;
+		text-align: start;
+		padding-left: 5px;
+	}
+	.log {
+		color: rgb(100, 100, 100);
+		&.pay {
+			color: rgb(0, 100, 10);
+		}
+		&.turn {
+			color: rgb(30, 30, 30);
+		}
+	}
+}
+
+.move-enter {
+	opacity: 0;
+	transform: translate(0, 0);
+}
+
+.move-enter-active {
+	opacity: 1;
+	transform: translate(0, $log-line-height);
+	transition: 5000ms ease;
+}
+
+.move-exit {
+	opacity: 1;
+	transform: translate(0, -$log-line-height);
+}
+
+.move-exit-active {
+	opacity: 0.01;
+	transform: translate(0, -$log-line-height);
 }

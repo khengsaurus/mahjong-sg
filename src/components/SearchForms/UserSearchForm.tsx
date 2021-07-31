@@ -65,8 +65,7 @@ const UserSearchForm: React.FC = () => {
 	const markup: JSX.Element = (
 		<div className="search-form-container">
 			<List>
-				{/* <ListItem> */}
-				<div className="search-box">
+				<ListItem className="search-box list-item">
 					<TextField
 						label={players.length < 4 ? 'Find user' : 'Players selected'}
 						size="small"
@@ -98,33 +97,30 @@ const UserSearchForm: React.FC = () => {
 							}
 						}}
 					/>
-				</div>
-				{/* </ListItem> */}
-				<Collapse in={showOptions} timeout={300} unmountOnExit>
-					<List disablePadding>
-						{foundUsers.length > 0 &&
-							foundUsers.map(foundUser => {
-								if (user && user.id !== foundUser.id && notSelected(foundUser)) {
-									return (
-										<ListItem
-											className="list-item"
-											button
-											key={foundUser.id}
-											onClick={() => {
-												handleSelect(foundUser);
-											}}
-										>
-											<ListItemText primary={foundUser.username} />
-											<ListItemIcon>
-												<FaceIcon />
-											</ListItemIcon>
-										</ListItem>
-									);
-								} else {
-									return null;
-								}
-							})}
-					</List>
+				</ListItem>
+				<Collapse in={showOptions} timeout={300} unmountOnExit className="search-box list-item">
+					{foundUsers.length > 0 &&
+						foundUsers.map(foundUser => {
+							if (user && user.id !== foundUser.id && notSelected(foundUser)) {
+								return (
+									<ListItem
+										className="user list-item"
+										button
+										key={foundUser.id}
+										onClick={() => {
+											handleSelect(foundUser);
+										}}
+									>
+										<ListItemText primary={foundUser.username} />
+										<ListItemIcon style={{ justifyContent: 'flex-end', paddingRight: '3px' }}>
+											<FaceIcon />
+										</ListItemIcon>
+									</ListItem>
+								);
+							} else {
+								return null;
+							}
+						})}
 				</Collapse>
 			</List>
 		</div>

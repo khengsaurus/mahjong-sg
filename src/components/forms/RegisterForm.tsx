@@ -33,6 +33,7 @@ const RegisterForm: React.FC = () => {
 					<br></br>
 					<br></br>
 					<Button
+						autoFocus
 						variant="outlined"
 						disabled={values.username.trim() === '' || values.password.trim() === ''}
 						type="submit"

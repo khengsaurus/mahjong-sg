@@ -45,7 +45,7 @@ import _无 from './tiles/无.svg';
 import _白板 from './tiles/白板.svg';
 import _红中 from './tiles/红中.svg';
 import _西 from './tiles/西.svg';
-import dice from './symbols/dice.svg';
+// import dice from './symbols/dice.svg';
 
 export default function getTileSrc(card: string): string {
 	switch (card) {

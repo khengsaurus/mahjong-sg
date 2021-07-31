@@ -44,14 +44,18 @@ $main-padding: 2px;
 
 .main {
 	position: absolute;
+	// top: 0;
+	// left: 0;
+	// height: 100%;
+	// width: 100%;
 	top: calc(env(safe-area-inset-top));
 	left: calc(env(safe-area-inset-left));
 	bottom: calc(env(safe-area-inset-bottom));
 	right: calc(env(safe-area-inset-right));
-	height: auto;
-	width: auto;
-	// height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-	// width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
+	// height: auto;
+	// width: auto;
+	height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
 	// padding-top: calc(env(safe-area-inset-top));
 	// padding-left: calc(env(safe-area-inset-left));
 	// padding-bottom: calc(env(safe-area-inset-bottom));
@@ -72,7 +76,9 @@ $main-padding: 2px;
 }
 
 .list-item {
+	align-self: center;
 	height: 30px;
+	padding: 0 !important;
 }
 
 @keyframes linear-gradient {

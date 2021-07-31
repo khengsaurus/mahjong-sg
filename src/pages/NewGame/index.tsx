@@ -9,12 +9,10 @@ import UserSearchForm from '../../components/SearchForms/UserSearchForm';
 import { User } from '../../Models/User';
 import FBService from '../../service/FirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { setGame } from '../../util/store/actions';
 import Login from '../Login';
 import './NewGame.scss';
 
 const NewGame = () => {
-	const dispatch = useDispatch();
 	const [startedGame, setStartedGame] = useState(false);
 	const { user, validateJWT, players, setPlayers, setGameId } = useContext(AppContext);
 
@@ -65,14 +63,22 @@ const NewGame = () => {
 							players.length > 0 &&
 							players.map(player => {
 								return player ? (
-									<ListItem className="list-item" key={player.id}>
+									<ListItem className="user list-item" key={player.id}>
 										<ListItemText primary={player.username} />
 										{player.username === user.username ? (
-											<IconButton color="primary" disabled={true}>
+											<IconButton
+												color="primary"
+												disabled={true}
+												style={{ justifyContent: 'flex-end', paddingRight: '3px' }}
+											>
 												<MoodIcon />
 											</IconButton>
 										) : (
-											<IconButton color="primary" onClick={() => handleRemovePlayer(player)}>
+											<IconButton
+												color="primary"
+												onClick={() => handleRemovePlayer(player)}
+												style={{ justifyContent: 'flex-end', paddingRight: '3px' }}
+											>
 												<ClearIcon />
 											</IconButton>
 										)}
