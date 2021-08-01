@@ -4,6 +4,7 @@ import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
+import './playerComponentsLarge.scss';
 
 const LeftPlayer = (props: PlayerComponentProps) => {
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);

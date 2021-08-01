@@ -1,4 +1,4 @@
-// Color refs
+/*-------------------- Colors --------------------*/
 $light-brown: rgb(215, 205, 190);
 $dark-brown: rgb(150, 125, 95);
 $gold: #d4af37;
@@ -8,7 +8,7 @@ $grey-light: rgb(170, 170, 170);
 $grey-standard: grey;
 $grey-dark: rgb(100, 100, 100);
 
-// Color vars
+/*-------------------- Color vars --------------------*/
 $color-background: $light-brown;
 $color-grey-text: $grey-standard;
 $color-detail: $dark-purple-blue;
@@ -25,57 +25,60 @@ $log-dark: rgb(30, 30, 30);
 $panel-segment-width: 200px;
 $wind-font-size: 60px;
 
-// Tile Sizes
-// Medium
+/*-------------------- Tile sizes --------------------*/
 $tile-border-px: 1px;
-$tile-padding: 1px;
-$hidden-tile-height: 9px;
-$hidden-tile-width: 6px;
-$shown-tile-height: 32px;
-$shown-tile-width: 22px;
 
-$self-hidden-tile-height: 46px;
-$self-hidden-tile-width: 32px;
-
-// Large
-// $tile-border-px: 1px;
-// $tile-padding: 3px;
-// $hidden-tile-height: 12px;
-// $hidden-tile-width: 8px;
-// $shown-tile-height: 39px;
-// $shown-tile-width: 27px;
-
-// $self-hidden-tile-height: 52px;
-// $self-hidden-tile-width: 37px;
-
-// Controls & logs
 // Medium
-$icon-button-size: 35px;
-$button-width: 45px;
-$button-height: 55px;
+$tile-padding-medium: 1px;
+$hidden-tile-height-medium: 9px;
+$hidden-tile-width-medium: 6px;
+$shown-tile-height-medium: 32px;
+$shown-tile-width-medium: 22px;
 
-$text-line-height: 16px;
-$text-line-width: 80px;
-$text-font-size: 14px;
-$text-line-height: 15px;
-
-$log-line-width: 250px;
-$log-line-height: 15px;
-$log-font-size: 14px;
+$self-hidden-tile-height-medium: 46px;
+$self-hidden-tile-width-medium: 32px;
 
 // Large
-// $icon-button-size: 38px;
-// $button-width: 50px;
-// $button-height: 62px;
+$tile-padding-large: 3px;
+$hidden-tile-height-large: 12px;
+$hidden-tile-width-large: 8px;
+$shown-tile-height-large: 39px;
+$shown-tile-width-large: 27px;
 
-// $text-line-height: 17px;
-// $text-line-width: 80px;
-// $text-font-size: 15px;
-// $text-line-height: 16px;
+$self-hidden-tile-height-large: 53px;
+$self-hidden-tile-width-large: 37px;
 
-// $log-line-width: 260px;
-// $log-line-height: 16px;
-// $log-font-size: 15px;
+/*-------------------- Controls & logs --------------------*/
+// Medium
+$icon-button-size-medium: 35px;
+$button-width-medium: 45px;
+$button-height-medium: 55px;
+
+$text-line-width-medium: 80px;
+$text-font-size-medium: 14px;
+$text-line-height-medium: 15px;
+
+$log-line-width-medium: 250px;
+$log-line-height-medium: 15px;
+$log-font-size-medium: 14px;
+
+// Large
+$icon-button-size-large: 38px;
+$button-width-large: 50px;
+$button-height-large: 62px;
+
+$text-line-width-large: 80px;
+$text-font-size-large: 17px;
+$text-line-height-large: 18px;
+
+$log-line-width-large: 260px;
+$log-line-height-large: 17px;
+$log-font-size-large: 16px;
+
+/*-------------------- Transform --------------------*/
+$rotate-simple-90: rotate(90deg);
+$transform-rotate: rotate(90deg) translateX(-22%);
+$rotate-simple-180: rotate(180deg);
 
 @mixin default-border {
 	border: 1px solid $color-border;

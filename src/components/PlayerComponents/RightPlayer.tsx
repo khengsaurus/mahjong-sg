@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from 'react';
 import getTileSrc from '../../images';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
+import './playerComponentsLarge.scss';
 
 const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack } = props;
