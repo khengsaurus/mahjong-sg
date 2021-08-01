@@ -17,7 +17,7 @@ $rotate-simple-180: rotate(180deg);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
-		padding: 1px 0;
+		padding: $tile-padding 0;
 		// max-height: $hidden-tile-height;
 		&.unused {
 			flex-flow: column wrap;
@@ -44,9 +44,8 @@ $rotate-simple-180: rotate(180deg);
 	.horizontal-tile-hidden {
 		height: $hidden-tile-height;
 		width: $hidden-tile-width;
-		background-color: $tile-back-color;
-		border: $tile-border-px solid rgb(65, 65, 65);
-		border-radius: 1px;
+		background-color: $color-tile-back;
+		@include default-tile-border;
 	}
 
 	.horizontal-tiles-shown {
@@ -65,21 +64,18 @@ $rotate-simple-180: rotate(180deg);
 		.horizontal-tile-shown {
 			height: $shown-tile-height;
 			width: $shown-tile-width;
-			border-radius: 8%;
-			background: $tile-front-color;
+			border-radius: 4%;
+			background: $color-tile-front;
 
 			&.animate-flower {
 				transition: 200ms;
-				border-radius: 8%;
-				background: $linear-gradient-multi;
-				background-size: 400% 400%;
-				animation: linear-gradient 4s ease infinite;
+				@include default-flower;
 			}
 
 			&.animal {
-				height: $shown-tile-height - 2px;
-				width: $shown-tile-width - 2px;
-				border: $tile-border-px solid black;
+				height: $shown-tile-height - (2 * $tile-border-px);
+				width: $shown-tile-width - (2 * $tile-border-px);
+				@include default-tile-border;
 			}
 		}
 	}
@@ -90,7 +86,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: flex-start;
 		align-self: center;
 		width: 9 * $shown-tile-width;
-		padding: 1px 0;
+		padding: $tile-padding 0;
 
 		&.bottom {
 			transform: $rotate-simple-180;
@@ -99,8 +95,8 @@ $rotate-simple-180: rotate(180deg);
 		.discarded-tile {
 			height: $shown-tile-height;
 			width: $shown-tile-width;
-			border-radius: 8%;
-			background: $tile-front-color;
+			border-radius: 4%;
+			background: $color-tile-front;
 		}
 	}
 }
@@ -118,7 +114,7 @@ $rotate-simple-180: rotate(180deg);
 	.vertical-tiles-hidden {
 		display: flex;
 		flex-direction: column;
-		padding: 0 1px;
+		padding: 0 $tile-padding;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
 			max-width: (2 * $hidden-tile-height) + (4 * $tile-border-px);
@@ -142,9 +138,8 @@ $rotate-simple-180: rotate(180deg);
 	.vertical-tile-hidden {
 		width: $hidden-tile-height;
 		height: $hidden-tile-width;
-		border: $tile-border-px solid rgb(65, 65, 65);
-		border-radius: 8%;
-		background-color: $tile-back-color;
+		background-color: $color-tile-back;
+		@include default-tile-border;
 	}
 
 	.vertical-tiles-shown {
@@ -153,7 +148,7 @@ $rotate-simple-180: rotate(180deg);
 		justify-content: center;
 		max-height: 22 * ($shown-tile-width + (2 * $tile-border-px));
 		max-width: $shown-tile-height;
-		padding: 0 1px;
+		padding: 0 $tile-padding;
 
 		.vertical-tile-shown {
 			height: $shown-tile-width;
@@ -164,27 +159,23 @@ $rotate-simple-180: rotate(180deg);
 	.vertical-tile-shown-bg {
 		height: $shown-tile-height;
 		width: $shown-tile-width;
-		border-radius: 8%;
+		border-radius: 4%;
 		transform: $transform-rotate;
-		background-color: $tile-front-color;
+		background-color: $color-tile-front;
 		align-self: flex-start;
 
 		&.animate-flower {
 			transition: 200ms;
-			background: $linear-gradient-multi;
-			background-size: 400% 400%;
-			animation: linear-gradient 4s ease infinite;
+			@include default-flower;
 		}
 
 		&.animal {
-			height: $shown-tile-height - 2px;
-			width: $shown-tile-width - 2px;
-			border: $tile-border-px solid black;
+			height: $shown-tile-height - (2 * $tile-border-px);
+			width: $shown-tile-width - (2 * $tile-border-px);
+			@include default-tile-border;
 			&.self {
-				// height: $self-hidden-tile-height - 2px;
-				// width: $self-hidden-tile-width - 2px;
-				height: $shown-tile-height - 2px;
-				width: $shown-tile-width - 2px;
+				height: $shown-tile-height - (2 * $tile-border-px);
+				width: $shown-tile-width - (2 * $tile-border-px);
 			}
 		}
 	}
@@ -194,7 +185,7 @@ $rotate-simple-180: rotate(180deg);
 		flex-flow: column wrap;
 		justify-content: flex-start;
 		height: 12 * $shown-tile-width;
-		padding: 0 1px;
+		padding: 0 $tile-padding;
 
 		&.right {
 			justify-content: flex-start;
@@ -204,8 +195,8 @@ $rotate-simple-180: rotate(180deg);
 		.discarded-tile {
 			height: $shown-tile-width;
 			width: $shown-tile-height;
-			border-radius: 8%;
-			background: $tile-front-color;
+			border-radius: 4%;
+			background: $color-tile-front;
 		}
 	}
 
@@ -220,24 +211,15 @@ $rotate-simple-180: rotate(180deg);
 
 			&.unselected {
 				transition: 200ms;
-				background: $tile-front-color;
-				border-radius: 8%;
+				background: $color-tile-front;
+				border-radius: 4%;
 			}
 
 			&.selected {
 				transform: translateX(15%);
 				transition: 200ms;
-				border-radius: 8%;
-				background: linear-gradient(
-					135deg,
-					$tile-front-color,
-					$tile-front-color,
-					$tile-front-color,
-					#d2bc85,
-					#c49c36
-				);
-				background-size: 600% 600%;
-				animation: linear-gradient 3s ease infinite;
+				border-radius: 4%;
+				@include default-selected;
 			}
 		}
 

@@ -15,7 +15,6 @@
 		margin: 10px 0;
 		width: 250px;
 		overflow: scroll;
-		border: 1px solid grey;
-		border-radius: 5px;
+		@include default-border;
 	}
 }

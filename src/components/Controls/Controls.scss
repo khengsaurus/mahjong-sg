@@ -1,17 +1,4 @@
 @import '../../App.scss';
-$button-width: 45px;
-$button-height: 55px;
-
-$text-line-height: 16px;
-$text-line-width: 80px;
-$text-font-size: 14px;
-$text-line-height: 15px;
-
-$log-line-width: 250px;
-$log-line-height: 15px;
-$log-font-size: 14px;
-
-$icon-button-size: 35px;
 
 .top-right-controls {
 	position: absolute;
@@ -44,7 +31,7 @@ $icon-button-size: 35px;
 		width: $text-line-width;
 		margin: 5px -2px !important;
 		font-size: $text-font-size;
-		color: grey;
+		color: $log-grey;
 		line-height: $text-line-height;
 	}
 }
@@ -58,7 +45,6 @@ $icon-button-size: 35px;
 	height: 2 * $button-height;
 	width: 2 * $button-width;
 	display: flex;
-	// flex-direction: row;
 	flex-flow: column wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
@@ -141,20 +127,19 @@ $icon-button-size: 35px;
 	$log-line-height: $log-line-height;
 	&.expanded {
 		height: 4 * $icon-button-size;
-		border: 1px solid grey;
-		border-radius: 5px;
 		background-color: $color-background;
 		align-items: flex-start;
 		text-align: start;
 		padding-left: 5px;
+		@include default-border;
 	}
 	.log {
-		color: rgb(100, 100, 100);
+		color: $log-grey;
 		&.pay {
-			color: rgb(0, 100, 10);
+			color: $log-green;
 		}
 		&.turn {
-			color: rgb(30, 30, 30);
+			color: $log-dark;
 		}
 	}
 }

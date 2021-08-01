@@ -1,46 +1,104 @@
-$navbar-height: 60px;
-$sidebar-width: 200px;
-$color-navbar: #242526;
-
-$color-message-sent-bg: #007bd3;
-$color-message-sent-text: white;
-$color-message-received-bg: rgb(190, 190, 190);
-$color-message-received-text: black;
-$color-grey-text: grey;
-$color-detail: rgb(88, 101, 144);
-$color-borders: rgb(170, 170, 170);
-
+// Color refs
 $light-brown: rgb(215, 205, 190);
 $dark-brown: rgb(150, 125, 95);
 $gold: #d4af37;
 $light-gold: rgb(220, 190, 150);
+$dark-purple-blue: rgb(88, 101, 144);
+$grey-light: rgb(170, 170, 170);
+$grey-standard: grey;
+$grey-dark: rgb(100, 100, 100);
 
+// Color vars
 $color-background: $light-brown;
-$tile-back-color: teal;
-$tile-front-color: rgb(220, 220, 220);
+$color-grey-text: $grey-standard;
+$color-detail: $dark-purple-blue;
+$color-tile-back: teal;
+$color-tile-front: rgb(220, 220, 220);
+$color-tile-border: rgb(40, 40, 40);
+$color-wind-font: $grey-light;
+$color-border: $grey-standard;
 
+$log-grey: $grey-standard;
+$log-green: rgb(0, 100, 10);
+$log-dark: rgb(30, 30, 30);
+
+$panel-segment-width: 200px;
+$wind-font-size: 60px;
+
+// Tile Sizes
+// Medium
+$tile-border-px: 1px;
+$tile-padding: 1px;
 $hidden-tile-height: 9px;
 $hidden-tile-width: 6px;
 $shown-tile-height: 32px;
 $shown-tile-width: 22px;
-$tile-border-px: 1px;
-$button-border-px: 1px;
-
-// $self-hidden-tile-height: 50px;
-// $self-hidden-tile-width: 35px;
 
 $self-hidden-tile-height: 46px;
 $self-hidden-tile-width: 32px;
 
-// $flower-highlight: #9ba6bd;
-$flower-highlight: #df9a94;
-// $hidden-tile-height: 10px;
-// $hidden-tile-width: 6px;
-// $shown-tile-height: 36px;
-// $shown-tile-width: 25px;
+// Large
+// $tile-border-px: 1px;
+// $tile-padding: 3px;
+// $hidden-tile-height: 12px;
+// $hidden-tile-width: 8px;
+// $shown-tile-height: 39px;
+// $shown-tile-width: 27px;
 
-$panel-segment-width: 200px;
-$main-padding: 2px;
+// $self-hidden-tile-height: 52px;
+// $self-hidden-tile-width: 37px;
+
+// Controls & logs
+// Medium
+$icon-button-size: 35px;
+$button-width: 45px;
+$button-height: 55px;
+
+$text-line-height: 16px;
+$text-line-width: 80px;
+$text-font-size: 14px;
+$text-line-height: 15px;
+
+$log-line-width: 250px;
+$log-line-height: 15px;
+$log-font-size: 14px;
+
+// Large
+// $icon-button-size: 38px;
+// $button-width: 50px;
+// $button-height: 62px;
+
+// $text-line-height: 17px;
+// $text-line-width: 80px;
+// $text-font-size: 15px;
+// $text-line-height: 16px;
+
+// $log-line-width: 260px;
+// $log-line-height: 16px;
+// $log-font-size: 15px;
+
+@mixin default-border {
+	border: 1px solid $color-border;
+	border-radius: 4px;
+}
+
+@mixin default-tile-border {
+	border: $tile-border-px solid $color-tile-border;
+	border-radius: 4%;
+}
+
+@mixin default-selected {
+	background: linear-gradient(135deg, $color-tile-front, $color-tile-front, $color-tile-front, #d2bc85, #c49c36);
+	background-size: 600% 600%;
+	animation: linear-gradient 3s ease infinite;
+}
+
+@mixin default-flower {
+	border-radius: 4%;
+	background: $linear-gradient-multi;
+	background-size: 400% 400%;
+	animation: linear-gradient 4s ease infinite;
+}
 
 .main {
 	position: absolute;

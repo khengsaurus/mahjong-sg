@@ -49,7 +49,6 @@ export const AppContextProvider = (props: any) => {
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function validateJWT() {
-		// setLoading(true);
 		let token = localStorage.getItem('jwt');
 		if (!FBService.userAuthenticated()) {
 			history.push('/');
@@ -61,13 +60,10 @@ export const AppContextProvider = (props: any) => {
 				await login(user1);
 			}
 		}
-		// setLoading(false);
 	}
 
 	async function login(user: User) {
-		// setLoading(true);
 		const token = await jwt.sign(userToObj(user), secretKey, {
-			// expiresIn: 1800, // 30mins
 			algorithm: 'HS256'
 		});
 		localStorage.setItem('jwt', token);
@@ -79,7 +75,6 @@ export const AppContextProvider = (props: any) => {
 		}
 		setPlayers([user]);
 		setUser(user);
-		// setLoading(false);
 	}
 
 	function deleteAllCookies() {
