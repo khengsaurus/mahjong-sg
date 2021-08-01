@@ -404,7 +404,7 @@ export class Game {
 
 	nextPlayerMove() {
 		this.whoseMove = this.findRight(this.whoseMove);
-		this.newLog(`${this.players[this.whoseMove].username}'s move`);
+		this.newLog(`${this.players[this.whoseMove].username}'s turn`);
 	}
 
 	repr(): any[] {
@@ -455,6 +455,7 @@ export class Game {
 		this.distributeTiles();
 		this.hu = [];
 		this.draw = false;
+		this.newLog(`${this.players[this.dealer].username}'s turn - to throw`);
 	}
 
 	/**

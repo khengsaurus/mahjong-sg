@@ -5,16 +5,12 @@ import './Controls.scss';
 interface LogBoxProps {
 	logs: string[];
 	expanded: boolean;
+	scroll: () => void;
 }
 
 const LogBox = (props: LogBoxProps) => {
-	const { logs, expanded } = props;
+	const { logs, expanded, scroll } = props;
 	const logRef = useRef<string[]>([]);
-
-	function scrollToBottom() {
-		var logsList = document.getElementById('logs');
-		logsList.scrollTop = logsList.scrollHeight + 10;
-	}
 
 	useEffect(() => {
 		logs.forEach(log => {
@@ -22,10 +18,7 @@ const LogBox = (props: LogBoxProps) => {
 				logRef.current = [...logRef.current, log];
 			}
 		});
-	}, [logs]);
-
-	useEffect(() => {
-		scrollToBottom();
+		scroll();
 	}, [logs, expanded]);
 
 	return (
@@ -36,7 +29,7 @@ const LogBox = (props: LogBoxProps) => {
 						<CSSTransition key={index} timeout={250} classNames="move">
 							<div
 								id={`${index}`}
-								className={log.includes('paid') ? 'log pay' : log.includes('move') ? 'log turn' : 'log'}
+								className={log.includes('paid') ? 'log pay' : log.includes('turn') ? 'log turn' : 'log'}
 							>
 								{log}
 							</div>

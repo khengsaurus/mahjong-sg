@@ -17,26 +17,30 @@ $wind-font-color: #a2a2a2;
 .top-player-container {
 	position: absolute;
 	width: 100%;
-	top: calc(env(safe-area-inset-top));
+	top: 0;
+	margin-top: calc(env(safe-area-inset-top));
 	z-index: 0;
 }
 
 .right-player-container {
 	position: absolute;
-	right: calc(env(safe-area-inset-right));
+	right: 0;
+	margin-right: calc(env(safe-area-inset-right));
 	z-index: 1;
 }
 
 .bottom-player-container {
 	position: absolute;
 	width: 100%;
-	bottom: calc(env(safe-area-inset-bottom));
+	bottom: 0;
+	margin-bottom: calc(env(safe-area-inset-bottom));
 	z-index: 2;
 }
 
 .self-container {
 	position: absolute;
-	left: calc(env(safe-area-inset-left));
+	left: 0;
+	margin-left: calc(env(safe-area-inset-left));
 	z-index: 3;
 }
 

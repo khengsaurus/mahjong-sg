@@ -7,7 +7,7 @@ $text-line-width: 80px;
 $text-font-size: 14px;
 $text-line-height: 15px;
 
-$log-line-width: 150px;
+$log-line-width: 250px;
 $log-line-height: 15px;
 $log-font-size: 14px;
 
@@ -15,15 +15,19 @@ $icon-button-size: 35px;
 
 .top-right-controls {
 	position: absolute;
-	top: calc(env(safe-area-inset-top));
-	right: calc(env(safe-area-inset-right));
-	height: 3 * $icon-button-size;
-	width: 3 * $icon-button-size;
+	top: 0;
+	right: 0;
+	margin-top: calc(env(safe-area-inset-top));
+	margin-right: calc(env(safe-area-inset-right));
 	display: flex;
-	flex-flow: column wrap-reverse;
-	align-items: flex-end;
+	flex-flow: row-reverse;
+	align-items: flex-start;
 	justify-content: flex-start;
 	z-index: 10;
+	.buttons {
+		display: flex;
+		flex-direction: column;
+	}
 	.icon-button {
 		width: $icon-button-size;
 		height: $icon-button-size;
@@ -47,8 +51,10 @@ $icon-button-size: 35px;
 
 .top-left-controls {
 	position: absolute;
-	top: calc(env(safe-area-inset-top));
-	left: calc(env(safe-area-inset-left));
+	top: 0;
+	left: 0;
+	margin-top: calc(env(safe-area-inset-top));
+	margin-left: calc(env(safe-area-inset-left));
 	height: 2 * $button-height;
 	width: 2 * $button-width;
 	display: flex;
@@ -70,8 +76,10 @@ $icon-button-size: 35px;
 
 .bottom-left-controls {
 	position: absolute;
-	bottom: calc(env(safe-area-inset-bottom));
-	left: calc(env(safe-area-inset-left));
+	left: 0;
+	bottom: 0;
+	margin-left: calc(env(safe-area-inset-left));
+	margin-bottom: calc(env(safe-area-inset-bottom));
 	height: 2 * $button-height;
 	width: 2 * $button-width;
 	display: flex;
@@ -91,8 +99,10 @@ $icon-button-size: 35px;
 
 .bottom-right-controls {
 	position: absolute;
-	bottom: calc(env(safe-area-inset-bottom));
-	right: calc(env(safe-area-inset-right));
+	right: 0;
+	bottom: 0;
+	margin-right: calc(env(safe-area-inset-right));
+	margin-bottom: calc(env(safe-area-inset-bottom));
 	display: flex;
 	flex-direction: column-reverse;
 	align-items: flex-end;
@@ -106,25 +116,6 @@ $icon-button-size: 35px;
 		width: $icon-button-size;
 		height: $icon-button-size;
 		transform: rotate(90deg);
-	}
-}
-
-ul {
-	list-style-type: circle;
-	max-height: 65vw;
-	width: 250px;
-	padding-left: 20px;
-	display: flex;
-	flex-direction: column;
-	overflow-y: scroll;
-	li {
-		color: rgb(100, 100, 100);
-		&.pay {
-			color: rgb(0, 100, 10);
-		}
-		&.turn {
-			color: rgb(30, 30, 30);
-		}
 	}
 }
 
@@ -142,7 +133,7 @@ ul {
 	align-items: flex-end;
 	text-align: end;
 	height: $icon-button-size;
-	width: $log-line-width;
+	max-width: $log-line-width;
 	overflow-y: scroll;
 	scroll-behavior: smooth;
 	transition: 200ms;

@@ -236,16 +236,34 @@ const Controls = (props: ControlsProps) => {
 		}
 	}
 
+	function scrollToBottom() {
+		try {
+			let logsList = document.getElementById('logs');
+			logsList.scrollTop = logsList.scrollHeight + 10;
+		} catch (err) {
+			console.log(`Div with id 'log-list' not found`);
+		}
+	}
+
+	function handleShowLogs() {
+		setShowLogs(!showLogs);
+		setTimeout(function () {
+			scrollToBottom();
+		}, 200);
+	}
+
 	return game && player ? (
 		<div className="main transparent">
 			<div className="top-right-controls">
 				<>
-					<IconButton className="icon-button" size="small" onClick={goHome}>
-						<HomeIcon />
-					</IconButton>
-					<IconButton className="icon-button" size="small">
-						<SettingsIcon />
-					</IconButton>
+					<div className="buttons">
+						<IconButton className="icon-button" size="small" onClick={goHome}>
+							<HomeIcon />
+						</IconButton>
+						<IconButton className="icon-button" size="small">
+							<SettingsIcon />
+						</IconButton>
+					</div>
 					<div className="text-container">
 						{`Dealer: ${game.players[game.dealer].username}`}
 						<br></br>
@@ -319,20 +337,20 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
-					// onClick={() => {
-					// 	setOkToShow(!okToShow);
-					// }}
+					onClick={() => {
+						setOkToShow(!okToShow);
+					}}
 					// onClick={e => {
 					// 	e.preventDefault();
 					// 	game.newLog(`Test: ${Math.random()}`);
 					// 	FBService.updateGame(game);
 					// }}
-					onTouchStart={() => {
-						setOkToShow(true);
-					}}
-					onTouchEnd={() => {
-						setOkToShow(false);
-					}}
+					// onTouchStart={() => {
+					// 	setOkToShow(true);
+					// }}
+					// onTouchEnd={() => {
+					// 	setOkToShow(false);
+					// }}
 				>
 					<p>{`Show`}</p>
 				</Button>
@@ -349,19 +367,14 @@ const Controls = (props: ControlsProps) => {
 					>
 						<MonetizationOnIcon />
 					</IconButton>
-					<IconButton
-						className="icon-button"
-						size="small"
-						onClick={() => {
-							setShowLogs(!showLogs);
-						}}
-					>
+					<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
 						<SubjectIcon />
 					</IconButton>
 					<div className={showLogs ? `log-box-container expanded` : `log-box-container`}>
 						<LogBox
 							expanded={showLogs}
 							logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
+							scroll={scrollToBottom}
 						/>
 					</div>
 				</>
