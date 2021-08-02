@@ -10,7 +10,7 @@ import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
-import FBService from '../../service/FirebaseService';
+import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { setGame, setPlayer } from '../../util/store/actions';
 import { typeCheckGame } from '../../util/utilFns';

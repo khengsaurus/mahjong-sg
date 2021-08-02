@@ -16,7 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
-import FBService from '../../service/FirebaseService';
+import FBService from '../../service/MyFirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
 import './Controls.scss';
 

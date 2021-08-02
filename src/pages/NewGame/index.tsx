@@ -2,12 +2,11 @@ import { Button, IconButton, List, ListItem, ListItemText, Typography } from '@m
 import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
 import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
 import { User } from '../../Models/User';
-import FBService from '../../service/FirebaseService';
+import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
 import './NewGame.scss';

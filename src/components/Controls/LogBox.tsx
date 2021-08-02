@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Controls.scss';
 
@@ -10,6 +10,7 @@ interface LogBoxProps {
 
 const LogBox = (props: LogBoxProps) => {
 	const { logs, expanded, scroll } = props;
+	const [displayLogs, setDisplayLogs] = useState<string[]>([]);
 	const logRef = useRef<string[]>([]);
 
 	useEffect(() => {
@@ -18,13 +19,17 @@ const LogBox = (props: LogBoxProps) => {
 				logRef.current = [...logRef.current, log];
 			}
 		});
+		setDisplayLogs(logRef.current);
+	}, [logs]);
+
+	useEffect(() => {
 		scroll();
-	}, [logs, expanded]);
+	}, [displayLogs]);
 
 	return (
 		<TransitionGroup className={expanded ? 'log-box expanded' : 'log-box'} id="logs">
-			{logRef.current.length > 0 &&
-				logRef.current.map((log: string, index) => {
+			{displayLogs.length > 0 &&
+				displayLogs.map((log: string, index) => {
 					return (
 						<CSSTransition key={index} timeout={250} classNames="move">
 							<div

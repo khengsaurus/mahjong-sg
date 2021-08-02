@@ -5,7 +5,7 @@ import LoginForm from '../../components/Forms/LoginForm';
 import RegisterForm from '../../components/Forms/RegisterForm';
 import RegisterWithGoogleForm from '../../components/Forms/RegisterWithGoogleForm';
 import { User } from '../../Models/User';
-import FBService from '../../service/FirebaseService';
+import FBService from '../../service/MyFirebaseService';
 import { attemptLoginByEmail } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 import './Login.scss';
@@ -56,6 +56,7 @@ const Login: React.FC = () => {
 			<Button
 				variant="outlined"
 				onClick={() => {
+					setShowRegister(false);
 					setRefuseEmail(false);
 				}}
 			>

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
-import FBService from '../../service/FirebaseService';
+import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { search, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';

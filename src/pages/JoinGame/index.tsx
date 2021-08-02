@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import { Game } from '../../Models/Game';
-import FBService from '../../service/FirebaseService';
+import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { formatDateToDay, typeCheckGameRepr } from '../../util/utilFns';
 import Login from '../Login';
