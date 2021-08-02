@@ -7,14 +7,10 @@ import './playerComponents.scss';
 import './playerComponentsLarge.scss';
 
 const LeftPlayer = (props: PlayerComponentProps) => {
-	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const { player, dealer, hasFront, hasBack } = props;
+	const { selectedTiles, setSelectedTiles, handSize, tilesSize } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
-
-	useEffect(() => {
-		console.log('Rendering left component');
-	});
 
 	function selectTile(tile: Tile) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
@@ -25,8 +21,8 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 	}
 
 	return (
-		<div className="column-section">
-			<div className={`self-hidden-tiles`}>
+		<div className={`column-section-${tilesSize}`}>
+			<div className={`self-hidden-tiles-${handSize}`}>
 				{player.hiddenTiles &&
 					player.hiddenTiles.map((tile: Tile, index: number) => {
 						return (

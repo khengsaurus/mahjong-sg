@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.row-section {
+.row-section-medium {
 	display: flex;
 	flex-direction: column;
 	padding: 0 5px;
@@ -96,7 +96,7 @@
 	}
 }
 
-.column-section {
+.column-section-medium {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -196,7 +196,7 @@
 	}
 }
 
-.self-hidden-tiles {
+.self-hidden-tiles-medium {
 	display: flex;
 	flex-direction: column;
 	z-index: 20;

@@ -1,21 +1,19 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import React, { useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import getTileSrc from '../../images';
+import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
 import './playerComponentsLarge.scss';
 
 const BottomPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack } = props;
+	const { tilesSize } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
-	useEffect(() => {
-		console.log('Rendering bottom component');
-	});
-
 	return (
-		<div className="row-section bottom">
+		<div className={`row-section-${tilesSize} bottom`}>
 			<div className="horizontal-tiles-hidden">
 				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return <div key={`bottom-hidden-tile${index}`} className="horizontal-tile-hidden" />;

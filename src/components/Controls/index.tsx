@@ -14,9 +14,11 @@ import { AppContext } from '../../util/hooks/AppContext';
 import { search, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './Controls.scss';
+import './ControlsLarge.scss';
 import HuDialog from './HuDialog';
 import LogBox from './LogBox';
 import PaymentWindow from './PaymentWindow';
+import SettingsWindow from './SettingsWindow';
 
 interface ControlsProps {
 	playerSeat?: number;
@@ -24,7 +26,7 @@ interface ControlsProps {
 
 const Controls = (props: ControlsProps) => {
 	const { playerSeat } = props;
-	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const [meld, setMeld] = useState<Tile[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
@@ -33,6 +35,7 @@ const Controls = (props: ControlsProps) => {
 	const [okToShow, setOkToShow] = useState(false);
 	const [showPay, setShowPay] = useState(false);
 	const [showLogs, setShowLogs] = useState(false);
+	const [showSettings, setShowSettings] = useState(false);
 
 	const game: Game = useSelector((state: Store) => state.game);
 	const player: User = useSelector((state: Store) => state.player);
@@ -114,7 +117,7 @@ const Controls = (props: ControlsProps) => {
 		} else {
 			game.newLog(`${player.username} chi'd ${game.lastThrown.card}`);
 		}
-		// game.lastThrown = {};
+		game.lastThrown = {};
 		game.takenTile = true;
 		handleAction(game);
 	}
@@ -161,6 +164,7 @@ const Controls = (props: ControlsProps) => {
 				drawnTile = buHua();
 			}
 			game.takenTile = true;
+			game.newLog(`${player.username} drew a tile`);
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -254,13 +258,19 @@ const Controls = (props: ControlsProps) => {
 
 	return game && player ? (
 		<div className="main transparent">
-			<div className="top-right-controls">
+			<div className={`top-right-controls-${controlsSize}`}>
 				<>
 					<div className="buttons">
 						<IconButton className="icon-button" size="small" onClick={goHome}>
 							<HomeIcon />
 						</IconButton>
-						<IconButton className="icon-button" size="small">
+						<IconButton
+							className="icon-button"
+							size="small"
+							onClick={() => {
+								setShowSettings(!showSettings);
+							}}
+						>
 							<SettingsIcon />
 						</IconButton>
 					</div>
@@ -276,7 +286,7 @@ const Controls = (props: ControlsProps) => {
 				</>
 			</div>
 
-			<div className="top-left-controls">
+			<div className={`top-left-controls-${controlsSize}`}>
 				<Button
 					className="button"
 					variant="outlined"
@@ -314,7 +324,7 @@ const Controls = (props: ControlsProps) => {
 				)}
 			</div>
 
-			<div className="bottom-left-controls">
+			<div className={`bottom-left-controls-${controlsSize}`}>
 				<Button
 					className="button"
 					variant="outlined"
@@ -324,7 +334,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat || !game.takenTile}
 				>
-					<p>Throw</p>
+					<p>{`Throw`}</p>
 				</Button>
 				<Button
 					className="button"
@@ -356,13 +366,13 @@ const Controls = (props: ControlsProps) => {
 				</Button>
 			</div>
 
-			<div className="bottom-right-controls">
+			<div className={`bottom-right-controls-${controlsSize}`}>
 				<>
 					<IconButton
 						className="icon-button"
 						size="small"
 						onClick={() => {
-							setShowPay(true);
+							setShowPay(!showPay);
 						}}
 					>
 						<MonetizationOnIcon />
@@ -370,7 +380,7 @@ const Controls = (props: ControlsProps) => {
 					<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
 						<SubjectIcon />
 					</IconButton>
-					<div className={showLogs ? `log-box-container expanded` : `log-box-container`}>
+					<div className={`log-box-container-${controlsSize}${showLogs ? ` expanded` : ``}`}>
 						<LogBox
 							expanded={showLogs}
 							logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
@@ -386,6 +396,14 @@ const Controls = (props: ControlsProps) => {
 					show={showPay}
 					onClose={() => {
 						setShowPay(false);
+					}}
+				/>
+			)}
+			{showSettings && (
+				<SettingsWindow
+					show={showSettings}
+					onClose={() => {
+						setShowSettings(false);
 					}}
 				/>
 			)}

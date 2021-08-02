@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { AppContext } from '../../util/hooks/AppContext';
 import './Controls.scss';
+import './ControlsLarge.scss';
 
 interface LogBoxProps {
 	logs: string[];
@@ -9,6 +11,7 @@ interface LogBoxProps {
 }
 
 const LogBox = (props: LogBoxProps) => {
+	const { controlsSize } = useContext(AppContext);
 	const { logs, expanded, scroll } = props;
 	const [displayLogs, setDisplayLogs] = useState<string[]>([]);
 	const logRef = useRef<string[]>([]);
@@ -27,7 +30,7 @@ const LogBox = (props: LogBoxProps) => {
 	}, [displayLogs]);
 
 	return (
-		<TransitionGroup className={expanded ? 'log-box expanded' : 'log-box'} id="logs">
+		<TransitionGroup className={`log-box-${controlsSize}${expanded ? ` expanded` : ``}`} id="logs">
 			{displayLogs.length > 0 &&
 				displayLogs.map((log: string, index) => {
 					return (

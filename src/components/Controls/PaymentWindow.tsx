@@ -81,7 +81,7 @@ const PaymentWindow = (props: Props) => {
 						<Typography variant="subtitle1">{'Send money'}</Typography>
 						<br></br>
 						<FormControl component="fieldset">
-							<FormLabel component="legend">{`Recipient: `}</FormLabel>
+							<FormLabel component="legend">{`To: `}</FormLabel>
 							<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
 								{game.players.map((otherPlayer: User, index: number) => {
 									return otherPlayer.username !== playerUsername ? (

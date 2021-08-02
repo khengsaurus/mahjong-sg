@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.top-right-controls {
+.top-right-controls-large {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -9,7 +9,7 @@
 	display: flex;
 	flex-flow: row-reverse;
 	align-items: flex-start;
-	justify-content: flex-start;
+	justify-content: flex-end;
 	z-index: 10;
 	.buttons {
 		display: flex;
@@ -26,9 +26,9 @@
 		justify-content: flex-end;
 		text-align: start;
 		transform-origin: top left;
-		transform: translateX($text-line-width-large) rotate(90deg);
+		transform: translateX(1.5 * $text-line-width-large) rotate(90deg);
 		height: $text-line-height-large * 4;
-		width: $text-line-width-large;
+		width: 1.5 * $text-line-width-large;
 		margin: 5px -2px !important;
 		font-size: $text-font-size-large;
 		color: $log-grey;
@@ -36,7 +36,7 @@
 	}
 }
 
-.top-left-controls {
+.top-left-controls-large {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -60,7 +60,7 @@
 	}
 }
 
-.bottom-left-controls {
+.bottom-left-controls-large {
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -83,7 +83,7 @@
 	}
 }
 
-.bottom-right-controls {
+.bottom-right-controls-large {
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -105,7 +105,7 @@
 	}
 }
 
-.log-box-container {
+.log-box-container-large {
 	transform-origin: bottom right;
 	transform: rotate(90deg) translateY($icon-button-size-large);
 	&.expanded {
@@ -113,7 +113,7 @@
 	}
 }
 
-.log-box {
+.log-box-large {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
@@ -142,25 +142,4 @@
 			color: $log-dark;
 		}
 	}
-}
-
-.move-enter {
-	opacity: 0;
-	transform: translate(0, 0);
-}
-
-.move-enter-active {
-	opacity: 1;
-	transform: translate(0, $log-line-height-large);
-	transition: 5000ms ease;
-}
-
-.move-exit {
-	opacity: 1;
-	transform: translate(0, -$log-line-height-large);
-}
-
-.move-exit-active {
-	opacity: 0.01;
-	transform: translate(0, -$log-line-height-large);
 }

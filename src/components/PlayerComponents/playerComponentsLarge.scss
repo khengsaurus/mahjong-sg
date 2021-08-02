@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.row-section.large {
+.row-section-large {
 	display: flex;
 	flex-direction: column;
 	padding: 0 5px;
@@ -96,7 +96,7 @@
 	}
 }
 
-.column-section.large {
+.column-section-large {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -194,34 +194,34 @@
 			background: $color-tile-front;
 		}
 	}
+}
 
-	.self-hidden-tiles {
-		display: flex;
-		flex-direction: column;
-		z-index: 20;
+.self-hidden-tiles-large {
+	display: flex;
+	flex-direction: column;
+	z-index: 20;
 
-		.self-hidden-tile {
-			height: $self-hidden-tile-width-large;
-			width: $self-hidden-tile-height-large;
+	.self-hidden-tile {
+		height: $self-hidden-tile-width-large;
+		width: $self-hidden-tile-height-large;
 
-			&.unselected {
-				transition: 200ms;
-				background: $color-tile-front;
-				border-radius: 4%;
-			}
-
-			&.selected {
-				transform: translateX(15%);
-				transition: 200ms;
-				border-radius: 4%;
-				@include default-selected;
-			}
+		&.unselected {
+			transition: 200ms;
+			background: $color-tile-front;
+			border-radius: 4%;
 		}
 
-		.self-hidden-tile-bg {
-			height: $self-hidden-tile-height-large;
-			width: $self-hidden-tile-width-large;
-			transform: $transform-rotate;
+		&.selected {
+			transform: translateX(15%);
+			transition: 200ms;
+			border-radius: 4%;
+			@include default-selected;
 		}
+	}
+
+	.self-hidden-tile-bg {
+		height: $self-hidden-tile-height-large;
+		width: $self-hidden-tile-width-large;
+		transform: $transform-rotate;
 	}
 }

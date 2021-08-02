@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.top-right-controls {
+.top-right-controls-medium {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -26,9 +26,9 @@
 		justify-content: flex-end;
 		text-align: start;
 		transform-origin: top left;
-		transform: translateX($text-line-width-medium) rotate(90deg);
+		transform: translateX(1.5 * $text-line-width-medium) rotate(90deg);
 		height: $text-line-height-medium * 4;
-		width: $text-line-width-medium;
+		width: 1.5 * $text-line-width-medium;
 		margin: 5px -2px !important;
 		font-size: $text-font-size-medium;
 		color: $log-grey;
@@ -36,7 +36,7 @@
 	}
 }
 
-.top-left-controls {
+.top-left-controls-medium {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -60,7 +60,7 @@
 	}
 }
 
-.bottom-left-controls {
+.bottom-left-controls-medium {
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -83,7 +83,7 @@
 	}
 }
 
-.bottom-right-controls {
+.bottom-right-controls-medium {
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -105,7 +105,7 @@
 	}
 }
 
-.log-box-container {
+.log-box-container-medium {
 	transform-origin: bottom right;
 	transform: rotate(90deg) translateY($icon-button-size-medium);
 	&.expanded {
@@ -113,7 +113,7 @@
 	}
 }
 
-.log-box {
+.log-box-medium {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;

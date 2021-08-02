@@ -1,21 +1,19 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import React, { useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import getTileSrc from '../../images';
+import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';
 import './playerComponents.scss';
 import './playerComponentsLarge.scss';
 
 const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack } = props;
+	const { tilesSize } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
 
-	useEffect(() => {
-		console.log('Rendering right component');
-	});
-
 	return (
-		<div className="column-section right">
+		<div className={`column-section-${tilesSize} right`}>
 			<div className="vertical-tiles-hidden">
 				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return <div key={`right-hidden-tile${index}`} className="vertical-tile-hidden" />;
