@@ -27,6 +27,7 @@ export function gameToObj(game: Game) {
 		thrownBy: game.thrownBy || 0,
 		thrownTile: game.thrownTile || false,
 		takenTile: game.takenTile || false,
+		takenBy: game.takenBy || 0,
 		uncachedAction: game.uncachedAction || false,
 		hu: game.hu || [],
 		draw: game.draw || false,
@@ -55,6 +56,7 @@ export class Game {
 	thrownBy?: number;
 	thrownTile?: boolean;
 	takenTile?: boolean;
+	takenBy?: number;
 	uncachedAction?: boolean;
 	hu?: number[];
 	draw?: boolean;
@@ -81,6 +83,7 @@ export class Game {
 		thrownBy?: number,
 		thrownTile?: boolean,
 		takenTile?: boolean,
+		takenBy?: number,
 		uncachedAction?: boolean,
 		hu?: number[],
 		draw?: boolean,
@@ -106,6 +109,7 @@ export class Game {
 		this.thrownBy = thrownBy;
 		this.thrownTile = thrownTile;
 		this.takenTile = takenTile;
+		this.takenBy = takenBy;
 		this.uncachedAction = uncachedAction;
 		this.hu = hu;
 		this.draw = draw;
@@ -113,7 +117,6 @@ export class Game {
 	}
 
 	newLog(log: string) {
-		console.log(log);
 		this.logs = [...this.logs, log];
 	}
 
@@ -387,7 +390,8 @@ export class Game {
 			player.shownTiles = sortTiles(player.shownTiles);
 		});
 		this.takenTile = true;
-		this.tiles = this.tiles.slice(0, 20);
+		this.takenBy = this.dealer;
+		// this.tiles = this.tiles.slice(0, 20);
 	}
 
 	buHua() {
@@ -450,11 +454,13 @@ export class Game {
 		this.lastThrown = {};
 		this.thrownBy = 0;
 		this.thrownTile = false;
+		this.takenTile = false;
+		this.takenBy = 0;
 		this.uncachedAction = false;
-		this.tiles = this.generateShuffledTiles();
-		this.distributeTiles();
 		this.hu = [];
 		this.draw = false;
+		this.tiles = this.generateShuffledTiles();
+		this.distributeTiles();
 		this.newLog(`${this.players[this.dealer].username}'s turn - to throw`);
 	}
 

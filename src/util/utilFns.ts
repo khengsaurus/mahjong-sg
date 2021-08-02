@@ -159,6 +159,7 @@ export const typeCheckGame = (doc: firebase.firestore.DocumentData | any): Game 
 		Number(ref.thrownBy),
 		Boolean(ref.thrownTile),
 		Boolean(ref.takenTile),
+		Number(ref.takenBy),
 		Boolean(ref.uncachedAction),
 		ref.hu,
 		Boolean(ref.draw),

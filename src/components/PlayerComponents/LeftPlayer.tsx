@@ -1,5 +1,5 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateUnusedTiles } from '../../util/utilFns';

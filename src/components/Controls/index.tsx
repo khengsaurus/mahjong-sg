@@ -119,6 +119,7 @@ const Controls = (props: ControlsProps) => {
 		}
 		game.lastThrown = {};
 		game.takenTile = true;
+		game.takenBy = playerSeat;
 		handleAction(game);
 	}
 
@@ -164,6 +165,7 @@ const Controls = (props: ControlsProps) => {
 				drawnTile = buHua();
 			}
 			game.takenTile = true;
+			game.takenBy = playerSeat;
 			game.newLog(`${player.username} drew a tile`);
 		} else {
 			game.draw = true;
@@ -203,7 +205,13 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		player.shownTiles = [...player.shownTiles, ...player.hiddenTiles];
+		if (!game.takenTile && !_.isEmpty(game.lastThrown)) {
+			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles, game.lastThrown];
+		} else {
+			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles];
+		}
+		// TODO: remove lastThrown from the board, then add it back
+		// TODO: if(game.takenTile && !_.isEmpty(game.lastThrown)){// zimo}
 		player.hiddenTiles = [];
 		handleAction(game);
 	}
@@ -211,11 +219,11 @@ const Controls = (props: ControlsProps) => {
 	function hideHuDialog() {
 		setDeclareHu(false);
 		let hiddenTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === false;
+			return tile.show === false || tile.id !== game.lastThrown.id;
 		});
 		player.hiddenTiles = hiddenTiles;
 		player.shownTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === true;
+			return tile.show === true && tile.id !== game.lastThrown.id;
 		});
 		handleAction(game);
 	}

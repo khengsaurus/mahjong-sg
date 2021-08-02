@@ -216,9 +216,9 @@ class FirebaseService {
 						thrownBy: 0,
 						thrownTile: false,
 						takenTile: true,
+						takenBy: 0,
 						uncachedAction: false,
 						hu: [],
-						initRound: [true, false],
 						draw: false,
 						logs: []
 					})
@@ -245,6 +245,7 @@ class FirebaseService {
 							null,
 							false,
 							true,
+							0,
 							false,
 							[],
 							false,

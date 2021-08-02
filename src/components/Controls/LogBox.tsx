@@ -33,16 +33,19 @@ const LogBox = (props: LogBoxProps) => {
 		<TransitionGroup className={`log-box-${controlsSize}${expanded ? ` expanded` : ``}`} id="logs">
 			{displayLogs.length > 0 &&
 				displayLogs.map((log: string, index) => {
-					return (
-						<CSSTransition key={index} timeout={250} classNames="move">
-							<div
-								id={`${index}`}
-								className={log.includes('sent') ? 'log pay' : log.includes('turn') ? 'log turn' : 'log'}
-							>
-								{log}
-							</div>
-						</CSSTransition>
-					);
+					if ((displayLogs.length > 20 && index > displayLogs.length - 20) || displayLogs.length <= 20)
+						return (
+							<CSSTransition key={index} timeout={250} classNames="move">
+								<div
+									id={`${index}`}
+									className={
+										log.includes('sent') ? 'log pay' : log.includes('turn') ? 'log turn' : 'log'
+									}
+								>
+									{log}
+								</div>
+							</CSSTransition>
+						);
 				})}
 		</TransitionGroup>
 	);

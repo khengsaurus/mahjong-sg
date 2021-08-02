@@ -27,16 +27,12 @@ const SettingsWindow = (props: Props) => {
 		handSize,
 		setHandSize,
 		tilesSize,
-		setTilesSize,
-		tileBackColor,
-		setTileBackColor,
-		backgroundColor,
-		setBackgroundColor
+		setTilesSize
+		// tileBackColor, setTileBackColor, backgroundColor, setBackgroundColor
 	} = useContext(AppContext);
 	const { onClose, show } = props;
-	const [amount, setAmount] = useState(0);
 	const sizes = ['medium', 'large'];
-	const colors = ['brown', 'teal', 'maroon', 'black', 'grey'];
+	// const colors = ['brown', 'teal', 'maroon', 'black', 'grey'];
 
 	const handleControlsSizeSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setControlsSize((event.target as HTMLInputElement).value);
