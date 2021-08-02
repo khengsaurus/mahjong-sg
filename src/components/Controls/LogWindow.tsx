@@ -41,7 +41,7 @@ const LogWindow = (props: Props) => {
 										<li
 											key={index}
 											className={
-												log.includes('paid') ? 'pay' : log.includes('move') ? 'turn' : ''
+												log.includes('sent') ? 'pay' : log.includes('move') ? 'turn' : ''
 											}
 										>
 											{log}

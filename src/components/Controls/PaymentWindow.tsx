@@ -1,17 +1,17 @@
 import {
+	Button,
 	Dialog,
+	DialogActions,
 	DialogContent,
 	FormControl,
 	FormControlLabel,
+	FormLabel,
 	IconButton,
-	InputAdornment,
 	Radio,
 	RadioGroup,
-	TextField,
 	ThemeProvider,
 	Typography
 } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { Game } from '../../Models/Game';
@@ -30,37 +30,28 @@ interface Props {
 const PaymentWindow = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
 	let playerUsername = game.players[playerSeat].username;
-	const [recipientIndex, setRecipientIndex] = useState(0);
-	const [amountString, setAmountString] = useState('');
+	const [recipientIndex, setRecipientIndex] = useState<number>(null);
 	const [amount, setAmount] = useState(0);
-	const [errorMsg, setErrorMsg] = useState('');
+
+	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4];
 
 	async function pay() {
 		game.players[playerSeat].balance -= amount;
 		game.players[recipientIndex].balance += amount;
-		game.newLog(`${game.players[playerSeat].username} paid ${game.players[recipientIndex].username} $${amount}`);
+		game.newLog(`${game.players[playerSeat].username} sent ${game.players[recipientIndex].username} $${amount}`);
 		FBService.updateGame(game);
-		setAmountString('');
 		setAmount(0);
 		setTimeout(function () {
 			onClose();
 		}, 1000);
 	}
 
-	function handleSetAmount(amount: string) {
-		setAmountString(amount);
-		if (amount.trim() === '') {
-			setErrorMsg('');
-		} else if (!Number(amount) || Number(amount) <= 0) {
-			setErrorMsg('Enter a valid amount');
-		} else {
-			setErrorMsg('');
-			setAmount(Math.round(Number(amount) * 100) / 100);
-		}
-	}
-
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleSelectRecipient = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setRecipientIndex(parseInt((event.target as HTMLInputElement).value));
+	};
+
+	const handleSelectAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setAmount(Number((event.target as HTMLInputElement).value));
 	};
 
 	return (
@@ -72,6 +63,10 @@ const PaymentWindow = (props: Props) => {
 					onClose={onClose}
 					PaperProps={{
 						style: {
+							maxWidth: '400px',
+							minWidth: '400px',
+							maxHeight: '300px',
+							minHeight: '300px',
 							backgroundColor: 'rgb(220, 190, 150)'
 						}
 					}}
@@ -84,8 +79,10 @@ const PaymentWindow = (props: Props) => {
 							<CloseIcon />
 						</IconButton>
 						<Typography variant="subtitle1">{'Send money'}</Typography>
+						<br></br>
 						<FormControl component="fieldset">
-							<RadioGroup aria-label="gender" name="To:" value={recipientIndex} onChange={handleChange}>
+							<FormLabel component="legend">{`Recipient: `}</FormLabel>
+							<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
 								{game.players.map((otherPlayer: User, index: number) => {
 									return otherPlayer.username !== playerUsername ? (
 										<FormControlLabel
@@ -99,44 +96,35 @@ const PaymentWindow = (props: Props) => {
 							</RadioGroup>
 						</FormControl>
 						<br></br>
-						<TextField
-							label="Amount"
-							error={errorMsg !== '' && amountString.trim() !== ''}
-							helperText={errorMsg}
-							value={amountString}
-							onChange={e => {
-								handleSetAmount(e.target.value);
-							}}
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">
-										<IconButton
-											color="primary"
-											component="span"
-											size="small"
-											onClick={pay}
-											disabled={
-												amountString.trim() === '' || !Number(amountString) || amount <= 0
-											}
-										>
-											<ChevronRightIcon />
-										</IconButton>
-									</InputAdornment>
-								)
-							}}
-						/>
-						{/* <br></br>
+						<br></br>
+						<FormControl component="fieldset">
+							<FormLabel component="legend">{`Amount: `}</FormLabel>
+							<RadioGroup row value={amount} onChange={handleSelectAmount}>
+								{amounts.map((amount: number, index: number) => {
+									return (
+										<FormControlLabel
+											key={index}
+											value={amount}
+											control={<Radio color="primary" />}
+											label={`$${amount}`}
+											labelPlacement="end"
+										/>
+									);
+								})}
+							</RadioGroup>
+						</FormControl>
+						<br></br>
 						<DialogActions>
 							<Button
 								variant="outlined"
 								size="small"
 								onClick={pay}
-								disabled={amountString.trim() === '' || !Number(amountString) || amount <= 0}
+								disabled={!recipientIndex || !amount}
 								autoFocus
 							>
-								Send
+								{`Send`}
 							</Button>
-						</DialogActions> */}
+						</DialogActions>
 					</DialogContent>
 				</Dialog>
 			</ThemeProvider>

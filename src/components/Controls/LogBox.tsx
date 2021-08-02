@@ -34,7 +34,7 @@ const LogBox = (props: LogBoxProps) => {
 						<CSSTransition key={index} timeout={250} classNames="move">
 							<div
 								id={`${index}`}
-								className={log.includes('paid') ? 'log pay' : log.includes('turn') ? 'log turn' : 'log'}
+								className={log.includes('sent') ? 'log pay' : log.includes('turn') ? 'log turn' : 'log'}
 							>
 								{log}
 							</div>

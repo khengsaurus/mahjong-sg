@@ -9,7 +9,7 @@ interface AppContextInt {
 	user: User;
 	userEmail: string;
 	setUserEmail: (email: string) => void;
-	loading: boolean;
+	// loading: boolean;
 	login: (user: User) => void;
 	logout: () => void;
 	validateJWT: () => void;
@@ -19,13 +19,24 @@ interface AppContextInt {
 	setGameId: (gameId: string) => void;
 	selectedTiles?: Tile[];
 	setSelectedTiles: (tiles: Tile[]) => void;
+	//
+	handSize?: string;
+	setHandSize?: (handSize: string) => void;
+	tilesSize?: string;
+	setTilesSize?: (tilesSize: string) => void;
+	controlsSize?: string;
+	setControlsSize?: (controlsSize: string) => void;
+	backgroundColor?: string;
+	setBackgroundColor?: (backgroundColor: string) => void;
+	tileBackColor?: string;
+	setTileBackColor?: (tileBackColor: string) => void;
 }
 
 const initialContext: AppContextInt = {
 	user: null,
 	userEmail: '',
 	setUserEmail: (email: string) => {},
-	loading: false,
+	// loading: false,
 	login: (user: User) => {},
 	logout: () => {},
 	validateJWT: async () => {},
@@ -34,7 +45,18 @@ const initialContext: AppContextInt = {
 	gameId: null,
 	setGameId: (gameId: string) => {},
 	selectedTiles: [],
-	setSelectedTiles: (tiles: Tile[]) => {}
+	setSelectedTiles: (tiles: Tile[]) => {},
+	//
+	handSize: 'm',
+	setHandSize: (handSize: string) => {},
+	tilesSize: 'm',
+	setTilesSize: (tilesSize: string) => {},
+	controlsSize: 'm',
+	setControlsSize: (controlsSize: string) => {},
+	backgroundColor: 'brown',
+	setBackgroundColor: (backgroundColor: string) => {},
+	tileBackColor: 'teal',
+	setTileBackColor: (tileBackColor: string) => {}
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -45,7 +67,12 @@ export const AppContextProvider = (props: any) => {
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
-	const [loading, setLoading] = useState(false);
+	// const [loading, setLoading] = useState(false);
+	const [handSize, setHandSize] = useState('m');
+	const [tilesSize, setTilesSize] = useState('m');
+	const [controlsSize, setControlsSize] = useState('m');
+	const [backgroundColor, setBackgroundColor] = useState('brown');
+	const [tileBackColor, setTileBackColor] = useState('teal');
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function validateJWT() {
@@ -54,7 +81,7 @@ export const AppContextProvider = (props: any) => {
 			history.push('/');
 		}
 		if (token) {
-			var decoded = await jwt.verify(token, secretKey);
+			var decoded = jwt.verify(token, secretKey);
 			let user1: User = typeCheckUser(1, decoded);
 			if (!user || user.username !== user1.username) {
 				await login(user1);
@@ -63,7 +90,7 @@ export const AppContextProvider = (props: any) => {
 	}
 
 	async function login(user: User) {
-		const token = await jwt.sign(userToObj(user), secretKey, {
+		const token = jwt.sign(userToObj(user), secretKey, {
 			algorithm: 'HS256'
 		});
 		localStorage.setItem('jwt', token);
@@ -105,7 +132,7 @@ export const AppContextProvider = (props: any) => {
 				user,
 				userEmail,
 				setUserEmail,
-				loading,
+				// loading,
 				login,
 				logout,
 				validateJWT,
@@ -114,7 +141,18 @@ export const AppContextProvider = (props: any) => {
 				gameId,
 				setGameId,
 				selectedTiles,
-				setSelectedTiles
+				setSelectedTiles,
+				//
+				handSize,
+				setHandSize,
+				tilesSize,
+				setTilesSize,
+				controlsSize,
+				setControlsSize,
+				backgroundColor,
+				setBackgroundColor,
+				tileBackColor,
+				setTileBackColor
 			}}
 			{...props}
 		/>

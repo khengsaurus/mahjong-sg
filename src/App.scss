@@ -81,7 +81,7 @@ $transform-rotate: rotate(90deg) translateX(-22%);
 $rotate-simple-180: rotate(180deg);
 
 @mixin default-border {
-	border: 1px solid $color-border;
+	border: $tile-border-px solid $color-border;
 	border-radius: 4px;
 }
 

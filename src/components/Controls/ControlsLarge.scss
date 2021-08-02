@@ -16,8 +16,8 @@
 		flex-direction: column;
 	}
 	.icon-button {
-		width: $icon-button-size-medium;
-		height: $icon-button-size-medium;
+		width: $icon-button-size-large;
+		height: $icon-button-size-large;
 		transform: rotate(90deg);
 	}
 	.text-container {
@@ -26,13 +26,13 @@
 		justify-content: flex-end;
 		text-align: start;
 		transform-origin: top left;
-		transform: translateX($text-line-width-medium) rotate(90deg);
-		height: $text-line-height-medium * 4;
-		width: $text-line-width-medium;
+		transform: translateX($text-line-width-large) rotate(90deg);
+		height: $text-line-height-large * 4;
+		width: $text-line-width-large;
 		margin: 5px -2px !important;
-		font-size: $text-font-size-medium;
+		font-size: $text-font-size-large;
 		color: $log-grey;
-		line-height: $text-line-height-medium;
+		line-height: $text-line-height-large;
 	}
 }
 
@@ -42,18 +42,18 @@
 	left: 0;
 	margin-top: calc(env(safe-area-inset-top));
 	margin-left: calc(env(safe-area-inset-left));
-	height: 2 * $button-height-medium;
-	width: 2 * $button-width-medium;
+	height: 2 * $button-height-large;
+	width: 2 * $button-width-large;
 	display: flex;
 	flex-flow: column wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
 	z-index: 10;
 	.button {
-		max-width: $button-width-medium;
-		max-height: $button-height-medium;
-		min-width: $button-width-medium;
-		min-height: $button-height-medium;
+		max-width: $button-width-large;
+		max-height: $button-height-large;
+		min-width: $button-width-large;
+		min-height: $button-height-large;
 		p {
 			transform: rotate(90deg);
 		}
@@ -66,17 +66,17 @@
 	bottom: 0;
 	margin-left: calc(env(safe-area-inset-left));
 	margin-bottom: calc(env(safe-area-inset-bottom));
-	height: 2 * $button-height-medium;
-	width: 2 * $button-width-medium;
+	height: 2 * $button-height-large;
+	width: 2 * $button-width-large;
 	display: flex;
 	flex-flow: column-reverse wrap;
 	align-items: flex-start;
 	z-index: 10;
 	.button {
-		max-width: $button-width-medium;
-		max-height: $button-height-medium;
-		min-width: $button-width-medium;
-		min-height: $button-height-medium;
+		max-width: $button-width-large;
+		max-height: $button-height-large;
+		min-width: $button-width-large;
+		min-height: $button-height-large;
 		p {
 			transform: rotate(90deg);
 		}
@@ -99,17 +99,17 @@
 		flex-direction: column;
 	}
 	.icon-button {
-		width: $icon-button-size-medium;
-		height: $icon-button-size-medium;
+		width: $icon-button-size-large;
+		height: $icon-button-size-large;
 		transform: rotate(90deg);
 	}
 }
 
 .log-box-container {
 	transform-origin: bottom right;
-	transform: rotate(90deg) translateY($icon-button-size-medium);
+	transform: rotate(90deg) translateY($icon-button-size-large);
 	&.expanded {
-		transform: rotate(90deg) translateY((4 * $icon-button-size-medium) + (2 * $tile-border-px));
+		transform: rotate(90deg) translateY((4 * $icon-button-size-large) + (2 * $tile-border-px));
 	}
 }
 
@@ -121,12 +121,12 @@
 	overflow-y: scroll;
 	scroll-behavior: smooth;
 	transition: 200ms;
-	height: $icon-button-size-medium;
-	max-width: $log-line-width-medium;
-	font-size: $log-font-size-medium;
-	$line-height: $log-line-height-medium;
+	height: $icon-button-size-large;
+	max-width: $log-line-width-large;
+	font-size: $log-font-size-large;
+	$line-height: $log-line-height-large;
 	&.expanded {
-		height: 4 * $icon-button-size-medium;
+		height: 4 * $icon-button-size-large;
 		background-color: $color-background;
 		align-items: flex-start;
 		text-align: start;
@@ -151,16 +151,16 @@
 
 .move-enter-active {
 	opacity: 1;
-	transform: translate(0, $log-line-height-medium);
+	transform: translate(0, $log-line-height-large);
 	transition: 5000ms ease;
 }
 
 .move-exit {
 	opacity: 1;
-	transform: translate(0, -$log-line-height-medium);
+	transform: translate(0, -$log-line-height-large);
 }
 
 .move-exit-active {
 	opacity: 0.01;
-	transform: translate(0, -$log-line-height-medium);
+	transform: translate(0, -$log-line-height-large);
 }
