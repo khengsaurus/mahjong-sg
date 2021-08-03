@@ -67,7 +67,8 @@ const PaymentWindow = (props: Props) => {
 							minWidth: '400px',
 							maxHeight: '300px',
 							minHeight: '300px',
-							backgroundColor: 'rgb(220, 190, 150)'
+							backgroundColor: 'rgb(215, 195, 170)',
+							overflow: 'scroll'
 						}
 					}}
 				>

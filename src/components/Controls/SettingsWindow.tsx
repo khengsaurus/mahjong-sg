@@ -57,7 +57,7 @@ const SettingsWindow = (props: Props) => {
 							minWidth: '300px',
 							maxHeight: '350px',
 							minHeight: '350px',
-							backgroundColor: 'rgb(220, 190, 150)'
+							backgroundColor: 'rgb(215, 195, 170)'
 						}
 					}}
 				>

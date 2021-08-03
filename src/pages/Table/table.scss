@@ -14,14 +14,14 @@
 .top-player-container {
 	position: absolute;
 	width: 100%;
-	top: 0;
+	top: $main-padding;
 	margin-top: calc(env(safe-area-inset-top));
 	z-index: 0;
 }
 
 .right-player-container {
 	position: absolute;
-	right: 0;
+	right: $main-padding;
 	margin-right: calc(env(safe-area-inset-right));
 	z-index: 1;
 }
@@ -29,14 +29,14 @@
 .bottom-player-container {
 	position: absolute;
 	width: 100%;
-	bottom: 0;
+	bottom: $main-padding;
 	margin-bottom: calc(env(safe-area-inset-bottom));
 	z-index: 2;
 }
 
 .self-container {
 	position: absolute;
-	left: 0;
+	left: $main-padding;
 	margin-left: calc(env(safe-area-inset-left));
 	z-index: 3;
 }

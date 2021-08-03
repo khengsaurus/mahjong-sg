@@ -63,7 +63,6 @@
 			background: $color-tile-front;
 
 			&.animate-flower {
-				transition: 200ms;
 				@include default-flower;
 			}
 
@@ -167,7 +166,6 @@
 		align-self: flex-start;
 
 		&.animate-flower {
-			transition: 200ms;
 			@include default-flower;
 		}
 

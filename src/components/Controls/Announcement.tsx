@@ -26,7 +26,7 @@ const Announcement = (props: Props) => {
 					BackdropProps={{ invisible: true }}
 					PaperProps={{
 						style: {
-							backgroundColor: 'rgb(220, 190, 150)'
+							backgroundColor: 'rgb(215, 195, 170)'
 						}
 					}}
 				>
