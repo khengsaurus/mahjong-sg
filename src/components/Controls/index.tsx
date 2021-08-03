@@ -302,7 +302,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={!canChi || game.whoseMove !== playerSeat}
 				>
-					<p>Chi</p>
+					<p>{`吃`}</p>
 				</Button>
 				<Button
 					className="button"
@@ -316,7 +316,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={!canPong && !canKang}
 				>
-					<p>{canKang ? `Kang` : `Pong`}</p>
+					<p>{canKang ? `杠` : `碰`}</p>
 				</Button>
 				{okToShow && (
 					<Button
@@ -326,7 +326,7 @@ const Controls = (props: ControlsProps) => {
 						onClick={showHuDialog}
 						disabled={!okToShow}
 					>
-						<p>{`Show`}</p>
+						<p>{`胡`}</p>
 					</Button>
 				)}
 			</div>
@@ -341,7 +341,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat || !game.takenTile}
 				>
-					<p>{`Throw`}</p>
+					<p>{`丢`}</p>
 				</Button>
 				<Button
 					className="button"
@@ -349,7 +349,7 @@ const Controls = (props: ControlsProps) => {
 					onClick={handleDraw}
 					disabled={game.whoseMove !== playerSeat || game.takenTile}
 				>
-					<p>{game.tiles.length === 15 ? `End` : `Draw`}</p>
+					<p>{game.tiles.length === 15 ? `结束` : `摸`}</p>
 				</Button>
 				<Button
 					className="button"
@@ -369,7 +369,7 @@ const Controls = (props: ControlsProps) => {
 					// 	setOkToShow(false);
 					// }}
 				>
-					<p>{`Show`}</p>
+					<p>{`开`}</p>
 				</Button>
 			</div>
 
