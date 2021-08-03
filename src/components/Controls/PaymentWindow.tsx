@@ -33,7 +33,7 @@ const PaymentWindow = (props: Props) => {
 	const [recipientIndex, setRecipientIndex] = useState<number>(null);
 	const [amount, setAmount] = useState(0);
 
-	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4];
+	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8];
 
 	async function pay() {
 		game.players[playerSeat].balance -= amount;

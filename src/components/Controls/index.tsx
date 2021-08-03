@@ -218,10 +218,9 @@ const Controls = (props: ControlsProps) => {
 
 	function hideHuDialog() {
 		setDeclareHu(false);
-		let hiddenTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === false || tile.id !== game.lastThrown.id;
+		player.hiddenTiles = player.shownTiles.filter((tile: Tile) => {
+			return tile.show === false && tile.id !== game.lastThrown.id;
 		});
-		player.hiddenTiles = hiddenTiles;
 		player.shownTiles = player.shownTiles.filter((tile: Tile) => {
 			return tile.show === true && tile.id !== game.lastThrown.id;
 		});
