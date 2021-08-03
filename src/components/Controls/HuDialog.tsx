@@ -4,11 +4,15 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
+	FormControl,
 	FormControlLabel,
+	FormLabel,
 	IconButton,
 	TextField,
 	ThemeProvider,
-	Typography
+	Typography,
+	RadioGroup,
+	Radio
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
@@ -26,41 +30,20 @@ interface Props {
 
 const HuDialog = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
-	const [taiString, setTaiString] = useState('');
-	const [tai, setTai] = useState(0);
+	const [tai, setTai] = useState<number>(null);
 	const [zimo, setZimo] = useState(false);
-	const [errorMsg, setErrorMsg] = useState('');
 
 	async function hu() {
 		game.hu = [playerSeat, tai, zimo ? 1 : 0];
 		game.flagProgress = Number(game.dealer) === playerSeat ? Boolean(false) : Boolean(true);
-		if (game.flagProgress) {
-			console.log(
-				`${game.players[playerSeat].username} hu, next dealer: ${
-					game.players[(Number(game.dealer) % 3) + 1].username
-				}`
-			);
-		} else {
-			console.log(
-				`${game.players[playerSeat].username} hu, next dealer: ${game.players[Number(game.dealer)].username}`
-			);
-		}
 		game.endRound();
 		FBService.updateGame(game);
 		onClose();
 	}
 
-	function handleSetTai(tai: string) {
-		setTaiString(tai);
-		if (tai.trim() === '') {
-			setErrorMsg('');
-		} else if (!Number(tai) || parseInt(tai) <= 0 || parseInt(tai) > 5) {
-			setErrorMsg('Please enter 1-5');
-		} else {
-			setErrorMsg('');
-			setTai(parseInt(tai));
-		}
-	}
+	const handleSetTaiNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setTai(parseInt((event.target as HTMLInputElement).value));
+	};
 
 	return (
 		<div className="main transparent">
@@ -71,6 +54,7 @@ const HuDialog = (props: Props) => {
 					onClose={onClose}
 					PaperProps={{
 						style: {
+							minWidth: '350px',
 							backgroundColor: 'rgb(215, 195, 170)'
 						}
 					}}
@@ -83,41 +67,36 @@ const HuDialog = (props: Props) => {
 							<CloseIcon />
 						</IconButton>
 						<Typography variant="h6">{'Nice!'}</Typography>
-						<TextField
-							label="Tai"
-							error={errorMsg !== '' && taiString.trim() !== ''}
-							helperText={errorMsg}
-							value={taiString}
-							onChange={e => {
-								handleSetTai(e.target.value);
-							}}
-						/>
+						<br></br>
+						<FormControl component="fieldset">
+							<FormLabel component="legend">{`台: `}</FormLabel>
+							<RadioGroup row value={tai} onChange={handleSetTaiNumber}>
+								{[1, 2, 3, 4, 5].map((tai: number) => {
+									return (
+										<FormControlLabel
+											key={tai}
+											value={tai}
+											control={<Radio color="primary" />}
+											label={tai}
+										/>
+									);
+								})}
+							</RadioGroup>
+						</FormControl>
 						<br></br>
 						<FormControlLabel
 							label="自摸"
 							control={
 								<Checkbox
-									// checked={}
 									onChange={() => {
 										setZimo(!zimo);
 									}}
+									color="primary"
 								/>
 							}
 						/>
 						<DialogActions>
-							<Button
-								variant="outlined"
-								size="small"
-								onClick={hu}
-								disabled={
-									taiString.trim() === '' ||
-									!Number(taiString) ||
-									tai <= 0 ||
-									tai > 5 ||
-									(game.hu.length === 3 && game.hu[0] !== playerSeat)
-								}
-								autoFocus
-							>
+							<Button variant="outlined" size="small" onClick={hu} disabled={!tai} autoFocus>
 								Hu
 							</Button>
 						</DialogActions>

@@ -26,6 +26,8 @@ const Announcement = (props: Props) => {
 					BackdropProps={{ invisible: true }}
 					PaperProps={{
 						style: {
+							minHeight: '120px',
+							justifyContent: 'center',
 							backgroundColor: 'rgb(215, 195, 170)'
 						}
 					}}

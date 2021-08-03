@@ -453,13 +453,13 @@ export class Game {
 		this.flagProgress = false;
 		this.whoseMove = this.dealer;
 		this.tiles = [];
-		this.frontTiles = 0;
-		this.backTiles = 0;
+		this.frontTiles = null;
+		this.backTiles = null;
 		this.lastThrown = {};
-		this.thrownBy = 0;
+		this.thrownBy = null;
 		this.thrownTile = false;
 		this.takenTile = false;
-		this.takenBy = 0;
+		this.takenBy = null;
 		this.uncachedAction = false;
 		this.hu = [];
 		this.draw = false;
@@ -473,12 +473,15 @@ export class Game {
 	 * if game is to continue => this.midRound(false), this.stage+=1, next this.dealer
 	 */
 	endRound() {
-		this.hu.length === 3 &&
-			this.newLog(
-				`${this.players[this.hu[0]].username} won with ${this.hu[1]}台${
-					this.hu[2] === 1 ? ` 自摸` : `, last tile thrown by ${this.players[this.thrownBy].username}`
-				}`
-			);
+		if (this.hu.length === 3) {
+			let huLog: string = `${this.players[this.hu[0]].username} hu with ${this.hu[1]}台`;
+			if (this.hu[2] === 1) {
+				huLog += ` 自摸`;
+			} else if (this.thrownBy && this.players[this.thrownBy].username !== this.players[this.hu[0]].username) {
+				huLog += `, last tile thrown by ${this.players[this.thrownBy].username}`;
+			}
+			this.newLog(huLog);
+		}
 		this.midRound = false;
 		this.previousStage = this.stage;
 		if (this.dealer === 3 && this.stage === 16 && this.flagProgress) {
