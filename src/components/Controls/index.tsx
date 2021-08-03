@@ -53,36 +53,42 @@ const Controls = (props: ControlsProps) => {
 	useEffect(() => {
 		if (game && player) {
 			console.log(`Controls/index - useEffect to set options called`);
-			let consideringTiles: Tile[];
-			if (selectedTiles.length === 1 || selectedTiles.length === 4) {
-				consideringTiles = selectedTiles;
-			} else if (_.isEmpty(game.lastThrown)) {
-				consideringTiles = sortTiles(selectedTiles);
+			if (game.takenTile && game.takenBy === playerSeat) {
+				setCanKang(false);
+				setCanPong(false);
+				setCanChi(false);
 			} else {
-				consideringTiles = sortTiles([...selectedTiles, game.lastThrown]);
-			}
-			setMeld(consideringTiles);
-
-			if (!game.takenTile) {
-				if (player.canKang(consideringTiles)) {
-					// can kang
-					setCanKang(true);
-					setCanPong(false);
-				} else if (player.canPong(consideringTiles)) {
-					// can pong
-					setCanKang(false);
-					setCanPong(true);
-				} else if (
-					// can chi
-					game.whoseMove === playerSeat &&
-					thrownBy === previousPlayer &&
-					player.canChi(consideringTiles)
-				) {
-					setCanChi(true);
+				let consideringTiles: Tile[];
+				if (selectedTiles.length === 1 || selectedTiles.length === 4) {
+					consideringTiles = selectedTiles;
+				} else if (_.isEmpty(game.lastThrown)) {
+					consideringTiles = sortTiles(selectedTiles);
 				} else {
-					setCanKang(false);
-					setCanPong(false);
-					setCanChi(false);
+					consideringTiles = sortTiles([...selectedTiles, game.lastThrown]);
+				}
+				setMeld(consideringTiles);
+
+				if (!game.takenTile) {
+					if (player.canKang(consideringTiles)) {
+						// can kang
+						setCanKang(true);
+						setCanPong(false);
+					} else if (player.canPong(consideringTiles)) {
+						// can pong
+						setCanKang(false);
+						setCanPong(true);
+					} else if (
+						// can chi
+						game.whoseMove === playerSeat &&
+						thrownBy === previousPlayer &&
+						player.canChi(consideringTiles)
+					) {
+						setCanChi(true);
+					} else {
+						setCanKang(false);
+						setCanPong(false);
+						setCanChi(false);
+					}
 				}
 			}
 		}
