@@ -69,7 +69,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			)}
 			<div className="discarded bottom">
 				{/* Extra discarded tiles */}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
+				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
 							key={`bottom-discarded-tile-${index}`}
@@ -88,7 +88,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 							alt="tile"
 						/>
 					);
-				})}
+				})} */}
 				{player.discardedTiles.map((tile: Tile, index: number) => {
 					let className = `discarded-tile${
 						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
