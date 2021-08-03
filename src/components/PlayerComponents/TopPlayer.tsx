@@ -1,4 +1,5 @@
 import CasinoIcon from '@material-ui/icons/Casino';
+import * as _ from 'lodash';
 import React, { useContext, useMemo } from 'react';
 import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -7,7 +8,7 @@ import './playerComponents.scss';
 import './playerComponentsLarge.scss';
 
 const TopPlayer = (props: PlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack } = props;
+	const { player, dealer, hasFront, hasBack, lastThrownTile } = props;
 	const { tilesSize } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
@@ -56,18 +57,8 @@ const TopPlayer = (props: PlayerComponentProps) => {
 				</div>
 			)}
 			<div className="discarded">
-				{player.discardedTiles.map((tile: Tile, index: number) => {
-					return (
-						<img
-							key={`top-discarded-tile-${index}`}
-							className="discarded-tile"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
-					);
-				})}
 				{/* Extra discarded tiles */}
-				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
 							key={`top-discarded-tile-${index}`}
@@ -86,7 +77,20 @@ const TopPlayer = (props: PlayerComponentProps) => {
 							alt="tile"
 						/>
 					);
-				})} */}
+				})}
+				{player.discardedTiles.map((tile: Tile, index: number) => {
+					let className = `discarded-tile${
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+					}`;
+					return (
+						<img
+							key={`top-discarded-tile-${index}`}
+							className={className}
+							src={getTileSrc(tile.card)}
+							alt="tile"
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);

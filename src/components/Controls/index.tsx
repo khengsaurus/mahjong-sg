@@ -253,7 +253,7 @@ const Controls = (props: ControlsProps) => {
 			let logsList = document.getElementById('logs');
 			logsList.scrollTop = logsList.scrollHeight + 10;
 		} catch (err) {
-			console.log(`Div with id 'log-list' not found`);
+			console.log(`Div with id 'logs' not found`);
 		}
 	}
 

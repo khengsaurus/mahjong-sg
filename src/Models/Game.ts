@@ -60,7 +60,7 @@ export class Game {
 	uncachedAction?: boolean;
 	hu?: number[];
 	draw?: boolean;
-	logs?: string[];
+	logs?: Log[];
 
 	constructor(
 		id: string,
@@ -87,7 +87,7 @@ export class Game {
 		uncachedAction?: boolean,
 		hu?: number[],
 		draw?: boolean,
-		logs?: string[]
+		logs?: Log[]
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -117,7 +117,11 @@ export class Game {
 	}
 
 	newLog(log: string) {
-		this.logs = [...this.logs, log];
+		let newLog = { msg: log, timeStamp: new Date() };
+		this.logs = [...this.logs, newLog];
+		if (this.logs.length >= 20) {
+			this.logs = this.logs.slice(-15);
+		}
 	}
 
 	shuffle(array: any[]) {

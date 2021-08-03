@@ -5,7 +5,7 @@
 	flex-direction: column;
 	padding: 0 5px;
 	justify-content: center;
-
+	align-content: center;
 	&.bottom {
 		flex-direction: column-reverse;
 	}
@@ -92,6 +92,13 @@
 			width: $shown-tile-width-medium;
 			border-radius: 4%;
 			background: $color-tile-front;
+			&.last-thrown {
+				height: 1.3 * $shown-tile-height-medium;
+				width: 1.3 * $shown-tile-width-medium;
+				transition: 200ms;
+				@include last-thrown;
+				z-index: 10;
+			}
 		}
 	}
 }
@@ -173,6 +180,13 @@
 				width: $shown-tile-width-medium - (2 * $tile-border-px);
 			}
 		}
+
+		&.last-thrown {
+			height: 1.3 * $shown-tile-height-medium;
+			width: 1.3 * $shown-tile-width-medium;
+			transition: 200ms;
+			@include last-thrown;
+		}
 	}
 
 	.discarded {
@@ -192,6 +206,12 @@
 			width: $shown-tile-height-medium;
 			border-radius: 4%;
 			background: $color-tile-front;
+			&.last-thrown {
+				height: 1.3 * $shown-tile-width-medium;
+				width: 1.3 * $shown-tile-height-medium;
+				transition: 200ms;
+				@include last-thrown;
+			}
 		}
 	}
 }

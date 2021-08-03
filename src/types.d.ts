@@ -30,6 +30,7 @@ interface PlayerComponentProps {
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
+	lastThrownTile?: Tile;
 }
 
 interface loginParams {
@@ -45,4 +46,9 @@ interface RegisterEmail {
 interface RegisterUserPass {
 	username: string;
 	password: string;
+}
+
+interface Log {
+	msg: string;
+	timeStamp: Date;
 }

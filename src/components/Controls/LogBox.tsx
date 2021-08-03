@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { AppContext } from '../../util/hooks/AppContext';
 import './Controls.scss';
 import './ControlsLarge.scss';
 
 interface LogBoxProps {
-	logs: string[];
+	logs: Log[];
 	expanded: boolean;
 	scroll: () => void;
 }
@@ -13,8 +13,8 @@ interface LogBoxProps {
 const LogBox = (props: LogBoxProps) => {
 	const { controlsSize } = useContext(AppContext);
 	const { logs, expanded, scroll } = props;
-	const [displayLogs, setDisplayLogs] = useState<string[]>([]);
-	const logRef = useRef<string[]>([]);
+	const logRef = useRef<Log[]>([]);
+	// const [displayLogs, setDisplayLogs] = useState<Log[]>([]);
 
 	useEffect(() => {
 		logs.forEach(log => {
@@ -22,31 +22,27 @@ const LogBox = (props: LogBoxProps) => {
 				logRef.current = [...logRef.current, log];
 			}
 		});
-		setDisplayLogs(logRef.current);
 	}, [logs]);
 
 	useEffect(() => {
 		scroll();
-	}, [displayLogs]);
+	}, [logs, logRef.current]);
 
 	return (
 		<TransitionGroup className={`log-box-${controlsSize}${expanded ? ` expanded` : ``}`} id="logs">
-			{displayLogs.length > 0 &&
-				displayLogs.map((log: string, index) => {
-					if ((displayLogs.length > 20 && index > displayLogs.length - 20) || displayLogs.length <= 20)
-						return (
-							<CSSTransition key={index} timeout={250} classNames="move">
-								<div
-									id={`${index}`}
-									className={
-										log.includes('sent') ? 'log pay' : log.includes('turn') ? 'log turn' : 'log'
-									}
-								>
-									{log}
-								</div>
-							</CSSTransition>
-						);
-				})}
+			{logRef.current.map((log: Log, index) => {
+				return (
+					<CSSTransition key={`${index}`} timeout={250} classNames="move">
+						<div
+							className={
+								log.msg.includes('sent') ? 'log pay' : log.msg.includes('turn') ? 'log turn' : 'log'
+							}
+						>
+							{log.msg}
+						</div>
+					</CSSTransition>
+				);
+			})}
 		</TransitionGroup>
 	);
 };
