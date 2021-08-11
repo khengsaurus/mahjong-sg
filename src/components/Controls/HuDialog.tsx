@@ -8,11 +8,10 @@ import {
 	FormControlLabel,
 	FormLabel,
 	IconButton,
-	TextField,
-	ThemeProvider,
-	Typography,
+	Radio,
 	RadioGroup,
-	Radio
+	ThemeProvider,
+	Typography
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
@@ -96,7 +95,13 @@ const HuDialog = (props: Props) => {
 							}
 						/>
 						<DialogActions>
-							<Button variant="outlined" size="small" onClick={hu} disabled={!tai} autoFocus>
+							<Button
+								variant="outlined"
+								size="small"
+								onClick={hu}
+								disabled={!tai || game.hu.length === 3}
+								autoFocus
+							>
 								Hu
 							</Button>
 						</DialogActions>

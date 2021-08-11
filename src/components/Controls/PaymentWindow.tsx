@@ -30,7 +30,7 @@ interface Props {
 const PaymentWindow = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
 	let playerUsername = game.players[playerSeat].username;
-	const [recipientIndex, setRecipientIndex] = useState<number>(null);
+	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
 
 	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8];
@@ -120,7 +120,7 @@ const PaymentWindow = (props: Props) => {
 								variant="outlined"
 								size="small"
 								onClick={pay}
-								disabled={!recipientIndex || !amount}
+								disabled={recipientIndex === 10 || !amount || amount <= 0}
 								autoFocus
 							>
 								{`Send`}

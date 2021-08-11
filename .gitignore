@@ -2,8 +2,11 @@
 /src/service/FirebaseConfig.ts
 
 #builds
+/build
 /android
 /ios
+/android 2
+/ios 2
 
 # dependencies
 /node_modules
@@ -12,9 +15,6 @@
 
 # testing
 /coverage
-
-# production
-/build
 
 # misc
 .DS_Store

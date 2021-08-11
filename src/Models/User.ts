@@ -55,8 +55,9 @@ export class User {
 	canChi(tiles: Tile[]): boolean {
 		if (
 			tiles.length === 3 &&
-			tiles[0].suit === tiles[1].suit &&
-			tiles[1].suit === tiles[2].suit &&
+			(tiles.every(tile => tile.suit === tiles[0].suit) ? true : false) &&
+			// tiles[0].suit === tiles[1].suit &&
+			// tiles[1].suit === tiles[2].suit &&
 			tiles[2].number - 1 === tiles[1].number &&
 			tiles[1].number - 1 === tiles[0].number
 		) {
@@ -70,12 +71,13 @@ export class User {
 	}
 
 	canKang(tiles: Tile[]): boolean {
-		if (tiles.length === 1) {
-			return this.pongs.includes(tiles[0].card);
+		if (tiles.length === 1 && this.pongs.includes(tiles[0].card)) {
+			return true;
 		} else if (tiles.length === 4) {
 			return tiles.every(tile => tile.card === tiles[0].card) ? true : false;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	chi(selectedTiles: Tile[]) {
@@ -103,8 +105,4 @@ export class User {
 		this.discardedTiles.push(tileToThrow);
 		return tileToThrow;
 	}
-
-	declareHu() {}
-
-	undo() {}
 }

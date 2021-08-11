@@ -217,11 +217,12 @@ export class Game {
 	}
 
 	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): Tile {
-		let flowerReceived = '';
-		let flowersReceived = ', including';
-		let receivedFlower: boolean = false;
 		let player = this.players[playerIndex];
 		let newTile: Tile;
+		let receivedFlower: boolean = false;
+		let log = `${player.username} received `;
+		let flowerReceived = '';
+		let flowersReceived = ', including';
 		if (!player.hiddenTiles) {
 			player.hiddenTiles = [];
 		}
@@ -262,7 +263,6 @@ export class Game {
 				player.hiddenTiles = [...player.hiddenTiles, newTile];
 			}
 		}
-		let log = `${player.username} received `;
 		if (n === 1 && receivedFlower) {
 			log += flowerReceived;
 		} else {

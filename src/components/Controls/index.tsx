@@ -36,6 +36,7 @@ const Controls = (props: ControlsProps) => {
 	const [showPay, setShowPay] = useState(false);
 	const [showLogs, setShowLogs] = useState(false);
 	const [showSettings, setShowSettings] = useState(false);
+	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 
 	const game: Game = useSelector((state: Store) => state.game);
 	const player: User = useSelector((state: Store) => state.player);
@@ -53,65 +54,102 @@ const Controls = (props: ControlsProps) => {
 	useEffect(() => {
 		if (game && player) {
 			console.log(`Controls/index - useEffect to set options called`);
-			if (game.takenTile && game.takenBy === playerSeat) {
+			if (game.takenTile) {
+				/**
+				 * If a tile has been taken by any player, options -> false
+				 * If not player's turn, canChi -> false
+				 */
 				setCanKang(false);
 				setCanPong(false);
 				setCanChi(false);
 			} else {
+				if (game.whoseMove !== playerSeat) {
+					setCanChi(false);
+				}
 				let consideringTiles: Tile[];
+				/**
+				 * If player selects 1/4 tiles, player is considering those tiles
+				 * If player selects 2/3 tiles, player is considering those, + last thrown if not empty
+				 */
 				if (selectedTiles.length === 1 || selectedTiles.length === 4) {
-					consideringTiles = selectedTiles;
-				} else if (_.isEmpty(game.lastThrown)) {
 					consideringTiles = sortTiles(selectedTiles);
 				} else {
-					consideringTiles = sortTiles([...selectedTiles, game.lastThrown]);
+					consideringTiles = sortTiles(
+						_.isEmpty(lastThrown) ? selectedTiles : [...selectedTiles, lastThrown]
+					);
 				}
 				setMeld(consideringTiles);
-
-				if (!game.takenTile) {
-					if (player.canKang(consideringTiles)) {
-						// can kang
-						setCanKang(true);
-						setCanPong(false);
-					} else if (player.canPong(consideringTiles)) {
-						// can pong
-						setCanKang(false);
-						setCanPong(true);
-					} else if (
-						// can chi
-						game.whoseMove === playerSeat &&
-						thrownBy === previousPlayer &&
-						player.canChi(consideringTiles)
-					) {
-						setCanChi(true);
-					} else {
-						setCanKang(false);
-						setCanPong(false);
-						setCanChi(false);
-					}
+				if (
+					/**
+					 * If player considering 4 tiles or 1 tile (which is in player's hand) -> canKang ?
+					 * Else -> canPong ?
+					 * Else -> canChi ?
+					 */
+					consideringTiles.length === 4 ||
+					(consideringTiles.length === 1 && consideringTiles[0] !== lastThrown)
+				) {
+					setCanKang(player.canKang(consideringTiles));
+					setCanPong(false);
+					setCanChi(false);
+				} else if (player.canPong(consideringTiles)) {
+					setCanKang(false);
+					setCanPong(true);
+					setCanChi(false);
+				} else if (
+					game.whoseMove === playerSeat &&
+					consideringTiles.includes(lastThrown) &&
+					thrownBy === previousPlayer
+				) {
+					setCanKang(false);
+					setCanPong(false);
+					setCanChi(player.canChi(consideringTiles));
+				} else {
+					setCanKang(false);
+					setCanPong(false);
+					setCanChi(false);
 				}
 			}
 		}
-	}, [game.lastThrown, selectedTiles]);
+	}, [lastThrown, selectedTiles]);
 
-	function handleTake(kang: boolean) {
-		game.whoseMove = playerSeat;
+	/* ----------------------------------- Take ----------------------------------- */
+
+	function takeLastThrown() {
 		game.players[thrownBy].discardedTiles = game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
 			return tile.id !== lastThrown.id;
 		});
-		console.log(game.players[thrownBy].discardedTiles);
+		// game.lastThrown = {};
+	}
+
+	function takenTile() {
+		game.takenTile = true;
+		game.takenBy = playerSeat;
+		game.newLog(`${player.username}'s turn - to throw`);
+	}
+
+	function handleTake(kang: boolean) {
+		/**
+		 * Set game.whoseMove to playerSeat in case of pong/kang
+		 * Remove lastThrown from board
+		 * Each tile in meld -> show = true
+		 * Move meld (including lastThrown) from player.hiddenTiles -> player.shownTiles
+		 *
+		 */
+		game.whoseMove = playerSeat;
+		takeLastThrown();
 		meld.forEach(tile => {
 			tile.show = true;
 		});
-		player.hiddenTiles = player.hiddenTiles.filter((tileH: Tile) => {
-			return !meld
-				.map(tileM => {
-					return tileM.id;
-				})
-				.includes(tileH.id);
+		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
+			// return !meld
+			// 	.map(tileM => {
+			// 		return tileM.id;
+			// 	})
+			// 	.includes(tileH.id);
+			return !meld.includes(tile);
 		});
 		player.shownTiles = [...player.shownTiles, ...meld];
-		if (player.canPong(meld) || player.canKang(meld)) {
+		if (player.canPong(meld) || (meld.length === 4 && player.canKang(meld))) {
 			player.pongs.push(meld[0].card);
 			if (kang) {
 				game.flagProgress = true;
@@ -121,47 +159,28 @@ const Controls = (props: ControlsProps) => {
 				game.newLog(`${player.username} pong'd ${meld[0].card}`);
 			}
 		} else {
-			game.newLog(`${player.username} chi'd ${game.lastThrown.card}`);
+			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 		}
-		game.lastThrown = {};
-		game.takenTile = true;
-		game.takenBy = playerSeat;
+		takenTile();
 		handleAction(game);
 	}
 
 	function selfKang() {
-		if (selectedTiles.length === 1 && player.canKang(selectedTiles)) {
-			let toKang = selectedTiles[0];
-			let atIndex: number = search(toKang, player.shownTiles);
-			let initLength = player.shownTiles.length;
-			player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => tile.id !== toKang.id);
-			player.shownTiles = [
-				...player.shownTiles.slice(0, atIndex),
-				toKang,
-				...player.shownTiles.slice(atIndex, initLength)
-			];
-			game.flagProgress = true;
-			buHua();
-			handleAction(game);
-		}
+		let toKang = selectedTiles[0];
+		let atIndex: number = search(toKang, player.shownTiles);
+		let initLength = player.shownTiles.length;
+		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => tile.id !== toKang.id);
+		player.shownTiles = [
+			...player.shownTiles.slice(0, atIndex),
+			toKang,
+			...player.shownTiles.slice(atIndex, initLength)
+		];
+		game.flagProgress = true;
+		buHua();
+		handleAction(game);
 	}
 
-	function buHua(): Tile {
-		let drawnTile: Tile;
-		let initNoHiddenTiles = player.hiddenTiles.length;
-		while (player.hiddenTiles.length === initNoHiddenTiles) {
-			if (game.tiles.length > 15) {
-				drawnTile = game.giveTiles(1, playerSeat, true, true);
-			} else {
-				game.newLog(`${player.username} drew a flower but cannot bu hua`);
-				game.draw = true;
-				game.endRound();
-				drawnTile = null;
-				break;
-			}
-		}
-		return drawnTile;
-	}
+	/* ----------------------------------- Draw ----------------------------------- */
 
 	function handleDraw() {
 		let drawnTile: Tile;
@@ -170,16 +189,32 @@ const Controls = (props: ControlsProps) => {
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			game.takenTile = true;
-			game.takenBy = playerSeat;
-			game.newLog(`${player.username} drew a tile`);
+			takenTile();
 		} else {
 			game.draw = true;
 			game.endRound();
 		}
-		setSelectedTiles([drawnTile]);
+		setSelectedTiles(drawnTile ? [drawnTile] : []);
 		handleAction(game);
 	}
+
+	function buHua(): Tile {
+		let drawnTile: Tile = null;
+		let initNoHiddenTiles = player.hiddenTiles.length;
+		while (player.hiddenTiles.length === initNoHiddenTiles) {
+			if (game.tiles.length > 15) {
+				drawnTile = game.giveTiles(1, playerSeat, true, true);
+			} else {
+				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
+				game.draw = true;
+				game.endRound();
+				break;
+			}
+		}
+		return drawnTile;
+	}
+
+	/* ----------------------------------- Throw ----------------------------------- */
 
 	function handleThrow(tileToThrow: Tile) {
 		tileToThrow.show = true;
@@ -209,32 +244,35 @@ const Controls = (props: ControlsProps) => {
 		FBService.updateGame(game);
 	}
 
+	/* ----------------------------------- Hu ----------------------------------- */
+
 	function showHuDialog() {
 		setDeclareHu(true);
-		if (!game.takenTile && !_.isEmpty(game.lastThrown)) {
-			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles, game.lastThrown];
+		if (!game.takenTile && !_.isEmpty(lastThrown)) {
+			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles, lastThrown];
 		} else {
 			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles];
 		}
-		// TODO: remove lastThrown from the board, then add it back
-		// TODO: if(game.takenTile && !_.isEmpty(game.lastThrown)){// zimo}
 		player.hiddenTiles = [];
 		handleAction(game);
 	}
 
 	function hideHuDialog() {
 		setDeclareHu(false);
+		returnLastThrown();
 		player.hiddenTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === false && tile.id !== game.lastThrown.id;
+			return tile.show === false && tile.id !== lastThrown.id;
 		});
 		player.shownTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === true && tile.id !== game.lastThrown.id;
+			return tile.show === true && tile.id !== lastThrown.id;
 		});
 		handleAction(game);
 	}
 
-	function goHome() {
-		history.push('/');
+	/* ----------------------------------- Util ----------------------------------- */
+
+	function returnLastThrown() {
+		game.players[thrownBy].discardedTiles = [...game.players[thrownBy].discardedTiles, lastThrown];
 	}
 
 	function playerWind(): string {
@@ -269,12 +307,36 @@ const Controls = (props: ControlsProps) => {
 		}, 200);
 	}
 
+	function setShowTimeout() {
+		setTimeoutId(
+			setTimeout(function () {
+				setOkToShow(false);
+			}, 2000)
+		);
+	}
+
+	function handleShow() {
+		if (okToShow) {
+			clearTimeout(timeoutId);
+		}
+		setOkToShow(true);
+		setShowTimeout();
+	}
+
+	/* ----------------------------------- Markup ----------------------------------- */
+
 	return game && player ? (
 		<div className="main transparent">
 			<div className={`top-right-controls-${controlsSize}`}>
 				<>
 					<div className="buttons">
-						<IconButton className="icon-button" size="small" onClick={goHome}>
+						<IconButton
+							className="icon-button"
+							size="small"
+							onClick={() => {
+								history.push('/');
+							}}
+						>
 							<HomeIcon />
 						</IconButton>
 						<IconButton
@@ -306,7 +368,7 @@ const Controls = (props: ControlsProps) => {
 					onClick={() => {
 						handleTake(false);
 					}}
-					disabled={!canChi || game.whoseMove !== playerSeat}
+					disabled={!canChi}
 				>
 					<p>{`吃`}</p>
 				</Button>
@@ -330,9 +392,9 @@ const Controls = (props: ControlsProps) => {
 						variant="outlined"
 						size="small"
 						onClick={showHuDialog}
-						disabled={!okToShow}
+						disabled={game.hu.length === 3}
 					>
-						<p>{`胡`}</p>
+						<p>{`开`}</p>
 					</Button>
 				)}
 			</div>
@@ -360,9 +422,7 @@ const Controls = (props: ControlsProps) => {
 				<Button
 					className="button"
 					variant="outlined"
-					onClick={() => {
-						setOkToShow(!okToShow);
-					}}
+					onClick={handleShow}
 					// onClick={e => {
 					// 	e.preventDefault();
 					// 	game.newLog(`Test: ${Math.random()}`);
@@ -372,10 +432,13 @@ const Controls = (props: ControlsProps) => {
 					// 	setOkToShow(true);
 					// }}
 					// onTouchEnd={() => {
-					// 	setOkToShow(false);
+					// 	setOkToShow &&
+					// 		setTimeout(function () {
+					// 			setOkToShow(false);
+					// 		}, 3000);
 					// }}
 				>
-					<p>{`开`}</p>
+					<p>{`胡`}</p>
 				</Button>
 			</div>
 
