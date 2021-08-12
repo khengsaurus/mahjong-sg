@@ -49,16 +49,16 @@ const TopPlayer = (props: PlayerComponentProps) => {
 					) : null;
 				})}
 			</div>
-			{player.unusedTiles > 0 && (
-				<div className={`horizontal-tiles-hidden unused ${frontBackTag}`}>
-					{unusedTiles.map(i => {
-						return <div key={`top-unused-tile${i}`} className="horizontal-tile-hidden" />;
-					})}
-				</div>
-			)}
+			{/* {player.unusedTiles > 0 && ( */}
+			<div className={`horizontal-tiles-hidden unused ${frontBackTag}`}>
+				{unusedTiles.map(i => {
+					return <div key={`top-unused-tile${i}`} className="horizontal-tile-hidden" />;
+				})}
+			</div>
+			{/* )} */}
 			<div className="discarded">
 				{/* Extra discarded tiles */}
-				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
+				{player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
 						<img
 							key={`top-discarded-tile-${index}`}
@@ -77,7 +77,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 							alt="tile"
 						/>
 					);
-				})} */}
+				})}
 				{player.discardedTiles.map((tile: Tile, index: number) => {
 					let className = `discarded-tile${
 						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``

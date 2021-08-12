@@ -261,7 +261,6 @@ class FirebaseService {
 	}
 
 	updateGame(game: Game): Promise<Game> {
-		console.log('FirebaseService - updating game');
 		return new Promise(async (resolve, reject) => {
 			try {
 				let gameObj = gameToObj(game);

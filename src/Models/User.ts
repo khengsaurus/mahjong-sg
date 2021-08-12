@@ -55,9 +55,8 @@ export class User {
 	canChi(tiles: Tile[]): boolean {
 		if (
 			tiles.length === 3 &&
-			(tiles.every(tile => tile.suit === tiles[0].suit) ? true : false) &&
-			// tiles[0].suit === tiles[1].suit &&
-			// tiles[1].suit === tiles[2].suit &&
+			tiles[0].suit === tiles[1].suit &&
+			tiles[1].suit === tiles[2].suit &&
 			tiles[2].number - 1 === tiles[1].number &&
 			tiles[1].number - 1 === tiles[0].number
 		) {
@@ -104,5 +103,29 @@ export class User {
 		this.hiddenTiles = this.hiddenTiles.filter(tile => tile.id !== tileToThrow.id);
 		this.discardedTiles.push(tileToThrow);
 		return tileToThrow;
+	}
+
+	hiddenTilesContain(tile: Tile): boolean {
+		return this.hiddenTiles
+			.map(tile => {
+				return tile.id;
+			})
+			.includes(tile.id);
+	}
+
+	shownTilesContain(tile: Tile): boolean {
+		return this.shownTiles
+			.map(tile => {
+				return tile.id;
+			})
+			.includes(tile.id);
+	}
+
+	discardedTilesContain(tile: Tile): boolean {
+		return this.discardedTiles
+			.map(tile => {
+				return tile.id;
+			})
+			.includes(tile.id);
 	}
 }

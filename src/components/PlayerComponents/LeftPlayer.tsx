@@ -41,24 +41,18 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						);
 					})}
 			</div>
-			<div className="vertical-tiles-shown self">
-				{player.shownTiles.map((tile: Tile, index: number) => {
-					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<div className="vertical-tile-shown self" key={`self-shown-tile-${index}`}>
-							<img className="vertical-tile-shown-bg self" src={getTileSrc(tile.card)} alt="tile" />
-						</div>
-					) : null;
-				})}
+			<div className="vertical-tiles-shown">
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 				{player.shownTiles.map((tile: Tile, index: number) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vertical-tile-shown self" key={`self-shown-tile-${index}`}>
+						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
 							<img
 								className={
 									tile.isValidFlower
 										? tile.suit === '动物'
-											? 'vertical-tile-shown-bg self animate-flower animal'
-											: 'vertical-tile-shown-bg self animate-flower'
-										: 'vertical-tile-shown-bg self'
+											? 'vertical-tile-shown-bg animate-flower animal'
+											: 'vertical-tile-shown-bg animate-flower'
+										: 'vertical-tile-shown-bg'
 								}
 								src={getTileSrc(tile.card)}
 								alt="tile"
@@ -66,15 +60,21 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						</div>
 					) : null;
 				})}
-				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
+				{player.shownTiles.map((tile: Tile, index: number) => {
+					return tile.suit !== '花' && tile.suit !== '动物' ? (
+						<div className="vertical-tile-shown" key={`self-shown-tile-${index}`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						</div>
+					) : null;
+				})}
 			</div>
-			{player.unusedTiles > 0 && (
-				<div className={`vertical-tiles-hidden unused ${frontBackTag}`}>
-					{unusedTiles.map(i => {
-						return <div key={`self-unused-tile${i}`} className="vertical-tile-hidden" />;
-					})}
-				</div>
-			)}
+			{/* {player.unusedTiles > 0 && ( */}
+			<div className={`vertical-tiles-hidden unused ${frontBackTag}`}>
+				{unusedTiles.map(i => {
+					return <div key={`self-unused-tile${i}`} className="vertical-tile-hidden" />;
+				})}
+			</div>
+			{/* )} */}
 			<div className="discarded">
 				{/* Extra discarded tiles */}
 				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {

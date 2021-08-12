@@ -127,6 +127,7 @@
 	$line-height: $log-line-height-medium;
 	&.expanded {
 		height: 4 * $icon-button-size-medium;
+		min-width: $log-line-width-medium;
 		background-color: $color-background;
 		align-items: flex-start;
 		text-align: start;

@@ -42,14 +42,11 @@ const Controls = (props: ControlsProps) => {
 	const player: User = useSelector((state: Store) => state.player);
 	const { lastThrown, thrownBy, logs } = game;
 
-	const previousPlayer = useMemo(() => {
-		console.log('Controls/index - useMemo calculating previous player');
-		if (playerSeat === 0) {
-			return 3;
-		} else {
-			return playerSeat - 1;
+	useEffect(() => {
+		if (player && player.hiddenTiles.length === 0) {
+			showHuDialog();
 		}
-	}, [playerSeat]);
+	}, []);
 
 	useEffect(() => {
 		if (game && player) {
@@ -97,8 +94,8 @@ const Controls = (props: ControlsProps) => {
 					setCanChi(false);
 				} else if (
 					game.whoseMove === playerSeat &&
-					consideringTiles.includes(lastThrown) &&
-					thrownBy === previousPlayer
+					thrownBy === game.findLeft(playerSeat) &&
+					consideringTiles.includes(lastThrown)
 				) {
 					setCanKang(false);
 					setCanPong(false);
@@ -114,14 +111,13 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Take ----------------------------------- */
 
-	function takeLastThrown() {
+	function removeLastThrownFromDiscarded() {
 		game.players[thrownBy].discardedTiles = game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
 			return tile.id !== lastThrown.id;
 		});
-		// game.lastThrown = {};
 	}
 
-	function takenTile() {
+	function takeTile() {
 		game.takenTile = true;
 		game.takenBy = playerSeat;
 		game.newLog(`${player.username}'s turn - to throw`);
@@ -136,16 +132,11 @@ const Controls = (props: ControlsProps) => {
 		 *
 		 */
 		game.whoseMove = playerSeat;
-		takeLastThrown();
+		removeLastThrownFromDiscarded();
 		meld.forEach(tile => {
 			tile.show = true;
 		});
 		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
-			// return !meld
-			// 	.map(tileM => {
-			// 		return tileM.id;
-			// 	})
-			// 	.includes(tileH.id);
 			return !meld.includes(tile);
 		});
 		player.shownTiles = [...player.shownTiles, ...meld];
@@ -161,7 +152,8 @@ const Controls = (props: ControlsProps) => {
 		} else {
 			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 		}
-		takenTile();
+		takeTile();
+		game.lastThrown = {};
 		handleAction(game);
 	}
 
@@ -189,7 +181,8 @@ const Controls = (props: ControlsProps) => {
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			takenTile();
+			takeTile();
+			game.lastThrown = {};
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -241,6 +234,7 @@ const Controls = (props: ControlsProps) => {
 			game.uncachedAction = true;
 		}
 		game.players[playerSeat] = player;
+		console.log('Controls/index - handleAction called');
 		FBService.updateGame(game);
 	}
 
@@ -248,7 +242,8 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		if (!game.takenTile && !_.isEmpty(lastThrown)) {
+		if (!_.isEmpty(lastThrown) && game.players[thrownBy].discardedTilesContain(lastThrown)) {
+			removeLastThrownFromDiscarded();
 			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles, lastThrown];
 		} else {
 			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles];
@@ -259,7 +254,10 @@ const Controls = (props: ControlsProps) => {
 
 	function hideHuDialog() {
 		setDeclareHu(false);
-		returnLastThrown();
+		if (!_.isEmpty(lastThrown) && player.shownTilesContain(lastThrown)) {
+			console.log('Returning');
+			returnLastThrown();
+		}
 		player.hiddenTiles = player.shownTiles.filter((tile: Tile) => {
 			return tile.show === false && tile.id !== lastThrown.id;
 		});
@@ -296,7 +294,7 @@ const Controls = (props: ControlsProps) => {
 			let logsList = document.getElementById('logs');
 			logsList.scrollTop = logsList.scrollHeight + 10;
 		} catch (err) {
-			console.log(`Div with id 'logs' not found`);
+			console.log(`Element with id 'logs' not found`);
 		}
 	}
 
@@ -427,15 +425,6 @@ const Controls = (props: ControlsProps) => {
 					// 	e.preventDefault();
 					// 	game.newLog(`Test: ${Math.random()}`);
 					// 	FBService.updateGame(game);
-					// }}
-					// onTouchStart={() => {
-					// 	setOkToShow(true);
-					// }}
-					// onTouchEnd={() => {
-					// 	setOkToShow &&
-					// 		setTimeout(function () {
-					// 			setOkToShow(false);
-					// 		}, 3000);
 					// }}
 				>
 					<p>{`胡`}</p>

@@ -157,10 +157,6 @@ const Table = () => {
 		);
 	};
 
-	useEffect(() => {
-		console.log('Table/index - re-rendering game & controls');
-	}, [game, user, dispatch]);
-
 	if (user && game) {
 		return gameMarkup();
 	} else {

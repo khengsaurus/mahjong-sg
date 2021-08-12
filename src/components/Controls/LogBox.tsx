@@ -14,7 +14,6 @@ const LogBox = (props: LogBoxProps) => {
 	const { controlsSize } = useContext(AppContext);
 	const { logs, expanded, scroll } = props;
 	const logRef = useRef<Log[]>([]);
-	// const [displayLogs, setDisplayLogs] = useState<Log[]>([]);
 
 	useEffect(() => {
 		logs.forEach(log => {
@@ -22,11 +21,8 @@ const LogBox = (props: LogBoxProps) => {
 				logRef.current = [...logRef.current, log];
 			}
 		});
-	}, [logs]);
-
-	useEffect(() => {
 		scroll();
-	}, [logs, logRef.current]);
+	}, [logs, scroll]);
 
 	return (
 		<TransitionGroup className={`log-box-${controlsSize}${expanded ? ` expanded` : ``}`} id="logs">
