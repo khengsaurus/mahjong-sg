@@ -68,14 +68,25 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 					) : null;
 				})}
 			</div>
-			{/* {player.unusedTiles > 0 && ( */}
 			<div className={`vertical-tiles-hidden unused ${frontBackTag}`}>
 				{unusedTiles.map(i => {
 					return <div key={`self-unused-tile${i}`} className="vertical-tile-hidden" />;
 				})}
 			</div>
-			{/* )} */}
 			<div className="discarded">
+				{player.discardedTiles.map((tile: Tile, index: number) => {
+					let tileDivName = `discarded-tile${
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+					}`;
+					let tileBgName = `vertical-tile-shown-bg${
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+					}`;
+					return (
+						<div className={tileDivName} key={`self-discarded-tile-${index}`}>
+							<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
+						</div>
+					);
+				})}
 				{/* Extra discarded tiles */}
 				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
 					return (
@@ -91,19 +102,6 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						</div>
 					);
 				})} */}
-				{player.discardedTiles.map((tile: Tile, index: number) => {
-					let tileDivName = `discarded-tile${
-						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
-					}`;
-					let tileBgName = `vertical-tile-shown-bg${
-						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
-					}`;
-					return (
-						<div className={tileDivName} key={`self-discarded-tile-${index}`}>
-							<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
-						</div>
-					);
-				})}
 			</div>
 		</div>
 	);

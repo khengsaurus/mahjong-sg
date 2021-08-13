@@ -269,6 +269,14 @@ class FirebaseService {
 					resolve(game);
 					console.log('FirebaseService - game doc was updated');
 				});
+				// await this.db.runTransaction(async(t)=>{
+				// 	const doc = await t.get(currentGameRef); // <-- transaction-time game state modification
+				// 	t.update(currentGameRef, {...gameObj})
+				// })
+				// .then(()=>{
+				// 	resolve(game);
+				// 	console.log('FirebaseService - transaction success, game doc updated');
+				// })
 			} catch (err) {
 				console.log(err);
 				reject(new Error('FirebaseService - game doc was not updated'));

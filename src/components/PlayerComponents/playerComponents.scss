@@ -16,12 +16,12 @@
 		flex-direction: row;
 		justify-content: center;
 		padding: $tile-padding-medium 0;
+		min-height: $hidden-tile-height-medium;
 		&.unused {
 			flex-flow: column wrap;
 			align-self: center;
 			align-content: center;
 			justify-content: flex-end;
-			min-height: $hidden-tile-height-medium;
 			max-height: (2 * $hidden-tile-height-medium) + (4 * $tile-border-px);
 			width: (19 * $hidden-tile-width-medium) + (4 * $tile-border-px);
 			z-index: -1;
@@ -78,7 +78,7 @@
 
 	.discarded {
 		display: flex;
-		flex-flow: row wrap;
+		flex-flow: row-reverse wrap;
 		justify-content: center;
 		align-self: center;
 		width: 60vw;
@@ -86,7 +86,6 @@
 
 		&.bottom {
 			transform: $rotate-simple-180;
-			flex-flow: row wrap;
 		}
 
 		.discarded-tile {
@@ -118,9 +117,9 @@
 		display: flex;
 		flex-direction: column;
 		padding: 0 $tile-padding-medium;
+		min-width: $hidden-tile-height-medium;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
-			min-width: $hidden-tile-height-medium;
 			max-width: (2 * $hidden-tile-height-medium) + (4 * $tile-border-px);
 			align-content: flex-start;
 			align-self: center;
@@ -150,14 +149,13 @@
 		display: flex;
 		flex-flow: column-reverse wrap;
 		justify-content: center;
-		max-height: 22 * ($shown-tile-width-medium + (2 * $tile-border-px));
+		// max-height: 22 * ($shown-tile-width-medium + (2 * $tile-border-px));
+		height: 50vh;
 		max-width: $shown-tile-height-medium;
 		padding: 0 $tile-padding-medium;
-
 		&.right {
 			flex-flow: column wrap;
 		}
-
 		.vertical-tile-shown {
 			height: $shown-tile-width-medium;
 			width: $shown-tile-height-medium;
@@ -195,14 +193,15 @@
 
 	.discarded {
 		display: flex;
-		flex-flow: column-reverse wrap;
+		flex-flow: column wrap;
 		justify-content: center;
 		align-self: center;
-		height: 12 * $shown-tile-width-medium;
+		height: 50vh;
+		// height: 12 * $shown-tile-width-medium;
 		padding: 0 $tile-padding-medium;
 
 		&.right {
-			flex-flow: column wrap-reverse;
+			flex-flow: column-reverse wrap-reverse;
 		}
 
 		.discarded-tile {
@@ -232,12 +231,14 @@
 		&.unselected {
 			background: $color-tile-front;
 			border-radius: 4%;
+			transition: 200ms;
 		}
 
 		&.selected {
 			transform: translateX(15%);
 			border-radius: 4%;
 			@include default-selected;
+			transition: 200ms;
 		}
 	}
 

@@ -4,14 +4,14 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SubjectIcon from '@material-ui/icons/Subject';
 import * as _ from 'lodash';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { search, sortTiles } from '../../util/utilFns';
+import { sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './Controls.scss';
 import './ControlsLarge.scss';
@@ -43,6 +43,7 @@ const Controls = (props: ControlsProps) => {
 	const { lastThrown, thrownBy, logs } = game;
 
 	useEffect(() => {
+		// If player opens hu dialog, leaves and comes back, open it again
 		if (player && player.hiddenTiles.length === 0) {
 			showHuDialog();
 		}
@@ -60,13 +61,10 @@ const Controls = (props: ControlsProps) => {
 				setCanPong(false);
 				setCanChi(false);
 			} else {
-				if (game.whoseMove !== playerSeat) {
-					setCanChi(false);
-				}
 				let consideringTiles: Tile[];
 				/**
-				 * If player selects 1/4 tiles, player is considering those tiles
-				 * If player selects 2/3 tiles, player is considering those, + last thrown if not empty
+				 * Player selects 1/4 tiles -> consider those tiles
+				 * Player selects 2/3 tiles -> consider those + last thrown if not empty
 				 */
 				if (selectedTiles.length === 1 || selectedTiles.length === 4) {
 					consideringTiles = sortTiles(selectedTiles);
@@ -78,9 +76,8 @@ const Controls = (props: ControlsProps) => {
 				setMeld(consideringTiles);
 				if (
 					/**
-					 * If player considering 4 tiles or 1 tile (which is in player's hand) -> canKang ?
-					 * Else -> canPong ?
-					 * Else -> canChi ?
+					 * Player considering 4 tiles or 1 tile (which is in player's hand) -> canKang
+					 * Else -> canPong, canChi
 					 */
 					consideringTiles.length === 4 ||
 					(consideringTiles.length === 1 && consideringTiles[0] !== lastThrown)
@@ -111,13 +108,15 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Take ----------------------------------- */
 
-	function removeLastThrownFromDiscarded() {
-		game.players[thrownBy].discardedTiles = game.players[thrownBy].discardedTiles.filter((tile: Tile) => {
-			return tile.id !== lastThrown.id;
-		});
+	// Returns: removed successfully
+	function tookLastThrown(): boolean {
+		let initCount = game.players[thrownBy].discardedTiles.length;
+		!_.isEmpty(lastThrown) && game.players[thrownBy].removeTileFromDiscardedTiles(lastThrown);
+		return game.players[thrownBy].discardedTiles.length < initCount ? true : false;
 	}
 
-	function takeTile() {
+	function acquireTile() {
+		game.lastThrown = {};
 		game.takenTile = true;
 		game.takenBy = playerSeat;
 		game.newLog(`${player.username}'s turn - to throw`);
@@ -125,48 +124,41 @@ const Controls = (props: ControlsProps) => {
 
 	function handleTake(kang: boolean) {
 		/**
-		 * Set game.whoseMove to playerSeat in case of pong/kang
-		 * Remove lastThrown from board
-		 * Each tile in meld -> show = true
-		 * Move meld (including lastThrown) from player.hiddenTiles -> player.shownTiles
-		 *
+		 * If last thrown can be taken ->
+		 *   Set game.whoseMove to playerSeat in case of pong/kang
+		 *   Remove lastThrown from board
+		 *   Each tile in meld -> show = true
+		 *   Move meld (including lastThrown) from player.hiddenTiles -> player.shownTiles
+		 * Else -> void, log
 		 */
-		game.whoseMove = playerSeat;
-		removeLastThrownFromDiscarded();
-		meld.forEach(tile => {
-			tile.show = true;
-		});
-		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
-			return !meld.includes(tile);
-		});
-		player.shownTiles = [...player.shownTiles, ...meld];
-		if (player.canPong(meld) || (meld.length === 4 && player.canKang(meld))) {
-			player.pongs.push(meld[0].card);
-			if (kang) {
-				game.flagProgress = true;
-				game.newLog(`${player.username} kang'd ${meld[0].card}`);
-				buHua();
+		if (tookLastThrown()) {
+			game.whoseMove = playerSeat;
+			meld.forEach(tile => {
+				tile.show = true;
+			});
+			if (player.canPong(meld) || (meld.length === 4 && player.canKang(meld))) {
+				player.pongOrKang(meld);
+				if (kang) {
+					game.flagProgress = true;
+					game.newLog(`${player.username} kang'd ${meld[0].card}`);
+					buHua();
+				} else {
+					game.newLog(`${player.username} pong'd ${meld[0].card}`);
+				}
 			} else {
-				game.newLog(`${player.username} pong'd ${meld[0].card}`);
+				player.take(meld);
+				game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 			}
+			acquireTile();
+			handleAction(game);
 		} else {
-			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
+			console.log(`Controls/index - ${player.username} failed to take last thrown tile`);
 		}
-		takeTile();
-		game.lastThrown = {};
-		handleAction(game);
 	}
 
 	function selfKang() {
 		let toKang = selectedTiles[0];
-		let atIndex: number = search(toKang, player.shownTiles);
-		let initLength = player.shownTiles.length;
-		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => tile.id !== toKang.id);
-		player.shownTiles = [
-			...player.shownTiles.slice(0, atIndex),
-			toKang,
-			...player.shownTiles.slice(atIndex, initLength)
-		];
+		player.selfKang(toKang);
 		game.flagProgress = true;
 		buHua();
 		handleAction(game);
@@ -181,8 +173,7 @@ const Controls = (props: ControlsProps) => {
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			takeTile();
-			game.lastThrown = {};
+			acquireTile();
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -192,7 +183,7 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function buHua(): Tile {
-		let drawnTile: Tile = null;
+		let drawnTile: Tile;
 		let initNoHiddenTiles = player.hiddenTiles.length;
 		while (player.hiddenTiles.length === initNoHiddenTiles) {
 			if (game.tiles.length > 15) {
@@ -209,26 +200,17 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
-	function handleThrow(tileToThrow: Tile) {
-		tileToThrow.show = true;
-		player.hiddenTiles = player.hiddenTiles.filter((tile: Tile) => {
-			return tile.id !== tileToThrow.id;
-		});
-		player.discardedTiles.push(tileToThrow);
+	function handleThrow(tile: Tile) {
+		tile.show = true;
+		player.discard(tile);
 		player.hiddenTiles = sortTiles(player.hiddenTiles);
-		game.lastThrown = tileToThrow;
-		game.thrownBy = playerSeat;
-		game.thrownTile = true;
-		game.newLog(`${player.username} discarded ${tileToThrow.card}`);
+		game.tileThrown(tile, playerSeat);
 		handleAction(game);
 	}
 
 	function handleAction(game: Game) {
 		setSelectedTiles([]);
 		if (game.takenTile && game.thrownTile) {
-			game.takenTile = false;
-			game.thrownTile = false;
-			game.uncachedAction = false;
 			game.nextPlayerMove();
 		} else {
 			game.uncachedAction = true;
@@ -242,28 +224,18 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		if (!_.isEmpty(lastThrown) && game.players[thrownBy].discardedTilesContain(lastThrown)) {
-			removeLastThrownFromDiscarded();
-			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles, lastThrown];
-		} else {
-			player.shownTiles = [...player.shownTiles, ...player.hiddenTiles];
-		}
-		player.hiddenTiles = [];
+		tookLastThrown() ? player.showTilesHu(lastThrown) : player.showTilesHu();
 		handleAction(game);
 	}
 
 	function hideHuDialog() {
 		setDeclareHu(false);
 		if (!_.isEmpty(lastThrown) && player.shownTilesContain(lastThrown)) {
-			console.log('Returning');
 			returnLastThrown();
+			player.hideTilesHu(lastThrown);
+		} else {
+			player.hideTilesHu();
 		}
-		player.hiddenTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === false && tile.id !== lastThrown.id;
-		});
-		player.shownTiles = player.shownTiles.filter((tile: Tile) => {
-			return tile.show === true && tile.id !== lastThrown.id;
-		});
 		handleAction(game);
 	}
 
@@ -433,18 +405,20 @@ const Controls = (props: ControlsProps) => {
 
 			<div className={`bottom-right-controls-${controlsSize}`}>
 				<>
-					<IconButton
-						className="icon-button"
-						size="small"
-						onClick={() => {
-							setShowPay(!showPay);
-						}}
-					>
-						<MonetizationOnIcon />
-					</IconButton>
-					<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
-						<SubjectIcon />
-					</IconButton>
+					<div className="buttons">
+						<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
+							<SubjectIcon />
+						</IconButton>
+						<IconButton
+							className="icon-button"
+							size="small"
+							onClick={() => {
+								setShowPay(!showPay);
+							}}
+						>
+							<MonetizationOnIcon />
+						</IconButton>
+					</div>
 					<div className={`log-box-container-${controlsSize}${showLogs ? ` expanded` : ``}`}>
 						<LogBox
 							expanded={showLogs}

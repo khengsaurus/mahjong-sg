@@ -2,18 +2,17 @@
 
 .top-right-controls-large {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: $main-padding;
+	right: $main-padding;
 	margin-top: calc(env(safe-area-inset-top));
 	margin-right: calc(env(safe-area-inset-right));
 	display: flex;
-	flex-flow: row-reverse;
-	align-items: flex-start;
-	justify-content: flex-end;
+	flex-flow: column;
+	align-items: flex-end;
 	z-index: 10;
 	.buttons {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row-reverse;
 	}
 	.icon-button {
 		width: $icon-button-size-large;
@@ -26,10 +25,9 @@
 		justify-content: flex-end;
 		text-align: start;
 		transform-origin: top left;
-		transform: translateX(2 * $text-line-width-large) rotate(90deg);
+		transform: rotate(90deg) translateY((2 * $main-padding) - (2 * $text-line-width-large));
 		height: $text-line-height-large * 4;
 		width: 2 * $text-line-width-large;
-		margin: 5px -2px !important;
 		font-size: $text-font-size-large;
 		color: $log-grey;
 		line-height: $text-line-height-large;
@@ -38,8 +36,8 @@
 
 .top-left-controls-large {
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: $main-padding;
+	left: $main-padding;
 	margin-top: calc(env(safe-area-inset-top));
 	margin-left: calc(env(safe-area-inset-left));
 	height: 2 * $button-height-large;
@@ -62,8 +60,8 @@
 
 .bottom-left-controls-large {
 	position: absolute;
-	left: 0;
-	bottom: 0;
+	left: $main-padding;
+	bottom: $main-padding;
 	margin-left: calc(env(safe-area-inset-left));
 	margin-bottom: calc(env(safe-area-inset-bottom));
 	height: 2 * $button-height-large;
@@ -85,8 +83,8 @@
 
 .bottom-right-controls-large {
 	position: absolute;
-	right: 0;
-	bottom: 0;
+	right: $main-padding;
+	bottom: $main-padding;
 	margin-right: calc(env(safe-area-inset-right));
 	margin-bottom: calc(env(safe-area-inset-bottom));
 	display: flex;
@@ -96,7 +94,7 @@
 	z-index: 10;
 	.buttons {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row-reverse;
 	}
 	.icon-button {
 		width: $icon-button-size-large;
@@ -109,7 +107,7 @@
 	transform-origin: bottom right;
 	transform: rotate(90deg) translateY($icon-button-size-large);
 	&.expanded {
-		transform: rotate(90deg) translateY((4 * $icon-button-size-large) + (2 * $tile-border-px));
+		transform: rotate(90deg) translateY((4 * $icon-button-size-large) + ($tile-border-px));
 	}
 }
 

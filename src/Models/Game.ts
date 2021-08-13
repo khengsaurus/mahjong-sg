@@ -412,6 +412,9 @@ export class Game {
 
 	nextPlayerMove() {
 		this.whoseMove = this.findRight(this.whoseMove);
+		this.takenTile = false;
+		this.thrownTile = false;
+		this.uncachedAction = false;
 		this.newLog(`${this.players[this.whoseMove].username}'s turn`);
 	}
 
@@ -491,5 +494,12 @@ export class Game {
 			this.dealer = (this.dealer + 1) % 4;
 			this.newLog('Round ended');
 		}
+	}
+
+	tileThrown(tile: Tile, player: number) {
+		this.lastThrown = tile;
+		this.thrownBy = player;
+		this.thrownTile = true;
+		this.newLog(`${this.players[player].username} discarded ${tile.card}`);
 	}
 }

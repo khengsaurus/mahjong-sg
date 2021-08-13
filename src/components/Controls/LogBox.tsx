@@ -16,11 +16,15 @@ const LogBox = (props: LogBoxProps) => {
 	const logRef = useRef<Log[]>([]);
 
 	useEffect(() => {
-		logs.forEach(log => {
-			if (!logRef.current.includes(log)) {
-				logRef.current = [...logRef.current, log];
-			}
-		});
+		if (logRef.current.length > 100) {
+			logRef.current = logs;
+		} else {
+			logs.forEach(log => {
+				if (!logRef.current.includes(log)) {
+					logRef.current = [...logRef.current, log];
+				}
+			});
+		}
 		scroll();
 	}, [logs, scroll]);
 
