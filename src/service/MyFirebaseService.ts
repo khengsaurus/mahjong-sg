@@ -3,7 +3,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { Game, gameToObj } from '../Models/Game';
 import { User } from '../Models/User';
-import { userToObj } from '../util/utilFns';
+import { playerToObj } from '../util/utilFns';
 import FirebaseConfig from './FirebaseConfig';
 
 class FirebaseService {
@@ -207,7 +207,7 @@ class FirebaseService {
 						playerIds,
 						playersString,
 						players: players.map(function (player: User) {
-							return userToObj(player);
+							return playerToObj(player);
 						}),
 						tiles: [],
 						frontTiles: 0,

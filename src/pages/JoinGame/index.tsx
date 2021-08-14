@@ -7,7 +7,7 @@ import HomeButton from '../../components/HomeButton';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { formatDateToDay, typeCheckGameRepr } from '../../util/utilFns';
+import { formatDateToDay, objToGame } from '../../util/utilFns';
 import Login from '../Login';
 import './JoinGame.scss';
 
@@ -23,7 +23,7 @@ const JoinGame = () => {
 		const unsubscribe = FBService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
-					games.push(typeCheckGameRepr(doc));
+					games.push(objToGame(1, doc));
 				});
 				setGameInvites(games);
 			}

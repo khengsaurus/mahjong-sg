@@ -3,14 +3,14 @@ import * as _ from 'lodash';
 import React, { useContext, useMemo } from 'react';
 import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
-import { generateUnusedTiles } from '../../util/utilFns';
+import { generateNumberArray } from '../../util/utilFns';
 import './playerComponents.scss';
 import './playerComponentsLarge.scss';
 
 const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrownTile } = props;
 	const { tilesSize } = useContext(AppContext);
-	const unusedTiles: number[] = useMemo(() => generateUnusedTiles(player.unusedTiles), [player.unusedTiles]);
+	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
 
 	return (

@@ -1,4 +1,4 @@
-import { sortTiles, userToObj } from '../util/utilFns';
+import { sortTiles, playerToObj } from '../util/utilFns';
 import { User } from './User';
 
 export function gameToObj(game: Game) {
@@ -17,7 +17,7 @@ export function gameToObj(game: Game) {
 		playerIds: game.playerIds || [],
 		players: game.players
 			? game.players.map(player => {
-					return userToObj(player);
+					return playerToObj(player);
 			  })
 			: [],
 		tiles: game.tiles,

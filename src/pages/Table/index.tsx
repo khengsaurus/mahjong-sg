@@ -13,7 +13,7 @@ import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { setGame, setPlayer } from '../../util/store/actions';
-import { typeCheckGame } from '../../util/utilFns';
+import { objToGame } from '../../util/utilFns';
 import './Table.scss';
 
 const Table = () => {
@@ -33,7 +33,7 @@ const Table = () => {
 		console.log('Table/index - game listener called');
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
-				let currentGame: Game = typeCheckGame(gameData);
+				let currentGame: Game = objToGame(2, gameData);
 				console.log('Table/index - game state updated');
 				// setGame, setPlayer
 				dispatch(setGame(currentGame));

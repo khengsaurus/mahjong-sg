@@ -11,7 +11,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { sortTiles } from '../../util/utilFns';
+import { scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './Controls.scss';
 import './ControlsLarge.scss';
@@ -31,12 +31,12 @@ const Controls = (props: ControlsProps) => {
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
-	const [declareHu, setDeclareHu] = useState(false);
-	const [okToShow, setOkToShow] = useState(false);
 	const [showPay, setShowPay] = useState(false);
 	const [showLogs, setShowLogs] = useState(false);
-	const [showSettings, setShowSettings] = useState(false);
+	const [okToHu, setOkToHu] = useState(false);
+	const [declareHu, setDeclareHu] = useState(false);
 	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
+	const [showSettings, setShowSettings] = useState(false);
 
 	const game: Game = useSelector((state: Store) => state.game);
 	const player: User = useSelector((state: Store) => state.player);
@@ -111,7 +111,7 @@ const Controls = (props: ControlsProps) => {
 	// Returns: removed successfully
 	function tookLastThrown(): boolean {
 		let initCount = game.players[thrownBy].discardedTiles.length;
-		!_.isEmpty(lastThrown) && game.players[thrownBy].removeTileFromDiscardedTiles(lastThrown);
+		!_.isEmpty(lastThrown) && game.players[thrownBy].removeFromDiscarded(lastThrown);
 		return game.players[thrownBy].discardedTiles.length < initCount ? true : false;
 	}
 
@@ -224,7 +224,8 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		tookLastThrown() ? player.showTilesHu(lastThrown) : player.showTilesHu();
+		// tookLastThrown() ? player.showTilesHu(lastThrown) : player.showTilesHu();
+		player.showTilesHu(tookLastThrown() ? lastThrown : null);
 		handleAction(game);
 	}
 
@@ -261,35 +262,26 @@ const Controls = (props: ControlsProps) => {
 		}
 	}
 
-	function scrollToBottom() {
-		try {
-			let logsList = document.getElementById('logs');
-			logsList.scrollTop = logsList.scrollHeight + 10;
-		} catch (err) {
-			console.log(`Element with id 'logs' not found`);
-		}
-	}
-
 	function handleShowLogs() {
 		setShowLogs(!showLogs);
 		setTimeout(function () {
-			scrollToBottom();
+			scrollToBottomOfDiv('logs');
 		}, 200);
 	}
 
 	function setShowTimeout() {
 		setTimeoutId(
 			setTimeout(function () {
-				setOkToShow(false);
+				setOkToHu(false);
 			}, 2000)
 		);
 	}
 
 	function handleShow() {
-		if (okToShow) {
+		if (okToHu) {
 			clearTimeout(timeoutId);
 		}
-		setOkToShow(true);
+		setOkToHu(true);
 		setShowTimeout();
 	}
 
@@ -356,7 +348,7 @@ const Controls = (props: ControlsProps) => {
 				>
 					<p>{canKang ? `杠` : `碰`}</p>
 				</Button>
-				{okToShow && (
+				{okToHu && (
 					<Button
 						className="button"
 						variant="outlined"
@@ -423,7 +415,9 @@ const Controls = (props: ControlsProps) => {
 						<LogBox
 							expanded={showLogs}
 							logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
-							scroll={scrollToBottom}
+							scroll={() => {
+								scrollToBottomOfDiv('logs');
+							}}
 						/>
 					</div>
 				</>

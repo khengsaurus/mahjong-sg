@@ -23,7 +23,7 @@ const UserSearchForm: React.FC = () => {
 	const [foundUsers, setFoundUsers] = useState<Array<User>>([]);
 	const [searchFor, setSearchFor] = useState('');
 
-	async function search(username: string) {
+	async function searchForUser(username: string) {
 		let foundUsers: Array<User> = [];
 		await FBService.searchUser(username).then(data => {
 			if (!data.empty) {
@@ -41,7 +41,7 @@ const UserSearchForm: React.FC = () => {
 	function handleFormChange(str: string): void {
 		setSearchFor(str);
 		if (str.length > 3) {
-			search(str);
+			searchForUser(str);
 		} else {
 			setShowOptions(false);
 		}
@@ -82,7 +82,7 @@ const UserSearchForm: React.FC = () => {
 										component="span"
 										size="small"
 										onClick={() => {
-											showOptions ? setShowOptions(false) : search(searchFor);
+											showOptions ? setShowOptions(false) : searchForUser(searchFor);
 										}}
 										disabled={searchFor.trim() === ''}
 									>
@@ -93,7 +93,7 @@ const UserSearchForm: React.FC = () => {
 						}}
 						onKeyPress={e => {
 							if (searchFor.trim() !== '' && e.key === 'Enter') {
-								search(searchFor);
+								searchForUser(searchFor);
 							}
 						}}
 					/>

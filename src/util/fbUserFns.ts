@@ -2,19 +2,7 @@ import { compare } from 'bcryptjs';
 import { User } from '../Models/User';
 import FBService from '../service/MyFirebaseService';
 import { hashPassword } from './bcrypt';
-import { typeCheckContact, typeCheckUser } from './utilFns';
-
-export async function getUser(userId: string) {
-	return new Promise<User>((resolve, reject) => {
-		FBService.getUserReprById(userId).then(res => {
-			if (res.exists) {
-				resolve(typeCheckContact(userId, res.data()));
-			} else {
-				reject(null);
-			}
-		});
-	});
-}
+import { objToUser } from './utilFns';
 
 export async function attemptLogin(values: loginParams): Promise<User> {
 	if (!FBService.userAuthenticated()) {
@@ -43,7 +31,7 @@ export async function attemptLogin(values: loginParams): Promise<User> {
 										reject(new Error('Login attempt failed'));
 									})
 									.then(userData => {
-										let user: User | null = typeCheckUser(2, userData);
+										let user: User | null = objToUser(2, userData);
 										if (user) {
 											resolve(user);
 										} else {
@@ -95,7 +83,7 @@ export function attemptLoginByEmail(email: string): Promise<User> {
 				if (userData.docs.length === 0) {
 					reject(new Error('Email not registered -> RegisterWithGoogleForm'));
 				} else {
-					resolve(typeCheckUser(2, userData));
+					resolve(objToUser(2, userData));
 				}
 			});
 		} catch (err) {

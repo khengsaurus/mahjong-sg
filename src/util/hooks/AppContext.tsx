@@ -3,7 +3,7 @@ import { createContext, useState } from 'react';
 import { history } from '../../App';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
-import { typeCheckUser, userToObj } from '../utilFns';
+import { objToUser, userToObj } from '../utilFns';
 
 interface AppContextInt {
 	user: User;
@@ -82,7 +82,7 @@ export const AppContextProvider = (props: any) => {
 		}
 		if (token) {
 			var decoded = jwt.verify(token, secretKey);
-			let user1: User = typeCheckUser(1, decoded);
+			let user1: User = objToUser(1, decoded);
 			if (!user || user.username !== user1.username) {
 				await login(user1);
 			}
