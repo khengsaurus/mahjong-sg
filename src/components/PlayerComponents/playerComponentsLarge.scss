@@ -94,9 +94,11 @@
 			border-radius: 4%;
 			background: $color-tile-front;
 			&.last-thrown {
-				height: 1.3 * $shown-tile-height-large;
-				width: 1.3 * $shown-tile-width-large;
 				@include last-thrown;
+				&.magnify {
+					height: 1.2 * $shown-tile-height-large;
+					width: 1.2 * $shown-tile-width-large;
+				}
 			}
 		}
 	}
@@ -149,13 +151,13 @@
 		display: flex;
 		flex-flow: column-reverse wrap;
 		justify-content: center;
-		// max-height: 22 * ($shown-tile-width-large + (2 * $tile-border-px));
 		height: 50vh;
 		max-width: $shown-tile-height-large;
 		padding: 0 $tile-padding-large;
-		&.right {
+		&.flow-column-wrap {
 			flex-flow: column wrap;
 		}
+
 		.vertical-tile-shown {
 			height: $shown-tile-width-large;
 			width: $shown-tile-height-large;
@@ -169,25 +171,20 @@
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
 		align-self: flex-start;
-
 		&.animate-flower {
 			@include default-flower;
 		}
-
 		&.animal {
 			height: $shown-tile-height-large - (2 * $tile-border-px);
 			width: $shown-tile-width-large - (2 * $tile-border-px);
 			@include default-tile-border;
-			&.self {
-				height: $shown-tile-height-large - (2 * $tile-border-px);
-				width: $shown-tile-width-large - (2 * $tile-border-px);
-			}
 		}
-
 		&.last-thrown {
-			height: 1.3 * $shown-tile-height-large;
-			width: 1.3 * $shown-tile-width-large;
 			@include last-thrown;
+			&.magnify {
+				height: 1.2 * $shown-tile-height-large;
+				width: 1.2 * $shown-tile-width-large;
+			}
 		}
 	}
 
@@ -197,10 +194,9 @@
 		justify-content: center;
 		align-self: center;
 		height: 50vh;
-		// height: 12 * $shown-tile-width-large;
 		padding: 0 $tile-padding-large;
 
-		&.right {
+		&.flow-column-r-wrap-r {
 			flex-flow: column-reverse wrap-reverse;
 		}
 
@@ -210,9 +206,8 @@
 			border-radius: 4%;
 			background: $color-tile-front;
 			&.last-thrown {
-				height: 1.3 * $shown-tile-width-large;
-				width: 1.3 * $shown-tile-height-large;
-				@include last-thrown;
+				height: 1.2 * $shown-tile-width-large;
+				width: 1.2 * $shown-tile-height-large;
 			}
 		}
 	}
@@ -227,18 +222,14 @@
 	.self-hidden-tile {
 		height: $self-hidden-tile-width-large;
 		width: $self-hidden-tile-height-large;
-
+		border-radius: 4%;
+		transition: 200ms;
 		&.unselected {
 			background: $color-tile-front;
-			border-radius: 4%;
-			transition: 200ms;
 		}
-
 		&.selected {
 			transform: translateX(15%);
-			border-radius: 4%;
 			@include default-selected;
-			transition: 200ms;
 		}
 	}
 

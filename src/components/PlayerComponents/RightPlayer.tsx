@@ -15,16 +15,34 @@ const RightPlayer = (props: PlayerComponentProps) => {
 
 	return (
 		<div className={`column-section-${tilesSize} right`}>
-			<div className="vertical-tiles-hidden">
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
-					return <div key={`right-hidden-tile${index}`} className="vertical-tile-hidden" />;
-				})}
-			</div>
-			<div className="vertical-tiles-shown right">
+			{/* Hidden tiles */}
+			{player.showTiles ? (
+				<div className="vertical-tiles-shown">
+					{player.hiddenTiles.map((tile: Tile) => {
+						let tileBgName = `vertical-tile-shown-bg${
+							!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+						}`;
+						return (
+							<div className="vertical-tile-shown" key={`${tile.id}-hidden`}>
+								<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
+							</div>
+						);
+					})}
+				</div>
+			) : (
+				<div className="vertical-tiles-hidden">
+					{player.hiddenTiles.map((tile: Tile) => {
+						return <div key={`${tile.id}-hidden`} className="vertical-tile-hidden" />;
+					})}
+				</div>
+			)}
+
+			{/* Shown tiles */}
+			<div className="vertical-tiles-shown flow-column-wrap">
 				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
-				{player.shownTiles.map((tile: Tile, index: number) => {
+				{player.shownTiles.map((tile: Tile) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
+						<div className="vertical-tile-shown" key={`${tile.id}-shown`}>
 							<img
 								className={
 									tile.isValidFlower
@@ -39,48 +57,58 @@ const RightPlayer = (props: PlayerComponentProps) => {
 						</div>
 					) : null;
 				})}
-				{player.shownTiles.map((tile: Tile, index: number) => {
+				{player.shownTiles.map((tile: Tile) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<div className="vertical-tile-shown" key={`right-shown-tile-${index}`}>
+						<div className="vertical-tile-shown" key={`${tile.id}-shown`}>
 							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					) : null;
 				})}
+				{player.hiddenTiles.map((tile: Tile) => {
+					return (
+						<div className="vertical-tile-shown" key={`${tile.id}-shown`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						</div>
+					);
+				})}
 			</div>
+
+			{/* Unused tiles */}
 			<div className={`vertical-tiles-hidden unused right ${frontBackTag}`}>
 				{unusedTiles.map(i => {
 					return <div key={`right-unused-tile${i}`} className="vertical-tile-hidden" />;
 				})}
 			</div>
-			<div className="discarded right">
-				{player.discardedTiles.map((tile: Tile, index: number) => {
+
+			{/* Discarded tiles */}
+			<div className="discarded flow-column-r-wrap-r">
+				{player.hiddenTiles.map((tile: Tile) => {
+					return (
+						<div className="discarded-tile" key={`${tile.id}`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						</div>
+					);
+				})}
+				{player.hiddenTiles.map((tile: Tile) => {
+					return (
+						<div className="discarded-tile" key={`${tile.id}`}>
+							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						</div>
+					);
+				})}
+				{player.discardedTiles.map((tile: Tile) => {
 					let tileDivName = `discarded-tile${
-						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown magnify` : ``
 					}`;
 					let tileBgName = `vertical-tile-shown-bg${
-						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown magnify` : ``
 					}`;
 					return (
-						<div className={tileDivName} key={`right-discarded-tile-${index}`}>
+						<div className={tileDivName} key={`${tile.id}-discarded`}>
 							<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					);
 				})}
-				{/* Extra discarded tiles */}
-				{/* {player.hiddenTiles.map((tile: Tile, index: number) => {
-					return (
-						<div className="discarded-tile" key={`right-discarded-tile-${index}`}>
-							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
-						</div>
-					);
-				})}
-				{player.hiddenTiles.map((tile: Tile, index: number) => {
-					return (
-						<div className="discarded-tile" key={`right-discarded-tile-${index}`}>
-							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
-						</div>
-					);
-				})} */}
 			</div>
 		</div>
 	);

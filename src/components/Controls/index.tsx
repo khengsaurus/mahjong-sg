@@ -43,8 +43,7 @@ const Controls = (props: ControlsProps) => {
 	const { lastThrown, thrownBy, logs } = game;
 
 	useEffect(() => {
-		// If player opens hu dialog, leaves and comes back, open it again
-		if (player && player.hiddenTiles.length === 0) {
+		if (player && player.showTiles) {
 			showHuDialog();
 		}
 	}, []);
@@ -107,12 +106,9 @@ const Controls = (props: ControlsProps) => {
 	}, [lastThrown, selectedTiles]);
 
 	/* ----------------------------------- Take ----------------------------------- */
-
-	// Returns: removed successfully
-	function tookLastThrown(): boolean {
-		let initCount = game.players[thrownBy].discardedTiles.length;
-		!_.isEmpty(lastThrown) && game.players[thrownBy].removeFromDiscarded(lastThrown);
-		return game.players[thrownBy].discardedTiles.length < initCount ? true : false;
+	function takeLastThrown() {
+		game.players[thrownBy].removeFromDiscarded(lastThrown);
+		player.addToHidden(lastThrown);
 	}
 
 	function acquireTile() {
@@ -131,7 +127,8 @@ const Controls = (props: ControlsProps) => {
 		 *   Move meld (including lastThrown) from player.hiddenTiles -> player.shownTiles
 		 * Else -> void, log
 		 */
-		if (tookLastThrown()) {
+		if (canTakeLastThrown()) {
+			takeLastThrown();
 			game.whoseMove = playerSeat;
 			meld.forEach(tile => {
 				tile.show = true;
@@ -152,7 +149,7 @@ const Controls = (props: ControlsProps) => {
 			acquireTile();
 			handleAction(game);
 		} else {
-			console.log(`Controls/index - ${player.username} failed to take last thrown tile`);
+			console.log(`Controls/index - ${player.username} could not take last thrown tile`);
 		}
 	}
 
@@ -224,26 +221,40 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		// tookLastThrown() ? player.showTilesHu(lastThrown) : player.showTilesHu();
-		player.showTilesHu(tookLastThrown() ? lastThrown : null);
+		if (canTakeLastThrown()) {
+			takeLastThrown();
+		}
+		player.hiddenTiles = sortTiles(player.hiddenTiles);
+		player.showTiles = true;
 		handleAction(game);
 	}
 
 	function hideHuDialog() {
 		setDeclareHu(false);
-		if (!_.isEmpty(lastThrown) && player.shownTilesContain(lastThrown)) {
+		if (isHoldingLastThrown()) {
 			returnLastThrown();
-			player.hideTilesHu(lastThrown);
-		} else {
-			player.hideTilesHu();
 		}
+		player.showTiles = false;
 		handleAction(game);
 	}
 
 	/* ----------------------------------- Util ----------------------------------- */
 
+	function canTakeLastThrown(): boolean {
+		return !_.isEmpty(lastThrown) && game.players[thrownBy].discardedTilesContain(lastThrown);
+	}
+
+	function isHoldingLastThrown(): boolean {
+		return (
+			!_.isEmpty(lastThrown) &&
+			player.hiddenTilesContain(lastThrown) &&
+			!game.players[thrownBy].discardedTilesContain(lastThrown)
+		);
+	}
+
 	function returnLastThrown() {
-		game.players[thrownBy].discardedTiles = [...game.players[thrownBy].discardedTiles, lastThrown];
+		player.removeFromHidden(lastThrown);
+		game.players[thrownBy].addToDiscarded(lastThrown);
 	}
 
 	function playerWind(): string {

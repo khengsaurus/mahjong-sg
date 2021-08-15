@@ -4,11 +4,18 @@ interface Store {
 	player: User;
 }
 
+interface jwtData {
+	id: string;
+	username: string;
+	photoUrl: string;
+	iat: number;
+	exp: number;
+}
+
 interface Group {
 	name: string;
 	users: User[];
 }
-
 interface alert {
 	status: Color;
 	msg: string;

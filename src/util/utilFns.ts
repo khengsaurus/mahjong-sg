@@ -4,19 +4,12 @@ import moment from 'moment';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 
-export interface ChatListObject {
-	corresId: string;
-	msg: string;
-	createdAt: Date;
-	sent: string;
-}
-
-interface jwtData {
-	id: string;
-	username: string;
-	photoUrl: string;
-	iat: number;
-	exp: number;
+export function userToObj(user: User) {
+	return {
+		id: user.id,
+		username: user.username,
+		photoUrl: user.photoUrl
+	};
 }
 
 /**
@@ -63,7 +56,8 @@ export function objToPlayer(data: any): User {
 		data.discardedTiles,
 		data.unusedTiles,
 		data.pongs,
-		data.balance
+		data.balance,
+		data.showTiles
 	);
 }
 
@@ -79,14 +73,6 @@ export function playerToObj(user: User, startingBal?: number) {
 		pongs: user.pongs || [],
 		balance: user.balance || startingBal || 0,
 		showTiles: user.showTiles || false
-	};
-}
-
-export function userToObj(user: User) {
-	return {
-		id: user.id,
-		username: user.username,
-		photoUrl: user.photoUrl
 	};
 }
 

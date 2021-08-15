@@ -84,26 +84,14 @@ export class User {
 	}
 
 	/* ----------------------------------- Contains ----------------------------------- */
-	hiddenTilesContain(tile: Tile): boolean {
-		return this.hiddenTiles
-			.map(tile => {
-				return tile.id;
-			})
-			.includes(tile.id);
+	hiddenTilesContain(t: Tile): boolean {
+		return this.hiddenTiles.map(tile => tile.id).includes(t.id);
 	}
-	shownTilesContain(tile: Tile): boolean {
-		return this.shownTiles
-			.map(tile => {
-				return tile.id;
-			})
-			.includes(tile.id);
+	shownTilesContain(t: Tile): boolean {
+		return this.shownTiles.map(tile => tile.id).includes(t.id);
 	}
-	discardedTilesContain(tile: Tile): boolean {
-		return this.discardedTiles
-			.map(tile => {
-				return tile.id;
-			})
-			.includes(tile.id);
+	discardedTilesContain(t: Tile): boolean {
+		return this.discardedTiles.map(tile => tile.id).includes(t.id);
 	}
 
 	/* ----------------------------------- Add ----------------------------------- */

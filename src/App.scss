@@ -30,12 +30,14 @@ $wind-font-size: 60px;
 /*-------------------- Tile sizes --------------------*/
 $tile-border-px: 1px;
 
+// original tile svg: 140 x 200 -> 14 20, 28 40, 21 30
+
 // Medium
 $tile-padding-medium: 1px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
-$shown-tile-height-medium: 32px;
-$shown-tile-width-medium: 22px;
+$shown-tile-height-medium: 30px;
+$shown-tile-width-medium: 21px;
 
 $self-hidden-tile-height-medium: 46px;
 $self-hidden-tile-width-medium: 32px;
@@ -44,8 +46,8 @@ $self-hidden-tile-width-medium: 32px;
 $tile-padding-large: 3px;
 $hidden-tile-height-large: 12px;
 $hidden-tile-width-large: 8px;
-$shown-tile-height-large: 39px;
-$shown-tile-width-large: 27px;
+$shown-tile-height-large: 40px;
+$shown-tile-width-large: 28px;
 
 $self-hidden-tile-height-large: 53px;
 $self-hidden-tile-width-large: 37px;
