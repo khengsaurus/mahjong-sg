@@ -13,7 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import React, { useContext, useState } from 'react';
 import { AppContext } from '../../util/hooks/AppContext';
 import { rotatedMUIDialog } from '../../util/utilFns';
-import './Controls.scss';
+import './ControlsMedium.scss';
 
 interface Props {
 	onClose: () => void;
@@ -31,7 +31,7 @@ const SettingsWindow = (props: Props) => {
 		// tileBackColor, setTileBackColor, backgroundColor, setBackgroundColor
 	} = useContext(AppContext);
 	const { onClose, show } = props;
-	const sizes = ['medium', 'large'];
+	const sizes = ['small', 'medium', 'large'];
 	// const colors = ['brown', 'teal', 'maroon', 'black', 'grey'];
 
 	const handleControlsSizeSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,10 +53,10 @@ const SettingsWindow = (props: Props) => {
 					onClose={onClose}
 					PaperProps={{
 						style: {
-							maxWidth: '300px',
-							minWidth: '300px',
-							maxHeight: '350px',
-							minHeight: '350px',
+							maxWidth: '400px',
+							minWidth: '400px',
+							maxHeight: '300px',
+							minHeight: '300px',
 							backgroundColor: 'rgb(215, 195, 170)'
 						}
 					}}
@@ -115,11 +115,6 @@ const SettingsWindow = (props: Props) => {
 							<br></br>
 						</FormControl>
 						<br></br>
-						{/* <DialogActions>
-							<Button variant="outlined" size="small" onClick={onClose} autoFocus>
-								{`Apply`}
-							</Button>
-						</DialogActions> */}
 					</DialogContent>
 				</Dialog>
 			</ThemeProvider>

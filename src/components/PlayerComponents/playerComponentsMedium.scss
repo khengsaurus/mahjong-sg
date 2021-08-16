@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.row-section-large {
+.row-section-medium {
 	display: flex;
 	flex-direction: column;
 	padding: 0 5px;
@@ -14,15 +14,15 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
-		padding: $tile-padding-large 0;
-		min-height: $hidden-tile-height-large;
+		padding: $tile-padding-medium 0;
+		min-height: $hidden-tile-height-medium;
 		&.unused {
 			flex-flow: column wrap;
 			align-self: center;
 			align-content: center;
 			justify-content: flex-end;
-			max-height: (2 * $hidden-tile-height-large) + (4 * $tile-border-px);
-			width: (19 * $hidden-tile-width-large) + (4 * $tile-border-px);
+			max-height: (2 * $hidden-tile-height-medium) + (4 * $tile-border-px);
+			width: (19 * $hidden-tile-width-medium) + (4 * $tile-border-px);
 			z-index: -1;
 			&.front {
 				flex-flow: column wrap-reverse;
@@ -40,8 +40,8 @@
 	}
 
 	.horizontal-tile-hidden {
-		height: $hidden-tile-height-large;
-		width: $hidden-tile-width-large;
+		height: $hidden-tile-height-medium;
+		width: $hidden-tile-width-medium;
 		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
@@ -52,7 +52,7 @@
 		justify-content: center;
 		align-items: flex-start;
 		align-self: center;
-		width: 9 * ($shown-tile-width-large);
+		width: 9 * ($shown-tile-width-medium);
 		&.bottom {
 			transform: $rotate-simple-180;
 		}
@@ -65,15 +65,15 @@
 		}
 
 		.horizontal-tile-shown {
-			height: $shown-tile-height-large;
+			height: $shown-tile-height-medium;
 			border-radius: 4%;
 			background: $color-tile-front;
 			&.animate-flower {
 				@include default-flower;
 			}
 			&.animal {
-				height: $shown-tile-height-large - (2 * $tile-border-px);
-				width: $shown-tile-width-large - (2 * $tile-border-px);
+				height: $shown-tile-height-medium - (2 * $tile-border-px);
+				width: $shown-tile-width-medium - (2 * $tile-border-px);
 				@include default-tile-border;
 			}
 		}
@@ -84,27 +84,27 @@
 		flex-flow: row-reverse wrap;
 		justify-content: flex-start;
 		align-self: center;
-		max-width: 10 * $shown-tile-width-large;
-		padding: $tile-padding-large 0;
+		max-width: 10 * $shown-tile-width-medium;
+		padding: $tile-padding-medium 0;
 		&.bottom {
 			transform: $rotate-simple-180;
 		}
 
 		.discarded-tile {
-			height: $shown-tile-height-large;
+			height: $shown-tile-height-medium;
 			border-radius: 4%;
 			background: $color-tile-front;
 			&.last-thrown {
 				@include last-thrown;
 				&.magnify {
-					height: 1.2 * $shown-tile-height-large;
+					height: 1.2 * $shown-tile-height-medium;
 				}
 			}
 		}
 	}
 }
 
-.column-section-large {
+.column-section-medium {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -117,11 +117,11 @@
 	.vertical-tiles-hidden {
 		display: flex;
 		flex-direction: column;
-		padding: 0 $tile-padding-large;
-		min-width: $hidden-tile-height-large;
+		padding: 0 $tile-padding-medium;
+		min-width: $hidden-tile-height-medium;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
-			max-width: (2 * $hidden-tile-height-large) + (4 * $tile-border-px);
+			max-width: (2 * $hidden-tile-height-medium) + (4 * $tile-border-px);
 			align-content: flex-start;
 			align-self: center;
 			z-index: -1;
@@ -141,8 +141,8 @@
 	}
 
 	.vertical-tile-hidden {
-		width: $hidden-tile-height-large;
-		height: $hidden-tile-width-large;
+		width: $hidden-tile-height-medium;
+		height: $hidden-tile-width-medium;
 		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
@@ -152,8 +152,8 @@
 		flex-flow: column-reverse wrap;
 		align-items: flex-start;
 		justify-content: center;
-		height: 15 * $shown-tile-height-large;
-		padding: 0 $tile-padding-large;
+		height: 15 * $shown-tile-height-medium;
+		padding: 0 $tile-padding-medium;
 		&.flow-column-wrap {
 			flex-flow: column wrap;
 			align-items: flex-end;
@@ -165,13 +165,13 @@
 		}
 
 		.vertical-tile-shown {
-			height: $shown-tile-width-large;
-			width: $shown-tile-height-large;
+			height: $shown-tile-width-medium;
+			width: $shown-tile-height-medium;
 		}
 	}
 
 	.vertical-tile-shown-bg {
-		height: $shown-tile-height-large;
+		height: $shown-tile-height-medium;
 		border-radius: 4%;
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
@@ -180,14 +180,14 @@
 			@include default-flower;
 		}
 		&.animal {
-			height: $shown-tile-height-large - (2 * $tile-border-px);
-			width: $shown-tile-width-large - (2 * $tile-border-px);
+			height: $shown-tile-height-medium - (2 * $tile-border-px);
+			width: $shown-tile-width-medium - (2 * $tile-border-px);
 			@include default-tile-border;
 		}
 		&.last-thrown {
 			@include last-thrown;
 			&.magnify {
-				height: 1.2 * $shown-tile-height-large;
+				height: 1.2 * $shown-tile-height-medium;
 			}
 		}
 	}
@@ -198,28 +198,28 @@
 		justify-content: flex-start;
 		align-self: center;
 		max-height: 50vh;
-		padding: 0 $tile-padding-large;
+		padding: 0 $tile-padding-medium;
 		&.flow-column-r-wrap-r {
 			flex-flow: column-reverse wrap-reverse;
 		}
 
 		.discarded-tile {
-			height: $shown-tile-width-large;
-			width: $shown-tile-height-large;
+			height: $shown-tile-width-medium;
+			width: $shown-tile-height-medium;
 			border-radius: 4%;
 			background: $color-tile-front;
 		}
 	}
 }
 
-.self-hidden-tiles-large {
+.self-hidden-tiles-medium {
 	display: flex;
 	flex-direction: column;
 	z-index: 20;
 
 	.self-hidden-tile {
-		height: $self-hidden-tile-width-large;
-		width: $self-hidden-tile-height-large;
+		height: $self-hidden-tile-width-medium;
+		width: $self-hidden-tile-height-medium;
 		border-radius: 4%;
 		transition: 200ms;
 		&.unselected {
@@ -232,7 +232,7 @@
 	}
 
 	.self-hidden-tile-bg {
-		height: $self-hidden-tile-height-large;
+		height: $self-hidden-tile-height-medium;
 		transform: $transform-rotate;
 	}
 }

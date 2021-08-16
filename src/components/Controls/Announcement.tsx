@@ -3,7 +3,7 @@ import React from 'react';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
-import './Controls.scss';
+import './ControlsMedium.scss';
 
 interface Props {
 	game: Game;

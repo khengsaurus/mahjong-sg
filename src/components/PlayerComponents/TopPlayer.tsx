@@ -4,7 +4,8 @@ import React, { useContext, useMemo } from 'react';
 import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
-import './playerComponents.scss';
+import './playerComponentsSmall.scss';
+import './playerComponentsMedium.scss';
 import './playerComponentsLarge.scss';
 
 const TopPlayer = (props: PlayerComponentProps) => {
@@ -13,12 +14,11 @@ const TopPlayer = (props: PlayerComponentProps) => {
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
 
-	// TODO: last thrown styling for show-hu tiles, last-thrown & magnify
 	return (
 		<div className={`row-section-${tilesSize}`}>
 			{/* Hidden tiles */}
 			{player.showTiles ? (
-				<div className="horizontal-tiles-shown">
+				<div className="horizontal-tiles-shown hu">
 					{player.hiddenTiles.map((tile: Tile) => {
 						console.log(tile.id);
 						return (
@@ -68,6 +68,16 @@ const TopPlayer = (props: PlayerComponentProps) => {
 						/>
 					) : null;
 				})}
+				{/* {player.hiddenTiles.map((tile: Tile) => {
+					return (
+						<img
+							key={`${tile.id}-shown`}
+							className="horizontal-tile-shown"
+							src={getTileSrc(tile.card)}
+							alt="tile"
+						/>
+					);
+				})} */}
 			</div>
 
 			{/* Unused tiles */}
@@ -79,6 +89,16 @@ const TopPlayer = (props: PlayerComponentProps) => {
 
 			{/* Discarded tiles */}
 			<div className="discarded">
+				{/* {player.hiddenTiles.map((tile: Tile) => {
+					return (
+						<img
+							key={`${tile.id}-discarded`}
+							className="discarded-tile"
+							src={getTileSrc(tile.card)}
+							alt="tile"
+						/>
+					);
+				})} */}
 				{player.discardedTiles.map((tile: Tile) => {
 					let className = `discarded-tile${
 						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
@@ -92,26 +112,6 @@ const TopPlayer = (props: PlayerComponentProps) => {
 						/>
 					);
 				})}
-				{/* {player.hiddenTiles.map((tile: Tile) => {
-					return (
-						<img
-							key={`${tile.id}-discarded`}
-							className="discarded-tile"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
-					);
-				})}
-				{player.hiddenTiles.map((tile: Tile) => {
-					return (
-						<img
-							key={`${tile.id}-discarded`}
-							className="discarded-tile"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
-					);
-				})} */}
 			</div>
 		</div>
 	);

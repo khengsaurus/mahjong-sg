@@ -47,11 +47,11 @@ const initialContext: AppContextInt = {
 	selectedTiles: [],
 	setSelectedTiles: (tiles: Tile[]) => {},
 	//
-	handSize: 'medium',
+	handSize: 'small',
 	setHandSize: (handSize: string) => {},
-	tilesSize: 'medium',
+	tilesSize: 'small',
 	setTilesSize: (tilesSize: string) => {},
-	controlsSize: 'medium',
+	controlsSize: 'small',
 	setControlsSize: (controlsSize: string) => {},
 	backgroundColor: 'brown',
 	setBackgroundColor: (backgroundColor: string) => {},
@@ -68,9 +68,9 @@ export const AppContextProvider = (props: any) => {
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
 	// const [loading, setLoading] = useState(false);
-	const [handSize, setHandSize] = useState('medium');
-	const [tilesSize, setTilesSize] = useState('medium');
-	const [controlsSize, setControlsSize] = useState('medium');
+	const [handSize, setHandSize] = useState('small');
+	const [tilesSize, setTilesSize] = useState('small');
+	const [controlsSize, setControlsSize] = useState('small');
 	const [backgroundColor, setBackgroundColor] = useState('brown');
 	const [tileBackColor, setTileBackColor] = useState('teal');
 	const secretKey = 'shouldBeServerSideKey';

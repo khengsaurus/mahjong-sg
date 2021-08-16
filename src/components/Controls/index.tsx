@@ -13,7 +13,8 @@ import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
-import './Controls.scss';
+import './ControlsSmall.scss';
+import './ControlsMedium.scss';
 import './ControlsLarge.scss';
 import HuDialog from './HuDialog';
 import LogBox from './LogBox';
@@ -224,7 +225,7 @@ const Controls = (props: ControlsProps) => {
 		if (canTakeLastThrown()) {
 			takeLastThrown();
 		}
-		player.hiddenTiles = sortTiles(player.hiddenTiles);
+		// player.hiddenTiles = sortTiles(player.hiddenTiles);
 		player.showTiles = true;
 		handleAction(game);
 	}

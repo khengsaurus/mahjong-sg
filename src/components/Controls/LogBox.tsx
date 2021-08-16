@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { AppContext } from '../../util/hooks/AppContext';
-import './Controls.scss';
+import './ControlsSmall.scss';
+import './ControlsMedium.scss';
 import './ControlsLarge.scss';
 
 interface LogBoxProps {

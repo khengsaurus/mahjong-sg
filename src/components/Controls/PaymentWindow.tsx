@@ -18,7 +18,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
-import './Controls.scss';
+import './ControlsMedium.scss';
 
 interface Props {
 	game: Game;

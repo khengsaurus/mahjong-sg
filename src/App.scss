@@ -30,50 +30,73 @@ $wind-font-size: 60px;
 /*-------------------- Tile sizes --------------------*/
 $tile-border-px: 1px;
 
-// original tile svg: 140 x 200 -> 14 20, 28 40, 21 30
+// original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40,
+
+// Small
+$tile-padding-small: 1px;
+$hidden-tile-height-small: 8px;
+$hidden-tile-width-small: 5px;
+$shown-tile-height-small: 30px;
+$shown-tile-width-small: 21px;
+
+$self-hidden-tile-height-small: 40px;
+$self-hidden-tile-width-small: 28px;
 
 // Medium
 $tile-padding-medium: 1px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
-$shown-tile-height-medium: 30px;
-$shown-tile-width-medium: 21px;
+$shown-tile-height-medium: 34px;
+$shown-tile-width-medium: 24px;
 
 $self-hidden-tile-height-medium: 46px;
 $self-hidden-tile-width-medium: 32px;
 
 // Large
-$tile-padding-large: 3px;
-$hidden-tile-height-large: 12px;
-$hidden-tile-width-large: 8px;
+$tile-padding-large: 2px;
+$hidden-tile-height-large: 10px;
+$hidden-tile-width-large: 7px;
 $shown-tile-height-large: 40px;
 $shown-tile-width-large: 28px;
 
-$self-hidden-tile-height-large: 53px;
-$self-hidden-tile-width-large: 37px;
+$self-hidden-tile-height-large: 50px;
+$self-hidden-tile-width-large: 34px;
 
 /*-------------------- Controls & logs --------------------*/
+// Small
+$icon-button-size-small: 32px;
+$button-width-small: 45px;
+$button-height-small: 55px;
+
+$text-line-width-small: 80px;
+$text-font-size-small: 14px;
+$text-line-height-small: 15px;
+
+$log-line-width-small: 200px;
+$log-line-height-small: 15px;
+$log-font-size-small: 14px;
+
 // Medium
-$icon-button-size-medium: 32px;
-$button-width-medium: 45px;
-$button-height-medium: 55px;
+$icon-button-size-medium: 36px;
+$button-width-medium: 50px;
+$button-height-medium: 60px;
 
-$text-line-width-medium: 80px;
-$text-font-size-medium: 14px;
-$text-line-height-medium: 15px;
+$text-line-width-medium: 90px;
+$text-font-size-medium: 15px;
+$text-line-height-medium: 16px;
 
-$log-line-width-medium: 200px;
-$log-line-height-medium: 15px;
-$log-font-size-medium: 14px;
+$log-line-width-medium: 220px;
+$log-line-height-medium: 16px;
+$log-font-size-medium: 15px;
 
 // Large
 $icon-button-size-large: 40px;
-$button-width-large: 50px;
-$button-height-large: 70px;
+$button-width-large: 55px;
+$button-height-large: 65px;
 
-$text-line-width-large: 80px;
-$text-font-size-large: 17px;
-$text-line-height-large: 18px;
+$text-line-width-large: 100px;
+$text-font-size-large: 16px;
+$text-line-height-large: 17px;
 
 $log-line-width-large: 250px;
 $log-line-height-large: 17px;
@@ -95,9 +118,10 @@ $rotate-simple-180: rotate(180deg);
 }
 
 @mixin default-selected {
-	background: linear-gradient(135deg, $color-tile-front, $color-tile-front, $color-tile-front, #d2bc85, #c49c36);
-	background-size: 600% 600%;
-	animation: linear-gradient 3s ease infinite;
+	border-radius: 4%;
+	background: $radial-gradient-gold-2;
+	background-size: 400% 400%;
+	animation: linear-gradient 5s ease infinite;
 }
 
 @mixin default-flower {
@@ -166,6 +190,7 @@ $rotate-simple-180: rotate(180deg);
 }
 
 $radial-gradient-gold: radial-gradient(#ffffff, #d8ba85, #ffffff, #ffffff);
+$radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
 
 $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
