@@ -1,12 +1,14 @@
-import { indexOfCard } from '../util/utilFns';
+import _ from 'lodash';
+import { indexOfCard, sortTiles } from '../util/utilFns';
 
 export class User {
 	id: string;
 	username: string;
 	photoUrl: string;
-	shownTiles?: Tile[] | null;
-	hiddenTiles?: Tile[] | null;
-	discardedTiles?: Tile[] | null;
+	shownTiles?: Tile[];
+	hiddenTiles?: Tile[];
+	discardedTiles?: Tile[];
+	lastTakenTile?: Tile;
 	unusedTiles?: number;
 	pongs?: string[];
 	balance?: number;
@@ -19,6 +21,7 @@ export class User {
 		shownTiles?: Tile[],
 		hiddenTiles?: Tile[],
 		discardedTiles?: Tile[],
+		lastTakenTile?: Tile,
 		unusedTiles?: number,
 		pongs?: string[],
 		balance?: number,
@@ -30,7 +33,8 @@ export class User {
 		this.shownTiles = shownTiles || [];
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
-		this.unusedTiles = unusedTiles || null;
+		this.lastTakenTile = lastTakenTile || {};
+		this.unusedTiles = unusedTiles || 0;
 		this.pongs = pongs || [];
 		this.balance = balance || 0;
 		this.showTiles = showTiles || false;
@@ -53,8 +57,19 @@ export class User {
 		return tiles;
 	}
 
-	sort(tiles: Tile[]) {
-		tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
+	sortHiddenTiles() {
+		this.putNewTileIntoHidden();
+		this.hiddenTiles = sortTiles(this.hiddenTiles);
+	}
+
+	prepareForNewRound() {
+		this.shownTiles = [];
+		this.hiddenTiles = [];
+		this.discardedTiles = [];
+		this.lastTakenTile = {};
+		this.unusedTiles = 0;
+		this.pongs = [];
+		this.showTiles = false;
 	}
 
 	/* ----------------------------------- Take options ----------------------------------- */
@@ -83,7 +98,31 @@ export class User {
 		}
 	}
 
+	/* ----------------------------------- Handle last taken tile ----------------------------------- */
+	putNewTileIntoHidden() {
+		if (!_.isEmpty(this.lastTakenTile) && !this.hiddenTilesContain(this.lastTakenTile)) {
+			this.addToHidden(this.lastTakenTile);
+		}
+		this.lastTakenTile = {};
+	}
+
+	getNewTile(t: Tile) {
+		this.putNewTileIntoHidden();
+		this.lastTakenTile = t;
+	}
+
+	returnNewTile(): Tile {
+		let t = !_.isEmpty(this.lastTakenTile) ? null : this.lastTakenTile;
+		this.lastTakenTile = {};
+		return t;
+	}
+
 	/* ----------------------------------- Contains ----------------------------------- */
+	allHiddenTilesContain(t: Tile): boolean {
+		return (this.lastTakenTile ? [...this.hiddenTiles, this.lastTakenTile] : this.hiddenTiles)
+			.map(tile => tile.id)
+			.includes(t.id);
+	}
 	hiddenTilesContain(t: Tile): boolean {
 		return this.hiddenTiles.map(tile => tile.id).includes(t.id);
 	}

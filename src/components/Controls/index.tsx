@@ -11,7 +11,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
+import { findLeft, scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
 import './ControlsSmall.scss';
 import './ControlsMedium.scss';
@@ -91,7 +91,7 @@ const Controls = (props: ControlsProps) => {
 					setCanChi(false);
 				} else if (
 					game.whoseMove === playerSeat &&
-					thrownBy === game.findLeft(playerSeat) &&
+					thrownBy === findLeft(playerSeat) &&
 					consideringTiles.includes(lastThrown)
 				) {
 					setCanKang(false);
@@ -109,10 +109,11 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Take ----------------------------------- */
 	function takeLastThrown() {
 		game.players[thrownBy].removeFromDiscarded(lastThrown);
-		player.addToHidden(lastThrown);
+		// player.addToHidden(lastThrown);
+		player.getNewTile(lastThrown);
 	}
 
-	function acquireTile() {
+	function gameStateTakenTile() {
 		game.lastThrown = {};
 		game.takenTile = true;
 		game.takenBy = playerSeat;
@@ -129,8 +130,8 @@ const Controls = (props: ControlsProps) => {
 		 * Else -> void, log
 		 */
 		if (canTakeLastThrown()) {
-			takeLastThrown();
 			game.whoseMove = playerSeat;
+			game.players[thrownBy].removeFromDiscarded(lastThrown);
 			meld.forEach(tile => {
 				tile.show = true;
 			});
@@ -147,7 +148,7 @@ const Controls = (props: ControlsProps) => {
 				player.take(meld);
 				game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 			}
-			acquireTile();
+			gameStateTakenTile();
 			handleAction(game);
 		} else {
 			console.log(`Controls/index - ${player.username} could not take last thrown tile`);
@@ -171,7 +172,7 @@ const Controls = (props: ControlsProps) => {
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			acquireTile();
+			gameStateTakenTile();
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -198,10 +199,17 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
+	function acceptNewTile() {
+		if (!_.isEmpty(player.lastTakenTile)) {
+			player.putNewTileIntoHidden();
+			player.sortHiddenTiles();
+		}
+	}
+
 	function handleThrow(tile: Tile) {
 		tile.show = true;
 		player.discard(tile);
-		player.hiddenTiles = sortTiles(player.hiddenTiles);
+		acceptNewTile();
 		game.tileThrown(tile, playerSeat);
 		handleAction(game);
 	}
@@ -209,6 +217,7 @@ const Controls = (props: ControlsProps) => {
 	function handleAction(game: Game) {
 		setSelectedTiles([]);
 		if (game.takenTile && game.thrownTile) {
+			acceptNewTile();
 			game.nextPlayerMove();
 		} else {
 			game.uncachedAction = true;
@@ -248,13 +257,14 @@ const Controls = (props: ControlsProps) => {
 	function isHoldingLastThrown(): boolean {
 		return (
 			!_.isEmpty(lastThrown) &&
-			player.hiddenTilesContain(lastThrown) &&
+			player.allHiddenTilesContain(lastThrown) &&
 			!game.players[thrownBy].discardedTilesContain(lastThrown)
 		);
 	}
 
 	function returnLastThrown() {
-		player.removeFromHidden(lastThrown);
+		// player.removeFromHidden(lastThrown);
+		player.returnNewTile();
 		game.players[thrownBy].addToDiscarded(lastThrown);
 	}
 

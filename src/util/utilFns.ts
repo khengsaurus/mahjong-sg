@@ -54,6 +54,7 @@ export function objToPlayer(data: any): User {
 		data.shownTiles,
 		data.hiddenTiles,
 		data.discardedTiles,
+		data.lastTakenTile,
 		data.unusedTiles,
 		data.pongs,
 		data.balance,
@@ -69,6 +70,7 @@ export function playerToObj(user: User, startingBal?: number) {
 		hiddenTiles: user.hiddenTiles || [],
 		shownTiles: user.shownTiles || [],
 		discardedTiles: user.discardedTiles || [],
+		lastTakenTile: user.lastTakenTile || {},
 		unusedTiles: user.unusedTiles || 0,
 		pongs: user.pongs || [],
 		balance: user.balance || startingBal || 0,
@@ -160,4 +162,16 @@ export function scrollToBottomOfDiv(id: string) {
 	} catch (err) {
 		console.log(`Element with id '${id}' not found`);
 	}
+}
+
+export function findLeft(n: number) {
+	return (n + 3) % 4;
+}
+
+export function findRight(n: number) {
+	return (n + 1) % 4;
+}
+
+export function findOpp(n: number) {
+	return (n + 2) % 4;
 }
