@@ -8,14 +8,16 @@
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	// padding-top: 2px;
 	@include default-border;
 
 	.search-box {
 		width: $panel-segment-width - 40px;
-		margin-bottom: 5px;
+		margin: 3px 0 5px;
 	}
 
 	.user {
+		margin: 5px 0 0 !important;
 		width: $panel-segment-width - 40px;
 	}
 }

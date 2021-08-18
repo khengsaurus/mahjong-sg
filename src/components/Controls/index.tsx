@@ -34,7 +34,7 @@ const Controls = (props: ControlsProps) => {
 	const [canKang, setCanKang] = useState(false);
 	const [showPay, setShowPay] = useState(false);
 	const [showLogs, setShowLogs] = useState(false);
-	const [okToHu, setOkToHu] = useState(false);
+	const [okToShow, setOkToShow] = useState(false);
 	const [declareHu, setDeclareHu] = useState(false);
 	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 	const [showSettings, setShowSettings] = useState(false);
@@ -49,9 +49,28 @@ const Controls = (props: ControlsProps) => {
 		}
 	}, []);
 
+	function lastThrownTileAvailable() {
+		return (
+			!game.takenTile &&
+			!_.isEmpty(game.lastThrown) &&
+			game.players[thrownBy].discardedTilesContain(game.lastThrown)
+		);
+	}
+
 	useEffect(() => {
 		if (game && player) {
 			console.log(`Controls/index - useEffect to set options called`);
+			/**
+			 * TODO: review logic for this
+			 * OtherPlayer has thrown tile
+			 *  -> Availble if has not been taken && otherPlayer has not drawn a tile
+			 *  -> Player canPong/ canKang ?
+			 *  -> thrownBy is previous & player's turn -> canChi ?
+			 *
+			 * Case: when can selfKang:
+			 *  -> selectedTiles.length === 1/ 4 && is player's turn
+			 */
+
 			if (game.takenTile) {
 				/**
 				 * If a tile has been taken by any player, options -> false
@@ -113,8 +132,10 @@ const Controls = (props: ControlsProps) => {
 		player.getNewTile(lastThrown);
 	}
 
-	function gameStateTakenTile() {
-		game.lastThrown = {};
+	function gameStateTakenTile(resetLastThrown: boolean = false) {
+		if (resetLastThrown) {
+			game.lastThrown = {};
+		}
 		game.takenTile = true;
 		game.takenBy = playerSeat;
 		game.newLog(`${player.username}'s turn - to throw`);
@@ -129,7 +150,7 @@ const Controls = (props: ControlsProps) => {
 		 *   Move meld (including lastThrown) from player.hiddenTiles -> player.shownTiles
 		 * Else -> void, log
 		 */
-		if (canTakeLastThrown()) {
+		if (kang || canTakeLastThrown()) {
 			game.whoseMove = playerSeat;
 			game.players[thrownBy].removeFromDiscarded(lastThrown);
 			meld.forEach(tile => {
@@ -148,7 +169,7 @@ const Controls = (props: ControlsProps) => {
 				player.take(meld);
 				game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 			}
-			gameStateTakenTile();
+			gameStateTakenTile(false);
 			handleAction(game);
 		} else {
 			console.log(`Controls/index - ${player.username} could not take last thrown tile`);
@@ -172,7 +193,7 @@ const Controls = (props: ControlsProps) => {
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			gameStateTakenTile();
+			gameStateTakenTile(true);
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -183,8 +204,8 @@ const Controls = (props: ControlsProps) => {
 
 	function buHua(): Tile {
 		let drawnTile: Tile;
-		let initNoHiddenTiles = player.hiddenTiles.length;
-		while (player.hiddenTiles.length === initNoHiddenTiles) {
+		let initNoHiddenTiles = player.countAllHiddenTiles();
+		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (game.tiles.length > 15) {
 				drawnTile = game.giveTiles(1, playerSeat, true, true);
 			} else {
@@ -199,17 +220,10 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
-	function acceptNewTile() {
-		if (!_.isEmpty(player.lastTakenTile)) {
-			player.putNewTileIntoHidden();
-			player.sortHiddenTiles();
-		}
-	}
-
 	function handleThrow(tile: Tile) {
 		tile.show = true;
 		player.discard(tile);
-		acceptNewTile();
+		player.setHiddenTiles();
 		game.tileThrown(tile, playerSeat);
 		handleAction(game);
 	}
@@ -217,7 +231,7 @@ const Controls = (props: ControlsProps) => {
 	function handleAction(game: Game) {
 		setSelectedTiles([]);
 		if (game.takenTile && game.thrownTile) {
-			acceptNewTile();
+			player.setHiddenTiles();
 			game.nextPlayerMove();
 		} else {
 			game.uncachedAction = true;
@@ -294,16 +308,16 @@ const Controls = (props: ControlsProps) => {
 	function setShowTimeout() {
 		setTimeoutId(
 			setTimeout(function () {
-				setOkToHu(false);
+				setOkToShow(false);
 			}, 2000)
 		);
 	}
 
 	function handleShow() {
-		if (okToHu) {
+		if (okToShow) {
 			clearTimeout(timeoutId);
 		}
-		setOkToHu(true);
+		setOkToShow(true);
 		setShowTimeout();
 	}
 
@@ -370,7 +384,7 @@ const Controls = (props: ControlsProps) => {
 				>
 					<p>{canKang ? `杠` : `碰`}</p>
 				</Button>
-				{okToHu && (
+				{okToShow && (
 					<Button
 						className="button"
 						variant="outlined"
@@ -378,7 +392,7 @@ const Controls = (props: ControlsProps) => {
 						onClick={showHuDialog}
 						disabled={game.hu.length === 3}
 					>
-						<p>{`开`}</p>
+						<p>{`开!`}</p>
 					</Button>
 				)}
 			</div>
@@ -403,18 +417,20 @@ const Controls = (props: ControlsProps) => {
 				>
 					<p>{game.tiles.length === 15 ? `结束` : `摸`}</p>
 				</Button>
-				<Button
-					className="button"
-					variant="outlined"
-					onClick={handleShow}
-					// onClick={e => {
-					// 	e.preventDefault();
-					// 	game.newLog(`Test: ${Math.random()}`);
-					// 	FBService.updateGame(game);
-					// }}
-				>
-					<p>{`胡`}</p>
-				</Button>
+				{!okToShow && (
+					<Button
+						className="button"
+						variant="outlined"
+						onClick={handleShow}
+						// onClick={e => {
+						// 	e.preventDefault();
+						// 	game.newLog(`Test: ${Math.random()}`);
+						// 	FBService.updateGame(game);
+						// }}
+					>
+						<p>{`开?`}</p>
+					</Button>
+				)}
 			</div>
 
 			<div className={`bottom-right-controls-${controlsSize}`}>

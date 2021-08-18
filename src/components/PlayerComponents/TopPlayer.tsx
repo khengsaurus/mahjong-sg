@@ -12,46 +12,42 @@ const TopPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrownTile } = props;
 	const { tilesSize } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
-	let frontBackTag = hasFront ? ' front' : hasBack ? ' back' : '';
+	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
 	return (
 		<div className={`row-section-${tilesSize}`}>
 			{/* Hidden tiles */}
 			{player.showTiles ? (
-				<div className="horizontal-tiles-shown hu">
+				<div className="htss">
 					{player.hiddenTiles.map((tile: Tile) => {
-						console.log(tile.id);
-						return (
-							<img
-								key={`${tile.id}-hidden`}
-								className="horizontal-tile-shown"
-								src={getTileSrc(tile.card)}
-								alt="tile"
-							/>
-						);
+						return <img key={`${tile.id}-hidden`} className="hts" src={getTileSrc(tile.card)} alt="tile" />;
 					})}
+					{!_.isEmpty(player.lastTakenTile) && (
+						<img
+							key={`${player.lastTakenTile.id}-hidden`}
+							className="hts last"
+							src={getTileSrc(player.lastTakenTile.card)}
+							alt="tile"
+						/>
+					)}
 				</div>
 			) : (
-				<div className="horizontal-tiles-hidden">
-					{player.hiddenTiles.map((tile: Tile) => {
-						return <div key={`${tile.id}-hidden`} className="horizontal-tile-hidden" />;
+				<div className="htsh">
+					{player.allHiddenTiles().map((tile: Tile) => {
+						return <div key={`${tile.id}-hidden`} className="hth" />;
 					})}
 				</div>
 			)}
 
 			{/* Shown tiles */}
-			<div className="horizontal-tiles-shown">
+			<div className="htss">
 				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 				{player.shownTiles.map((tile: Tile) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<img
 							key={`${tile.id}-shown`}
 							className={
-								tile.isValidFlower
-									? tile.suit === '动物'
-										? 'horizontal-tile-shown animate-flower animal'
-										: 'horizontal-tile-shown animate-flower'
-									: 'horizontal-tile-shown'
+								tile.isValidFlower ? (tile.suit === '动物' ? 'hts flower animal' : 'hts flower') : 'hts'
 							}
 							src={getTileSrc(tile.card)}
 							alt="tile"
@@ -60,49 +56,30 @@ const TopPlayer = (props: PlayerComponentProps) => {
 				})}
 				{player.shownTiles.map((tile: Tile) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<img
-							key={`${tile.id}-shown`}
-							className="horizontal-tile-shown"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
+						<img key={`${tile.id}-shown`} className="hts" src={getTileSrc(tile.card)} alt="tile" />
 					) : null;
 				})}
+				{/* Extra */}
 				{/* {player.hiddenTiles.map((tile: Tile) => {
-					return (
-						<img
-							key={`${tile.id}-shown`}
-							className="horizontal-tile-shown"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
-					);
+					return <img key={`${tile.id}-shown`} className="hts" src={getTileSrc(tile.card)} alt="tile" />;
 				})} */}
 			</div>
 
 			{/* Unused tiles */}
-			<div className={`horizontal-tiles-hidden unused ${frontBackTag}`}>
+			<div className={`htsh unused ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`top-unused-tile${i}`} className="horizontal-tile-hidden" />;
+					return <div key={`top-unused-tile${i}`} className="hth" />;
 				})}
 			</div>
 
 			{/* Discarded tiles */}
-			<div className="discarded">
+			<div className="dts">
+				{/* Extra */}
 				{/* {player.hiddenTiles.map((tile: Tile) => {
-					return (
-						<img
-							key={`${tile.id}-discarded`}
-							className="discarded-tile"
-							src={getTileSrc(tile.card)}
-							alt="tile"
-						/>
-					);
+					return <img key={`${tile.id}-discarded`} className="dt" src={getTileSrc(tile.card)} alt="tile" />;
 				})} */}
 				{player.discardedTiles.map((tile: Tile) => {
-					let className = `discarded-tile${
-						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
-					}`;
+					let className = `dt${!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last` : ``}`;
 					return (
 						<img
 							key={`${tile.id}-discarded`}

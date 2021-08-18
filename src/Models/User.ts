@@ -57,12 +57,15 @@ export class User {
 		return tiles;
 	}
 
-	sortHiddenTiles() {
-		this.putNewTileIntoHidden();
+	sortHiddenTiles(): void {
 		this.hiddenTiles = sortTiles(this.hiddenTiles);
 	}
 
-	prepareForNewRound() {
+	sortShownTiles(): void {
+		this.shownTiles = sortTiles(this.shownTiles);
+	}
+
+	prepareForNewRound(): void {
 		this.shownTiles = [];
 		this.hiddenTiles = [];
 		this.discardedTiles = [];
@@ -70,6 +73,14 @@ export class User {
 		this.unusedTiles = 0;
 		this.pongs = [];
 		this.showTiles = false;
+	}
+
+	countAllHiddenTiles(): number {
+		return this.hiddenTiles.length + (_.isEmpty(this.lastTakenTile) ? 0 : 1);
+	}
+
+	allHiddenTiles(): Tile[] {
+		return _.isEmpty(this.lastTakenTile) ? this.hiddenTiles : [...this.hiddenTiles, this.lastTakenTile];
 	}
 
 	/* ----------------------------------- Take options ----------------------------------- */
@@ -104,6 +115,11 @@ export class User {
 			this.addToHidden(this.lastTakenTile);
 		}
 		this.lastTakenTile = {};
+	}
+
+	setHiddenTiles() {
+		this.putNewTileIntoHidden();
+		this.sortHiddenTiles();
 	}
 
 	getNewTile(t: Tile) {

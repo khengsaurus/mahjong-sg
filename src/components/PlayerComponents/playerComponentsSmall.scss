@@ -7,10 +7,10 @@
 	justify-content: center;
 	align-content: center;
 	transition: 200ms;
-	&.bottom {
+	&.flex-dir-column-r {
 		flex-direction: column-reverse;
 	}
-	.horizontal-tiles-hidden {
+	.htsh {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
@@ -39,14 +39,14 @@
 		}
 	}
 
-	.horizontal-tile-hidden {
+	.hth {
 		height: $hidden-tile-height-small;
 		width: $hidden-tile-width-small;
 		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
 
-	.horizontal-tiles-shown {
+	.htss {
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: center;
@@ -56,19 +56,12 @@
 		&.bottom {
 			transform: $rotate-simple-180;
 		}
-		&.hu {
-			flex-flow: row-reverse wrap;
-			// Not working for left/right since each tile svg is recognized asa 'last-child'
-			:last-child {
-				@include last-thrown;
-			}
-		}
 
-		.horizontal-tile-shown {
+		.hts {
 			height: $shown-tile-height-small;
 			border-radius: 4%;
 			background: $color-tile-front;
-			&.animate-flower {
+			&.flower {
 				@include default-flower;
 			}
 			&.animal {
@@ -76,10 +69,17 @@
 				width: $shown-tile-width-small - (2 * $tile-border-px);
 				@include default-tile-border;
 			}
+			&.last {
+				margin-right: $hidden-tile-width-small;
+				@include last-thrown;
+				&.margin-left {
+					margin-left: $hidden-tile-width-small;
+				}
+			}
 		}
 	}
 
-	.discarded {
+	.dts {
 		display: flex;
 		flex-flow: row-reverse wrap;
 		justify-content: flex-start;
@@ -90,15 +90,12 @@
 			transform: $rotate-simple-180;
 		}
 
-		.discarded-tile {
+		.dt {
 			height: $shown-tile-height-small;
 			border-radius: 4%;
 			background: $color-tile-front;
-			&.last-thrown {
+			&.last {
 				@include last-thrown;
-				&.magnify {
-					height: 1.2 * $shown-tile-height-small;
-				}
 			}
 		}
 	}
@@ -114,7 +111,7 @@
 		flex-direction: row-reverse;
 	}
 
-	.vertical-tiles-hidden {
+	.vtsh {
 		display: flex;
 		flex-direction: column;
 		padding: 0 $tile-padding-small;
@@ -140,43 +137,44 @@
 		}
 	}
 
-	.vertical-tile-hidden {
+	.vth {
 		width: $hidden-tile-height-small;
 		height: $hidden-tile-width-small;
 		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
 
-	.vertical-tiles-shown {
+	.vtss {
 		display: flex;
 		flex-flow: column-reverse wrap;
 		align-items: flex-start;
 		justify-content: center;
 		height: 15 * $shown-tile-height-small;
 		padding: 0 $tile-padding-small;
-		&.flow-column-wrap {
+		&.right {
 			flex-flow: column wrap;
 			align-items: flex-end;
 		}
-		&.hu {
-			:last-child {
-				@include last-thrown;
-			}
-		}
 
-		.vertical-tile-shown {
+		.vts {
 			height: $shown-tile-width-small;
 			width: $shown-tile-height-small;
+			&.last {
+				margin-top: $hidden-tile-width-small;
+				&.right {
+					margin-bottom: $hidden-tile-width-small;
+				}
+			}
 		}
 	}
 
-	.vertical-tile-shown-bg {
+	.vts-bg {
 		height: $shown-tile-height-small;
 		border-radius: 4%;
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
 		align-self: flex-start;
-		&.animate-flower {
+		&.flower {
 			@include default-flower;
 		}
 		&.animal {
@@ -184,26 +182,23 @@
 			width: $shown-tile-width-small - (2 * $tile-border-px);
 			@include default-tile-border;
 		}
-		&.last-thrown {
+		&.last {
 			@include last-thrown;
-			&.magnify {
-				height: 1.2 * $shown-tile-height-small;
-			}
 		}
 	}
 
-	.discarded {
+	.dts {
 		display: flex;
 		flex-flow: column wrap;
 		justify-content: flex-start;
 		align-self: center;
 		max-height: 50vh;
 		padding: 0 $tile-padding-small;
-		&.flow-column-r-wrap-r {
+		&.right {
 			flex-flow: column-reverse wrap-reverse;
 		}
 
-		.discarded-tile {
+		.dt {
 			height: $shown-tile-width-small;
 			width: $shown-tile-height-small;
 			border-radius: 4%;
@@ -228,6 +223,9 @@
 		&.selected {
 			transform: translateX(15%);
 			@include default-selected;
+		}
+		&.last {
+			margin-top: $hidden-tile-height-small;
 		}
 	}
 

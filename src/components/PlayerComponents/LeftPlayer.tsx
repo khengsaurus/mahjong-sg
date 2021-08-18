@@ -1,6 +1,6 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import * as _ from 'lodash';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useEffect } from 'react';
 import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
@@ -22,21 +22,27 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 		}
 	}
 
+	useEffect(() => {
+		console.log(selectedTiles);
+	}, [selectedTiles]);
+
 	return (
 		<div className={`column-section-${tilesSize}`}>
 			{/* Hidden tiles */}
 			{player.showTiles ? (
-				<div className="vertical-tiles-shown flow-column-wrap">
+				<div className="vtss">
 					{player.hiddenTiles.map((tile: Tile) => {
-						let tileBgName = `vertical-tile-shown-bg${
-							!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
-						}`;
 						return (
-							<div className={`vertical-tile-shown`} key={`${tile.id}-hidden`}>
-								<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
+							<div className="vts" key={`${tile.id}-hidden`}>
+								<img className="vts-bg" src={getTileSrc(tile.card)} alt="tile" />
 							</div>
 						);
 					})}
+					{!_.isEmpty(player.lastTakenTile) && (
+						<div className="vts last" key={`${player.lastTakenTile.id}-hidden`}>
+							<img className="vts-bg last" src={getTileSrc(player.lastTakenTile.card)} alt="tile" />
+						</div>
+					)}
 				</div>
 			) : (
 				<div className={`self-hidden-tiles-${handSize}`}>
@@ -55,22 +61,39 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 							</div>
 						);
 					})}
+					{!_.isEmpty(player.lastTakenTile) && (
+						<div
+							key={`${player.lastTakenTile.id}-hidden`}
+							className={
+								selectedTiles.includes(player.lastTakenTile)
+									? 'self-hidden-tile selected last'
+									: 'self-hidden-tile unselected last'
+							}
+							onClick={() => selectTile(player.lastTakenTile)}
+						>
+							<img
+								className="self-hidden-tile-bg"
+								src={getTileSrc(player.lastTakenTile.card)}
+								alt="tile"
+							/>
+						</div>
+					)}
 				</div>
 			)}
 
 			{/* Shown tiles */}
-			<div className="vertical-tiles-shown">
+			<div className="vtss">
 				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 				{player.shownTiles.map((tile: Tile) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vertical-tile-shown" key={`${tile.id}-shown`}>
+						<div className="vts" key={`${tile.id}-shown`}>
 							<img
 								className={
 									tile.isValidFlower
 										? tile.suit === '动物'
-											? 'vertical-tile-shown-bg animate-flower animal'
-											: 'vertical-tile-shown-bg animate-flower'
-										: 'vertical-tile-shown-bg'
+											? 'vts-bg flower animal'
+											: 'vts-bg flower'
+										: 'vts-bg'
 								}
 								src={getTileSrc(tile.card)}
 								alt="tile"
@@ -79,44 +102,49 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 					) : null;
 				})}
 				{player.shownTiles.map((tile: Tile) => {
+					let tileBgName = `vts-bg${
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last` : ``
+					}`;
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<div className="vertical-tile-shown" key={`${tile.id}-shown`}>
-							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						<div className="vts" key={`${tile.id}-shown`}>
+							<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					) : null;
 				})}
+				{/* Extra */}
 				{/* {player.hiddenTiles.map((tile: Tile) => {
 					return (
-						<div className="vertical-tile-shown" key={`${tile.id}-shown`}>
-							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						<div className="vts" key={`${tile.id}-shown`}>
+							<img className="vts-bg" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					);
 				})} */}
 			</div>
 
 			{/* Unused tiles */}
-			<div className={`vertical-tiles-hidden unused ${frontBackTag}`}>
+			<div className={`vtsh unused ${frontBackTag}`}>
 				{unusedTiles &&
 					unusedTiles.map(i => {
-						return <div key={`self-unused-tile${i}`} className="vertical-tile-hidden" />;
+						return <div key={`self-unused-tile${i}`} className="vth" />;
 					})}
 			</div>
 
 			{/* Discarded tiles */}
-			<div className="discarded">
+			<div className="dts">
+				{/* Extra */}
 				{/* {player.hiddenTiles.map((tile: Tile) => {
 					return (
-						<div className="discarded-tile" key={`self-discarded-tile-${tile.id}`}>
-							<img className="vertical-tile-shown-bg" src={getTileSrc(tile.card)} alt="tile" />
+						<div className="dt" key={`self-dt-${tile.id}`}>
+							<img className="vts-bg" src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					);
 				})} */}
 				{player.discardedTiles.map((tile: Tile) => {
-					let tileBgName = `vertical-tile-shown-bg${
-						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last-thrown` : ``
+					let tileBgName = `vts-bg${
+						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last` : ``
 					}`;
 					return (
-						<div className={'discarded-tile'} key={`${tile.id}-discarded`}>
+						<div className={'dt'} key={`${tile.id}-discarded`}>
 							<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					);

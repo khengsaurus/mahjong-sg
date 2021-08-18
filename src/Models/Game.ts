@@ -220,7 +220,7 @@ export class Game {
 		let player = this.players[playerIndex];
 		let newTile: Tile;
 		let receivedFlower: boolean = false;
-		let log = `${player.username} received `;
+		let log = `${player.username} ${buHua ? `bu hua, ` : ``} received `;
 		let flowerReceived = '';
 		let flowersReceived = ', including';
 		if (!player.hiddenTiles) {
@@ -372,16 +372,16 @@ export class Game {
 		this.giveTiles(13, findOpp(this.dealer), false, false);
 		this.giveTiles(13, findLeft(this.dealer), false, false);
 		while (
-			this.players[this.dealer].hiddenTiles.length < 14 ||
-			this.players[findRight(this.dealer)].hiddenTiles.length < 13 ||
-			this.players[findOpp(this.dealer)].hiddenTiles.length < 13 ||
-			this.players[findLeft(this.dealer)].hiddenTiles.length < 13
+			this.players[this.dealer].countAllHiddenTiles() < 14 ||
+			this.players[findRight(this.dealer)].countAllHiddenTiles() < 13 ||
+			this.players[findOpp(this.dealer)].countAllHiddenTiles() < 13 ||
+			this.players[findLeft(this.dealer)].countAllHiddenTiles() < 13
 		) {
 			this.buHua();
 		}
 		this.players.forEach((player: User) => {
-			player.hiddenTiles = sortTiles(player.hiddenTiles);
-			player.shownTiles = sortTiles(player.shownTiles);
+			player.setHiddenTiles();
+			player.sortShownTiles();
 		});
 		this.takenTile = true;
 		this.takenBy = this.dealer;
@@ -389,13 +389,13 @@ export class Game {
 	}
 
 	buHua() {
-		if (this.players[this.dealer].hiddenTiles.length < 14) {
-			this.giveTiles(14 - this.players[this.dealer].hiddenTiles.length, this.dealer, true, true);
+		if (this.players[this.dealer].countAllHiddenTiles() < 14) {
+			this.giveTiles(14 - this.players[this.dealer].countAllHiddenTiles(), this.dealer, true, true);
 		}
 		let others: number[] = [findRight(this.dealer), findOpp(this.dealer), findLeft(this.dealer)];
 		others.forEach((n: number) => {
-			if (this.players[n].hiddenTiles.length < 13) {
-				this.giveTiles(13 - this.players[n].hiddenTiles.length, n, true, true);
+			if (this.players[n].countAllHiddenTiles() < 13) {
+				this.giveTiles(13 - this.players[n].countAllHiddenTiles(), n, true, true);
 			}
 		});
 	}
