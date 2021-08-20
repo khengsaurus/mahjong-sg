@@ -178,11 +178,18 @@ export class User {
 	addToDiscarded(t: Tile): void;
 	addToDiscarded(t: Tile[]): void;
 	addToDiscarded(t: any) {
+		console.log(t);
+		t.length && console.log(t[0]);
+		t.length && t[0].id && console.log(t[0].id);
+		console.log('Old discarded');
+		this.discardedTiles.forEach(tile => console.log(tile.id));
 		if (!t.length) {
 			this.discardedTiles = [...this.discardedTiles, t];
 		} else {
 			this.discardedTiles = [...this.discardedTiles, ...t];
 		}
+		console.log('New discarded');
+		this.discardedTiles.forEach(tile => console.log(tile.id));
 	}
 
 	// /* ----------------------------------- Remove ----------------------------------- */
@@ -221,16 +228,17 @@ export class User {
 
 	/* ----------------------------------- Take ----------------------------------- */
 	discard(tileToThrow: Tile): Tile {
+		this.putNewTileIntoHidden();
 		this.removeFromHidden(tileToThrow);
 		this.addToDiscarded(tileToThrow);
 		return tileToThrow;
 	}
-	take(tiles: Tile[]) {
+	moveMeldFromHiddenIntoShown(tiles: Tile[]) {
 		this.removeFromHidden(tiles);
 		this.addToShown(tiles);
 	}
 	pongOrKang(tiles: Tile[]) {
-		this.take(tiles);
+		this.moveMeldFromHiddenIntoShown(tiles);
 		this.pongs = [...this.pongs, tiles[0].card];
 	}
 	selfKang(toKang: Tile) {

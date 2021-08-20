@@ -146,13 +146,13 @@
 
 	.vtss {
 		display: flex;
-		flex-flow: column-reverse wrap;
+		flex-flow: column wrap;
 		align-items: flex-start;
 		justify-content: center;
 		height: 15 * $shown-tile-height-small;
 		padding: 0 $tile-padding-small;
 		&.right {
-			flex-flow: column wrap;
+			// flex-flow: column-reverse wrap;
 			align-items: flex-end;
 		}
 

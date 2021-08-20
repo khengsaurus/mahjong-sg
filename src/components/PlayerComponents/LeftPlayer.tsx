@@ -22,10 +22,6 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 		}
 	}
 
-	useEffect(() => {
-		console.log(selectedTiles);
-	}, [selectedTiles]);
-
 	return (
 		<div className={`column-section-${tilesSize}`}>
 			{/* Hidden tiles */}
@@ -83,24 +79,6 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 
 			{/* Shown tiles */}
 			<div className="vtss">
-				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
-				{player.shownTiles.map((tile: Tile) => {
-					return tile.suit === '花' || tile.suit === '动物' ? (
-						<div className="vts" key={`${tile.id}-shown`}>
-							<img
-								className={
-									tile.isValidFlower
-										? tile.suit === '动物'
-											? 'vts-bg flower animal'
-											: 'vts-bg flower'
-										: 'vts-bg'
-								}
-								src={getTileSrc(tile.card)}
-								alt="tile"
-							/>
-						</div>
-					) : null;
-				})}
 				{player.shownTiles.map((tile: Tile) => {
 					let tileBgName = `vts-bg${
 						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last` : ``
@@ -119,6 +97,24 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						</div>
 					);
 				})} */}
+				{player.shownTiles.map((tile: Tile) => {
+					return tile.suit === '花' || tile.suit === '动物' ? (
+						<div className="vts" key={`${tile.id}-shown`}>
+							<img
+								className={
+									tile.isValidFlower
+										? tile.suit === '动物'
+											? 'vts-bg flower animal'
+											: 'vts-bg flower'
+										: 'vts-bg'
+								}
+								src={getTileSrc(tile.card)}
+								alt="tile"
+							/>
+						</div>
+					) : null;
+				})}
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
 
 			{/* Unused tiles */}
@@ -144,7 +140,13 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						!_.isEmpty(lastThrownTile) && tile.id === lastThrownTile.id ? ` last` : ``
 					}`;
 					return (
-						<div className={'dt'} key={`${tile.id}-discarded`}>
+						<div
+							className={'dt'}
+							key={`${tile.id}-discarded`}
+							onClick={() => {
+								console.log(tile.id);
+							}}
+						>
 							<img className={tileBgName} src={getTileSrc(tile.card)} alt="tile" />
 						</div>
 					);

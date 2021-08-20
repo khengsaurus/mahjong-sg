@@ -146,6 +146,7 @@ export class Game {
 		const daPai = ['红中', '白板', '发财'];
 		const animals = ['cat', 'mouse', 'rooster', 'worm'];
 		const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
+		let indexes = new Set();
 
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
@@ -160,6 +161,7 @@ export class Game {
 						show: false
 					};
 					tiles.push(tile);
+					indexes.add(tile.id);
 				});
 			});
 			winds.forEach(pai => {
@@ -173,6 +175,7 @@ export class Game {
 					show: false
 				};
 				tiles.push(tile);
+				indexes.add(tile.id);
 			});
 			daPai.forEach(pai => {
 				let tile: Tile = {
@@ -185,6 +188,7 @@ export class Game {
 					show: false
 				};
 				tiles.push(tile);
+				indexes.add(tile.id);
 			});
 		});
 		flowers.forEach(flower => {
@@ -198,6 +202,7 @@ export class Game {
 				show: false
 			};
 			tiles.push(tile);
+			indexes.add(tile.id);
 		});
 
 		animals.forEach(animal => {
@@ -211,8 +216,10 @@ export class Game {
 				show: false
 			};
 			tiles.push(tile);
+			indexes.add(tile.id);
 		});
 		this.newLog(`Generated ${tiles.length} tiles`);
+		this.newLog(`Generated ${indexes.size} unique tile indexes`);
 		return this.shuffle(tiles);
 	}
 

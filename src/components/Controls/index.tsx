@@ -49,86 +49,37 @@ const Controls = (props: ControlsProps) => {
 		}
 	}, []);
 
-	function lastThrownTileAvailable() {
-		return (
-			!game.takenTile &&
-			!_.isEmpty(game.lastThrown) &&
-			game.players[thrownBy].discardedTilesContain(game.lastThrown)
-		);
-	}
-
 	useEffect(() => {
-		if (game && player) {
-			console.log(`Controls/index - useEffect to set options called`);
+		let tiles: Tile[] = [];
+		/**
+		 * Can self kang during turn & selecting 1 || 4 */
+		if (game.whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
+			tiles = selectedTiles;
+			setOptions(player.canKang(tiles), false, false, tiles);
 			/**
-			 * TODO: review logic for this
-			 * OtherPlayer has thrown tile
-			 *  -> Availble if has not been taken && otherPlayer has not drawn a tile
-			 *  -> Player canPong/ canKang ?
-			 *  -> thrownBy is previous & player's turn -> canChi ?
-			 *
-			 * Case: when can selfKang:
-			 *  -> selectedTiles.length === 1/ 4 && is player's turn
-			 */
-
-			if (game.takenTile) {
-				/**
-				 * If a tile has been taken by any player, options -> false
-				 * If not player's turn, canChi -> false
-				 */
-				setCanKang(false);
-				setCanPong(false);
-				setCanChi(false);
-			} else {
-				let consideringTiles: Tile[];
-				/**
-				 * Player selects 1/4 tiles -> consider those tiles
-				 * Player selects 2/3 tiles -> consider those + last thrown if not empty
-				 */
-				if (selectedTiles.length === 1 || selectedTiles.length === 4) {
-					consideringTiles = sortTiles(selectedTiles);
-				} else {
-					consideringTiles = sortTiles(
-						_.isEmpty(lastThrown) ? selectedTiles : [...selectedTiles, lastThrown]
-					);
-				}
-				setMeld(consideringTiles);
-				if (
-					/**
-					 * Player considering 4 tiles or 1 tile (which is in player's hand) -> canKang
-					 * Else -> canPong, canChi
-					 */
-					consideringTiles.length === 4 ||
-					(consideringTiles.length === 1 && consideringTiles[0] !== lastThrown)
-				) {
-					setCanKang(player.canKang(consideringTiles));
-					setCanPong(false);
-					setCanChi(false);
-				} else if (player.canPong(consideringTiles)) {
-					setCanKang(false);
-					setCanPong(true);
-					setCanChi(false);
-				} else if (
-					game.whoseMove === playerSeat &&
-					thrownBy === findLeft(playerSeat) &&
-					consideringTiles.includes(lastThrown)
-				) {
-					setCanKang(false);
-					setCanPong(false);
-					setCanChi(player.canChi(consideringTiles));
-				} else {
-					setCanKang(false);
-					setCanPong(false);
-					setCanChi(false);
-				}
-			}
+			 * Can kang during anyone's turn if last thrown tile available & selecting 3*/
+		} else if (lastThrownAvailable() && selectedTiles.length === 3) {
+			tiles = [...selectedTiles, lastThrown];
+			setOptions(player.canKang(tiles), false, false, tiles);
+		} else if (lastThrownAvailable() && selectedTiles.length === 2) {
+			/**
+			 * If last thrown available, can pong during anyone's turn,
+			 * Can chi only during own's turn */
+			tiles = sortTiles([...selectedTiles, lastThrown]);
+			setOptions(
+				false,
+				player.canPong(tiles),
+				game.thrownBy === findLeft(playerSeat) && game.whoseMove === playerSeat && player.canChi(tiles),
+				tiles
+			);
+		} else {
+			setOptions(false, false, false, tiles);
 		}
 	}, [lastThrown, selectedTiles]);
 
 	/* ----------------------------------- Take ----------------------------------- */
 	function takeLastThrown() {
 		game.players[thrownBy].removeFromDiscarded(lastThrown);
-		// player.addToHidden(lastThrown);
 		player.getNewTile(lastThrown);
 	}
 
@@ -141,44 +92,35 @@ const Controls = (props: ControlsProps) => {
 		game.newLog(`${player.username}'s turn - to throw`);
 	}
 
-	function handleTake(kang: boolean) {
-		/**
-		 * If last thrown can be taken ->
-		 *   Set game.whoseMove to playerSeat in case of pong/kang
-		 *   Remove lastThrown from board
-		 *   Each tile in meld -> show = true
-		 *   Move meld (including lastThrown) from player.hiddenTiles -> player.shownTiles
-		 * Else -> void, log
-		 */
-		if (kang || canTakeLastThrown()) {
-			game.whoseMove = playerSeat;
+	function handleTake() {
+		game.whoseMove = playerSeat;
+		if (meld.includes(lastThrown)) {
 			game.players[thrownBy].removeFromDiscarded(lastThrown);
-			meld.forEach(tile => {
-				tile.show = true;
-			});
-			if (player.canPong(meld) || (meld.length === 4 && player.canKang(meld))) {
-				player.pongOrKang(meld);
-				if (kang) {
-					game.flagProgress = true;
-					game.newLog(`${player.username} kang'd ${meld[0].card}`);
-					buHua();
-				} else {
-					game.newLog(`${player.username} pong'd ${meld[0].card}`);
-				}
-			} else {
-				player.take(meld);
-				game.newLog(`${player.username} chi'd ${lastThrown.card}`);
-			}
-			gameStateTakenTile(false);
-			handleAction(game);
-		} else {
-			console.log(`Controls/index - ${player.username} could not take last thrown tile`);
 		}
+		meld.forEach(tile => {
+			tile.show = true;
+		});
+		if (canKang || canPong) {
+			player.pongOrKang(meld);
+			if (canKang) {
+				game.flagProgress = true;
+				game.newLog(`${player.username} kang'd ${meld[0].card}`);
+				buHua();
+			} else {
+				game.newLog(`${player.username} pong'd ${meld[0].card}`);
+			}
+		} else {
+			player.moveMeldFromHiddenIntoShown(meld);
+			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
+		}
+		gameStateTakenTile(false);
+		handleAction(game);
 	}
 
 	function selfKang() {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
+		gameStateTakenTile(false);
 		game.flagProgress = true;
 		buHua();
 		handleAction(game);
@@ -221,6 +163,7 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Throw ----------------------------------- */
 
 	function handleThrow(tile: Tile) {
+		console.log(tile.id);
 		tile.show = true;
 		player.discard(tile);
 		player.setHiddenTiles();
@@ -245,7 +188,7 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		if (canTakeLastThrown()) {
+		if (lastThrownAvailable()) {
 			takeLastThrown();
 		}
 		// player.hiddenTiles = sortTiles(player.hiddenTiles);
@@ -264,8 +207,15 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Util ----------------------------------- */
 
-	function canTakeLastThrown(): boolean {
-		return !_.isEmpty(lastThrown) && game.players[thrownBy].discardedTilesContain(lastThrown);
+	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: Tile[]) {
+		setCanKang(kang);
+		setCanPong(pong);
+		setCanChi(chi);
+		setMeld(tiles);
+	}
+
+	function lastThrownAvailable(): boolean {
+		return !_.isEmpty(lastThrown) && !game.takenTile && game.players[thrownBy].discardedTilesContain(lastThrown);
 	}
 
 	function isHoldingLastThrown(): boolean {
@@ -364,7 +314,7 @@ const Controls = (props: ControlsProps) => {
 					className="button"
 					variant="outlined"
 					onClick={() => {
-						handleTake(false);
+						handleTake();
 					}}
 					disabled={!canChi}
 				>
@@ -374,10 +324,10 @@ const Controls = (props: ControlsProps) => {
 					className="button"
 					variant="outlined"
 					onClick={() => {
-						if (selectedTiles.length === 1 && player.canKang(selectedTiles)) {
+						if (selectedTiles.length === 1) {
 							selfKang();
 						} else {
-							handleTake(canKang);
+							handleTake();
 						}
 					}}
 					disabled={!canPong && !canKang}
