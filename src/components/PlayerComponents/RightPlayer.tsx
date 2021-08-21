@@ -18,7 +18,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 		<div className={`column-section-${tilesSize} right`}>
 			{/* Hidden tiles */}
 			{player.showTiles ? (
-				<div className="vtss right">
+				<div className="vtss show-hidden">
 					{player.hiddenTiles.map((tile: Tile) => {
 						return (
 							<div className="vts" key={`${tile.id}-hidden`}>

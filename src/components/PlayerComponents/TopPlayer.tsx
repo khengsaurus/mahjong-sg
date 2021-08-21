@@ -18,7 +18,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 		<div className={`row-section-${tilesSize}`}>
 			{/* Hidden tiles */}
 			{player.showTiles ? (
-				<div className="htss">
+				<div className="htss show-hidden">
 					{player.hiddenTiles.map((tile: Tile) => {
 						return <img key={`${tile.id}-hidden`} className="hts" src={getTileSrc(tile.card)} alt="tile" />;
 					})}

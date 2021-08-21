@@ -135,7 +135,7 @@ export class User {
 
 	/* ----------------------------------- Contains ----------------------------------- */
 	allHiddenTilesContain(t: Tile): boolean {
-		return (this.lastTakenTile ? [...this.hiddenTiles, this.lastTakenTile] : this.hiddenTiles)
+		return (!_.isEmpty(this.lastTakenTile) ? [...this.hiddenTiles, this.lastTakenTile] : this.hiddenTiles)
 			.map(tile => tile.id)
 			.includes(t.id);
 	}
@@ -145,8 +145,14 @@ export class User {
 	shownTilesContain(t: Tile): boolean {
 		return this.shownTiles.map(tile => tile.id).includes(t.id);
 	}
+	shownTilesContainCard(card: string): boolean {
+		return this.shownTiles.map(tile => tile.card).includes(card);
+	}
 	discardedTilesContain(t: Tile): boolean {
 		return this.discardedTiles.map(tile => tile.id).includes(t.id);
+	}
+	lastDiscardedTileIs(t: Tile): boolean {
+		return this.discardedTiles.length > 0 ? this.discardedTiles[this.discardedTiles.length - 1].id === t.id : false;
 	}
 
 	/* ----------------------------------- Add ----------------------------------- */
@@ -168,28 +174,21 @@ export class User {
 				let initLength = this.shownTiles.length;
 				this.shownTiles = [...this.shownTiles.slice(0, index), t, ...this.shownTiles.slice(index, initLength)];
 			} else {
-				this.shownTiles = [...this.shownTiles, t];
+				this.shownTiles = [t, ...this.shownTiles];
 			}
 		} else {
-			this.shownTiles = [...this.shownTiles, ...t];
+			this.shownTiles = [...t, ...this.shownTiles];
 		}
 	}
 
 	addToDiscarded(t: Tile): void;
 	addToDiscarded(t: Tile[]): void;
 	addToDiscarded(t: any) {
-		console.log(t);
-		t.length && console.log(t[0]);
-		t.length && t[0].id && console.log(t[0].id);
-		console.log('Old discarded');
-		this.discardedTiles.forEach(tile => console.log(tile.id));
 		if (!t.length) {
 			this.discardedTiles = [...this.discardedTiles, t];
 		} else {
 			this.discardedTiles = [...this.discardedTiles, ...t];
 		}
-		console.log('New discarded');
-		this.discardedTiles.forEach(tile => console.log(tile.id));
 	}
 
 	// /* ----------------------------------- Remove ----------------------------------- */

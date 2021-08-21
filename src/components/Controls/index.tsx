@@ -65,7 +65,9 @@ const Controls = (props: ControlsProps) => {
 			/**
 			 * If last thrown available, can pong during anyone's turn,
 			 * Can chi only during own's turn */
-			tiles = sortTiles([...selectedTiles, lastThrown]);
+			tiles = player.canPong([lastThrown, ...selectedTiles])
+				? [lastThrown, ...selectedTiles]
+				: sortTiles([...selectedTiles, lastThrown]);
 			setOptions(
 				false,
 				player.canPong(tiles),
@@ -163,7 +165,6 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Throw ----------------------------------- */
 
 	function handleThrow(tile: Tile) {
-		console.log(tile.id);
 		tile.show = true;
 		player.discard(tile);
 		player.setHiddenTiles();
@@ -180,7 +181,6 @@ const Controls = (props: ControlsProps) => {
 			game.uncachedAction = true;
 		}
 		game.players[playerSeat] = player;
-		console.log('Controls/index - handleAction called');
 		FBService.updateGame(game);
 	}
 
@@ -215,14 +215,14 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function lastThrownAvailable(): boolean {
-		return !_.isEmpty(lastThrown) && !game.takenTile && game.players[thrownBy].discardedTilesContain(lastThrown);
+		return !_.isEmpty(lastThrown) && !game.takenTile && game.players[thrownBy].lastDiscardedTileIs(lastThrown);
 	}
 
 	function isHoldingLastThrown(): boolean {
 		return (
 			!_.isEmpty(lastThrown) &&
 			player.allHiddenTilesContain(lastThrown) &&
-			!game.players[thrownBy].discardedTilesContain(lastThrown)
+			!game.players[thrownBy].lastDiscardedTileIs(lastThrown)
 		);
 	}
 
@@ -363,9 +363,9 @@ const Controls = (props: ControlsProps) => {
 					className="button"
 					variant="outlined"
 					onClick={handleDraw}
-					disabled={game.whoseMove !== playerSeat || game.takenTile}
+					disabled={game.whoseMove !== playerSeat || (game.tiles.length > 15 && game.takenTile)}
 				>
-					<p>{game.tiles.length === 15 ? `结束` : `摸`}</p>
+					<p>{game.tiles.length === 15 ? `完` : `摸`}</p>
 				</Button>
 				{!okToShow && (
 					<Button

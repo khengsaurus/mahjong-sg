@@ -7,7 +7,7 @@
 	justify-content: center;
 	align-content: center;
 	transition: 200ms;
-	&.flex-dir-column-r {
+	&.bottom {
 		flex-direction: column-reverse;
 	}
 	.htsh {
@@ -53,6 +53,9 @@
 		align-items: flex-start;
 		align-self: center;
 		width: 9 * ($shown-tile-width-small);
+		&.show-hidden {
+			flex-flow: row-reverse wrap;
+		}
 		&.bottom {
 			transform: $rotate-simple-180;
 		}
@@ -151,8 +154,10 @@
 		justify-content: center;
 		height: 15 * $shown-tile-height-small;
 		padding: 0 $tile-padding-small;
+		&.show-hidden {
+			flex-flow: column-reverse wrap;
+		}
 		&.right {
-			// flex-flow: column-reverse wrap;
 			align-items: flex-end;
 		}
 

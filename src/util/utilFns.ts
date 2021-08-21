@@ -164,6 +164,26 @@ export function scrollToBottomOfDiv(id: string) {
 	}
 }
 
+export function addClassToElement(tileId: string, className: string) {
+	try {
+		var e = document.getElementById(tileId);
+		if (!e.classList.contains(className)) {
+			e.classList.add(className);
+		}
+	} catch (err) {
+		console.log(`Element with id ${tileId} not found`);
+	}
+}
+
+export function removeClassFromElement(tileId: string, className: string) {
+	try {
+		var e = document.getElementById(tileId);
+		e.classList.remove(className);
+	} catch (err) {
+		console.log(`Element with id ${tileId} not found`);
+	}
+}
+
 export function findLeft(n: number) {
 	return (n + 3) % 4;
 }

@@ -257,8 +257,25 @@ export class Game {
 					}
 				}
 			}
-			if (newTile.suit === '花' && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
+			if (newTile.suit === '动物') {
+				if (
+					(this.players[playerIndex].shownTilesContainCard(`rooster`) &&
+						this.players[playerIndex].shownTilesContainCard(`worm`)) ||
+					(this.players[playerIndex].shownTilesContainCard(`cat`) &&
+						this.players[playerIndex].shownTilesContainCard(`mouse`))
+				) {
+					this.newLog(`${this.players[playerIndex].username} drew matching animals`);
+					this.flagProgress = true;
+				}
+			} else if (newTile.suit === '花' && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
 				newTile.isValidFlower = true;
+				if (
+					this.players[playerIndex].shownTilesContainCard(`red${newTile.card.slice(-1)}`) &&
+					this.players[playerIndex].shownTilesContainCard(`blue${newTile.card.slice(-1)}`)
+				) {
+					this.newLog(`${this.players[playerIndex].username} drew both his/her flowers`);
+					this.flagProgress = true;
+				}
 			}
 			if (newTile.suit === '花' || newTile.suit === '动物') {
 				newTile.show = true;
@@ -392,7 +409,9 @@ export class Game {
 		});
 		this.takenTile = true;
 		this.takenBy = this.dealer;
-		// this.tiles = this.tiles.slice(0, 20);
+		if (this.players[0].username === 'test20Left') {
+			this.tiles = this.tiles.slice(0, 20);
+		}
 	}
 
 	buHua() {

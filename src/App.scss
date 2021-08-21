@@ -1,4 +1,6 @@
 $main-padding: 2px;
+$panel-segment-width: 200px;
+$wind-font-size: 60px;
 
 /*-------------------- Colors --------------------*/
 $light-brown: rgb(215, 205, 190);
@@ -15,7 +17,7 @@ $color-background: $light-brown;
 $color-grey-text: $grey-standard;
 $color-detail: $dark-purple-blue;
 $color-tile-back: teal;
-$color-tile-front: rgb(220, 220, 220);
+$color-tile-front: gainsboro;
 $color-tile-border: rgb(40, 40, 40);
 $color-wind-font: $grey-light;
 $color-border: $grey-standard;
@@ -24,8 +26,11 @@ $log-grey: $grey-standard;
 $log-green: rgb(0, 100, 10);
 $log-dark: rgb(30, 30, 30);
 
-$panel-segment-width: 200px;
-$wind-font-size: 60px;
+$radial-gradient-gold: radial-gradient(#ffffff, #d8ba85, #ffffff, #ffffff);
+$radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
+
+$linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
+$linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 
 /*-------------------- Tile sizes --------------------*/
 $tile-border-px: 1px;
@@ -132,7 +137,6 @@ $rotate-simple-180: rotate(180deg);
 }
 
 @mixin last-thrown {
-	border-radius: 4%;
 	background: $radial-gradient-gold;
 	background-size: 400% 400%;
 	animation: linear-gradient 6s ease infinite;
@@ -188,9 +192,3 @@ $rotate-simple-180: rotate(180deg);
 		background-position: 0% 50%;
 	}
 }
-
-$radial-gradient-gold: radial-gradient(#ffffff, #d8ba85, #ffffff, #ffffff);
-$radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
-
-$linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
-$linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);

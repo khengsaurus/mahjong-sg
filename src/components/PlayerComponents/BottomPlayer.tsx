@@ -15,10 +15,10 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
 	return (
-		<div className={`row-section-${tilesSize} flex-dir-column-r`}>
+		<div className={`row-section-${tilesSize} bottom`}>
 			{/* Hidden tiles */}
 			{player.showTiles ? (
-				<div className="htss bottom">
+				<div className="htss show-hidden bottom">
 					{player.hiddenTiles.map((tile: Tile) => {
 						return <img key={`${tile.id}-hidden`} className="hts" src={getTileSrc(tile.card)} alt="tile" />;
 					})}

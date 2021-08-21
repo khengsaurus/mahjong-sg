@@ -34,7 +34,6 @@ const Table = () => {
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(2, gameData);
-				console.log('Table/index - game state updated');
 				// setGame, setPlayer
 				dispatch(setGame(currentGame));
 				setDealer(currentGame.dealer);
