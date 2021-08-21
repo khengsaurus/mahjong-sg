@@ -53,53 +53,34 @@
 		align-items: flex-start;
 		align-self: center;
 		width: 9 * ($shown-tile-width-medium);
-		&.show-hidden {
+		&.row-r {
 			flex-flow: row-reverse wrap;
 		}
 		&.bottom {
 			transform: $rotate-simple-180;
 		}
-
-		.hts {
-			height: $shown-tile-height-medium;
-			border-radius: 4%;
-			background: $color-tile-front;
-			&.flower {
-				@include default-flower;
-			}
-			&.animal {
-				height: $shown-tile-height-medium - (2 * $tile-border-px);
-				width: $shown-tile-width-medium - (2 * $tile-border-px);
-				@include default-tile-border;
-			}
-			&.last {
-				margin-right: $hidden-tile-width-medium;
-				@include last-thrown;
-				&.margin-left {
-					margin-left: $hidden-tile-width-medium;
-				}
-			}
-		}
 	}
 
-	.dts {
-		display: flex;
-		flex-flow: row-reverse wrap;
-		justify-content: flex-start;
-		align-self: center;
-		max-width: 10 * $shown-tile-width-medium;
-		padding: $tile-padding-medium 0;
-		&.bottom {
-			transform: $rotate-simple-180;
+	.hts {
+		height: $shown-tile-height-medium;
+		border-radius: 4%;
+		background: $color-tile-front;
+		&.flower {
+			@include default-flower;
 		}
-
-		.dt {
-			height: $shown-tile-height-medium;
-			border-radius: 4%;
-			background: $color-tile-front;
-			&.last {
-				@include last-thrown;
-			}
+		&.animal {
+			height: $shown-tile-height-medium - (2 * $tile-border-px);
+			width: $shown-tile-width-medium - (2 * $tile-border-px);
+			@include default-tile-border;
+		}
+		&.last {
+			@include last-thrown;
+		}
+		&.margin-right {
+			margin-right: $hidden-tile-width-medium;
+		}
+		&.margin-left {
+			margin-left: $hidden-tile-width-medium;
 		}
 	}
 }
@@ -154,22 +135,28 @@
 		justify-content: center;
 		height: 15 * $shown-tile-height-medium;
 		padding: 0 $tile-padding-medium;
-		&.show-hidden {
+		&.col-r {
 			flex-flow: column-reverse wrap;
 		}
 		&.right {
 			align-items: flex-end;
 		}
-
-		.vts {
-			height: $shown-tile-width-medium;
-			width: $shown-tile-height-medium;
-			&.last {
-				margin-top: $hidden-tile-width-medium;
-				&.right {
-					margin-bottom: $hidden-tile-width-medium;
-				}
+		&.discarded {
+			max-height: 50vh;
+			&.right {
+				flex-flow: column-reverse wrap-reverse;
 			}
+		}
+	}
+
+	.vts {
+		height: $shown-tile-width-medium;
+		width: $shown-tile-height-medium;
+		&.margin-top {
+			margin-top: $hidden-tile-width-medium;
+		}
+		&.margin-bottom {
+			margin-bottom: $hidden-tile-width-medium;
 		}
 	}
 
@@ -189,25 +176,6 @@
 		}
 		&.last {
 			@include last-thrown;
-		}
-	}
-
-	.dts {
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
-		align-self: center;
-		max-height: 50vh;
-		padding: 0 $tile-padding-medium;
-		&.right {
-			flex-flow: column-reverse wrap-reverse;
-		}
-
-		.dt {
-			height: $shown-tile-width-medium;
-			width: $shown-tile-height-medium;
-			border-radius: 4%;
-			background: $color-tile-front;
 		}
 	}
 }
