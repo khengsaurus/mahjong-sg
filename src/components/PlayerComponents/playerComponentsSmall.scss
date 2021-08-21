@@ -53,53 +53,34 @@
 		align-items: flex-start;
 		align-self: center;
 		width: 9 * ($shown-tile-width-small);
-		&.show-hidden {
+		&.row-r {
 			flex-flow: row-reverse wrap;
 		}
 		&.bottom {
 			transform: $rotate-simple-180;
 		}
-
-		.hts {
-			height: $shown-tile-height-small;
-			border-radius: 4%;
-			background: $color-tile-front;
-			&.flower {
-				@include default-flower;
-			}
-			&.animal {
-				height: $shown-tile-height-small - (2 * $tile-border-px);
-				width: $shown-tile-width-small - (2 * $tile-border-px);
-				@include default-tile-border;
-			}
-			&.last {
-				margin-right: $hidden-tile-width-small;
-				@include last-thrown;
-				&.margin-left {
-					margin-left: $hidden-tile-width-small;
-				}
-			}
-		}
 	}
 
-	.dts {
-		display: flex;
-		flex-flow: row-reverse wrap;
-		justify-content: flex-start;
-		align-self: center;
-		max-width: 10 * $shown-tile-width-small;
-		padding: $tile-padding-small 0;
-		&.bottom {
-			transform: $rotate-simple-180;
+	.hts {
+		height: $shown-tile-height-small;
+		border-radius: 4%;
+		background: $color-tile-front;
+		&.flower {
+			@include default-flower;
 		}
-
-		.dt {
-			height: $shown-tile-height-small;
-			border-radius: 4%;
-			background: $color-tile-front;
-			&.last {
-				@include last-thrown;
-			}
+		&.animal {
+			height: $shown-tile-height-small - (2 * $tile-border-px);
+			width: $shown-tile-width-small - (2 * $tile-border-px);
+			@include default-tile-border;
+		}
+		&.last {
+			@include last-thrown;
+		}
+		&.margin-right {
+			margin-right: $hidden-tile-width-small;
+		}
+		&.margin-left {
+			margin-left: $hidden-tile-width-small;
 		}
 	}
 }
@@ -154,22 +135,28 @@
 		justify-content: center;
 		height: 15 * $shown-tile-height-small;
 		padding: 0 $tile-padding-small;
-		&.show-hidden {
+		&.col-r {
 			flex-flow: column-reverse wrap;
 		}
 		&.right {
 			align-items: flex-end;
 		}
-
-		.vts {
-			height: $shown-tile-width-small;
-			width: $shown-tile-height-small;
-			&.last {
-				margin-top: $hidden-tile-width-small;
-				&.right {
-					margin-bottom: $hidden-tile-width-small;
-				}
+		&.discarded {
+			max-height: 50vh;
+			&.right {
+				flex-flow: column-reverse wrap-reverse;
 			}
+		}
+	}
+
+	.vts {
+		height: $shown-tile-width-small;
+		width: $shown-tile-height-small;
+		&.margin-top {
+			margin-top: $hidden-tile-width-small;
+		}
+		&.margin-bottom {
+			margin-bottom: $hidden-tile-width-small;
 		}
 	}
 
@@ -189,25 +176,6 @@
 		}
 		&.last {
 			@include last-thrown;
-		}
-	}
-
-	.dts {
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
-		align-self: center;
-		max-height: 50vh;
-		padding: 0 $tile-padding-small;
-		&.right {
-			flex-flow: column-reverse wrap-reverse;
-		}
-
-		.dt {
-			height: $shown-tile-width-small;
-			width: $shown-tile-height-small;
-			border-radius: 4%;
-			background: $color-tile-front;
 		}
 	}
 }

@@ -123,11 +123,11 @@ export function generateNumberArray(n: number) {
 	return unusedTiles;
 }
 
-export function sortTiles(tiles: Tile[]): Tile[] {
+export function sortTiles(tiles: TileI[]): TileI[] {
 	return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 }
 
-export function indexOfCard(tile: Tile, tiles: Tile[]) {
+export function indexOfCard(tile: TileI, tiles: TileI[]) {
 	for (var i = 0; i < tiles.length; i++) {
 		if (tiles[i].card === tile.card) {
 			return i;

@@ -17,8 +17,8 @@ interface AppContextInt {
 	setPlayers: (players: User[]) => void;
 	gameId?: string;
 	setGameId: (gameId: string) => void;
-	selectedTiles?: Tile[];
-	setSelectedTiles: (tiles: Tile[]) => void;
+	selectedTiles?: TileI[];
+	setSelectedTiles: (tiles: TileI[]) => void;
 	//
 	handSize?: string;
 	setHandSize?: (handSize: string) => void;
@@ -45,7 +45,7 @@ const initialContext: AppContextInt = {
 	gameId: null,
 	setGameId: (gameId: string) => {},
 	selectedTiles: [],
-	setSelectedTiles: (tiles: Tile[]) => {},
+	setSelectedTiles: (tiles: TileI[]) => {},
 	//
 	handSize: 'small',
 	setHandSize: (handSize: string) => {},
@@ -66,7 +66,7 @@ export const AppContextProvider = (props: any) => {
 	const [userEmail, setUserEmail] = useState('');
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
-	const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
+	const [selectedTiles, setSelectedTiles] = useState<TileI[]>([]);
 	// const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState('small');
 	const [tilesSize, setTilesSize] = useState('small');

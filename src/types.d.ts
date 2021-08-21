@@ -21,7 +21,7 @@ interface alert {
 	msg: string;
 }
 
-interface Tile {
+interface TileI {
 	card?: string;
 	suit?: string;
 	number?: number;
@@ -37,7 +37,7 @@ interface PlayerComponentProps {
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
-	lastThrownTile?: Tile;
+	lastThrown?: TileI;
 }
 
 interface loginParams {

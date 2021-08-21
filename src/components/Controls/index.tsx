@@ -28,7 +28,7 @@ interface ControlsProps {
 const Controls = (props: ControlsProps) => {
 	const { playerSeat } = props;
 	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const [meld, setMeld] = useState<Tile[]>([]);
+	const [meld, setMeld] = useState<TileI[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
@@ -50,7 +50,7 @@ const Controls = (props: ControlsProps) => {
 	}, []);
 
 	useEffect(() => {
-		let tiles: Tile[] = [];
+		let tiles: TileI[] = [];
 		/**
 		 * Can self kang during turn & selecting 1 || 4 */
 		if (game.whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
@@ -131,7 +131,7 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Draw ----------------------------------- */
 
 	function handleDraw() {
-		let drawnTile: Tile;
+		let drawnTile: TileI;
 		if (game.tiles.length > 15) {
 			drawnTile = game.giveTiles(1, playerSeat, false, true);
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
@@ -146,8 +146,8 @@ const Controls = (props: ControlsProps) => {
 		handleAction(game);
 	}
 
-	function buHua(): Tile {
-		let drawnTile: Tile;
+	function buHua(): TileI {
+		let drawnTile: TileI;
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (game.tiles.length > 15) {
@@ -164,7 +164,7 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
-	function handleThrow(tile: Tile) {
+	function handleThrow(tile: TileI) {
 		tile.show = true;
 		player.discard(tile);
 		player.setHiddenTiles();
@@ -207,7 +207,7 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Util ----------------------------------- */
 
-	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: Tile[]) {
+	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: TileI[]) {
 		setCanKang(kang);
 		setCanPong(pong);
 		setCanChi(chi);

@@ -93,7 +93,7 @@ const Table = () => {
 								dealer={dealer === topPlayerIndex}
 								hasFront={front === topPlayerIndex}
 								hasBack={back === topPlayerIndex}
-								lastThrownTile={game.lastThrown}
+								lastThrown={game.lastThrown}
 							/>
 						)}
 					</div>
@@ -104,7 +104,7 @@ const Table = () => {
 								dealer={dealer === bottomPlayerIndex}
 								hasFront={front === bottomPlayerIndex}
 								hasBack={back === bottomPlayerIndex}
-								lastThrownTile={game.lastThrown}
+								lastThrown={game.lastThrown}
 							/>
 						)}
 					</div>
@@ -115,7 +115,7 @@ const Table = () => {
 								dealer={dealer === rightPlayerIndex}
 								hasFront={front === rightPlayerIndex}
 								hasBack={back === rightPlayerIndex}
-								lastThrownTile={game.lastThrown}
+								lastThrown={game.lastThrown}
 							/>
 						)}
 					</div>
@@ -126,7 +126,7 @@ const Table = () => {
 								dealer={dealer === leftPlayerIndex}
 								hasFront={front === leftPlayerIndex}
 								hasBack={back === leftPlayerIndex}
-								lastThrownTile={game.lastThrown}
+								lastThrown={game.lastThrown}
 							/>
 						)}
 					</div>
