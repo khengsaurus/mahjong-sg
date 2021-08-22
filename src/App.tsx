@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import Home from './pages/Home';
 import JoinGame from './pages/JoinGame';
+import NewUser from './pages/Login/NewUser';
+import Login from './pages/Login';
 import NewGame from './pages/NewGame';
 import Table from './pages/Table';
 import { AppContextProvider } from './util/hooks/AppContext';
@@ -17,9 +19,12 @@ function App() {
 				<Router history={history}>
 					<Switch>
 						<Route exact path="/" component={Home} />
+						<Route exact path="/Home" component={Home} />
+						<Route exact path="/Login" component={Login} />
+						<Route exact path="/NewUser" component={NewUser} />
 						<Route exact path="/NewGame" component={NewGame} />
-						<Route exact path="/Table" component={Table} />
 						<Route exact path="/JoinGame" component={JoinGame} />
+						<Route exact path="/Table" component={Table} />
 					</Switch>
 				</Router>
 			</AppContextProvider>

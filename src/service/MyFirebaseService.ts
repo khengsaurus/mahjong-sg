@@ -12,9 +12,9 @@ class FirebaseService {
 	private userVal: firebase.firestore.CollectionReference;
 	private userRepr: firebase.firestore.CollectionReference;
 	private gameRef: firebase.firestore.CollectionReference;
-	private app: firebase.app.App = null;
-	private auth: firebase.auth.Auth = null;
-	private authProvider: firebase.auth.GoogleAuthProvider = null;
+	private app: firebase.app.App;
+	private auth: firebase.auth.Auth;
+	private authProvider: firebase.auth.GoogleAuthProvider;
 
 	constructor() {
 		this.init().then(() => {
@@ -36,10 +36,24 @@ class FirebaseService {
 		} else {
 			this.app = firebase.app();
 		}
-		// this.loginAnon();
+		// this.authLoginAnon();
 	}
 
-	async loginWithGoogle(): Promise<string> {
+	userAuthenticated() {
+		return this.user !== null;
+	}
+
+	/* ------------------------- Auth related ------------------------- */
+
+	async authLoginAnon(): Promise<firebase.auth.UserCredential> {
+		try {
+			return await firebase.auth().signInAnonymously();
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	async authLoginWithGoogle(): Promise<string> {
 		return new Promise((resolve, reject) => {
 			this.auth
 				.signInWithPopup(this.authProvider)
@@ -47,25 +61,44 @@ class FirebaseService {
 					resolve(values.user.email);
 				})
 				.catch(err => {
-					console.log(err);
+					reject(err);
 				});
 		});
 	}
 
-	logout() {
+	async authRegisterEmailPass(email: string, password: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			this.auth
+				.createUserWithEmailAndPassword(email, password)
+				.then((values: firebase.auth.UserCredential) => {
+					resolve(values.user.email);
+				})
+				.catch(err => {
+					reject(err);
+				});
+		});
+	}
+
+	async authLoginEmailPass(email: string, password: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			this.auth
+				.signInWithEmailAndPassword(email, password)
+				.then((values: firebase.auth.UserCredential) => {
+					console.log(values);
+					resolve(values.user.email);
+				})
+				.catch(err => {
+					reject(err);
+				});
+		});
+	}
+
+	authLogout() {
 		this.auth.signOut();
 	}
 
-	userAuthenticated() {
-		return this.user !== null;
-	}
-
-	async loginAnon(): Promise<firebase.auth.UserCredential> {
-		try {
-			return await firebase.auth().signInAnonymously();
-		} catch (err) {
-			console.log(err);
-		}
+	authDeleteCurrentUser() {
+		this.auth.currentUser.delete();
 	}
 
 	/* ------------------------- User related ------------------------- */
@@ -87,13 +120,17 @@ class FirebaseService {
 		}
 	}
 
-	async registerByEmail(username: string, email: string) {
-		try {
-			await this.userRepr.add({ username, email, photoUrl: '', groups: [] });
-			console.log('User created successfully');
-		} catch (err) {
-			console.log('FirebaseService - user was not created: ', +err);
-		}
+	async registerUserEmail(username: string, email: string): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			try {
+				this.userRepr.add({ username, email, photoUrl: '', groups: [] });
+				console.log('User created successfully');
+				resolve(true);
+			} catch (err) {
+				console.log('FirebaseService - user was not created: ', +err);
+				resolve(false);
+			}
+		});
 	}
 
 	getUserValByUsername(username: string) {

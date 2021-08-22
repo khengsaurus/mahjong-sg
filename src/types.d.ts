@@ -40,18 +40,18 @@ interface PlayerComponentProps {
 	lastThrown?: TileI;
 }
 
-interface loginParams {
+interface UserPass {
 	username: string;
 	password: string;
 }
 
-interface RegisterEmail {
+interface EmailUser {
 	username: string;
 	email: string;
 }
 
-interface RegisterUserPass {
-	username: string;
+interface EmailPass {
+	email: string;
 	password: string;
 }
 

@@ -4,10 +4,11 @@ import FBService from '../service/MyFirebaseService';
 import { hashPassword } from './bcrypt';
 import { objToUser } from './utilFns';
 
-export async function attemptLogin(values: loginParams): Promise<User> {
+/*---------------------------------------- To decommission ----------------------------------------*/
+export async function attemptLoginUserPass(values: UserPass): Promise<User> {
 	if (!FBService.userAuthenticated()) {
 		console.log('Logging into firebase anonymously');
-		await FBService.loginAnon().catch(err => {
+		await FBService.authLoginAnon().catch(err => {
 			console.log(err);
 		});
 	}
@@ -50,10 +51,10 @@ export async function attemptLogin(values: loginParams): Promise<User> {
 	});
 }
 
-export async function attemptRegister(values: RegisterUserPass): Promise<boolean> {
+export async function attemptRegisterUserPass(values: UserPass): Promise<boolean> {
 	if (!FBService.userAuthenticated()) {
 		console.log('Logging into firebase anonymously');
-		await FBService.loginAnon().catch(err => {
+		await FBService.authLoginAnon().catch(err => {
 			console.log(err);
 		});
 	}
@@ -76,12 +77,41 @@ export async function attemptRegister(values: RegisterUserPass): Promise<boolean
 	});
 }
 
-export function attemptLoginByEmail(email: string): Promise<User> {
+/*---------------------------------------- ^ End to decommission ^ ----------------------------------------*/
+
+export async function authRegister_EmailPass(props: EmailPass): Promise<string> {
+	// let hashedPass = await hashPassword(props.password);
+	return new Promise((resolve, reject) => {
+		FBService.authRegisterEmailPass(props.email, props.password)
+			.then(email => {
+				resolve(email);
+			})
+			.catch(err => {
+				reject(err);
+			});
+	});
+}
+
+export async function authLogin_EmailPass(props: EmailPass): Promise<string> {
+	// let hashedPass = await hashPassword(props.password);
+	return new Promise((resolve, reject) => {
+		FBService.authLoginEmailPass(props.email, props.password)
+			.then(email => {
+				resolve(email);
+			})
+			.catch(err => {
+				reject(err);
+			});
+	});
+}
+
+export function resolveUser_Email(email: string): Promise<User | null> {
 	return new Promise((resolve, reject) => {
 		try {
 			FBService.getUserReprByEmail(email).then((userData: any) => {
 				if (userData.docs.length === 0) {
-					reject(new Error('Email not registered -> RegisterWithGoogleForm'));
+					console.log('User not registered -> NewUser');
+					resolve(null);
 				} else {
 					resolve(objToUser(2, userData));
 				}
@@ -92,20 +122,25 @@ export function attemptLoginByEmail(email: string): Promise<User> {
 	});
 }
 
-export async function attemptRegisterByEmail(values: RegisterEmail): Promise<boolean> {
+export async function newUser_EmailUser(values: EmailUser): Promise<boolean> {
 	return new Promise((resolve, reject) => {
 		FBService.getUserReprByUsername(values.username).then(data => {
 			if (!data.empty) {
 				reject(new Error('Username already taken'));
 			} else {
-				FBService.registerByEmail(values.username, values.email)
-					.then(() => {
-						resolve(true);
+				FBService.registerUserEmail(values.username, values.email)
+					.then(res => {
+						resolve(res);
 					})
 					.catch(err => {
-						reject(new Error('Unable to register user'));
+						console.log('Unable to register user');
+						reject(err);
 					});
 			}
 		});
 	});
+}
+
+export async function deleteCurrentFBUser() {
+	return FBService.authDeleteCurrentUser();
 }

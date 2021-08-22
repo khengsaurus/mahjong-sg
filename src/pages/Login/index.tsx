@@ -1,104 +1,63 @@
 import { Button } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
 import GoogleButton from 'react-google-button';
+import { history } from '../../App';
 import LoginForm from '../../components/Forms/LoginForm';
 import RegisterForm from '../../components/Forms/RegisterForm';
-import RegisterWithGoogleForm from '../../components/Forms/RegisterWithGoogleForm';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
-import { attemptLoginByEmail } from '../../util/fbUserFns';
+import { resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 import './Login.scss';
 
-const Login: React.FC = () => {
+const Login = () => {
 	const { login, setUserEmail } = useContext(AppContext);
 	const [showRegister, setShowRegister] = useState(false);
-	const [showRegisterWithEmail, setShowRegisterWithEmail] = useState(false);
-	const [refuseEmail, setRefuseEmail] = useState(false);
 
 	async function loginWithGoogle() {
-		await FBService.loginWithGoogle().then((email: string) => {
+		await FBService.authLoginWithGoogle().then((email: string) => {
 			setUserEmail(email);
-			attemptLoginByEmail(email)
+			resolveUser_Email(email)
 				.then((user: User) => {
-					login(user);
+					if (user) {
+						login(user);
+					} else {
+						history.push('/NewUser');
+					}
 				})
 				.catch((err: Error) => {
-					if (err.message === 'Email not registered -> RegisterWithGoogleForm') {
-						setShowRegisterWithEmail(true);
-					} else {
-						console.log(err);
-					}
+					console.log(err);
 				});
 		});
 	}
 
-	const userPassLoginMarkup = (
+	const markup = (
 		<div className="main">
-			{showRegister ? (
-				<div>
-					<RegisterForm />
-				</div>
-			) : (
-				<div>
-					<LoginForm />
-				</div>
-			)}
-			<Button
-				variant="outlined"
-				onClick={() => {
-					setShowRegister(!showRegister);
-				}}
-			>
-				{showRegister ? `Back to login` : `Register now`}
-			</Button>
-			<br></br>
-			<Button
-				variant="outlined"
-				onClick={() => {
-					setShowRegister(false);
-					setRefuseEmail(false);
-				}}
-			>
-				{`Back`}
-			</Button>
+			<>
+				{showRegister ? (
+					<div>
+						<RegisterForm />
+					</div>
+				) : (
+					<div>
+						<LoginForm />
+					</div>
+				)}
+				<Button
+					variant="outlined"
+					onClick={() => {
+						setShowRegister(!showRegister);
+					}}
+				>
+					{showRegister ? `Back to login` : `Register now`}
+				</Button>
+				<br></br>
+				<GoogleButton onClick={loginWithGoogle} type={'light'} />
+			</>
 		</div>
 	);
 
-	const emailLoginMarkup = (
-		<div className="main">
-			{showRegisterWithEmail ? (
-				<div>
-					<RegisterWithGoogleForm
-						onCancel={() => {
-							setShowRegisterWithEmail(false);
-						}}
-					/>
-				</div>
-			) : (
-				<>
-					<GoogleButton onClick={loginWithGoogle} type={'light'} />
-					{refuseEmail ? (
-						userPassLoginMarkup
-					) : (
-						<>
-							<br></br>
-							<Button
-								variant="outlined"
-								onClick={() => {
-									setRefuseEmail(true);
-								}}
-							>
-								{'Nah'}
-							</Button>
-						</>
-					)}
-				</>
-			)}
-		</div>
-	);
-
-	return emailLoginMarkup;
+	return markup;
 };
 
 export default Login;

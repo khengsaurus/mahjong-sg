@@ -195,3 +195,7 @@ export function findRight(n: number) {
 export function findOpp(n: number) {
 	return (n + 2) % 4;
 }
+
+export function validateEmail(email: string) {
+	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
+}

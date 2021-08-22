@@ -2,31 +2,38 @@ import { Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { attemptRegister } from '../../util/fbUserFns';
+import { authRegister_EmailPass } from '../../util/fbUserFns';
 import { FormField } from './FormField';
 
+/**
+ * Email and password -> create a new set of firebase auth credentials
+ */
 const RegisterForm: React.FC = () => {
 	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
 
+	function handleSubmit(values: EmailPass, successCallback: () => void) {
+		authRegister_EmailPass(values)
+			.then(res => {
+				if (res) {
+					setAlert({ status: 'success', msg: 'Registered successfully' });
+					successCallback();
+				}
+			})
+			.catch(err => {
+				setAlert({ status: 'error', msg: err.toString() });
+			});
+	}
+
 	const markup = (
 		<Formik
-			initialValues={{ username: '', password: '' }}
+			initialValues={{ email: '', password: '' }}
 			onSubmit={async (values, { resetForm }) => {
-				attemptRegister(values)
-					.catch(err => {
-						setAlert({ status: 'error', msg: err.toString() });
-					})
-					.then(res => {
-						if (res) {
-							resetForm();
-							setAlert({ status: 'success', msg: 'Registered successfully' });
-						}
-					});
+				handleSubmit(values, resetForm);
 			}}
 		>
 			{({ values }) => (
 				<Form>
-					<Field name="username" label="Username" component={FormField} />
+					<Field name="email" label="Email" component={FormField} />
 					<br></br>
 					<br></br>
 					<Field name="password" label="Password" type="password" component={FormField} />
@@ -35,7 +42,7 @@ const RegisterForm: React.FC = () => {
 					<Button
 						autoFocus
 						variant="outlined"
-						disabled={values.username.trim() === '' || values.password.trim() === ''}
+						disabled={values.email.trim() === '' || values.password.trim() === ''}
 						type="submit"
 					>
 						Register

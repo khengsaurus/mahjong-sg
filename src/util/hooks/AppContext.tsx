@@ -96,7 +96,7 @@ export const AppContextProvider = (props: any) => {
 		localStorage.setItem('jwt', token);
 		if (!FBService.userAuthenticated()) {
 			console.log('Logging into firebase anonymously');
-			await FBService.loginAnon().catch(err => {
+			await FBService.authLoginAnon().catch(err => {
 				console.log(err);
 			});
 		}
@@ -115,7 +115,7 @@ export const AppContextProvider = (props: any) => {
 	}
 
 	function logout(): void {
-		FBService.logout();
+		FBService.authLogout();
 		setPlayers([]);
 		setUser(null);
 		setUserEmail('');
