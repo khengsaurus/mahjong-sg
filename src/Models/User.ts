@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isEmpty from 'lodash.isempty';
 import { indexOfCard, sortTiles } from '../util/utilFns';
 
 export class User {
@@ -76,11 +76,11 @@ export class User {
 	}
 
 	countAllHiddenTiles(): number {
-		return this.hiddenTiles.length + (_.isEmpty(this.lastTakenTile) ? 0 : 1);
+		return this.hiddenTiles.length + (isEmpty(this.lastTakenTile) ? 0 : 1);
 	}
 
 	allHiddenTiles(): TileI[] {
-		return _.isEmpty(this.lastTakenTile) ? this.hiddenTiles : [...this.hiddenTiles, this.lastTakenTile];
+		return isEmpty(this.lastTakenTile) ? this.hiddenTiles : [...this.hiddenTiles, this.lastTakenTile];
 	}
 
 	/* ----------------------------------- Take options ----------------------------------- */
@@ -111,7 +111,7 @@ export class User {
 
 	/* ----------------------------------- Handle last taken tile ----------------------------------- */
 	putNewTileIntoHidden() {
-		if (!_.isEmpty(this.lastTakenTile) && !this.hiddenTilesContain(this.lastTakenTile)) {
+		if (!isEmpty(this.lastTakenTile) && !this.hiddenTilesContain(this.lastTakenTile)) {
 			this.addToHidden(this.lastTakenTile);
 		}
 		this.lastTakenTile = {};
@@ -128,14 +128,14 @@ export class User {
 	}
 
 	returnNewTile(): TileI {
-		let t = !_.isEmpty(this.lastTakenTile) ? null : this.lastTakenTile;
+		let t = !isEmpty(this.lastTakenTile) ? null : this.lastTakenTile;
 		this.lastTakenTile = {};
 		return t;
 	}
 
 	/* ----------------------------------- Contains ----------------------------------- */
 	allHiddenTilesContain(t: TileI): boolean {
-		return (!_.isEmpty(this.lastTakenTile) ? [...this.hiddenTiles, this.lastTakenTile] : this.hiddenTiles)
+		return (!isEmpty(this.lastTakenTile) ? [...this.hiddenTiles, this.lastTakenTile] : this.hiddenTiles)
 			.map(tile => tile.id)
 			.includes(t.id);
 	}

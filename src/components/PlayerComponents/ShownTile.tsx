@@ -2,7 +2,7 @@ import './playerComponentsSmall.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsLarge.scss';
 import getTileSrc from '../../images';
-import * as _ from 'lodash';
+import isEmpty from 'lodash.isempty';
 
 interface ShownTileProps {
 	tile: TileI;
@@ -39,7 +39,7 @@ const ShownTile = (props: ShownTileProps) => {
 				<img
 					key={`${tile.id}`}
 					className={`${divClass} ${
-						highlight || (last && !_.isEmpty(last) && last.id === tile.id) ? `last` : ``
+						highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
 					} ${imgClassSuffix}`}
 					src={getTileSrc(tile.card)}
 					alt="tile"
@@ -50,7 +50,7 @@ const ShownTile = (props: ShownTileProps) => {
 				<div className={`${divClass} ${divClassSuffix}`} key={`${tile.id}-hidden`}>
 					<img
 						className={`${bgClass} ${
-							highlight || (last && !_.isEmpty(last) && last.id === tile.id) ? `last` : ``
+							highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
 						} ${imgClassSuffix}`}
 						src={getTileSrc(tile.card)}
 						alt="tile"

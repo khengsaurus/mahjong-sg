@@ -24,7 +24,7 @@ const NewUser = () => {
 		newUser_EmailUser(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: 'success', msg: 'Username available' });
+					setAlert({ status: 'success', msg: 'Username set' });
 					callback();
 				}
 			})

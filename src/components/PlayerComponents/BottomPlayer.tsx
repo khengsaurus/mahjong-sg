@@ -1,5 +1,5 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import * as _ from 'lodash';
+import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
@@ -20,7 +20,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 					{player.hiddenTiles.map((tile: TileI) => {
 						return <ShownTile key={tile.id} tile={tile} segment="bottom" />;
 					})}
-					{!_.isEmpty(player.lastTakenTile) && (
+					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.id}
 							tile={player.lastTakenTile}

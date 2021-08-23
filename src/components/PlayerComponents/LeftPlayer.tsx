@@ -1,5 +1,5 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import * as _ from 'lodash';
+import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
 import getTileSrc from '../../images';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -31,7 +31,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 					{player.hiddenTiles.map((tile: TileI) => {
 						return <ShownTile key={tile.id} tile={tile} segment="left" last={lastThrown} />;
 					})}
-					{!_.isEmpty(player.lastTakenTile) && (
+					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.id}
 							tile={player.lastTakenTile}
@@ -58,7 +58,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 							</div>
 						);
 					})}
-					{!_.isEmpty(player.lastTakenTile) && (
+					{!isEmpty(player.lastTakenTile) && (
 						<div
 							key={`${player.lastTakenTile.id}-hidden`}
 							className={

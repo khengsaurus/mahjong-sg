@@ -4,8 +4,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SubjectIcon from '@material-ui/icons/Subject';
-import * as _ from 'lodash';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import isEmpty from 'lodash.isempty';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
@@ -64,12 +64,12 @@ const Controls = (props: ControlsProps) => {
 	}, [tiles]);
 
 	const lastThrownAvailable: boolean = useMemo(() => {
-		return !_.isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
+		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
 	}, [players, lastThrown, thrownBy, takenTile]);
 
 	const isHoldingLastThrown: boolean = useMemo(() => {
 		return (
-			!_.isEmpty(lastThrown) &&
+			!isEmpty(lastThrown) &&
 			player &&
 			player.allHiddenTilesContain(lastThrown) &&
 			!players[thrownBy].lastDiscardedTileIs(lastThrown)
