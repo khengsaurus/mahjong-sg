@@ -84,7 +84,6 @@ class FirebaseService {
 			this.auth
 				.signInWithEmailAndPassword(email, password)
 				.then((values: firebase.auth.UserCredential) => {
-					console.log(values);
 					resolve(values.user.email);
 				})
 				.catch(err => {
@@ -304,16 +303,7 @@ class FirebaseService {
 				const currentGameRef = this.gameRef.doc(game.id);
 				await currentGameRef.set({ ...gameObj }).then(() => {
 					resolve(game);
-					console.log('FirebaseService - game doc was updated');
 				});
-				// await this.db.runTransaction(async(t)=>{
-				// 	const doc = await t.get(currentGameRef); // <-- transaction-time game state modification
-				// 	t.update(currentGameRef, {...gameObj})
-				// })
-				// .then(()=>{
-				// 	resolve(game);
-				// 	console.log('FirebaseService - transaction success, game doc updated');
-				// })
 			} catch (err) {
 				console.log(err);
 				reject(new Error('FirebaseService - game doc was not updated'));

@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core';
-import React, { useContext, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import { useContext, useState } from 'react';
 import GoogleButton from 'react-google-button';
 import { history } from '../../App';
 import LoginForm from '../../components/Forms/LoginForm';

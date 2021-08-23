@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import { history } from '../App';
 
 const HomeButton = () => {

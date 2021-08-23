@@ -1,13 +1,12 @@
-import { Button } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import Button from '@material-ui/core/Button';
+import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import { authLogin_EmailPass, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 import { FormField } from './FormField';
 
-/* Successful login: 3 reads, unsuccessful login: 1 read */
 const LoginForm: React.FC = () => {
 	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
 	const { login, setUserEmail } = useContext(AppContext);
@@ -20,7 +19,7 @@ const LoginForm: React.FC = () => {
 		};
 	}, []);
 
-	function handleSubmit(values: EmailPass, successCallback: () => void) {
+	function handleSubmit(values: EmailPass, formCallback: () => void) {
 		authLogin_EmailPass(values)
 			.then(email => {
 				if (email === values.email) {
@@ -29,7 +28,7 @@ const LoginForm: React.FC = () => {
 						.then(user => {
 							if (user) {
 								login(user);
-								successCallback();
+								formCallback();
 								setAlert({ status: 'info', msg: '' });
 								history.push('/');
 							} else {
@@ -86,55 +85,6 @@ const LoginForm: React.FC = () => {
 			) : null}
 		</div>
 	);
-
-	// const markup: JSX.Element = (
-	// 	<div>
-	// 		<Formik
-	// 			initialValues={{ username: '', password: '' }}
-	// 			onSubmit={async (values, { resetForm }) => {
-	// 				attemptLoginUserPass(values)
-	// 					.catch(err => {
-	// 						setAlert({ status: 'error', msg: err.toString() });
-	// 					})
-	// 					.then(user => {
-	// 						if (user) {
-	// 							login(user);
-	// 							resetForm();
-	// 							setAlert({ status: 'info', msg: '' });
-	// 						}
-	// 					});
-	// 			}}
-	// 		>
-	// 			{({ values }) => (
-	// 				<Form>
-	// 					<Field name="username" label="Username" type="text" component={FormField} />
-	// 					<br></br>
-	// 					<br></br>
-	// 					<Field name="password" label="Password" type="password" component={FormField} />
-	// 					<br></br>
-	// 					<br></br>
-	// 					<Button
-	// 						autoFocus
-	// 						variant="outlined"
-	// 						disabled={values.username.trim() === '' || values.password.trim() === ''}
-	// 						type="submit"
-	// 					>
-	// 						Login
-	// 					</Button>
-	// 					<br></br>
-	// 					<br></br>
-	// 					{alert.msg !== '' ? (
-	// 						<>
-	// 							<Alert severity={alert.status}>{alert.msg}</Alert>
-	// 							<br></br>
-	// 						</>
-	// 					) : null}
-	// 				</Form>
-	// 			)}
-	// 		</Formik>
-	// 	</div>
-	// );
-
 	return markup;
 };
 

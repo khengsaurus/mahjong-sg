@@ -1,6 +1,6 @@
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import firebase from 'firebase/app';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Controls from '../../components/Controls';
 import HomeButton from '../../components/HomeButton';
@@ -17,7 +17,7 @@ import { objToGame } from '../../util/utilFns';
 import './Table.scss';
 
 const Table = () => {
-	const { user, gameId } = useContext(AppContext);
+	const { user, gameId, tilesSize } = useContext(AppContext);
 	const [topPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [rightPlayerIndex, setRightPlayerIndex] = useState(null);
 	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(null);
@@ -89,6 +89,7 @@ const Table = () => {
 					<div className="top-player-container">
 						{game.players[topPlayerIndex] && (
 							<TopPlayer
+								tilesSize={tilesSize}
 								player={game.players[topPlayerIndex]}
 								dealer={dealer === topPlayerIndex}
 								hasFront={front === topPlayerIndex}
@@ -100,6 +101,7 @@ const Table = () => {
 					<div className="bottom-player-container">
 						{game.players[bottomPlayerIndex] && (
 							<BottomPlayer
+								tilesSize={tilesSize}
 								player={game.players[bottomPlayerIndex]}
 								dealer={dealer === bottomPlayerIndex}
 								hasFront={front === bottomPlayerIndex}
@@ -111,6 +113,7 @@ const Table = () => {
 					<div className="right-player-container">
 						{game.players[rightPlayerIndex] && (
 							<RightPlayer
+								tilesSize={tilesSize}
 								player={game.players[rightPlayerIndex]}
 								dealer={dealer === rightPlayerIndex}
 								hasFront={front === rightPlayerIndex}
@@ -122,6 +125,7 @@ const Table = () => {
 					<div className="self-container">
 						{game.players[leftPlayerIndex] && (
 							<LeftPlayer
+								tilesSize={tilesSize}
 								player={game.players[leftPlayerIndex]}
 								dealer={dealer === leftPlayerIndex}
 								hasFront={front === leftPlayerIndex}

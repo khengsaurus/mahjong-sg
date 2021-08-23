@@ -1,6 +1,7 @@
-import spinner from '../../images/brown-loading-spinner.svg';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 import '../../App.scss';
-import { Dialog, DialogContent } from '@material-ui/core';
+import spinner from '../../images/brown-loading-spinner.svg';
 
 interface LoaderProps {
 	show: boolean;

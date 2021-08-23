@@ -1,10 +1,11 @@
-import { Button, IconButton } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SubjectIcon from '@material-ui/icons/Subject';
 import * as _ from 'lodash';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Game } from '../../Models/Game';
@@ -13,9 +14,9 @@ import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { findLeft, scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
 import Announcement from './Announcement';
-import './ControlsSmall.scss';
-import './ControlsMedium.scss';
 import './ControlsLarge.scss';
+import './ControlsMedium.scss';
+import './ControlsSmall.scss';
 import HuDialog from './HuDialog';
 import LogBox from './LogBox';
 import PaymentWindow from './PaymentWindow';
@@ -41,7 +42,7 @@ const Controls = (props: ControlsProps) => {
 
 	const game: Game = useSelector((state: Store) => state.game);
 	const player: User = useSelector((state: Store) => state.player);
-	const { lastThrown, thrownBy, logs } = game;
+	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs } = game;
 
 	useEffect(() => {
 		if (player && player.showTiles) {
@@ -49,19 +50,85 @@ const Controls = (props: ControlsProps) => {
 		}
 	}, []);
 
+	/* ----------------------------------- Util ----------------------------------- */
+
+	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: TileI[]) {
+		setCanKang(kang);
+		setCanPong(pong);
+		setCanChi(chi);
+		setMeld(tiles);
+	}
+
+	const tilesLeft: number = useMemo(() => {
+		return tiles.length;
+	}, [tiles]);
+
+	const lastThrownAvailable: boolean = useMemo(() => {
+		return !_.isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
+	}, [players, lastThrown, thrownBy, takenTile]);
+
+	const isHoldingLastThrown: boolean = useMemo(() => {
+		return (
+			!_.isEmpty(lastThrown) &&
+			player &&
+			player.allHiddenTilesContain(lastThrown) &&
+			!players[thrownBy].lastDiscardedTileIs(lastThrown)
+		);
+	}, [player, players, lastThrown, thrownBy]);
+
+	const playerWind: string = useMemo(() => {
+		switch ((playerSeat - dealer + 4) % 4) {
+			case 0:
+				return '東';
+			case 1:
+				return '南';
+			case 2:
+				return '西';
+			case 3:
+				return '北';
+			default:
+				return '';
+		}
+	}, [playerSeat, dealer]);
+
+	function handleShowLogs() {
+		setShowLogs(!showLogs);
+		setTimeout(function () {
+			scrollToBottomOfDiv('logs');
+		}, 200);
+	}
+
+	function setShowTimeout() {
+		setTimeoutId(
+			setTimeout(function () {
+				setOkToShow(false);
+			}, 2000)
+		);
+	}
+
+	function handleShow() {
+		if (okToShow) {
+			clearTimeout(timeoutId);
+		}
+		setOkToShow(true);
+		setShowTimeout();
+	}
+
+	/* ----------------------------------- useEffect to set options ----------------------------------- */
+
 	useEffect(() => {
 		let tiles: TileI[] = [];
 		/**
 		 * Can self kang during turn & selecting 1 || 4 */
-		if (game.whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
+		if (whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
 			tiles = selectedTiles;
 			setOptions(player.canKang(tiles), false, false, tiles);
 			/**
 			 * Can kang during anyone's turn if last thrown tile available & selecting 3*/
-		} else if (lastThrownAvailable() && selectedTiles.length === 3) {
+		} else if (lastThrownAvailable && selectedTiles.length === 3) {
 			tiles = [...selectedTiles, lastThrown];
 			setOptions(player.canKang(tiles), false, false, tiles);
-		} else if (lastThrownAvailable() && selectedTiles.length === 2) {
+		} else if (lastThrownAvailable && selectedTiles.length === 2) {
 			/**
 			 * If last thrown available, can pong during anyone's turn,
 			 * Can chi only during own's turn */
@@ -71,13 +138,13 @@ const Controls = (props: ControlsProps) => {
 			setOptions(
 				false,
 				player.canPong(tiles),
-				game.thrownBy === findLeft(playerSeat) && game.whoseMove === playerSeat && player.canChi(tiles),
+				thrownBy === findLeft(playerSeat) && whoseMove === playerSeat && player.canChi(tiles),
 				tiles
 			);
 		} else {
 			setOptions(false, false, false, tiles);
 		}
-	}, [lastThrown, selectedTiles]);
+	}, [lastThrown, thrownBy, lastThrownAvailable, whoseMove, selectedTiles, player, playerSeat]);
 
 	/* ----------------------------------- Take ----------------------------------- */
 	function takeLastThrown() {
@@ -85,7 +152,12 @@ const Controls = (props: ControlsProps) => {
 		player.getNewTile(lastThrown);
 	}
 
-	function gameStateTakenTile(resetLastThrown: boolean = false) {
+	function returnLastThrown() {
+		player.returnNewTile();
+		game.players[thrownBy].addToDiscarded(lastThrown);
+	}
+
+	function updateGameStateTakenTile(resetLastThrown: boolean = false) {
 		if (resetLastThrown) {
 			game.lastThrown = {};
 		}
@@ -115,14 +187,14 @@ const Controls = (props: ControlsProps) => {
 			player.moveMeldFromHiddenIntoShown(meld);
 			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 		}
-		gameStateTakenTile(false);
+		updateGameStateTakenTile(false);
 		handleAction(game);
 	}
 
 	function selfKang() {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
-		gameStateTakenTile(false);
+		updateGameStateTakenTile(false);
 		game.flagProgress = true;
 		buHua();
 		handleAction(game);
@@ -132,12 +204,12 @@ const Controls = (props: ControlsProps) => {
 
 	function handleDraw() {
 		let drawnTile: TileI;
-		if (game.tiles.length > 15) {
+		if (tilesLeft > 15) {
 			drawnTile = game.giveTiles(1, playerSeat, false, true);
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			gameStateTakenTile(true);
+			updateGameStateTakenTile(true);
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -150,7 +222,7 @@ const Controls = (props: ControlsProps) => {
 		let drawnTile: TileI;
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
-			if (game.tiles.length > 15) {
+			if (tilesLeft > 15) {
 				drawnTile = game.giveTiles(1, playerSeat, true, true);
 			} else {
 				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
@@ -174,7 +246,7 @@ const Controls = (props: ControlsProps) => {
 
 	function handleAction(game: Game) {
 		setSelectedTiles([]);
-		if (game.takenTile && game.thrownTile) {
+		if (takenTile && game.thrownTile) {
 			player.setHiddenTiles();
 			game.nextPlayerMove();
 		} else {
@@ -188,87 +260,20 @@ const Controls = (props: ControlsProps) => {
 
 	function showHuDialog() {
 		setDeclareHu(true);
-		if (lastThrownAvailable()) {
+		if (lastThrownAvailable) {
 			takeLastThrown();
 		}
-		// player.hiddenTiles = sortTiles(player.hiddenTiles);
 		player.showTiles = true;
 		handleAction(game);
 	}
 
 	function hideHuDialog() {
 		setDeclareHu(false);
-		if (isHoldingLastThrown()) {
+		if (isHoldingLastThrown) {
 			returnLastThrown();
 		}
 		player.showTiles = false;
 		handleAction(game);
-	}
-
-	/* ----------------------------------- Util ----------------------------------- */
-
-	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: TileI[]) {
-		setCanKang(kang);
-		setCanPong(pong);
-		setCanChi(chi);
-		setMeld(tiles);
-	}
-
-	function lastThrownAvailable(): boolean {
-		return !_.isEmpty(lastThrown) && !game.takenTile && game.players[thrownBy].lastDiscardedTileIs(lastThrown);
-	}
-
-	function isHoldingLastThrown(): boolean {
-		return (
-			!_.isEmpty(lastThrown) &&
-			player.allHiddenTilesContain(lastThrown) &&
-			!game.players[thrownBy].lastDiscardedTileIs(lastThrown)
-		);
-	}
-
-	function returnLastThrown() {
-		// player.removeFromHidden(lastThrown);
-		player.returnNewTile();
-		game.players[thrownBy].addToDiscarded(lastThrown);
-	}
-
-	function playerWind(): string {
-		let dealerSeat = game.dealer;
-		switch ((playerSeat - dealerSeat + 4) % 4) {
-			case 0:
-				return '東';
-			case 1:
-				return '南';
-			case 2:
-				return '西';
-			case 3:
-				return '北';
-			default:
-				return '';
-		}
-	}
-
-	function handleShowLogs() {
-		setShowLogs(!showLogs);
-		setTimeout(function () {
-			scrollToBottomOfDiv('logs');
-		}, 200);
-	}
-
-	function setShowTimeout() {
-		setTimeoutId(
-			setTimeout(function () {
-				setOkToShow(false);
-			}, 2000)
-		);
-	}
-
-	function handleShow() {
-		if (okToShow) {
-			clearTimeout(timeoutId);
-		}
-		setOkToShow(true);
-		setShowTimeout();
 	}
 
 	/* ----------------------------------- Markup ----------------------------------- */
@@ -298,11 +303,11 @@ const Controls = (props: ControlsProps) => {
 						</IconButton>
 					</div>
 					<div className="text-container">
-						{`Dealer: ${game.players[game.dealer].username}`}
+						{`Dealer: ${players[dealer].username}`}
 						<br></br>
-						{`Tiles left: ${game.tiles.length}`}
+						{`Tiles left: ${tilesLeft}`}
 						<br></br>
-						{`Seat: ${playerWind()}`}
+						{`Seat: ${playerWind}`}
 						<br></br>
 						{`$${Math.round(Number(player.balance) * 100) / 100}`}
 					</div>
@@ -355,7 +360,7 @@ const Controls = (props: ControlsProps) => {
 					onClick={() => {
 						handleThrow(selectedTiles[0]);
 					}}
-					disabled={selectedTiles.length !== 1 || game.whoseMove !== playerSeat || !game.takenTile}
+					disabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
 				>
 					<p>{`丢`}</p>
 				</Button>
@@ -363,9 +368,9 @@ const Controls = (props: ControlsProps) => {
 					className="button"
 					variant="outlined"
 					onClick={handleDraw}
-					disabled={game.whoseMove !== playerSeat || (game.tiles.length > 15 && game.takenTile)}
+					disabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
 				>
-					<p>{game.tiles.length === 15 ? `完` : `摸`}</p>
+					<p>{tilesLeft === 15 ? `完` : `摸`}</p>
 				</Button>
 				{!okToShow && (
 					<Button

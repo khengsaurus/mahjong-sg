@@ -32,6 +32,7 @@ interface TileI {
 }
 
 interface PlayerComponentProps {
+	tilesSize: string;
 	player: User;
 	dealer?: boolean;
 	hasFront?: boolean;

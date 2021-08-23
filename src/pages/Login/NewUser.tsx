@@ -1,12 +1,13 @@
-import { Button, Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { history } from '../../App';
 import '../../App.scss';
 import { FormField } from '../../components/Forms/FormField';
 import { User } from '../../Models/User';
-import { newUser_EmailUser, deleteCurrentFBUser, resolveUser_Email } from '../../util/fbUserFns';
+import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 
 const NewUser = () => {
@@ -19,28 +20,12 @@ const NewUser = () => {
 		history.push('/Login');
 	}
 
-	function pushToHome() {
-		history.push('/Home');
-	}
-
-	function handleSubmit(values: EmailUser, successCallback: () => void) {
+	function handleSubmit(values: EmailUser, callback: () => void) {
 		newUser_EmailUser(values)
 			.then(res => {
 				if (res) {
-					successCallback();
-					setAlert({ status: 'success', msg: 'Registered successfully' });
-					resolveUser_Email(userEmail)
-						.then((user: User) => {
-							login(user);
-							setTimeout(function () {
-								pushToHome();
-							}, 1000);
-						})
-						.catch(err => {
-							if (err.message === 'Username already taken') {
-								setAlert({ status: 'error', msg: err.message });
-							}
-						});
+					setAlert({ status: 'success', msg: 'Username available' });
+					callback();
 				}
 			})
 			.catch(err => {
@@ -48,12 +33,27 @@ const NewUser = () => {
 			});
 	}
 
+	function successCallback() {
+		resolveUser_Email(userEmail)
+			.then((user: User) => {
+				login(user);
+				setTimeout(function () {
+					history.push('/Home');
+				}, 1500);
+			})
+			.catch(err => {
+				if (err.message === 'Username already taken') {
+					setAlert({ status: 'error', msg: err.message });
+				}
+			});
+	}
+
 	const markup = (
 		<div className="main">
 			<Formik
 				initialValues={{ username: '', email: userEmail }}
-				onSubmit={async (values, { resetForm }) => {
-					handleSubmit(values, resetForm);
+				onSubmit={async values => {
+					handleSubmit(values, successCallback);
 				}}
 			>
 				{({ values }) => (

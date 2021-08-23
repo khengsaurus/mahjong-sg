@@ -1,4 +1,4 @@
-import { createTheme } from '@material-ui/core';
+import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
 import { Game } from '../Models/Game';

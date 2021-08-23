@@ -1,7 +1,6 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import * as _ from 'lodash';
-import React, { useContext, useMemo } from 'react';
-import { AppContext } from '../../util/hooks/AppContext';
+import React, { useMemo } from 'react';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -9,8 +8,7 @@ import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
 const BottomPlayer = (props: PlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { tilesSize } = useContext(AppContext);
+	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
@@ -28,7 +26,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 							tile={player.lastTakenTile}
 							segment="bottom"
 							highlight
-							classSuffix="margin-right"
+							imgClassSuffix="margin-right"
 						/>
 					)}
 				</div>
@@ -49,7 +47,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 							key={tile.id}
 							tile={tile}
 							segment="bottom"
-							classSuffix={
+							imgClassSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>

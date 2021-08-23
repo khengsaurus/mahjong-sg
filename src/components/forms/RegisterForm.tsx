@@ -1,7 +1,7 @@
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { authRegister_EmailPass } from '../../util/fbUserFns';
 import { FormField } from './FormField';
 
@@ -11,12 +11,12 @@ import { FormField } from './FormField';
 const RegisterForm: React.FC = () => {
 	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
 
-	function handleSubmit(values: EmailPass, successCallback: () => void) {
+	function handleSubmit(values: EmailPass, formCallback: () => void) {
 		authRegister_EmailPass(values)
 			.then(res => {
 				if (res) {
 					setAlert({ status: 'success', msg: 'Registered successfully' });
-					successCallback();
+					formCallback();
 				}
 			})
 			.catch(err => {

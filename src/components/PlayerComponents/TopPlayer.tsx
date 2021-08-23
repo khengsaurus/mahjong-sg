@@ -1,17 +1,14 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import * as _ from 'lodash';
-import React, { useContext, useMemo } from 'react';
-import getTileSrc from '../../images';
-import { AppContext } from '../../util/hooks/AppContext';
+import React, { useMemo } from 'react';
 import { generateNumberArray } from '../../util/utilFns';
-import './playerComponentsSmall.scss';
-import './playerComponentsMedium.scss';
 import './playerComponentsLarge.scss';
+import './playerComponentsMedium.scss';
+import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
 const TopPlayer = (props: PlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { tilesSize } = useContext(AppContext);
+	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
@@ -28,7 +25,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 							key={player.lastTakenTile.id}
 							tile={player.lastTakenTile}
 							segment="top"
-							classSuffix="margin-right"
+							imgClassSuffix="margin-right"
 							highlight
 						/>
 					)}
@@ -50,7 +47,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 							key={tile.id}
 							tile={tile}
 							segment="top"
-							classSuffix={
+							imgClassSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>

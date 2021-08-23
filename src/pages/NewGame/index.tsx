@@ -1,7 +1,12 @@
-import { Button, IconButton, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
@@ -19,7 +24,7 @@ const NewGame = () => {
 		if (!user) {
 			validateJWT();
 		}
-	}, [user]);
+	}, [user, validateJWT]);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {

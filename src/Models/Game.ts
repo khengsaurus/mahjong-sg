@@ -1,4 +1,4 @@
-import { sortTiles, playerToObj, findLeft, findRight, findOpp } from '../util/utilFns';
+import { findLeft, findOpp, findRight, playerToObj } from '../util/utilFns';
 import { User } from './User';
 
 export function gameToObj(game: Game) {

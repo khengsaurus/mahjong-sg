@@ -1,5 +1,6 @@
-import { Button, Typography } from '@material-ui/core';
-import React, { useContext, useEffect } from 'react';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { useContext, useEffect } from 'react';
 import { history } from '../../App';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
@@ -12,7 +13,7 @@ const Home = () => {
 		if (!user) {
 			validateJWT();
 		}
-	}, [user]);
+	}, [user, validateJWT]);
 
 	let markup = (
 		<div className="main">

@@ -1,16 +1,14 @@
-import {
-	Dialog,
-	DialogContent,
-	FormControl,
-	FormControlLabel,
-	FormLabel,
-	IconButton,
-	Radio,
-	RadioGroup,
-	ThemeProvider
-} from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import IconButton from '@material-ui/core/IconButton';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { ThemeProvider } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../util/hooks/AppContext';
 import { rotatedMUIDialog } from '../../util/utilFns';
 import './ControlsMedium.scss';

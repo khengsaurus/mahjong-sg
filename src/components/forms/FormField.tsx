@@ -1,4 +1,4 @@
-import { TextField } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 import { FieldProps } from 'formik';
 import * as React from 'react';
 

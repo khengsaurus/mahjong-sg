@@ -1,4 +1,8 @@
-import { Button, Dialog, DialogContent, ThemeProvider, Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import { ThemeProvider } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
