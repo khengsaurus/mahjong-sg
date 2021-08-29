@@ -18,10 +18,10 @@ import './Table.scss';
 
 const Table = () => {
 	const { user, gameId, tilesSize } = useContext(AppContext);
-	const [topPlayerIndex, setTopPlayerIndex] = useState(null);
-	const [rightPlayerIndex, setRightPlayerIndex] = useState(null);
-	const [bottomPlayerIndex, setBottomPlayerIndex] = useState(null);
-	const [leftPlayerIndex, setLeftPlayerIndex] = useState(null);
+	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);
+	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
+	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
+	const [BottomPlayerIndex, setBottomPlayerIndex] = useState(null);
 	const [front, setFront] = useState(null);
 	const [back, setBack] = useState(null);
 	const [dealer, setDealer] = useState(null);
@@ -43,31 +43,31 @@ const Table = () => {
 				switch (user.username) {
 					case currentGame.players[0].username:
 						player = currentGame.players[0];
-						setLeftPlayerIndex(0);
-						setTopPlayerIndex(3);
-						setRightPlayerIndex(2);
-						setBottomPlayerIndex(1);
-						break;
-					case currentGame.players[1].username:
-						player = currentGame.players[1];
-						setLeftPlayerIndex(1);
-						setTopPlayerIndex(0);
-						setRightPlayerIndex(3);
-						setBottomPlayerIndex(2);
-						break;
-					case currentGame.players[2].username:
-						player = currentGame.players[2];
-						setLeftPlayerIndex(2);
-						setTopPlayerIndex(1);
-						setRightPlayerIndex(0);
-						setBottomPlayerIndex(3);
-						break;
-					case currentGame.players[3].username:
-						player = currentGame.players[3];
+						setBottomPlayerIndex(0);
 						setLeftPlayerIndex(3);
 						setTopPlayerIndex(2);
 						setRightPlayerIndex(1);
-						setBottomPlayerIndex(0);
+						break;
+					case currentGame.players[1].username:
+						player = currentGame.players[1];
+						setBottomPlayerIndex(1);
+						setLeftPlayerIndex(0);
+						setTopPlayerIndex(3);
+						setRightPlayerIndex(2);
+						break;
+					case currentGame.players[2].username:
+						player = currentGame.players[2];
+						setBottomPlayerIndex(2);
+						setLeftPlayerIndex(1);
+						setTopPlayerIndex(0);
+						setRightPlayerIndex(3);
+						break;
+					case currentGame.players[3].username:
+						player = currentGame.players[3];
+						setBottomPlayerIndex(3);
+						setLeftPlayerIndex(2);
+						setTopPlayerIndex(1);
+						setRightPlayerIndex(0);
 						break;
 					default:
 						break;
@@ -87,55 +87,55 @@ const Table = () => {
 						<div className="wind-background">
 							<p>{currentWind}</p>
 						</div>
-						<div className="top-player-container">
-							{game.players[topPlayerIndex] && (
-								<TopPlayer
+						<div className="left-player-container">
+							{game.players[LeftPlayerIndex] && (
+								<LeftPlayer
 									tilesSize={tilesSize}
-									player={game.players[topPlayerIndex]}
-									dealer={dealer === topPlayerIndex}
-									hasFront={front === topPlayerIndex}
-									hasBack={back === topPlayerIndex}
-									lastThrown={game.lastThrown}
-								/>
-							)}
-						</div>
-						<div className="bottom-player-container">
-							{game.players[bottomPlayerIndex] && (
-								<BottomPlayer
-									tilesSize={tilesSize}
-									player={game.players[bottomPlayerIndex]}
-									dealer={dealer === bottomPlayerIndex}
-									hasFront={front === bottomPlayerIndex}
-									hasBack={back === bottomPlayerIndex}
+									player={game.players[LeftPlayerIndex]}
+									dealer={dealer === LeftPlayerIndex}
+									hasFront={front === LeftPlayerIndex}
+									hasBack={back === LeftPlayerIndex}
 									lastThrown={game.lastThrown}
 								/>
 							)}
 						</div>
 						<div className="right-player-container">
-							{game.players[rightPlayerIndex] && (
+							{game.players[RightPlayerIndex] && (
 								<RightPlayer
 									tilesSize={tilesSize}
-									player={game.players[rightPlayerIndex]}
-									dealer={dealer === rightPlayerIndex}
-									hasFront={front === rightPlayerIndex}
-									hasBack={back === rightPlayerIndex}
+									player={game.players[RightPlayerIndex]}
+									dealer={dealer === RightPlayerIndex}
+									hasFront={front === RightPlayerIndex}
+									hasBack={back === RightPlayerIndex}
 									lastThrown={game.lastThrown}
 								/>
 							)}
 						</div>
-						<div className="self-container">
-							{game.players[leftPlayerIndex] && (
-								<LeftPlayer
+						<div className="top-player-container">
+							{game.players[TopPlayerIndex] && (
+								<TopPlayer
 									tilesSize={tilesSize}
-									player={game.players[leftPlayerIndex]}
-									dealer={dealer === leftPlayerIndex}
-									hasFront={front === leftPlayerIndex}
-									hasBack={back === leftPlayerIndex}
+									player={game.players[TopPlayerIndex]}
+									dealer={dealer === TopPlayerIndex}
+									hasFront={front === TopPlayerIndex}
+									hasBack={back === TopPlayerIndex}
 									lastThrown={game.lastThrown}
 								/>
 							)}
 						</div>
-						<Controls playerSeat={leftPlayerIndex} />
+						<div className="bottom-player-container">
+							{game.players[BottomPlayerIndex] && (
+								<BottomPlayer
+									tilesSize={tilesSize}
+									player={game.players[BottomPlayerIndex]}
+									dealer={dealer === BottomPlayerIndex}
+									hasFront={front === BottomPlayerIndex}
+									hasBack={back === BottomPlayerIndex}
+									lastThrown={game.lastThrown}
+								/>
+							)}
+						</div>
+						<Controls playerSeat={BottomPlayerIndex} />
 					</div>
 				</div>
 			);

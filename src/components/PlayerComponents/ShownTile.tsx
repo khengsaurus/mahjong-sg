@@ -40,18 +40,18 @@ const ShownTile = (props: ShownTileProps) => {
 					key={`${tile.id}`}
 					className={`${divClass} ${
 						highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-					} ${imgClassSuffix}`}
+					} ${imgClassSuffix || ``}`}
 					src={getTileSrc(tile.card)}
 					alt="tile"
 				/>
 			);
 		case 'vts':
 			return (
-				<div className={`${divClass} ${divClassSuffix}`} key={`${tile.id}-hidden`}>
+				<div className={`${divClass} ${divClassSuffix || ``}`} key={tile.id}>
 					<img
 						className={`${bgClass} ${
 							highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-						} ${imgClassSuffix}`}
+						} ${imgClassSuffix || ``}`}
 						src={getTileSrc(tile.card)}
 						alt="tile"
 					/>

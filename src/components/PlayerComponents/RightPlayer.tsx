@@ -39,8 +39,12 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			)}
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
-			<div className="vtss right">
-				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
+			<div className="vtss">
+				{player.shownTiles.map((tile: TileI) => {
+					return tile.suit !== '花' && tile.suit !== '动物' ? (
+						<ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />
+					) : null;
+				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
@@ -53,12 +57,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 						/>
 					) : null;
 				})}
-				{player.shownTiles.map((tile: TileI) => {
-					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />
-					) : null;
-				})}
-				{/* Extra */}
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}

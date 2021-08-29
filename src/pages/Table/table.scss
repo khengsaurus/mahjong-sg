@@ -33,20 +33,20 @@
 .right-player-container {
 	position: absolute;
 	right: $main-padding;
-	z-index: 1;
+	z-index: 0;
 }
 
 .bottom-player-container {
 	position: absolute;
 	width: 100%;
 	bottom: $main-padding;
-	z-index: 2;
+	z-index: 1;
 }
 
-.self-container {
+.left-player-container {
 	position: absolute;
 	left: $main-padding;
-	z-index: 3;
+	z-index: 0;
 }
 
 @keyframes color-change {

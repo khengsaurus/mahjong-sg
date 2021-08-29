@@ -3,7 +3,7 @@
 .row-section-small {
 	display: flex;
 	flex-direction: column;
-	padding: 0 5px;
+	padding: 5px;
 	justify-content: center;
 	align-content: center;
 	transition: 200ms;
@@ -50,14 +50,13 @@
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: center;
-		align-items: flex-start;
+		align-items: flex-end;
 		align-self: center;
-		width: 9 * ($shown-tile-width-small);
-		&.row-r {
+		min-height: $shown-tile-height-small;
+		max-width: 60%;
+		&.top {
+			align-items: flex-start;
 			flex-flow: row-reverse wrap;
-		}
-		&.bottom {
-			transform: $rotate-simple-180;
 		}
 	}
 
@@ -90,6 +89,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	padding: 5px;
 	transition: 200ms;
 	&.right {
 		flex-direction: row-reverse;
@@ -98,7 +98,7 @@
 	.vtsh {
 		display: flex;
 		flex-direction: column;
-		padding: 0 $tile-padding-small;
+		padding: $tile-padding-small;
 		min-width: $hidden-tile-height-small;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
@@ -130,22 +130,15 @@
 
 	.vtss {
 		display: flex;
-		flex-flow: column wrap;
-		align-items: flex-start;
+		flex-flow: column-reverse wrap;
+		align-items: flex-end;
 		justify-content: center;
+		min-width: $shown-tile-height-small;
 		height: 15 * $shown-tile-height-small;
-		padding: 0 $tile-padding-small;
-		&.col-r {
-			flex-flow: column-reverse wrap;
-		}
-		&.right {
-			align-items: flex-end;
-		}
-		&.discarded {
-			max-height: 50vh;
-			&.right {
-				flex-flow: column-reverse wrap-reverse;
-			}
+		max-height: 60%;
+		padding: $tile-padding-small;
+		&.left {
+			transform: rotate(180deg);
 		}
 	}
 
@@ -182,28 +175,29 @@
 
 .self-hidden-tiles-small {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	align-self: center;
+	padding: $tile-padding-small;
 	z-index: 20;
 
 	.self-hidden-tile {
-		height: $self-hidden-tile-width-small;
-		width: $self-hidden-tile-height-small;
+		height: $self-hidden-tile-height-small;
+		width: $self-hidden-tile-width-small;
 		border-radius: 4%;
 		transition: 200ms;
 		&.unselected {
 			background: $color-tile-front;
 		}
 		&.selected {
-			transform: translateX(15%);
+			transform: translateY(-15%);
 			@include default-selected;
 		}
 		&.last {
-			margin-top: $hidden-tile-height-small;
+			margin-left: $hidden-tile-height-small;
 		}
 	}
 
 	.self-hidden-tile-bg {
 		height: $self-hidden-tile-height-small;
-		transform: $transform-rotate;
 	}
 }
