@@ -5,7 +5,7 @@ import { Field, Form, Formik } from 'formik';
 import { useContext, useState } from 'react';
 import { history } from '../../App';
 import '../../App.scss';
-import FormField from '../../components/Forms/FormField';
+import FormField from '../../components/FormComponents/FormField';
 import { User } from '../../Models/User';
 import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
