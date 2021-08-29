@@ -62,7 +62,7 @@
 
 	.hts {
 		height: $shown-tile-height-small;
-		border-radius: 4%;
+		@include default-tile-border-radius;
 		background: $color-tile-front;
 		&.flower {
 			@include default-flower;
@@ -155,7 +155,7 @@
 
 	.vts-bg {
 		height: $shown-tile-height-small;
-		border-radius: 4%;
+		@include default-tile-border-radius;
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
 		align-self: flex-start;
@@ -183,7 +183,7 @@
 	.self-hidden-tile {
 		height: $self-hidden-tile-height-small;
 		width: $self-hidden-tile-width-small;
-		border-radius: 4%;
+		@include default-tile-border-radius;
 		transition: 200ms;
 		&.unselected {
 			background: $color-tile-front;

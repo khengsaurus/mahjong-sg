@@ -17,7 +17,6 @@
 	display: flex;
 	flex-direction: column;
 	p {
-		transform: rotate(90deg); // translateY(-30px);
 		font-size: $wind-font-size;
 		color: $grey-standard;
 	}

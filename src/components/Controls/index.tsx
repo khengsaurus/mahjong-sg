@@ -280,7 +280,7 @@ const Controls = (props: ControlsProps) => {
 
 	return game && player ? (
 		<div className="main transparent">
-			<div className={`top-right-controls-${controlsSize}`}>
+			<div className={`top-left-controls-${controlsSize}`}>
 				<>
 					<div className="buttons">
 						<IconButton
@@ -303,18 +303,15 @@ const Controls = (props: ControlsProps) => {
 						</IconButton>
 					</div>
 					<div className="text-container">
-						{`Dealer: ${players[dealer].username}`}
-						<br></br>
-						{`Tiles left: ${tilesLeft}`}
-						<br></br>
-						{`Seat: ${playerWind}`}
-						<br></br>
-						{`$${Math.round(Number(player.balance) * 100) / 100}`}
+						<p>{`Dealer: ${players[dealer].username}`}</p>
+						<p>{`Seat: ${playerWind}`}</p>
+						<p>{`Tiles left: ${tilesLeft}`}</p>
+						<p>{`$ ${Math.round(Number(player.balance) * 100) / 100}`}</p>
 					</div>
 				</>
 			</div>
 
-			<div className={`top-left-controls-${controlsSize}`}>
+			<div className={`bottom-left-controls-${controlsSize}`}>
 				<Button
 					className="button"
 					variant="outlined"
@@ -323,7 +320,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={!canChi}
 				>
-					<p>{`吃`}</p>
+					{`吃`}
 				</Button>
 				<Button
 					className="button"
@@ -337,7 +334,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={!canPong && !canKang}
 				>
-					<p>{canKang ? `杠` : `碰`}</p>
+					{canKang ? `杠` : `碰`}
 				</Button>
 				{okToShow && (
 					<Button
@@ -352,7 +349,7 @@ const Controls = (props: ControlsProps) => {
 				)}
 			</div>
 
-			<div className={`bottom-left-controls-${controlsSize}`}>
+			<div className={`bottom-right-controls-${controlsSize}`}>
 				<Button
 					className="button"
 					variant="outlined"
@@ -362,7 +359,7 @@ const Controls = (props: ControlsProps) => {
 					}}
 					disabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
 				>
-					<p>{`丢`}</p>
+					{`丢`}
 				</Button>
 				<Button
 					className="button"
@@ -370,7 +367,7 @@ const Controls = (props: ControlsProps) => {
 					onClick={handleDraw}
 					disabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
 				>
-					<p>{tilesLeft === 15 ? `完` : `摸`}</p>
+					{tilesLeft === 15 ? `完` : `摸`}
 				</Button>
 				{!okToShow && (
 					<Button
@@ -383,36 +380,32 @@ const Controls = (props: ControlsProps) => {
 						// 	FBService.updateGame(game);
 						// }}
 					>
-						<p>{`开?`}</p>
+						{`开?`}
 					</Button>
 				)}
 			</div>
 
-			<div className={`bottom-right-controls-${controlsSize}`}>
+			<div className={`top-right-controls-${controlsSize}`}>
 				<>
-					<div className="buttons">
-						<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
-							<SubjectIcon />
-						</IconButton>
-						<IconButton
-							className="icon-button"
-							size="small"
-							onClick={() => {
-								setShowPay(!showPay);
-							}}
-						>
-							<MonetizationOnIcon />
-						</IconButton>
-					</div>
-					<div className={`log-box-container-${controlsSize}${showLogs ? ` expanded` : ``}`}>
-						<LogBox
-							expanded={showLogs}
-							logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
-							scroll={() => {
-								scrollToBottomOfDiv('logs');
-							}}
-						/>
-					</div>
+					<IconButton
+						className="icon-button"
+						size="small"
+						onClick={() => {
+							setShowPay(!showPay);
+						}}
+					>
+						<MonetizationOnIcon />
+					</IconButton>
+					<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
+						<SubjectIcon />
+					</IconButton>
+					<LogBox
+						expanded={showLogs}
+						logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
+						scroll={() => {
+							scrollToBottomOfDiv('logs');
+						}}
+					/>
 				</>
 			</div>
 			{showPay && (

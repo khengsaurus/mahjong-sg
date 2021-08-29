@@ -1,59 +1,31 @@
 @import '../../App.scss';
 
-.top-right-controls-small {
-	position: absolute;
-	top: $main-padding;
-	right: $main-padding;
-	margin-top: calc(env(safe-area-inset-top));
-	margin-right: calc(env(safe-area-inset-right));
-	display: flex;
-	flex-flow: column;
-	align-items: flex-end;
-	z-index: 10;
-	.buttons {
-		display: flex;
-		flex-direction: row-reverse;
-	}
-	.icon-button {
-		width: $icon-button-size-small;
-		height: $icon-button-size-small;
-		transform: rotate(90deg);
-	}
-	.text-container {
-		display: flex;
-		flex-direction: row-reverse;
-		justify-content: flex-end;
-		text-align: start;
-		transform-origin: top left;
-		transform: rotate(90deg) translateY((2 * $main-padding) - (2 * $text-line-width-small));
-		height: $text-line-height-small * 4;
-		width: 2 * $text-line-width-small;
-		font-size: $text-font-size-small;
-		color: $log-grey;
-		line-height: $text-line-height-small;
-	}
-}
-
 .top-left-controls-small {
 	position: absolute;
 	top: $main-padding;
 	left: $main-padding;
-	margin-top: calc(env(safe-area-inset-top));
-	margin-left: calc(env(safe-area-inset-left));
-	height: 2 * $button-height-small;
-	width: 2 * $button-width-small;
 	display: flex;
-	flex-flow: column wrap;
-	justify-content: flex-start;
+	flex-flow: column;
 	align-items: flex-start;
 	z-index: 10;
-	.button {
-		max-width: $button-width-small;
-		max-height: $button-height-small;
-		min-width: $button-width-small;
-		min-height: $button-height-small;
+	.buttons {
+		display: flex;
+		flex-direction: row;
+	}
+	.icon-button {
+		width: $icon-button-size-small;
+		height: $icon-button-size-small;
+	}
+	.text-container {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		padding-left: 3 * $main-padding;
 		p {
-			transform: rotate(90deg);
+			text-align: start;
+			color: $grey-50;
+			font-size: $text-font-size-small;
+			margin: 0 !important;
 		}
 	}
 }
@@ -62,12 +34,11 @@
 	position: absolute;
 	left: $main-padding;
 	bottom: $main-padding;
-	margin-left: calc(env(safe-area-inset-left));
-	margin-bottom: calc(env(safe-area-inset-bottom));
 	height: 2 * $button-height-small;
 	width: 2 * $button-width-small;
 	display: flex;
-	flex-flow: column-reverse wrap;
+	flex-flow: row wrap-reverse;
+	justify-content: flex-start;
 	align-items: flex-start;
 	z-index: 10;
 	.button {
@@ -75,9 +46,6 @@
 		max-height: $button-height-small;
 		min-width: $button-width-small;
 		min-height: $button-height-small;
-		p {
-			transform: rotate(90deg);
-		}
 	}
 }
 
@@ -85,29 +53,32 @@
 	position: absolute;
 	right: $main-padding;
 	bottom: $main-padding;
-	margin-right: calc(env(safe-area-inset-right));
-	margin-bottom: calc(env(safe-area-inset-bottom));
+	height: 2 * $button-height-small;
+	width: 2 * $button-width-small;
 	display: flex;
-	flex-direction: column-reverse;
-	align-items: flex-end;
-	justify-content: flex-start;
+	flex-flow: row-reverse wrap-reverse;
+	align-items: flex-start;
 	z-index: 10;
-	.buttons {
-		display: flex;
-		flex-direction: row-reverse;
-	}
-	.icon-button {
-		width: $icon-button-size-small;
-		height: $icon-button-size-small;
-		transform: rotate(90deg);
+	.button {
+		max-width: $button-width-small;
+		max-height: $button-height-small;
+		min-width: $button-width-small;
+		min-height: $button-height-small;
 	}
 }
 
-.log-box-container-small {
-	transform-origin: bottom right;
-	transform: rotate(90deg) translateY($icon-button-size-small);
-	&.expanded {
-		transform: rotate(90deg) translateY((4 * $icon-button-size-small) + ($tile-border-px));
+.top-right-controls-small {
+	position: absolute;
+	right: $main-padding;
+	top: $main-padding;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: flex-start;
+	justify-content: flex-start;
+	z-index: 10;
+	.icon-button {
+		width: $icon-button-size-small;
+		height: $icon-button-size-small;
 	}
 }
 
@@ -138,7 +109,7 @@
 			color: $log-green;
 		}
 		&.turn {
-			color: black;
+			color: $grey-50;
 		}
 	}
 }

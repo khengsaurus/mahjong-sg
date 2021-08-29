@@ -8,9 +8,10 @@ $dark-brown: rgb(175, 160, 140);
 $gold: #d4af37;
 $light-gold: rgb(220, 190, 150);
 $dark-purple-blue: rgb(88, 101, 144);
-$grey-light: rgb(170, 170, 170);
 $grey-standard: grey;
-$grey-dark: rgb(100, 100, 100);
+$grey-50: rgb(50, 50, 50);
+$grey-100: rgb(100, 100, 100);
+$grey-170: rgb(170, 170, 170);
 
 /*-------------------- Color vars --------------------*/
 $color-background: $light-brown;
@@ -32,6 +33,7 @@ $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 
 /*-------------------- Tile sizes --------------------*/
+$border-px: 1px;
 $tile-border-px: 1px;
 
 // original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
@@ -44,7 +46,7 @@ $shown-tile-height-small: 30px;
 $shown-tile-width-small: 21px;
 
 $self-hidden-tile-height-small: 34px;
-$self-hidden-tile-width-small: 24px;
+$self-hidden-tile-width-small: 23px;
 
 // Medium
 $tile-padding-medium: 6px;
@@ -53,8 +55,8 @@ $hidden-tile-width-medium: 6px;
 $shown-tile-height-medium: 34px;
 $shown-tile-width-medium: 24px;
 
-$self-hidden-tile-height-medium: 46px;
-$self-hidden-tile-width-medium: 32px;
+$self-hidden-tile-height-medium: 40px;
+$self-hidden-tile-width-medium: 28px;
 
 // Large
 $tile-padding-large: 8px;
@@ -63,14 +65,14 @@ $hidden-tile-width-large: 7px;
 $shown-tile-height-large: 40px;
 $shown-tile-width-large: 28px;
 
-$self-hidden-tile-height-large: 60px;
-$self-hidden-tile-width-large: 42px;
+$self-hidden-tile-height-large: 46px;
+$self-hidden-tile-width-large: 32px;
 
 /*-------------------- Controls & logs --------------------*/
 // Small
 $icon-button-size-small: 32px;
+$button-height-small: 40px;
 $button-width-small: 45px;
-$button-height-small: 55px;
 
 $text-line-width-small: 80px;
 $text-font-size-small: 14px;
@@ -82,8 +84,8 @@ $log-font-size-small: 14px;
 
 // Medium
 $icon-button-size-medium: 36px;
-$button-width-medium: 50px;
-$button-height-medium: 60px;
+$button-height-medium: 50px;
+$button-width-medium: 55px;
 
 $text-line-width-medium: 90px;
 $text-font-size-medium: 15px;
@@ -95,8 +97,8 @@ $log-font-size-medium: 15px;
 
 // Large
 $icon-button-size-large: 40px;
-$button-width-large: 55px;
 $button-height-large: 65px;
+$button-width-large: 60px;
 
 $text-line-width-large: 100px;
 $text-font-size-large: 16px;
@@ -112,24 +114,28 @@ $transform-rotate: rotate(90deg) translateX(-22%);
 $rotate-simple-180: rotate(180deg);
 
 @mixin default-border {
-	border: $tile-border-px solid $color-border;
-	border-radius: 4%;
+	border: $border-px solid $color-border;
+	border-radius: 4px;
+}
+
+@mixin default-tile-border-radius {
+	border-radius: 7%;
 }
 
 @mixin default-tile-border {
 	border: $tile-border-px solid $color-tile-border;
-	border-radius: 4%;
+	@include default-tile-border-radius;
 }
 
 @mixin default-selected {
-	border-radius: 4%;
+	@include default-tile-border-radius;
 	background: $radial-gradient-gold-2;
 	background-size: 400% 400%;
 	animation: linear-gradient 5s ease infinite;
 }
 
 @mixin default-flower {
-	border-radius: 4%;
+	@include default-tile-border-radius;
 	background: $linear-gradient-multi;
 	background-size: 400% 400%;
 	animation: linear-gradient 4s ease infinite;
@@ -178,4 +184,25 @@ $rotate-simple-180: rotate(180deg);
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+.move-enter {
+	opacity: 0;
+	transform: translate(0, 0);
+}
+
+.move-enter-active {
+	opacity: 1;
+	transform: translate(0, $log-line-height-medium);
+	transition: 5000ms ease;
+}
+
+.move-exit {
+	opacity: 1;
+	transform: translate(0, -$log-line-height-medium);
+}
+
+.move-exit-active {
+	opacity: 0.01;
+	transform: translate(0, -$log-line-height-medium);
 }

@@ -9,13 +9,11 @@ import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
 import { Game } from '../../models/Game';
 import FBService from '../../service/MyFirebaseService';
-import { rotatedMUIDialog } from '../../util/utilFns';
 import './ControlsMedium.scss';
 
 interface Props {
@@ -44,68 +42,66 @@ const HuDialog = (props: Props) => {
 
 	return (
 		<div className="main transparent">
-			<ThemeProvider theme={rotatedMUIDialog}>
-				<Dialog
-					open={show}
-					BackdropProps={{ invisible: true }}
-					onClose={onClose}
-					PaperProps={{
-						style: {
-							minWidth: '350px',
-							backgroundColor: 'rgb(215, 195, 170)'
+			<Dialog
+				open={show}
+				BackdropProps={{ invisible: true }}
+				onClose={onClose}
+				PaperProps={{
+					style: {
+						minWidth: '350px',
+						backgroundColor: 'rgb(215, 195, 170)'
+					}
+				}}
+			>
+				<DialogContent>
+					<IconButton
+						style={{ color: 'black', position: 'absolute', top: '12px', right: '15px' }}
+						onClick={onClose}
+					>
+						<CloseIcon />
+					</IconButton>
+					<Typography variant="h6">{'Nice!'}</Typography>
+					<br></br>
+					<FormControl component="fieldset">
+						<FormLabel component="legend">{`台: `}</FormLabel>
+						<RadioGroup row value={tai} onChange={handleSetTaiNumber}>
+							{[1, 2, 3, 4, 5].map((tai: number) => {
+								return (
+									<FormControlLabel
+										key={tai}
+										value={tai}
+										control={<Radio color="primary" />}
+										label={tai}
+									/>
+								);
+							})}
+						</RadioGroup>
+					</FormControl>
+					<br></br>
+					<FormControlLabel
+						label="自摸"
+						control={
+							<Checkbox
+								onChange={() => {
+									setZimo(!zimo);
+								}}
+								color="primary"
+							/>
 						}
-					}}
-				>
-					<DialogContent>
-						<IconButton
-							style={{ color: 'black', position: 'absolute', top: '12px', right: '15px' }}
-							onClick={onClose}
+					/>
+					<DialogActions>
+						<Button
+							variant="outlined"
+							size="small"
+							onClick={hu}
+							disabled={!tai || game.hu.length === 3}
+							autoFocus
 						>
-							<CloseIcon />
-						</IconButton>
-						<Typography variant="h6">{'Nice!'}</Typography>
-						<br></br>
-						<FormControl component="fieldset">
-							<FormLabel component="legend">{`台: `}</FormLabel>
-							<RadioGroup row value={tai} onChange={handleSetTaiNumber}>
-								{[1, 2, 3, 4, 5].map((tai: number) => {
-									return (
-										<FormControlLabel
-											key={tai}
-											value={tai}
-											control={<Radio color="primary" />}
-											label={tai}
-										/>
-									);
-								})}
-							</RadioGroup>
-						</FormControl>
-						<br></br>
-						<FormControlLabel
-							label="自摸"
-							control={
-								<Checkbox
-									onChange={() => {
-										setZimo(!zimo);
-									}}
-									color="primary"
-								/>
-							}
-						/>
-						<DialogActions>
-							<Button
-								variant="outlined"
-								size="small"
-								onClick={hu}
-								disabled={!tai || game.hu.length === 3}
-								autoFocus
-							>
-								Hu
-							</Button>
-						</DialogActions>
-					</DialogContent>
-				</Dialog>
-			</ThemeProvider>
+							Hu
+						</Button>
+					</DialogActions>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 };
