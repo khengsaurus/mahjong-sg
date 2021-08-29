@@ -12,7 +12,7 @@ import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { formatDateToDay, objToGame } from '../../util/utilFns';
 import Login from '../Login';
-import './joinGame.scss';
+import './JoinGame.scss';
 
 const JoinGame = () => {
 	const { user, setGameId, validateJWT } = useContext(AppContext);
