@@ -33,7 +33,8 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
-		"build": "react-scripts build && npx cap copy",
+		"build": "react-scripts build",
+		"buildapp": "react-scripts build && npx cap copy",
 		"test": "jest",
 		"eject": "react-scripts eject"
 	},
