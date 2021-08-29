@@ -9,8 +9,7 @@ interface ShownTileProps {
 	segment: 'top' | 'right' | 'bottom' | 'left';
 	last?: TileI;
 	highlight?: boolean;
-	divClassSuffix?: string;
-	imgClassSuffix?: string;
+	classSuffix?: string;
 }
 
 function getClass(segment: string) {
@@ -29,7 +28,7 @@ function getClass(segment: string) {
 }
 
 const ShownTile = (props: ShownTileProps) => {
-	const { tile, segment, last, highlight, divClassSuffix, imgClassSuffix } = props;
+	const { tile, segment, last, highlight, classSuffix } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -37,21 +36,20 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					key={`${tile.id}`}
 					className={`${divClass} ${
 						highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-					} ${imgClassSuffix || ``}`}
+					} ${classSuffix || ``}`}
 					src={getTileSrc(tile.card)}
 					alt="tile"
 				/>
 			);
 		case 'vts':
 			return (
-				<div className={`${divClass} ${divClassSuffix || ``}`} key={tile.id}>
+				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
 						className={`${bgClass} ${
 							highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-						} ${imgClassSuffix || ``}`}
+						} ${classSuffix || ``}`}
 						src={getTileSrc(tile.card)}
 						alt="tile"
 					/>

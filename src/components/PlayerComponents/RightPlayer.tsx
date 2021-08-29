@@ -18,22 +18,22 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="vtss col-r">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="right"
 							highlight
-							divClassSuffix="margin-bottom"
+							classSuffix="margin-bottom"
 						/>
 					)}
 				</div>
 			) : (
 				<div className="vtsh">
 					{player.allHiddenTiles().map((tile: TileI) => {
-						return <div key={`${tile.id}-hidden`} className="vth" />;
+						return <div key={tile.uuid} className="vth" />;
 					})}
 				</div>
 			)}
@@ -42,16 +42,16 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="right"
-							imgClassSuffix={
+							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
@@ -63,7 +63,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`vtsh unused right ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`right-unused-tile${i}`} className="vth" />;
+					return <div key={`right-unused-${i}`} className="vth" />;
 				})}
 			</div>
 
@@ -71,7 +71,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss discarded right">
 				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />;
 				})}
 			</div>
 		</div>

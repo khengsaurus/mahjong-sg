@@ -29,15 +29,15 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="htss">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="bottom" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="bottom" last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="bottom"
 							highlight
-							imgClassSuffix="margin-left"
+							classSuffix="margin-left"
 						/>
 					)}
 				</div>
@@ -46,7 +46,8 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 					{player.hiddenTiles.map((tile: TileI) => {
 						return (
 							<HandTile
-								tile={tile}
+								key={tile.uuid}
+								card={tile.card}
 								selected={selectedTiles.includes(tile)}
 								last={false}
 								callback={() => selectTile(tile)}
@@ -55,7 +56,8 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<HandTile
-							tile={player.lastTakenTile}
+							key={player.lastTakenTile.uuid}
+							card={player.lastTakenTile.card}
 							selected={selectedTiles.includes(player.lastTakenTile)}
 							last={true}
 							callback={() => selectTile(player.lastTakenTile)}
@@ -68,16 +70,16 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			<div className="htss">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="bottom" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment="bottom" last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="bottom"
-							imgClassSuffix={
+							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
@@ -89,14 +91,14 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`htsh unused bottom ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`bottom-unused-tile${i}`} className="vth" />;
+					return <div key={`bottom-unused-${i}`} className="vth" />;
 				})}
 			</div>
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss">
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="bottom" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="bottom" last={lastThrown} />;
 				})}
 			</div>
 		</div>

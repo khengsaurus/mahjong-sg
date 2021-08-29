@@ -18,22 +18,22 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="htss top">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="top" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="top"
 							highlight
-							divClassSuffix="margin-right"
+							classSuffix="margin-right"
 						/>
 					)}
 				</div>
 			) : (
 				<div className="htsh">
 					{player.allHiddenTiles().map((tile: TileI) => {
-						return <div key={`${tile.id}-hidden`} className="hth" />;
+						return <div key={tile.uuid} className="hth" />;
 					})}
 				</div>
 			)}
@@ -42,16 +42,16 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			<div className="htss top">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="top" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="top"
-							imgClassSuffix={
+							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
@@ -63,7 +63,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`htsh unused ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`top-unused-tile${i}`} className="hth" />;
+					return <div key={`top-unused-${i}`} className="hth" />;
 				})}
 			</div>
 
@@ -71,7 +71,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			<div className="htss top">
 				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="top" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />;
 				})}
 			</div>
 		</div>

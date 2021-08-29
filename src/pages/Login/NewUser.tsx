@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { history } from '../../App';
 import '../../App.scss';
 import { FormField } from '../../components/Forms/FormField';
-import { User } from '../../models/User';
+import { User } from '../../Models/User';
 import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 

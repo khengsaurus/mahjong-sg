@@ -12,7 +12,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
-import { Game } from '../../models/Game';
+import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import './ControlsMedium.scss';
 

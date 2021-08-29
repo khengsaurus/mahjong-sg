@@ -1,5 +1,6 @@
 import { findLeft, findOpp, findRight, playerToObj } from '../util/utilFns';
 import { User } from './User';
+import { v4 as uuidv4 } from 'uuid';
 
 export function gameToObj(game: Game) {
 	return {
@@ -158,6 +159,7 @@ export class Game {
 						index,
 						isValidFlower: false,
 						id: `a${suit}${number}${index}`,
+						uuid: uuidv4(),
 						show: false
 					};
 					tiles.push(tile);
@@ -172,6 +174,7 @@ export class Game {
 					index,
 					isValidFlower: false,
 					id: `b${pai}${index}`,
+					uuid: uuidv4(),
 					show: false
 				};
 				tiles.push(tile);
@@ -185,6 +188,7 @@ export class Game {
 					index,
 					isValidFlower: false,
 					id: `c${pai}${index}`,
+					uuid: uuidv4(),
 					show: false
 				};
 				tiles.push(tile);
@@ -199,6 +203,7 @@ export class Game {
 				index: 1,
 				isValidFlower: false,
 				id: `y${flower}`,
+				uuid: uuidv4(),
 				show: false
 			};
 			tiles.push(tile);
@@ -213,6 +218,7 @@ export class Game {
 				index: 1,
 				isValidFlower: true,
 				id: `z${animal}`,
+				uuid: uuidv4(),
 				show: false
 			};
 			tiles.push(tile);

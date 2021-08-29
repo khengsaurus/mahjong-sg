@@ -1,5 +1,5 @@
 import { compare } from 'bcryptjs';
-import { User } from '../models/User';
+import { User } from '../Models/User';
 import FBService from '../service/MyFirebaseService';
 import { hashPassword } from './bcrypt';
 import { objToUser } from './utilFns';

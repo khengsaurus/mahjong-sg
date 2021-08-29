@@ -1,8 +1,8 @@
 import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
-import { Game } from '../models/Game';
-import { User } from '../models/User';
+import { Game } from '../Models/Game';
+import { User } from '../Models/User';
 
 export function userToObj(user: User) {
 	return {

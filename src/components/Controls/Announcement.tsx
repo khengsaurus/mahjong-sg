@@ -3,7 +3,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { Game } from '../../models/Game';
+import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import './ControlsMedium.scss';
 

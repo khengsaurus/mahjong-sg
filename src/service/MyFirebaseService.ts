@@ -1,8 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { Game, gameToObj } from '../models/Game';
-import { User } from '../models/User';
+import { Game, gameToObj } from '../Models/Game';
+import { User } from '../Models/User';
 import { playerToObj } from '../util/utilFns';
 import FirebaseConfig from './FirebaseConfig';
 

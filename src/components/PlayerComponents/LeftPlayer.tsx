@@ -18,14 +18,14 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="vtss left">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="left" />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="left" />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="left"
-							imgClassSuffix="margin-top"
+							classSuffix="margin-bottom"
 							highlight
 						/>
 					)}
@@ -33,7 +33,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			) : (
 				<div className="vtsh">
 					{player.allHiddenTiles().map((tile: TileI) => {
-						return <div key={`${tile.id}-hidden`} className="vth" />;
+						return <div key={tile.uuid} className="vth" />;
 					})}
 				</div>
 			)}
@@ -42,16 +42,16 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss left">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="left" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="left"
-							imgClassSuffix={
+							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
@@ -63,14 +63,14 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`vtsh unused ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`left-unused-tile${i}`} className="vth" />;
+					return <div key={`left-unused-${i}`} className="vth" />;
 				})}
 			</div>
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss left">
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="left" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />;
 				})}
 			</div>
 		</div>

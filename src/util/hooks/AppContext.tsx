@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { history } from '../../App';
-import { User } from '../../models/User';
+import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { objToUser, userToObj } from '../utilFns';
 

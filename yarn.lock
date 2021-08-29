@@ -2636,6 +2636,11 @@
   dependencies:
     "source-map" "^0.6.1"
 
+"@types/uuid@^8.3.1":
+  "integrity" "sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg=="
+  "resolved" "https://registry.npmjs.org/@types/uuid/-/uuid-8.3.1.tgz"
+  "version" "8.3.1"
+
 "@types/webpack-sources@*":
   "integrity" "sha512-Ft7YH3lEVRQ6ls8k4Ff1oB4jN6oy/XmU6tQISKdhfh+1mR+viZFphS6WL0IrtDOzvefmJg5a0s7ZQoRXwqTEFg=="
   "resolved" "https://registry.npmjs.org/@types/webpack-sources/-/webpack-sources-3.2.0.tgz"
