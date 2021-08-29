@@ -3,7 +3,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import { useState } from 'react';
 import { authRegister_EmailPass } from '../../util/fbUserFns';
-import { FormField } from './FormField';
+import FormField from './FormField';
 
 /**
  * Email and password -> create a new set of firebase auth credentials

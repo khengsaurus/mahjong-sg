@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import { authLogin_EmailPass, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
-import { FormField } from './FormField';
+import FormField from './FormField';
 
 const LoginForm: React.FC = () => {
 	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
