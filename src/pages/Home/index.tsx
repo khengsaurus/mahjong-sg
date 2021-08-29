@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { history } from '../../App';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
-import './Home.scss';
+import './home.scss';
 
 const Home = () => {
 	const { user, validateJWT, logout } = useContext(AppContext);

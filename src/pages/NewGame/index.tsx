@@ -14,7 +14,7 @@ import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
-import './NewGame.scss';
+import './newGame.scss';
 
 const NewGame = () => {
 	const [startedGame, setStartedGame] = useState(false);

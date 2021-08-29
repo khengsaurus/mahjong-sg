@@ -14,7 +14,7 @@ import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { setGame, setPlayer } from '../../util/store/actions';
 import { objToGame } from '../../util/utilFns';
-import './Table.scss';
+import './table.scss';
 
 const Table = () => {
 	const { user, gameId, tilesSize } = useContext(AppContext);
