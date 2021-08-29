@@ -1,5 +1,5 @@
-import { Game } from '../../Models/Game';
-import { User } from '../../Models/User';
+import { Game } from '../../models/Game';
+import { User } from '../../models/User';
 
 export const SET_GAME = 'SET_GAME';
 export const SET_CACHE = 'SET_CACHE';

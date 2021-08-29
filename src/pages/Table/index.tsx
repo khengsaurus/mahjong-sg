@@ -8,8 +8,8 @@ import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
 import LeftPlayer from '../../components/PlayerComponents/LeftPlayer';
 import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
-import { Game } from '../../Models/Game';
-import { User } from '../../Models/User';
+import { Game } from '../../models/Game';
+import { User } from '../../models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { setGame, setPlayer } from '../../util/store/actions';
@@ -83,58 +83,60 @@ const Table = () => {
 			let currentWind = game.repr()[0];
 			return (
 				<div className="main">
-					<div className="wind-background">
-						<p>{currentWind}</p>
+					<div className="table">
+						<div className="wind-background">
+							<p>{currentWind}</p>
+						</div>
+						<div className="top-player-container">
+							{game.players[topPlayerIndex] && (
+								<TopPlayer
+									tilesSize={tilesSize}
+									player={game.players[topPlayerIndex]}
+									dealer={dealer === topPlayerIndex}
+									hasFront={front === topPlayerIndex}
+									hasBack={back === topPlayerIndex}
+									lastThrown={game.lastThrown}
+								/>
+							)}
+						</div>
+						<div className="bottom-player-container">
+							{game.players[bottomPlayerIndex] && (
+								<BottomPlayer
+									tilesSize={tilesSize}
+									player={game.players[bottomPlayerIndex]}
+									dealer={dealer === bottomPlayerIndex}
+									hasFront={front === bottomPlayerIndex}
+									hasBack={back === bottomPlayerIndex}
+									lastThrown={game.lastThrown}
+								/>
+							)}
+						</div>
+						<div className="right-player-container">
+							{game.players[rightPlayerIndex] && (
+								<RightPlayer
+									tilesSize={tilesSize}
+									player={game.players[rightPlayerIndex]}
+									dealer={dealer === rightPlayerIndex}
+									hasFront={front === rightPlayerIndex}
+									hasBack={back === rightPlayerIndex}
+									lastThrown={game.lastThrown}
+								/>
+							)}
+						</div>
+						<div className="self-container">
+							{game.players[leftPlayerIndex] && (
+								<LeftPlayer
+									tilesSize={tilesSize}
+									player={game.players[leftPlayerIndex]}
+									dealer={dealer === leftPlayerIndex}
+									hasFront={front === leftPlayerIndex}
+									hasBack={back === leftPlayerIndex}
+									lastThrown={game.lastThrown}
+								/>
+							)}
+						</div>
+						<Controls playerSeat={leftPlayerIndex} />
 					</div>
-					<div className="top-player-container">
-						{game.players[topPlayerIndex] && (
-							<TopPlayer
-								tilesSize={tilesSize}
-								player={game.players[topPlayerIndex]}
-								dealer={dealer === topPlayerIndex}
-								hasFront={front === topPlayerIndex}
-								hasBack={back === topPlayerIndex}
-								lastThrown={game.lastThrown}
-							/>
-						)}
-					</div>
-					<div className="bottom-player-container">
-						{game.players[bottomPlayerIndex] && (
-							<BottomPlayer
-								tilesSize={tilesSize}
-								player={game.players[bottomPlayerIndex]}
-								dealer={dealer === bottomPlayerIndex}
-								hasFront={front === bottomPlayerIndex}
-								hasBack={back === bottomPlayerIndex}
-								lastThrown={game.lastThrown}
-							/>
-						)}
-					</div>
-					<div className="right-player-container">
-						{game.players[rightPlayerIndex] && (
-							<RightPlayer
-								tilesSize={tilesSize}
-								player={game.players[rightPlayerIndex]}
-								dealer={dealer === rightPlayerIndex}
-								hasFront={front === rightPlayerIndex}
-								hasBack={back === rightPlayerIndex}
-								lastThrown={game.lastThrown}
-							/>
-						)}
-					</div>
-					<div className="self-container">
-						{game.players[leftPlayerIndex] && (
-							<LeftPlayer
-								tilesSize={tilesSize}
-								player={game.players[leftPlayerIndex]}
-								dealer={dealer === leftPlayerIndex}
-								hasFront={front === leftPlayerIndex}
-								hasBack={back === leftPlayerIndex}
-								lastThrown={game.lastThrown}
-							/>
-						)}
-					</div>
-					<Controls playerSeat={leftPlayerIndex} />
 				</div>
 			);
 		} else {

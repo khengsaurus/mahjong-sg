@@ -4,7 +4,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { Game } from '../../Models/Game';
+import { Game } from '../../models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
 import './ControlsMedium.scss';

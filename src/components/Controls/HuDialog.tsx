@@ -13,7 +13,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
-import { Game } from '../../Models/Game';
+import { Game } from '../../models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { rotatedMUIDialog } from '../../util/utilFns';
 import './ControlsMedium.scss';

@@ -7,7 +7,7 @@ import firebase from 'firebase/app';
 import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
-import { Game } from '../../Models/Game';
+import { Game } from '../../models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { formatDateToDay, objToGame } from '../../util/utilFns';

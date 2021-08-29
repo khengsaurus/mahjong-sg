@@ -10,7 +10,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useContext, useState } from 'react';
-import { User } from '../../Models/User';
+import { User } from '../../models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import './SearchForms.scss';

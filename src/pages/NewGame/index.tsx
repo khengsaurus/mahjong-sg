@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
-import { User } from '../../Models/User';
+import { User } from '../../models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
