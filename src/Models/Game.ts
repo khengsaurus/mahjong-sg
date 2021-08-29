@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { findLeft, findOpp, findRight, playerToObj } from '../util/utilFns';
 import { User } from './User';
 
@@ -146,7 +147,6 @@ export class Game {
 		const daPai = ['红中', '白板', '发财'];
 		const animals = ['cat', 'mouse', 'rooster', 'worm'];
 		const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
-		let indexes = new Set();
 
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
@@ -158,10 +158,10 @@ export class Game {
 						index,
 						isValidFlower: false,
 						id: `a${suit}${number}${index}`,
+						uuid: uuidv4(),
 						show: false
 					};
 					tiles.push(tile);
-					indexes.add(tile.id);
 				});
 			});
 			winds.forEach(pai => {
@@ -172,10 +172,10 @@ export class Game {
 					index,
 					isValidFlower: false,
 					id: `b${pai}${index}`,
+					uuid: uuidv4(),
 					show: false
 				};
 				tiles.push(tile);
-				indexes.add(tile.id);
 			});
 			daPai.forEach(pai => {
 				let tile: TileI = {
@@ -185,10 +185,10 @@ export class Game {
 					index,
 					isValidFlower: false,
 					id: `c${pai}${index}`,
+					uuid: uuidv4(),
 					show: false
 				};
 				tiles.push(tile);
-				indexes.add(tile.id);
 			});
 		});
 		flowers.forEach(flower => {
@@ -199,10 +199,10 @@ export class Game {
 				index: 1,
 				isValidFlower: false,
 				id: `y${flower}`,
+				uuid: uuidv4(),
 				show: false
 			};
 			tiles.push(tile);
-			indexes.add(tile.id);
 		});
 
 		animals.forEach(animal => {
@@ -213,13 +213,12 @@ export class Game {
 				index: 1,
 				isValidFlower: true,
 				id: `z${animal}`,
+				uuid: uuidv4(),
 				show: false
 			};
 			tiles.push(tile);
-			indexes.add(tile.id);
 		});
 		this.newLog(`Generated ${tiles.length} tiles`);
-		this.newLog(`Generated ${indexes.size} unique tile indexes`);
 		return this.shuffle(tiles);
 	}
 

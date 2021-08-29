@@ -18,11 +18,11 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="htss row-r">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="top" />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="top" />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="top"
 							imgClassSuffix="margin-right"
@@ -33,18 +33,22 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			) : (
 				<div className="htsh">
 					{player.allHiddenTiles().map((tile: TileI) => {
-						return <div key={`${tile.id}-hidden`} className="hth" />;
+						return <div key={tile.uuid} className="hth" />;
 					})}
 				</div>
 			)}
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
 			<div className="htss">
-				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
+				{player.shownTiles.map((tile: TileI) => {
+					return tile.suit !== '花' && tile.suit !== '动物' ? (
+						<ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />
+					) : null;
+				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="top"
 							imgClassSuffix={
@@ -53,11 +57,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 						/>
 					) : null;
 				})}
-				{player.shownTiles.map((tile: TileI) => {
-					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="top" last={lastThrown} />
-					) : null;
-				})}
+				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}
@@ -69,8 +69,11 @@ const TopPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss row-r">
+				{player.hiddenTiles.map((tile: TileI) => {
+					return <ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />;
+				})}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="top" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />;
 				})}
 			</div>
 		</div>

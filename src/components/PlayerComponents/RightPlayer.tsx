@@ -18,11 +18,11 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="vtss col-r">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="right"
 							highlight
@@ -33,7 +33,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			) : (
 				<div className="vtsh">
 					{player.allHiddenTiles().map((tile: TileI) => {
-						return <div key={`${tile.id}-hidden`} className="vth" />;
+						return <div key={tile.uuid} className="vth" />;
 					})}
 				</div>
 			)}
@@ -44,7 +44,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="right"
 							imgClassSuffix={
@@ -55,10 +55,9 @@ const RightPlayer = (props: PlayerComponentProps) => {
 				})}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />
 					) : null;
 				})}
-				{/* Extra */}
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}
@@ -70,9 +69,8 @@ const RightPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss discarded right">
-				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="right" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />;
 				})}
 			</div>
 		</div>

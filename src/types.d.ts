@@ -26,6 +26,7 @@ interface TileI {
 	suit?: string;
 	number?: number;
 	id?: string;
+	uuid?: string;
 	index?: number;
 	show?: boolean;
 	isValidFlower?: boolean;

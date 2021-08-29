@@ -37,7 +37,6 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					key={`${tile.id}`}
 					className={`${divClass} ${
 						highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
 					} ${imgClassSuffix}`}
@@ -47,7 +46,7 @@ const ShownTile = (props: ShownTileProps) => {
 			);
 		case 'vts':
 			return (
-				<div className={`${divClass} ${divClassSuffix}`} key={`${tile.id}-hidden`}>
+				<div className={`${divClass} ${divClassSuffix}`}>
 					<img
 						className={`${bgClass} ${
 							highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``

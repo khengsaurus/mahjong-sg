@@ -29,11 +29,11 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="vtss">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.id} tile={tile} segment="left" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
-							key={player.lastTakenTile.id}
+							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
 							segment="left"
 							highlight
@@ -46,7 +46,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 					{player.hiddenTiles.map((tile: TileI) => {
 						return (
 							<div
-								key={`${tile.id}-hidden`}
+								key={tile.uuid}
 								className={
 									selectedTiles.includes(tile)
 										? 'self-hidden-tile selected'
@@ -60,7 +60,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<div
-							key={`${player.lastTakenTile.id}-hidden`}
+							key={player.lastTakenTile.uuid}
 							className={
 								selectedTiles.includes(player.lastTakenTile)
 									? 'self-hidden-tile selected last'
@@ -82,14 +82,13 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.id} tile={tile} segment="left" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />
 					) : null;
 				})}
-				{/* Extra */}
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
-							key={tile.id}
+							key={tile.uuid}
 							tile={tile}
 							segment="left"
 							imgClassSuffix={
@@ -111,9 +110,8 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss discarded">
-				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.id} tile={tile} segment="left" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />;
 				})}
 			</div>
 		</div>
