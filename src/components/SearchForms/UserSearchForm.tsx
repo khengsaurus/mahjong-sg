@@ -18,7 +18,7 @@ import './SearchForms.scss';
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
-	const [foundUsers, setFoundUsers] = useState<Array<User>>([]);
+	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
 
 	async function searchForUser(username: string) {

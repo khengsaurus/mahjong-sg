@@ -2,13 +2,24 @@ import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { Segment } from '../../Enums';
+import { User } from '../../Models/User';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
-const TopPlayer = (props: PlayerComponentProps) => {
+interface Props {
+	tilesSize: string;
+	player: User;
+	dealer?: boolean;
+	hasFront?: boolean;
+	hasBack?: boolean;
+	isPlayerTurn?: boolean;
+	lastThrown?: TileI;
+}
+
+const TopPlayer = (props: Props) => {
 	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';

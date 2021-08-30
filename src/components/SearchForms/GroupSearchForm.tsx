@@ -16,9 +16,9 @@ import { AppContext } from '../../util/hooks/AppContext';
 import './SearchForms.scss';
 
 const GroupSearchForm: React.FC = () => {
-	const { user, players, setPlayers } = useContext(AppContext);
+	const { players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
-	const [foundGroups, setFoundGroups] = useState<Array<Group>>([]);
+	const [foundGroups, setFoundGroups] = useState<Group[]>([]);
 	const [searchFor, setSearchFor] = useState('');
 
 	async function search(groupName: string) {

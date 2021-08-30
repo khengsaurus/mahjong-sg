@@ -2,6 +2,7 @@ import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
 import { Segment } from '../../Enums';
+import { User } from '../../Models/User';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
 import { HandTile } from './HandTile';
@@ -10,7 +11,17 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
-const BottomPlayer = (props: PlayerComponentProps) => {
+interface Props {
+	tilesSize: string;
+	player: User;
+	dealer?: boolean;
+	hasFront?: boolean;
+	hasBack?: boolean;
+	isPlayerTurn?: boolean;
+	lastThrown?: TileI;
+}
+
+const BottomPlayer = (props: Props) => {
 	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { selectedTiles, setSelectedTiles, handSize } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);

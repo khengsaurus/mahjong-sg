@@ -32,16 +32,6 @@ interface TileI {
 	isValidFlower?: boolean;
 }
 
-interface PlayerComponentProps {
-	tilesSize: string;
-	player: User;
-	dealer?: boolean;
-	hasFront?: boolean;
-	hasBack?: boolean;
-	isPlayerTurn?: boolean;
-	lastThrown?: TileI;
-}
-
 interface UserPass {
 	username: string;
 	password: string;
