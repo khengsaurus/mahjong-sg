@@ -3,24 +3,40 @@ $panel-segment-width: 200px;
 $wind-font-size: 60px;
 
 /*-------------------- Colors --------------------*/
-$light-brown: rgb(215, 205, 190);
-$dark-brown: rgb(175, 160, 140);
-$gold: #d4af37;
-$light-gold: rgb(220, 190, 150);
-$dark-purple-blue: rgb(88, 101, 144);
+$brown-blanchedalmond: blanchedalmond;
+$brown-bisque: bisque;
+$brown-wheat: wheat;
+$brown-dark: rgb(190, 175, 155);
+$brown-sienna: sienna;
+$brown: brown;
+$maroon: maroon;
+$blue-cornflower: rgb(100, 149, 237);
+$blue-royal: rgb(65, 105, 225);
+$blue-steel: steelblue;
+$gold: gold;
+$gold-light: rgb(220, 190, 150);
+$gold-pale: rgb(230, 190, 138);
+$gold-dark: #d4af37;
 $grey-standard: grey;
 $grey-50: rgb(50, 50, 50);
 $grey-100: rgb(100, 100, 100);
 $grey-170: rgb(170, 170, 170);
+$purple-mediumpurple: rgb(147, 112, 219);
+$purple-darkmagenta: darkmagenta;
+$purple: purple;
+$red-puce: rgb(169, 92, 104);
+$red-poppy: rgb(227, 83, 53);
+$red-venetian: rgb(164, 42, 4);
 
 /*-------------------- Color vars --------------------*/
-$color-background: $light-brown;
+$color-background: $brown-bisque;
 $color-grey-text: $grey-standard;
-$color-detail: $dark-purple-blue;
+$color-detail: $brown-sienna;
 $color-tile-back: teal;
 $color-tile-front: gainsboro;
 $color-tile-border: rgb(40, 40, 40);
 $color-border: $grey-standard;
+$color-table: $brown-dark;
 
 $log-grey: $grey-standard;
 $log-green: rgb(0, 100, 10);
@@ -56,7 +72,7 @@ $shown-tile-height-medium: 34px;
 $shown-tile-width-medium: 24px;
 
 $self-hidden-tile-height-medium: 40px;
-$self-hidden-tile-width-medium: 28px;
+$self-hidden-tile-width-medium: 27px;
 
 // Large
 $tile-padding-large: 8px;

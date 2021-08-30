@@ -1,6 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
+import { Segment } from '../../Enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
 import { HandTile } from './HandTile';
@@ -29,13 +30,13 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="htss">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.uuid} tile={tile} segment="bottom" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segment.bottom} last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
-							segment="bottom"
+							segment={Segment.bottom}
 							highlight
 							classSuffix="margin-left"
 						/>
@@ -70,7 +71,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			<div className="htss">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment="bottom" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment={Segment.bottom} last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
@@ -78,7 +79,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
-							segment="bottom"
+							segment={Segment.bottom}
 							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
@@ -98,7 +99,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss">
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.uuid} tile={tile} segment="bottom" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segment.bottom} last={lastThrown} />;
 				})}
 			</div>
 		</div>

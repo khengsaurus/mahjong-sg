@@ -1,6 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
+import { Segment } from '../../Enums';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -18,13 +19,13 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="vtss left">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.uuid} tile={tile} segment="left" />;
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segment.left} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
-							segment="left"
+							segment={Segment.left}
 							classSuffix="margin-bottom"
 							highlight
 						/>
@@ -42,7 +43,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss left">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment={Segment.left} last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
@@ -50,7 +51,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
-							segment="left"
+							segment={Segment.left}
 							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
@@ -70,7 +71,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss left">
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segment.left} last={lastThrown} />;
 				})}
 			</div>
 		</div>

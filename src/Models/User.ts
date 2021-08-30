@@ -5,6 +5,12 @@ export class User {
 	id: string;
 	username: string;
 	photoUrl: string;
+	handSize: string;
+	tilesSize: string;
+	controlsSize: string;
+	backgroundColor: string;
+	tileBackColor: string;
+	tableColor: string;
 	shownTiles?: TileI[];
 	hiddenTiles?: TileI[];
 	discardedTiles?: TileI[];
@@ -18,6 +24,12 @@ export class User {
 		id: string,
 		username: string,
 		photoUrl: string,
+		handSize?: string,
+		tilesSize?: string,
+		controlsSize?: string,
+		backgroundColor?: string,
+		tileBackColor?: string,
+		tableColor?: string,
 		shownTiles?: TileI[],
 		hiddenTiles?: TileI[],
 		discardedTiles?: TileI[],
@@ -30,6 +42,12 @@ export class User {
 		this.id = id;
 		this.username = username;
 		this.photoUrl = photoUrl;
+		this.handSize = handSize;
+		this.tilesSize = tilesSize;
+		this.controlsSize = controlsSize;
+		this.backgroundColor = backgroundColor;
+		this.tileBackColor = tileBackColor;
+		this.tableColor = tableColor;
 		this.shownTiles = shownTiles || [];
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
@@ -140,16 +158,16 @@ export class User {
 			.includes(t.id);
 	}
 	hiddenTilesContain(t: TileI): boolean {
-		return this.hiddenTiles.map(tile => tile.id).includes(t.id);
+		return this.hiddenTiles?.map(tile => tile.id).includes(t.id);
 	}
 	shownTilesContain(t: TileI): boolean {
-		return this.shownTiles.map(tile => tile.id).includes(t.id);
+		return this.shownTiles?.map(tile => tile.id).includes(t.id);
 	}
 	shownTilesContainCard(card: string): boolean {
-		return this.shownTiles.map(tile => tile.card).includes(card);
+		return this.shownTiles?.map(tile => tile.card).includes(card);
 	}
 	discardedTilesContain(t: TileI): boolean {
-		return this.discardedTiles.map(tile => tile.id).includes(t.id);
+		return this.discardedTiles?.map(tile => tile.id).includes(t.id);
 	}
 	lastDiscardedTileIs(t: TileI): boolean {
 		return this.discardedTiles.length > 0 ? this.discardedTiles[this.discardedTiles.length - 1].id === t.id : false;

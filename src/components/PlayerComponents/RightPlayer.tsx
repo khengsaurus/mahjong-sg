@@ -1,6 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
+import { Segment } from '../../Enums';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -18,13 +19,13 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="vtss col-r">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segment.right} last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
-							segment="right"
+							segment={Segment.right}
 							highlight
 							classSuffix="margin-bottom"
 						/>
@@ -42,7 +43,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment={Segment.right} last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
@@ -50,7 +51,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
-							segment="right"
+							segment={Segment.right}
 							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
@@ -71,7 +72,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			<div className="vtss discarded right">
 				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.uuid} tile={tile} segment="right" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segment.right} last={lastThrown} />;
 				})}
 			</div>
 		</div>

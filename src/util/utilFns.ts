@@ -8,7 +8,13 @@ export function userToObj(user: User) {
 	return {
 		id: user.id,
 		username: user.username,
-		photoUrl: user.photoUrl
+		photoUrl: user.photoUrl,
+		handSize: user.handSize || 'medium',
+		tilesSize: user.tilesSize || 'medium',
+		controlsSize: user.controlsSize || 'medium',
+		backgroundColor: user.backgroundColor || 'bisque',
+		tileBackColor: user.tileBackColor || 'teal',
+		tableColor: user.tableColor || 'rgb(190, 175, 155)'
 	};
 }
 
@@ -30,7 +36,18 @@ export function objToUser(method: number, obj: unknown): User {
 	} else if (method === 2) {
 		let data = obj as firebase.firestore.DocumentData;
 		try {
-			user = new User(data.docs[0].id, data.docs[0].data().username, data.docs[0].data().photoUrl);
+			let ref = data.docs[0].data();
+			user = new User(
+				data.docs[0].id,
+				ref.username,
+				ref.photoUrl,
+				ref.handSize,
+				ref.tilesSize,
+				ref.controlsSize,
+				ref.backgroundColor,
+				ref.tileBackColor,
+				ref.tableColor
+			);
 		} catch (err) {
 			throw new Error('UtilFns/objToUser method 2 - failed to retrieve user data from user document');
 		}

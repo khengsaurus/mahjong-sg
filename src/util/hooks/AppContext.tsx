@@ -9,7 +9,6 @@ interface AppContextInt {
 	user: User;
 	userEmail: string;
 	setUserEmail: (email: string) => void;
-	// loading: boolean;
 	login: (user: User) => void;
 	logout: () => void;
 	validateJWT: () => void;
@@ -19,7 +18,8 @@ interface AppContextInt {
 	setGameId: (gameId: string) => void;
 	selectedTiles?: TileI[];
 	setSelectedTiles: (tiles: TileI[]) => void;
-	//
+	loading: boolean;
+	setLoading: () => void;
 	handSize?: string;
 	setHandSize?: (handSize: string) => void;
 	tilesSize?: string;
@@ -30,13 +30,14 @@ interface AppContextInt {
 	setBackgroundColor?: (backgroundColor: string) => void;
 	tileBackColor?: string;
 	setTileBackColor?: (tileBackColor: string) => void;
+	tableColor?: string;
+	setTableColor?: (tileBackColor: string) => void;
 }
 
 const initialContext: AppContextInt = {
 	user: null,
 	userEmail: '',
 	setUserEmail: (email: string) => {},
-	// loading: false,
 	login: (user: User) => {},
 	logout: () => {},
 	validateJWT: async () => {},
@@ -46,17 +47,20 @@ const initialContext: AppContextInt = {
 	setGameId: (gameId: string) => {},
 	selectedTiles: [],
 	setSelectedTiles: (tiles: TileI[]) => {},
-	//
-	handSize: 'small',
+	loading: false,
+	setLoading: () => {},
+	handSize: 'medium',
 	setHandSize: (handSize: string) => {},
-	tilesSize: 'small',
+	tilesSize: 'medium',
 	setTilesSize: (tilesSize: string) => {},
-	controlsSize: 'small',
+	controlsSize: 'medium',
 	setControlsSize: (controlsSize: string) => {},
 	backgroundColor: 'brown',
 	setBackgroundColor: (backgroundColor: string) => {},
 	tileBackColor: 'teal',
-	setTileBackColor: (tileBackColor: string) => {}
+	setTileBackColor: (tileBackColor: string) => {},
+	tableColor: 'rgb(190, 175, 155)',
+	setTableColor: (tileBackColor: string) => {}
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -67,12 +71,13 @@ export const AppContextProvider = (props: any) => {
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<TileI[]>([]);
-	// const [loading, setLoading] = useState(false);
-	const [handSize, setHandSize] = useState('small');
-	const [tilesSize, setTilesSize] = useState('small');
-	const [controlsSize, setControlsSize] = useState('small');
+	const [loading, setLoading] = useState(false);
+	const [handSize, setHandSize] = useState('medium');
+	const [tilesSize, setTilesSize] = useState('medium');
+	const [controlsSize, setControlsSize] = useState('medium');
 	const [backgroundColor, setBackgroundColor] = useState('brown');
 	const [tileBackColor, setTileBackColor] = useState('teal');
+	const [tableColor, setTableColor] = useState('rgb(190, 175, 155)');
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function validateJWT() {
@@ -95,11 +100,17 @@ export const AppContextProvider = (props: any) => {
 		});
 		localStorage.setItem('jwt', token);
 		if (!FBService.userAuthenticated()) {
-			console.log('Logging into firebase anonymously');
+			console.log('Failed to log into firebase with email credentials -> logging in anonymously');
 			await FBService.authLoginAnon().catch(err => {
 				console.log(err);
 			});
 		}
+		setHandSize(user.handSize || 'medium');
+		setTilesSize(user.tilesSize || 'medium');
+		setControlsSize(user.controlsSize || 'medium');
+		setBackgroundColor(user.backgroundColor || 'bisque');
+		setTileBackColor(user.tileBackColor || 'teal');
+		setTableColor(user.tableColor || 'rgb(190, 175, 155)');
 		setPlayers([user]);
 		setUser(user);
 	}
@@ -132,7 +143,6 @@ export const AppContextProvider = (props: any) => {
 				user,
 				userEmail,
 				setUserEmail,
-				// loading,
 				login,
 				logout,
 				validateJWT,
@@ -142,7 +152,8 @@ export const AppContextProvider = (props: any) => {
 				setGameId,
 				selectedTiles,
 				setSelectedTiles,
-				//
+				loading,
+				setLoading,
 				handSize,
 				setHandSize,
 				tilesSize,
@@ -152,7 +163,9 @@ export const AppContextProvider = (props: any) => {
 				backgroundColor,
 				setBackgroundColor,
 				tileBackColor,
-				setTileBackColor
+				setTileBackColor,
+				tableColor,
+				setTableColor
 			}}
 			{...props}
 		/>

@@ -52,8 +52,9 @@
 		justify-content: center;
 		align-items: flex-end;
 		align-self: center;
-		min-height: $shown-tile-height-medium;
 		max-width: 60%;
+		min-height: $shown-tile-height-medium;
+		padding: $tile-padding-medium;
 		&.top {
 			align-items: flex-start;
 			flex-flow: row-reverse wrap;

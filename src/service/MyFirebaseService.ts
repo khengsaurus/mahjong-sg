@@ -36,7 +36,6 @@ class FirebaseService {
 		} else {
 			this.app = firebase.app();
 		}
-		// this.authLoginAnon();
 	}
 
 	userAuthenticated() {

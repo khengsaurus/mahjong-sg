@@ -1,6 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
+import { Segment } from '../../Enums';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -18,13 +19,13 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			{player.showTiles ? (
 				<div className="htss top">
 					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segment.top} last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
-							segment="top"
+							segment={Segment.top}
 							highlight
 							classSuffix="margin-right"
 						/>
@@ -42,7 +43,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			<div className="htss top">
 				{player.shownTiles.map((tile: TileI) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment={Segment.top} last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map((tile: TileI) => {
@@ -50,7 +51,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
-							segment="top"
+							segment={Segment.top}
 							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
@@ -71,7 +72,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			<div className="htss top">
 				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.uuid} tile={tile} segment="top" last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segment.top} last={lastThrown} />;
 				})}
 			</div>
 		</div>
