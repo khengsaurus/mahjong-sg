@@ -3,25 +3,25 @@ import './playerComponentsMedium.scss';
 import './playerComponentsLarge.scss';
 import getTileSrc from '../../images';
 import isEmpty from 'lodash.isempty';
-import { Segment } from '../../Enums';
+import { Segments } from '../../Globals';
 
 interface ShownTileProps {
 	tile: TileI;
-	segment: Segment;
+	segment: Segments;
 	last?: TileI;
 	highlight?: boolean;
 	classSuffix?: string;
 }
 
-function getClass(segment: Segment) {
+function getClass(segment: Segments) {
 	switch (segment) {
-		case Segment.top:
+		case Segments.top:
 			return 'hts';
-		case Segment.bottom:
+		case Segments.bottom:
 			return 'hts';
-		case Segment.left:
+		case Segments.left:
 			return 'vts';
-		case Segment.right:
+		case Segments.right:
 			return 'vts';
 		default:
 			return '';

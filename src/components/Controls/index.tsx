@@ -28,7 +28,7 @@ interface ControlsProps {
 
 const Controls = (props: ControlsProps) => {
 	const { playerSeat } = props;
-	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const { controlsSize, selectedTiles, setSelectedTiles, backgroundColor } = useContext(AppContext);
 	const [meld, setMeld] = useState<TileI[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
@@ -416,6 +416,7 @@ const Controls = (props: ControlsProps) => {
 					onClose={() => {
 						setShowPay(false);
 					}}
+					bgColor={backgroundColor}
 				/>
 			)}
 			{showSettings && (
@@ -427,7 +428,9 @@ const Controls = (props: ControlsProps) => {
 				/>
 			)}
 			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-			{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
+			{(game.hu.length === 3 || game.draw) && (
+				<Announcement playerSeat={playerSeat} game={game} bgColor={backgroundColor} />
+			)}
 		</div>
 	) : null;
 };

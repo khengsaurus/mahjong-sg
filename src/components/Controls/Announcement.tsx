@@ -10,10 +10,11 @@ import './ControlsMedium.scss';
 interface Props {
 	game: Game;
 	playerSeat: number;
+	bgColor: string;
 }
 
 const Announcement = (props: Props) => {
-	const { game, playerSeat } = props;
+	const { game, playerSeat, bgColor } = props;
 
 	async function nextRound() {
 		game.initRound();
@@ -28,7 +29,7 @@ const Announcement = (props: Props) => {
 				style: {
 					minHeight: '120px',
 					justifyContent: 'center',
-					backgroundColor: 'rgb(215, 195, 170)'
+					backgroundColor: `${bgColor}`
 				}
 			}}
 		>

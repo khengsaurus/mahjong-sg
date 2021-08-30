@@ -7,18 +7,24 @@ $brown-blanchedalmond: blanchedalmond;
 $brown-bisque: bisque;
 $brown-wheat: wheat;
 $brown-dark: rgb(190, 175, 155);
+$brown-medium: rgb(165, 150, 130);
+$brown-darker: rgb(140, 125, 105);
+$brown-burlywood: burlywood;
 $brown-sienna: sienna;
 $brown: brown;
 $maroon: maroon;
 $blue-cornflower: rgb(100, 149, 237);
 $blue-royal: rgb(65, 105, 225);
 $blue-steel: steelblue;
+$blue-catalina: rgb(38, 61, 96);
+$blue-glaucous: rgb(96, 130, 182);
 $gold: gold;
 $gold-light: rgb(220, 190, 150);
 $gold-pale: rgb(230, 190, 138);
 $gold-dark: #d4af37;
 $grey-standard: grey;
 $grey-50: rgb(50, 50, 50);
+$grey-80: rgb(80, 80, 80);
 $grey-100: rgb(100, 100, 100);
 $grey-170: rgb(170, 170, 170);
 $purple-mediumpurple: rgb(147, 112, 219);
@@ -28,21 +34,27 @@ $red-puce: rgb(169, 92, 104);
 $red-poppy: rgb(227, 83, 53);
 $red-venetian: rgb(164, 42, 4);
 
+$green-sea: rgb(46, 139, 87);
+$green-fern: rgb(62, 120, 59);
+$green-fern-dark: rgb(80, 110, 80);
+
 /*-------------------- Color vars --------------------*/
-$color-background: $brown-bisque;
-$color-grey-text: $grey-standard;
-$color-detail: $brown-sienna;
+$color-background: $brown-medium;
+$color-table: $brown-dark;
 $color-tile-back: teal;
 $color-tile-front: gainsboro;
+
+$color-grey-text: $grey-standard;
+$color-detail: $brown-sienna;
+$color-wind: $brown-darker;
 $color-tile-border: rgb(40, 40, 40);
-$color-border: $grey-standard;
-$color-table: $brown-dark;
+$color-border: $grey-80;
 
 $log-grey: $grey-standard;
 $log-green: rgb(0, 100, 10);
 $log-dark: rgb(30, 30, 30);
 
-$radial-gradient-gold: radial-gradient(#ffffff, #d8ba85, #ffffff, #ffffff);
+$radial-gradient-gold: radial-gradient($color-tile-front #d8ba85, #ffffff, $color-tile-front);
 $radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
 
 $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);

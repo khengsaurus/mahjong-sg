@@ -1,25 +1,14 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
-import { Segment } from '../../Enums';
-import { User } from '../../Models/User';
+import { PlayerComponentProps, Segments } from '../../Globals';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
-interface Props {
-	tilesSize: string;
-	player: User;
-	dealer?: boolean;
-	hasFront?: boolean;
-	hasBack?: boolean;
-	isPlayerTurn?: boolean;
-	lastThrown?: TileI;
-}
-
-const LeftPlayer = (props: Props) => {
+const LeftPlayer = (props: PlayerComponentProps) => {
 	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
@@ -30,13 +19,13 @@ const LeftPlayer = (props: Props) => {
 			{player.showTiles ? (
 				<div className="vtss left">
 					{player.hiddenTiles.map(tile => {
-						return <ShownTile key={tile.uuid} tile={tile} segment={Segment.left} />;
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
-							segment={Segment.left}
+							segment={Segments.left}
 							classSuffix="margin-bottom"
 							highlight
 						/>
@@ -54,7 +43,7 @@ const LeftPlayer = (props: Props) => {
 			<div className="vtss left">
 				{player.shownTiles.map(tile => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment={Segment.left} last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />
 					) : null;
 				})}
 				{player.shownTiles.map(tile => {
@@ -62,7 +51,7 @@ const LeftPlayer = (props: Props) => {
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
-							segment={Segment.left}
+							segment={Segments.left}
 							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
@@ -82,7 +71,7 @@ const LeftPlayer = (props: Props) => {
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss left">
 				{player.discardedTiles.map(tile => {
-					return <ShownTile key={tile.uuid} tile={tile} segment={Segment.left} last={lastThrown} />;
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />;
 				})}
 			</div>
 		</div>

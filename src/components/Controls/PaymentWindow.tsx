@@ -21,10 +21,11 @@ interface Props {
 	playerSeat: number;
 	onClose: () => void;
 	show: boolean;
+	bgColor: string;
 }
 
 const PaymentWindow = (props: Props) => {
-	const { game, playerSeat, onClose, show } = props;
+	const { game, playerSeat, onClose, show, bgColor } = props;
 	let playerUsername = game.players[playerSeat].username;
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
@@ -62,7 +63,7 @@ const PaymentWindow = (props: Props) => {
 						minWidth: '400px',
 						maxHeight: '300px',
 						minHeight: '300px',
-						backgroundColor: 'rgb(215, 195, 170)',
+						backgroundColor: `${bgColor}`,
 						overflow: 'scroll'
 					}
 				}}

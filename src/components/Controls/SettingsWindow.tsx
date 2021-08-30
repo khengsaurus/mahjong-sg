@@ -8,6 +8,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext } from 'react';
+import { Sizes } from '../../Globals';
 import { AppContext } from '../../util/hooks/AppContext';
 import './ControlsMedium.scss';
 
@@ -27,8 +28,7 @@ const SettingsWindow = (props: Props) => {
 		// tileBackColor, setTileBackColor, backgroundColor, setBackgroundColor
 	} = useContext(AppContext);
 	const { onClose, show } = props;
-	const sizes = ['small', 'medium', 'large'];
-	// const colors = ['brown', 'teal', 'maroon', 'black', 'grey'];
+	const sizes = [Sizes.small, Sizes.medium, Sizes.large];
 
 	const handleControlsSizeSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setControlsSize((event.target as HTMLInputElement).value);
