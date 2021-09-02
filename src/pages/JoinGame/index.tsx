@@ -7,6 +7,7 @@ import firebase from 'firebase/app';
 import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
+import { Pages } from '../../Globals';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -15,28 +16,33 @@ import Login from '../Login';
 import './JoinGame.scss';
 
 const JoinGame = () => {
-	const { user, setGameId, validateJWT } = useContext(AppContext);
+	const { user, setGameId, handleUserState } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 
 	useEffect(() => {
 		if (!user) {
-			validateJWT();
+			handleUserState();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
 		let games: Game[] = [];
 		const unsubscribe = FBService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
-					games.push(objToGame(1, doc));
+					games.push(objToGame(doc, true));
 				});
 				setGameInvites(games);
 			}
 		});
 		return unsubscribe;
-	}, [user, validateJWT]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function handleJoinGame(game: Game) {
 		setGameId(game.id);
-		history.push('/Table');
+		history.push(Pages.table);
 	}
 
 	let markup = (

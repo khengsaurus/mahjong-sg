@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { BackgroundColors, Decorations, Sizes, TileColors } from '../Globals';
 import { Game, gameToObj } from '../Models/Game';
 import { User } from '../Models/User';
 import { playerToObj } from '../util/utilFns';
@@ -121,7 +122,20 @@ class FirebaseService {
 	async registerUserEmail(username: string, email: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			try {
-				this.userRepr.add({ username, email, photoUrl: '', groups: [] });
+				this.userRepr.add({
+					username,
+					email,
+					photoUrl: '',
+					handSize: Sizes.medium,
+					tilesSize: Sizes.medium,
+					controlsSize: Sizes.medium,
+					backgroundColor: BackgroundColors.darkBrown,
+					tableColor: BackgroundColors.lightBrown,
+					tileBackColor: TileColors.teal,
+					tileFrontColor: TileColors.white,
+					decoration: Decorations.default,
+					groups: []
+				});
 				console.log('User created successfully');
 				resolve(true);
 			} catch (err) {

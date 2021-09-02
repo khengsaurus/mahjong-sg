@@ -23,6 +23,7 @@ $gold-light: rgb(220, 190, 150);
 $gold-pale: rgb(230, 190, 138);
 $gold-dark: #d4af37;
 $grey-standard: grey;
+$dark-38: rgb(38, 38, 38);
 $grey-50: rgb(50, 50, 50);
 $grey-80: rgb(80, 80, 80);
 $grey-100: rgb(100, 100, 100);
@@ -39,7 +40,7 @@ $green-fern: rgb(62, 120, 59);
 $green-fern-dark: rgb(80, 110, 80);
 
 /*-------------------- Color vars --------------------*/
-$color-background: $brown-medium;
+$color-background: $brown-darker;
 $color-table: $brown-dark;
 $color-tile-back: teal;
 $color-tile-front: gainsboro;
@@ -51,7 +52,7 @@ $color-tile-border: rgb(40, 40, 40);
 $color-border: $grey-80;
 
 $log-grey: $grey-standard;
-$log-green: rgb(0, 100, 10);
+$log-green: rgb(0, 120, 10);
 $log-dark: rgb(30, 30, 30);
 
 $radial-gradient-gold: radial-gradient($color-tile-front #d8ba85, #ffffff, $color-tile-front);
@@ -73,7 +74,7 @@ $hidden-tile-width-small: 5px;
 $shown-tile-height-small: 30px;
 $shown-tile-width-small: 21px;
 
-$self-hidden-tile-height-small: 34px;
+$self-hidden-tile-height-small: 33px;
 $self-hidden-tile-width-small: 23px;
 
 // Medium
@@ -93,7 +94,7 @@ $hidden-tile-width-large: 7px;
 $shown-tile-height-large: 40px;
 $shown-tile-width-large: 28px;
 
-$self-hidden-tile-height-large: 46px;
+$self-hidden-tile-height-large: 47px;
 $self-hidden-tile-width-large: 32px;
 
 /*-------------------- Controls & logs --------------------*/
@@ -105,6 +106,7 @@ $button-width-small: 45px;
 $text-line-width-small: 80px;
 $text-font-size-small: 14px;
 $text-line-height-small: 15px;
+$font-weighted-small: 400;
 
 $log-line-width-small: 200px;
 $log-line-height-small: 15px;
@@ -118,6 +120,7 @@ $button-width-medium: 55px;
 $text-line-width-medium: 90px;
 $text-font-size-medium: 15px;
 $text-line-height-medium: 16px;
+$font-weighted-medium: 450;
 
 $log-line-width-medium: 220px;
 $log-line-height-medium: 16px;
@@ -125,12 +128,13 @@ $log-font-size-medium: 15px;
 
 // Large
 $icon-button-size-large: 40px;
-$button-height-large: 65px;
-$button-width-large: 60px;
+$button-height-large: 60px;
+$button-width-large: 65px;
 
 $text-line-width-large: 100px;
 $text-font-size-large: 16px;
 $text-line-height-large: 17px;
+$font-weighted-large: 500;
 
 $log-line-width-large: 250px;
 $log-line-height-large: 17px;
@@ -147,7 +151,7 @@ $rotate-simple-180: rotate(180deg);
 }
 
 @mixin default-tile-border-radius {
-	border-radius: 7%;
+	border-radius: 12%;
 }
 
 @mixin default-tile-border {
@@ -190,9 +194,6 @@ $rotate-simple-180: rotate(180deg);
 
 	&.transparent {
 		background-color: transparent;
-	}
-	&.rotated {
-		transform: rotate(90deg);
 	}
 }
 

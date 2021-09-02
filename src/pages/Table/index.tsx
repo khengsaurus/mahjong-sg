@@ -33,7 +33,7 @@ const Table = () => {
 		console.log('Table/index - game listener called');
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
-				let currentGame: Game = objToGame(2, gameData);
+				let currentGame: Game = objToGame(gameData, false);
 				// setGame, setPlayer
 				dispatch(setGame(currentGame));
 				setDealer(currentGame.dealer);
@@ -76,6 +76,7 @@ const Table = () => {
 			}
 		});
 		return unsubscribe;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const gameMarkup = () => {
@@ -90,48 +91,48 @@ const Table = () => {
 						<div className="left-player-container">
 							{game.players[LeftPlayerIndex] && (
 								<LeftPlayer
-									tilesSize={tilesSize}
 									player={game.players[LeftPlayerIndex]}
 									dealer={dealer === LeftPlayerIndex}
 									hasFront={front === LeftPlayerIndex}
 									hasBack={back === LeftPlayerIndex}
 									lastThrown={game.lastThrown}
+									tilesSize={tilesSize}
 								/>
 							)}
 						</div>
 						<div className="right-player-container">
 							{game.players[RightPlayerIndex] && (
 								<RightPlayer
-									tilesSize={tilesSize}
 									player={game.players[RightPlayerIndex]}
 									dealer={dealer === RightPlayerIndex}
 									hasFront={front === RightPlayerIndex}
 									hasBack={back === RightPlayerIndex}
 									lastThrown={game.lastThrown}
+									tilesSize={tilesSize}
 								/>
 							)}
 						</div>
 						<div className="top-player-container">
 							{game.players[TopPlayerIndex] && (
 								<TopPlayer
-									tilesSize={tilesSize}
 									player={game.players[TopPlayerIndex]}
 									dealer={dealer === TopPlayerIndex}
 									hasFront={front === TopPlayerIndex}
 									hasBack={back === TopPlayerIndex}
 									lastThrown={game.lastThrown}
+									tilesSize={tilesSize}
 								/>
 							)}
 						</div>
 						<div className="bottom-player-container">
 							{game.players[BottomPlayerIndex] && (
 								<BottomPlayer
-									tilesSize={tilesSize}
 									player={game.players[BottomPlayerIndex]}
 									dealer={dealer === BottomPlayerIndex}
 									hasFront={front === BottomPlayerIndex}
 									hasBack={back === BottomPlayerIndex}
 									lastThrown={game.lastThrown}
+									tilesSize={tilesSize}
 								/>
 							)}
 						</div>

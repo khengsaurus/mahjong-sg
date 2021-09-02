@@ -34,7 +34,7 @@ export function resolveUser_Email(email: string): Promise<User | null> {
 					console.log('User not registered -> NewUser');
 					resolve(null);
 				} else {
-					resolve(objToUser(2, userData));
+					resolve(objToUser(userData));
 				}
 			});
 		} catch (err) {

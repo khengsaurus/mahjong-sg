@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
+import { Pages } from '../../Globals';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -18,13 +19,14 @@ import './newGame.scss';
 
 const NewGame = () => {
 	const [startedGame, setStartedGame] = useState(false);
-	const { user, validateJWT, players, setPlayers, setGameId } = useContext(AppContext);
+	const { user, handleUserState, players, setPlayers, setGameId } = useContext(AppContext);
 
 	useEffect(() => {
 		if (!user) {
-			validateJWT();
+			handleUserState();
 		}
-	}, [user, validateJWT]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
@@ -47,7 +49,7 @@ const NewGame = () => {
 
 	function handleButtonClick() {
 		if (startedGame) {
-			history.push('/Table');
+			history.push(Pages.table);
 		} else {
 			startGame();
 		}

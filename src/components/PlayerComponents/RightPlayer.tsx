@@ -1,7 +1,8 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
+import isEqual from 'lodash.isequal';
 import React, { useMemo } from 'react';
-import { PlayerComponentProps, Segments } from '../../Globals';
+import { PlayerComponentProps, Segments, Sizes } from '../../Globals';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -9,12 +10,12 @@ import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
 const RightPlayer = (props: PlayerComponentProps) => {
-	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
+	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
 
 	return (
-		<div className={`column-section-${tilesSize} right`}>
+		<div className={`column-section-${tilesSize || Sizes.medium} right`}>
 			{/*------------------------------ Hidden tiles ------------------------------*/}
 			{player.showTiles ? (
 				<div className="vtss col-r">
@@ -79,4 +80,4 @@ const RightPlayer = (props: PlayerComponentProps) => {
 	);
 };
 
-export default React.memo(RightPlayer);
+export default React.memo(RightPlayer, isEqual);

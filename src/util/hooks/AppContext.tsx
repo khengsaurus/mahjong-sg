@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { history } from '../../App';
+import { BackgroundColors, Pages, Sizes, TextColors, TileColors } from '../../Globals';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { objToUser, userToObj } from '../utilFns';
@@ -9,9 +10,9 @@ interface AppContextInt {
 	user: User;
 	userEmail: string;
 	setUserEmail: (email: string) => void;
-	login: (user: User) => void;
+	login: (user: User, existingJwt: boolean) => void;
 	logout: () => void;
-	validateJWT: () => void;
+	handleUserState: () => void;
 	players: User[];
 	setPlayers: (players: User[]) => void;
 	gameId?: string;
@@ -20,27 +21,29 @@ interface AppContextInt {
 	setSelectedTiles: (tiles: TileI[]) => void;
 	loading: boolean;
 	setLoading: () => void;
-	handSize?: string;
-	setHandSize?: (handSize: string) => void;
-	tilesSize?: string;
-	setTilesSize?: (tilesSize: string) => void;
-	controlsSize?: string;
-	setControlsSize?: (controlsSize: string) => void;
-	backgroundColor?: string;
-	setBackgroundColor?: (backgroundColor: string) => void;
-	tileBackColor?: string;
-	setTileBackColor?: (tileBackColor: string) => void;
-	tableColor?: string;
-	setTableColor?: (tileBackColor: string) => void;
+	handSize?: Sizes;
+	setHandSize?: (handSize: Sizes) => void;
+	tilesSize?: Sizes;
+	setTilesSize?: (tilesSize: Sizes) => void;
+	controlsSize?: Sizes;
+	setControlsSize?: (controlsSize: Sizes) => void;
+	backgroundColor?: BackgroundColors;
+	setBackgroundColor?: (backgroundColor: BackgroundColors) => void;
+	tableColor?: BackgroundColors;
+	setTableColor?: (tableColor: BackgroundColors) => void;
+	tileBackColor?: TileColors;
+	setTileBackColor?: (tileBackColor: TileColors) => void;
+	theme?: Theme;
+	setTheme?: (theme: Theme) => void;
 }
 
 const initialContext: AppContextInt = {
 	user: null,
 	userEmail: '',
 	setUserEmail: (email: string) => {},
-	login: (user: User) => {},
+	login: (user: User, existingJwt: boolean) => {},
 	logout: () => {},
-	validateJWT: async () => {},
+	handleUserState: async () => {},
 	players: [],
 	setPlayers: (players: User[]) => {},
 	gameId: null,
@@ -49,18 +52,25 @@ const initialContext: AppContextInt = {
 	setSelectedTiles: (tiles: TileI[]) => {},
 	loading: false,
 	setLoading: () => {},
-	handSize: 'medium',
+	handSize: Sizes.medium,
 	setHandSize: (handSize: string) => {},
-	tilesSize: 'medium',
+	tilesSize: Sizes.medium,
 	setTilesSize: (tilesSize: string) => {},
-	controlsSize: 'medium',
+	controlsSize: Sizes.medium,
 	setControlsSize: (controlsSize: string) => {},
-	backgroundColor: 'brown',
+	backgroundColor: BackgroundColors.darkBrown,
 	setBackgroundColor: (backgroundColor: string) => {},
-	tileBackColor: 'teal',
+	tableColor: BackgroundColors.lightBrown,
+	setTableColor: (tileBackColor: string) => {},
+	tileBackColor: TileColors.teal,
 	setTileBackColor: (tileBackColor: string) => {},
-	tableColor: 'rgb(190, 175, 155)',
-	setTableColor: (tileBackColor: string) => {}
+	theme: {
+		backgroundColor: null,
+		tableColor: null,
+		tileBackColor: null,
+		textColor: null
+	},
+	setTheme: (theme: Theme) => {}
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -72,47 +82,80 @@ export const AppContextProvider = (props: any) => {
 	const [gameId, setGameId] = useState('');
 	const [selectedTiles, setSelectedTiles] = useState<TileI[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [handSize, setHandSize] = useState('medium');
-	const [tilesSize, setTilesSize] = useState('medium');
-	const [controlsSize, setControlsSize] = useState('medium');
-	const [backgroundColor, setBackgroundColor] = useState('brown');
-	const [tileBackColor, setTileBackColor] = useState('teal');
-	const [tableColor, setTableColor] = useState('rgb(190, 175, 155)');
+	const [handSize, setHandSize] = useState<Sizes>();
+	const [tilesSize, setTilesSize] = useState<Sizes>();
+	const [controlsSize, setControlsSize] = useState<Sizes>();
+	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.darkBrown);
+	const [tableColor, setTableColor] = useState<BackgroundColors>();
+	const [tileBackColor, setTileBackColor] = useState<TileColors>();
+	const [theme, setTheme] = useState({
+		backgroundColor,
+		tableColor,
+		tileBackColor,
+		textColor:
+			backgroundColor === BackgroundColors.dark ||
+			backgroundColor === BackgroundColors.darker ||
+			tableColor === BackgroundColors.dark ||
+			tableColor === BackgroundColors.darker
+				? TextColors.light
+				: TextColors.dark
+	});
 	const secretKey = 'shouldBeServerSideKey';
 
-	async function validateJWT() {
-		let token = localStorage.getItem('jwt');
+	async function handleUserState() {
+		let verifiedUser = resolveJwt();
 		if (!FBService.userAuthenticated()) {
-			history.push('/');
-		}
-		if (token) {
-			var decoded = jwt.verify(token, secretKey);
-			let user1: User = objToUser(1, decoded);
-			if (!user || user.username !== user1.username) {
-				await login(user1);
-			}
+			logout();
+		} else if ((!user && verifiedUser) || (user && user.username !== verifiedUser.username)) {
+			login(verifiedUser, true);
+		} else {
+			logout();
 		}
 	}
 
-	async function login(user: User) {
+	// Creates and stores a user token in localStorage
+	function signJwt(user: User) {
 		const token = jwt.sign(userToObj(user), secretKey, {
 			algorithm: 'HS256'
 		});
 		localStorage.setItem('jwt', token);
-		if (!FBService.userAuthenticated()) {
-			console.log('Failed to log into firebase with email credentials -> logging in anonymously');
-			await FBService.authLoginAnon().catch(err => {
-				console.log(err);
-			});
+	}
+
+	// Looks for a user token in localStorage, reads it and returns User
+	function resolveJwt() {
+		try {
+			let token = localStorage.getItem('jwt');
+			return token ? objToUser(jwt.verify(token, secretKey) as JwtData) : null;
+		} catch (err) {
+			console.log('User token not found');
+			return null;
 		}
-		setHandSize(user.handSize || 'medium');
-		setTilesSize(user.tilesSize || 'medium');
-		setControlsSize(user.controlsSize || 'medium');
-		setBackgroundColor(user.backgroundColor || 'bisque');
-		setTileBackColor(user.tileBackColor || 'teal');
-		setTableColor(user.tableColor || 'rgb(190, 175, 155)');
-		setPlayers([user]);
-		setUser(user);
+	}
+
+	function handleUserContext(user?: User) {
+		console.log(user ? 'Setting user preferences' : 'Clearing user preferences');
+		setPlayers(user ? [user] : []);
+		setUser(user || null);
+		setUserEmail(user ? user.email : '');
+		setHandSize(user ? user.handSize : null);
+		setTilesSize(user ? user.tilesSize : null);
+		setControlsSize(user ? user.controlsSize : null);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.darkBrown);
+		setTableColor(user ? user.tableColor : null);
+		setTileBackColor(user ? user.tileBackColor : null);
+	}
+
+	function login(user: User, existingJwt: boolean) {
+		// if (!FBService.userAuthenticated()) {
+		// 	console.log('Failed to log into firebase with email credentials -> logging in anonymously');
+		// 	FBService.authLoginAnon().catch(err => {
+		// 		console.log(err);
+		// 	});
+		// }
+		if (!existingJwt) {
+			signJwt(user);
+		}
+		handleUserContext(user);
 	}
 
 	function deleteAllCookies() {
@@ -127,13 +170,11 @@ export const AppContextProvider = (props: any) => {
 
 	function logout(): void {
 		FBService.authLogout();
-		setPlayers([]);
-		setUser(null);
-		setUserEmail('');
+		handleUserContext();
 		localStorage.clear();
 		sessionStorage.clear();
 		deleteAllCookies();
-		history.push('/');
+		history.push(Pages.index);
 		console.log('User logged out');
 	}
 
@@ -145,7 +186,7 @@ export const AppContextProvider = (props: any) => {
 				setUserEmail,
 				login,
 				logout,
-				validateJWT,
+				handleUserState,
 				players,
 				setPlayers,
 				gameId,
@@ -165,7 +206,9 @@ export const AppContextProvider = (props: any) => {
 				tileBackColor,
 				setTileBackColor,
 				tableColor,
-				setTableColor
+				setTableColor,
+				theme,
+				setTheme
 			}}
 			{...props}
 		/>

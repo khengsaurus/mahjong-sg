@@ -26,7 +26,8 @@ const UserSearchForm: React.FC = () => {
 		await FBService.searchUser(username).then(data => {
 			if (!data.empty) {
 				data.docs.forEach(doc => {
-					foundUsers.push(new User(doc.id, doc.data().username, doc.data().photoUrl));
+					let data = doc.data();
+					foundUsers.push(new User(doc.id, data.username, data.photoUrl, data.email));
 				});
 				if (foundUsers.length > 0) {
 					setFoundUsers(foundUsers);

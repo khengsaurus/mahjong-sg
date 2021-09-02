@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import { useState } from 'react';
+import { Status } from '../../Globals';
 import { authRegister_EmailPass } from '../../util/fbUserFns';
 import FormField from './FormField';
 
@@ -9,18 +10,18 @@ import FormField from './FormField';
  * Email and password -> create a new set of firebase auth credentials
  */
 const RegisterForm: React.FC = () => {
-	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
+	const [alert, setAlert] = useState<AlertI>({ status: Status.info, msg: '' });
 
 	function handleSubmit(values: EmailPass, formCallback: () => void) {
 		authRegister_EmailPass(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: 'success', msg: 'Registered successfully' });
+					setAlert({ status: Status.success, msg: 'Registered successfully' });
 					formCallback();
 				}
 			})
 			.catch(err => {
-				setAlert({ status: 'error', msg: err.toString() });
+				setAlert({ status: Status.error, msg: err.toString() });
 			});
 	}
 

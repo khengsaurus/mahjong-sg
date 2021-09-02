@@ -16,6 +16,7 @@
 		"formik": "^2.2.9",
 		"jsonwebtoken": "^8.5.1",
 		"lodash.isempty": "^4.4.0",
+		"lodash.isequal": "^4.5.0",
 		"moment": "^2.29.1",
 		"node-sass": "^6.0.1",
 		"normalize-url": "^6.1.0",

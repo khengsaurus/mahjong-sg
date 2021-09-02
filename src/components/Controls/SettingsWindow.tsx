@@ -17,7 +17,7 @@ interface Props {
 	show: boolean;
 }
 
-const SettingsWindow = (props: Props) => {
+const SettingsWindow = ({ onClose, show }: Props) => {
 	const {
 		controlsSize,
 		setControlsSize,
@@ -27,17 +27,18 @@ const SettingsWindow = (props: Props) => {
 		setTilesSize
 		// tileBackColor, setTileBackColor, backgroundColor, setBackgroundColor
 	} = useContext(AppContext);
-	const { onClose, show } = props;
 	const sizes = [Sizes.small, Sizes.medium, Sizes.large];
 
 	const handleControlsSizeSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setControlsSize((event.target as HTMLInputElement).value);
+		let size = (event.target as HTMLInputElement).value as Sizes;
+		setControlsSize(size);
 	};
 	const handleHandSizeSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setHandSize((event.target as HTMLInputElement).value);
+		let size = (event.target as HTMLInputElement).value as Sizes;
+		setHandSize(size);
 	};
 	const handleTilesSizeSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTilesSize((event.target as HTMLInputElement).value);
+		setTilesSize((event.target as HTMLInputElement).value as Sizes);
 	};
 
 	return (
@@ -63,12 +64,11 @@ const SettingsWindow = (props: Props) => {
 					>
 						<CloseIcon />
 					</IconButton>
-					{/* <Typography variant="subtitle1">{'Settings'}</Typography> */}
 					<br></br>
 					<FormControl component="fieldset">
 						<FormLabel component="legend">{`Controls size: `}</FormLabel>
 						<RadioGroup row value={controlsSize} onChange={handleControlsSizeSelect}>
-							{sizes.map((size: string) => {
+							{sizes.map((size: Sizes) => {
 								return (
 									<FormControlLabel
 										key={size}
@@ -82,7 +82,7 @@ const SettingsWindow = (props: Props) => {
 						<br></br>
 						<FormLabel component="legend">{`Hand: `}</FormLabel>
 						<RadioGroup row value={handSize} onChange={handleHandSizeSelect}>
-							{sizes.map((size: string) => {
+							{sizes.map((size: Sizes) => {
 								return (
 									<FormControlLabel
 										key={size}
@@ -96,7 +96,7 @@ const SettingsWindow = (props: Props) => {
 						<br></br>
 						<FormLabel component="legend">{`Tiles: `}</FormLabel>
 						<RadioGroup row value={tilesSize} onChange={handleTilesSizeSelect}>
-							{sizes.map((size: string) => {
+							{sizes.map((size: Sizes) => {
 								return (
 									<FormControlLabel
 										key={size}

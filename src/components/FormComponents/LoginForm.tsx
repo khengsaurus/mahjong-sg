@@ -1,25 +1,18 @@
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { history } from '../../App';
+import { Pages, Status } from '../../Globals';
 import { authLogin_EmailPass, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 import FormField from './FormField';
 
 const LoginForm: React.FC = () => {
-	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
+	const [alert, setAlert] = useState<AlertI>({ status: Status.info, msg: '' });
 	const { login, setUserEmail } = useContext(AppContext);
 
-	// Solution for error "Can't perform a React state update on an unmounted component. This is a no-op..."
-	useEffect(() => {
-		let isMounted = true;
-		return () => {
-			isMounted = false;
-		};
-	}, []);
-
-	function handleSubmit(values: EmailPass, formCallback: () => void) {
+	function handleSubmit(values: EmailPass) {
 		authLogin_EmailPass(values)
 			.then(email => {
 				if (email === values.email) {
@@ -27,13 +20,11 @@ const LoginForm: React.FC = () => {
 					resolveUser_Email(email)
 						.then(user => {
 							if (user) {
-								login(user);
-								formCallback();
-								setAlert({ status: 'info', msg: '' });
-								history.push('/');
+								login(user, false);
+								history.push(Pages.index);
 							} else {
 								// User not registered, redirect to NewUser
-								history.push('/NewUser');
+								history.push(Pages.newUser);
 							}
 						})
 						.catch(err => {
@@ -44,7 +35,7 @@ const LoginForm: React.FC = () => {
 				}
 			})
 			.catch(err => {
-				setAlert({ status: 'error', msg: err.toString() });
+				setAlert({ status: Status.error, msg: err.toString() });
 			});
 	}
 
@@ -52,8 +43,8 @@ const LoginForm: React.FC = () => {
 		<div>
 			<Formik
 				initialValues={{ email: '', password: '' }}
-				onSubmit={async (values, { resetForm }) => {
-					handleSubmit(values, resetForm);
+				onSubmit={async values => {
+					handleSubmit(values);
 				}}
 			>
 				{({ values }) => (
@@ -70,7 +61,7 @@ const LoginForm: React.FC = () => {
 							disabled={values.email.trim() === '' || values.password.trim() === ''}
 							type="submit"
 						>
-							Login
+							{`Login`}
 						</Button>
 						<br></br>
 						<br></br>

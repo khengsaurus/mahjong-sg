@@ -1,7 +1,8 @@
 import CasinoIcon from '@material-ui/icons/Casino';
+import { isEqual } from 'lodash';
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
-import { PlayerComponentProps, Segments } from '../../Globals';
+import { PlayerComponentProps, Segments, Sizes } from '../../Globals';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
 import { HandTile } from './HandTile';
@@ -11,11 +12,10 @@ import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
 const BottomPlayer = (props: PlayerComponentProps) => {
-	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { selectedTiles, setSelectedTiles, handSize } = useContext(AppContext);
+	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
+	const { handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
-
 	function selectTile(tile: TileI) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
 			setSelectedTiles([...selectedTiles, tile]);
@@ -25,7 +25,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 	}
 
 	return (
-		<div className={`row-section-${tilesSize} bottom`}>
+		<div className={`row-section-${tilesSize || Sizes.medium} bottom`}>
 			{/*------------------------------ Hidden tiles ------------------------------*/}
 			{player.showTiles ? (
 				<div className="htss">
@@ -43,7 +43,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 					)}
 				</div>
 			) : (
-				<div className={`self-hidden-tiles-${handSize}`}>
+				<div className={`self-hidden-tiles-${handSize || Sizes.medium}`}>
 					{player.hiddenTiles.map((tile: TileI) => {
 						return (
 							<HandTile
@@ -106,4 +106,4 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 	);
 };
 
-export default React.memo(BottomPlayer);
+export default React.memo(BottomPlayer, isEqual);

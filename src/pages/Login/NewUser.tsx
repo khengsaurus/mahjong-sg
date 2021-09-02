@@ -6,44 +6,45 @@ import { useContext, useState } from 'react';
 import { history } from '../../App';
 import '../../App.scss';
 import FormField from '../../components/FormComponents/FormField';
+import { Pages, Status } from '../../Globals';
 import { User } from '../../Models/User';
 import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 
 const NewUser = () => {
 	const { userEmail, login, logout } = useContext(AppContext);
-	const [alert, setAlert] = useState<alert>({ status: 'info', msg: '' });
+	const [alert, setAlert] = useState<AlertI>({ status: Status.info, msg: '' });
 
 	function handleCancel() {
 		deleteCurrentFBUser();
 		logout();
-		history.push('/Login');
+		history.push(Pages.login);
 	}
 
 	function handleSubmit(values: EmailUser, callback: () => void) {
 		newUser_EmailUser(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: 'success', msg: 'Username set' });
+					setAlert({ status: Status.success, msg: 'Username set' });
 					callback();
 				}
 			})
 			.catch(err => {
-				setAlert({ status: 'error', msg: err.toString() });
+				setAlert({ status: Status.error, msg: err.toString() });
 			});
 	}
 
 	function successCallback() {
 		resolveUser_Email(userEmail)
 			.then((user: User) => {
-				login(user);
+				login(user, false);
 				setTimeout(function () {
-					history.push('/Home');
+					history.push(Pages.home);
 				}, 1500);
 			})
 			.catch(err => {
 				if (err.message === 'Username already taken') {
-					setAlert({ status: 'error', msg: err.message });
+					setAlert({ status: Status.error, msg: err.message });
 				}
 			});
 	}
@@ -68,9 +69,11 @@ const NewUser = () => {
 							</Button>
 							<br></br>
 							<br></br>
-							<Button variant={'outlined'} onClick={handleCancel}>
-								Cancel
-							</Button>
+							{alert.status !== Status.success && (
+								<Button variant={'outlined'} onClick={handleCancel}>
+									Cancel
+								</Button>
+							)}
 							<br></br>
 							<br></br>
 							{alert.msg !== '' ? (

@@ -1,16 +1,18 @@
 import isEmpty from 'lodash.isempty';
+import { BackgroundColors, Sizes, TileColors } from '../Globals';
 import { indexOfCard, sortTiles } from '../util/utilFns';
 
 export class User {
 	id: string;
 	username: string;
 	photoUrl: string;
-	handSize: string;
-	tilesSize: string;
-	controlsSize: string;
-	backgroundColor: string;
-	tileBackColor: string;
-	tableColor: string;
+	email: string;
+	handSize: Sizes;
+	tilesSize: Sizes;
+	controlsSize: Sizes;
+	backgroundColor: BackgroundColors;
+	tableColor: BackgroundColors;
+	tileBackColor: TileColors;
 	shownTiles?: TileI[];
 	hiddenTiles?: TileI[];
 	discardedTiles?: TileI[];
@@ -24,12 +26,13 @@ export class User {
 		id: string,
 		username: string,
 		photoUrl: string,
-		handSize?: string,
-		tilesSize?: string,
-		controlsSize?: string,
-		backgroundColor?: string,
-		tileBackColor?: string,
-		tableColor?: string,
+		email: string,
+		handSize?: Sizes,
+		tilesSize?: Sizes,
+		controlsSize?: Sizes,
+		backgroundColor?: BackgroundColors,
+		tableColor?: BackgroundColors,
+		tileBackColor?: TileColors,
 		shownTiles?: TileI[],
 		hiddenTiles?: TileI[],
 		discardedTiles?: TileI[],
@@ -42,12 +45,13 @@ export class User {
 		this.id = id;
 		this.username = username;
 		this.photoUrl = photoUrl;
+		this.email = email;
 		this.handSize = handSize;
 		this.tilesSize = tilesSize;
 		this.controlsSize = controlsSize;
 		this.backgroundColor = backgroundColor;
-		this.tileBackColor = tileBackColor;
 		this.tableColor = tableColor;
+		this.tileBackColor = tileBackColor;
 		this.shownTiles = shownTiles || [];
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
@@ -280,6 +284,7 @@ export class User {
 			return tile.show === true && lastThrown?.id !== tile.id;
 		});
 		if (!lastThrown) {
+			// TODO:
 			console.log('Zimo ??');
 		}
 	}

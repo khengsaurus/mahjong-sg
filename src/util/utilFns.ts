@@ -1,6 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
+import { BackgroundColors, Sizes, TileColors } from '../Globals';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 
@@ -9,50 +10,52 @@ export function userToObj(user: User) {
 		id: user.id,
 		username: user.username,
 		photoUrl: user.photoUrl,
-		handSize: user.handSize || 'medium',
-		tilesSize: user.tilesSize || 'medium',
-		controlsSize: user.controlsSize || 'medium',
-		backgroundColor: user.backgroundColor || 'bisque',
-		tileBackColor: user.tileBackColor || 'teal',
-		tableColor: user.tableColor || 'rgb(190, 175, 155)'
+		email: user.email,
+		handSize: user.handSize,
+		tilesSize: user.tilesSize,
+		controlsSize: user.controlsSize,
+		backgroundColor: user.backgroundColor,
+		tableColor: user.tableColor,
+		tileBackColor: user.tileBackColor
 	};
 }
 
 /**
- * How to overload method with ONE object argument?
- * @param: 1, jwtData
- * @param: 2, firebase DocumentData
- * @returns: new User(id, username, photoUrl);
+ * Overloaded method to resolve User object from JwtData or firebase.firestore.DocumentData
+ * @param: JwtData | firebase.firestore.DocumentData
+ * @returns: new User(id, username, photoUrl, email);
  */
-export function objToUser(method: number, obj: unknown): User {
-	let user: User;
-	if (method === 1) {
-		let data = obj as jwtData;
-		try {
-			user = new User(data.id, data.username, data.photoUrl);
-		} catch (err) {
-			throw new Error('UtilFns/objToUser method 1 - failed to parse jwt');
+export function objToUser(obj: firebase.firestore.DocumentData): User;
+export function objToUser(obj: JwtData): User;
+export function objToUser(obj: any): User {
+	let user: User = null;
+	let ref: any = null;
+	let id = '';
+	try {
+		if (obj.docs) {
+			ref = obj.docs[0].data();
+			id = obj.docs[0].id;
+		} else {
+			ref = obj as JwtData;
+			id = ref.id;
 		}
-	} else if (method === 2) {
-		let data = obj as firebase.firestore.DocumentData;
-		try {
-			let ref = data.docs[0].data();
-			user = new User(
-				data.docs[0].id,
-				ref.username,
-				ref.photoUrl,
-				ref.handSize,
-				ref.tilesSize,
-				ref.controlsSize,
-				ref.backgroundColor,
-				ref.tileBackColor,
-				ref.tableColor
-			);
-		} catch (err) {
-			throw new Error('UtilFns/objToUser method 2 - failed to retrieve user data from user document');
-		}
+		user = new User(
+			id,
+			ref.username,
+			ref.photoUrl,
+			ref.email,
+			ref.handSize,
+			ref.tilesSize,
+			ref.controlsSize,
+			ref.backgroundColor,
+			ref.tableColor,
+			ref.tileBackColor
+		);
+	} catch (err) {
+		console.log(err.message + 'Failed to resolve user object');
+	} finally {
+		return user;
 	}
-	return user;
 }
 
 export function formatFirestoreTimestamp(date: firebase.firestore.Timestamp): string {
@@ -68,12 +71,13 @@ export function objToPlayer(data: any): User {
 		data.id,
 		data.username,
 		data.photoUrl,
-		'',
-		'',
-		'',
-		'',
-		'',
-		'',
+		data.email || '',
+		Sizes.medium,
+		Sizes.medium,
+		Sizes.medium,
+		BackgroundColors.darkBrown,
+		BackgroundColors.lightBrown,
+		TileColors.teal,
 		data.shownTiles,
 		data.hiddenTiles,
 		data.discardedTiles,
@@ -90,6 +94,7 @@ export function playerToObj(user: User, startingBal?: number) {
 		id: user.id,
 		username: user.username,
 		photoUrl: user.photoUrl,
+		email: '',
 		hiddenTiles: user.hiddenTiles || [],
 		shownTiles: user.shownTiles || [],
 		discardedTiles: user.discardedTiles || [],
@@ -101,11 +106,11 @@ export function playerToObj(user: User, startingBal?: number) {
 	};
 }
 
-export const objToGame = (method: number, doc: firebase.firestore.DocumentData): Game => {
+export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): Game => {
 	let ref = doc.data();
-	if (method === 1) {
+	if (repr) {
 		return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersString, ref.ongoing);
-	} else if (method === 2) {
+	} else {
 		return new Game(
 			doc.id,
 			ref.creator,

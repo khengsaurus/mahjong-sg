@@ -1,13 +1,31 @@
 import { User } from './Models/User';
+import styled from 'styled-components';
 
 export interface PlayerComponentProps {
-	tilesSize: string;
-	player: User;
+	player?: User;
 	dealer?: boolean;
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
 	lastThrown?: TileI;
+	tilesSize?: Sizes;
+	handSize?: Sizes;
+}
+
+export enum Status {
+	info = 'info',
+	success = 'success',
+	error = 'error'
+}
+
+export enum Pages {
+	index = '/',
+	login = '/Login',
+	newUser = '/NewUser',
+	home = '/Home',
+	newGame = '/NewGame',
+	joinGame = '/JoinGame',
+	table = '/Table'
 }
 
 export enum Segments {
@@ -28,47 +46,44 @@ export enum TileColors {
 	glaucous = 'rgb(96, 130, 182)',
 	teal = 'teal',
 	venetian = 'rgb(164, 42, 4)',
-	grey = 'grey'
+	grey = 'grey',
+	white = 'gainsboro'
 }
 
-export enum TableColors {
+export enum BackgroundColors {
+	light = 'gainsboro',
+	dark = 'rgb(50, 50, 50)',
+	darker = 'rgb(35, 35, 35)',
 	fern = 'rgb(80, 110, 80)',
-	lighBrown = 'rgb(190, 175, 155)',
-	darkBrown = 'rgb(145, 125, 105)'
+	lightBrown = 'rgb(190, 175, 155)',
+	darkBrown = 'rgb(140, 125, 105)',
+	steel = 'steelblue',
+	glaucous = 'rgb(96, 130, 182)',
+	puce = 'rgb(169, 92, 104)'
 }
 
-export enum backgroundColors {
-	fern = 'rgb(80, 110, 80)',
-	lighBrown = 'rgb(190, 175, 155)',
-	darkBrown = 'rgb(145, 125, 105)'
+export enum TextColors {
+	light = 'white',
+	dark = 'rgb(30, 30, 30)',
+	green = 'rgb(0, 120, 10)'
 }
 
-// brownBlanchedalmond = 'blanchedalmond',
-// brownBisque = 'bisque',
-// brownWheat = 'wheat',
-// brownDark = 'rgb(190, 175, 155)',
-// brownDarker = 'rgb(145, 125, 105)',
-// brownBurlywood = 'burlywood',
-// brownSienna = 'sienna',
-// brown = 'brown',
-// maroon = 'maroon',
-// blueCornflower = 'rgb(100, 149, 237)',
-// blueRoyal = 'rgb(65, 105, 225)',
-// blueSteel = 'steelblue',
-// gold = 'gold',
-// goldLight = 'rgb(220, 190, 150)',
-// goldPale = 'rgb(230, 190, 138)',
-// goldDark = '#d4af37',
-// greyStandard = 'grey',
-// grey50 = 'rgb(50, 50, 50)',
-// grey100 = 'rgb(100, 100, 100)',
-// grey170 = 'rgb(170, 170, 170)',
-// purpleMediumpurple = 'rgb(147, 112, 219)',
-// purpleDarkmagenta = 'darkmagenta',
-// purple = 'purple',
-// redPuce = 'rgb(169, 92, 104)',
-// redPoppy = 'rgb(227, 83, 53)',
-// redVenetian = 'rgb(164, 42, 4)',
-// greenSea = 'rgb(46, 139, 87)',
-// greenFern = 'rgb(62, 120, 59)',
-// greenFernDark = 'rgb(80, 110, 80)'
+export enum Decorations {
+	default = ''
+}
+
+export const Main = () => {
+	return styled.div`
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		background-color: ${props => props.theme.backgroundColor};
+	`;
+};
