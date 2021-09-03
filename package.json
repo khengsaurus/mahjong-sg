@@ -36,7 +36,7 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"buildapp": "react-scripts build && npx cap copy",
+		"buildapp": "react-scripts build",
 		"test": "jest",
 		"eject": "react-scripts eject"
 	},
