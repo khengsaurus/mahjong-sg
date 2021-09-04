@@ -1,7 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
-import { BackgroundColors, Sizes, TileColors } from '../Globals';
+import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 
@@ -76,7 +76,7 @@ export function objToPlayer(data: any): User {
 		Sizes.medium,
 		Sizes.medium,
 		BackgroundColors.darkBrown,
-		BackgroundColors.lightBrown,
+		TableColors.lightBrown,
 		TileColors.teal,
 		data.shownTiles,
 		data.hiddenTiles,

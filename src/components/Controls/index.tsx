@@ -2,7 +2,8 @@ import isEmpty from 'lodash.isempty';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
-import { Pages } from '../../Globals';
+import { Pages } from '../../global/enums';
+import { MainTransparent } from '../../global/styles';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
@@ -26,7 +27,7 @@ interface ControlsProps {
 
 const Controls = (props: ControlsProps) => {
 	const { playerSeat } = props;
-	const { controlsSize, selectedTiles, setSelectedTiles, backgroundColor } = useContext(AppContext);
+	const { controlsSize, selectedTiles, setSelectedTiles, tableColor } = useContext(AppContext);
 	const [meld, setMeld] = useState<TileI[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
@@ -296,7 +297,7 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Markup ----------------------------------- */
 
 	return game && player ? (
-		<div className="main transparent">
+		<MainTransparent>
 			<TopLeftControls
 				controlsSize={controlsSize}
 				homeCallback={() => {
@@ -358,7 +359,6 @@ const Controls = (props: ControlsProps) => {
 					onClose={() => {
 						setShowPay(false);
 					}}
-					bgColor={backgroundColor}
 				/>
 			)}
 			{showSettings && (
@@ -371,9 +371,9 @@ const Controls = (props: ControlsProps) => {
 			)}
 			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
 			{(game.hu.length === 3 || game.draw) && (
-				<Announcement playerSeat={playerSeat} game={game} bgColor={backgroundColor} />
+				<Announcement playerSeat={playerSeat} game={game} bgColor={tableColor} />
 			)}
-		</div>
+		</MainTransparent>
 	) : null;
 };
 

@@ -87,29 +87,26 @@
 	flex-direction: column;
 	align-items: flex-end;
 	text-align: end;
+	overflow: hidden;
 	overflow-y: scroll;
 	scroll-behavior: smooth;
-	transition: 200ms;
 	height: $icon-button-size-medium;
 	max-width: $log-line-width-medium;
 	font-size: $log-font-size-medium;
 	$line-height: $log-line-height-medium;
+	transition: 200ms;
 	&.expanded {
 		height: 4 * $icon-button-size-medium;
 		min-width: $log-line-width-medium;
-		background-color: $color-table;
 		align-items: flex-start;
 		text-align: start;
 		padding-left: 5px;
 		@include default-border;
 	}
 	.log {
-		color: $log-grey;
+		color: $grey-50;
 		&.pay {
 			color: $log-green;
-		}
-		&.turn {
-			color: $grey-50;
 		}
 	}
 }

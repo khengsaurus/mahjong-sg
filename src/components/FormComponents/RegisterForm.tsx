@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import { useState } from 'react';
-import { Status } from '../../Globals';
+import { Status } from '../../global/enums';
 import { authRegister_EmailPass } from '../../util/fbUserFns';
 import FormField from './FormField';
 

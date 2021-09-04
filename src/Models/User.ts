@@ -1,5 +1,5 @@
 import isEmpty from 'lodash.isempty';
-import { BackgroundColors, Sizes, TileColors } from '../Globals';
+import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
 import { indexOfCard, sortTiles } from '../util/utilFns';
 
 export class User {
@@ -11,7 +11,7 @@ export class User {
 	tilesSize: Sizes;
 	controlsSize: Sizes;
 	backgroundColor: BackgroundColors;
-	tableColor: BackgroundColors;
+	tableColor: TableColors;
 	tileBackColor: TileColors;
 	shownTiles?: TileI[];
 	hiddenTiles?: TileI[];
@@ -31,7 +31,7 @@ export class User {
 		tilesSize?: Sizes,
 		controlsSize?: Sizes,
 		backgroundColor?: BackgroundColors,
-		tableColor?: BackgroundColors,
+		tableColor?: TableColors,
 		tileBackColor?: TileColors,
 		shownTiles?: TileI[],
 		hiddenTiles?: TileI[],

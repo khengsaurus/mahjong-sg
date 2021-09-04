@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button';
 import { history } from '../App';
-import { Pages } from '../Globals';
+import { Pages } from '../global/enums';
 
 const HomeButton = () => {
 	function handleGoHome() {

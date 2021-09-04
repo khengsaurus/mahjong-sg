@@ -2,7 +2,7 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React from 'react';
-import { Sizes } from '../../Globals';
+import { Sizes } from '../../global/enums';
 import './ControlsLarge.scss';
 import './ControlsMedium.scss';
 import './ControlsSmall.scss';

@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { BackgroundColors, Decorations, Sizes, TileColors } from '../Globals';
+import { BackgroundColors, Decorations, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game, gameToObj } from '../Models/Game';
 import { User } from '../Models/User';
 import { playerToObj } from '../util/utilFns';
@@ -130,7 +130,7 @@ class FirebaseService {
 					tilesSize: Sizes.medium,
 					controlsSize: Sizes.medium,
 					backgroundColor: BackgroundColors.darkBrown,
-					tableColor: BackgroundColors.lightBrown,
+					tableColor: TableColors.lightBrown,
 					tileBackColor: TileColors.teal,
 					tileFrontColor: TileColors.white,
 					decoration: Decorations.default,

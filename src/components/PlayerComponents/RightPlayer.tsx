@@ -2,7 +2,8 @@ import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import React, { useMemo } from 'react';
-import { PlayerComponentProps, Segments, Sizes } from '../../Globals';
+import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { HiddenTile } from '../../global/styles';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -35,7 +36,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			) : (
 				<div className="vtsh">
 					{player.allHiddenTiles().map((tile: TileI) => {
-						return <div key={tile.uuid} className="vth" />;
+						return <HiddenTile key={tile.uuid} className="vth" />;
 					})}
 				</div>
 			)}
@@ -65,13 +66,12 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`vtsh unused right ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`right-unused-${i}`} className="vth" />;
+					return <HiddenTile key={`right-unused-${i}`} className="vth" />;
 				})}
 			</div>
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss discarded right">
-				{/* Extra */}
 				{player.discardedTiles.map((tile: TileI) => {
 					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.right} last={lastThrown} />;
 				})}

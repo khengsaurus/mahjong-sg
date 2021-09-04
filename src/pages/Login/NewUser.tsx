@@ -6,7 +6,8 @@ import { useContext, useState } from 'react';
 import { history } from '../../App';
 import '../../App.scss';
 import FormField from '../../components/FormComponents/FormField';
-import { Pages, Status } from '../../Globals';
+import { Pages, Status } from '../../global/enums';
+import { Main } from '../../global/styles';
 import { User } from '../../Models/User';
 import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -50,7 +51,7 @@ const NewUser = () => {
 	}
 
 	const markup = (
-		<div className="main">
+		<Main>
 			<Formik
 				initialValues={{ username: '', email: userEmail }}
 				onSubmit={async values => {
@@ -85,7 +86,7 @@ const NewUser = () => {
 					</>
 				)}
 			</Formik>
-		</div>
+		</Main>
 	);
 
 	return markup;

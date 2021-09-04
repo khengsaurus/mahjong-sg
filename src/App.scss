@@ -3,6 +3,7 @@ $panel-segment-width: 200px;
 $wind-font-size: 60px;
 
 /*-------------------- Colors --------------------*/
+$white-smoke: rgb(200, 200, 200);
 $brown-blanchedalmond: blanchedalmond;
 $brown-bisque: bisque;
 $brown-wheat: wheat;
@@ -64,6 +65,8 @@ $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, 
 /*-------------------- Tile sizes --------------------*/
 $border-px: 1px;
 $tile-border-px: 1px;
+$default-border-radius: 4px;
+$default-tile-border-radius: 12%;
 
 // original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
 
@@ -99,7 +102,7 @@ $self-hidden-tile-width-large: 32px;
 
 /*-------------------- Controls & logs --------------------*/
 // Small
-$icon-button-size-small: 32px;
+$icon-button-size-small: 30px;
 $button-height-small: 40px;
 $button-width-small: 45px;
 
@@ -118,16 +121,16 @@ $button-height-medium: 50px;
 $button-width-medium: 55px;
 
 $text-line-width-medium: 90px;
-$text-font-size-medium: 15px;
-$text-line-height-medium: 16px;
+$text-font-size-medium: 16px;
+$text-line-height-medium: 17px;
 $font-weighted-medium: 450;
 
 $log-line-width-medium: 220px;
-$log-line-height-medium: 16px;
-$log-font-size-medium: 15px;
+$log-line-height-medium: 17px;
+$log-font-size-medium: 16px;
 
 // Large
-$icon-button-size-large: 40px;
+$icon-button-size-large: 45px;
 $button-height-large: 60px;
 $button-width-large: 65px;
 
@@ -147,29 +150,25 @@ $rotate-simple-180: rotate(180deg);
 
 @mixin default-border {
 	border: $border-px solid $color-border;
-	border-radius: 4px;
-}
-
-@mixin default-tile-border-radius {
-	border-radius: 12%;
+	border-radius: $default-border-radius;
 }
 
 @mixin default-tile-border {
 	border: $tile-border-px solid $color-tile-border;
-	@include default-tile-border-radius;
+	border-radius: $default-tile-border-radius;
 }
 
 @mixin default-selected {
-	@include default-tile-border-radius;
 	background: $radial-gradient-gold-2;
 	background-size: 400% 400%;
+	border-radius: $default-tile-border-radius;
 	animation: linear-gradient 5s ease infinite;
 }
 
 @mixin default-flower {
-	@include default-tile-border-radius;
 	background: $linear-gradient-multi;
 	background-size: 400% 400%;
+	border-radius: $default-tile-border-radius;
 	animation: linear-gradient 4s ease infinite;
 }
 
@@ -200,7 +199,6 @@ $rotate-simple-180: rotate(180deg);
 .list-item {
 	align-self: center;
 	height: 30px;
-	padding: 0 !important;
 }
 
 @keyframes linear-gradient {
@@ -213,6 +211,15 @@ $rotate-simple-180: rotate(180deg);
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+.preference {
+	display: flex;
+	flex-direction: row;
+	width: 340px;
+	height: 45px;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .move-enter {

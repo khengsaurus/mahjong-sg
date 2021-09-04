@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { createContext, useState } from 'react';
 import { history } from '../../App';
-import { BackgroundColors, Pages, Sizes, TextColors, TileColors } from '../../Globals';
+import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } from '../../global/enums';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { objToUser, userToObj } from '../utilFns';
+import { useMemo } from 'react';
 
 interface AppContextInt {
 	user: User;
@@ -22,19 +23,19 @@ interface AppContextInt {
 	loading: boolean;
 	setLoading: () => void;
 	handSize?: Sizes;
-	setHandSize?: (handSize: Sizes) => void;
+	setHandSize?: (size: Sizes) => void;
 	tilesSize?: Sizes;
-	setTilesSize?: (tilesSize: Sizes) => void;
+	setTilesSize?: (size: Sizes) => void;
 	controlsSize?: Sizes;
-	setControlsSize?: (controlsSize: Sizes) => void;
+	setControlsSize?: (size: Sizes) => void;
 	backgroundColor?: BackgroundColors;
-	setBackgroundColor?: (backgroundColor: BackgroundColors) => void;
-	tableColor?: BackgroundColors;
-	setTableColor?: (tableColor: BackgroundColors) => void;
+	setBackgroundColor?: (color: BackgroundColors) => void;
+	tableColor?: TableColors;
+	setTableColor?: (color: TableColors) => void;
 	tileBackColor?: TileColors;
-	setTileBackColor?: (tileBackColor: TileColors) => void;
-	theme?: Theme;
-	setTheme?: (theme: Theme) => void;
+	setTileBackColor?: (color: TileColors) => void;
+	textColor?: TextColors;
+	homeTextColor?: TextColors;
 }
 
 const initialContext: AppContextInt = {
@@ -53,24 +54,18 @@ const initialContext: AppContextInt = {
 	loading: false,
 	setLoading: () => {},
 	handSize: Sizes.medium,
-	setHandSize: (handSize: string) => {},
+	setHandSize: (size: Sizes) => {},
 	tilesSize: Sizes.medium,
-	setTilesSize: (tilesSize: string) => {},
+	setTilesSize: (size: Sizes) => {},
 	controlsSize: Sizes.medium,
-	setControlsSize: (controlsSize: string) => {},
+	setControlsSize: (size: Sizes) => {},
 	backgroundColor: BackgroundColors.darkBrown,
-	setBackgroundColor: (backgroundColor: string) => {},
-	tableColor: BackgroundColors.lightBrown,
-	setTableColor: (tileBackColor: string) => {},
+	setBackgroundColor: (color: BackgroundColors) => {},
+	tableColor: TableColors.lightBrown,
+	setTableColor: (color: TableColors) => {},
 	tileBackColor: TileColors.teal,
-	setTileBackColor: (tileBackColor: string) => {},
-	theme: {
-		backgroundColor: null,
-		tableColor: null,
-		tileBackColor: null,
-		textColor: null
-	},
-	setTheme: (theme: Theme) => {}
+	setTileBackColor: (color: TileColors) => {},
+	textColor: TextColors.dark
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -86,20 +81,16 @@ export const AppContextProvider = (props: any) => {
 	const [tilesSize, setTilesSize] = useState<Sizes>();
 	const [controlsSize, setControlsSize] = useState<Sizes>();
 	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.darkBrown);
-	const [tableColor, setTableColor] = useState<BackgroundColors>();
+	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
-	const [theme, setTheme] = useState({
-		backgroundColor,
-		tableColor,
-		tileBackColor,
-		textColor:
-			backgroundColor === BackgroundColors.dark ||
-			backgroundColor === BackgroundColors.darker ||
-			tableColor === BackgroundColors.dark ||
-			tableColor === BackgroundColors.darker
-				? TextColors.light
-				: TextColors.dark
-	});
+	const textColor = useMemo(() => {
+		return [TableColors.dark].includes(tableColor) ? TextColors.light : TextColors.dark;
+	}, [tableColor]);
+	const homeTextColor = useMemo(() => {
+		return [BackgroundColors.darker, BackgroundColors.royal].includes(backgroundColor)
+			? TextColors.light
+			: TextColors.dark;
+	}, [backgroundColor]);
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function handleUserState() {
@@ -207,8 +198,8 @@ export const AppContextProvider = (props: any) => {
 				setTileBackColor,
 				tableColor,
 				setTableColor,
-				theme,
-				setTheme
+				textColor,
+				homeTextColor
 			}}
 			{...props}
 		/>

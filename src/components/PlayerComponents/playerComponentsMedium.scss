@@ -42,7 +42,6 @@
 	.hth {
 		height: $hidden-tile-height-medium;
 		width: $hidden-tile-width-medium;
-		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
 
@@ -63,7 +62,7 @@
 
 	.hts {
 		height: $shown-tile-height-medium;
-		@include default-tile-border-radius;
+		border-radius: $default-tile-border-radius;
 		background: $color-tile-front;
 		&.flower {
 			@include default-flower;
@@ -125,7 +124,6 @@
 	.vth {
 		width: $hidden-tile-height-medium;
 		height: $hidden-tile-width-medium;
-		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
 
@@ -156,7 +154,7 @@
 
 	.vts-bg {
 		height: $shown-tile-height-medium;
-		@include default-tile-border-radius;
+		border-radius: $default-tile-border-radius;
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
 		align-self: flex-start;
@@ -184,7 +182,7 @@
 	.self-hidden-tile {
 		height: $self-hidden-tile-height-medium;
 		width: $self-hidden-tile-width-medium;
-		@include default-tile-border-radius;
+		border-radius: $default-tile-border-radius;
 		transition: 200ms;
 		&.unselected {
 			background: $color-tile-front;

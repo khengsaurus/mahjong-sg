@@ -1,12 +1,7 @@
 @import '../../App.scss';
 
 .join-game-panel {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
 	align-content: flex-start;
-	align-items: center;
-	text-align: center;
 	max-height: 80vh;
 	.list {
 		display: flex;

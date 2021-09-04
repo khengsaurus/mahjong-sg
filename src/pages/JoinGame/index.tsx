@@ -7,7 +7,8 @@ import firebase from 'firebase/app';
 import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
-import { Pages } from '../../Globals';
+import { Pages } from '../../global/enums';
+import { Centered, Main } from '../../global/styles';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -46,8 +47,8 @@ const JoinGame = () => {
 	}
 
 	let markup = (
-		<div className="main">
-			<div className="join-game-panel">
+		<Main>
+			<Centered className="join-game-panel">
 				<Typography variant="subtitle1">{`Available games:`}</Typography>
 				{user && gameInvites.length > 0 && (
 					<List dense className="list">
@@ -71,9 +72,8 @@ const JoinGame = () => {
 				<br></br>
 				<br></br>
 				<HomeButton />
-			</div>
-			{/* <LoadingSpinner show={loading} /> */}
-		</div>
+			</Centered>
+		</Main>
 	);
 
 	return user ? markup : <Login />;

@@ -3,7 +3,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import { useContext, useState } from 'react';
 import { history } from '../../App';
-import { Pages, Status } from '../../Globals';
+import { Pages, Status } from '../../global/enums';
 import { authLogin_EmailPass, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 import FormField from './FormField';

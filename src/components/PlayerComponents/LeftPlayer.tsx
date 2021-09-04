@@ -2,7 +2,8 @@ import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import React, { useMemo } from 'react';
-import { PlayerComponentProps, Segments, Sizes } from '../../Globals';
+import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { HiddenTile } from '../../global/styles';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
@@ -35,7 +36,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			) : (
 				<div className="vtsh">
 					{player.allHiddenTiles().map(tile => {
-						return <div key={tile.uuid} className="vth" />;
+						return <HiddenTile key={tile.uuid} className="vth" />;
 					})}
 				</div>
 			)}
@@ -65,7 +66,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`vtsh unused ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`left-unused-${i}`} className="vth" />;
+					return <HiddenTile key={`left-unused-${i}`} className="vth" />;
 				})}
 			</div>
 

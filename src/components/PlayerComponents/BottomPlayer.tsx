@@ -2,7 +2,8 @@ import CasinoIcon from '@material-ui/icons/Casino';
 import { isEqual } from 'lodash';
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
-import { PlayerComponentProps, Segments, Sizes } from '../../Globals';
+import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { HiddenTile } from '../../global/styles';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
 import { HandTile } from './HandTile';
@@ -92,7 +93,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Unused tiles ------------------------------*/}
 			<div className={`htsh unused bottom ${frontBackTag}`}>
 				{unusedTiles.map(i => {
-					return <div key={`bottom-unused-${i}`} className="vth" />;
+					return <HiddenTile key={`bottom-unused-${i}`} className="vth" />;
 				})}
 			</div>
 

@@ -1,5 +1,5 @@
-import { User } from './Models/User';
-import styled from 'styled-components';
+import { createTheme } from '@material-ui/core/styles';
+import { User } from '../Models/User';
 
 export interface PlayerComponentProps {
 	player?: User;
@@ -41,25 +41,35 @@ export enum Sizes {
 	large = 'large'
 }
 
-export enum TileColors {
-	darkmagenta = 'darkmagenta',
-	glaucous = 'rgb(96, 130, 182)',
-	teal = 'teal',
-	venetian = 'rgb(164, 42, 4)',
-	grey = 'grey',
-	white = 'gainsboro'
+export enum BackgroundColors {
+	gainsboro = 'rgb(220, 220, 220)',
+	darker = 'rgb(30, 30, 30)',
+	// lightBrown = 'rgb(190, 175, 155)',
+	darkBrown = 'rgb(140, 125, 105)',
+	// steel = 'steelblue',
+	// glaucous = 'rgb(96, 130, 182)',
+	catalina = 'rgb(38, 61, 96)',
+	royal = 'rgb(120, 81, 169)',
+	maroon = 'maroon'
 }
 
-export enum BackgroundColors {
-	light = 'gainsboro',
+export enum TableColors {
+	// light = 'rgb(200, 200, 200)',
 	dark = 'rgb(50, 50, 50)',
-	darker = 'rgb(35, 35, 35)',
-	fern = 'rgb(80, 110, 80)',
 	lightBrown = 'rgb(190, 175, 155)',
-	darkBrown = 'rgb(140, 125, 105)',
-	steel = 'steelblue',
-	glaucous = 'rgb(96, 130, 182)',
+	fern = 'rgb(80, 110, 80)',
+	denim = 'rgb(111, 143, 175)',
+	mediumPurple = 'rgb(147, 112, 219)',
 	puce = 'rgb(169, 92, 104)'
+}
+
+export enum TileColors {
+	white = 'gainsboro',
+	grey = 'grey',
+	teal = 'teal',
+	steel = 'steelblue',
+	purple = 'rgb(128,0,128)',
+	venetian = 'rgb(164, 42, 4)'
 }
 
 export enum TextColors {
@@ -71,19 +81,3 @@ export enum TextColors {
 export enum Decorations {
 	default = ''
 }
-
-export const Main = () => {
-	return styled.div`
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		background-color: ${props => props.theme.backgroundColor};
-	`;
-};

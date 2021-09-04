@@ -10,6 +10,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useContext, useState } from 'react';
+import { CenteredColored } from '../../global/styles';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -62,7 +63,7 @@ const UserSearchForm: React.FC = () => {
 	}
 
 	const markup: JSX.Element = (
-		<div className="search-form-container">
+		<CenteredColored className="search-form-container">
 			<List>
 				<ListItem className="search-box list-item">
 					<TextField
@@ -122,7 +123,7 @@ const UserSearchForm: React.FC = () => {
 						})}
 				</Collapse>
 			</List>
-		</div>
+		</CenteredColored>
 	);
 
 	return markup;

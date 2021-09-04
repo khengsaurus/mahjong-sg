@@ -1,29 +1,21 @@
 @import '../../App.scss';
 
-.new-game-panel {
+.panel-segment {
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 20px;
+	width: $panel-segment-width;
+}
+
+.list {
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	text-align: center;
+	width: $panel-segment-width;
+	margin: 10px 0;
+	transition: 200ms;
+	@include default-border;
+}
 
-	.panel-segment {
-		flex-direction: column;
-		justify-content: center;
-		margin-top: 20px;
-		width: $panel-segment-width;
-	}
-
-	.list {
-		display: flex;
-		flex-direction: column;
-		width: $panel-segment-width;
-		margin: 10px 0;
-		transition: 200ms;
-		@include default-border;
-	}
-
-	.user {
-		width: $panel-segment-width - 40px;
-	}
+.user {
+	margin: 0 20px;
 }

@@ -10,10 +10,12 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { MainTransparent, MuiStyles } from '../../global/styles';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
+import { AppContext } from '../../util/hooks/AppContext';
 import './ControlsSmall.scss';
 
 interface Props {
@@ -21,11 +23,11 @@ interface Props {
 	playerSeat: number;
 	onClose: () => void;
 	show: boolean;
-	bgColor: string;
 }
 
 const PaymentWindow = (props: Props) => {
-	const { game, playerSeat, onClose, show, bgColor } = props;
+	const { game, playerSeat, onClose, show } = props;
+	const { tableColor, textColor } = useContext(AppContext);
 	let playerUsername = game.players[playerSeat].username;
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
@@ -52,25 +54,21 @@ const PaymentWindow = (props: Props) => {
 	};
 
 	return (
-		<div className="main transparent">
+		<MainTransparent>
 			<Dialog
 				open={show}
 				BackdropProps={{ invisible: true }}
 				onClose={onClose}
 				PaperProps={{
 					style: {
-						maxWidth: '400px',
-						minWidth: '400px',
-						maxHeight: '300px',
-						minHeight: '300px',
-						backgroundColor: `${bgColor}`,
-						overflow: 'scroll'
+						...MuiStyles.modal,
+						backgroundColor: `${tableColor}`
 					}
 				}}
 			>
 				<DialogContent>
 					<IconButton
-						style={{ color: 'black', position: 'absolute', top: '12px', right: '15px' }}
+						style={{ color: `${textColor}`, position: 'absolute', top: 5, right: 5 }}
 						onClick={onClose}
 					>
 						<CloseIcon />
@@ -124,7 +122,7 @@ const PaymentWindow = (props: Props) => {
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
-		</div>
+		</MainTransparent>
 	);
 };
 

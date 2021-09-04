@@ -3,7 +3,7 @@ import './playerComponentsMedium.scss';
 import './playerComponentsLarge.scss';
 import getTileSrc from '../../images';
 import isEmpty from 'lodash.isempty';
-import { Segments } from '../../Globals';
+import { Segments } from '../../global/enums';
 
 interface ShownTileProps {
 	tile: TileI;

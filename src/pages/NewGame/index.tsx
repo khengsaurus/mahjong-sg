@@ -10,7 +10,8 @@ import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
-import { Pages } from '../../Globals';
+import { Pages } from '../../global/enums';
+import { Centered, Main } from '../../global/styles';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -56,8 +57,8 @@ const NewGame = () => {
 	}
 
 	let markup = (
-		<div className="main">
-			<div className="new-game-panel">
+		<Main>
+			<Centered>
 				<Typography variant="h6">Create a new game</Typography>
 				<div className="panel-segment">
 					<UserSearchForm />
@@ -105,8 +106,8 @@ const NewGame = () => {
 				</Button>
 				<br></br>
 				<HomeButton />
-			</div>
-		</div>
+			</Centered>
+		</Main>
 	);
 
 	return user ? markup : <Login />;

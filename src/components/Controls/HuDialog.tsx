@@ -11,9 +11,11 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { MainTransparent } from '../../global/styles';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
+import { AppContext } from '../../util/hooks/AppContext';
 import './ControlsMedium.scss';
 
 interface Props {
@@ -25,6 +27,7 @@ interface Props {
 
 const HuDialog = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
+	const { tableColor, textColor } = useContext(AppContext);
 	const [tai, setTai] = useState<number>(null);
 	const [zimo, setZimo] = useState(false);
 
@@ -41,7 +44,7 @@ const HuDialog = (props: Props) => {
 	};
 
 	return (
-		<div className="main transparent">
+		<MainTransparent>
 			<Dialog
 				open={show}
 				BackdropProps={{ invisible: true }}
@@ -49,13 +52,13 @@ const HuDialog = (props: Props) => {
 				PaperProps={{
 					style: {
 						minWidth: '350px',
-						backgroundColor: 'rgb(215, 195, 170)'
+						backgroundColor: `${tableColor}`
 					}
 				}}
 			>
 				<DialogContent>
 					<IconButton
-						style={{ color: 'black', position: 'absolute', top: '12px', right: '15px' }}
+						style={{ color: `${textColor}`, position: 'absolute', top: 5, right: 5 }}
 						onClick={onClose}
 					>
 						<CloseIcon />
@@ -102,7 +105,7 @@ const HuDialog = (props: Props) => {
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
-		</div>
+		</MainTransparent>
 	);
 };
 
