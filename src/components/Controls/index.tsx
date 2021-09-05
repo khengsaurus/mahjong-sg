@@ -1,9 +1,10 @@
+import { createTheme, ThemeProvider } from '@material-ui/core';
 import isEmpty from 'lodash.isempty';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
 import { Pages } from '../../global/enums';
-import { MainTransparent } from '../../global/styles';
+import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
@@ -27,7 +28,7 @@ interface ControlsProps {
 
 const Controls = (props: ControlsProps) => {
 	const { playerSeat } = props;
-	const { controlsSize, selectedTiles, setSelectedTiles, tableColor } = useContext(AppContext);
+	const { controlsSize, selectedTiles, setSelectedTiles, tableTextColor } = useContext(AppContext);
 	const [meld, setMeld] = useState<TileI[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
@@ -294,86 +295,94 @@ const Controls = (props: ControlsProps) => {
 		handleAction(game);
 	}
 
+	/* ----------------------------------- Styles ----------------------------------- */
+
+	const ControlsTheme = createTheme({
+		palette: {
+			text: {
+				primary: tableTextColor
+			}
+		}
+	});
+
 	/* ----------------------------------- Markup ----------------------------------- */
 
 	return game && player ? (
-		<MainTransparent>
-			<TopLeftControls
-				controlsSize={controlsSize}
-				homeCallback={() => {
-					history.push(Pages.index);
-				}}
-				settingsCallback={() => {
-					setShowSettings(!showSettings);
-				}}
-				texts={[
-					`Dealer: ${players[dealer].username}`,
-					`Seat: ${playerWind}`,
-					`Tiles left: ${tilesLeft}`,
-					`$ ${Math.round(Number(player.balance) * 100) / 100}`
-				]}
-			/>
-			<TopRightControls
-				controlsSize={controlsSize}
-				payCallback={() => {
-					setShowPay(!showPay);
-				}}
-				logsCallback={handleShowLogs}
-				showLogs={showLogs}
-				logs={logs}
-			/>
-			<BottomLeftControls
-				controlsSize={controlsSize}
-				chiCallback={() => handleTake()}
-				chiDisabled={!canChi}
-				pongCallback={() => {
-					if (selectedTiles.length === 1) {
-						selfKang();
-					} else {
-						handleTake();
-					}
-				}}
-				pongText={canKang ? `杠` : `碰`}
-				pongDisabled={!canPong && !canKang}
-				huCallback={showHuDialog}
-				okToShow={okToShow}
-				huDisabled={game.hu.length === 3}
-			/>
-			<BottomRightControls
-				controlsSize={controlsSize}
-				throwCallback={() => {
-					handleThrow(selectedTiles[0]);
-				}}
-				throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
-				drawCallback={() => handleDraw()}
-				drawText={tilesLeft === 15 ? `完` : `摸`}
-				drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
-				openCallback={handleShow}
-				okToShow={okToShow}
-			/>
-			{showPay && (
-				<PaymentWindow
-					game={game}
-					playerSeat={playerSeat}
-					show={showPay}
-					onClose={() => {
-						setShowPay(false);
+		<ThemeProvider theme={ControlsTheme}>
+			<MainTransparent>
+				<TopLeftControls
+					homeCallback={() => {
+						history.push(Pages.index);
 					}}
-				/>
-			)}
-			{showSettings && (
-				<SettingsWindow
-					show={showSettings}
-					onClose={() => {
-						setShowSettings(false);
+					settingsCallback={() => {
+						setShowSettings(!showSettings);
 					}}
+					texts={[
+						`Dealer: ${players[dealer].username}`,
+						`Seat: ${playerWind}`,
+						`Tiles left: ${tilesLeft}`,
+						`$ ${Math.round(Number(player.balance) * 100) / 100}`
+					]}
 				/>
-			)}
-			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-			{(game.hu.length === 3 || game.draw) && (
-				<Announcement playerSeat={playerSeat} game={game} bgColor={tableColor} />
-			)}
-		</MainTransparent>
+				<TopRightControls
+					payCallback={() => {
+						setShowPay(!showPay);
+					}}
+					logsCallback={handleShowLogs}
+					showLogs={showLogs}
+					logs={logs}
+				/>
+				<BottomLeftControls
+					controlsSize={controlsSize}
+					chiCallback={() => handleTake()}
+					chiDisabled={!canChi}
+					pongCallback={() => {
+						if (selectedTiles.length === 1) {
+							selfKang();
+						} else {
+							handleTake();
+						}
+					}}
+					pongText={canKang ? `杠` : `碰`}
+					pongDisabled={!canPong && !canKang}
+					huCallback={showHuDialog}
+					okToShow={okToShow}
+					huDisabled={game.hu.length === 3}
+				/>
+				<BottomRightControls
+					controlsSize={controlsSize}
+					throwCallback={() => {
+						handleThrow(selectedTiles[0]);
+					}}
+					throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
+					drawCallback={() => handleDraw()}
+					drawText={tilesLeft === 15 ? `完` : `摸`}
+					drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
+					openCallback={handleShow}
+					okToShow={okToShow}
+				/>
+				{showPay && (
+					<PaymentWindow
+						game={game}
+						playerSeat={playerSeat}
+						show={showPay}
+						onClose={() => {
+							setShowPay(false);
+						}}
+					/>
+				)}
+				{showSettings && (
+					<SettingsWindow
+						show={showSettings}
+						onClose={() => {
+							setShowSettings(false);
+						}}
+					/>
+				)}
+				{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
+				{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
+			</MainTransparent>
+		</ThemeProvider>
 	) : null;
 };
 

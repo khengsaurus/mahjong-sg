@@ -7,7 +7,7 @@ const HomeButton = () => {
 		history.push(Pages.index);
 	}
 	return (
-		<Button size="small" variant="outlined" onClick={handleGoHome}>
+		<Button size="medium" variant="text" onClick={handleGoHome}>
 			Home
 		</Button>
 	);

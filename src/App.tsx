@@ -9,7 +9,7 @@ import NewGame from './pages/NewGame';
 import Table from './pages/Table';
 import { AppContextProvider } from './util/hooks/AppContext';
 import store from './util/store/store';
-import { Styled } from './global/styles';
+import { Styled } from './global/StyledComponents';
 
 export const history = createBrowserHistory();
 

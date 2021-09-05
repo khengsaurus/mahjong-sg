@@ -20,12 +20,10 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		padding-left: 3 * $main-padding;
-		p {
+		padding-left: $log-margin-left-small;
+		.text {
 			text-align: start;
-			color: $grey-50;
 			font-size: $text-font-size-small;
-			margin: 0 !important;
 		}
 	}
 }
@@ -41,6 +39,7 @@
 	justify-content: flex-start;
 	align-items: flex-start;
 	z-index: 10;
+	margin-bottom: 2 * $main-padding;
 	.button {
 		max-width: $button-width-small;
 		max-height: $button-height-small;
@@ -59,6 +58,7 @@
 	flex-flow: row-reverse wrap-reverse;
 	align-items: flex-start;
 	z-index: 10;
+	margin-bottom: 2 * $main-padding;
 	.button {
 		max-width: $button-width-small;
 		max-height: $button-height-small;
@@ -92,15 +92,15 @@
 	scroll-behavior: smooth;
 	height: $icon-button-size-small;
 	max-width: $log-line-width-small;
-	font-size: $log-font-size-small;
-	$line-height: $log-line-height-small;
+	font-size: $text-font-size-small;
+	$line-height: $text-line-height-small;
 	transition: 200ms;
 	&.expanded {
 		height: 4 * $icon-button-size-small;
 		min-width: $log-line-width-small;
 		align-items: flex-start;
 		text-align: start;
-		padding-left: 5px;
+		padding-left: 2 * $main-padding;
 		@include default-border;
 	}
 	.log {

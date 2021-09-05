@@ -9,7 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext } from 'react';
 import { BackgroundColors, Sizes, TableColors, TileColors } from '../../global/enums';
-import { MainTransparent, MuiStyles } from '../../global/styles';
+import { MuiStyles } from '../../global/MuiStyles';
+import { MainTransparent } from '../../global/StyledComponents';
 import { AppContext } from '../../util/hooks/AppContext';
 import './ControlsMedium.scss';
 
@@ -40,7 +41,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 		setTableColor,
 		tileBackColor,
 		setTileBackColor,
-		textColor
+		tableTextColor
 	} = useContext(AppContext);
 	const preferences: Preference[] = [
 		{ label: 'Controls', size: controlsSize, handleSelect: setControlsSize },
@@ -81,25 +82,22 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 				PaperProps={{
 					style: {
 						...MuiStyles.modal,
-						backgroundColor: `${tableColor}`
+						backgroundColor: tableColor
 					}
 				}}
 			>
 				<DialogContent>
 					<IconButton
-						style={{ color: `${textColor}`, position: 'absolute', top: 5, right: 5 }}
+						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
 						onClick={onClose}
 					>
 						<CloseIcon />
 					</IconButton>
 					<FormControl component="fieldset">
-						{/* <Typography style={{ color: `${textColor}` }} variant="h6">
-							{`Sizes`}
-						</Typography> */}
 						{preferences.map(preference => {
 							return preference.size ? (
 								<div className="preference" key={`preference-${preference.label}`}>
-									<Typography style={{ color: `${textColor}` }} variant="subtitle1" display="inline">
+									<Typography variant="subtitle1" display="inline">
 										{`${preference.label}:`}
 									</Typography>
 									<Tabs
@@ -107,18 +105,17 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 											...MuiStyles.tabs,
 											display: 'inline-block'
 										}}
-										indicatorColor="primary"
-										// TabIndicatorProps={{ style: { background: backgroundColor } }}
 										value={preference.size}
+										indicatorColor="primary" // TabIndicatorProps={{ style: { background: backgroundColor } }}
 									>
 										{Object.keys(Sizes).map(key => {
 											let size = Sizes[key];
 											return (
 												<Tab
 													style={{
-														...MuiStyles.tabOptions,
-														color: textColor
+														...MuiStyles.tabOptions
 													}}
+													fullWidth={false}
 													key={size}
 													value={size}
 													label={size}
@@ -132,39 +129,20 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 								</div>
 							) : null;
 						})}
-						{/* <Typography style={{ color: `${textColor}` }} variant="h6">
-							{`Colors`}
-						</Typography> */}
 						{preferences.map(preference => {
 							return preference.colors ? (
 								<div className="preference" key={`preference-${preference.label}`}>
-									<Typography style={{ color: `${textColor}` }} variant="subtitle1" display="inline">
+									<Typography variant="subtitle1" display="inline">
 										{`${preference.label}:`}
 									</Typography>
-									{/* <div className="options">
-										{preference.colors.map(rgb => {
-											return (
-												<div
-													key={`${preference.label}-option-${rgb}`}
-													style={{ backgroundColor: `${rgb}` }}
-													className={
-														rgb === preference.selectedColor && preference.label === 'Table'
-															? 'color-option selected'
-															: 'color-option'
-													}
-												/>
-											);
-										})}
-									</div> */}
 									<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'white' }}>
 										<Tabs
 											style={{
 												...MuiStyles.tabs,
 												display: 'inline-block'
 											}}
-											indicatorColor="primary"
-											// TabIndicatorProps={{ style: { background: backgroundColor } }}
 											value={preference.selectedColor}
+											indicatorColor="primary"
 										>
 											{preference.colors.map(rgb => {
 												return (

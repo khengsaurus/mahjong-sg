@@ -3,7 +3,7 @@ import { isEqual } from 'lodash';
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
 import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { HiddenTile } from '../../global/styles';
+import { HiddenTile } from '../../global/StyledComponents';
 import { AppContext } from '../../util/hooks/AppContext';
 import { generateNumberArray } from '../../util/utilFns';
 import { HandTile } from './HandTile';

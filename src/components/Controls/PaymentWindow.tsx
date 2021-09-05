@@ -4,14 +4,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext, useState } from 'react';
-import { MainTransparent, MuiStyles } from '../../global/styles';
+import { MuiStyles } from '../../global/MuiStyles';
+import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
@@ -27,12 +27,11 @@ interface Props {
 
 const PaymentWindow = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
-	const { tableColor, textColor } = useContext(AppContext);
-	let playerUsername = game.players[playerSeat].username;
+	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
-
 	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8];
+	let playerUsername = game.players[playerSeat].username;
 
 	async function pay() {
 		game.players[playerSeat].balance -= amount;
@@ -68,7 +67,7 @@ const PaymentWindow = (props: Props) => {
 			>
 				<DialogContent>
 					<IconButton
-						style={{ color: `${textColor}`, position: 'absolute', top: 5, right: 5 }}
+						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
 						onClick={onClose}
 					>
 						<CloseIcon />
@@ -76,31 +75,30 @@ const PaymentWindow = (props: Props) => {
 					<Typography variant="subtitle1">{'Send money'}</Typography>
 					<br></br>
 					<FormControl component="fieldset">
-						<FormLabel component="legend">{`To: `}</FormLabel>
+						<Typography variant="subtitle1">{'To: '}</Typography>
 						<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
 							{game.players.map((otherPlayer: User, index: number) => {
 								return otherPlayer.username !== playerUsername ? (
 									<FormControlLabel
 										key={otherPlayer.username}
 										value={index}
-										control={<Radio color="primary" />}
+										control={<Radio style={{ color: tableTextColor }} />}
 										label={otherPlayer.username}
 									/>
 								) : null;
 							})}
 						</RadioGroup>
 					</FormControl>
-					<br></br>
-					<br></br>
+
 					<FormControl component="fieldset">
-						<FormLabel component="legend">{`Amount: `}</FormLabel>
+						<Typography variant="subtitle1">{'Amount: '}</Typography>
 						<RadioGroup row value={amount} onChange={handleSelectAmount}>
 							{amounts.map((amount: number, index: number) => {
 								return (
 									<FormControlLabel
 										key={index}
 										value={amount}
-										control={<Radio color="primary" />}
+										control={<Radio style={{ color: tableTextColor }} />}
 										label={`$${amount}`}
 										labelPlacement="end"
 									/>
@@ -111,8 +109,9 @@ const PaymentWindow = (props: Props) => {
 					<br></br>
 					<DialogActions>
 						<Button
-							variant="outlined"
-							size="small"
+							style={{ color: tableTextColor, position: 'absolute', bottom: 15, right: 15 }}
+							variant="text"
+							size="large"
 							onClick={pay}
 							disabled={recipientIndex === 10 || !amount || amount <= 0}
 							autoFocus

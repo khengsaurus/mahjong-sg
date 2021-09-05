@@ -1,4 +1,3 @@
-import { createTheme } from '@material-ui/core/styles';
 import { User } from '../Models/User';
 
 export interface PlayerComponentProps {
@@ -49,8 +48,8 @@ export enum BackgroundColors {
 	// steel = 'steelblue',
 	// glaucous = 'rgb(96, 130, 182)',
 	catalina = 'rgb(38, 61, 96)',
-	royal = 'rgb(120, 81, 169)',
-	maroon = 'maroon'
+	royal = 'rgb(150, 99, 130)',
+	maroon = 'rgb(125, 47, 47)'
 }
 
 export enum TableColors {
@@ -59,8 +58,8 @@ export enum TableColors {
 	lightBrown = 'rgb(190, 175, 155)',
 	fern = 'rgb(80, 110, 80)',
 	denim = 'rgb(111, 143, 175)',
-	mediumPurple = 'rgb(147, 112, 219)',
-	puce = 'rgb(169, 92, 104)'
+	purple = 'rgb(152, 118, 152)',
+	muted = 'rgb(140, 80, 70)'
 }
 
 export enum TileColors {
@@ -68,13 +67,13 @@ export enum TileColors {
 	grey = 'grey',
 	teal = 'teal',
 	steel = 'steelblue',
-	purple = 'rgb(128,0,128)',
-	venetian = 'rgb(164, 42, 4)'
+	purple = 'rgb(128, 0, 128)',
+	red = '	rgb(152, 50, 32)'
 }
 
 export enum TextColors {
-	light = 'white',
-	dark = 'rgb(30, 30, 30)',
+	light = 'rgb(250, 250, 250)',
+	dark = 'rgb(40, 40, 40)',
 	green = 'rgb(0, 120, 10)'
 }
 

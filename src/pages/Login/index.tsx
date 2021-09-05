@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import { useState } from 'react';
 import LoginForm from '../../components/FormComponents/LoginForm';
 import RegisterForm from '../../components/FormComponents/RegisterForm';
-import { Main } from '../../global/styles';
+import { Main } from '../../global/StyledComponents';
 import './login.scss';
 
 const Login = () => {

@@ -1,8 +1,9 @@
 import IconButton from '@material-ui/core/IconButton';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SubjectIcon from '@material-ui/icons/Subject';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Sizes } from '../../global/enums';
+import { AppContext } from '../../util/hooks/AppContext';
 import { scrollToBottomOfDiv } from '../../util/utilFns';
 import './ControlsLarge.scss';
 import './ControlsMedium.scss';
@@ -10,7 +11,6 @@ import './ControlsSmall.scss';
 import LogBox from './LogBox';
 
 interface TopRightControlsProps {
-	controlsSize: Sizes;
 	payCallback: () => void;
 	logsCallback: () => void;
 	showLogs: boolean;
@@ -18,14 +18,16 @@ interface TopRightControlsProps {
 }
 
 const TopRightControls = (props: TopRightControlsProps) => {
-	const { controlsSize, payCallback, logsCallback, showLogs, logs } = props;
+	const { payCallback, logsCallback, showLogs, logs } = props;
+	const { controlsSize, tableColor, tableTextColor } = useContext(AppContext);
+
 	return (
 		<div className={`top-right-controls-${controlsSize}`}>
 			<>
-				<IconButton className="icon-button" size="small" onClick={payCallback}>
+				<IconButton style={{ color: tableTextColor }} className="icon-button" onClick={payCallback}>
 					<MonetizationOnIcon />
 				</IconButton>
-				<IconButton className="icon-button" size="small" onClick={logsCallback}>
+				<IconButton style={{ color: tableTextColor }} className="icon-button" onClick={logsCallback}>
 					<SubjectIcon />
 				</IconButton>
 				<LogBox
@@ -35,6 +37,7 @@ const TopRightControls = (props: TopRightControlsProps) => {
 						scrollToBottomOfDiv('logs');
 					}}
 					size={controlsSize || Sizes.medium}
+					tableColor={tableColor}
 				/>
 			</>
 		</div>

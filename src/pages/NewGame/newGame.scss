@@ -13,9 +13,13 @@
 	width: $panel-segment-width;
 	margin: 10px 0;
 	transition: 200ms;
-	@include default-border;
+	// @include default-border;
 }
 
 .user {
 	margin: 0 20px;
+}
+
+.Button:disabled {
+	color: rgb(125, 125, 125) !important;
 }

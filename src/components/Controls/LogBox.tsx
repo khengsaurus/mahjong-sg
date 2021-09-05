@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { Sizes } from '../../global/enums';
-import { TableColoredDiv } from '../../global/styles';
-import { AppContext } from '../../util/hooks/AppContext';
+import { Sizes, TableColors } from '../../global/enums';
+import { TableText } from '../../global/StyledComponents';
 import './ControlsLarge.scss';
 import './ControlsMedium.scss';
 import './ControlsSmall.scss';
@@ -12,11 +11,11 @@ interface LogBoxProps {
 	expanded: boolean;
 	scroll: () => void;
 	size: Sizes;
+	tableColor: TableColors;
 }
 
 const LogBox = (props: LogBoxProps) => {
-	const { logs, expanded, scroll, size } = props;
-	const { tableColor } = useContext(AppContext);
+	const { logs, expanded, scroll, size, tableColor } = props;
 	const logRef = useRef<Log[]>([]);
 
 	useEffect(() => {
@@ -33,20 +32,23 @@ const LogBox = (props: LogBoxProps) => {
 	}, [logs, scroll]);
 
 	return (
-		<TransitionGroup>
-			<div
-				id="logs"
-				className={`log-box-${size || Sizes.medium}${expanded ? ` expanded` : ``}`}
-				style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
-			>
-				{logRef.current.map((log: Log, index) => {
-					return (
-						<CSSTransition key={`${index}`} timeout={250} classNames="move">
-							<div className={log.msg.includes('sent') ? 'log pay' : 'log'}>{log.msg}</div>
-						</CSSTransition>
-					);
-				})}
-			</div>
+		<TransitionGroup
+			id="logs"
+			className={`log-box-${size || Sizes.medium}${expanded ? ` expanded` : ``}`}
+			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
+		>
+			{logRef.current.map((log: Log, index) => {
+				return (
+					<CSSTransition key={`${index}`} timeout={250} classNames="move">
+						{/* <div className={log.msg.includes('sent') ? 'log pay' : 'log'}>{log.msg}</div> */}
+						{/* <div style={{ color: log.msg.includes('sent') ? tableTextColor : TextColors.green }}>
+							{log.msg}
+						</div> */}
+						{/* <div style={{ color: tableTextColor }}>{log.msg}</div> */}
+						<TableText>{log.msg}</TableText>
+					</CSSTransition>
+				);
+			})}
 		</TransitionGroup>
 	);
 };

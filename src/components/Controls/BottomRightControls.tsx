@@ -1,6 +1,7 @@
 import Button from '@material-ui/core/Button';
 import React from 'react';
 import { Sizes } from '../../global/enums';
+import { MuiStyles } from '../../global/MuiStyles';
 import './ControlsLarge.scss';
 import './ControlsMedium.scss';
 import './ControlsSmall.scss';
@@ -21,22 +22,30 @@ const BottomRightControls = (props: BottomRightControlsProps) => {
 		props;
 	return (
 		<div className={`bottom-right-controls-${controlsSize}`}>
-			<Button className="button" variant="outlined" size="small" onClick={throwCallback} disabled={throwDisabled}>
+			<Button
+				className="button"
+				variant="text"
+				onClick={throwCallback}
+				disabled={throwDisabled}
+				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+			>
 				{`丢`}
 			</Button>
-			<Button className="button" variant="outlined" onClick={drawCallback} disabled={drawDisabled}>
+			<Button
+				className="button"
+				variant="text"
+				onClick={drawCallback}
+				disabled={drawDisabled}
+				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+			>
 				{drawText}
 			</Button>
 			{!okToShow && (
 				<Button
 					className="button"
-					variant="outlined"
+					variant="text"
 					onClick={openCallback}
-					// onClick={e => {
-					// 	e.preventDefault();
-					// 	game.newLog(`Test: ${Math.random()}`);
-					// 	FBService.updateGame(game);
-					// }}
+					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 				>
 					{`开?`}
 				</Button>

@@ -8,7 +8,7 @@ import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
 import LeftPlayer from '../../components/PlayerComponents/LeftPlayer';
 import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
-import { Main, TableDiv, Wind } from '../../global/styles';
+import { Main, TableDiv, Wind } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';

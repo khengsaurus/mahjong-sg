@@ -13,7 +13,7 @@ $brown-darker: rgb(140, 125, 105);
 $brown-burlywood: burlywood;
 $brown-sienna: sienna;
 $brown: brown;
-$maroon: maroon;
+$maroon: rgb(125, 47, 47);
 $blue-cornflower: rgb(100, 149, 237);
 $blue-royal: rgb(65, 105, 225);
 $blue-steel: steelblue;
@@ -29,12 +29,12 @@ $grey-50: rgb(50, 50, 50);
 $grey-80: rgb(80, 80, 80);
 $grey-100: rgb(100, 100, 100);
 $grey-170: rgb(170, 170, 170);
-$purple-mediumpurple: rgb(147, 112, 219);
+$purple-mediumpurple: rgb(150, 99, 130);
 $purple-darkmagenta: darkmagenta;
-$purple: purple;
+$purple: rgb(152, 118, 152);
 $red-puce: rgb(169, 92, 104);
-$red-poppy: rgb(227, 83, 53);
-$red-venetian: rgb(164, 42, 4);
+$red-muted: rgb(140, 80, 70);
+$red-venetian: rgb(152, 50, 32);
 
 $green-sea: rgb(46, 139, 87);
 $green-fern: rgb(62, 120, 59);
@@ -50,7 +50,7 @@ $color-grey-text: $grey-standard;
 $color-detail: $brown-sienna;
 $color-wind: $brown-darker;
 $color-tile-border: rgb(40, 40, 40);
-$color-border: $grey-80;
+$color-border: black;
 
 $log-grey: $grey-standard;
 $log-green: rgb(0, 120, 10);
@@ -108,12 +108,11 @@ $button-width-small: 45px;
 
 $text-line-width-small: 80px;
 $text-font-size-small: 14px;
-$text-line-height-small: 15px;
+$text-line-height-small: 14px;
 $font-weighted-small: 400;
 
 $log-line-width-small: 200px;
-$log-line-height-small: 15px;
-$log-font-size-small: 14px;
+$log-margin-left-small: 7px;
 
 // Medium
 $icon-button-size-medium: 36px;
@@ -122,12 +121,11 @@ $button-width-medium: 55px;
 
 $text-line-width-medium: 90px;
 $text-font-size-medium: 16px;
-$text-line-height-medium: 17px;
+$text-line-height-medium: 16px;
 $font-weighted-medium: 450;
 
 $log-line-width-medium: 220px;
-$log-line-height-medium: 17px;
-$log-font-size-medium: 16px;
+$log-margin-left-medium: 10px;
 
 // Large
 $icon-button-size-large: 45px;
@@ -135,13 +133,12 @@ $button-height-large: 60px;
 $button-width-large: 65px;
 
 $text-line-width-large: 100px;
-$text-font-size-large: 16px;
-$text-line-height-large: 17px;
+$text-font-size-large: 18px;
+$text-line-height-large: 18px;
 $font-weighted-large: 500;
 
 $log-line-width-large: 250px;
-$log-line-height-large: 17px;
-$log-font-size-large: 16px;
+$log-margin-left-large: 15px;
 
 /*-------------------- Transform --------------------*/
 $rotate-simple-90: rotate(90deg);
@@ -150,6 +147,11 @@ $rotate-simple-180: rotate(180deg);
 
 @mixin default-border {
 	border: $border-px solid $color-border;
+	border-radius: $default-border-radius;
+}
+
+@mixin default-border-no-color {
+	border: $border-px solid;
 	border-radius: $default-border-radius;
 }
 
@@ -229,16 +231,16 @@ $rotate-simple-180: rotate(180deg);
 
 .move-enter-active {
 	opacity: 1;
-	transform: translate(0, $log-line-height-medium);
+	transform: translate(0, $text-line-height-medium);
 	transition: 5000ms ease;
 }
 
 .move-exit {
 	opacity: 1;
-	transform: translate(0, -$log-line-height-medium);
+	transform: translate(0, -$text-line-height-medium);
 }
 
 .move-exit-active {
 	opacity: 0.01;
-	transform: translate(0, -$log-line-height-medium);
+	transform: translate(0, -$text-line-height-medium);
 }

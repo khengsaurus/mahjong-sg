@@ -11,7 +11,8 @@ import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
 import { Pages } from '../../global/enums';
-import { Centered, Main } from '../../global/styles';
+import { HomeTheme } from '../../global/MuiStyles';
+import { Centered, Main } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -19,8 +20,8 @@ import Login from '../Login';
 import './newGame.scss';
 
 const NewGame = () => {
+	const { user, handleUserState, players, setPlayers, setGameId, mainTextColor } = useContext(AppContext);
 	const [startedGame, setStartedGame] = useState(false);
-	const { user, handleUserState, players, setPlayers, setGameId } = useContext(AppContext);
 
 	useEffect(() => {
 		if (!user) {
@@ -56,58 +57,71 @@ const NewGame = () => {
 		}
 	}
 
-	let markup = (
-		<Main>
-			<Centered>
-				<Typography variant="h6">Create a new game</Typography>
-				<div className="panel-segment">
-					<UserSearchForm />
-				</div>
-				<div className="panel-segment">
-					<Typography variant="subtitle1">Players:</Typography>
-					<List className="list">
-						{user &&
-							players.length > 0 &&
-							players.map(player => {
-								return player ? (
-									<ListItem className="user list-item" key={player.id}>
-										<ListItemText primary={player.username} />
-										{player.username === user.username ? (
-											<IconButton
-												color="primary"
-												disabled={true}
-												style={{ justifyContent: 'flex-end', paddingRight: '3px' }}
-											>
-												<MoodIcon />
-											</IconButton>
-										) : (
-											<IconButton
-												color="primary"
-												onClick={() => handleRemovePlayer(player)}
-												style={{ justifyContent: 'flex-end', paddingRight: '3px' }}
-											>
-												<ClearIcon />
-											</IconButton>
-										)}
-									</ListItem>
-								) : null;
-							})}
-					</List>
-				</div>
-				<br></br>
-				<Button
-					className="margin-left"
-					size="small"
-					variant="outlined"
-					onClick={handleButtonClick}
-					disabled={players.length < 4}
-				>
-					{startedGame ? 'Join game' : 'Start game'}
-				</Button>
-				<br></br>
-				<HomeButton />
-			</Centered>
-		</Main>
+	const markup = (
+		<HomeTheme>
+			<Main>
+				<Centered>
+					<Typography style={{ color: mainTextColor }} variant="h6">
+						Create a new game
+					</Typography>
+					<div className="panel-segment">
+						<UserSearchForm />
+					</div>
+					<div className="panel-segment">
+						<Typography style={{ color: mainTextColor }} variant="subtitle1">
+							Players:
+						</Typography>
+						<List className="list">
+							{user &&
+								players.length > 0 &&
+								players.map(player => {
+									return player ? (
+										<ListItem
+											style={{ color: mainTextColor }}
+											className="user list-item"
+											key={player.id}
+										>
+											<ListItemText style={{ color: mainTextColor }} primary={player.username} />
+											{player.username === user.username ? (
+												<IconButton
+													disabled
+													style={{
+														color: mainTextColor,
+														justifyContent: 'flex-end',
+														paddingRight: '3px'
+													}}
+												>
+													<MoodIcon />
+												</IconButton>
+											) : (
+												<IconButton
+													color="primary"
+													onClick={() => handleRemovePlayer(player)}
+													style={{ justifyContent: 'flex-end', paddingRight: '3px' }}
+												>
+													<ClearIcon />
+												</IconButton>
+											)}
+										</ListItem>
+									) : null;
+								})}
+						</List>
+					</div>
+					<br></br>
+					<Button
+						style={{ color: mainTextColor }}
+						size="medium"
+						variant="text"
+						onClick={handleButtonClick}
+						disabled={players.length < 4}
+					>
+						{startedGame ? 'Join game' : 'Start game'}
+					</Button>
+					<br></br>
+					<HomeButton />
+				</Centered>
+			</Main>
+		</HomeTheme>
 	);
 
 	return user ? markup : <Login />;

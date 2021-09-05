@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import { Pages } from '../../global/enums';
-import { Centered, Main } from '../../global/styles';
+import { Centered, Main } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';

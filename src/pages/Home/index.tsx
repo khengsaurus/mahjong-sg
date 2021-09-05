@@ -3,13 +3,14 @@ import Typography from '@material-ui/core/Typography';
 import { useContext, useEffect } from 'react';
 import { history } from '../../App';
 import { Pages } from '../../global/enums';
-import { Main } from '../../global/styles';
+import { HomeTheme } from '../../global/MuiStyles';
+import { Main } from '../../global/StyledComponents';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
 import './home.scss';
 
 const Home = () => {
-	const { user, handleUserState, logout } = useContext(AppContext);
+	const { user, handleUserState, logout, mainTextColor } = useContext(AppContext);
 
 	useEffect(() => {
 		if (!user) {
@@ -19,21 +20,25 @@ const Home = () => {
 	}, []);
 
 	let markup = (
-		<Main>
-			{user && <Typography variant="h6">{`Welcome ${user.username}`}</Typography>}
-			<br></br>
-			<Button variant={'outlined'} onClick={() => history.push(Pages.newGame)}>
-				New game
-			</Button>
-			<br></br>
-			<Button variant={'outlined'} onClick={() => history.push(Pages.joinGame)}>
-				Join game
-			</Button>
-			<br></br>
-			<Button variant={'outlined'} onClick={logout}>
-				Logout
-			</Button>
-		</Main>
+		<HomeTheme>
+			<Main>
+				{user && (
+					<Typography style={{ color: mainTextColor }} variant="h6">{`Welcome ${user.username}`}</Typography>
+				)}
+				<br></br>
+				<Button variant={'text'} onClick={() => history.push(Pages.newGame)}>
+					New game
+				</Button>
+				<br></br>
+				<Button variant={'text'} onClick={() => history.push(Pages.joinGame)}>
+					Join game
+				</Button>
+				<br></br>
+				<Button variant={'text'} onClick={logout}>
+					Logout
+				</Button>
+			</Main>
+		</HomeTheme>
 	);
 
 	return user ? markup : <Login />;

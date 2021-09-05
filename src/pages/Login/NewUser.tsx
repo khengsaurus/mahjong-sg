@@ -7,7 +7,7 @@ import { history } from '../../App';
 import '../../App.scss';
 import FormField from '../../components/FormComponents/FormField';
 import { Pages, Status } from '../../global/enums';
-import { Main } from '../../global/styles';
+import { Main } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';

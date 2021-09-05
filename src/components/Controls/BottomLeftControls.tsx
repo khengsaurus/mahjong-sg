@@ -1,6 +1,7 @@
 import Button from '@material-ui/core/Button';
 import React from 'react';
 import { Sizes } from '../../global/enums';
+import { MuiStyles } from '../../global/MuiStyles';
 import './ControlsLarge.scss';
 import './ControlsMedium.scss';
 import './ControlsSmall.scss';
@@ -29,16 +30,35 @@ const BottomLeftControls = (props: BottomLeftControlsProps) => {
 		huCallback,
 		huDisabled
 	} = props;
+
 	return (
 		<div className={`bottom-left-controls-${controlsSize}`}>
-			<Button className="button" variant="outlined" onClick={chiCallback} disabled={chiDisabled}>
+			<Button
+				className="button"
+				variant="text"
+				onClick={chiCallback}
+				disabled={chiDisabled}
+				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+			>
 				{`吃`}
 			</Button>
-			<Button className="button" variant="outlined" onClick={pongCallback} disabled={pongDisabled}>
+			<Button
+				className="button"
+				variant="text"
+				onClick={pongCallback}
+				disabled={pongDisabled}
+				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+			>
 				{pongText}
 			</Button>
 			{okToShow && (
-				<Button className="button" variant="outlined" size="small" onClick={huCallback} disabled={huDisabled}>
+				<Button
+					className="button"
+					variant="text"
+					onClick={huCallback}
+					disabled={huDisabled}
+					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+				>
 					<p>{`开!`}</p>
 				</Button>
 			)}

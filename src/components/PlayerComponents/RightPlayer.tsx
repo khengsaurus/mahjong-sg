@@ -3,7 +3,7 @@ import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import React, { useMemo } from 'react';
 import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { HiddenTile } from '../../global/styles';
+import { HiddenTile } from '../../global/StyledComponents';
 import { generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';

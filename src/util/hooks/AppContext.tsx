@@ -1,11 +1,10 @@
 import jwt from 'jsonwebtoken';
-import { createContext, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 import { history } from '../../App';
 import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } from '../../global/enums';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { objToUser, userToObj } from '../utilFns';
-import { useMemo } from 'react';
 
 interface AppContextInt {
 	user: User;
@@ -34,8 +33,8 @@ interface AppContextInt {
 	setTableColor?: (color: TableColors) => void;
 	tileBackColor?: TileColors;
 	setTileBackColor?: (color: TileColors) => void;
-	textColor?: TextColors;
-	homeTextColor?: TextColors;
+	tableTextColor?: TextColors;
+	mainTextColor?: TextColors;
 }
 
 const initialContext: AppContextInt = {
@@ -65,7 +64,7 @@ const initialContext: AppContextInt = {
 	setTableColor: (color: TableColors) => {},
 	tileBackColor: TileColors.teal,
 	setTileBackColor: (color: TileColors) => {},
-	textColor: TextColors.dark
+	tableTextColor: TextColors.dark
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -83,14 +82,14 @@ export const AppContextProvider = (props: any) => {
 	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.darkBrown);
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
-	const textColor = useMemo(() => {
-		return [TableColors.dark].includes(tableColor) ? TextColors.light : TextColors.dark;
-	}, [tableColor]);
-	const homeTextColor = useMemo(() => {
-		return [BackgroundColors.darker, BackgroundColors.royal].includes(backgroundColor)
-			? TextColors.light
-			: TextColors.dark;
+	const mainTextColor = useMemo(() => {
+		return [BackgroundColors.darker as string].includes(backgroundColor) ? TextColors.light : TextColors.dark;
 	}, [backgroundColor]);
+	const tableTextColor = useMemo(() => {
+		if ((TableColors.dark as string) === tableColor) {
+		}
+		return [TableColors.dark as string].includes(tableColor) ? TextColors.light : TextColors.dark;
+	}, [tableColor]);
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function handleUserState() {
@@ -198,8 +197,8 @@ export const AppContextProvider = (props: any) => {
 				setTileBackColor,
 				tableColor,
 				setTableColor,
-				textColor,
-				homeTextColor
+				tableTextColor,
+				mainTextColor
 			}}
 			{...props}
 		/>
