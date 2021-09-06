@@ -1,3 +1,4 @@
+import { blue } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useContext } from 'react';
 import { AppContext } from '../util/hooks/AppContext';
@@ -5,9 +6,46 @@ import { AppContext } from '../util/hooks/AppContext';
 export const HomeTheme = (props: any) => {
 	const { mainTextColor } = useContext(AppContext);
 	const theme = createTheme({
+		overrides: {
+			MuiInput: {
+				underline: {
+					'&&:hover::before': {
+						borderColor: mainTextColor
+					}
+				}
+			}
+		},
 		palette: {
+			primary: {
+				main: mainTextColor
+			},
+			secondary: blue,
 			text: {
 				primary: mainTextColor
+			}
+		},
+		typography: {
+			h6: {
+				color: mainTextColor
+			},
+			subtitle1: {
+				color: mainTextColor
+			}
+		}
+	});
+	return <ThemeProvider theme={theme} {...props} />;
+};
+
+export const TableTheme = (props: any) => {
+	const { tableTextColor } = useContext(AppContext);
+	const theme = createTheme({
+		palette: {
+			primary: {
+				main: tableTextColor
+			},
+			secondary: blue,
+			text: {
+				primary: tableTextColor
 			}
 		}
 	});

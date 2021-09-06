@@ -85,14 +85,12 @@ export const AppContextProvider = (props: any) => {
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
 	const mainTextColor = useMemo(() => {
-		return [BackgroundColors.darker, BackgroundColors.catalina].includes(backgroundColor)
+		return [BackgroundColors.darker, BackgroundColors.catalina, BackgroundColors.maroon].includes(backgroundColor)
 			? TextColors.light
 			: TextColors.dark;
 	}, [backgroundColor]);
 	const tableTextColor = useMemo(() => {
-		if (TableColors.dark === tableColor) {
-		}
-		return [TableColors.dark].includes(tableColor) ? TextColors.light : TextColors.dark;
+		return [TableColors.dark, TableColors.muted].includes(tableColor) ? TextColors.light : TextColors.dark;
 	}, [tableColor]);
 	const secretKey = 'shouldBeServerSideKey';
 

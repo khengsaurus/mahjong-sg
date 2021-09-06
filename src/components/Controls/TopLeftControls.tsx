@@ -15,20 +15,16 @@ interface TopLeftControlsProps {
 }
 
 const TopLeftControls = (props: TopLeftControlsProps) => {
-	const { tableTextColor, controlsSize } = useContext(AppContext);
+	const { controlsSize } = useContext(AppContext);
 
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>
 			<>
 				<div className="buttons">
-					<IconButton style={{ color: tableTextColor }} className="icon-button" onClick={props.homeCallback}>
+					<IconButton color="primary" className="icon-button" onClick={props.homeCallback}>
 						<HomeIcon />
 					</IconButton>
-					<IconButton
-						style={{ color: tableTextColor }}
-						className="icon-button"
-						onClick={props.settingsCallback}
-					>
+					<IconButton color="primary" className="icon-button" onClick={props.settingsCallback}>
 						<SettingsIcon />
 					</IconButton>
 				</div>

@@ -19,15 +19,15 @@ interface TopRightControlsProps {
 
 const TopRightControls = (props: TopRightControlsProps) => {
 	const { payCallback, logsCallback, showLogs, logs } = props;
-	const { controlsSize, tableColor, tableTextColor } = useContext(AppContext);
+	const { controlsSize, tableColor } = useContext(AppContext);
 
 	return (
 		<div className={`top-right-controls-${controlsSize}`}>
 			<>
-				<IconButton style={{ color: tableTextColor }} className="icon-button" onClick={payCallback}>
+				<IconButton color="primary" className="icon-button" onClick={payCallback}>
 					<MonetizationOnIcon />
 				</IconButton>
-				<IconButton style={{ color: tableTextColor }} className="icon-button" onClick={logsCallback}>
+				<IconButton color="primary" className="icon-button" onClick={logsCallback}>
 					<SubjectIcon />
 				</IconButton>
 				<LogBox

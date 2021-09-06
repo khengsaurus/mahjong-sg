@@ -5,13 +5,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useContext, useState } from 'react';
-import { HomeTheme } from '../../global/MuiStyles';
 import { CenteredColored } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
@@ -19,7 +17,7 @@ import { AppContext } from '../../util/hooks/AppContext';
 import './SearchForms.scss';
 
 const UserSearchForm: React.FC = () => {
-	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);
+	const { user, players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
@@ -64,85 +62,77 @@ const UserSearchForm: React.FC = () => {
 		setShowOptions(false);
 	}
 
-	const useStyles = makeStyles({
-		inputLabel: {
-			color: mainTextColor
-		}
-	});
-	const classes = useStyles();
-
 	const markup: JSX.Element = (
-		<HomeTheme>
-			<CenteredColored className="search-form-container">
-				<List>
-					<ListItem style={{ color: mainTextColor }} className="search-box list-item">
-						<TextField
-							label={players.length < 4 ? 'Find user' : 'Players selected'}
-							onChange={e => {
-								handleFormChange(e.target.value);
-							}}
-							value={searchFor}
-							InputLabelProps={{
-								className: classes.inputLabel
-							}}
-							InputProps={{
-								readOnly: players.length === 4,
-								endAdornment: (
-									<InputAdornment position="end">
-										<IconButton
-											style={{ color: mainTextColor }}
-											component="span"
-											onClick={() => {
-												showOptions ? setShowOptions(false) : searchForUser(searchFor);
+		<CenteredColored className="search-form-container">
+			<List>
+				<ListItem className="search-box list-item">
+					<TextField
+						label={players.length < 4 ? 'Find user' : 'Players selected'}
+						onChange={e => {
+							handleFormChange(e.target.value);
+						}}
+						value={searchFor}
+						InputLabelProps={{
+							color: 'primary'
+						}}
+						InputProps={{
+							color: 'secondary',
+							readOnly: players.length === 4,
+							endAdornment: (
+								<InputAdornment position="end" style={{ marginRight: -11 }}>
+									<IconButton
+										color="secondary"
+										component="span"
+										onClick={() => {
+											showOptions ? setShowOptions(false) : searchForUser(searchFor);
+										}}
+										disabled={searchFor.trim() === ''}
+									>
+										{showOptions ? <KeyboardArrowDownIcon /> : <ChevronRightIcon />}
+									</IconButton>
+								</InputAdornment>
+							)
+						}}
+						onKeyPress={e => {
+							if (searchFor.trim() !== '' && e.key === 'Enter') {
+								searchForUser(searchFor);
+							}
+						}}
+					/>
+				</ListItem>
+				<Collapse in={showOptions} timeout={300} unmountOnExit className="search-box list-item">
+					{foundUsers.length > 0 &&
+						foundUsers.map(foundUser => {
+							if (user && user.id !== foundUser.id && notSelected(foundUser)) {
+								return (
+									<ListItem
+										className="user list-item"
+										button
+										key={foundUser.id}
+										style={{
+											borderRadius: '5px'
+										}}
+										onClick={() => {
+											handleSelect(foundUser);
+										}}
+									>
+										<ListItemText primary={foundUser.username} />
+										<ListItemIcon
+											style={{
+												justifyContent: 'flex-end'
 											}}
-											disabled={searchFor.trim() === ''}
 										>
-											{showOptions ? <KeyboardArrowDownIcon /> : <ChevronRightIcon />}
-										</IconButton>
-									</InputAdornment>
-								)
-							}}
-							onKeyPress={e => {
-								if (searchFor.trim() !== '' && e.key === 'Enter') {
-									searchForUser(searchFor);
-								}
-							}}
-						/>
-					</ListItem>
-					<Collapse in={showOptions} timeout={300} unmountOnExit className="search-box list-item">
-						{foundUsers.length > 0 &&
-							foundUsers.map(foundUser => {
-								if (user && user.id !== foundUser.id && notSelected(foundUser)) {
-									return (
-										<ListItem
-											style={{ color: mainTextColor }}
-											className="user list-item"
-											button
-											key={foundUser.id}
-											onClick={() => {
-												handleSelect(foundUser);
-											}}
-										>
-											<ListItemText primary={foundUser.username} />
-											<ListItemIcon
-												style={{
-													color: mainTextColor,
-													justifyContent: 'flex-end',
-													paddingRight: '3px'
-												}}
-											>
-												<FaceIcon />
-											</ListItemIcon>
-										</ListItem>
-									);
-								} else {
-									return null;
-								}
-							})}
-					</Collapse>
-				</List>
-			</CenteredColored>
-		</HomeTheme>
+											<FaceIcon color="primary" />
+										</ListItemIcon>
+									</ListItem>
+								);
+							} else {
+								return null;
+							}
+						})}
+				</Collapse>
+			</List>
+		</CenteredColored>
 	);
 
 	return markup;

@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -20,7 +21,7 @@ import Login from '../Login';
 import './newGame.scss';
 
 const NewGame = () => {
-	const { user, handleUserState, players, setPlayers, setGameId, mainTextColor } = useContext(AppContext);
+	const { user, handleUserState, players, setPlayers, setGameId } = useContext(AppContext);
 	const [startedGame, setStartedGame] = useState(false);
 
 	useEffect(() => {
@@ -61,45 +62,33 @@ const NewGame = () => {
 		<HomeTheme>
 			<Main>
 				<Centered>
-					<Typography style={{ color: mainTextColor }} variant="h6">
-						Create a new game
-					</Typography>
+					<Typography variant="h6">{`Create a new game`}</Typography>
 					<div className="panel-segment">
 						<UserSearchForm />
 					</div>
 					<div className="panel-segment">
-						<Typography style={{ color: mainTextColor }} variant="subtitle1">
-							Players:
-						</Typography>
+						<Typography variant="subtitle1">{`Players:`}</Typography>
 						<List className="list">
 							{user &&
 								players.length > 0 &&
 								players.map(player => {
 									return player ? (
-										<ListItem
-											style={{ color: mainTextColor }}
-											className="user list-item"
-											key={player.id}
-										>
-											<ListItemText style={{ color: mainTextColor }} primary={player.username} />
+										<ListItem className="user list-item" key={player.id}>
+											<ListItemText primary={player.username} />
 											{player.username === user.username ? (
-												<IconButton
-													disabled
+												<ListItemIcon
 													style={{
-														color: mainTextColor,
-														justifyContent: 'flex-end',
-														paddingRight: '3px'
+														justifyContent: 'flex-end'
 													}}
 												>
-													<MoodIcon />
-												</IconButton>
+													<MoodIcon color="primary" />
+												</ListItemIcon>
 											) : (
 												<IconButton
-													color="primary"
 													onClick={() => handleRemovePlayer(player)}
-													style={{ justifyContent: 'flex-end', paddingRight: '3px' }}
+													style={{ justifyContent: 'flex-end', marginRight: -12 }}
 												>
-													<ClearIcon />
+													<ClearIcon color="secondary" />
 												</IconButton>
 											)}
 										</ListItem>
@@ -108,13 +97,7 @@ const NewGame = () => {
 						</List>
 					</div>
 					<br></br>
-					<Button
-						style={{ color: mainTextColor }}
-						size="medium"
-						variant="text"
-						onClick={handleButtonClick}
-						disabled={players.length < 4}
-					>
+					<Button size="medium" variant="text" onClick={handleButtonClick} disabled={players.length < 4}>
 						{startedGame ? 'Join game' : 'Start game'}
 					</Button>
 					<br></br>

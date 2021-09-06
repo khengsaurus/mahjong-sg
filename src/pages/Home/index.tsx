@@ -11,7 +11,7 @@ import Login from '../Login';
 import './home.scss';
 
 const Home = () => {
-	const { user, handleUserState, logout, mainTextColor } = useContext(AppContext);
+	const { user, handleUserState, logout } = useContext(AppContext);
 	const [showSettings, setShowSettings] = useState(false);
 
 	useEffect(() => {
@@ -24,9 +24,7 @@ const Home = () => {
 	let markup = (
 		<HomeTheme>
 			<Main>
-				{user && (
-					<Typography style={{ color: mainTextColor }} variant="h6">{`Welcome ${user.username}`}</Typography>
-				)}
+				{user && <Typography variant="h6">{`Welcome ${user.username}`}</Typography>}
 				<br></br>
 				<Button variant={'text'} onClick={() => history.push(Pages.newGame)}>
 					New game

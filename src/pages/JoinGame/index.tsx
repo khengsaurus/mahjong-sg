@@ -1,3 +1,4 @@
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -8,6 +9,7 @@ import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import { Pages } from '../../global/enums';
+import { HomeTheme } from '../../global/MuiStyles';
 import { Centered, Main } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
@@ -47,33 +49,38 @@ const JoinGame = () => {
 	}
 
 	let markup = (
-		<Main>
-			<Centered className="join-game-panel">
-				<Typography variant="subtitle1">{`Available games:`}</Typography>
-				{user && gameInvites.length > 0 && (
-					<List dense className="list">
-						{gameInvites.map(game => {
-							return (
-								<ListItem
-									button
-									key={game.playersString + game.createdAt.toString()}
-									onClick={() => handleJoinGame(game)}
-								>
-									<ListItemText
-										primary={formatDateToDay(game.createdAt)}
-										secondary={game.playersString}
-									/>
-									<ArrowForwardIcon />
-								</ListItem>
-							);
-						})}
-					</List>
-				)}
-				<br></br>
-				<br></br>
-				<HomeButton />
-			</Centered>
-		</Main>
+		<HomeTheme>
+			<Main>
+				<Centered className="join-game-panel">
+					<Typography variant="subtitle1">{`Available games:`}</Typography>
+					{user && gameInvites.length > 0 && (
+						<List dense className="list">
+							{gameInvites.map(game => {
+								return (
+									<ListItem
+										button
+										key={game.playersString + game.createdAt.toString()}
+										onClick={() => handleJoinGame(game)}
+									>
+										<ListItemText
+											color="primary"
+											primary={formatDateToDay(game.createdAt)}
+											secondary={game.playersString}
+										/>
+										<IconButton color="primary" disabled>
+											<ArrowForwardIcon />
+										</IconButton>
+									</ListItem>
+								);
+							})}
+						</List>
+					)}
+					<br></br>
+					<br></br>
+					<HomeButton />
+				</Centered>
+			</Main>
+		</HomeTheme>
 	);
 
 	return user ? markup : <Login />;

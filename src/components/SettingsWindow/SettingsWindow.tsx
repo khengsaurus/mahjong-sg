@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext, useRef } from 'react';
 import { BackgroundColors, Sizes, TableColors, TileColors } from '../../global/enums';
-import { MuiStyles } from '../../global/MuiStyles';
+import { MuiStyles, TableTheme } from '../../global/MuiStyles';
 import { MainTransparent } from '../../global/StyledComponents';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -43,8 +43,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 		tableColor,
 		setTableColor,
 		tileBackColor,
-		setTileBackColor,
-		tableTextColor
+		setTileBackColor
 	} = useContext(AppContext);
 	const initialValues = useRef([backgroundColor, tableColor, tileBackColor]);
 	const preferences: Preference[] = [
@@ -77,7 +76,6 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 		}
 	];
 	function handleClose() {
-		console.log(initialValues.current);
 		if (
 			backgroundColor !== initialValues.current[0] ||
 			tableColor !== initialValues.current[1] ||
@@ -89,7 +87,6 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			FBService.updateUser(user)
 				.then(res => {
 					if (res) {
-						console.log(user);
 						signJwt(user);
 					}
 				})
@@ -101,100 +98,103 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 	}
 
 	return (
-		<MainTransparent>
-			<Dialog
-				open={show}
-				BackdropProps={{ invisible: true }}
-				onClose={handleClose}
-				PaperProps={{
-					style: {
-						...MuiStyles.modal,
-						backgroundColor: tableColor
-					}
-				}}
-			>
-				<DialogContent>
-					<IconButton
-						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
-						onClick={handleClose}
-					>
-						<CloseIcon />
-					</IconButton>
-					<FormControl component="fieldset">
-						{preferences.map(preference => {
-							return preference.size ? (
-								<div className="preference" key={`preference-${preference.label}`}>
-									<Typography variant="subtitle1" display="inline">
-										{`${preference.label}:`}
-									</Typography>
-									<Tabs
-										style={{
-											...MuiStyles.tabs,
-											display: 'inline-block'
-										}}
-										value={preference.size}
-										indicatorColor="primary" // TabIndicatorProps={{ style: { background: backgroundColor } }}
-									>
-										{Object.keys(Sizes).map(key => {
-											let size = Sizes[key];
-											return (
-												<Tab
-													style={{
-														...MuiStyles.tabOptions
-													}}
-													fullWidth={false}
-													key={size}
-													value={size}
-													label={size}
-													onClick={() => {
-														preference.handleSelect(size);
-													}}
-												/>
-											);
-										})}
-									</Tabs>
-								</div>
-							) : null;
-						})}
-						{preferences.map(preference => {
-							return preference.colors ? (
-								<div className="preference" key={`preference-${preference.label}`}>
-									<Typography variant="subtitle1" display="inline">
-										{`${preference.label}:`}
-									</Typography>
-									<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'white' }}>
+		<TableTheme>
+			<MainTransparent>
+				<Dialog
+					open={show}
+					BackdropProps={{ invisible: true }}
+					onClose={handleClose}
+					PaperProps={{
+						style: {
+							...MuiStyles.modal,
+							backgroundColor: tableColor
+						}
+					}}
+				>
+					<DialogContent>
+						<IconButton
+							color="primary"
+							style={{ position: 'absolute', top: 5, right: 5 }}
+							onClick={handleClose}
+						>
+							<CloseIcon />
+						</IconButton>
+						<FormControl component="fieldset">
+							{preferences.map(preference => {
+								return preference.size ? (
+									<div className="preference" key={`preference-${preference.label}`}>
+										<Typography variant="subtitle1" display="inline">
+											{`${preference.label}:`}
+										</Typography>
 										<Tabs
 											style={{
 												...MuiStyles.tabs,
 												display: 'inline-block'
 											}}
-											value={preference.selectedColor}
-											indicatorColor="primary"
+											value={preference.size}
+											TabIndicatorProps={{ style: { background: '#1976d2' } }} // indicatorColor="primary"
 										>
-											{preference.colors.map(rgb => {
+											{Object.keys(Sizes).map(key => {
+												let size = Sizes[key];
 												return (
 													<Tab
 														style={{
-															...MuiStyles.tabColorOptions,
-															backgroundColor: rgb
+															...MuiStyles.tabOptions
 														}}
-														key={rgb}
-														value={rgb}
+														fullWidth={false}
+														key={size}
+														value={size}
+														label={size}
 														onClick={() => {
-															preference.handleSelect(rgb);
+															preference.handleSelect(size);
 														}}
 													/>
 												);
 											})}
 										</Tabs>
-									</Paper>
-								</div>
-							) : null;
-						})}
-					</FormControl>
-				</DialogContent>
-			</Dialog>
-		</MainTransparent>
+									</div>
+								) : null;
+							})}
+							{preferences.map(preference => {
+								return preference.colors ? (
+									<div className="preference" key={`preference-${preference.label}`}>
+										<Typography variant="subtitle1" display="inline">
+											{`${preference.label}:`}
+										</Typography>
+										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'white' }}>
+											<Tabs
+												style={{
+													...MuiStyles.tabs,
+													display: 'inline-block'
+												}}
+												value={preference.selectedColor}
+												TabIndicatorProps={{ style: { background: '#1976d2' } }}
+											>
+												{preference.colors.map(rgb => {
+													return (
+														<Tab
+															style={{
+																...MuiStyles.tabColorOptions,
+																backgroundColor: rgb
+															}}
+															key={rgb}
+															value={rgb}
+															onClick={() => {
+																preference.handleSelect(rgb);
+															}}
+														/>
+													);
+												})}
+											</Tabs>
+										</Paper>
+									</div>
+								) : null;
+							})}
+						</FormControl>
+					</DialogContent>
+				</Dialog>
+			</MainTransparent>
+		</TableTheme>
 	);
 };
 

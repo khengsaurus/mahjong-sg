@@ -40,11 +40,6 @@ const LogBox = (props: LogBoxProps) => {
 			{logRef.current.map((log: Log, index) => {
 				return (
 					<CSSTransition key={`${index}`} timeout={250} classNames="move">
-						{/* <div className={log.msg.includes('sent') ? 'log pay' : 'log'}>{log.msg}</div> */}
-						{/* <div style={{ color: log.msg.includes('sent') ? tableTextColor : TextColors.green }}>
-							{log.msg}
-						</div> */}
-						{/* <div style={{ color: tableTextColor }}>{log.msg}</div> */}
 						<TableText>{log.msg}</TableText>
 					</CSSTransition>
 				);
