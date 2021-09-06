@@ -18,7 +18,7 @@ import './ControlsMedium.scss';
 import './ControlsSmall.scss';
 import HuDialog from './HuDialog';
 import PaymentWindow from './PaymentWindow';
-import SettingsWindow from './SettingsWindow';
+import SettingsWindow from '../SettingsWindow/SettingsWindow';
 import TopLeftControls from './TopLeftControls';
 import TopRightControls from './TopRightControls';
 

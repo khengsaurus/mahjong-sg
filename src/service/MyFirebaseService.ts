@@ -192,6 +192,18 @@ class FirebaseService {
 		});
 	}
 
+	updateUser(user: User): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			try {
+				const userRef = this.userRepr.doc(user.id);
+				userRef.set({ ...user });
+				resolve(true);
+			} catch (err) {
+				reject(new Error('FirebaseService - user doc was not updated: ' + err.msg));
+			}
+		});
+	}
+
 	/* ------------------------- User-game related ------------------------- */
 
 	async getInvites(user: User) {
@@ -223,6 +235,7 @@ class FirebaseService {
 	}
 
 	/* ------------------------- Game related ------------------------- */
+
 	async getGameById(game?: Game, gameId?: string) {
 		if (!game && !gameId) {
 			return null;

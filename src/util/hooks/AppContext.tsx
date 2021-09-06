@@ -10,6 +10,7 @@ interface AppContextInt {
 	user: User;
 	userEmail: string;
 	setUserEmail: (email: string) => void;
+	signJwt: (user: User) => void;
 	login: (user: User, existingJwt: boolean) => void;
 	logout: () => void;
 	handleUserState: () => void;
@@ -41,6 +42,7 @@ const initialContext: AppContextInt = {
 	user: null,
 	userEmail: '',
 	setUserEmail: (email: string) => {},
+	signJwt: (user: User) => {},
 	login: (user: User, existingJwt: boolean) => {},
 	logout: () => {},
 	handleUserState: async () => {},
@@ -83,23 +85,28 @@ export const AppContextProvider = (props: any) => {
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
 	const mainTextColor = useMemo(() => {
-		return [BackgroundColors.darker as string].includes(backgroundColor) ? TextColors.light : TextColors.dark;
+		return [BackgroundColors.darker, BackgroundColors.catalina].includes(backgroundColor)
+			? TextColors.light
+			: TextColors.dark;
 	}, [backgroundColor]);
 	const tableTextColor = useMemo(() => {
-		if ((TableColors.dark as string) === tableColor) {
+		if (TableColors.dark === tableColor) {
 		}
-		return [TableColors.dark as string].includes(tableColor) ? TextColors.light : TextColors.dark;
+		return [TableColors.dark].includes(tableColor) ? TextColors.light : TextColors.dark;
 	}, [tableColor]);
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function handleUserState() {
-		let verifiedUser = resolveJwt();
 		if (!FBService.userAuthenticated()) {
 			logout();
-		} else if ((!user && verifiedUser) || (user && user.username !== verifiedUser.username)) {
-			login(verifiedUser, true);
 		} else {
-			logout();
+			resolveJwt().then(verifiedUser => {
+				if (verifiedUser) {
+					login(verifiedUser, true);
+				} else {
+					logout();
+				}
+			});
 		}
 	}
 
@@ -112,14 +119,20 @@ export const AppContextProvider = (props: any) => {
 	}
 
 	// Looks for a user token in localStorage, reads it and returns User
-	function resolveJwt() {
-		try {
-			let token = localStorage.getItem('jwt');
-			return token ? objToUser(jwt.verify(token, secretKey) as JwtData) : null;
-		} catch (err) {
-			console.log('User token not found');
-			return null;
-		}
+	function resolveJwt(): Promise<User> {
+		return new Promise((resolve, reject) => {
+			let user: User;
+			try {
+				let token = localStorage.getItem('jwt');
+				user = token ? objToUser(jwt.verify(token, secretKey) as JwtData) : null;
+				if (user) {
+					handleUserContext(user);
+					resolve(user);
+				}
+			} catch (err) {
+				reject(new Error('User token not found: ' + err.msg));
+			}
+		});
 	}
 
 	function handleUserContext(user?: User) {
@@ -130,6 +143,9 @@ export const AppContextProvider = (props: any) => {
 		setHandSize(user ? user.handSize : null);
 		setTilesSize(user ? user.tilesSize : null);
 		setControlsSize(user ? user.controlsSize : null);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.darkBrown);
+		setTableColor(user ? user.tableColor : null);
+		setTileBackColor(user ? user.tileBackColor : null);
 		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.darkBrown);
 		setTableColor(user ? user.tableColor : null);
 		setTileBackColor(user ? user.tileBackColor : null);
@@ -174,6 +190,7 @@ export const AppContextProvider = (props: any) => {
 				user,
 				userEmail,
 				setUserEmail,
+				signJwt,
 				login,
 				logout,
 				handleUserState,

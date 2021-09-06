@@ -7,12 +7,13 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import { BackgroundColors, Sizes, TableColors, TileColors } from '../../global/enums';
 import { MuiStyles } from '../../global/MuiStyles';
 import { MainTransparent } from '../../global/StyledComponents';
+import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import './ControlsMedium.scss';
+import '../../App.scss';
 
 interface Props {
 	onClose: () => void;
@@ -29,6 +30,8 @@ interface Preference {
 
 const SettingsWindow = ({ onClose, show }: Props) => {
 	const {
+		user,
+		signJwt,
 		controlsSize,
 		setControlsSize,
 		handSize,
@@ -43,6 +46,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 		setTileBackColor,
 		tableTextColor
 	} = useContext(AppContext);
+	const initialValues = useRef([backgroundColor, tableColor, tileBackColor]);
 	const preferences: Preference[] = [
 		{ label: 'Controls', size: controlsSize, handleSelect: setControlsSize },
 		{ label: 'Hand', size: handSize, handleSelect: setHandSize },
@@ -72,13 +76,36 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			})
 		}
 	];
+	function handleClose() {
+		console.log(initialValues.current);
+		if (
+			backgroundColor !== initialValues.current[0] ||
+			tableColor !== initialValues.current[1] ||
+			tileBackColor !== initialValues.current[2]
+		) {
+			user.backgroundColor = backgroundColor;
+			user.tableColor = tableColor;
+			user.tileBackColor = tileBackColor;
+			FBService.updateUser(user)
+				.then(res => {
+					if (res) {
+						console.log(user);
+						signJwt(user);
+					}
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		}
+		onClose();
+	}
 
 	return (
 		<MainTransparent>
 			<Dialog
 				open={show}
 				BackdropProps={{ invisible: true }}
-				onClose={onClose}
+				onClose={handleClose}
 				PaperProps={{
 					style: {
 						...MuiStyles.modal,
@@ -89,7 +116,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 				<DialogContent>
 					<IconButton
 						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
-						onClick={onClose}
+						onClick={handleClose}
 					>
 						<CloseIcon />
 					</IconButton>
