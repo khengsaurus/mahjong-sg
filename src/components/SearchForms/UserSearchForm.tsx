@@ -5,10 +5,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useContext, useState } from 'react';
 import { CenteredColored } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
@@ -17,7 +17,7 @@ import { AppContext } from '../../util/hooks/AppContext';
 import './SearchForms.scss';
 
 const UserSearchForm: React.FC = () => {
-	const { user, players, setPlayers } = useContext(AppContext);
+	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
@@ -62,7 +62,23 @@ const UserSearchForm: React.FC = () => {
 		setShowOptions(false);
 	}
 
-	const markup: JSX.Element = (
+	const useStyles = makeStyles((theme: Theme) =>
+		createStyles({
+			text: {
+				color: mainTextColor
+			},
+			rightChevron: {
+				transition: '100ms'
+			},
+			downChevron: {
+				transition: '100ms',
+				transform: 'rotate(90deg)'
+			}
+		})
+	);
+	const classes = useStyles();
+
+	return (
 		<CenteredColored className="search-form-container">
 			<List>
 				<ListItem className="search-box list-item">
@@ -73,7 +89,7 @@ const UserSearchForm: React.FC = () => {
 						}}
 						value={searchFor}
 						InputLabelProps={{
-							color: 'primary'
+							className: classes.text
 						}}
 						InputProps={{
 							color: 'secondary',
@@ -88,7 +104,10 @@ const UserSearchForm: React.FC = () => {
 										}}
 										disabled={searchFor.trim() === ''}
 									>
-										{showOptions ? <KeyboardArrowDownIcon /> : <ChevronRightIcon />}
+										<ChevronRightIcon
+											className={showOptions ? classes.downChevron : classes.rightChevron}
+											color={showOptions ? 'secondary' : 'primary'}
+										/>
 									</IconButton>
 								</InputAdornment>
 							)
@@ -116,7 +135,7 @@ const UserSearchForm: React.FC = () => {
 											handleSelect(foundUser);
 										}}
 									>
-										<ListItemText primary={foundUser.username} />
+										<ListItemText primary={foundUser.username} className={classes.text} />
 										<ListItemIcon
 											style={{
 												justifyContent: 'flex-end'
@@ -134,8 +153,6 @@ const UserSearchForm: React.FC = () => {
 			</List>
 		</CenteredColored>
 	);
-
-	return markup;
 };
 
 export default UserSearchForm;

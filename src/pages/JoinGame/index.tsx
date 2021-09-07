@@ -19,7 +19,7 @@ import Login from '../Login';
 import './JoinGame.scss';
 
 const JoinGame = () => {
-	const { user, setGameId, handleUserState } = useContext(AppContext);
+	const { user, setGameId, handleUserState, mainTextColor } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 
 	useEffect(() => {
@@ -63,12 +63,16 @@ const JoinGame = () => {
 										onClick={() => handleJoinGame(game)}
 									>
 										<ListItemText
-											color="primary"
-											primary={formatDateToDay(game.createdAt)}
-											secondary={game.playersString}
+											primary={
+												<Typography variant="body1">
+													{formatDateToDay(game.createdAt)}
+												</Typography>
+											}
+											secondary={<Typography variant="body2">{game.playersString}</Typography>}
+											style={{ color: mainTextColor }}
 										/>
-										<IconButton color="primary" disabled>
-											<ArrowForwardIcon />
+										<IconButton disabled>
+											<ArrowForwardIcon color="primary" />
 										</IconButton>
 									</ListItem>
 								);
