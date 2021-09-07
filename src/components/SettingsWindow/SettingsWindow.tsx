@@ -132,7 +132,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 												display: 'inline-block'
 											}}
 											value={preference.size}
-											TabIndicatorProps={{ style: { background: '#1976d2' } }} // indicatorColor="primary"
+											indicatorColor="secondary"
 										>
 											{Object.keys(Sizes).map(key => {
 												let size = Sizes[key];
@@ -168,7 +168,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 													display: 'inline-block'
 												}}
 												value={preference.selectedColor}
-												TabIndicatorProps={{ style: { background: '#1976d2' } }}
+												indicatorColor="secondary"
 											>
 												{preference.colors.map(rgb => {
 													return (

@@ -68,10 +68,10 @@ const UserSearchForm: React.FC = () => {
 				color: mainTextColor
 			},
 			rightChevron: {
-				transition: '100ms'
+				transition: '200ms'
 			},
 			downChevron: {
-				transition: '100ms',
+				transition: '200ms',
 				transform: 'rotate(90deg)'
 			}
 		})

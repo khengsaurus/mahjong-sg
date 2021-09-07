@@ -41,7 +41,7 @@ export enum Sizes {
 }
 
 export enum BackgroundColors {
-	gainsboro = 'rgb(220, 220, 220)',
+	gainsboro = 'rgb(210, 210, 210)',
 	darker = 'rgb(30, 30, 30)',
 	// lightBrown = 'rgb(190, 175, 155)',
 	darkBrown = 'rgb(140, 125, 105)',

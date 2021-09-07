@@ -1,16 +1,56 @@
-import { blue } from '@material-ui/core/colors';
+import { blue, indigo } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../util/hooks/AppContext';
+import { TextColors } from './enums';
 
 export const HomeTheme = (props: any) => {
 	const { mainTextColor } = useContext(AppContext);
+	const highlightColor = useMemo(() => {
+		return mainTextColor === TextColors.light ? blue[700] : indigo[500];
+	}, [mainTextColor]);
+
 	const theme = createTheme({
 		overrides: {
 			MuiInput: {
 				underline: {
-					'&&:hover::before': {
+					'&&::before': {
 						borderColor: mainTextColor
+					},
+					'&&:hover::before': {
+						borderColor: highlightColor
+					}
+				}
+			},
+			MuiInputLabel: {
+				shrink: {
+					'&.MuiInputLabel-animated': {
+						color: `${highlightColor} !important`
+					}
+				}
+			},
+			MuiButton: {
+				root: {
+					'&:hover': {
+						backgroundColor: 'transparent !imporant',
+						color: `${highlightColor} !important`
+					}
+				}
+			},
+			MuiIconButton: {
+				root: {
+					color: `${mainTextColor} !important`,
+					'&:hover': {
+						color: `${highlightColor} !important`
+					}
+				}
+			},
+			MuiListItem: {
+				root: {
+					color: mainTextColor,
+					'&:hover': {
+						backgroundColor: 'transparent !imporant',
+						color: `${highlightColor} !important`
 					}
 				}
 			}
@@ -19,7 +59,9 @@ export const HomeTheme = (props: any) => {
 			primary: {
 				main: mainTextColor
 			},
-			secondary: blue,
+			secondary: {
+				main: highlightColor
+			},
 			text: {
 				primary: mainTextColor
 			}
@@ -38,12 +80,18 @@ export const HomeTheme = (props: any) => {
 
 export const TableTheme = (props: any) => {
 	const { tableTextColor } = useContext(AppContext);
+	const highlightColor = useMemo(() => {
+		return tableTextColor === TextColors.light ? blue[700] : indigo[500];
+	}, [tableTextColor]);
+
 	const theme = createTheme({
 		palette: {
 			primary: {
 				main: tableTextColor
 			},
-			secondary: blue,
+			secondary: {
+				main: highlightColor
+			},
 			text: {
 				primary: tableTextColor
 			}
