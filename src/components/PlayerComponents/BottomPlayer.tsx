@@ -1,5 +1,4 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import { isEqual } from 'lodash';
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
 import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
@@ -17,6 +16,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 	const { handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
+
 	function selectTile(tile: TileI) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
 			setSelectedTiles([...selectedTiles, tile]);
@@ -107,4 +107,4 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 	);
 };
 
-export default React.memo(BottomPlayer, isEqual);
+export default BottomPlayer;

@@ -1,10 +1,9 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import isEqual from 'lodash.isequal';
 import React, { useMemo } from 'react';
 import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { HiddenTile } from '../../global/StyledComponents';
-import { generateNumberArray } from '../../util/utilFns';
+import { comparePlayerProps, generateNumberArray } from '../../util/utilFns';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
@@ -14,6 +13,8 @@ const TopPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
 	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
+	console.log('Rendering top');
+
 	return (
 		<div className={`row-section-${tilesSize || Sizes.medium}`}>
 			{/*------------------------------ Hidden tiles ------------------------------*/}
@@ -79,4 +80,4 @@ const TopPlayer = (props: PlayerComponentProps) => {
 	);
 };
 
-export default React.memo(TopPlayer, isEqual);
+export default React.memo(TopPlayer, comparePlayerProps);

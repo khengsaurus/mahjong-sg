@@ -1,9 +1,9 @@
-import './playerComponentsSmall.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsLarge.scss';
-import getTileSrc from '../../images';
 import isEmpty from 'lodash.isempty';
 import { Segments } from '../../global/enums';
+import getTileSrc from '../../images';
+import './playerComponentsLarge.scss';
+import './playerComponentsMedium.scss';
+import './playerComponentsSmall.scss';
 
 interface ShownTileProps {
 	tile: TileI;
@@ -37,9 +37,9 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					className={`${divClass} ${
-						highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-					} ${classSuffix || ``}`}
+					className={`${divClass} ${highlight || (!isEmpty(last) && last.id === tile.id) ? `last` : ``} ${
+						classSuffix || ``
+					}`}
 					src={getTileSrc(tile.card)}
 					alt="tile"
 				/>
@@ -48,9 +48,9 @@ const ShownTile = (props: ShownTileProps) => {
 			return (
 				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
-						className={`${bgClass} ${
-							highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-						} ${classSuffix || ``}`}
+						className={`${bgClass} ${highlight || (!isEmpty(last) && last.id === tile.id) ? `last` : ``} ${
+							classSuffix || ``
+						}`}
 						src={getTileSrc(tile.card)}
 						alt="tile"
 					/>

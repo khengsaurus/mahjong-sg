@@ -1,7 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
-import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
+import { BackgroundColors, PlayerComponentProps, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 
@@ -226,4 +226,21 @@ export function findOpp(n: number) {
 
 export function validateEmail(email: string) {
 	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
+}
+
+//FIXME: FIXME: FIXME: FIXME: FIXME:
+export function comparePlayerProps(prev: PlayerComponentProps, next: PlayerComponentProps) {
+	return (
+		prev?.player?.id === next?.player?.id &&
+		prev?.player?.discardedTiles?.length === next?.player?.discardedTiles?.length &&
+		prev?.player?.hiddenTiles?.length === next?.player?.hiddenTiles?.length &&
+		prev?.player?.unusedTiles === next?.player?.unusedTiles &&
+		prev?.player?.lastTakenTile?.uuid === next?.player?.lastTakenTile?.uuid &&
+		prev?.player?.shownTiles?.length === next?.player?.shownTiles?.length &&
+		prev?.player?.showTiles === next?.player?.showTiles &&
+		prev?.player?.lastTakenTile?.id === next?.player?.lastTakenTile?.id &&
+		prev?.player?.discardedTiles[0]?.id === next?.player?.discardedTiles[0]?.id &&
+		prev?.hasFront === next?.hasFront &&
+		prev?.hasBack === next?.hasBack
+	);
 }

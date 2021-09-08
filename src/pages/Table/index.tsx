@@ -8,6 +8,7 @@ import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
 import LeftPlayer from '../../components/PlayerComponents/LeftPlayer';
 import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
+import { HomeTheme } from '../../global/MuiStyles';
 import { Main, TableDiv, Wind } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
@@ -147,24 +148,28 @@ const Table = () => {
 			);
 		} else {
 			return (
-				<Main>
-					<Typography variant="h6">{`Game has not started`}</Typography>
-					<br></br>
-					<HomeButton />
-				</Main>
+				<HomeTheme>
+					<Main>
+						<Typography variant="h6">{`Game has not started`}</Typography>
+						<br></br>
+						<HomeButton />
+					</Main>
+				</HomeTheme>
 			);
 		}
 	};
 
 	const noActiveGame = () => {
 		return (
-			<Main>
-				<div className="rotated">
-					<Typography variant="h6">{`No ongoing game`}</Typography>
-					<br></br>
-					<HomeButton />
-				</div>
-			</Main>
+			<HomeTheme>
+				<Main>
+					<div className="rotated">
+						<Typography variant="h6">{`No ongoing game`}</Typography>
+						<br></br>
+						<HomeButton />
+					</div>
+				</Main>
+			</HomeTheme>
 		);
 	};
 

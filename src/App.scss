@@ -56,7 +56,7 @@ $log-grey: $grey-standard;
 $log-green: rgb(0, 120, 10);
 $log-dark: rgb(30, 30, 30);
 
-$radial-gradient-gold: radial-gradient($color-tile-front #d8ba85, #ffffff, $color-tile-front);
+$radial-gradient-gold: radial-gradient($color-tile-front, #d8ba85, #ffffff, $color-tile-front);
 $radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
 
 $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
