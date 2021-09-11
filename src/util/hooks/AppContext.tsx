@@ -60,11 +60,11 @@ const initialContext: AppContextInt = {
 	setTilesSize: (size: Sizes) => {},
 	controlsSize: Sizes.medium,
 	setControlsSize: (size: Sizes) => {},
-	backgroundColor: BackgroundColors.darkBrown,
+	backgroundColor: BackgroundColors.brown,
 	setBackgroundColor: (color: BackgroundColors) => {},
-	tableColor: TableColors.lightBrown,
+	tableColor: TableColors.brown,
 	setTableColor: (color: TableColors) => {},
-	tileBackColor: TileColors.teal,
+	tileBackColor: TileColors.green,
 	setTileBackColor: (color: TileColors) => {},
 	tableTextColor: TextColors.dark
 };
@@ -81,16 +81,18 @@ export const AppContextProvider = (props: any) => {
 	const [handSize, setHandSize] = useState<Sizes>();
 	const [tilesSize, setTilesSize] = useState<Sizes>();
 	const [controlsSize, setControlsSize] = useState<Sizes>();
-	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.darkBrown);
+	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.brown);
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
 	const mainTextColor = useMemo(() => {
-		return [BackgroundColors.darker, BackgroundColors.catalina, BackgroundColors.maroon].includes(backgroundColor)
+		return [BackgroundColors.dark, BackgroundColors.green, BackgroundColors.blue, BackgroundColors.red].includes(
+			backgroundColor
+		)
 			? TextColors.light
 			: TextColors.dark;
 	}, [backgroundColor]);
 	const tableTextColor = useMemo(() => {
-		return [TableColors.dark, TableColors.muted].includes(tableColor) ? TextColors.light : TextColors.dark;
+		return [TableColors.dark, TableColors.red].includes(tableColor) ? TextColors.light : TextColors.dark;
 	}, [tableColor]);
 	const secretKey = 'shouldBeServerSideKey';
 
@@ -141,10 +143,10 @@ export const AppContextProvider = (props: any) => {
 		setHandSize(user ? user.handSize : null);
 		setTilesSize(user ? user.tilesSize : null);
 		setControlsSize(user ? user.controlsSize : null);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.darkBrown);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.brown);
 		setTableColor(user ? user.tableColor : null);
 		setTileBackColor(user ? user.tileBackColor : null);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.darkBrown);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.brown);
 		setTableColor(user ? user.tableColor : null);
 		setTileBackColor(user ? user.tileBackColor : null);
 	}

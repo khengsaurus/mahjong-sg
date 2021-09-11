@@ -129,10 +129,10 @@ class FirebaseService {
 					handSize: Sizes.medium,
 					tilesSize: Sizes.medium,
 					controlsSize: Sizes.medium,
-					backgroundColor: BackgroundColors.darkBrown,
-					tableColor: TableColors.lightBrown,
-					tileBackColor: TileColors.teal,
-					tileFrontColor: TileColors.white,
+					backgroundColor: BackgroundColors.brown,
+					tableColor: TableColors.brown,
+					tileBackColor: TileColors.green,
+					tileFrontColor: TileColors.light,
 					decoration: Decorations.default,
 					groups: []
 				});

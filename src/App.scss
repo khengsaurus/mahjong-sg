@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital@0;1&display=swap');
 $main-padding: 2px;
 $panel-segment-width: 200px;
 $wind-font-size: 60px;
@@ -7,7 +8,8 @@ $white-smoke: rgb(200, 200, 200);
 $brown-blanchedalmond: blanchedalmond;
 $brown-bisque: bisque;
 $brown-wheat: wheat;
-$brown-dark: rgb(190, 175, 155);
+$brown-dark: rgb(160, 149, 133);
+$purple2: rgb(142, 80, 117);
 $brown-medium: rgb(165, 150, 130);
 $brown-darker: rgb(140, 125, 105);
 $brown-burlywood: burlywood;
@@ -17,6 +19,7 @@ $maroon: rgb(125, 47, 47);
 $blue-cornflower: rgb(100, 149, 237);
 $blue-royal: rgb(65, 105, 225);
 $blue-steel: steelblue;
+$blue-denim: rgb(95, 130, 165);
 $blue-catalina: rgb(38, 61, 96);
 $blue-glaucous: rgb(96, 130, 182);
 $gold: gold;
@@ -37,7 +40,7 @@ $red-muted: rgb(140, 80, 70);
 $red-venetian: rgb(152, 50, 32);
 
 $green-sea: rgb(46, 139, 87);
-$green-fern: rgb(62, 120, 59);
+$green-fern: rgb(40, 85, 95);
 $green-fern-dark: rgb(80, 110, 80);
 
 /*-------------------- Color vars --------------------*/
@@ -178,24 +181,6 @@ $rotate-simple-180: rotate(180deg);
 	background: $radial-gradient-gold;
 	background-size: 400% 400%;
 	animation: linear-gradient 6s ease infinite;
-}
-
-.main {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	background-color: $color-background;
-
-	&.transparent {
-		background-color: transparent;
-	}
 }
 
 .list-item {

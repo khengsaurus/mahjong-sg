@@ -8,7 +8,6 @@ export interface PlayerComponentProps {
 	isPlayerTurn?: boolean;
 	lastThrown?: TileI;
 	tilesSize?: Sizes;
-	handSize?: Sizes;
 }
 
 export enum Status {
@@ -24,7 +23,8 @@ export enum Pages {
 	home = '/Home',
 	newGame = '/NewGame',
 	joinGame = '/JoinGame',
-	table = '/Table'
+	table = '/Table',
+	test = '/Test'
 }
 
 export enum Segments {
@@ -34,6 +34,11 @@ export enum Segments {
 	left = 'left'
 }
 
+export enum FrontBackTag {
+	front = 'front',
+	back = 'back'
+}
+
 export enum Sizes {
 	small = 'small',
 	medium = 'medium',
@@ -41,34 +46,30 @@ export enum Sizes {
 }
 
 export enum BackgroundColors {
-	gainsboro = 'rgb(210, 210, 210)',
-	darker = 'rgb(30, 30, 30)',
-	// lightBrown = 'rgb(190, 175, 155)',
-	darkBrown = 'rgb(140, 125, 105)',
-	// steel = 'steelblue',
-	// glaucous = 'rgb(96, 130, 182)',
-	catalina = 'rgb(38, 61, 96)',
-	royal = 'rgb(150, 99, 130)',
-	maroon = 'rgb(125, 47, 47)'
+	dark = 'rgb(30, 30, 30)',
+	brown = 'rgb(140, 125, 105)',
+	green = 'rgb(40, 90, 85)',
+	red = 'rgb(125, 50, 50)',
+	purple = 'rgb(142, 80, 118)',
+	blue = 'rgb(38, 61, 96)'
 }
 
 export enum TableColors {
-	// light = 'rgb(200, 200, 200)',
 	dark = 'rgb(50, 50, 50)',
-	lightBrown = 'rgb(190, 175, 155)',
-	fern = 'rgb(80, 110, 80)',
-	denim = 'rgb(111, 143, 175)',
-	purple = 'rgb(152, 118, 152)',
-	muted = 'rgb(140, 80, 70)'
+	brown = 'rgb(160, 149, 133)',
+	green = 'rgb(80, 110, 80)',
+	red = 'rgb(140, 80, 70)',
+	purple = 'rgb(135, 100, 155)',
+	blue = 'rgb(95, 110, 160)'
 }
 
 export enum TileColors {
-	white = 'gainsboro',
-	grey = 'grey',
-	teal = 'teal',
-	steel = 'steelblue',
-	purple = 'rgb(128, 0, 128)',
-	red = '	rgb(152, 50, 32)'
+	dark = 'grey',
+	light = 'gainsboro',
+	green = 'teal',
+	red = 'rgb(150, 65, 50)',
+	purple = 'rgb(106, 62, 128)',
+	blue = 'rgb(96, 130, 182)'
 }
 
 export enum TextColors {

@@ -1,9 +1,10 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React, { useMemo } from 'react';
-import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { HiddenTile } from '../../global/StyledComponents';
-import { comparePlayerProps, generateNumberArray } from '../../util/utilFns';
+import React from 'react';
+import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { comparePlayerProps } from '../../util/utilFns';
+import HiddenHand from './HiddenTiles/HiddenHand';
+import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
@@ -11,8 +12,7 @@ import ShownTile from './ShownTile';
 
 const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
-	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
-	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
+	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 	console.log('Rendering right');
 
 	return (
@@ -34,41 +34,32 @@ const RightPlayer = (props: PlayerComponentProps) => {
 					)}
 				</div>
 			) : (
-				<div className="vtsh">
-					{player.allHiddenTiles().map((tile: TileI) => {
-						return <HiddenTile key={tile.uuid} className="vth" />;
-					})}
-				</div>
+				<HiddenHand tiles={player.allHiddenTiles().length} segment={Segments.right} />
 			)}
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
 			<div className="vtss">
 				{player.shownTiles.map((tile: TileI) => {
-					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment={Segments.right} last={lastThrown} />
-					) : null;
-				})}
-				{player.shownTiles.map((tile: TileI) => {
-					return tile.suit === '花' || tile.suit === '动物' ? (
-						<ShownTile
-							key={tile.uuid}
-							tile={tile}
-							segment={Segments.right}
-							classSuffix={
-								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
-							}
-						/>
-					) : null;
+					if (tile.suit === '花' || tile.suit === '动物') {
+						return (
+							<ShownTile
+								key={tile.uuid}
+								tile={tile}
+								segment={Segments.right}
+								classSuffix={
+									tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
+								}
+							/>
+						);
+					} else {
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segments.right} last={lastThrown} />;
+					}
 				})}
 				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}
-			<div className={`vtsh unused right ${frontBackTag}`}>
-				{unusedTiles.map(i => {
-					return <HiddenTile key={`right-unused-${i}`} className="vth" />;
-				})}
-			</div>
+			<UnusedTiles tiles={player.unusedTiles} segment={Segments.right} tag={frontBackTag} />
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="vtss discarded right">

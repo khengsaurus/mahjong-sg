@@ -20,7 +20,7 @@ const Login = () => {
 				</div>
 			)}
 			<Button
-				variant="outlined"
+				variant="text"
 				onClick={() => {
 					setShowRegister(!showRegister);
 				}}

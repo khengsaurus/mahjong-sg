@@ -50,7 +50,7 @@ const Announcement = (props: Props) => {
 					playerSeat === Number(game.dealer) && (
 						<Button
 							style={{ color: tableTextColor }}
-							variant="outlined"
+							variant="text"
 							size="small"
 							onClick={nextRound}
 							autoFocus

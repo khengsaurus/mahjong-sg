@@ -1,21 +1,19 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React, { useContext, useMemo } from 'react';
-import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { HiddenTile } from '../../global/StyledComponents';
+import React, { useContext } from 'react';
+import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
-import { generateNumberArray } from '../../util/utilFns';
 import { HandTile } from './HandTile';
+import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
 const BottomPlayer = (props: PlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
-	const { handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
-	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
+	const { player, dealer, hasFront, hasBack, lastThrown } = props;
+	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 
 	function selectTile(tile: TileI) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
@@ -91,11 +89,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}
-			<div className={`htsh unused bottom ${frontBackTag}`}>
-				{unusedTiles.map(i => {
-					return <HiddenTile key={`bottom-unused-${i}`} className="vth" />;
-				})}
-			</div>
+			<UnusedTiles tiles={player.unusedTiles} segment={Segments.bottom} tag={frontBackTag} />
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss">

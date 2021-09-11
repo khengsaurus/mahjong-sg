@@ -90,55 +90,74 @@ const Table = () => {
 	const gameMarkup = () => {
 		if (game && game.stage !== 0) {
 			let currentWind = game.repr()[0];
+			let topPlayer = game.players[TopPlayerIndex];
+			let rightPlayer = game.players[RightPlayerIndex];
+			let bottomPlayer = game.players[BottomPlayerIndex];
+			let leftPlayer = game.players[LeftPlayerIndex];
 			return (
 				<Main>
 					<TableDiv>
 						<Wind className="wind-background">{currentWind}</Wind>
-						<div className="left-player-container">
-							{game.players[LeftPlayerIndex] && (
-								<LeftPlayer
-									player={game.players[LeftPlayerIndex]}
-									dealer={dealer === LeftPlayerIndex}
-									hasFront={front === LeftPlayerIndex}
-									hasBack={back === LeftPlayerIndex}
-									lastThrown={game.lastThrown}
+						<div className="top-player-container">
+							{topPlayer && (
+								<TopPlayer
+									player={topPlayer}
+									dealer={dealer === TopPlayerIndex}
+									hasFront={front === TopPlayerIndex}
+									hasBack={back === TopPlayerIndex}
 									tilesSize={tilesSize}
+									lastThrown={
+										game.thrownBy === TopPlayerIndex || game.whoseMove === TopPlayerIndex
+											? game.lastThrown
+											: null
+									}
 								/>
 							)}
 						</div>
 						<div className="right-player-container">
-							{game.players[RightPlayerIndex] && (
+							{rightPlayer && (
 								<RightPlayer
-									player={game.players[RightPlayerIndex]}
+									player={rightPlayer}
 									dealer={dealer === RightPlayerIndex}
 									hasFront={front === RightPlayerIndex}
 									hasBack={back === RightPlayerIndex}
-									lastThrown={game.lastThrown}
 									tilesSize={tilesSize}
-								/>
-							)}
-						</div>
-						<div className="top-player-container">
-							{game.players[TopPlayerIndex] && (
-								<TopPlayer
-									player={game.players[TopPlayerIndex]}
-									dealer={dealer === TopPlayerIndex}
-									hasFront={front === TopPlayerIndex}
-									hasBack={back === TopPlayerIndex}
-									lastThrown={game.lastThrown}
-									tilesSize={tilesSize}
+									lastThrown={
+										game.thrownBy === RightPlayerIndex || game.whoseMove === RightPlayerIndex
+											? game.lastThrown
+											: null
+									}
 								/>
 							)}
 						</div>
 						<div className="bottom-player-container">
-							{game.players[BottomPlayerIndex] && (
+							{bottomPlayer && (
 								<BottomPlayer
-									player={game.players[BottomPlayerIndex]}
+									player={bottomPlayer}
 									dealer={dealer === BottomPlayerIndex}
 									hasFront={front === BottomPlayerIndex}
 									hasBack={back === BottomPlayerIndex}
-									lastThrown={game.lastThrown}
+									lastThrown={
+										game.thrownBy === BottomPlayerIndex || game.whoseMove === BottomPlayerIndex
+											? game.lastThrown
+											: null
+									}
+								/>
+							)}
+						</div>
+						<div className="left-player-container">
+							{leftPlayer && (
+								<LeftPlayer
+									player={leftPlayer}
+									dealer={dealer === LeftPlayerIndex}
+									hasFront={front === LeftPlayerIndex}
+									hasBack={back === LeftPlayerIndex}
 									tilesSize={tilesSize}
+									lastThrown={
+										game.thrownBy === LeftPlayerIndex || game.whoseMove === LeftPlayerIndex
+											? game.lastThrown
+											: null
+									}
 								/>
 							)}
 						</div>

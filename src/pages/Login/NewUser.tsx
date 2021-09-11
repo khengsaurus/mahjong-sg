@@ -65,7 +65,7 @@ const NewUser = () => {
 							<Field name="username" label="Username" component={FormField} />
 							<br></br>
 							<br></br>
-							<Button variant="outlined" disabled={values.username.trim() === ''} type="submit">
+							<Button variant="text" disabled={values.username.trim() === ''} type="submit">
 								Submit
 							</Button>
 							<br></br>

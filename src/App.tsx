@@ -10,6 +10,7 @@ import Table from './pages/Table';
 import { AppContextProvider } from './util/hooks/AppContext';
 import store from './util/store/store';
 import { Styled } from './global/StyledComponents';
+import './App.scss';
 
 export const history = createBrowserHistory();
 

@@ -44,12 +44,15 @@ const Controls = (props: ControlsProps) => {
 	const player: User = useSelector((state: Store) => state.player);
 	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs } = game;
 
+	// Logic to showHuDialog when user shows, leaves the game, then returns
 	useEffect(() => {
 		if (player && player.showTiles) {
-			showHuDialog();
+			if (!declareHu) {
+				showHuDialog();
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [player?.showTiles]);
 
 	/* ----------------------------------- Util ----------------------------------- */
 

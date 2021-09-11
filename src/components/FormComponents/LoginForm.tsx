@@ -57,7 +57,7 @@ const LoginForm: React.FC = () => {
 						<br></br>
 						<Button
 							autoFocus
-							variant="outlined"
+							variant="text"
 							disabled={values.email.trim() === '' || values.password.trim() === ''}
 							type="submit"
 						>

@@ -1,9 +1,10 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React, { useMemo } from 'react';
-import { PlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { HiddenTile } from '../../global/StyledComponents';
-import { comparePlayerProps, generateNumberArray } from '../../util/utilFns';
+import React from 'react';
+import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { comparePlayerProps } from '../../util/utilFns';
+import HiddenHand from './HiddenTiles/HiddenHand';
+import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
@@ -11,8 +12,7 @@ import ShownTile from './ShownTile';
 
 const TopPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
-	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
-	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
+	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 	console.log('Rendering top');
 
 	return (
@@ -34,11 +34,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 					)}
 				</div>
 			) : (
-				<div className="htsh">
-					{player.allHiddenTiles().map((tile: TileI) => {
-						return <HiddenTile key={tile.uuid} className="hth" />;
-					})}
-				</div>
+				<HiddenHand tiles={player.allHiddenTiles().length} segment={Segments.top} />
 			)}
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
@@ -64,11 +60,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}
-			<div className={`htsh unused ${frontBackTag}`}>
-				{unusedTiles.map(i => {
-					return <HiddenTile key={`top-unused-${i}`} className="hth" />;
-				})}
-			</div>
+			<UnusedTiles tiles={player.unusedTiles} segment={Segments.top} tag={frontBackTag} />
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss top">

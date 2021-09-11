@@ -98,7 +98,7 @@ const HuDialog = (props: Props) => {
 					<DialogActions>
 						<Button
 							style={{ color: tableTextColor }}
-							variant="outlined"
+							variant="text"
 							size="small"
 							onClick={hu}
 							disabled={!tai || game.hu.length === 3}

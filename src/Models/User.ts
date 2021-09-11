@@ -173,8 +173,17 @@ export class User {
 	discardedTilesContain(t: TileI): boolean {
 		return this.discardedTiles?.map(tile => tile.id).includes(t.id);
 	}
+	lastTakenTileUUID(): string {
+		let all = this.allHiddenTiles();
+		return all.length > 0 ? all[all.length - 1].uuid : '';
+	}
+	lastDiscardedTileUUID(): string {
+		let all = this.discardedTiles;
+		return all.length > 0 ? all[all.length - 1].uuid : '';
+	}
 	lastDiscardedTileIs(t: TileI): boolean {
-		return this.discardedTiles.length > 0 ? this.discardedTiles[this.discardedTiles.length - 1].id === t.id : false;
+		let all = this.discardedTiles;
+		return all.length > 0 ? all[all.length - 1].id === t.id : false;
 	}
 
 	/* ----------------------------------- Add ----------------------------------- */
