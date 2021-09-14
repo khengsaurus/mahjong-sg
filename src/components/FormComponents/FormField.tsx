@@ -11,7 +11,7 @@ interface Props extends FieldProps {
 	errorMsg: string;
 }
 
-export const FormField: React.FC<Props> = ({ field, label, type = 'string', errorMsg = '', isRequired }) => {
+const FormField: React.FC<Props> = ({ field, label, type = 'string', errorMsg = '', isRequired }) => {
 	return (
 		<TextField
 			required={isRequired}
@@ -23,3 +23,5 @@ export const FormField: React.FC<Props> = ({ field, label, type = 'string', erro
 		/>
 	);
 };
+
+export default FormField;

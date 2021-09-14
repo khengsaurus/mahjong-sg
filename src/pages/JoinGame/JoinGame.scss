@@ -1,20 +1,15 @@
 @import '../../App.scss';
 
 .join-game-panel {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
 	align-content: flex-start;
-	align-items: center;
-	text-align: center;
 	max-height: 80vh;
 	.list {
 		display: flex;
 		flex-direction: column;
-		max-height: 65vh;
+		max-height: 70vh;
 		margin: 10px 0;
 		width: 250px;
 		overflow: scroll;
-		@include default-border;
+		// @include default-border;
 	}
 }

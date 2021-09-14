@@ -1,26 +1,26 @@
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import HomeIcon from '@material-ui/icons/Home';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import SettingsIcon from '@material-ui/icons/Settings';
-import SubjectIcon from '@material-ui/icons/Subject';
 import isEmpty from 'lodash.isempty';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { history } from '../../App';
+import { Pages } from '../../global/enums';
+import { TableTheme } from '../../global/MuiStyles';
+import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { findLeft, scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
+import SettingsWindow from '../SettingsWindow/SettingsWindow';
 import Announcement from './Announcement';
+import BottomLeftControls from './BottomLeftControls';
+import BottomRightControls from './BottomRightControls';
 import './ControlsLarge.scss';
 import './ControlsMedium.scss';
 import './ControlsSmall.scss';
 import HuDialog from './HuDialog';
-import LogBox from './LogBox';
 import PaymentWindow from './PaymentWindow';
-import SettingsWindow from './SettingsWindow';
+import TopLeftControls from './TopLeftControls';
+import TopRightControls from './TopRightControls';
 
 interface ControlsProps {
 	playerSeat?: number;
@@ -44,11 +44,15 @@ const Controls = (props: ControlsProps) => {
 	const player: User = useSelector((state: Store) => state.player);
 	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs } = game;
 
+	// Logic to showHuDialog when user shows, leaves the game, then returns
 	useEffect(() => {
 		if (player && player.showTiles) {
-			showHuDialog();
+			if (!declareHu) {
+				showHuDialog();
+			}
 		}
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [player?.showTiles]);
 
 	/* ----------------------------------- Util ----------------------------------- */
 
@@ -146,6 +150,65 @@ const Controls = (props: ControlsProps) => {
 		}
 	}, [lastThrown, thrownBy, lastThrownAvailable, whoseMove, selectedTiles, player, playerSeat]);
 
+	/* ----------------------------------- Draw ----------------------------------- */
+
+	function handleDraw() {
+		let drawnTile: TileI;
+		if (tilesLeft > 15) {
+			drawnTile = game.giveTiles(1, playerSeat, false, true);
+			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
+				drawnTile = buHua();
+			}
+			updateGameStateTakenTile(true);
+		} else {
+			game.draw = true;
+			game.endRound();
+		}
+		setSelectedTiles(drawnTile ? [drawnTile] : []);
+		handleAction(game);
+	}
+
+	const buHua = useCallback(() => {
+		let drawnTile: TileI;
+		let initNoHiddenTiles = player.countAllHiddenTiles();
+		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
+			if (tilesLeft > 15) {
+				drawnTile = game.giveTiles(1, playerSeat, true, true);
+			} else {
+				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
+				game.draw = true;
+				game.endRound();
+				break;
+			}
+		}
+		return drawnTile;
+	}, [game, player, playerSeat, tilesLeft]);
+
+	/* ----------------------------------- Throw ----------------------------------- */
+
+	function handleThrow(tile: TileI) {
+		tile.show = true;
+		player.discard(tile);
+		player.setHiddenTiles();
+		game.tileThrown(tile, playerSeat);
+		handleAction(game);
+	}
+
+	const handleAction = useCallback(
+		(game: Game) => {
+			setSelectedTiles([]);
+			if (takenTile && game.thrownTile) {
+				player.setHiddenTiles();
+				game.nextPlayerMove();
+			} else {
+				game.uncachedAction = true;
+			}
+			game.players[playerSeat] = player;
+			FBService.updateGame(game);
+		},
+		[player, playerSeat, setSelectedTiles, takenTile]
+	);
+
 	/* ----------------------------------- Take ----------------------------------- */
 	function takeLastThrown() {
 		game.players[thrownBy].removeFromDiscarded(lastThrown);
@@ -157,16 +220,19 @@ const Controls = (props: ControlsProps) => {
 		game.players[thrownBy].addToDiscarded(lastThrown);
 	}
 
-	function updateGameStateTakenTile(resetLastThrown: boolean = false) {
-		if (resetLastThrown) {
-			game.lastThrown = {};
-		}
-		game.takenTile = true;
-		game.takenBy = playerSeat;
-		game.newLog(`${player.username}'s turn - to throw`);
-	}
+	const updateGameStateTakenTile = useCallback(
+		(resetLastThrown: boolean = false) => {
+			if (resetLastThrown) {
+				game.lastThrown = {};
+			}
+			game.takenTile = true;
+			game.takenBy = playerSeat;
+			game.newLog(`${player.username}'s turn - to throw`);
+		},
+		[game, player?.username, playerSeat]
+	);
 
-	function handleTake() {
+	const handleTake = useCallback(() => {
 		game.whoseMove = playerSeat;
 		if (meld.includes(lastThrown)) {
 			game.players[thrownBy].removeFromDiscarded(lastThrown);
@@ -189,72 +255,28 @@ const Controls = (props: ControlsProps) => {
 		}
 		updateGameStateTakenTile(false);
 		handleAction(game);
-	}
+	}, [
+		buHua,
+		canKang,
+		canPong,
+		game,
+		handleAction,
+		lastThrown,
+		meld,
+		player,
+		playerSeat,
+		thrownBy,
+		updateGameStateTakenTile
+	]);
 
-	function selfKang() {
+	const selfKang = useCallback(() => {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
 		updateGameStateTakenTile(false);
 		game.flagProgress = true;
 		buHua();
 		handleAction(game);
-	}
-
-	/* ----------------------------------- Draw ----------------------------------- */
-
-	function handleDraw() {
-		let drawnTile: TileI;
-		if (tilesLeft > 15) {
-			drawnTile = game.giveTiles(1, playerSeat, false, true);
-			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
-				drawnTile = buHua();
-			}
-			updateGameStateTakenTile(true);
-		} else {
-			game.draw = true;
-			game.endRound();
-		}
-		setSelectedTiles(drawnTile ? [drawnTile] : []);
-		handleAction(game);
-	}
-
-	function buHua(): TileI {
-		let drawnTile: TileI;
-		let initNoHiddenTiles = player.countAllHiddenTiles();
-		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
-			if (tilesLeft > 15) {
-				drawnTile = game.giveTiles(1, playerSeat, true, true);
-			} else {
-				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
-				game.draw = true;
-				game.endRound();
-				break;
-			}
-		}
-		return drawnTile;
-	}
-
-	/* ----------------------------------- Throw ----------------------------------- */
-
-	function handleThrow(tile: TileI) {
-		tile.show = true;
-		player.discard(tile);
-		player.setHiddenTiles();
-		game.tileThrown(tile, playerSeat);
-		handleAction(game);
-	}
-
-	function handleAction(game: Game) {
-		setSelectedTiles([]);
-		if (takenTile && game.thrownTile) {
-			player.setHiddenTiles();
-			game.nextPlayerMove();
-		} else {
-			game.uncachedAction = true;
-		}
-		game.players[playerSeat] = player;
-		FBService.updateGame(game);
-	}
+	}, [buHua, game, handleAction, player, selectedTiles, updateGameStateTakenTile]);
 
 	/* ----------------------------------- Hu ----------------------------------- */
 
@@ -279,163 +301,83 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Markup ----------------------------------- */
 
 	return game && player ? (
-		<div className="main transparent">
-			<div className={`top-right-controls-${controlsSize}`}>
-				<>
-					<div className="buttons">
-						<IconButton
-							className="icon-button"
-							size="small"
-							onClick={() => {
-								history.push('/');
-							}}
-						>
-							<HomeIcon />
-						</IconButton>
-						<IconButton
-							className="icon-button"
-							size="small"
-							onClick={() => {
-								setShowSettings(!showSettings);
-							}}
-						>
-							<SettingsIcon />
-						</IconButton>
-					</div>
-					<div className="text-container">
-						{`Dealer: ${players[dealer].username}`}
-						<br></br>
-						{`Tiles left: ${tilesLeft}`}
-						<br></br>
-						{`Seat: ${playerWind}`}
-						<br></br>
-						{`$${Math.round(Number(player.balance) * 100) / 100}`}
-					</div>
-				</>
-			</div>
-
-			<div className={`top-left-controls-${controlsSize}`}>
-				<Button
-					className="button"
-					variant="outlined"
-					onClick={() => {
-						handleTake();
+		<TableTheme>
+			{/* <ThemeProvider theme={ControlsTheme}> */}
+			<MainTransparent>
+				<TopLeftControls
+					homeCallback={() => {
+						history.push(Pages.index);
 					}}
-					disabled={!canChi}
-				>
-					<p>{`吃`}</p>
-				</Button>
-				<Button
-					className="button"
-					variant="outlined"
-					onClick={() => {
+					settingsCallback={() => {
+						setShowSettings(!showSettings);
+					}}
+					texts={[
+						`Dealer: ${players[dealer].username}`,
+						`Seat: ${playerWind}`,
+						`Tiles left: ${tilesLeft}`,
+						`$ ${Math.round(Number(player.balance) * 100) / 100}`
+					]}
+				/>
+				<TopRightControls
+					payCallback={() => {
+						setShowPay(!showPay);
+					}}
+					logsCallback={handleShowLogs}
+					showLogs={showLogs}
+					logs={logs}
+				/>
+				<BottomLeftControls
+					controlsSize={controlsSize}
+					chiCallback={() => handleTake()}
+					chiDisabled={!canChi}
+					pongCallback={() => {
 						if (selectedTiles.length === 1) {
 							selfKang();
 						} else {
 							handleTake();
 						}
 					}}
-					disabled={!canPong && !canKang}
-				>
-					<p>{canKang ? `杠` : `碰`}</p>
-				</Button>
-				{okToShow && (
-					<Button
-						className="button"
-						variant="outlined"
-						size="small"
-						onClick={showHuDialog}
-						disabled={game.hu.length === 3}
-					>
-						<p>{`开!`}</p>
-					</Button>
-				)}
-			</div>
-
-			<div className={`bottom-left-controls-${controlsSize}`}>
-				<Button
-					className="button"
-					variant="outlined"
-					size="small"
-					onClick={() => {
+					pongText={canKang ? `杠` : `碰`}
+					pongDisabled={!canPong && !canKang}
+					huCallback={showHuDialog}
+					okToShow={okToShow}
+					huDisabled={game.hu.length === 3}
+				/>
+				<BottomRightControls
+					controlsSize={controlsSize}
+					throwCallback={() => {
 						handleThrow(selectedTiles[0]);
 					}}
-					disabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
-				>
-					<p>{`丢`}</p>
-				</Button>
-				<Button
-					className="button"
-					variant="outlined"
-					onClick={handleDraw}
-					disabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
-				>
-					<p>{tilesLeft === 15 ? `完` : `摸`}</p>
-				</Button>
-				{!okToShow && (
-					<Button
-						className="button"
-						variant="outlined"
-						onClick={handleShow}
-						// onClick={e => {
-						// 	e.preventDefault();
-						// 	game.newLog(`Test: ${Math.random()}`);
-						// 	FBService.updateGame(game);
-						// }}
-					>
-						<p>{`开?`}</p>
-					</Button>
+					throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
+					drawCallback={() => handleDraw()}
+					drawText={tilesLeft === 15 ? `完` : `摸`}
+					drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
+					openCallback={handleShow}
+					okToShow={okToShow}
+				/>
+				{showPay && (
+					<PaymentWindow
+						game={game}
+						playerSeat={playerSeat}
+						show={showPay}
+						onClose={() => {
+							setShowPay(false);
+						}}
+					/>
 				)}
-			</div>
-
-			<div className={`bottom-right-controls-${controlsSize}`}>
-				<>
-					<div className="buttons">
-						<IconButton className="icon-button" size="small" onClick={handleShowLogs}>
-							<SubjectIcon />
-						</IconButton>
-						<IconButton
-							className="icon-button"
-							size="small"
-							onClick={() => {
-								setShowPay(!showPay);
-							}}
-						>
-							<MonetizationOnIcon />
-						</IconButton>
-					</div>
-					<div className={`log-box-container-${controlsSize}${showLogs ? ` expanded` : ``}`}>
-						<LogBox
-							expanded={showLogs}
-							logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
-							scroll={() => {
-								scrollToBottomOfDiv('logs');
-							}}
-						/>
-					</div>
-				</>
-			</div>
-			{showPay && (
-				<PaymentWindow
-					game={game}
-					playerSeat={playerSeat}
-					show={showPay}
-					onClose={() => {
-						setShowPay(false);
-					}}
-				/>
-			)}
-			{showSettings && (
-				<SettingsWindow
-					show={showSettings}
-					onClose={() => {
-						setShowSettings(false);
-					}}
-				/>
-			)}
-			{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-			{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
-		</div>
+				{showSettings && (
+					<SettingsWindow
+						show={showSettings}
+						onClose={() => {
+							setShowSettings(false);
+						}}
+					/>
+				)}
+				{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
+				{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
+			</MainTransparent>
+			{/* </ThemeProvider> */}
+		</TableTheme>
 	) : null;
 };
 

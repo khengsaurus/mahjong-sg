@@ -1,27 +1,27 @@
-import './playerComponentsSmall.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsLarge.scss';
-import getTileSrc from '../../images';
 import isEmpty from 'lodash.isempty';
+import { Segments } from '../../global/enums';
+import getTileSrc from '../../images';
+import './playerComponentsLarge.scss';
+import './playerComponentsMedium.scss';
+import './playerComponentsSmall.scss';
 
 interface ShownTileProps {
 	tile: TileI;
-	segment: 'top' | 'right' | 'bottom' | 'left';
+	segment: Segments;
 	last?: TileI;
 	highlight?: boolean;
-	divClassSuffix?: string;
-	imgClassSuffix?: string;
+	classSuffix?: string;
 }
 
-function getClass(segment: string) {
+function getClass(segment: Segments) {
 	switch (segment) {
-		case 'top':
+		case Segments.top:
 			return 'hts';
-		case 'bottom':
+		case Segments.bottom:
 			return 'hts';
-		case 'left':
+		case Segments.left:
 			return 'vts';
-		case 'right':
+		case Segments.right:
 			return 'vts';
 		default:
 			return '';
@@ -29,7 +29,7 @@ function getClass(segment: string) {
 }
 
 const ShownTile = (props: ShownTileProps) => {
-	const { tile, segment, last, highlight, divClassSuffix, imgClassSuffix } = props;
+	const { tile, segment, last, highlight, classSuffix } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -37,20 +37,20 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					className={`${divClass} ${
-						highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-					} ${imgClassSuffix}`}
+					className={`${divClass} ${highlight || (!isEmpty(last) && last.id === tile.id) ? `last` : ``} ${
+						classSuffix || ``
+					}`}
 					src={getTileSrc(tile.card)}
 					alt="tile"
 				/>
 			);
 		case 'vts':
 			return (
-				<div className={`${divClass} ${divClassSuffix}`}>
+				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
-						className={`${bgClass} ${
-							highlight || (last && !isEmpty(last) && last.id === tile.id) ? `last` : ``
-						} ${imgClassSuffix}`}
+						className={`${bgClass} ${highlight || (!isEmpty(last) && last.id === tile.id) ? `last` : ``} ${
+							classSuffix || ``
+						}`}
 						src={getTileSrc(tile.card)}
 						alt="tile"
 					/>

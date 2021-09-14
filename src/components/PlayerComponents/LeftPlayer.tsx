@@ -1,97 +1,56 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React, { useContext, useMemo } from 'react';
-import getTileSrc from '../../images';
-import { AppContext } from '../../util/hooks/AppContext';
-import { generateNumberArray } from '../../util/utilFns';
+import React from 'react';
+import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { comparePlayerProps } from '../../util/utilFns';
+import HiddenHand from './HiddenTiles/HiddenHand';
+import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
 const LeftPlayer = (props: PlayerComponentProps) => {
-	const { tilesSize, player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { selectedTiles, setSelectedTiles, handSize } = useContext(AppContext);
-	const unusedTiles: number[] = useMemo(() => generateNumberArray(player.unusedTiles), [player.unusedTiles]);
-	let frontBackTag = hasFront ? 'front' : hasBack ? 'back' : '';
-
-	function selectTile(tile: TileI) {
-		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
-			setSelectedTiles([...selectedTiles, tile]);
-		} else {
-			setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.id !== tile.id));
-		}
-	}
+	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
+	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
+	console.log('Rendering left');
 
 	return (
-		<div className={`column-section-${tilesSize}`}>
+		<div className={`column-section-${tilesSize || Sizes.medium}`}>
 			{/*------------------------------ Hidden tiles ------------------------------*/}
 			{player.showTiles ? (
-				<div className="vtss">
-					{player.hiddenTiles.map((tile: TileI) => {
-						return <ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />;
+				<div className="vtss left">
+					{player.hiddenTiles.map(tile => {
+						return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
 						<ShownTile
 							key={player.lastTakenTile.uuid}
 							tile={player.lastTakenTile}
-							segment="left"
+							segment={Segments.left}
+							classSuffix="margin-bottom"
 							highlight
-							divClassSuffix="margin-top"
 						/>
 					)}
 				</div>
 			) : (
-				<div className={`self-hidden-tiles-${handSize}`}>
-					{player.hiddenTiles.map((tile: TileI) => {
-						return (
-							<div
-								key={tile.uuid}
-								className={
-									selectedTiles.includes(tile)
-										? 'self-hidden-tile selected'
-										: 'self-hidden-tile unselected'
-								}
-								onClick={() => selectTile(tile)}
-							>
-								<img className="self-hidden-tile-bg" src={getTileSrc(tile.card)} alt="tile" />
-							</div>
-						);
-					})}
-					{!isEmpty(player.lastTakenTile) && (
-						<div
-							key={player.lastTakenTile.uuid}
-							className={
-								selectedTiles.includes(player.lastTakenTile)
-									? 'self-hidden-tile selected last'
-									: 'self-hidden-tile unselected last'
-							}
-							onClick={() => selectTile(player.lastTakenTile)}
-						>
-							<img
-								className="self-hidden-tile-bg"
-								src={getTileSrc(player.lastTakenTile.card)}
-								alt="tile"
-							/>
-						</div>
-					)}
-				</div>
+				<HiddenHand tiles={player.allHiddenTiles().length} segment={Segments.left} />
 			)}
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
-			<div className="vtss">
-				{player.shownTiles.map((tile: TileI) => {
+			<div className="vtss left">
+				{player.shownTiles.map(tile => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />
+						<ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />
 					) : null;
 				})}
-				{player.shownTiles.map((tile: TileI) => {
+				{player.shownTiles.map(tile => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
-							segment="left"
-							imgClassSuffix={
+							segment={Segments.left}
+							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
@@ -101,21 +60,16 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 			</div>
 
 			{/*------------------------------ Unused tiles ------------------------------*/}
-			<div className={`vtsh unused ${frontBackTag}`}>
-				{unusedTiles &&
-					unusedTiles.map(i => {
-						return <div key={`self-unused-tile${i}`} className="vth" />;
-					})}
-			</div>
+			<UnusedTiles tiles={player.unusedTiles} segment={Segments.left} tag={frontBackTag} />
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
-			<div className="vtss discarded">
-				{player.discardedTiles.map((tile: TileI) => {
-					return <ShownTile key={tile.uuid} tile={tile} segment="left" last={lastThrown} />;
+			<div className="vtss left">
+				{player.discardedTiles.map(tile => {
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />;
 				})}
 			</div>
 		</div>
 	);
 };
 
-export default React.memo(LeftPlayer);
+export default React.memo(LeftPlayer, comparePlayerProps);

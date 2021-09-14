@@ -4,19 +4,19 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { MuiStyles } from '../../global/MuiStyles';
+import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
-import { rotatedMUIDialog } from '../../util/utilFns';
-import './ControlsMedium.scss';
+import { AppContext } from '../../util/hooks/AppContext';
+import './ControlsSmall.scss';
 
 interface Props {
 	game: Game;
@@ -27,11 +27,11 @@ interface Props {
 
 const PaymentWindow = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
-	let playerUsername = game.players[playerSeat].username;
+	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
-
 	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8];
+	let playerUsername = game.players[playerSeat].username;
 
 	async function pay() {
 		game.players[playerSeat].balance -= amount;
@@ -53,81 +53,75 @@ const PaymentWindow = (props: Props) => {
 	};
 
 	return (
-		<div className="main transparent">
-			<ThemeProvider theme={rotatedMUIDialog}>
-				<Dialog
-					open={show}
-					BackdropProps={{ invisible: true }}
-					onClose={onClose}
-					PaperProps={{
-						style: {
-							maxWidth: '400px',
-							minWidth: '400px',
-							maxHeight: '300px',
-							minHeight: '300px',
-							backgroundColor: 'rgb(215, 195, 170)',
-							overflow: 'scroll'
-						}
-					}}
-				>
-					<DialogContent>
-						<IconButton
-							style={{ color: 'black', position: 'absolute', top: '12px', right: '15px' }}
-							onClick={onClose}
+		<MainTransparent>
+			<Dialog
+				open={show}
+				BackdropProps={{ invisible: true }}
+				onClose={onClose}
+				PaperProps={{
+					style: {
+						...MuiStyles.modal,
+						backgroundColor: `${tableColor}`
+					}
+				}}
+			>
+				<DialogContent>
+					<IconButton
+						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
+						onClick={onClose}
+					>
+						<CloseIcon />
+					</IconButton>
+					<Typography variant="subtitle1">{'Send money'}</Typography>
+					<br></br>
+					<FormControl component="fieldset">
+						<Typography variant="subtitle1">{'To: '}</Typography>
+						<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
+							{game.players.map((otherPlayer: User, index: number) => {
+								return otherPlayer.username !== playerUsername ? (
+									<FormControlLabel
+										key={otherPlayer.username}
+										value={index}
+										control={<Radio style={{ color: tableTextColor }} />}
+										label={otherPlayer.username}
+									/>
+								) : null;
+							})}
+						</RadioGroup>
+					</FormControl>
+
+					<FormControl component="fieldset">
+						<Typography variant="subtitle1">{'Amount: '}</Typography>
+						<RadioGroup row value={amount} onChange={handleSelectAmount}>
+							{amounts.map((amount: number, index: number) => {
+								return (
+									<FormControlLabel
+										key={index}
+										value={amount}
+										control={<Radio style={{ color: tableTextColor }} />}
+										label={`$${amount}`}
+										labelPlacement="end"
+									/>
+								);
+							})}
+						</RadioGroup>
+					</FormControl>
+					<br></br>
+					<DialogActions>
+						<Button
+							style={{ color: tableTextColor, position: 'absolute', bottom: 15, right: 15 }}
+							variant="text"
+							size="large"
+							onClick={pay}
+							disabled={recipientIndex === 10 || !amount || amount <= 0}
+							autoFocus
 						>
-							<CloseIcon />
-						</IconButton>
-						<Typography variant="subtitle1">{'Send money'}</Typography>
-						<br></br>
-						<FormControl component="fieldset">
-							<FormLabel component="legend">{`To: `}</FormLabel>
-							<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
-								{game.players.map((otherPlayer: User, index: number) => {
-									return otherPlayer.username !== playerUsername ? (
-										<FormControlLabel
-											key={otherPlayer.username}
-											value={index}
-											control={<Radio color="primary" />}
-											label={otherPlayer.username}
-										/>
-									) : null;
-								})}
-							</RadioGroup>
-						</FormControl>
-						<br></br>
-						<br></br>
-						<FormControl component="fieldset">
-							<FormLabel component="legend">{`Amount: `}</FormLabel>
-							<RadioGroup row value={amount} onChange={handleSelectAmount}>
-								{amounts.map((amount: number, index: number) => {
-									return (
-										<FormControlLabel
-											key={index}
-											value={amount}
-											control={<Radio color="primary" />}
-											label={`$${amount}`}
-											labelPlacement="end"
-										/>
-									);
-								})}
-							</RadioGroup>
-						</FormControl>
-						<br></br>
-						<DialogActions>
-							<Button
-								variant="outlined"
-								size="small"
-								onClick={pay}
-								disabled={recipientIndex === 10 || !amount || amount <= 0}
-								autoFocus
-							>
-								{`Send`}
-							</Button>
-						</DialogActions>
-					</DialogContent>
-				</Dialog>
-			</ThemeProvider>
-		</div>
+							{`Send`}
+						</Button>
+					</DialogActions>
+				</DialogContent>
+			</Dialog>
+		</MainTransparent>
 	);
 };
 

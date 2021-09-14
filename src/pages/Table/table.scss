@@ -1,44 +1,33 @@
 @import '../../App.scss';
 
 .wind-background {
-	transform: rotate(90deg) translateY(-30px);
-	display: flex;
-	flex-direction: column;
-	p {
-		font-size: $wind-font-size;
-		color: $color-wind-font;
-		// animation: color-change 5s infinite;
-	}
+	font-size: $wind-font-size;
 }
 
 .top-player-container {
 	position: absolute;
 	width: 100%;
 	top: $main-padding;
-	margin-top: calc(env(safe-area-inset-top));
 	z-index: 0;
 }
 
 .right-player-container {
 	position: absolute;
 	right: $main-padding;
-	margin-right: calc(env(safe-area-inset-right));
-	z-index: 1;
+	z-index: 0;
 }
 
 .bottom-player-container {
 	position: absolute;
 	width: 100%;
 	bottom: $main-padding;
-	margin-bottom: calc(env(safe-area-inset-bottom));
-	z-index: 2;
+	z-index: 1;
 }
 
-.self-container {
+.left-player-container {
 	position: absolute;
 	left: $main-padding;
-	margin-left: calc(env(safe-area-inset-left));
-	z-index: 3;
+	z-index: 0;
 }
 
 @keyframes color-change {

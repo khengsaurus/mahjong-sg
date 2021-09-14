@@ -1,12 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-/src/service/FirebaseConfig.ts
+# /src/service/FirebaseConfig.ts
 
 #builds
 /build
-/android
-/ios
-/android 2
-/ios 2
 
 # dependencies
 /node_modules

@@ -5,20 +5,21 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useContext, useState } from 'react';
+import { CenteredColored } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import './SearchForms.scss';
 
 const UserSearchForm: React.FC = () => {
-	const { user, players, setPlayers } = useContext(AppContext);
+	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
-	const [foundUsers, setFoundUsers] = useState<Array<User>>([]);
+	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
 
 	async function searchForUser(username: string) {
@@ -26,7 +27,8 @@ const UserSearchForm: React.FC = () => {
 		await FBService.searchUser(username).then(data => {
 			if (!data.empty) {
 				data.docs.forEach(doc => {
-					foundUsers.push(new User(doc.id, doc.data().username, doc.data().photoUrl));
+					let data = doc.data();
+					foundUsers.push(new User(doc.id, data.username, data.photoUrl, data.email));
 				});
 				if (foundUsers.length > 0) {
 					setFoundUsers(foundUsers);
@@ -60,31 +62,52 @@ const UserSearchForm: React.FC = () => {
 		setShowOptions(false);
 	}
 
-	const markup: JSX.Element = (
-		<div className="search-form-container">
+	const useStyles = makeStyles((theme: Theme) =>
+		createStyles({
+			text: {
+				color: mainTextColor
+			},
+			rightChevron: {
+				transition: '200ms'
+			},
+			downChevron: {
+				transition: '200ms',
+				transform: 'rotate(90deg)'
+			}
+		})
+	);
+	const classes = useStyles();
+
+	return (
+		<CenteredColored className="search-form-container">
 			<List>
 				<ListItem className="search-box list-item">
 					<TextField
 						label={players.length < 4 ? 'Find user' : 'Players selected'}
-						size="small"
 						onChange={e => {
 							handleFormChange(e.target.value);
 						}}
 						value={searchFor}
-						disabled={players.length === 4}
+						InputLabelProps={{
+							className: classes.text
+						}}
 						InputProps={{
+							color: 'secondary',
+							readOnly: players.length === 4,
 							endAdornment: (
-								<InputAdornment position="end">
+								<InputAdornment position="end" style={{ marginRight: -11 }}>
 									<IconButton
-										color="primary"
+										color="secondary"
 										component="span"
-										size="small"
 										onClick={() => {
 											showOptions ? setShowOptions(false) : searchForUser(searchFor);
 										}}
 										disabled={searchFor.trim() === ''}
 									>
-										{showOptions ? <KeyboardArrowDownIcon /> : <ChevronRightIcon />}
+										<ChevronRightIcon
+											className={showOptions ? classes.downChevron : classes.rightChevron}
+											color={showOptions ? 'secondary' : 'primary'}
+										/>
 									</IconButton>
 								</InputAdornment>
 							)
@@ -105,13 +128,20 @@ const UserSearchForm: React.FC = () => {
 										className="user list-item"
 										button
 										key={foundUser.id}
+										style={{
+											borderRadius: '5px'
+										}}
 										onClick={() => {
 											handleSelect(foundUser);
 										}}
 									>
-										<ListItemText primary={foundUser.username} />
-										<ListItemIcon style={{ justifyContent: 'flex-end', paddingRight: '3px' }}>
-											<FaceIcon />
+										<ListItemText primary={foundUser.username} className={classes.text} />
+										<ListItemIcon
+											style={{
+												justifyContent: 'flex-end'
+											}}
+										>
+											<FaceIcon color="primary" />
 										</ListItemIcon>
 									</ListItem>
 								);
@@ -121,10 +151,8 @@ const UserSearchForm: React.FC = () => {
 						})}
 				</Collapse>
 			</List>
-		</div>
+		</CenteredColored>
 	);
-
-	return markup;
 };
 
 export default UserSearchForm;

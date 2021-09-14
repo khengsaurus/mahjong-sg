@@ -3,7 +3,7 @@
 .row-section-small {
 	display: flex;
 	flex-direction: column;
-	padding: 0 5px;
+	padding: 5px;
 	justify-content: center;
 	align-content: center;
 	transition: 200ms;
@@ -42,7 +42,6 @@
 	.hth {
 		height: $hidden-tile-height-small;
 		width: $hidden-tile-width-small;
-		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
 
@@ -50,20 +49,20 @@
 		display: flex;
 		flex-flow: row-reverse wrap-reverse;
 		justify-content: center;
-		align-items: flex-start;
+		align-items: flex-end;
 		align-self: center;
-		width: 9 * ($shown-tile-width-small);
-		&.row-r {
+		max-width: 60%;
+		min-height: $shown-tile-height-small;
+		padding: $tile-padding-small;
+		&.top {
+			align-items: flex-start;
 			flex-flow: row-reverse wrap;
-		}
-		&.bottom {
-			transform: $rotate-simple-180;
 		}
 	}
 
 	.hts {
 		height: $shown-tile-height-small;
-		border-radius: 4%;
+		border-radius: $default-tile-border-radius;
 		background: $color-tile-front;
 		&.flower {
 			@include default-flower;
@@ -90,6 +89,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	padding: 5px;
 	transition: 200ms;
 	&.right {
 		flex-direction: row-reverse;
@@ -98,7 +98,7 @@
 	.vtsh {
 		display: flex;
 		flex-direction: column;
-		padding: 0 $tile-padding-small;
+		padding: $tile-padding-small;
 		min-width: $hidden-tile-height-small;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
@@ -124,28 +124,20 @@
 	.vth {
 		width: $hidden-tile-height-small;
 		height: $hidden-tile-width-small;
-		background-color: $color-tile-back;
 		@include default-tile-border;
 	}
 
 	.vtss {
 		display: flex;
-		flex-flow: column wrap;
-		align-items: flex-start;
+		flex-flow: column-reverse wrap;
+		align-items: flex-end;
 		justify-content: center;
+		min-width: $shown-tile-height-small;
 		height: 15 * $shown-tile-height-small;
-		padding: 0 $tile-padding-small;
-		&.col-r {
-			flex-flow: column-reverse wrap;
-		}
-		&.right {
-			align-items: flex-end;
-		}
-		&.discarded {
-			max-height: 50vh;
-			&.right {
-				flex-flow: column-reverse wrap-reverse;
-			}
+		max-height: 60%;
+		padding: $tile-padding-small;
+		&.left {
+			transform: rotate(180deg);
 		}
 	}
 
@@ -162,7 +154,7 @@
 
 	.vts-bg {
 		height: $shown-tile-height-small;
-		border-radius: 4%;
+		border-radius: $default-tile-border-radius;
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
 		align-self: flex-start;
@@ -182,28 +174,29 @@
 
 .self-hidden-tiles-small {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	align-self: center;
+	padding: $tile-padding-small;
 	z-index: 20;
 
 	.self-hidden-tile {
-		height: $self-hidden-tile-width-small;
-		width: $self-hidden-tile-height-small;
-		border-radius: 4%;
+		height: $self-hidden-tile-height-small;
+		width: $self-hidden-tile-width-small;
+		border-radius: $default-tile-border-radius;
 		transition: 200ms;
 		&.unselected {
 			background: $color-tile-front;
 		}
 		&.selected {
-			transform: translateX(15%);
+			transform: translateY(-15%);
 			@include default-selected;
 		}
 		&.last {
-			margin-top: $hidden-tile-height-small;
+			margin-left: $hidden-tile-height-small;
 		}
 	}
 
 	.self-hidden-tile-bg {
 		height: $self-hidden-tile-height-small;
-		transform: $transform-rotate;
 	}
 }

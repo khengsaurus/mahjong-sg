@@ -4,10 +4,17 @@ interface Store {
 	player: User;
 }
 
-interface jwtData {
+interface JwtData {
 	id: string;
 	username: string;
 	photoUrl: string;
+	email: string;
+	handSize: Sizes;
+	tilesSize: Sizes;
+	controlsSize: Sizes;
+	backgroundColor: BackgroundColors;
+	tableColor: BackgroundColors;
+	tileBackColor: TileColors;
 	iat: number;
 	exp: number;
 }
@@ -16,8 +23,8 @@ interface Group {
 	name: string;
 	users: User[];
 }
-interface alert {
-	status: Color;
+interface AlertI {
+	status: Status;
 	msg: string;
 }
 
@@ -30,16 +37,6 @@ interface TileI {
 	index?: number;
 	show?: boolean;
 	isValidFlower?: boolean;
-}
-
-interface PlayerComponentProps {
-	tilesSize: string;
-	player: User;
-	dealer?: boolean;
-	hasFront?: boolean;
-	hasBack?: boolean;
-	isPlayerTurn?: boolean;
-	lastThrown?: TileI;
 }
 
 interface UserPass {
@@ -60,4 +57,11 @@ interface EmailPass {
 interface Log {
 	msg: string;
 	timeStamp: Date;
+}
+
+interface Theme {
+	backgroundColor: BackgroundColors;
+	tableColor: BackgroundColors;
+	tileBackColor: TileColors;
+	textColor: string;
 }
