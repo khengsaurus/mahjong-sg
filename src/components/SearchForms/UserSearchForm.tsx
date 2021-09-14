@@ -14,7 +14,7 @@ import { CenteredColored } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import './SearchForms.scss';
+import '../PlayerComponents/searchForms.scss';
 
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);
@@ -62,7 +62,7 @@ const UserSearchForm: React.FC = () => {
 		setShowOptions(false);
 	}
 
-	const useStyles = makeStyles((theme: Theme) =>
+	const useStyles = makeStyles((theme: ITheme) =>
 		createStyles({
 			text: {
 				color: mainTextColor

@@ -18,8 +18,8 @@ interface AppContextInt {
 	setPlayers: (players: User[]) => void;
 	gameId?: string;
 	setGameId: (gameId: string) => void;
-	selectedTiles?: TileI[];
-	setSelectedTiles: (tiles: TileI[]) => void;
+	selectedTiles?: ITile[];
+	setSelectedTiles: (tiles: ITile[]) => void;
 	loading: boolean;
 	setLoading: () => void;
 	handSize?: Sizes;
@@ -51,7 +51,7 @@ const initialContext: AppContextInt = {
 	gameId: null,
 	setGameId: (gameId: string) => {},
 	selectedTiles: [],
-	setSelectedTiles: (tiles: TileI[]) => {},
+	setSelectedTiles: (tiles: ITile[]) => {},
 	loading: false,
 	setLoading: () => {},
 	handSize: Sizes.medium,
@@ -76,7 +76,7 @@ export const AppContextProvider = (props: any) => {
 	const [userEmail, setUserEmail] = useState('');
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
-	const [selectedTiles, setSelectedTiles] = useState<TileI[]>([]);
+	const [selectedTiles, setSelectedTiles] = useState<ITile[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState<Sizes>();
 	const [tilesSize, setTilesSize] = useState<Sizes>();
@@ -124,7 +124,7 @@ export const AppContextProvider = (props: any) => {
 			let user: User;
 			try {
 				let token = localStorage.getItem('jwt');
-				user = token ? objToUser(jwt.verify(token, secretKey) as JwtData) : null;
+				user = token ? objToUser(jwt.verify(token, secretKey) as IJwtData) : null;
 				if (user) {
 					handleUserContext(user);
 					resolve(user);

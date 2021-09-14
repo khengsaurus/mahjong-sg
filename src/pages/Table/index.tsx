@@ -29,7 +29,7 @@ const Table = () => {
 	const [dealer, setDealer] = useState(null);
 
 	const dispatch = useDispatch();
-	const game: Game = useSelector((state: Store) => state.game);
+	const game: Game = useSelector((state: IStore) => state.game);
 
 	useEffect(() => {
 		if (!user) {

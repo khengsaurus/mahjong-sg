@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { findLeft, findOpp, findRight, playerToObj } from '../util/utilFns';
 import { User } from './User';
-import { v4 as uuidv4 } from 'uuid';
 
 export function gameToObj(game: Game) {
 	return {
@@ -51,10 +50,10 @@ export class Game {
 	whoseMove?: number;
 	playerIds?: string[];
 	players?: User[];
-	tiles?: TileI[];
+	tiles?: ITile[];
 	frontTiles?: number;
 	backTiles?: number;
-	lastThrown?: TileI;
+	lastThrown?: ITile;
 	thrownBy?: number;
 	thrownTile?: boolean;
 	takenTile?: boolean;
@@ -62,7 +61,7 @@ export class Game {
 	uncachedAction?: boolean;
 	hu?: number[];
 	draw?: boolean;
-	logs?: Log[];
+	logs?: ILog[];
 
 	constructor(
 		id: string,
@@ -78,10 +77,10 @@ export class Game {
 		whoseMove?: number,
 		playerIds?: string[],
 		players?: User[],
-		tiles?: TileI[],
+		tiles?: ITile[],
 		frontTiles?: number,
 		backTiles?: number,
-		lastThrown?: TileI,
+		lastThrown?: ITile,
 		thrownBy?: number,
 		thrownTile?: boolean,
 		takenTile?: boolean,
@@ -89,7 +88,7 @@ export class Game {
 		uncachedAction?: boolean,
 		hu?: number[],
 		draw?: boolean,
-		logs?: Log[]
+		logs?: ILog[]
 	) {
 		this.id = id;
 		this.creator = creator;
@@ -139,8 +138,8 @@ export class Game {
 		return array;
 	}
 
-	generateShuffledTiles(): TileI[] {
-		let tiles: TileI[] = [];
+	generateShuffledTiles(): ITile[] {
+		let tiles: ITile[] = [];
 		const oneToFour = [1, 2, 3, 4];
 		const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 		const suits = ['万', '筒', '索'];
@@ -152,7 +151,7 @@ export class Game {
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
-					let tile: TileI = {
+					let tile: ITile = {
 						card: `${number}${suit}`,
 						suit,
 						number,
@@ -166,7 +165,7 @@ export class Game {
 				});
 			});
 			winds.forEach(pai => {
-				let tile: TileI = {
+				let tile: ITile = {
 					card: pai,
 					suit: '大牌',
 					number: 1,
@@ -179,7 +178,7 @@ export class Game {
 				tiles.push(tile);
 			});
 			daPai.forEach(pai => {
-				let tile: TileI = {
+				let tile: ITile = {
 					card: pai,
 					suit: '大牌',
 					number: 1,
@@ -193,7 +192,7 @@ export class Game {
 			});
 		});
 		flowers.forEach(flower => {
-			let tile: TileI = {
+			let tile: ITile = {
 				card: flower,
 				suit: '花',
 				number: 1,
@@ -207,7 +206,7 @@ export class Game {
 		});
 
 		animals.forEach(animal => {
-			let tile: TileI = {
+			let tile: ITile = {
 				card: animal,
 				suit: '动物',
 				number: 1,
@@ -223,9 +222,9 @@ export class Game {
 		return this.shuffle(tiles);
 	}
 
-	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): TileI {
+	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): ITile {
 		let player = this.players[playerIndex];
-		let newTile: TileI;
+		let newTile: ITile;
 		let receivedFlower: boolean = false;
 		let log = `${player.username} ${buHua ? `bu hua, ` : ``} received `;
 		let flowerReceived = '';
@@ -512,7 +511,7 @@ export class Game {
 		}
 	}
 
-	tileThrown(tile: TileI, player: number) {
+	tileThrown(tile: ITile, player: number) {
 		this.lastThrown = tile;
 		this.thrownBy = player;
 		this.thrownTile = true;

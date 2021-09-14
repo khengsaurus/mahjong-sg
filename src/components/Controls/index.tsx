@@ -10,13 +10,13 @@ import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { findLeft, scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
+import '../FormComponents/controlsLarge.scss';
+import '../FormComponents/controlsMedium.scss';
+import '../FormComponents/controlsSmall.scss';
 import SettingsWindow from '../SettingsWindow/SettingsWindow';
 import Announcement from './Announcement';
 import BottomLeftControls from './BottomLeftControls';
 import BottomRightControls from './BottomRightControls';
-import './ControlsLarge.scss';
-import './ControlsMedium.scss';
-import './ControlsSmall.scss';
 import HuDialog from './HuDialog';
 import PaymentWindow from './PaymentWindow';
 import TopLeftControls from './TopLeftControls';
@@ -29,7 +29,7 @@ interface ControlsProps {
 const Controls = (props: ControlsProps) => {
 	const { playerSeat } = props;
 	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const [meld, setMeld] = useState<TileI[]>([]);
+	const [meld, setMeld] = useState<ITile[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
@@ -40,8 +40,8 @@ const Controls = (props: ControlsProps) => {
 	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 	const [showSettings, setShowSettings] = useState(false);
 
-	const game: Game = useSelector((state: Store) => state.game);
-	const player: User = useSelector((state: Store) => state.player);
+	const game: Game = useSelector((state: IStore) => state.game);
+	const player: User = useSelector((state: IStore) => state.player);
 	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs } = game;
 
 	// Logic to showHuDialog when user shows, leaves the game, then returns
@@ -56,7 +56,7 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Util ----------------------------------- */
 
-	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: TileI[]) {
+	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: ITile[]) {
 		setCanKang(kang);
 		setCanPong(pong);
 		setCanChi(chi);
@@ -68,7 +68,7 @@ const Controls = (props: ControlsProps) => {
 	}, [tiles]);
 
 	const lastThrownAvailable: boolean = useMemo(() => {
-		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
+		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedITiles(lastThrown);
 	}, [players, lastThrown, thrownBy, takenTile]);
 
 	const isHoldingLastThrown: boolean = useMemo(() => {
@@ -76,7 +76,7 @@ const Controls = (props: ControlsProps) => {
 			!isEmpty(lastThrown) &&
 			player &&
 			player.allHiddenTilesContain(lastThrown) &&
-			!players[thrownBy].lastDiscardedTileIs(lastThrown)
+			!players[thrownBy].lastDiscardedITiles(lastThrown)
 		);
 	}, [player, players, lastThrown, thrownBy]);
 
@@ -121,7 +121,7 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- useEffect to set options ----------------------------------- */
 
 	useEffect(() => {
-		let tiles: TileI[] = [];
+		let tiles: ITile[] = [];
 		/**
 		 * Can self kang during turn & selecting 1 || 4 */
 		if (whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
@@ -153,7 +153,7 @@ const Controls = (props: ControlsProps) => {
 	/* ----------------------------------- Draw ----------------------------------- */
 
 	function handleDraw() {
-		let drawnTile: TileI;
+		let drawnTile: ITile;
 		if (tilesLeft > 15) {
 			drawnTile = game.giveTiles(1, playerSeat, false, true);
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
@@ -169,7 +169,7 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	const buHua = useCallback(() => {
-		let drawnTile: TileI;
+		let drawnTile: ITile;
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (tilesLeft > 15) {
@@ -186,7 +186,7 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
-	function handleThrow(tile: TileI) {
+	function handleThrow(tile: ITile) {
 		tile.show = true;
 		player.discard(tile);
 		player.setHiddenTiles();
@@ -302,7 +302,6 @@ const Controls = (props: ControlsProps) => {
 
 	return game && player ? (
 		<TableTheme>
-			{/* <ThemeProvider theme={ControlsTheme}> */}
 			<MainTransparent>
 				<TopLeftControls
 					homeCallback={() => {
@@ -376,7 +375,6 @@ const Controls = (props: ControlsProps) => {
 				{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
 				{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
 			</MainTransparent>
-			{/* </ThemeProvider> */}
 		</TableTheme>
 	) : null;
 };

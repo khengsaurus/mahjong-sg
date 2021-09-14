@@ -1,12 +1,12 @@
 import { User } from '../Models/User';
 
-export interface PlayerComponentProps {
+export interface IPlayerComponentProps {
 	player?: User;
 	dealer?: boolean;
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
-	lastThrown?: TileI;
+	lastThrown?: ITile;
 	tilesSize?: Sizes;
 }
 

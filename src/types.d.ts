@@ -1,10 +1,10 @@
-interface Store {
+interface IStore {
 	game: Game;
 	gameCache: Game;
 	player: User;
 }
 
-interface JwtData {
+interface IJwtData {
 	id: string;
 	username: string;
 	photoUrl: string;
@@ -19,16 +19,16 @@ interface JwtData {
 	exp: number;
 }
 
-interface Group {
+interface IGroup {
 	name: string;
 	users: User[];
 }
-interface AlertI {
+interface IAlert {
 	status: Status;
 	msg: string;
 }
 
-interface TileI {
+interface ITile {
 	card?: string;
 	suit?: string;
 	number?: number;
@@ -39,27 +39,27 @@ interface TileI {
 	isValidFlower?: boolean;
 }
 
-interface UserPass {
+interface IUserPass {
 	username: string;
 	password: string;
 }
 
-interface EmailUser {
+interface IEmailUser {
 	username: string;
 	email: string;
 }
 
-interface EmailPass {
+interface IEmailPass {
 	email: string;
 	password: string;
 }
 
-interface Log {
+interface ILog {
 	msg: string;
 	timeStamp: Date;
 }
 
-interface Theme {
+interface ITheme {
 	backgroundColor: BackgroundColors;
 	tableColor: BackgroundColors;
 	tileBackColor: TileColors;

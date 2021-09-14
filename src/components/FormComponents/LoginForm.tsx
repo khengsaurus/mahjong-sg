@@ -9,10 +9,10 @@ import { AppContext } from '../../util/hooks/AppContext';
 import FormField from './FormField';
 
 const LoginForm: React.FC = () => {
-	const [alert, setAlert] = useState<AlertI>({ status: Status.info, msg: '' });
+	const [alert, setAlert] = useState<IAlert>({ status: Status.info, msg: '' });
 	const { login, setUserEmail } = useContext(AppContext);
 
-	function handleSubmit(values: EmailPass) {
+	function handleSubmit(values: IEmailPass) {
 		authLogin_EmailPass(values)
 			.then(email => {
 				if (email === values.email) {

@@ -1,7 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React from 'react';
-import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { comparePlayerProps } from '../../util/utilFns';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -10,7 +10,7 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
-const TopPlayer = (props: PlayerComponentProps) => {
+const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 	console.log('Rendering top');
@@ -20,7 +20,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Hidden tiles ------------------------------*/}
 			{player.showTiles ? (
 				<div className="htss top">
-					{player.hiddenTiles.map((tile: TileI) => {
+					{player.hiddenTiles.map((tile: ITile) => {
 						return <ShownTile key={tile.uuid} tile={tile} segment={Segments.top} last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
@@ -39,12 +39,12 @@ const TopPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
 			<div className="htss top">
-				{player.shownTiles.map((tile: TileI) => {
+				{player.shownTiles.map((tile: ITile) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<ShownTile key={tile.uuid} tile={tile} segment={Segments.top} last={lastThrown} />
 					) : null;
 				})}
-				{player.shownTiles.map((tile: TileI) => {
+				{player.shownTiles.map((tile: ITile) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
 							key={tile.uuid}
@@ -64,7 +64,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss top">
-				{player.discardedTiles.map((tile: TileI) => {
+				{player.discardedTiles.map((tile: ITile) => {
 					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.top} last={lastThrown} />;
 				})}
 			</div>

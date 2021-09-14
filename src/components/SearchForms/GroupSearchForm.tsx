@@ -13,12 +13,12 @@ import { useContext, useState } from 'react';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import './SearchForms.scss';
+import '../PlayerComponents/searchForms.scss';
 
 const GroupSearchForm: React.FC = () => {
 	const { players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
-	const [foundGroups, setFoundGroups] = useState<Group[]>([]);
+	const [foundGroups, setFoundGroups] = useState<IGroup[]>([]);
 	const [searchFor, setSearchFor] = useState('');
 
 	async function search(groupName: string) {
@@ -45,7 +45,7 @@ const GroupSearchForm: React.FC = () => {
 		return true;
 	}
 
-	function handleSelect(group: Group) {
+	function handleSelect(group: IGroup) {
 		setPlayers([...group.users]);
 		setSearchFor('');
 		setShowOptions(false);

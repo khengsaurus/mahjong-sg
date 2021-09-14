@@ -16,7 +16,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import './ControlsSmall.scss';
+import '../FormComponents/controlsSmall.scss';
 
 interface Props {
 	game: Game;

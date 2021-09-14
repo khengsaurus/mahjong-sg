@@ -1,7 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useContext } from 'react';
-import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import { HandTile } from './HandTile';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -10,12 +10,12 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
-const BottomPlayer = (props: PlayerComponentProps) => {
+const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 
-	function selectTile(tile: TileI) {
+	function selectTile(tile: ITile) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
 			setSelectedTiles([...selectedTiles, tile]);
 		} else {
@@ -28,7 +28,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 			{/*------------------------------ Hidden tiles ------------------------------*/}
 			{player.showTiles ? (
 				<div className="htss">
-					{player.hiddenTiles.map((tile: TileI) => {
+					{player.hiddenTiles.map((tile: ITile) => {
 						return <ShownTile key={tile.uuid} tile={tile} segment={Segments.bottom} last={lastThrown} />;
 					})}
 					{!isEmpty(player.lastTakenTile) && (
@@ -43,7 +43,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 				</div>
 			) : (
 				<div className={`self-hidden-tiles-${handSize || Sizes.medium}`}>
-					{player.hiddenTiles.map((tile: TileI) => {
+					{player.hiddenTiles.map((tile: ITile) => {
 						return (
 							<HandTile
 								key={tile.uuid}
@@ -68,12 +68,12 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
 			<div className="htss">
-				{player.shownTiles.map((tile: TileI) => {
+				{player.shownTiles.map((tile: ITile) => {
 					return tile.suit !== '花' && tile.suit !== '动物' ? (
 						<ShownTile key={tile.uuid} tile={tile} segment={Segments.bottom} last={lastThrown} />
 					) : null;
 				})}
-				{player.shownTiles.map((tile: TileI) => {
+				{player.shownTiles.map((tile: ITile) => {
 					return tile.suit === '花' || tile.suit === '动物' ? (
 						<ShownTile
 							key={tile.uuid}
@@ -93,7 +93,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 
 			{/*------------------------------ Discarded tiles ------------------------------*/}
 			<div className="htss">
-				{player.discardedTiles.map((tile: TileI) => {
+				{player.discardedTiles.map((tile: ITile) => {
 					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.bottom} last={lastThrown} />;
 				})}
 			</div>

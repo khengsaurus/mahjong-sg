@@ -4,9 +4,9 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useContext } from 'react';
 import { TableText } from '../../global/StyledComponents';
 import { AppContext } from '../../util/hooks/AppContext';
-import './ControlsLarge.scss';
-import './ControlsMedium.scss';
-import './ControlsSmall.scss';
+import '../FormComponents/controlsLarge.scss';
+import '../FormComponents/controlsMedium.scss';
+import '../FormComponents/controlsSmall.scss';
 
 interface TopLeftControlsProps {
 	homeCallback: () => void;

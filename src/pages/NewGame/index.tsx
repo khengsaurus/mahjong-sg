@@ -59,7 +59,7 @@ const NewGame = () => {
 		}
 	}
 
-	const useStyles = makeStyles((theme: Theme) =>
+	const useStyles = makeStyles((theme: ITheme) =>
 		createStyles({
 			text: {
 				color: mainTextColor

@@ -5,16 +5,16 @@ import React, { useContext } from 'react';
 import { Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import { scrollToBottomOfDiv } from '../../util/utilFns';
-import './ControlsLarge.scss';
-import './ControlsMedium.scss';
-import './ControlsSmall.scss';
+import '../FormComponents/controlsLarge.scss';
+import '../FormComponents/controlsMedium.scss';
+import '../FormComponents/controlsSmall.scss';
 import LogBox from './LogBox';
 
 interface TopRightControlsProps {
 	payCallback: () => void;
 	logsCallback: () => void;
 	showLogs: boolean;
-	logs: Log[];
+	logs: ILog[];
 }
 
 const TopRightControls = (props: TopRightControlsProps) => {

@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Sizes, TableColors } from '../../global/enums';
 import { TableText } from '../../global/StyledComponents';
-import './ControlsLarge.scss';
-import './ControlsMedium.scss';
-import './ControlsSmall.scss';
+import '../FormComponents/controlsLarge.scss';
+import '../FormComponents/controlsMedium.scss';
+import '../FormComponents/controlsSmall.scss';
 
 interface LogBoxProps {
-	logs: Log[];
+	logs: ILog[];
 	expanded: boolean;
 	scroll: () => void;
 	size: Sizes;
@@ -16,7 +16,7 @@ interface LogBoxProps {
 
 const LogBox = (props: LogBoxProps) => {
 	const { logs, expanded, scroll, size, tableColor } = props;
-	const logRef = useRef<Log[]>([]);
+	const logRef = useRef<ILog[]>([]);
 
 	useEffect(() => {
 		if (logRef.current.length > 100) {
@@ -37,7 +37,7 @@ const LogBox = (props: LogBoxProps) => {
 			className={`log-box-${size || Sizes.medium}${expanded ? ` expanded` : ``}`}
 			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 		>
-			{logRef.current.map((log: Log, index) => {
+			{logRef.current.map((log: ILog, index) => {
 				return (
 					<CSSTransition key={`${index}`} timeout={250} classNames="move">
 						<TableText>{log.msg}</TableText>

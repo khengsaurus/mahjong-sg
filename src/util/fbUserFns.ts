@@ -2,7 +2,7 @@ import { User } from '../Models/User';
 import FBService from '../service/MyFirebaseService';
 import { objToUser } from './utilFns';
 
-export async function authRegister_EmailPass(props: EmailPass): Promise<string> {
+export async function authRegister_EmailPass(props: IEmailPass): Promise<string> {
 	return new Promise((resolve, reject) => {
 		FBService.authRegisterEmailPass(props.email, props.password)
 			.then(email => {
@@ -14,7 +14,7 @@ export async function authRegister_EmailPass(props: EmailPass): Promise<string> 
 	});
 }
 
-export async function authLogin_EmailPass(props: EmailPass): Promise<string> {
+export async function authLogin_EmailPass(props: IEmailPass): Promise<string> {
 	return new Promise((resolve, reject) => {
 		FBService.authLoginEmailPass(props.email, props.password)
 			.then(email => {
@@ -43,7 +43,7 @@ export function resolveUser_Email(email: string): Promise<User | null> {
 	});
 }
 
-export async function newUser_EmailUser(values: EmailUser): Promise<boolean> {
+export async function newUser_IEmailUser(values: IEmailUser): Promise<boolean> {
 	return new Promise((resolve, reject) => {
 		FBService.getUserReprByUsername(values.username).then(data => {
 			if (!data.empty) {

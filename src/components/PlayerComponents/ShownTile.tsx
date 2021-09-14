@@ -6,9 +6,9 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 
 interface ShownTileProps {
-	tile: TileI;
+	tile: ITile;
 	segment: Segments;
-	last?: TileI;
+	last?: ITile;
 	highlight?: boolean;
 	classSuffix?: string;
 }

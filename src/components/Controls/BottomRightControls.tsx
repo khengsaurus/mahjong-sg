@@ -2,9 +2,9 @@ import Button from '@material-ui/core/Button';
 import React from 'react';
 import { Sizes } from '../../global/enums';
 import { MuiStyles } from '../../global/MuiStyles';
-import './ControlsLarge.scss';
-import './ControlsMedium.scss';
-import './ControlsSmall.scss';
+import '../FormComponents/controlsLarge.scss';
+import '../FormComponents/controlsMedium.scss';
+import '../FormComponents/controlsSmall.scss';
 
 interface BottomRightControlsProps {
 	controlsSize: Sizes;

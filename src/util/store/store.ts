@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 import { ActionTypes, SET_CACHE, SET_PLAYER, SET_GAME } from './actions';
 
 function storeReducer(
-	state: Store = {
+	state: IStore = {
 		game: null,
 		gameCache: null,
 		player: null

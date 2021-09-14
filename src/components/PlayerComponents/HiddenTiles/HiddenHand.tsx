@@ -22,14 +22,14 @@ const HiddenHand = ({ tiles, segment }: Props) => {
 
 	return segment === Segments.top ? (
 		<div className="htsh">
-			{tilesArray.map(tileIndex => {
-				return <HiddenTile key={`${segment}-hidden-${tileIndex}`} className="hth" />;
+			{tilesArray.map(ITilendex => {
+				return <HiddenTile key={`${segment}-hidden-${ITilendex}`} className="hth" />;
 			})}
 		</div>
 	) : (
 		<div className="vtsh">
-			{tilesArray.map(tileIndex => {
-				return <HiddenTile key={`${segment}-hidden-${tileIndex}`} className="vth" />;
+			{tilesArray.map(ITilendex => {
+				return <HiddenTile key={`${segment}-hidden-${ITilendex}`} className="vth" />;
 			})}
 		</div>
 	);

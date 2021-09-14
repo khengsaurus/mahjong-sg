@@ -9,12 +9,12 @@ import FormField from '../../components/FormComponents/FormField';
 import { Pages, Status } from '../../global/enums';
 import { Main } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
-import { deleteCurrentFBUser, newUser_EmailUser, resolveUser_Email } from '../../util/fbUserFns';
+import { deleteCurrentFBUser, newUser_IEmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
 
 const NewUser = () => {
 	const { userEmail, login, logout } = useContext(AppContext);
-	const [alert, setAlert] = useState<AlertI>({ status: Status.info, msg: '' });
+	const [alert, setAlert] = useState<IAlert>({ status: Status.info, msg: '' });
 
 	function handleCancel() {
 		deleteCurrentFBUser();
@@ -22,8 +22,8 @@ const NewUser = () => {
 		history.push(Pages.login);
 	}
 
-	function handleSubmit(values: EmailUser, callback: () => void) {
-		newUser_EmailUser(values)
+	function handleSubmit(values: IEmailUser, callback: () => void) {
+		newUser_IEmailUser(values)
 			.then(res => {
 				if (res) {
 					setAlert({ status: Status.success, msg: 'Username set' });

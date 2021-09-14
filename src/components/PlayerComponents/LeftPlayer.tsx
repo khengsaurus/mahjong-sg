@@ -1,7 +1,7 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React from 'react';
-import { FrontBackTag, PlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { comparePlayerProps } from '../../util/utilFns';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -10,7 +10,7 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
 
-const LeftPlayer = (props: PlayerComponentProps) => {
+const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 	console.log('Rendering left');

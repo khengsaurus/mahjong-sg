@@ -1,7 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
-import { BackgroundColors, PlayerComponentProps, Sizes, TableColors, TileColors } from '../global/enums';
+import { BackgroundColors, IPlayerComponentProps, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 import isEqual from 'lodash.isequal';
@@ -22,12 +22,12 @@ export function userToObj(user: User) {
 }
 
 /**
- * Overloaded method to resolve User object from JwtData or firebase.firestore.DocumentData
- * @param: JwtData | firebase.firestore.DocumentData
+ * Overloaded method to resolve User object from IJwtData or firebase.firestore.DocumentData
+ * @param: IJwtData | firebase.firestore.DocumentData
  * @returns: new User(id, username, photoUrl, email);
  */
 export function objToUser(obj: firebase.firestore.DocumentData): User;
-export function objToUser(obj: JwtData): User;
+export function objToUser(obj: IJwtData): User;
 export function objToUser(obj: any): User {
 	let user: User = null;
 	let ref: any = null;
@@ -37,7 +37,7 @@ export function objToUser(obj: any): User {
 			ref = obj.docs[0].data();
 			id = obj.docs[0].id;
 		} else {
-			ref = obj as JwtData;
+			ref = obj as IJwtData;
 			id = ref.id;
 		}
 		user = new User(
@@ -152,11 +152,11 @@ export function generateNumberArray(n: number) {
 	return unusedTiles;
 }
 
-export function sortTiles(tiles: TileI[]): TileI[] {
+export function sortTiles(tiles: ITile[]): ITile[] {
 	return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 }
 
-export function indexOfCard(tile: TileI, tiles: TileI[]) {
+export function indexOfCard(tile: ITile, tiles: ITile[]) {
 	for (var i = 0; i < tiles.length; i++) {
 		if (tiles[i].card === tile.card) {
 			return i;
@@ -193,23 +193,23 @@ export function scrollToBottomOfDiv(id: string) {
 	}
 }
 
-export function addClassToElement(tileId: string, className: string) {
+export function addClassToElement(ITiled: string, className: string) {
 	try {
-		var e = document.getElementById(tileId);
+		var e = document.getElementById(ITiled);
 		if (!e.classList.contains(className)) {
 			e.classList.add(className);
 		}
 	} catch (err) {
-		console.log(`Element with id ${tileId} not found`);
+		console.log(`Element with id ${ITiled} not found`);
 	}
 }
 
-export function removeClassFromElement(tileId: string, className: string) {
+export function removeClassFromElement(ITiled: string, className: string) {
 	try {
-		var e = document.getElementById(tileId);
+		var e = document.getElementById(ITiled);
 		e.classList.remove(className);
 	} catch (err) {
-		console.log(`Element with id ${tileId} not found`);
+		console.log(`Element with id ${ITiled} not found`);
 	}
 }
 
@@ -229,7 +229,7 @@ export function validateEmail(email: string) {
 	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
-export function comparePlayerProps(prev: PlayerComponentProps, next: PlayerComponentProps) {
+export function comparePlayerProps(prev: IPlayerComponentProps, next: IPlayerComponentProps) {
 	return (
 		prev.player.showTiles === next.player.showTiles &&
 		prev.player.allHiddenTiles().length === next.player.allHiddenTiles().length &&
@@ -246,9 +246,9 @@ export function comparePlayerProps(prev: PlayerComponentProps, next: PlayerCompo
 	 * 	Yes -> still IS the last one to throw? -> true/false
 	 * 	No -> IS the last one to throw? -> false/true
 	 */
-	// prev.player.lastDiscardedTileIs(prev.lastThrown)
-	// ? prev.player.lastDiscardedTileIs(next.lastThrown)
-	// : next.player.lastDiscardedTileIs(next.lastThrown)
+	// prev.player.lastDiscardedITiles(prev.lastThrown)
+	// ? prev.player.lastDiscardedITiles(next.lastThrown)
+	// : next.player.lastDiscardedITiles(next.lastThrown)
 	// ? false
 	// : true
 }

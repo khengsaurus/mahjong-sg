@@ -101,7 +101,7 @@ class FirebaseService {
 	}
 
 	/* ------------------------- User related ------------------------- */
-	async registerByUserPass(username: string, password: string) {
+	async registerByIUserPass(username: string, password: string) {
 		let userId = '';
 		try {
 			await this.userVal.add({}).then(user => {
@@ -176,7 +176,7 @@ class FirebaseService {
 
 	async searchGroups(user: User, partGroupName: string) {
 		return new Promise((resolve, reject) => {
-			let groups: Group[] = [];
+			let groups: IGroup[] = [];
 			this.userRepr
 				.doc(user.id)
 				.get()
