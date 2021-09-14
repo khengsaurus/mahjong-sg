@@ -16,7 +16,7 @@ import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import '../FormComponents/controlsMedium.scss';
+import './controlsMedium.scss';
 
 interface Props {
 	game: Game;

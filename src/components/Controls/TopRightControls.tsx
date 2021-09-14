@@ -5,9 +5,9 @@ import React, { useContext } from 'react';
 import { Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import { scrollToBottomOfDiv } from '../../util/utilFns';
-import '../FormComponents/controlsLarge.scss';
-import '../FormComponents/controlsMedium.scss';
-import '../FormComponents/controlsSmall.scss';
+import './controlsLarge.scss';
+import './controlsMedium.scss';
+import './controlsSmall.scss';
 import LogBox from './LogBox';
 
 interface TopRightControlsProps {

@@ -13,7 +13,7 @@ import { useContext, useState } from 'react';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import '../PlayerComponents/searchForms.scss';
+import './searchForms.scss';
 
 const GroupSearchForm: React.FC = () => {
 	const { players, setPlayers } = useContext(AppContext);

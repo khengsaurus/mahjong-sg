@@ -16,7 +16,7 @@ import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { formatDateToDay, objToGame } from '../../util/utilFns';
 import Login from '../Login';
-import '../Login/joinGame.scss';
+import './joinGame.scss';
 
 const JoinGame = () => {
 	const { user, setGameId, handleUserState } = useContext(AppContext);

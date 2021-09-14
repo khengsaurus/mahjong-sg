@@ -14,7 +14,7 @@ import { CenteredColored } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import '../PlayerComponents/searchForms.scss';
+import './searchForms.scss';
 
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);

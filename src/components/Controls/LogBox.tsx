@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Sizes, TableColors } from '../../global/enums';
 import { TableText } from '../../global/StyledComponents';
-import '../FormComponents/controlsLarge.scss';
-import '../FormComponents/controlsMedium.scss';
-import '../FormComponents/controlsSmall.scss';
+import './controlsLarge.scss';
+import './controlsMedium.scss';
+import './controlsSmall.scss';
 
 interface LogBoxProps {
 	logs: ILog[];
