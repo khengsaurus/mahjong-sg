@@ -1,8 +1,0 @@
-{
-  "appId": "io.ionic.mahjong_app",
-  "appName": "mahjong_app",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "build",
-  "cordova": {}
-}

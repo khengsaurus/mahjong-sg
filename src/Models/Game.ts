@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { findLeft, findOpp, findRight, playerToObj } from '../util/utilFns';
 import { User } from './User';
+import { v4 as uuidv4 } from 'uuid';
 
 export function gameToObj(game: Game) {
 	return {

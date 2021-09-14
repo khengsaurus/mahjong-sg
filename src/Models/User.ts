@@ -1,10 +1,18 @@
 import isEmpty from 'lodash.isempty';
+import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
 import { indexOfCard, sortTiles } from '../util/utilFns';
 
 export class User {
 	id: string;
 	username: string;
 	photoUrl: string;
+	email: string;
+	handSize: Sizes;
+	tilesSize: Sizes;
+	controlsSize: Sizes;
+	backgroundColor: BackgroundColors;
+	tableColor: TableColors;
+	tileBackColor: TileColors;
 	shownTiles?: TileI[];
 	hiddenTiles?: TileI[];
 	discardedTiles?: TileI[];
@@ -18,6 +26,13 @@ export class User {
 		id: string,
 		username: string,
 		photoUrl: string,
+		email: string,
+		handSize?: Sizes,
+		tilesSize?: Sizes,
+		controlsSize?: Sizes,
+		backgroundColor?: BackgroundColors,
+		tableColor?: TableColors,
+		tileBackColor?: TileColors,
 		shownTiles?: TileI[],
 		hiddenTiles?: TileI[],
 		discardedTiles?: TileI[],
@@ -30,6 +45,13 @@ export class User {
 		this.id = id;
 		this.username = username;
 		this.photoUrl = photoUrl;
+		this.email = email;
+		this.handSize = handSize;
+		this.tilesSize = tilesSize;
+		this.controlsSize = controlsSize;
+		this.backgroundColor = backgroundColor;
+		this.tableColor = tableColor;
+		this.tileBackColor = tileBackColor;
 		this.shownTiles = shownTiles || [];
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
@@ -140,19 +162,28 @@ export class User {
 			.includes(t.id);
 	}
 	hiddenTilesContain(t: TileI): boolean {
-		return this.hiddenTiles.map(tile => tile.id).includes(t.id);
+		return this.hiddenTiles?.map(tile => tile.id).includes(t.id);
 	}
 	shownTilesContain(t: TileI): boolean {
-		return this.shownTiles.map(tile => tile.id).includes(t.id);
+		return this.shownTiles?.map(tile => tile.id).includes(t.id);
 	}
 	shownTilesContainCard(card: string): boolean {
-		return this.shownTiles.map(tile => tile.card).includes(card);
+		return this.shownTiles?.map(tile => tile.card).includes(card);
 	}
 	discardedTilesContain(t: TileI): boolean {
-		return this.discardedTiles.map(tile => tile.id).includes(t.id);
+		return this.discardedTiles?.map(tile => tile.id).includes(t.id);
+	}
+	lastTakenTileUUID(): string {
+		let all = this.allHiddenTiles();
+		return all.length > 0 ? all[all.length - 1].uuid : '';
+	}
+	lastDiscardedTileUUID(): string {
+		let all = this.discardedTiles;
+		return all.length > 0 ? all[all.length - 1].uuid : '';
 	}
 	lastDiscardedTileIs(t: TileI): boolean {
-		return this.discardedTiles.length > 0 ? this.discardedTiles[this.discardedTiles.length - 1].id === t.id : false;
+		let all = this.discardedTiles;
+		return all.length > 0 ? all[all.length - 1].id === t.id : false;
 	}
 
 	/* ----------------------------------- Add ----------------------------------- */
@@ -262,6 +293,7 @@ export class User {
 			return tile.show === true && lastThrown?.id !== tile.id;
 		});
 		if (!lastThrown) {
+			// TODO:
 			console.log('Zimo ??');
 		}
 	}

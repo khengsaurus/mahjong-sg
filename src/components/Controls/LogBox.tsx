@@ -1,19 +1,21 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { AppContext } from '../../util/hooks/AppContext';
-import './ControlsSmall.scss';
-import './ControlsMedium.scss';
+import { Sizes, TableColors } from '../../global/enums';
+import { TableText } from '../../global/StyledComponents';
 import './ControlsLarge.scss';
+import './ControlsMedium.scss';
+import './ControlsSmall.scss';
 
 interface LogBoxProps {
 	logs: Log[];
 	expanded: boolean;
 	scroll: () => void;
+	size: Sizes;
+	tableColor: TableColors;
 }
 
 const LogBox = (props: LogBoxProps) => {
-	const { controlsSize } = useContext(AppContext);
-	const { logs, expanded, scroll } = props;
+	const { logs, expanded, scroll, size, tableColor } = props;
 	const logRef = useRef<Log[]>([]);
 
 	useEffect(() => {
@@ -30,17 +32,15 @@ const LogBox = (props: LogBoxProps) => {
 	}, [logs, scroll]);
 
 	return (
-		<TransitionGroup className={`log-box-${controlsSize}${expanded ? ` expanded` : ``}`} id="logs">
+		<TransitionGroup
+			id="logs"
+			className={`log-box-${size || Sizes.medium}${expanded ? ` expanded` : ``}`}
+			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
+		>
 			{logRef.current.map((log: Log, index) => {
 				return (
 					<CSSTransition key={`${index}`} timeout={250} classNames="move">
-						<div
-							className={
-								log.msg.includes('sent') ? 'log pay' : log.msg.includes('turn') ? 'log turn' : 'log'
-							}
-						>
-							{log.msg}
-						</div>
+						<TableText>{log.msg}</TableText>
 					</CSSTransition>
 				);
 			})}

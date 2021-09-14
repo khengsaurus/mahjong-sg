@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { BackgroundColors, Decorations, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game, gameToObj } from '../Models/Game';
 import { User } from '../Models/User';
 import { playerToObj } from '../util/utilFns';
@@ -36,7 +37,6 @@ class FirebaseService {
 		} else {
 			this.app = firebase.app();
 		}
-		// this.authLoginAnon();
 	}
 
 	userAuthenticated() {
@@ -122,7 +122,20 @@ class FirebaseService {
 	async registerUserEmail(username: string, email: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			try {
-				this.userRepr.add({ username, email, photoUrl: '', groups: [] });
+				this.userRepr.add({
+					username,
+					email,
+					photoUrl: '',
+					handSize: Sizes.medium,
+					tilesSize: Sizes.medium,
+					controlsSize: Sizes.medium,
+					backgroundColor: BackgroundColors.brown,
+					tableColor: TableColors.brown,
+					tileBackColor: TileColors.green,
+					tileFrontColor: TileColors.light,
+					decoration: Decorations.default,
+					groups: []
+				});
 				console.log('User created successfully');
 				resolve(true);
 			} catch (err) {
@@ -179,6 +192,18 @@ class FirebaseService {
 		});
 	}
 
+	updateUser(user: User): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			try {
+				const userRef = this.userRepr.doc(user.id);
+				userRef.set({ ...user });
+				resolve(true);
+			} catch (err) {
+				reject(new Error('FirebaseService - user doc was not updated: ' + err.msg));
+			}
+		});
+	}
+
 	/* ------------------------- User-game related ------------------------- */
 
 	async getInvites(user: User) {
@@ -210,6 +235,7 @@ class FirebaseService {
 	}
 
 	/* ------------------------- Game related ------------------------- */
+
 	async getGameById(game?: Game, gameId?: string) {
 		if (!game && !gameId) {
 			return null;
