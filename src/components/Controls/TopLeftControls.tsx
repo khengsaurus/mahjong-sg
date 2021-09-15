@@ -19,25 +19,23 @@ const TopLeftControls = (props: TopLeftControlsProps) => {
 
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>
-			<>
-				<div className="buttons">
-					<IconButton color="primary" className="icon-button" onClick={props.homeCallback}>
-						<HomeIcon />
-					</IconButton>
-					<IconButton color="primary" className="icon-button" onClick={props.settingsCallback}>
-						<SettingsIcon />
-					</IconButton>
-				</div>
-				<div className="text-container">
-					{props.texts?.map((text, index) => {
-						return (
-							<TableText className="text" key={`top-left-text-${index}`}>
-								{text}
-							</TableText>
-						);
-					})}
-				</div>
-			</>
+			<div className="buttons">
+				<IconButton color="primary" className="icon-button" onClick={props.homeCallback}>
+					<HomeIcon />
+				</IconButton>
+				<IconButton color="primary" className="icon-button" onClick={props.settingsCallback}>
+					<SettingsIcon />
+				</IconButton>
+			</div>
+			<div className="text-container">
+				{props.texts?.map((text, index) => {
+					return (
+						<TableText className="text" key={`top-left-text-${index}`}>
+							{text}
+						</TableText>
+					);
+				})}
+			</div>
 		</div>
 	);
 };

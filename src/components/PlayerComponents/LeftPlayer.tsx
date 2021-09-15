@@ -1,8 +1,8 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { comparePlayerProps } from '../../util/utilFns';
+import { comparePlayerProps, rotateShownTiles, sortShownTiles } from '../../util/utilFns';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
@@ -14,6 +14,16 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 	console.log('Rendering left');
+
+	const { flowers, nonFlowers } = useMemo(() => {
+		return sortShownTiles(player.shownTiles);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [player.shownTiles.length]);
+
+	const rotatedNonFlowers = useMemo(() => {
+		return rotateShownTiles(nonFlowers);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [nonFlowers.length]);
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.medium}`}>
@@ -39,13 +49,11 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
 			<div className="vtss left">
-				{player.shownTiles.map(tile => {
-					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />
-					) : null;
+				{rotatedNonFlowers.map(tile => {
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />;
 				})}
-				{player.shownTiles.map(tile => {
-					return tile.suit === '花' || tile.suit === '动物' ? (
+				{flowers.map(tile => {
+					return (
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
@@ -54,7 +62,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
-					) : null;
+					);
 				})}
 				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>

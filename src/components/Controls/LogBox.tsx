@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Sizes, TableColors } from '../../global/enums';
 import { TableText } from '../../global/StyledComponents';
@@ -7,16 +7,26 @@ import './controlsMedium.scss';
 import './controlsSmall.scss';
 
 interface LogBoxProps {
+	id: string;
 	logs: ILog[];
 	expanded: boolean;
-	scroll: () => void;
 	size: Sizes;
 	tableColor: TableColors;
 }
 
 const LogBox = (props: LogBoxProps) => {
-	const { logs, expanded, scroll, size, tableColor } = props;
+	const { id, logs, expanded, size, tableColor } = props;
 	const logRef = useRef<ILog[]>([]);
+
+	const scrollToBottomOfDiv = useCallback(() => {
+		try {
+			let logsList = document.getElementById(id);
+			logsList.scrollTop = logsList.scrollHeight + 10;
+		} catch (err) {
+			console.log(`Element with id '${id}' not found`);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [id, expanded]);
 
 	useEffect(() => {
 		if (logRef.current.length > 100) {
@@ -28,12 +38,12 @@ const LogBox = (props: LogBoxProps) => {
 				}
 			});
 		}
-		scroll();
-	}, [logs, scroll]);
+		scrollToBottomOfDiv();
+	}, [logs, scrollToBottomOfDiv]);
 
 	return (
 		<TransitionGroup
-			id="logs"
+			id={id}
 			className={`log-box-${size || Sizes.medium}${expanded ? ` expanded` : ``}`}
 			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 		>

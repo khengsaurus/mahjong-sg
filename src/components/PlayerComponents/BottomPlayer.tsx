@@ -1,8 +1,9 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
+import { comparePlayerProps, sortShownTiles } from '../../util/utilFns';
 import { HandTile } from './HandTile';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
@@ -14,6 +15,12 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
+	console.log('Rendering bottom');
+
+	const { flowers, nonFlowers } = useMemo(() => {
+		return sortShownTiles(player.shownTiles);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [player.shownTiles.length]);
 
 	function selectTile(tile: ITile) {
 		if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
@@ -68,13 +75,11 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 			{/*------------------------------ Shown tiles ------------------------------*/}
 			<div className="htss">
-				{player.shownTiles.map((tile: ITile) => {
-					return tile.suit !== '花' && tile.suit !== '动物' ? (
-						<ShownTile key={tile.uuid} tile={tile} segment={Segments.bottom} last={lastThrown} />
-					) : null;
+				{nonFlowers.map((tile: ITile) => {
+					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.bottom} last={lastThrown} />;
 				})}
-				{player.shownTiles.map((tile: ITile) => {
-					return tile.suit === '花' || tile.suit === '动物' ? (
+				{flowers.map((tile: ITile) => {
+					return (
 						<ShownTile
 							key={tile.uuid}
 							tile={tile}
@@ -83,7 +88,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
 							}
 						/>
-					) : null;
+					);
 				})}
 				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
 			</div>
@@ -101,4 +106,4 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 };
 
-export default BottomPlayer;
+export default React.memo(BottomPlayer, comparePlayerProps);

@@ -161,7 +161,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 										<Typography variant="subtitle1" display="inline">
 											{`${preference.label}:`}
 										</Typography>
-										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'white' }}>
+										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
 											<Tabs
 												style={{
 													...MuiStyles.tabs,

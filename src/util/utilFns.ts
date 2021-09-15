@@ -184,15 +184,6 @@ export const rotatedMUIButton = createTheme({
 	}
 });
 
-export function scrollToBottomOfDiv(id: string) {
-	try {
-		let logsList = document.getElementById(id);
-		logsList.scrollTop = logsList.scrollHeight + 10;
-	} catch (err) {
-		console.log(`Element with id '${id}' not found`);
-	}
-}
-
 export function addClassToElement(ITiled: string, className: string) {
 	try {
 		var e = document.getElementById(ITiled);
@@ -229,17 +220,19 @@ export function validateEmail(email: string) {
 	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
+//FIXME: player component not rerendering after tile is thrown and taken by another player
 export function comparePlayerProps(prev: IPlayerComponentProps, next: IPlayerComponentProps) {
 	return (
 		prev.player.showTiles === next.player.showTiles &&
 		prev.player.allHiddenTiles().length === next.player.allHiddenTiles().length &&
 		prev.player.shownTiles.length === next.player.shownTiles.length &&
 		prev.player.discardedTiles.length === next.player.discardedTiles.length &&
+		prev.player.lastDiscardedTileUUID() === next.player.lastDiscardedTileUUID() &&
 		prev.player.unusedTiles === next.player.unusedTiles &&
 		prev.hasFront === next.hasFront &&
 		prev.hasBack === next.hasBack &&
 		prev.tilesSize === next.tilesSize &&
-		isEqual(prev.lastThrown, next.lastThrown)
+		prev.lastThrown?.id === next.lastThrown?.id
 	);
 	/**
 	 * WAS the last one to throw?
@@ -251,4 +244,52 @@ export function comparePlayerProps(prev: IPlayerComponentProps, next: IPlayerCom
 	// : next.player.lastDiscardedITiles(next.lastThrown)
 	// ? false
 	// : true
+}
+
+export function sortShownTiles(tiles: ITile[]): ShownTiles {
+	let flowers: ITile[] = tiles.filter(tile => tile.suit === '花' || tile.suit === '动物') || [];
+	let nonFlowers: ITile[] = tiles.filter(tile => tile.suit !== '花' && tile.suit !== '动物') || [];
+	return { flowers, nonFlowers };
+}
+
+export function rotateShownTiles(tiles: ITile[]): ITile[] {
+	let copy = [...tiles];
+	let temp: ITile;
+	let j: number;
+	let k: number;
+	if (tiles.length > 0) {
+		try {
+			//TODO: edge case - 3 kangs
+			if (tiles.length % 3 === 0) {
+				for (let i = 0; i < tiles.length; i += 3) {
+					j = i + 2;
+					if (tiles[i].card !== tiles[j].card) {
+						temp = tiles[i];
+						tiles[i] = tiles[j];
+						tiles[j] = temp;
+					}
+				}
+			} else {
+				for (let i = 0; i < tiles.length; i += 3) {
+					if (tiles.length - i !== 4) {
+						k = i + 3;
+						if (tiles.length > k + 1 && tiles[i].card === tiles[k].card) {
+							i += 1;
+						} else {
+							j = i + 2;
+							if (tiles[i].card !== tiles[j].card) {
+								temp = tiles[i];
+								tiles[i] = tiles[j];
+								tiles[j] = temp;
+							}
+						}
+					}
+				}
+			}
+		} catch (err) {
+			console.log(err);
+			return copy;
+		}
+	}
+	return tiles;
 }

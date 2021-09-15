@@ -39,6 +39,11 @@ interface ITile {
 	isValidFlower?: boolean;
 }
 
+interface ShownTiles {
+	flowers?: ITile[];
+	nonFlowers?: ITile[];
+}
+
 interface IUserPass {
 	username: string;
 	password: string;

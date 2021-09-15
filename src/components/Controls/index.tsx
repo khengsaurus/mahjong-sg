@@ -9,7 +9,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { findLeft, scrollToBottomOfDiv, sortTiles } from '../../util/utilFns';
+import { findLeft, sortTiles } from '../../util/utilFns';
 import './controlsLarge.scss';
 import './controlsMedium.scss';
 import './controlsSmall.scss';
@@ -42,11 +42,11 @@ const Controls = (props: ControlsProps) => {
 
 	const game: Game = useSelector((state: IStore) => state.game);
 	const player: User = useSelector((state: IStore) => state.player);
-	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs } = game;
+	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs, hu } = game;
 
 	// Logic to showHuDialog when user shows, leaves the game, then returns
 	useEffect(() => {
-		if (player && player.showTiles) {
+		if (player && player.showTiles && hu.length !== 3) {
 			if (!declareHu) {
 				showHuDialog();
 			}
@@ -97,9 +97,6 @@ const Controls = (props: ControlsProps) => {
 
 	function handleShowLogs() {
 		setShowLogs(!showLogs);
-		setTimeout(function () {
-			scrollToBottomOfDiv('logs');
-		}, 200);
 	}
 
 	function setShowTimeout() {
