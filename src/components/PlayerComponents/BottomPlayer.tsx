@@ -3,7 +3,7 @@ import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
-import { comparePlayerProps, sortShownTiles } from '../../util/utilFns';
+import { sortShownTiles } from '../../util/utilFns';
 import { HandTile } from './HandTile';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
@@ -106,4 +106,4 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 };
 
-export default React.memo(BottomPlayer, comparePlayerProps);
+export default BottomPlayer;

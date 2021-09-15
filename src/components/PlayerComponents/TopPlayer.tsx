@@ -2,7 +2,7 @@ import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { comparePlayerProps, rotateShownTiles, sortShownTiles } from '../../util/utilFns';
+import { rotateShownTiles, sortShownTiles } from '../../util/utilFns';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
@@ -81,4 +81,4 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 	);
 };
 
-export default React.memo(TopPlayer, comparePlayerProps);
+export default TopPlayer;
