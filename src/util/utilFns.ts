@@ -4,7 +4,6 @@ import moment from 'moment';
 import { BackgroundColors, IPlayerComponentProps, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
-import isEqual from 'lodash.isequal';
 
 export function userToObj(user: User) {
 	return {
@@ -220,30 +219,27 @@ export function validateEmail(email: string) {
 	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
-//FIXME: player component not rerendering after tile is thrown and taken by another player
+/**
+ * Comparator fn for Rect.memo(<>Player)
+ * //FIXME: Returns false but component is not re-rendering...
+ * @param prev
+ * @param next
+ * @returns boolean: false to trigger re-render
+ */
 export function comparePlayerProps(prev: IPlayerComponentProps, next: IPlayerComponentProps) {
-	return (
-		prev.player.showTiles === next.player.showTiles &&
+	return prev.player.showTiles === next.player.showTiles &&
 		prev.player.allHiddenTiles().length === next.player.allHiddenTiles().length &&
 		prev.player.shownTiles.length === next.player.shownTiles.length &&
 		prev.player.discardedTiles.length === next.player.discardedTiles.length &&
-		prev.player.lastDiscardedTileUUID() === next.player.lastDiscardedTileUUID() &&
 		prev.player.unusedTiles === next.player.unusedTiles &&
 		prev.hasFront === next.hasFront &&
 		prev.hasBack === next.hasBack &&
 		prev.tilesSize === next.tilesSize &&
-		prev.lastThrown?.id === next.lastThrown?.id
-	);
-	/**
-	 * WAS the last one to throw?
-	 * 	Yes -> still IS the last one to throw? -> true/false
-	 * 	No -> IS the last one to throw? -> false/true
-	 */
-	// prev.player.lastDiscardedITiles(prev.lastThrown)
-	// ? prev.player.lastDiscardedITiles(next.lastThrown)
-	// : next.player.lastDiscardedITiles(next.lastThrown)
-	// ? false
-	// : true
+		prev.player.lastDiscardedTileIs(prev.lastThrown)
+		? prev.player.lastDiscardedTileIs(next.lastThrown)
+			? false // WAS the last one to throw, last thrown has changed -> re-render
+			: true
+		: true;
 }
 
 export function sortShownTiles(tiles: ITile[]): ShownTiles {

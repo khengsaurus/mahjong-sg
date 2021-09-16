@@ -178,12 +178,14 @@ export class User {
 		return all.length > 0 ? all[all.length - 1].uuid : '';
 	}
 	lastDiscardedTileUUID(): string {
-		let all = this.discardedTiles;
-		return all.length > 0 ? all[all.length - 1].uuid : '';
+		return this.discardedTiles.length > 0 ? this.discardedTiles.slice(-1)[0].uuid : '';
 	}
-	lastDiscardedITiles(t: ITile): boolean {
-		let all = this.discardedTiles;
-		return all.length > 0 ? all[all.length - 1].id === t.id : false;
+	lastDiscardedTileIs(t: ITile): boolean {
+		if (isEmpty(t) || this.discardedTiles.length === 0) {
+			return false;
+		} else {
+			return this.discardedTiles.slice(-1)[0].id === t.id;
+		}
 	}
 
 	/* ----------------------------------- Add ----------------------------------- */

@@ -68,7 +68,7 @@ const Controls = (props: ControlsProps) => {
 	}, [tiles]);
 
 	const lastThrownAvailable: boolean = useMemo(() => {
-		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedITiles(lastThrown);
+		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
 	}, [players, lastThrown, thrownBy, takenTile]);
 
 	const isHoldingLastThrown: boolean = useMemo(() => {
@@ -76,7 +76,7 @@ const Controls = (props: ControlsProps) => {
 			!isEmpty(lastThrown) &&
 			player &&
 			player.allHiddenTilesContain(lastThrown) &&
-			!players[thrownBy].lastDiscardedITiles(lastThrown)
+			!players[thrownBy].lastDiscardedTileIs(lastThrown)
 		);
 	}, [player, players, lastThrown, thrownBy]);
 
@@ -156,7 +156,7 @@ const Controls = (props: ControlsProps) => {
 			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
 				drawnTile = buHua();
 			}
-			updateGameStateTakenTile(true);
+			updateGameStateTakenTile();
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -218,13 +218,15 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	const updateGameStateTakenTile = useCallback(
-		(resetLastThrown: boolean = false) => {
+		(resetLastThrown: boolean = true, halfMove: boolean = true) => {
 			if (resetLastThrown) {
 				game.lastThrown = {};
 			}
-			game.takenTile = true;
-			game.takenBy = playerSeat;
-			game.newLog(`${player.username}'s turn - to throw`);
+			if (halfMove) {
+				game.takenTile = true;
+				game.takenBy = playerSeat;
+				game.newLog(`${player.username}'s turn - to throw`);
+			}
 		},
 		[game, player?.username, playerSeat]
 	);
@@ -269,7 +271,7 @@ const Controls = (props: ControlsProps) => {
 	const selfKang = useCallback(() => {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
-		updateGameStateTakenTile(false);
+		updateGameStateTakenTile();
 		game.flagProgress = true;
 		buHua();
 		handleAction(game);
@@ -281,6 +283,7 @@ const Controls = (props: ControlsProps) => {
 		setDeclareHu(true);
 		if (lastThrownAvailable) {
 			takeLastThrown();
+			updateGameStateTakenTile(false, false);
 		}
 		player.showTiles = true;
 		handleAction(game);
