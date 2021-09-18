@@ -1,6 +1,6 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { rotateShownTiles, sortShownTiles } from '../../util/utilFns';
 import HiddenHand from './HiddenTiles/HiddenHand';
@@ -14,8 +14,6 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	let frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 	const sumHiddenTiles = player.countAllHiddenTiles();
-	const sumShownTiles = player.shownTiles.length;
-	const sumDiscardedTiles = player.discardedTiles.length;
 	// console.log('Rendering left');
 
 	const { flowers, nonFlowers } = useMemo(() => {
@@ -28,39 +26,53 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [nonFlowers.length]);
 
-	const renderHiddenHand = useCallback(() => {
-		return player.showTiles ? (
+	const renderShownHiddenHand = useMemo(() => {
+		return (
 			<div className="vtss left">
 				{player.hiddenTiles.map(tile => {
-					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} />;
+					return (
+						<ShownTile key={tile.uuid} tileUUID={tile.uuid} tileCard={tile.card} segment={Segments.left} />
+					);
 				})}
 				{!isEmpty(player.lastTakenTile) && (
 					<ShownTile
 						key={player.lastTakenTile.uuid}
-						tile={player.lastTakenTile}
+						tileUUID={player.lastTakenTile.uuid}
+						tileCard={player.lastTakenTile.card}
 						segment={Segments.left}
 						classSuffix="margin-bottom"
 						highlight
 					/>
 				)}
 			</div>
-		) : (
-			<HiddenHand tiles={player.allHiddenTiles().length} segment={Segments.left} />
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sumHiddenTiles, player.showTiles]);
+	}, [sumHiddenTiles]);
 
-	const renderShownTiles = useCallback(() => {
+	const renderHiddenHand = useMemo(() => {
+		return <HiddenHand tiles={sumHiddenTiles} segment={Segments.left} />;
+	}, [sumHiddenTiles]);
+
+	const renderShownTiles = useMemo(() => {
 		return (
 			<div className="vtss left">
 				{rotatedNonFlowers.map(tile => {
-					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />;
+					return (
+						<ShownTile
+							key={tile.uuid}
+							tileUUID={tile.uuid}
+							tileCard={tile.card}
+							segment={Segments.left}
+							lastUUID={lastThrown?.uuid}
+						/>
+					);
 				})}
 				{flowers.map(tile => {
 					return (
 						<ShownTile
 							key={tile.uuid}
-							tile={tile}
+							tileUUID={tile.uuid}
+							tileCard={tile.card}
 							segment={Segments.left}
 							classSuffix={
 								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
@@ -72,30 +84,38 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sumShownTiles]);
+	}, [flowers?.length, nonFlowers?.length]);
 
-	const renderUnusedTiles = useCallback(() => {
+	const renderUnusedTiles = useMemo(() => {
 		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.left} tag={frontBackTag} />;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player.unusedTiles]);
+	}, [player?.unusedTiles, frontBackTag]);
 
-	const renderDiscardedTiles = useCallback(() => {
+	// NOTE: Will re-render whenever lastThrown changes, even if is/was not thrown by player
+	const renderDiscardedTiles = useMemo(() => {
 		return (
 			<div className="vtss left">
 				{player.discardedTiles.map(tile => {
-					return <ShownTile key={tile.uuid} tile={tile} segment={Segments.left} last={lastThrown} />;
+					return (
+						<ShownTile
+							key={tile.uuid}
+							tileUUID={tile.uuid}
+							tileCard={tile.card}
+							segment={Segments.left}
+							lastUUID={lastThrown?.uuid}
+						/>
+					);
 				})}
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sumDiscardedTiles, lastThrown]);
+	}, [player?.discardedTiles?.length, lastThrown?.id]);
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.medium}`}>
-			{renderHiddenHand()}
-			{renderShownTiles()}
-			{renderUnusedTiles()}
-			{renderDiscardedTiles()}
+			{player.showTiles ? renderShownHiddenHand : renderHiddenHand}
+			{renderShownTiles}
+			{renderUnusedTiles}
+			{renderDiscardedTiles}
 		</div>
 	);
 };

@@ -1,18 +1,14 @@
-import React, { useCallback, useMemo } from 'react';
-import '../playerComponentsSmall.scss';
-import '../playerComponentsMedium.scss';
-import '../playerComponentsLarge.scss';
+import React, { useMemo } from 'react';
 import { Segments } from '../../../global/enums';
 import { HiddenTile } from '../../../global/StyledComponents';
 import { generateNumberArray } from '../../../util/utilFns';
+import '../playerComponentsLarge.scss';
+import '../playerComponentsMedium.scss';
+import '../playerComponentsSmall.scss';
 
 interface Props {
 	tiles: number;
 	segment: Segments;
-}
-
-function compare(prev: Props, next: Props) {
-	return prev.tiles === next.tiles && prev.segment === next.segment;
 }
 
 const HiddenHand = ({ tiles, segment }: Props) => {
@@ -35,4 +31,4 @@ const HiddenHand = ({ tiles, segment }: Props) => {
 	);
 };
 
-export default React.memo(HiddenHand, compare);
+export default React.memo(HiddenHand);
