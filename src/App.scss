@@ -200,32 +200,13 @@ $rotate-simple-180: rotate(180deg);
 	}
 }
 
-.preference {
-	display: flex;
-	flex-direction: row;
-	width: 340px;
-	height: 45px;
-	align-items: center;
-	justify-content: space-between;
-}
-
 .move-enter {
 	opacity: 0;
-	transform: translate(0, 0);
+	transition: all 500ms ease-in;
 }
 
 .move-enter-active {
 	opacity: 1;
-	transform: translate(0, $text-line-height-medium);
-	transition: 5000ms ease;
-}
-
-.move-exit {
-	opacity: 1;
-	transform: translate(0, -$text-line-height-medium);
-}
-
-.move-exit-active {
-	opacity: 0.01;
-	transform: translate(0, -$text-line-height-medium);
+	transform: translate(0, 0);
+	transition: all 500ms ease-in;
 }

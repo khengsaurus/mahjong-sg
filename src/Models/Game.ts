@@ -120,7 +120,7 @@ export class Game {
 	newLog(log: string) {
 		let newLog = { msg: log, timeStamp: new Date() };
 		this.logs = [...this.logs, newLog];
-		if (this.logs.length >= 20) {
+		if (this.logs.length >= 50) {
 			this.logs = this.logs.slice(-15);
 		}
 	}

@@ -13,7 +13,7 @@ import { MuiStyles, TableTheme } from '../../global/MuiStyles';
 import { MainTransparent } from '../../global/StyledComponents';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import '../../App.scss';
+import './settingsWindow.scss';
 
 interface Props {
 	onClose: () => void;
