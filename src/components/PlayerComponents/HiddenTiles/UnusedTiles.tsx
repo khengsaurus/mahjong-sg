@@ -12,10 +12,6 @@ interface Props {
 	tag: FrontBackTag;
 }
 
-function compare(prev: Props, next: Props) {
-	return prev.tiles === next.tiles && prev.segment === next.segment && prev.tag === next.tag;
-}
-
 const UnusedTiles = ({ tiles, segment, tag }: Props) => {
 	const tilesArray = useMemo(() => {
 		return generateNumberArray(tiles);
@@ -36,4 +32,4 @@ const UnusedTiles = ({ tiles, segment, tag }: Props) => {
 	);
 };
 
-export default React.memo(UnusedTiles, compare);
+export default React.memo(UnusedTiles);

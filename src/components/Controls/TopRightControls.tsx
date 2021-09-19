@@ -32,7 +32,7 @@ const TopRightControls = (props: TopRightControlsProps) => {
 			<LogBox
 				id={boxId}
 				expanded={showLogs}
-				logs={logs.length <= 10 ? logs : logs.slice(logs.length - 10, logs.length)}
+				logs={logs}
 				size={controlsSize || Sizes.medium}
 				tableColor={tableColor}
 			/>

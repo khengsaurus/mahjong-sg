@@ -37,7 +37,7 @@ export const Main = styled(Centered)`
 	left: 0;
 	height: 100%;
 	width: 100%;
-	font-family: 'Barlow', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.backgroundColor};
 `;
 
@@ -55,14 +55,14 @@ export const TableDiv = styled.div`
 	width: 100%;
 	max-height: 750px;
 	max-width: 750px;
-	font-family: 'Barlow', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.tableColor};
 `;
 
 export const Wind = styled.div`
 	display: flex;
 	flex-direction: column;
-	font-family: 'Barlow', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	color: ${props => props.theme.backgroundColor};
 `;
 
@@ -73,6 +73,7 @@ export const TableText = styled.p`
 
 export const GreenTableText = styled.p`
 	color: ${TextColors.green};
+	margin: 0;
 `;
 
 export const HiddenTile = styled.div`

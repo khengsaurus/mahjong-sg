@@ -1,4 +1,4 @@
-import isEmpty from 'lodash.isempty';
+import React from 'react';
 import { Segments } from '../../global/enums';
 import getTileSrc from '../../images';
 import './playerComponentsLarge.scss';
@@ -6,9 +6,10 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 
 interface ShownTileProps {
-	tile: ITile;
+	tileUUID: string;
+	tileCard: string;
 	segment: Segments;
-	last?: ITile;
+	lastUUID?: string;
 	highlight?: boolean;
 	classSuffix?: string;
 }
@@ -29,7 +30,7 @@ function getClass(segment: Segments) {
 }
 
 const ShownTile = (props: ShownTileProps) => {
-	const { tile, segment, last, highlight, classSuffix } = props;
+	const { tileUUID, tileCard, segment, lastUUID = '', highlight, classSuffix } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -37,10 +38,8 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					className={`${divClass} ${highlight || (!isEmpty(last) && last.id === tile.id) ? `last` : ``} ${
-						classSuffix || ``
-					}`}
-					src={getTileSrc(tile.card)}
+					className={`${divClass} ${highlight || lastUUID === tileUUID ? `last` : ``} ${classSuffix || ``}`}
+					src={getTileSrc(tileCard)}
 					alt="tile"
 				/>
 			);
@@ -48,10 +47,10 @@ const ShownTile = (props: ShownTileProps) => {
 			return (
 				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
-						className={`${bgClass} ${highlight || (!isEmpty(last) && last.id === tile.id) ? `last` : ``} ${
+						className={`${bgClass} ${highlight || lastUUID === tileUUID ? `last` : ``} ${
 							classSuffix || ``
 						}`}
-						src={getTileSrc(tile.card)}
+						src={getTileSrc(tileCard)}
 						alt="tile"
 					/>
 				</div>
@@ -61,4 +60,4 @@ const ShownTile = (props: ShownTileProps) => {
 	}
 };
 
-export default ShownTile;
+export default React.memo(ShownTile);
