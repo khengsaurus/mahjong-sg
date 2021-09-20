@@ -3,59 +3,12 @@ $main-padding: 2px;
 $panel-segment-width: 200px;
 $wind-font-size: 60px;
 
-/*-------------------- Colors --------------------*/
-$white-smoke: rgb(200, 200, 200);
-$brown-blanchedalmond: blanchedalmond;
-$brown-bisque: bisque;
-$brown-wheat: wheat;
-$brown-dark: rgb(160, 149, 133);
-$purple2: rgb(142, 80, 117);
-$brown-medium: rgb(165, 150, 130);
-$brown-darker: rgb(140, 125, 105);
-$brown-burlywood: burlywood;
-$brown-sienna: sienna;
-$brown: brown;
-$maroon: rgb(125, 47, 47);
-$blue-cornflower: rgb(100, 149, 237);
-$blue-royal: rgb(65, 105, 225);
-$blue-steel: steelblue;
-$blue-denim: rgb(95, 130, 165);
-$blue-catalina: rgb(38, 61, 96);
-$blue-glaucous: rgb(96, 130, 182);
-$gold: gold;
-$gold-light: rgb(220, 190, 150);
-$gold-pale: rgb(230, 190, 138);
-$gold-dark: #d4af37;
-$grey-standard: grey;
-$dark-38: rgb(38, 38, 38);
-$grey-50: rgb(50, 50, 50);
-$grey-80: rgb(80, 80, 80);
-$grey-100: rgb(100, 100, 100);
-$grey-170: rgb(170, 170, 170);
-$purple-mediumpurple: rgb(150, 99, 130);
-$purple-darkmagenta: darkmagenta;
-$purple: rgb(152, 118, 152);
-$red-puce: rgb(169, 92, 104);
-$red-muted: rgb(140, 80, 70);
-$red-venetian: rgb(152, 50, 32);
-
-$green-sea: rgb(46, 139, 87);
-$green-fern: rgb(40, 85, 95);
-$green-fern-dark: rgb(80, 110, 80);
-
 /*-------------------- Color vars --------------------*/
-$color-background: $brown-darker;
-$color-table: $brown-dark;
-$color-tile-back: teal;
 $color-tile-front: gainsboro;
 
-$color-grey-text: $grey-standard;
-$color-detail: $brown-sienna;
-$color-wind: $brown-darker;
 $color-tile-border: rgb(40, 40, 40);
 $color-border: black;
 
-$log-grey: $grey-standard;
 $log-green: rgb(0, 120, 10);
 $log-dark: rgb(30, 30, 30);
 
@@ -74,7 +27,7 @@ $default-tile-border-radius: 12%;
 // original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
 
 // Small
-$tile-padding-small: 4px;
+$tile-padding-small: 2px;
 $hidden-tile-height-small: 8px;
 $hidden-tile-width-small: 5px;
 $shown-tile-height-small: 30px;
@@ -84,7 +37,7 @@ $self-hidden-tile-height-small: 33px;
 $self-hidden-tile-width-small: 23px;
 
 // Medium
-$tile-padding-medium: 6px;
+$tile-padding-medium: 3px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
 $shown-tile-height-medium: 34px;
@@ -94,7 +47,7 @@ $self-hidden-tile-height-medium: 40px;
 $self-hidden-tile-width-medium: 27px;
 
 // Large
-$tile-padding-large: 8px;
+$tile-padding-large: 4px;
 $hidden-tile-height-large: 10px;
 $hidden-tile-width-large: 7px;
 $shown-tile-height-large: 40px;

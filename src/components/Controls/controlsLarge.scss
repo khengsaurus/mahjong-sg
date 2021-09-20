@@ -103,10 +103,4 @@
 		padding-left: 2 * $main-padding;
 		@include default-border;
 	}
-	.log {
-		color: $grey-50;
-		&.pay {
-			color: $log-green;
-		}
-	}
 }
