@@ -1,0 +1,7 @@
+{
+  "name": "mahjongApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

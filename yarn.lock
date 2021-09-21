@@ -1215,15 +1215,20 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
-"@capacitor/android@3.2.0":
-  "integrity" "sha512-DtYEAxIwH7ToP3UtYKL/eQ3hDWJkxV3kTzv1J24gdbRcAyQlT2+iRZo4Uv5iwA21rTb0ynd4/k2xQqcWnmByzA=="
-  "resolved" "https://registry.npmjs.org/@capacitor/android/-/android-3.2.0.tgz"
-  "version" "3.2.0"
+"@capacitor/android@3.2.3":
+  "integrity" "sha512-sltt9/ENb8cgnz29MnQWDFg6mV+EdKK4LCvhjr4v6rDXsFI+tcMrJtLc2px3y7ewKW8lR+w4pRSQIlhpaTrHiA=="
+  "resolved" "https://registry.npmjs.org/@capacitor/android/-/android-3.2.3.tgz"
+  "version" "3.2.3"
 
-"@capacitor/cli@^3.1.2":
-  "integrity" "sha512-KwfNS8eKdAcJyC9yHnujvt31gRlnHU9lKxHqQdgUWlID74jIa++ORk1aqsCu5cE5dfqkqOuBTLy2DwM03YSWIg=="
-  "resolved" "https://registry.npmjs.org/@capacitor/cli/-/cli-3.2.0.tgz"
-  "version" "3.2.0"
+"@capacitor/app@1.0.3":
+  "integrity" "sha512-kilAdWODV5p32wz0jVGdSoQTEx4Q0TM/xYj9w3iYYNI24v1WIRnEs04TaGTG8JFYIUksJaOqGC3PoZddfZ1POA=="
+  "resolved" "https://registry.npmjs.org/@capacitor/app/-/app-1.0.3.tgz"
+  "version" "1.0.3"
+
+"@capacitor/cli@3.2.3":
+  "integrity" "sha512-vEinN2Q4ZSosPIRnNdRSAOA+zIjBhVxZOg5n0OKY/QkqENTemIT7mhAfoOgTdSu1iwrqJGf+Tt34cOkCo0a+0A=="
+  "resolved" "https://registry.npmjs.org/@capacitor/cli/-/cli-3.2.3.tgz"
+  "version" "3.2.3"
   dependencies:
     "@ionic/cli-framework-output" "^2.2.1"
     "@ionic/utils-fs" "^3.1.5"
@@ -1234,25 +1239,40 @@
     "env-paths" "^2.2.0"
     "kleur" "^4.1.1"
     "native-run" "^1.4.0"
-    "open" "^7.1.0"
+    "open" "^7.4.2"
     "plist" "^3.0.2"
     "prompts" "^2.3.2"
     "semver" "^7.3.2"
-    "tar" "^6.0.5"
+    "tar" "^6.1.11"
     "tslib" "^2.1.0"
     "xml2js" "^0.4.23"
 
-"@capacitor/core@^3.1.0", "@capacitor/core@^3.1.2", "@capacitor/core@^3.2.0":
-  "integrity" "sha512-OJJFk54QSA0r35ElIpNfVDJImGGemspn4dVlFAujfxoAFIGTYiLzVF6Sj5o4cBpm3DZKs4ai152S9qeFdFcnZA=="
-  "resolved" "https://registry.npmjs.org/@capacitor/core/-/core-3.2.0.tgz"
-  "version" "3.2.0"
+"@capacitor/core@^3.0.0", "@capacitor/core@^3.2.0", "@capacitor/core@3.2.3":
+  "integrity" "sha512-6oIi9EXgTRI8Xg3Gg8IWSQcddshb6lNtywkQA+QWoTL/6qV/l519tBcZHV9cu6BA7GT3qm2WcX9yQjwDq5iKpw=="
+  "resolved" "https://registry.npmjs.org/@capacitor/core/-/core-3.2.3.tgz"
+  "version" "3.2.3"
   dependencies:
     "tslib" "^2.1.0"
 
-"@capacitor/ios@3.1.2":
-  "integrity" "sha512-y6wnTLK0I/ckTuofzeRkXK0OPw6vAKOj0I6QXwg2DxDdtiHmed6qP/G8cvwNBiFhZE9xfXAulxRYP8D76TPtNQ=="
-  "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-3.1.2.tgz"
-  "version" "3.1.2"
+"@capacitor/haptics@1.0.3":
+  "integrity" "sha512-RPV8kd4bY7sdmssXMkrg9v0HrjJZoCkbVk5ygbTByM+Yxl/1qqQUkEnBzCsA48tJHQz4ddTMjtpBEblS+GWUsw=="
+  "resolved" "https://registry.npmjs.org/@capacitor/haptics/-/haptics-1.0.3.tgz"
+  "version" "1.0.3"
+
+"@capacitor/ios@3.2.3":
+  "integrity" "sha512-HGuCf9CnHdpeCBU8grgaPxlF20gIs6R5UhngdLbUKc1ULj6EtfOFxfH6ptbdJ/rIuZ9a8ADlszFaN4CGl5P8Mg=="
+  "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-3.2.3.tgz"
+  "version" "3.2.3"
+
+"@capacitor/keyboard@1.0.3":
+  "integrity" "sha512-s963GqVAvhdqxwtASjev/Az6gm164GbAxZGXP29VK8J+j363y++F9uDVUNfud9z7msdXaoV4btyk7cc7rmxydg=="
+  "resolved" "https://registry.npmjs.org/@capacitor/keyboard/-/keyboard-1.0.3.tgz"
+  "version" "1.0.3"
+
+"@capacitor/status-bar@1.0.3":
+  "integrity" "sha512-btprzQ5Spjqd6FX3eXKqRKTKZWlIZmJL4bQ79d5N1ESortOZ5NJFB25lAT/a073t8aaJv6DVdZurVFd0/0ELSA=="
+  "resolved" "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-1.0.3.tgz"
+  "version" "1.0.3"
 
 "@cnakazawa/watch@^1.0.3":
   "integrity" "sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ=="
@@ -9442,7 +9462,7 @@
   dependencies:
     "mimic-fn" "^2.1.0"
 
-"open@^7.0.2", "open@^7.1.0":
+"open@^7.0.2", "open@^7.4.2":
   "integrity" "sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q=="
   "resolved" "https://registry.npmjs.org/open/-/open-7.4.2.tgz"
   "version" "7.4.2"
@@ -12525,10 +12545,10 @@
   "resolved" "https://registry.npmjs.org/tapable/-/tapable-1.1.3.tgz"
   "version" "1.1.3"
 
-"tar@^6.0.2", "tar@^6.0.5":
-  "integrity" "sha512-kvvfiVvjGMxeUNB6MyYv5z7vhfFRwbwCXJAeL0/lnbrttBVqcMOnpHUf0X42LrPMR8mMpgapkJMchFH4FSHzNA=="
-  "resolved" "https://registry.npmjs.org/tar/-/tar-6.1.10.tgz"
-  "version" "6.1.10"
+"tar@^6.0.2", "tar@^6.1.11":
+  "integrity" "sha512-an/KZQzQUkZCkuoAA64hM92X0Urb6VpRhAFllDzz44U2mcD5scmT3zBc4VgVpkugF580+DQn8eAFSyoQt0tznA=="
+  "resolved" "https://registry.npmjs.org/tar/-/tar-6.1.11.tgz"
+  "version" "6.1.11"
   dependencies:
     "chownr" "^2.0.0"
     "fs-minipass" "^2.0.0"
