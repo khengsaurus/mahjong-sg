@@ -75,7 +75,7 @@ export enum TileColors {
 export enum TextColors {
 	light = 'rgb(250, 250, 250)',
 	dark = 'rgb(40, 40, 40)',
-	green = 'rgb(0, 130, 15)'
+	green = 'rgb(0, 130, 20)'
 }
 
 export enum Decorations {

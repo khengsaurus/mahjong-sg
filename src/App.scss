@@ -96,6 +96,14 @@ $font-weighted-large: 500;
 $log-line-width-large: 250px;
 $log-margin-left-large: 15px;
 
+/*-------------------- Safe Area --------------------*/
+.safe-area {
+	margin-top: calc(env(safe-area-inset-top));
+	margin-right: calc(env(safe-area-inset-right));
+	margin-bottom: calc(env(safe-area-inset-bottom));
+	margin-left: calc(env(safe-area-inset-left));
+}
+
 /*-------------------- Transform --------------------*/
 $rotate-simple-90: rotate(90deg);
 $transform-rotate: rotate(90deg) translateX(-22%);

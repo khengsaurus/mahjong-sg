@@ -51,10 +51,10 @@ export const TableDiv = styled.div`
 	justify-content: center;
 	align-items: center;
 	position: relative;
-	height: 100%;
-	width: 100%;
-	max-height: 750px;
-	max-width: 750px;
+	height: 90%;
+	width: 90%;
+	max-height: 900px;
+	max-width: 900px;
 	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.tableColor};
 `;

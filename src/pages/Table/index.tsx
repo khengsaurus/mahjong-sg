@@ -96,7 +96,7 @@ const Table = () => {
 			let leftPlayer = game.players[LeftPlayerIndex];
 			return (
 				<Main>
-					<TableDiv>
+					<TableDiv className="safe-area">
 						<Wind className="wind-background">{currentWind}</Wind>
 						<div className="top-player-container">
 							{topPlayer && (
