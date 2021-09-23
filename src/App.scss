@@ -25,36 +25,38 @@ $default-border-radius: 4px;
 $default-tile-border-radius: 12%;
 
 // original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
+$original-height: 200px;
+$original-width: 140px;
 
 // Small
 $tile-padding-small: 2px;
 $hidden-tile-height-small: 8px;
 $hidden-tile-width-small: 5px;
-$shown-tile-height-small: 30px;
-$shown-tile-width-small: 21px;
+$shown-tile-height-small: 1.8 * $original-height / 10;
+$shown-tile-width-small: 1.8 * $original-width / 10;
 
-$self-hidden-tile-height-small: 33px;
-$self-hidden-tile-width-small: 23px;
+$self-hidden-tile-height-small: $original-height / 5;
+$self-hidden-tile-width-small: $original-width / 5;
 
 // Medium
 $tile-padding-medium: 3px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
-$shown-tile-height-medium: 34px;
-$shown-tile-width-medium: 24px;
+$shown-tile-height-medium: $original-height / 5;
+$shown-tile-width-medium: $original-width / 5;
 
-$self-hidden-tile-height-medium: 40px;
-$self-hidden-tile-width-medium: 27px;
+$self-hidden-tile-height-medium: $original-height / 4.5;
+$self-hidden-tile-width-medium: $original-width / 4.5;
 
 // Large
 $tile-padding-large: 4px;
-$hidden-tile-height-large: 10px;
-$hidden-tile-width-large: 7px;
-$shown-tile-height-large: 40px;
-$shown-tile-width-large: 28px;
+$hidden-tile-height-large: 12px;
+$hidden-tile-width-large: 8px;
+$shown-tile-height-large: $original-height / 4.2;
+$shown-tile-width-large: $original-width / 4.2;
 
-$self-hidden-tile-height-large: 47px;
-$self-hidden-tile-width-large: 32px;
+$self-hidden-tile-height-large: $original-height / 3.8;
+$self-hidden-tile-width-large: $original-width / 3.8;
 
 /*-------------------- Controls & logs --------------------*/
 // Small
@@ -86,11 +88,11 @@ $log-margin-left-medium: 10px;
 // Large
 $icon-button-size-large: 45px;
 $button-height-large: 60px;
-$button-width-large: 65px;
+$button-width-large: 52px;
 
 $text-line-width-large: 100px;
-$text-font-size-large: 18px;
-$text-line-height-large: 18px;
+$text-font-size-large: 19px;
+$text-line-height-large: 19px;
 $font-weighted-large: 500;
 
 $log-line-width-large: 250px;

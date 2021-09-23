@@ -122,7 +122,7 @@ export const rotatedMUIButton = createTheme({
 
 export const MuiStyles = {
 	dialog: {
-		minHeight: '120px',
+		minHeight: '130px',
 		justifyContent: 'center'
 	},
 	topRight5: {
@@ -131,15 +131,12 @@ export const MuiStyles = {
 		right: 5
 	},
 	modal: {
-		maxWidth: '400px',
-		minWidth: '400px',
-		maxHeight: '300px',
-		minHeight: '300px',
+		maxWidth: '420px',
+		minWidth: '420px',
 		overflow: 'scroll'
 	},
 	tabs: {
 		borderRadius: 0,
-		// minWidth: '240px',
 		maxWidth: '240px',
 		minHeight: '30px',
 		maxHeight: '30px'

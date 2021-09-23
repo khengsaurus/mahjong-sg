@@ -42,6 +42,8 @@ interface ITile {
 interface ShownTiles {
 	flowers?: ITile[];
 	nonFlowers?: ITile[];
+	flowerIds?: string[];
+	nonFlowerIds?: string[];
 }
 
 interface IUserPass {

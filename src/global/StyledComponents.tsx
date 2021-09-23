@@ -51,8 +51,8 @@ export const TableDiv = styled.div`
 	justify-content: center;
 	align-items: center;
 	position: relative;
-	height: 90%;
-	width: 90%;
+	height: 100%;
+	width: 100%;
 	max-height: 900px;
 	max-width: 900px;
 	font-family: 'Roboto', sans-serif;

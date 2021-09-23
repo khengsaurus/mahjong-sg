@@ -6,10 +6,10 @@ import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 
 interface ShownTileProps {
-	tileUUID: string;
+	tileID: string;
 	tileCard: string;
 	segment: Segments;
-	lastUUID?: string;
+	lastID?: string;
 	highlight?: boolean;
 	classSuffix?: string;
 }
@@ -30,7 +30,7 @@ function getClass(segment: Segments) {
 }
 
 const ShownTile = (props: ShownTileProps) => {
-	const { tileUUID, tileCard, segment, lastUUID = '', highlight, classSuffix } = props;
+	const { tileID, tileCard, segment, lastID = '', highlight, classSuffix } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -38,7 +38,7 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					className={`${divClass} ${highlight || lastUUID === tileUUID ? `last` : ``} ${classSuffix || ``}`}
+					className={`${divClass} ${highlight || lastID === tileID ? `last` : ``} ${classSuffix || ``}`}
 					src={getTileSrc(tileCard)}
 					alt="tile"
 				/>
@@ -47,9 +47,7 @@ const ShownTile = (props: ShownTileProps) => {
 			return (
 				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
-						className={`${bgClass} ${highlight || lastUUID === tileUUID ? `last` : ``} ${
-							classSuffix || ``
-						}`}
+						className={`${bgClass} ${highlight || lastID === tileID ? `last` : ``} ${classSuffix || ``}`}
 						src={getTileSrc(tileCard)}
 						alt="tile"
 					/>

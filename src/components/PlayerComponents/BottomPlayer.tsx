@@ -4,19 +4,37 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import { sortShownTiles } from '../../util/utilFns';
+import DiscardedTiles from './DiscardedTiles';
 import { HandTile } from './HandTile';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
 import ShownTile from './ShownTile';
+import ShownTiles from './ShownTiles';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
-	const sumHiddenTiles = player.countAllHiddenTiles();
-	const sumShownTiles = player.shownTiles.length;
+
+	// useMemo dependency -> flowers, nonFlowers, nonFlowerIds, flowerIds
+	const shownCards = useMemo(() => {
+		return player?.shownTiles?.map(tile => tile.id);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [player?.shownTiles?.length]);
+	const { flowers, nonFlowers, nonFlowerIds, flowerIds } = useMemo(() => {
+		return sortShownTiles(player.shownTiles);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [shownCards]);
+
+	// useMemo dependency -> hiddenCards
+	const allHiddenTiles = player?.allHiddenTiles();
+	const hiddenCards = useMemo(() => {
+		return allHiddenTiles.map(tile => tile.uuid);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [allHiddenTiles.length]);
+
 	const selectedTilesIds = selectedTiles.map(tile => {
 		return tile.id;
 	});
@@ -33,28 +51,16 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		[selectedTiles, setSelectedTiles]
 	);
 
-	const { flowers, nonFlowers } = useMemo(() => {
-		return sortShownTiles(player.shownTiles);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player.shownTiles.length]);
-
 	const renderShownHiddenHand = useMemo(() => {
 		return (
 			<div className="htss">
 				{player.hiddenTiles.map((tile: ITile) => {
-					return (
-						<ShownTile
-							key={tile.uuid}
-							tileUUID={tile.uuid}
-							tileCard={tile.card}
-							segment={Segments.bottom}
-						/>
-					);
+					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.bottom} />;
 				})}
 				{!isEmpty(player.lastTakenTile) && (
 					<ShownTile
-						key={player.lastTakenTile.uuid}
-						tileUUID={player.lastTakenTile.uuid}
+						key={player.lastTakenTile.id}
+						tileID={player.lastTakenTile.id}
 						tileCard={player.lastTakenTile.card}
 						segment={Segments.bottom}
 						highlight
@@ -64,7 +70,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sumHiddenTiles]);
+	}, [hiddenCards]);
 
 	const renderHiddenHand = useCallback(() => {
 		return (
@@ -92,70 +98,42 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectTile, handSize, sumHiddenTiles, player.showTiles, selectedTilesIds]);
+	}, [selectTile, handSize, hiddenCards, player.showTiles, selectedTilesIds]);
 
-	const renderShownTiles = useMemo(() => {
+	const renderShownTiles = () => {
 		return (
 			<div className="htss">
-				{nonFlowers.map((tile: ITile) => {
-					return (
-						<ShownTile
-							key={tile.uuid}
-							tileUUID={tile.uuid}
-							tileCard={tile.card}
-							segment={Segments.bottom}
-							lastUUID={lastThrown?.uuid}
-						/>
-					);
-				})}
-				{flowers.map((tile: ITile) => {
-					return (
-						<ShownTile
-							key={tile.uuid}
-							tileUUID={tile.uuid}
-							tileCard={tile.card}
-							segment={Segments.bottom}
-							classSuffix={
-								tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''
-							}
-						/>
-					);
-				})}
-				{dealer && <CasinoIcon color="disabled" fontSize="small" />}
+				<ShownTiles
+					nonFlowers={nonFlowers}
+					flowers={flowers}
+					flowerIds={flowerIds}
+					nonFlowerIds={nonFlowerIds}
+					segment={Segments.bottom}
+					lastThrownId={lastThrown?.id}
+				/>
+				{dealer && <CasinoIcon color="disabled" fontSize={tilesSize} />}
 			</div>
 		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sumShownTiles]);
+	};
 
 	const renderUnusedTiles = useMemo(() => {
 		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.bottom} tag={frontBackTag} />;
 	}, [player?.unusedTiles, frontBackTag]);
 
-	const renderDiscardedTiles = useMemo(() => {
+	const renderDiscardedTiles = () => {
 		return (
 			<div className="htss">
-				{player.discardedTiles.map((tile: ITile) => {
-					return (
-						<ShownTile
-							key={tile.uuid}
-							tileUUID={tile.uuid}
-							tileCard={tile.card}
-							segment={Segments.bottom}
-							lastUUID={lastThrown?.uuid}
-						/>
-					);
-				})}
+				<DiscardedTiles tiles={player.discardedTiles} segment={Segments.bottom} lastThrownId={lastThrown?.id} />
 			</div>
 		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player?.discardedTiles?.length, lastThrown?.id]);
+	};
 
 	return (
 		<div className={`row-section-${tilesSize || Sizes.medium} bottom`}>
 			{player.showTiles ? renderShownHiddenHand : renderHiddenHand()}
-			{renderShownTiles}
+			{renderShownTiles()}
 			{renderUnusedTiles}
-			{renderDiscardedTiles}
+			{renderDiscardedTiles()}
 		</div>
 	);
 };

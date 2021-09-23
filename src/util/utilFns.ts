@@ -219,33 +219,12 @@ export function validateEmail(email: string) {
 	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
-/**
- * Comparator fn for Rect.memo(<>Player)
- * //FIXME: Returns false but component is not re-rendering...
- * @param prev
- * @param next
- * @returns boolean: false to trigger re-render
- */
-export function comparePlayerProps(prev: IPlayerComponentProps, next: IPlayerComponentProps) {
-	return prev.player.showTiles === next.player.showTiles &&
-		prev.player.allHiddenTiles().length === next.player.allHiddenTiles().length &&
-		prev.player.shownTiles.length === next.player.shownTiles.length &&
-		prev.player.discardedTiles.length === next.player.discardedTiles.length &&
-		prev.player.unusedTiles === next.player.unusedTiles &&
-		prev.hasFront === next.hasFront &&
-		prev.hasBack === next.hasBack &&
-		prev.tilesSize === next.tilesSize &&
-		prev.player.lastDiscardedTileIs(prev.lastThrown)
-		? prev.player.lastDiscardedTileIs(next.lastThrown)
-			? false // WAS the last one to throw, last thrown has changed -> re-render
-			: true
-		: true;
-}
-
 export function sortShownTiles(tiles: ITile[]): ShownTiles {
-	let flowers: ITile[] = tiles.filter(tile => tile.suit === '花' || tile.suit === '动物') || [];
-	let nonFlowers: ITile[] = tiles.filter(tile => tile.suit !== '花' && tile.suit !== '动物') || [];
-	return { flowers, nonFlowers };
+	const flowers: ITile[] = tiles.filter(tile => tile.suit === '花' || tile.suit === '动物') || [];
+	const nonFlowers: ITile[] = tiles.filter(tile => tile.suit !== '花' && tile.suit !== '动物') || [];
+	const flowerIds = flowers.map(tile => tile.id);
+	const nonFlowerIds = nonFlowers.map(tile => tile.id);
+	return { flowers, nonFlowers, flowerIds, nonFlowerIds };
 }
 
 export function rotateShownTiles(tiles: ITile[]): ITile[] {
