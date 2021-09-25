@@ -32,31 +32,36 @@ $original-width: 140px;
 $tile-padding-small: 2px;
 $hidden-tile-height-small: 8px;
 $hidden-tile-width-small: 5px;
-$shown-tile-height-small: 1.8 * $original-height / 10;
-$shown-tile-width-small: 1.8 * $original-width / 10;
+$shown-tile-height-small: round($original-height / 7);
+$shown-tile-width-small: round($original-width / 7);
 
-$self-hidden-tile-height-small: $original-height / 5;
-$self-hidden-tile-width-small: $original-width / 5;
+$self-hidden-tile-height-small: round(1.2 * $original-height / 7);
+$self-hidden-tile-width-small: round(1.2 * $original-width / 7);
 
 // Medium
 $tile-padding-medium: 3px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
-$shown-tile-height-medium: $original-height / 5;
-$shown-tile-width-medium: $original-width / 5;
+$shown-tile-height-medium: round($original-height / 6);
+$shown-tile-width-medium: round($original-width / 6);
 
-$self-hidden-tile-height-medium: $original-height / 4.5;
-$self-hidden-tile-width-medium: $original-width / 4.5;
+$self-hidden-tile-height-medium: round(1.2 * $original-height / 6);
+$self-hidden-tile-width-medium: round(1.2 * $original-width / 6);
 
 // Large
 $tile-padding-large: 4px;
 $hidden-tile-height-large: 12px;
 $hidden-tile-width-large: 8px;
-$shown-tile-height-large: $original-height / 4.2;
-$shown-tile-width-large: $original-width / 4.2;
+$shown-tile-height-large: round($original-height / 5);
+$shown-tile-width-large: round($original-width / 5);
 
-$self-hidden-tile-height-large: $original-height / 3.8;
-$self-hidden-tile-width-large: $original-width / 3.8;
+$self-hidden-tile-height-large: round(1.2 * $original-height / 5);
+$self-hidden-tile-width-large: round(1.2 * $original-width / 5);
+
+/*-------------------- Controls & logs --------------------*/
+
+$shown-tiles-per-row: 14;
+$discarded-tiles-per-row: 9;
 
 /*-------------------- Controls & logs --------------------*/
 // Small
@@ -107,10 +112,7 @@ $log-margin-left-large: 15px;
 }
 
 /*-------------------- Transform --------------------*/
-$rotate-simple-90: rotate(90deg);
 $transform-rotate: rotate(90deg) translateX(-22%);
-$rotate-simple-180: rotate(180deg);
-
 @mixin default-border {
 	border: $border-px solid $color-border;
 	border-radius: $default-border-radius;

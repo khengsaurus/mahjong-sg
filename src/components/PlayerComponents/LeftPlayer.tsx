@@ -1,4 +1,3 @@
-import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
@@ -39,7 +38,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [allHiddenTiles.length]);
 
-	const renderShownHiddenHand = useMemo(() => {
+	const shownHiddenHand = useMemo(() => {
 		return (
 			<div className="vtss left">
 				{player.hiddenTiles.map(tile => {
@@ -60,43 +59,50 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hiddenCards]);
 
-	const renderHiddenHand = useMemo(() => {
+	const hiddenHand = useMemo(() => {
 		return <HiddenHand tiles={allHiddenTiles.length} segment={Segments.left} />;
 	}, [allHiddenTiles.length]);
 
 	const renderShownTiles = () => {
 		return (
-			<div className="vtss left">
-				<ShownTiles
-					nonFlowers={rotatedNonFlowers}
-					flowers={flowers}
-					flowerIds={flowerIds}
-					nonFlowerIds={nonFlowerIds}
-					segment={Segments.left}
-					lastThrownId={lastThrown?.id}
-				/>
-				{dealer && <CasinoIcon color="disabled" fontSize={tilesSize} />}
-			</div>
+			<ShownTiles
+				className="vtss left shown"
+				nonFlowers={nonFlowers}
+				// nonFlowers={player.hiddenTiles}
+				flowers={flowers}
+				flowerIds={flowerIds}
+				nonFlowerIds={nonFlowerIds}
+				// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
+				segment={Segments.left}
+				dealer={dealer}
+				tilesSize={tilesSize}
+				lastThrownId={lastThrown?.id}
+			/>
 		);
 	};
 
-	const renderUnusedTiles = useMemo(() => {
+	const unusedTiles = useMemo(() => {
 		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.left} tag={frontBackTag} />;
 	}, [player?.unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
+		// {/* <DiscardedTiles className="vtss left discarded" tiles={player.discardedTiles} segment={Segments.left} lastThrownId={lastThrown?.id} /> */}
 		return (
-			<div className="vtss left">
-				<DiscardedTiles tiles={player.discardedTiles} segment={Segments.left} lastThrownId={lastThrown?.id} />
-			</div>
+			<DiscardedTiles
+				className="vtss left discarded"
+				tiles={player.discardedTiles}
+				// tiles={player.hiddenTiles}
+				segment={Segments.left}
+				lastThrownId={lastThrown?.id}
+			/>
 		);
 	};
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.medium}`}>
-			{player.showTiles ? renderShownHiddenHand : renderHiddenHand}
+			{player.showTiles ? shownHiddenHand : hiddenHand}
 			{renderShownTiles()}
-			{renderUnusedTiles}
+			{unusedTiles}
 			{renderDiscardedTiles()}
 		</div>
 	);

@@ -1,7 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
-import { BackgroundColors, IPlayerComponentProps, Sizes, TableColors, TileColors } from '../global/enums';
+import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 

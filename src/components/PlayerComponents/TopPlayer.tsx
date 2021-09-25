@@ -1,4 +1,3 @@
-import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
@@ -39,7 +38,7 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [allHiddenTiles.length]);
 
-	const renderShownHiddenHand = useMemo(() => {
+	const shownHiddenHand = useMemo(() => {
 		return (
 			<div className="htss top">
 				{player.hiddenTiles.map((tile: ITile) => {
@@ -60,43 +59,49 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hiddenCards]);
 
-	const renderHiddenHand = useMemo(() => {
+	const hiddenHand = useMemo(() => {
 		return <HiddenHand tiles={allHiddenTiles.length} segment={Segments.top} />;
 	}, [allHiddenTiles.length]);
 
 	const renderShownTiles = () => {
 		return (
-			<div className="htss top">
-				<ShownTiles
-					nonFlowers={rotatedNonFlowers}
-					flowers={flowers}
-					flowerIds={flowerIds}
-					nonFlowerIds={nonFlowerIds}
-					segment={Segments.top}
-					lastThrownId={lastThrown?.id}
-				/>
-				{dealer && <CasinoIcon color="disabled" fontSize={tilesSize} />}
-			</div>
+			<ShownTiles
+				className="htss shown top"
+				nonFlowers={nonFlowers}
+				// nonFlowers={player.hiddenTiles}
+				flowers={flowers}
+				flowerIds={flowerIds}
+				nonFlowerIds={nonFlowerIds}
+				// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
+				segment={Segments.top}
+				dealer={dealer}
+				tilesSize={tilesSize}
+				lastThrownId={lastThrown?.id}
+			/>
 		);
 	};
 
-	const renderUnusedTiles = useMemo(() => {
+	const unusedTiles = useMemo(() => {
 		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.top} tag={frontBackTag} />;
 	}, [player?.unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
 		return (
-			<div className="vtss left">
-				<DiscardedTiles tiles={player.discardedTiles} segment={Segments.top} lastThrownId={lastThrown?.id} />
-			</div>
+			<DiscardedTiles
+				className="htss discarded top"
+				tiles={player.discardedTiles}
+				// 	tiles={player.hiddenTiles}
+				segment={Segments.top}
+				lastThrownId={lastThrown?.id}
+			/>
 		);
 	};
 
 	return (
 		<div className={`row-section-${tilesSize || Sizes.medium}`}>
-			{player.showTiles ? renderShownHiddenHand : renderHiddenHand}
+			{player.showTiles ? shownHiddenHand : hiddenHand}
 			{renderShownTiles()}
-			{renderUnusedTiles}
+			{unusedTiles}
 			{renderDiscardedTiles()}
 		</div>
 	);

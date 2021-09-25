@@ -1,12 +1,27 @@
 @import '../../App.scss';
 
+@mixin flower-mod {
+	&.flower {
+		@include default-flower;
+	}
+	&.animal {
+		height: $shown-tile-height-small - (2 * $tile-border-px);
+		width: $shown-tile-width-small - (2 * $tile-border-px);
+		@include default-tile-border;
+	}
+}
+
+$shown-melds-per-row: 4; //TODO: calculate this dynamically
+$shown-melds-per-column: 4;
+$shown-tiles-per-row: $shown-melds-per-row * 3;
+$shown-tiles-per-column: $shown-melds-per-column * 3;
+
 .row-section-small {
 	display: flex;
 	flex-direction: column;
-	padding: 5px;
 	justify-content: center;
-	align-content: center;
-	transition: 200ms;
+	align-items: center;
+	padding: 5px;
 	&.bottom {
 		flex-direction: column-reverse;
 	}
@@ -22,7 +37,6 @@
 			align-content: center;
 			justify-content: flex-end;
 			max-height: (2 * $hidden-tile-height-small) + (4 * $tile-border-px);
-			width: (19 * $hidden-tile-width-small) + (4 * $tile-border-px);
 			z-index: -1;
 			&.front {
 				flex-flow: column wrap-reverse;
@@ -47,16 +61,20 @@
 
 	.htss {
 		display: flex;
-		flex-flow: row-reverse wrap-reverse;
+		flex-shrink: 1;
+		flex-flow: row wrap-reverse;
 		justify-content: center;
-		align-items: flex-end;
-		align-self: center;
-		max-width: 60%;
-		min-height: $shown-tile-height-small;
 		padding: $tile-padding-small;
+		min-height: 2 * $shown-tile-height-small;
+		width: 75vw;
+		max-width: $shown-tiles-per-row * $shown-tile-width-small;
 		&.top {
-			align-items: flex-start;
 			flex-flow: row-reverse wrap;
+		}
+		&.shown {
+		}
+		&.discarded {
+			justify-content: flex-start;
 		}
 	}
 
@@ -64,14 +82,7 @@
 		height: $shown-tile-height-small;
 		border-radius: $default-tile-border-radius;
 		background: $color-tile-front;
-		&.flower {
-			@include default-flower;
-		}
-		&.animal {
-			height: $shown-tile-height-small - (2 * $tile-border-px);
-			width: $shown-tile-width-small - (2 * $tile-border-px);
-			@include default-tile-border;
-		}
+		@include flower-mod;
 		&.last {
 			@include last-thrown;
 		}
@@ -90,7 +101,6 @@
 	justify-content: center;
 	align-items: center;
 	padding: 5px;
-	transition: 200ms;
 	&.right {
 		flex-direction: row-reverse;
 	}
@@ -98,13 +108,14 @@
 	.vtsh {
 		display: flex;
 		flex-direction: column;
-		padding: $tile-padding-small;
+		justify-content: center;
+		padding: 0 $tile-padding-small;
 		min-width: $hidden-tile-height-small;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
-			max-width: (2 * $hidden-tile-height-small) + (4 * $tile-border-px);
 			align-content: flex-start;
 			align-self: center;
+			max-width: (2 * $hidden-tile-height-small) + (4 * $tile-border-px);
 			z-index: -1;
 			&.front {
 				flex-flow: row wrap;
@@ -129,15 +140,21 @@
 
 	.vtss {
 		display: flex;
-		flex-flow: column-reverse wrap;
-		align-items: flex-end;
+		flex-flow: column-reverse wrap-reverse;
 		justify-content: center;
-		min-width: $shown-tile-height-small;
-		height: 15 * $shown-tile-height-small;
-		max-height: 60%;
+		align-self: center;
+		align-content: flex-start;
 		padding: $tile-padding-small;
+		width: 2 * $shown-tile-height-small;
+		height: 75vh;
+		max-height: $shown-tiles-per-column * $shown-tile-width-small;
 		&.left {
 			transform: rotate(180deg);
+		}
+		&.shown {
+		}
+		&.discarded {
+			justify-content: flex-start;
 		}
 	}
 
@@ -158,14 +175,7 @@
 		transform: $transform-rotate;
 		background-color: $color-tile-front;
 		align-self: flex-start;
-		&.flower {
-			@include default-flower;
-		}
-		&.animal {
-			height: $shown-tile-height-small - (2 * $tile-border-px);
-			width: $shown-tile-width-small - (2 * $tile-border-px);
-			@include default-tile-border;
-		}
+		@include flower-mod;
 		&.last {
 			@include last-thrown;
 		}

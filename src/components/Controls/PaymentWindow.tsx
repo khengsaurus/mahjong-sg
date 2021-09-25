@@ -38,10 +38,9 @@ const PaymentWindow = (props: Props) => {
 		game.players[recipientIndex].balance += amount;
 		game.newLog(`${game.players[playerSeat].username} sent ${game.players[recipientIndex].username} $${amount}`);
 		FBService.updateGame(game);
+		setRecipientIndex(10);
 		setAmount(0);
-		setTimeout(function () {
-			onClose();
-		}, 1000);
+		onClose();
 	}
 
 	const handleSelectRecipient = (event: React.ChangeEvent<HTMLInputElement>) => {

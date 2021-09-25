@@ -9,7 +9,7 @@ import '../playerComponentsSmall.scss';
 interface Props {
 	tiles: number;
 	segment: Segments;
-	tag: FrontBackTag;
+	tag?: FrontBackTag;
 }
 
 const UnusedTiles = ({ tiles, segment, tag }: Props) => {
@@ -18,13 +18,13 @@ const UnusedTiles = ({ tiles, segment, tag }: Props) => {
 	}, [tiles]);
 
 	return segment === Segments.top || segment === Segments.bottom ? (
-		<div className={`htsh unused ${segment === Segments.bottom ? `bottom ` : ``}${tag}`}>
+		<div className={`htsh unused ${segment === Segments.bottom ? `bottom ` : ``}${tag || ``}`}>
 			{tilesArray.map(i => {
 				return <HiddenTile key={`${segment}-unused-${i}`} className="hth" />;
 			})}
 		</div>
 	) : (
-		<div className={`vtsh unused ${segment === Segments.right ? `right ` : ``}${tag}`}>
+		<div className={`vtsh unused ${segment === Segments.right ? `right ` : ``}${tag || ``}`}>
 			{tilesArray.map(i => {
 				return <HiddenTile key={`${segment}-unused-${i}`} className="vth" />;
 			})}

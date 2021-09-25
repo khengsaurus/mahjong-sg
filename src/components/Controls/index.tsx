@@ -119,20 +119,16 @@ const Controls = (props: ControlsProps) => {
 
 	useEffect(() => {
 		let tiles: ITile[] = [];
-		/**
-		 * Can self kang during turn & selecting 1 || 4 */
 		if (whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
+			// Can self kang during turn & selecting 1 || 4
 			tiles = selectedTiles;
 			setOptions(player.canKang(tiles), false, false, tiles);
-			/**
-			 * Can kang during anyone's turn if last thrown tile available & selecting 3*/
 		} else if (lastThrownAvailable && selectedTiles.length === 3) {
-			tiles = [...selectedTiles, lastThrown];
+			// Can kang during anyone's turn if last thrown tile available & selecting 3
+			tiles = [lastThrown, ...selectedTiles];
 			setOptions(player.canKang(tiles), false, false, tiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 2) {
-			/**
-			 * If last thrown available, can pong during anyone's turn,
-			 * Can chi only during own's turn */
+			// If last thrown available, can pong during anyone's turn, can chi only during own's turn
 			tiles = player.canPong([lastThrown, ...selectedTiles])
 				? [lastThrown, ...selectedTiles]
 				: sortTiles([...selectedTiles, lastThrown]);
@@ -290,12 +286,14 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function hideHuDialog() {
-		setDeclareHu(false);
-		if (isHoldingLastThrown) {
-			returnLastThrown();
+		if (hu.length !== 3) {
+			setDeclareHu(false);
+			if (isHoldingLastThrown) {
+				returnLastThrown();
+			}
+			player.showTiles = false;
+			handleAction(game);
 		}
-		player.showTiles = false;
-		handleAction(game);
 	}
 
 	/* ----------------------------------- Markup ----------------------------------- */

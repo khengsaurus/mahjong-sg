@@ -1,4 +1,3 @@
-import CasinoIcon from '@material-ui/icons/Casino';
 import isEmpty from 'lodash.isempty';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
@@ -51,7 +50,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		[selectedTiles, setSelectedTiles]
 	);
 
-	const renderShownHiddenHand = useMemo(() => {
+	const shownHiddenHand = useMemo(() => {
 		return (
 			<div className="htss">
 				{player.hiddenTiles.map((tile: ITile) => {
@@ -72,7 +71,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hiddenCards]);
 
-	const renderHiddenHand = useCallback(() => {
+	const hiddenHand = useCallback(() => {
 		return (
 			<div className={`self-hidden-tiles-${handSize || Sizes.medium}`}>
 				{player.hiddenTiles.map((tile: ITile) => {
@@ -102,37 +101,43 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<div className="htss">
-				<ShownTiles
-					nonFlowers={nonFlowers}
-					flowers={flowers}
-					flowerIds={flowerIds}
-					nonFlowerIds={nonFlowerIds}
-					segment={Segments.bottom}
-					lastThrownId={lastThrown?.id}
-				/>
-				{dealer && <CasinoIcon color="disabled" fontSize={tilesSize} />}
-			</div>
+			<ShownTiles
+				className="htss shown"
+				nonFlowers={nonFlowers}
+				// nonFlowers={player.hiddenTiles}
+				flowers={flowers}
+				flowerIds={flowerIds}
+				nonFlowerIds={nonFlowerIds}
+				// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
+				segment={Segments.bottom}
+				dealer={dealer}
+				tilesSize={tilesSize}
+				lastThrownId={lastThrown?.id}
+			/>
 		);
 	};
 
-	const renderUnusedTiles = useMemo(() => {
+	const unusedTiles = useMemo(() => {
 		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.bottom} tag={frontBackTag} />;
 	}, [player?.unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
 		return (
-			<div className="htss">
-				<DiscardedTiles tiles={player.discardedTiles} segment={Segments.bottom} lastThrownId={lastThrown?.id} />
-			</div>
+			<DiscardedTiles
+				className="htss discarded"
+				tiles={player.discardedTiles}
+				// tiles={player.hiddenTiles}
+				segment={Segments.bottom}
+				lastThrownId={lastThrown?.id}
+			/>
 		);
 	};
 
 	return (
 		<div className={`row-section-${tilesSize || Sizes.medium} bottom`}>
-			{player.showTiles ? renderShownHiddenHand : renderHiddenHand()}
+			{player.showTiles ? shownHiddenHand : hiddenHand()}
 			{renderShownTiles()}
-			{renderUnusedTiles}
+			{unusedTiles}
 			{renderDiscardedTiles()}
 		</div>
 	);

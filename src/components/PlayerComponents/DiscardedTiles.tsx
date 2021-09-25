@@ -3,6 +3,7 @@ import { Segments } from '../../global/enums';
 import ShownTile from './ShownTile';
 
 interface Props {
+	className: string;
 	tiles: ITile[];
 	segment: Segments;
 	lastThrownId?: string;
@@ -10,6 +11,7 @@ interface Props {
 
 function compare(prev: Props, next: Props) {
 	return (
+		prev.className === next.className &&
 		prev.tiles.length === next.tiles.length &&
 		prev.segment === next.segment &&
 		(!!prev.tiles.find(tile => {
@@ -20,9 +22,9 @@ function compare(prev: Props, next: Props) {
 	);
 }
 
-const DiscardedTiles = ({ tiles, segment, lastThrownId }: Props) => {
+const DiscardedTiles = ({ className, tiles, segment, lastThrownId }: Props) => {
 	return (
-		<>
+		<div className={className}>
 			{tiles.map(tile => {
 				return (
 					<ShownTile
@@ -34,7 +36,7 @@ const DiscardedTiles = ({ tiles, segment, lastThrownId }: Props) => {
 					/>
 				);
 			})}
-		</>
+		</div>
 	);
 };
 
