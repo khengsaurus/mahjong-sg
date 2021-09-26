@@ -65,19 +65,20 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<ShownTiles
-				className="vtss left shown"
-				nonFlowers={nonFlowers}
-				// nonFlowers={player.hiddenTiles}
-				flowers={flowers}
-				flowerIds={flowerIds}
-				nonFlowerIds={nonFlowerIds}
-				// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
-				segment={Segments.left}
-				dealer={dealer}
-				tilesSize={tilesSize}
-				lastThrownId={lastThrown?.id}
-			/>
+			<div className="vtss left shown">
+				<ShownTiles
+					nonFlowers={rotatedNonFlowers}
+					// nonFlowers={player.hiddenTiles}
+					flowers={flowers}
+					flowerIds={flowerIds}
+					nonFlowerIds={nonFlowerIds}
+					// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
+					segment={Segments.left}
+					dealer={dealer}
+					tilesSize={tilesSize}
+					lastThrownId={lastThrown?.id}
+				/>
+			</div>
 		);
 	};
 
@@ -86,12 +87,11 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	}, [player?.unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
-		// {/* <DiscardedTiles className="vtss left discarded" tiles={player.discardedTiles} segment={Segments.left} lastThrownId={lastThrown?.id} /> */}
 		return (
 			<DiscardedTiles
 				className="vtss left discarded"
 				tiles={player.discardedTiles}
-				// tiles={player.hiddenTiles}
+				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
 				segment={Segments.left}
 				lastThrownId={lastThrown?.id}
 			/>

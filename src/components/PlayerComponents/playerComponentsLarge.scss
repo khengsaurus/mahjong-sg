@@ -11,17 +11,15 @@
 	}
 }
 
-$shown-melds-per-row: 4; //TODO: calculate this dynamically
-$shown-melds-per-column: 4;
-$shown-tiles-per-row: $shown-melds-per-row * 3;
-$shown-tiles-per-column: $shown-melds-per-column * 3;
+$tiles-per-row: $shown-tiles-per-row;
+$tiles-per-column: $shown-tiles-per-row;
 
 .row-section-large {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 5px;
+	padding: 2 * $tile-padding-large;
 	&.bottom {
 		flex-direction: column-reverse;
 	}
@@ -61,20 +59,26 @@ $shown-tiles-per-column: $shown-melds-per-column * 3;
 
 	.htss {
 		display: flex;
-		flex-shrink: 1;
 		flex-flow: row wrap-reverse;
 		justify-content: center;
 		padding: $tile-padding-large;
-		min-height: 2 * $shown-tile-height-large;
-		width: 75vw;
-		max-width: $shown-tiles-per-row * $shown-tile-width-large;
+		width: 80vw;
+		// min-height: 2 * $shown-tile-height-large;
 		&.top {
 			flex-flow: row-reverse wrap;
 		}
 		&.shown {
 		}
 		&.discarded {
-			justify-content: flex-start;
+			// justify-content: flex-start;
+			// width: 50vw;
+			// If 70% of the screen width cannot accommodate 12 tiles in one row...
+			@media all and (max-width: 12 * $shown-tile-width-large / 0.7) {
+				width: 70vw;
+			}
+			@media all and (max-width: 9 * $shown-tile-width-large / 0.6) {
+				width: 60vw;
+			}
 		}
 	}
 
@@ -82,25 +86,25 @@ $shown-tiles-per-column: $shown-melds-per-column * 3;
 		height: $shown-tile-height-large;
 		border-radius: $default-tile-border-radius;
 		background: $color-tile-front;
-		@include flower-mod;
-		&.last {
-			@include last-thrown;
-		}
 		&.margin-right {
 			margin-right: $hidden-tile-width-large;
 		}
 		&.margin-left {
 			margin-left: $hidden-tile-width-large;
 		}
+		@include flower-mod;
+		&.last {
+			@include highlight;
+		}
 	}
 }
 
 .column-section-large {
 	display: flex;
-	flex-direction: row;
+	flex-direction: row wrap;
 	justify-content: center;
 	align-items: center;
-	padding: 5px;
+	padding: 2 * $tile-padding-large;
 	&.right {
 		flex-direction: row-reverse;
 	}
@@ -142,19 +146,24 @@ $shown-tiles-per-column: $shown-melds-per-column * 3;
 		display: flex;
 		flex-flow: column-reverse wrap-reverse;
 		justify-content: center;
-		align-self: center;
-		align-content: flex-start;
 		padding: $tile-padding-large;
-		width: 2 * $shown-tile-height-large;
-		height: 75vh;
-		max-height: $shown-tiles-per-column * $shown-tile-width-large;
+		height: 80vh;
+		//FIXME: how to make this dynamic...
+		min-width: 2 * $shown-tile-height-large;
 		&.left {
 			transform: rotate(180deg);
 		}
 		&.shown {
 		}
 		&.discarded {
-			justify-content: flex-start;
+			// justify-content: flex-start;
+			// If 40% of the screen height cannot accommodate 9 tiles in one row...
+			@media all and (max-height: 12 * $shown-tile-width-large / 0.7) {
+				height: 70vh;
+			}
+			@media all and (max-height: 9 * $shown-tile-width-large / 0.6) {
+				height: 60vh;
+			}
 		}
 	}
 
@@ -177,7 +186,7 @@ $shown-tiles-per-column: $shown-melds-per-column * 3;
 		align-self: flex-start;
 		@include flower-mod;
 		&.last {
-			@include last-thrown;
+			@include highlight;
 		}
 	}
 }
@@ -197,13 +206,10 @@ $shown-tiles-per-column: $shown-melds-per-column * 3;
 		&.unselected {
 			background: $color-tile-front;
 		}
-		&.selected {
-			transform: translateY(-15%);
-			@include default-selected;
-		}
 		&.last {
 			margin-left: $hidden-tile-height-large;
 		}
+		@include selected;
 	}
 
 	.self-hidden-tile-bg {

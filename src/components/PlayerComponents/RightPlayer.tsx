@@ -65,19 +65,20 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<ShownTiles
-				className="vtss shown"
-				nonFlowers={nonFlowers}
-				// nonFlowers={player.hiddenTiles}
-				flowers={flowers}
-				flowerIds={flowerIds}
-				nonFlowerIds={nonFlowerIds}
-				// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
-				segment={Segments.right}
-				dealer={dealer}
-				tilesSize={tilesSize}
-				lastThrownId={lastThrown?.id}
-			/>
+			<div className="vtss shown">
+				<ShownTiles
+					nonFlowers={rotatedNonFlowers}
+					// nonFlowers={player.hiddenTiles}
+					flowers={flowers}
+					flowerIds={flowerIds}
+					nonFlowerIds={nonFlowerIds}
+					// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
+					segment={Segments.right}
+					dealer={dealer}
+					tilesSize={tilesSize}
+					lastThrownId={lastThrown?.id}
+				/>
+			</div>
 		);
 	};
 
@@ -90,7 +91,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			<DiscardedTiles
 				className="vtss discarded"
 				tiles={player.discardedTiles}
-				// tiles={player.hiddenTiles}
+				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
 				segment={Segments.right}
 				lastThrownId={lastThrown?.id}
 			/>

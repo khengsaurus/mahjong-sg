@@ -65,19 +65,20 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<ShownTiles
-				className="htss shown top"
-				nonFlowers={nonFlowers}
-				// nonFlowers={player.hiddenTiles}
-				flowers={flowers}
-				flowerIds={flowerIds}
-				nonFlowerIds={nonFlowerIds}
-				// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
-				segment={Segments.top}
-				dealer={dealer}
-				tilesSize={tilesSize}
-				lastThrownId={lastThrown?.id}
-			/>
+			<div className="htss shown top">
+				<ShownTiles
+					nonFlowers={rotatedNonFlowers}
+					// nonFlowers={player.hiddenTiles}
+					flowers={flowers}
+					flowerIds={flowerIds}
+					nonFlowerIds={nonFlowerIds}
+					// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
+					segment={Segments.top}
+					dealer={dealer}
+					tilesSize={tilesSize}
+					lastThrownId={lastThrown?.id}
+				/>
+			</div>
 		);
 	};
 
@@ -88,9 +89,9 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 	const renderDiscardedTiles = () => {
 		return (
 			<DiscardedTiles
-				className="htss discarded top"
+				className="htss top discarded"
 				tiles={player.discardedTiles}
-				// 	tiles={player.hiddenTiles}
+				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
 				segment={Segments.top}
 				lastThrownId={lastThrown?.id}
 			/>

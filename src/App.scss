@@ -3,14 +3,9 @@ $main-padding: 2px;
 $panel-segment-width: 200px;
 $wind-font-size: 60px;
 
-/*-------------------- Color vars --------------------*/
+/*-------------------- Colors --------------------*/
 $color-tile-front: gainsboro;
-
-$color-tile-border: rgb(40, 40, 40);
-$color-border: black;
-
-$log-green: rgb(0, 120, 10);
-$log-dark: rgb(30, 30, 30);
+$color-border: rgb(40, 40, 40);
 
 $radial-gradient-gold: radial-gradient($color-tile-front, #d8ba85, #ffffff, $color-tile-front);
 $radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
@@ -18,18 +13,21 @@ $radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $c
 $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 
-/*-------------------- Tile sizes --------------------*/
+/*-------------------- Tiles --------------------*/
+// original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
+$shown-tiles-per-row: 14;
+$discarded-tiles-per-row: 9;
+
 $border-px: 1px;
 $tile-border-px: 1px;
 $default-border-radius: 4px;
 $default-tile-border-radius: 12%;
 
-// original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
 $original-height: 200px;
 $original-width: 140px;
 
 // Small
-$tile-padding-small: 2px;
+$tile-padding-small: 1px;
 $hidden-tile-height-small: 8px;
 $hidden-tile-width-small: 5px;
 $shown-tile-height-small: round($original-height / 7);
@@ -39,7 +37,7 @@ $self-hidden-tile-height-small: round(1.2 * $original-height / 7);
 $self-hidden-tile-width-small: round(1.2 * $original-width / 7);
 
 // Medium
-$tile-padding-medium: 3px;
+$tile-padding-medium: 2px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
 $shown-tile-height-medium: round($original-height / 6);
@@ -49,7 +47,7 @@ $self-hidden-tile-height-medium: round(1.2 * $original-height / 6);
 $self-hidden-tile-width-medium: round(1.2 * $original-width / 6);
 
 // Large
-$tile-padding-large: 4px;
+$tile-padding-large: 3px;
 $hidden-tile-height-large: 12px;
 $hidden-tile-width-large: 8px;
 $shown-tile-height-large: round($original-height / 5);
@@ -57,11 +55,6 @@ $shown-tile-width-large: round($original-width / 5);
 
 $self-hidden-tile-height-large: round(1.2 * $original-height / 5);
 $self-hidden-tile-width-large: round(1.2 * $original-width / 5);
-
-/*-------------------- Controls & logs --------------------*/
-
-$shown-tiles-per-row: 14;
-$discarded-tiles-per-row: 9;
 
 /*-------------------- Controls & logs --------------------*/
 // Small
@@ -111,8 +104,25 @@ $log-margin-left-large: 15px;
 	margin-left: calc(env(safe-area-inset-left));
 }
 
-/*-------------------- Transform --------------------*/
-$transform-rotate: rotate(90deg) translateX(-22%);
+.list-item {
+	align-self: center;
+	height: 30px;
+}
+$enlarge: 1.2;
+$transform-percent: 22%;
+$transform-rotate: rotate(90deg) translateX(-1 * $transform-percent);
+
+.move-enter {
+	opacity: 0;
+	transition: all 500ms ease-in;
+}
+
+.move-enter-active {
+	opacity: 1;
+	transform: translate(0, 0);
+	transition: all 500ms ease-in;
+}
+
 @mixin default-border {
 	border: $border-px solid $color-border;
 	border-radius: $default-border-radius;
@@ -124,15 +134,8 @@ $transform-rotate: rotate(90deg) translateX(-22%);
 }
 
 @mixin default-tile-border {
-	border: $tile-border-px solid $color-tile-border;
+	border: $tile-border-px solid $color-border;
 	border-radius: $default-tile-border-radius;
-}
-
-@mixin default-selected {
-	background: $radial-gradient-gold-2;
-	background-size: 400% 400%;
-	border-radius: $default-tile-border-radius;
-	animation: linear-gradient 5s ease infinite;
 }
 
 @mixin default-flower {
@@ -142,15 +145,24 @@ $transform-rotate: rotate(90deg) translateX(-22%);
 	animation: linear-gradient 4s ease infinite;
 }
 
-@mixin last-thrown {
+@mixin highlight {
 	background: $radial-gradient-gold;
 	background-size: 400% 400%;
 	animation: linear-gradient 6s ease infinite;
+	border-radius: $default-tile-border-radius;
 }
 
-.list-item {
-	align-self: center;
-	height: 30px;
+@mixin last-thrown {
+	&.last {
+		@include highlight;
+	}
+}
+
+@mixin selected {
+	&.selected {
+		transform: translateY(-15%);
+		@include highlight;
+	}
 }
 
 @keyframes linear-gradient {
@@ -163,15 +175,4 @@ $transform-rotate: rotate(90deg) translateX(-22%);
 	100% {
 		background-position: 0% 50%;
 	}
-}
-
-.move-enter {
-	opacity: 0;
-	transition: all 500ms ease-in;
-}
-
-.move-enter-active {
-	opacity: 1;
-	transform: translate(0, 0);
-	transition: all 500ms ease-in;
 }

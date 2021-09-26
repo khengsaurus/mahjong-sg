@@ -4,7 +4,6 @@ import { Segments, Sizes } from '../../global/enums';
 import ShownTile from './ShownTile';
 
 interface Props {
-	className: string;
 	nonFlowers: ITile[];
 	flowers: ITile[];
 	flowerIds: string[];
@@ -17,7 +16,6 @@ interface Props {
 
 function compare(prev: Props, next: Props) {
 	return (
-		prev.className === next.className &&
 		prev.flowerIds.length === next.flowerIds.length &&
 		prev.nonFlowerIds.length === next.nonFlowerIds.length &&
 		prev.segment === next.segment &&
@@ -33,9 +31,9 @@ function compare(prev: Props, next: Props) {
 	);
 }
 
-const ShownTiles = ({ className, nonFlowers, flowers, segment, dealer, tilesSize, lastThrownId }: Props) => {
+const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrownId }: Props) => {
 	return (
-		<div className={className}>
+		<>
 			{nonFlowers.map(tile => {
 				return (
 					<ShownTile
@@ -59,7 +57,7 @@ const ShownTiles = ({ className, nonFlowers, flowers, segment, dealer, tilesSize
 				);
 			})}
 			{dealer && <CasinoIcon color="disabled" fontSize={tilesSize} />}
-		</div>
+		</>
 	);
 };
 
