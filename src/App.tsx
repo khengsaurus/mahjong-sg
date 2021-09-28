@@ -11,6 +11,7 @@ import { AppContextProvider } from './util/hooks/AppContext';
 import store from './util/store/store';
 import { Styled } from './global/StyledComponents';
 import './App.scss';
+import Sample from './pages/Sample';
 
 export const history = createBrowserHistory();
 
@@ -28,6 +29,7 @@ function App() {
 							<Route exact path="/NewGame" component={NewGame} />
 							<Route exact path="/JoinGame" component={JoinGame} />
 							<Route exact path="/Table" component={Table} />
+							<Route exact path="/Sample" component={Sample} />
 						</Switch>
 					</Router>
 				</Styled>

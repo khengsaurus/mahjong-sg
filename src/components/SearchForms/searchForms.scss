@@ -3,6 +3,7 @@
 .search-form-container {
 	width: $panel-segment-width;
 	// @include default-border;
+	border: 1px solid black;
 
 	.search-box {
 		margin: 3px 0 5px;

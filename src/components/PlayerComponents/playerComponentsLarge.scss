@@ -19,7 +19,7 @@ $tiles-per-column: $shown-tiles-per-row;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 2 * $tile-padding-large;
+	margin: 2 * $tile-padding-large;
 	&.bottom {
 		flex-direction: column-reverse;
 	}
@@ -27,7 +27,7 @@ $tiles-per-column: $shown-tiles-per-row;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
-		padding: $tile-padding-large 0;
+		margin: $tile-padding-large 0;
 		min-height: $hidden-tile-height-large;
 		&.unused {
 			flex-flow: column wrap;
@@ -61,24 +61,22 @@ $tiles-per-column: $shown-tiles-per-row;
 		display: flex;
 		flex-flow: row wrap-reverse;
 		justify-content: center;
-		padding: $tile-padding-large;
-		width: 80vw;
-		// min-height: 2 * $shown-tile-height-large;
+		align-content: flex-start;
+		margin: $tile-padding-large;
+		max-width: 80vw;
 		&.top {
 			flex-flow: row-reverse wrap;
 		}
-		&.shown {
-		}
 		&.discarded {
-			// justify-content: flex-start;
-			// width: 50vw;
-			// If 70% of the screen width cannot accommodate 12 tiles in one row...
-			@media all and (max-width: 12 * $shown-tile-width-large / 0.7) {
-				width: 70vw;
+			@media all and (max-width: floor(12 * $shown-tile-width-large / 0.7)) {
+				max-width: 70vw;
 			}
-			@media all and (max-width: 9 * $shown-tile-width-large / 0.6) {
-				width: 60vw;
+			@media all and (max-width: floor(9 * $shown-tile-width-large / 0.6)) {
+				max-width: 60vw;
 			}
+			// @media all and (max-width: floor(6 * $shown-tile-width-large / 0.5)) {
+			// 	max-width: 50vw;
+			// }
 		}
 	}
 
@@ -104,7 +102,7 @@ $tiles-per-column: $shown-tiles-per-row;
 	flex-direction: row wrap;
 	justify-content: center;
 	align-items: center;
-	padding: 2 * $tile-padding-large;
+	margin: 2 * $tile-padding-large;
 	&.right {
 		flex-direction: row-reverse;
 	}
@@ -112,8 +110,8 @@ $tiles-per-column: $shown-tiles-per-row;
 	.vtsh {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		padding: 0 $tile-padding-large;
+		justify-content: flex-start;
+		margin: 0 $tile-padding-large;
 		min-width: $hidden-tile-height-large;
 		&.unused {
 			flex-flow: row-reverse wrap-reverse;
@@ -146,24 +144,22 @@ $tiles-per-column: $shown-tiles-per-row;
 		display: flex;
 		flex-flow: column-reverse wrap-reverse;
 		justify-content: center;
-		padding: $tile-padding-large;
+		align-content: flex-start;
+		margin: $tile-padding-large;
 		height: 80vh;
-		//FIXME: how to make this dynamic...
-		min-width: 2 * $shown-tile-height-large;
 		&.left {
 			transform: rotate(180deg);
 		}
-		&.shown {
-		}
 		&.discarded {
-			// justify-content: flex-start;
-			// If 40% of the screen height cannot accommodate 9 tiles in one row...
 			@media all and (max-height: 12 * $shown-tile-width-large / 0.7) {
-				height: 70vh;
+				max-height: 70vh;
 			}
 			@media all and (max-height: 9 * $shown-tile-width-large / 0.6) {
-				height: 60vh;
+				max-height: 60vh;
 			}
+			// @media all and (max-height: 6 * $shown-tile-width-large / 0.5) {
+			// 	max-height: 50vh;
+			// }
 		}
 	}
 
@@ -195,7 +191,7 @@ $tiles-per-column: $shown-tiles-per-row;
 	display: flex;
 	flex-direction: row;
 	align-self: center;
-	padding: $tile-padding-large;
+	margin: $tile-padding-large;
 	z-index: 20;
 
 	.self-hidden-tile {

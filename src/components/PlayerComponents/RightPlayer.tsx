@@ -1,7 +1,15 @@
 import isEmpty from 'lodash.isempty';
-import React, { useMemo } from 'react';
-import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { rotateShownTiles, sortShownTiles } from '../../util/utilFns';
+import React, { useEffect, useMemo, useRef } from 'react';
+import {
+	FrontBackTag,
+	IPlayerComponentProps,
+	Segments,
+	ShownTileHeights,
+	ShownTileWidths,
+	Sizes
+} from '../../global/enums';
+import useTiles from '../../util/hooks/useTiles';
+import { useWindowSize } from '../../util/hooks/useWindowSize';
 import DiscardedTiles from './DiscardedTiles';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -13,30 +21,25 @@ import ShownTiles from './ShownTiles';
 
 const RightPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
+	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
-	// console.log('Rendering right');
-
-	// useMemo dependency -> flowers, nonFlowers, nonFlowerIds, flowerIds
-	const shownCards = useMemo(() => {
-		return player?.shownTiles?.map(tile => tile.id);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player?.shownTiles?.length]);
-	const { flowers, nonFlowers, nonFlowerIds, flowerIds } = useMemo(() => {
-		return sortShownTiles(player.shownTiles);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [shownCards]);
-
-	const rotatedNonFlowers = useMemo(() => {
-		return rotateShownTiles(nonFlowers);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [nonFlowerIds]);
-
-	// useMemo dependency -> hiddenCards
-	const allHiddenTiles = player?.allHiddenTiles();
-	const hiddenCards = useMemo(() => {
-		return allHiddenTiles.map(tile => tile.uuid);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [allHiddenTiles.length]);
+	const shownTilesRef = useRef(null);
+	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
+		shownTiles: player?.shownTiles,
+		allHiddenTiles
+	});
+	const { height } = useWindowSize();
+	useEffect(() => {
+		let length = nonFlowers.length + flowers.length + Number(dealer);
+		// let length = player.hiddenTiles.length + player.shownTiles.length + Number(dealer);
+		let shownTilesHeight = shownTilesRef.current?.offsetHeight || 0;
+		if (!!Number(length) && !!Number(shownTilesHeight) && shownTilesRef.current) {
+			let reqHeight = length * ShownTileWidths[tilesSize];
+			let cols = Math.ceil(reqHeight / shownTilesHeight);
+			let toSet = `${cols * ShownTileHeights[tilesSize]}px`;
+			shownTilesRef.current.style.width = toSet;
+		}
+	}, [height, nonFlowers.length, flowers.length, tilesSize, dealer]);
 
 	const shownHiddenHand = useMemo(() => {
 		return (
@@ -65,14 +68,13 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<div className="vtss shown">
+			<div ref={shownTilesRef} id="right-shown" className="vtss">
 				<ShownTiles
-					nonFlowers={rotatedNonFlowers}
-					// nonFlowers={player.hiddenTiles}
+					nonFlowers={nonFlowers}
+					// nonFlowers={[...player.hiddenTiles, ...nonFlowers]}
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
-					// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
 					segment={Segments.right}
 					dealer={dealer}
 					tilesSize={tilesSize}

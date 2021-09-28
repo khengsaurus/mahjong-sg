@@ -1,7 +1,7 @@
 import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
-import { rotateShownTiles, sortShownTiles } from '../../util/utilFns';
+import useTiles from '../../util/hooks/useTiles';
 import DiscardedTiles from './DiscardedTiles';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -13,30 +13,13 @@ import ShownTiles from './ShownTiles';
 
 const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
+	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
+		shownTiles: player?.shownTiles,
+		allHiddenTiles,
+		toRotate: false
+	});
 	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
-	// console.log('Rendering top');
-
-	// useMemo dependency -> flowers, nonFlowers, nonFlowerIds, flowerIds
-	const shownCards = useMemo(() => {
-		return player?.shownTiles?.map(tile => tile.id);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player?.shownTiles?.length]);
-	const { flowers, nonFlowers, nonFlowerIds, flowerIds } = useMemo(() => {
-		return sortShownTiles(player.shownTiles);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [shownCards]);
-
-	const rotatedNonFlowers = useMemo(() => {
-		return rotateShownTiles(nonFlowers);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [nonFlowerIds]);
-
-	// useMemo dependency -> hiddenCards
-	const allHiddenTiles = player?.allHiddenTiles();
-	const hiddenCards = useMemo(() => {
-		return allHiddenTiles.map(tile => tile.uuid);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [allHiddenTiles.length]);
 
 	const shownHiddenHand = useMemo(() => {
 		return (
@@ -65,14 +48,13 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<div className="htss shown top">
+			<div id="top-shown" className="htss top">
 				<ShownTiles
-					nonFlowers={rotatedNonFlowers}
-					// nonFlowers={player.hiddenTiles}
+					nonFlowers={nonFlowers}
+					// nonFlowers={[...player.hiddenTiles, ...nonFlowers]}
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
-					// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
 					segment={Segments.top}
 					dealer={dealer}
 					tilesSize={tilesSize}

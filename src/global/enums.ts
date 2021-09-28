@@ -81,3 +81,15 @@ export enum TextColors {
 export enum Decorations {
 	default = ''
 }
+
+export enum ShownTileWidths {
+	small = 20,
+	medium = 23,
+	large = 28
+}
+
+export enum ShownTileHeights {
+	small = 29,
+	medium = 33,
+	large = 40
+}

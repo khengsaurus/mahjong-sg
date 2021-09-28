@@ -267,9 +267,10 @@ const Controls = (props: ControlsProps) => {
 	const selfKang = useCallback(() => {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
-		updateGameStateTakenTile();
 		game.flagProgress = true;
+		game.newLog(`${player.username} kang'd - ${toKang.card}`);
 		buHua();
+		updateGameStateTakenTile();
 		handleAction(game);
 	}, [buHua, game, handleAction, player, selectedTiles, updateGameStateTakenTile]);
 

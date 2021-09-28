@@ -25,7 +25,7 @@ const Home = () => {
 				<StyledButton title={'New Game'} navigate={Pages.newGame} />
 				<StyledButton title={'Join Game'} navigate={Pages.joinGame} />
 				<StyledButton title={'Settings'} onClick={() => setShowSettings(true)} />
-				<StyledButton title={'Sample'} navigate={Pages.sample} />
+				{/* <StyledButton title={'Sample'} navigate={Pages.sample} /> */}
 				<StyledButton title={'Logout'} onClick={logout} />
 				{showSettings && (
 					<SettingsWindow

@@ -233,6 +233,9 @@ export class User {
 					return tile.id;
 			  })
 			: [t.id];
+		if (!isEmpty(this.lastTakenTile) && toRemove.includes(this.lastTakenTile.id)) {
+			this.lastTakenTile = {};
+		}
 		this.hiddenTiles = this.hiddenTiles.filter(tile => !toRemove.includes(tile.id));
 	}
 

@@ -2,7 +2,7 @@ import isEmpty from 'lodash.isempty';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
-import { sortShownTiles } from '../../util/utilFns';
+import useTiles from '../../util/hooks/useTiles';
 import DiscardedTiles from './DiscardedTiles';
 import { HandTile } from './HandTile';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -15,29 +15,17 @@ import ShownTiles from './ShownTiles';
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
+		shownTiles: player?.shownTiles,
+		allHiddenTiles,
+		toRotate: false
+	});
 	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
-
-	// useMemo dependency -> flowers, nonFlowers, nonFlowerIds, flowerIds
-	const shownCards = useMemo(() => {
-		return player?.shownTiles?.map(tile => tile.id);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player?.shownTiles?.length]);
-	const { flowers, nonFlowers, nonFlowerIds, flowerIds } = useMemo(() => {
-		return sortShownTiles(player.shownTiles);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [shownCards]);
-
-	// useMemo dependency -> hiddenCards
-	const allHiddenTiles = player?.allHiddenTiles();
-	const hiddenCards = useMemo(() => {
-		return allHiddenTiles.map(tile => tile.uuid);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [allHiddenTiles.length]);
 
 	const selectedTilesIds = selectedTiles.map(tile => {
 		return tile.id;
 	});
-	// console.log('Rendering bottom');
 
 	const selectTile = useCallback(
 		(tile: ITile) => {
@@ -101,14 +89,13 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	const renderShownTiles = () => {
 		return (
-			<div className="htss shown">
+			<div id="bottom-shown" className="htss">
 				<ShownTiles
 					nonFlowers={nonFlowers}
-					// nonFlowers={player.hiddenTiles}
+					// nonFlowers={[...player.hiddenTiles, ...nonFlowers]}
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
-					// nonFlowerIds={player.hiddenTiles.map(tile => tile.id)}
 					segment={Segments.bottom}
 					dealer={dealer}
 					tilesSize={tilesSize}
