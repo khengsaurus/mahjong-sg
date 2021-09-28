@@ -5,7 +5,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
 import { useContext, useEffect, useState } from 'react';
@@ -14,7 +13,7 @@ import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
 import { Pages, TextColors } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Centered, Main } from '../../global/StyledComponents';
+import { Centered, Main, Title } from '../../global/StyledComponents';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -75,12 +74,12 @@ const NewGame = () => {
 		<HomeTheme>
 			<Main>
 				<Centered>
-					<Typography variant="h6">{`Create a new game`}</Typography>
+					<Title title="Create a new game" />
 					<div className="panel-segment">
 						<UserSearchForm />
 					</div>
 					<div className="panel-segment">
-						<Typography variant="subtitle1">{`Players:`}</Typography>
+						<Title variant="subtitle1" title="Players:" />
 						<List className="list">
 							{user &&
 								players.length > 0 &&
@@ -119,7 +118,6 @@ const NewGame = () => {
 					>
 						{startedGame ? 'Join game' : 'Start game'}
 					</Button>
-					<br></br>
 					<HomeButton />
 				</Centered>
 			</Main>

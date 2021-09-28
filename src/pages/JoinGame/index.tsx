@@ -10,7 +10,7 @@ import { history } from '../../App';
 import HomeButton from '../../components/HomeButton';
 import { Pages } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Centered, Main } from '../../global/StyledComponents';
+import { Centered, Main, Title } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -52,7 +52,7 @@ const JoinGame = () => {
 		<HomeTheme>
 			<Main>
 				<Centered className="join-game-panel">
-					<Typography variant="subtitle1">{`Available games:`}</Typography>
+					<Title title={'Available games:'} />
 					{user && gameInvites.length > 0 && (
 						<List dense className="list">
 							{gameInvites.map(game => {
@@ -78,8 +78,6 @@ const JoinGame = () => {
 							})}
 						</List>
 					)}
-					<br></br>
-					<br></br>
 					<HomeButton />
 				</Centered>
 			</Main>

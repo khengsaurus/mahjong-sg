@@ -1,8 +1,7 @@
-import Button from '@material-ui/core/Button';
 import { useState } from 'react';
 import LoginForm from '../../components/FormComponents/LoginForm';
 import RegisterForm from '../../components/FormComponents/RegisterForm';
-import { Main } from '../../global/StyledComponents';
+import { Main, StyledButton } from '../../global/StyledComponents';
 import './login.scss';
 
 const Login = () => {
@@ -19,14 +18,13 @@ const Login = () => {
 					<LoginForm />
 				</div>
 			)}
-			<Button
-				variant="text"
+			<StyledButton
+				padding="0px"
+				title={showRegister ? `Back to login` : `Register now`}
 				onClick={() => {
 					setShowRegister(!showRegister);
 				}}
-			>
-				{showRegister ? `Back to login` : `Register now`}
-			</Button>
+			/>
 		</Main>
 	);
 

@@ -1,11 +1,8 @@
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import { useContext, useEffect, useState } from 'react';
-import { history } from '../../App';
 import SettingsWindow from '../../components/SettingsWindow/SettingsWindow';
 import { Pages } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Main } from '../../global/StyledComponents';
+import { Main, StyledButton, Title } from '../../global/StyledComponents';
 import { AppContext } from '../../util/hooks/AppContext';
 import Login from '../Login';
 import './home.scss';
@@ -24,23 +21,12 @@ const Home = () => {
 	let markup = (
 		<HomeTheme>
 			<Main>
-				{user && <Typography variant="h6">{`Welcome ${user.username}`}</Typography>}
-				<br></br>
-				<Button variant={'text'} onClick={() => history.push(Pages.newGame)}>
-					New game
-				</Button>
-				<br></br>
-				<Button variant={'text'} onClick={() => history.push(Pages.joinGame)}>
-					Join game
-				</Button>
-				<br></br>
-				<Button variant={'text'} onClick={() => setShowSettings(true)}>
-					Settings
-				</Button>
-				<br></br>
-				<Button variant={'text'} onClick={logout}>
-					Logout
-				</Button>
+				{user && <Title title={`Welcome ${user.username}`} />}
+				<StyledButton title={'New Game'} navigate={Pages.newGame} />
+				<StyledButton title={'Join Game'} navigate={Pages.joinGame} />
+				<StyledButton title={'Settings'} onClick={() => setShowSettings(true)} />
+				<StyledButton title={'Sample'} navigate={Pages.sample} />
+				<StyledButton title={'Logout'} onClick={logout} />
 				{showSettings && (
 					<SettingsWindow
 						show={showSettings}

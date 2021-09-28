@@ -24,7 +24,7 @@ export enum Pages {
 	newGame = '/NewGame',
 	joinGame = '/JoinGame',
 	table = '/Table',
-	test = '/Test'
+	sample = '/Sample'
 }
 
 export enum Segments {

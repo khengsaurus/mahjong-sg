@@ -1,7 +1,10 @@
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { history } from '../App';
 import { AppContext } from '../util/hooks/AppContext';
-import { TextColors } from './enums';
+import { Pages, TextColors } from './enums';
 
 export const Styled = (props: any) => {
 	const { backgroundColor, tableColor, tileBackColor, tableTextColor, mainTextColor } = useContext(AppContext);
@@ -79,3 +82,49 @@ export const GreenTableText = styled.p`
 export const HiddenTile = styled.div`
 	background-color: ${props => props.theme.tileBackColor || 'teal'};
 `;
+
+interface TitleProps {
+	title: string;
+	padding?: string;
+	variant?: 'h6' | 'subtitle1';
+}
+
+export const Title = ({ title, padding = '15px', variant = 'h6' }: TitleProps) => {
+	return (
+		<Typography style={{ padding }} variant={variant}>
+			{title}
+		</Typography>
+	);
+};
+
+interface StyledButtonProps {
+	title: string;
+	navigate?: Pages;
+	padding?: string;
+	onClick?: () => void;
+	size?: 'small' | 'medium' | 'large';
+	variant?: 'text' | 'outlined' | 'contained';
+	disabled?: boolean;
+}
+
+export const StyledButton = ({
+	title,
+	navigate,
+	padding = '15px',
+	onClick,
+	size = 'medium',
+	variant = 'text',
+	disabled = false
+}: StyledButtonProps) => {
+	return (
+		<Button
+			style={{ padding }}
+			size={size}
+			variant={variant}
+			onClick={() => (navigate ? history.push(navigate) : onClick ? onClick() : null)}
+			disabled={disabled}
+		>
+			{title}
+		</Button>
+	);
+};

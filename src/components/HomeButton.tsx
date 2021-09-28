@@ -1,15 +1,7 @@
-import Button from '@material-ui/core/Button';
-import { history } from '../App';
 import { Pages } from '../global/enums';
+import { StyledButton } from '../global/StyledComponents';
 
 const HomeButton = () => {
-	function handleGoHome() {
-		history.push(Pages.index);
-	}
-	return (
-		<Button size="medium" variant="text" onClick={handleGoHome}>
-			Home
-		</Button>
-	);
+	return <StyledButton title="Home" navigate={Pages.index} />;
 };
 export default HomeButton;
