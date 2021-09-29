@@ -97,7 +97,6 @@ const UserSearchForm: React.FC = () => {
 							endAdornment: (
 								<InputAdornment position="end" style={{ marginRight: -11 }}>
 									<IconButton
-										color="secondary"
 										component="span"
 										onClick={() => {
 											showOptions ? setShowOptions(false) : searchForUser(searchFor);

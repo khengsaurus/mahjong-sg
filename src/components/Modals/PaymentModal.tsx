@@ -9,14 +9,12 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Amounts } from '../../global/enums';
-import { MuiStyles } from '../../global/MuiStyles';
 import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
-import { AppContext } from '../../util/hooks/AppContext';
 
 interface Props {
 	game: Game;
@@ -25,20 +23,26 @@ interface Props {
 	show: boolean;
 }
 
+export async function sendChips(
+	game: Game,
+	sender: number,
+	recipient: number,
+	amount: number,
+	sendCallback?: () => void
+) {
+	game.players[sender].balance = Math.round(game.players[sender].balance - amount);
+	game.players[recipient].balance = Math.round(game.players[recipient].balance + amount);
+	game.newLog(`${game.players[sender].username} sent ${game.players[recipient].username} ${amount} chips`);
+	FBService.updateGame(game);
+	sendCallback && sendCallback();
+}
+
 const PaymentModal = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
-	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
 	let playerUsername = game.players[playerSeat].username;
-
-	async function pay() {
-		game.players[playerSeat].balance = Math.round(game.players[playerSeat].balance - amount);
-		game.players[recipientIndex].balance = Math.round(game.players[recipientIndex].balance + amount);
-		game.newLog(
-			`${game.players[playerSeat].username} sent ${game.players[recipientIndex].username} ${amount} chips`
-		);
-		FBService.updateGame(game);
+	function sendCallback() {
 		setRecipientIndex(10);
 		setAmount(0);
 		onClose();
@@ -54,22 +58,9 @@ const PaymentModal = (props: Props) => {
 
 	return (
 		<MainTransparent>
-			<Dialog
-				open={show}
-				BackdropProps={{ invisible: true }}
-				onClose={onClose}
-				PaperProps={{
-					style: {
-						...MuiStyles.modal,
-						backgroundColor: `${tableColor}`
-					}
-				}}
-			>
+			<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
 				<DialogContent>
-					<IconButton
-						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
-						onClick={onClose}
-					>
+					<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={onClose}>
 						<CloseIcon />
 					</IconButton>
 					<Typography variant="h6">{'Send chips'}</Typography>
@@ -81,7 +72,7 @@ const PaymentModal = (props: Props) => {
 									<FormControlLabel
 										key={otherPlayer.username}
 										value={index}
-										control={<Radio style={{ color: tableTextColor }} />}
+										control={<Radio />}
 										label={otherPlayer.username}
 									/>
 								) : null;
@@ -97,7 +88,7 @@ const PaymentModal = (props: Props) => {
 									<FormControlLabel
 										key={index}
 										value={amount}
-										control={<Radio style={{ color: tableTextColor }} />}
+										control={<Radio />}
 										label={`${amount}`}
 										labelPlacement="end"
 										style={{ width: '60px' }}
@@ -109,10 +100,12 @@ const PaymentModal = (props: Props) => {
 
 					<DialogActions>
 						<Button
-							style={{ color: tableTextColor, position: 'absolute', bottom: 15, right: 15 }}
+							style={{ position: 'absolute', bottom: 15, right: 15 }}
 							variant="text"
 							size="large"
-							onClick={pay}
+							onClick={() => {
+								sendChips(game, playerSeat, recipientIndex, amount, sendCallback);
+							}}
 							disabled={recipientIndex === 10 || !amount || amount <= 0}
 							autoFocus
 						>

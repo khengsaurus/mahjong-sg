@@ -100,23 +100,9 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 	return (
 		<TableTheme>
 			<MainTransparent>
-				<Dialog
-					open={show}
-					BackdropProps={{ invisible: true }}
-					onClose={handleClose}
-					PaperProps={{
-						style: {
-							...MuiStyles.modal,
-							backgroundColor: tableColor
-						}
-					}}
-				>
+				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={handleClose}>
 					<DialogContent>
-						<IconButton
-							color="primary"
-							style={{ position: 'absolute', top: 5, right: 5 }}
-							onClick={handleClose}
-						>
+						<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={handleClose}>
 							<CloseIcon />
 						</IconButton>
 						<FormControl component="fieldset">

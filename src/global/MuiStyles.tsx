@@ -25,32 +25,34 @@ export const HomeTheme = (props: any) => {
 			MuiInputLabel: {
 				shrink: {
 					'&.MuiInputLabel-animated': {
-						color: `${highlightColor} !important`
+						color: `${highlightColor}`
 					}
 				}
 			},
 			MuiButton: {
 				root: {
+					disableRipple: true,
 					'&:hover': {
 						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor} !important`
+						color: `${highlightColor}`
 					}
 				}
 			},
 			MuiIconButton: {
 				root: {
-					color: `${mainTextColor} !important`,
+					disableRipple: true,
+					color: `${mainTextColor}`,
 					'&:hover': {
-						color: `${highlightColor} !important`
+						color: `${highlightColor}`
 					}
 				}
 			},
 			MuiListItem: {
 				root: {
+					backgroundColor: 'transparent !imporant',
 					color: mainTextColor,
 					'&:hover': {
-						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor} !important`
+						color: `${highlightColor}`
 					}
 				}
 			}
@@ -79,12 +81,115 @@ export const HomeTheme = (props: any) => {
 };
 
 export const TableTheme = (props: any) => {
-	const { tableTextColor } = useContext(AppContext);
+	const { tableColor, tableTextColor } = useContext(AppContext);
 	const highlightColor = useMemo(() => {
 		return tableTextColor === TextColors.light ? blue[700] : indigo[500];
 	}, [tableTextColor]);
 
 	const theme = createTheme({
+		overrides: {
+			MuiFormLabel: {
+				root: {
+					color: tableTextColor
+				}
+			},
+			MuiRadio: {
+				root: {
+					color: tableTextColor
+				}
+			},
+			MuiCheckbox: {
+				root: {
+					color: tableTextColor
+				}
+			},
+			MuiButton: {
+				root: {
+					disableRipple: true,
+					color: `${tableTextColor}`,
+					'&:hover': {
+						backgroundColor: 'transparent !imporant',
+						color: `${highlightColor}`
+					}
+				}
+			},
+			MuiIconButton: {
+				root: {
+					disableRipple: true,
+					color: `${tableTextColor}`,
+					'&:hover': {
+						backgroundColor: 'transparent !imporant',
+						color: `${highlightColor}`
+					}
+				}
+			},
+			MuiDialog: {
+				paper: {
+					backgroundColor: tableColor,
+					maxWidth: '420px',
+					minWidth: '420px',
+					overflow: 'scroll'
+				}
+			},
+			MuiPopover: {
+				paper: {
+					backgroundColor: tableColor
+				}
+			},
+			MuiInput: {
+				underline: {
+					'&&::before': {
+						borderColor: tableTextColor
+					},
+					'&&:hover::before': {
+						borderColor: highlightColor
+					}
+				}
+			},
+			MuiInputLabel: {
+				shrink: {
+					'&.MuiInputLabel-animated': {
+						color: `${highlightColor} !important`
+					}
+				}
+			},
+			MuiList: {
+				root: {
+					backgroundColor: tableColor
+				},
+				padding: {
+					paddingTop: '0px',
+					paddingBottom: '0px'
+				}
+			},
+			MuiListItem: {
+				root: {
+					backgroundColor: tableColor,
+					maxHeight: '30px !important',
+					minHeight: '30px !important',
+					overflowY: 'scroll',
+					paddingLeft: '15px'
+				}
+			},
+			MuiMenuItem: {
+				root: {
+					justifyContent: 'center',
+					'&$selected': {
+						backgroundColor: 'transparent'
+					}
+				}
+			},
+			MuiSelect: {
+				select: {
+					textAlign: 'center',
+					paddingLeft: '12px !important',
+					paddingRight: '12px !important',
+					'&:focus': {
+						backgroundColor: 'transparent'
+					}
+				}
+			}
+		},
 		palette: {
 			primary: {
 				main: tableTextColor
@@ -95,20 +200,18 @@ export const TableTheme = (props: any) => {
 			text: {
 				primary: tableTextColor
 			}
+		},
+		typography: {
+			h6: {
+				color: tableTextColor
+			},
+			subtitle1: {
+				color: tableTextColor
+			}
 		}
 	});
 	return <ThemeProvider theme={theme} {...props} />;
 };
-
-export const rotatedMUIDialog = createTheme({
-	overrides: {
-		MuiDialog: {
-			root: {
-				transform: 'rotate(90deg)'
-			}
-		}
-	}
-});
 
 export const rotatedMUIButton = createTheme({
 	overrides: {
@@ -121,8 +224,10 @@ export const rotatedMUIButton = createTheme({
 });
 
 export const MuiStyles = {
-	dialog: {
-		minHeight: '130px',
+	announce_hu_dialog: {
+		minHeight: '140px',
+		minWidth: '320px',
+		maxWidth: '320px',
 		justifyContent: 'center'
 	},
 	topRight5: {
@@ -153,6 +258,11 @@ export const MuiStyles = {
 		minHeight: '30px',
 		maxHeight: '30px'
 	},
+	icon_button_top_right: {
+		position: 'absolute',
+		top: 5,
+		right: 5
+	},
 	buttons_small: {
 		fontSize: 16,
 		fontWeight: 500
@@ -164,5 +274,16 @@ export const MuiStyles = {
 	buttons_large: {
 		fontSize: 26,
 		fontWeight: 800
+	},
+	dropdown_select: {
+		width: '50px'
+	},
+	dropdown_item: {
+		width: '50px',
+		height: '20px',
+		minHeight: '20px',
+		maxHeight: '20px',
+		margin: '4px',
+		justifyContent: 'center'
 	}
 };

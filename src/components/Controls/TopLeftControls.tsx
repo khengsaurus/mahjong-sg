@@ -20,10 +20,10 @@ const TopLeftControls = (props: TopLeftControlsProps) => {
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
-				<IconButton color="primary" className="icon-button" onClick={props.homeCallback}>
+				<IconButton className="icon-button" onClick={props.homeCallback}>
 					<HomeIcon />
 				</IconButton>
-				<IconButton color="primary" className="icon-button" onClick={props.settingsCallback}>
+				<IconButton className="icon-button" onClick={props.settingsCallback}>
 					<SettingsIcon />
 				</IconButton>
 			</div>

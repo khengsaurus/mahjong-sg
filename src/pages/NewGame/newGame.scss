@@ -5,8 +5,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: flex-start;
-	height: 50vh;
-	min-height: 140px;
+	height: 160px;
 	.panel-segment {
 		flex-direction: column;
 		justify-content: center;
@@ -23,12 +22,4 @@
 	width: $panel-segment-width;
 	padding-top: 50px;
 	transition: 200ms;
-}
-
-.user {
-	// margin: 0 20px;
-}
-
-.Button:disabled {
-	color: rgb(125, 125, 125) !important;
 }

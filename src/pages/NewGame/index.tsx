@@ -12,7 +12,7 @@ import { history } from '../../App';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
 import { Pages, TextColors } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Centered, Main, VerticalDivider } from '../../global/StyledComponents';
+import { Main, VerticalDivider } from '../../global/StyledComponents';
 import { HomeButton, Title } from '../../global/StyledMui';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
@@ -73,7 +73,7 @@ const NewGame = () => {
 	const markup = (
 		<HomeTheme>
 			<Main>
-				<Title title="Create a new game" />
+				<Title title="Create a new game" padding="5px" />
 				<div className="panels">
 					<UserSearchForm />
 					<VerticalDivider />
@@ -99,7 +99,7 @@ const NewGame = () => {
 													onClick={() => handleRemovePlayer(player)}
 													style={{ justifyContent: 'flex-end', marginRight: -12 }}
 												>
-													<ClearIcon color="secondary" />
+													<ClearIcon />
 												</IconButton>
 											)}
 										</ListItem>

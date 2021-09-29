@@ -1,22 +1,24 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import React, { useContext } from 'react';
+import { isEmpty } from 'lodash';
+import React from 'react';
 import { MuiStyles } from '../../global/MuiStyles';
-import { Centered } from '../../global/StyledComponents';
-import { StyledButton, Title } from '../../global/StyledMui';
+import { HomeButton, StyledButton, Title } from '../../global/StyledMui';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
-import { AppContext } from '../../util/hooks/AppContext';
+import PaymentModalInline from './PaymentModalInline';
 
 interface Props {
 	game: Game;
 	playerSeat: number;
+	showing: boolean;
+	showCallback: () => void;
 }
 
 const AnnounceHuModal = (props: Props) => {
-	const { game, playerSeat } = props;
-	const { tableColor } = useContext(AppContext);
+	const { game, playerSeat, showing, showCallback } = props;
+	const { hu, draw, ongoing } = game;
 
 	async function nextRound() {
 		game.initRound();
@@ -25,41 +27,45 @@ const AnnounceHuModal = (props: Props) => {
 
 	return (
 		<Dialog
-			open={game.hu !== []}
+			open={!isEmpty(hu)}
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
 				style: {
-					...MuiStyles.dialog,
-					backgroundColor: `${tableColor}`
+					...MuiStyles.announce_hu_dialog
 				}
 			}}
 		>
-			<DialogContent>
-				<Centered>
-					{game.hu.length === 3 && (
-						<>
-							<Title title={`${game.players[game.hu[0]].username} hu`} padding="5px" />
-							<Title
-								title={`${game.hu[1]} 台${game.hu[2] === 1 ? ` 自摸` : ``}`}
-								variant="subtitle1"
-								padding="2px"
-							/>
-						</>
-					)}
-					{game.draw && (
-						<>
-							<Title title={`Draw!`} padding="5px" />
-							<Title title={`15 tiles left`} variant="subtitle1" padding="2px" />
-						</>
-					)}
-					{!game.ongoing && (
-						<Title title={`The game has ended, thank you for playing!`} variant="subtitle1" padding="2px" />
-					)}
-				</Centered>
+			<DialogContent style={{ paddingBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+				{hu.length === 3 && (
+					<>
+						<Title title={`${game.players[hu[0]]?.username} hu`} padding="5px" />
+						<Title title={`${hu[1]} 台${hu[2] === 1 ? ` 自摸` : ``}`} variant="subtitle1" padding="2px" />
+					</>
+				)}
+				{draw && (
+					<>
+						<Title title={`Draw!`} padding="5px" />
+						<Title title={`15 tiles left`} variant="subtitle1" padding="2px" />
+					</>
+				)}
+				{!ongoing && (
+					<Title title={`The game has ended, thank you for playing!`} variant="subtitle1" padding="2px" />
+				)}
+				{hu.length === 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 			</DialogContent>
-			<DialogActions>
-				{game.ongoing && playerSeat === Number(game.dealer) && (
-					<StyledButton label={`Next round`} onClick={nextRound} />
+			<DialogActions
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center'
+				}}
+			>
+				<HomeButton />
+				{hu.length === 3 && hu[0] !== playerSeat && (
+					<StyledButton label={showing ? 'Close' : 'Open'} onClick={showCallback} />
+				)}
+				{ongoing && playerSeat === Number(game.dealer) && (
+					<StyledButton label={`Next Round`} onClick={nextRound} />
 				)}
 			</DialogActions>
 		</Dialog>

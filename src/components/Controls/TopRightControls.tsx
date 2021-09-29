@@ -22,10 +22,10 @@ const TopRightControls = (props: TopRightControlsProps) => {
 
 	return (
 		<div className={`top-right-controls-${controlsSize}`}>
-			<IconButton color="primary" className="icon-button" onClick={payCallback}>
+			<IconButton className="icon-button" onClick={payCallback}>
 				<MonetizationOnIcon />
 			</IconButton>
-			<IconButton color="primary" className="icon-button" onClick={logsCallback}>
+			<IconButton className="icon-button" onClick={logsCallback}>
 				<SubjectIcon />
 			</IconButton>
 			<LogModal expanded={showLogs} logs={logs} size={controlsSize || Sizes.medium} tableColor={tableColor} />

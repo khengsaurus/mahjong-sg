@@ -297,6 +297,11 @@ const Controls = (props: ControlsProps) => {
 		}
 	}
 
+	function handleShowTiles() {
+		player.showTiles = !player.showTiles;
+		handleAction(game);
+	}
+
 	/* ----------------------------------- Markup ----------------------------------- */
 
 	return game && player ? (
@@ -380,7 +385,14 @@ const Controls = (props: ControlsProps) => {
 				{declareHu && (
 					<DeclareHuModal game={game} playerSeat={playerSeat} show={declareHu} onClose={hideDeclareHuModal} />
 				)}
-				{(game.hu.length === 3 || draw) && <AnnounceHuModal playerSeat={playerSeat} game={game} />}
+				{(game.hu.length === 3 || draw) && (
+					<AnnounceHuModal
+						game={game}
+						playerSeat={playerSeat}
+						showing={player.showTiles}
+						showCallback={handleShowTiles}
+					/>
+				)}
 			</MainTransparent>
 		</TableTheme>
 	) : null;

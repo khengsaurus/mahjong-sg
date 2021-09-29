@@ -52,7 +52,7 @@ const JoinGame = () => {
 		<HomeTheme>
 			<Main>
 				<Centered className="join-game-panel">
-					<Title title={'Available games:'} variant="subtitle1" padding="5px" />
+					<Title title={'Available games:'} variant="h6" padding="5px" />
 					{user && gameInvites.length > 0 && (
 						<List dense className="list">
 							{gameInvites.map(game => {
@@ -71,8 +71,8 @@ const JoinGame = () => {
 											}
 											secondary={<Typography variant="body2">{game.playersString}</Typography>}
 										/>
-										<IconButton disabled>
-											<ArrowForwardIcon color="secondary" />
+										<IconButton>
+											<ArrowForwardIcon />
 										</IconButton>
 									</ListItem>
 								);

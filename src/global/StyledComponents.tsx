@@ -84,6 +84,13 @@ export const VerticalDivider = styled.div`
 	position: relative;
 	top: 10%;
 	height: 80%;
+	max-height: 200px;
 	width: 1px;
-	background-color: ${props => props.theme.tableTextColor};
+	background-color: ${props => props.theme.mainTextColor};
+`;
+
+export const Row = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 `;

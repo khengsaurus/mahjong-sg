@@ -10,12 +10,11 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { MainTransparent } from '../../global/StyledComponents';
 import { StyledButton } from '../../global/StyledMui';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
-import { AppContext } from '../../util/hooks/AppContext';
 
 interface Props {
 	game: Game;
@@ -26,7 +25,6 @@ interface Props {
 
 const DeclareHuModal = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
-	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [tai, setTai] = useState<number>(null);
 	const [zimo, setZimo] = useState(false);
 
@@ -50,55 +48,37 @@ const DeclareHuModal = (props: Props) => {
 				onClose={() => onClose(false)}
 				PaperProps={{
 					style: {
-						minWidth: '350px',
-						backgroundColor: `${tableColor}`
+						minWidth: '350px'
 					}
 				}}
 			>
 				<DialogContent>
-					<IconButton
-						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
-						onClick={() => onClose(false)}
-					>
+					<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={() => onClose(false)}>
 						<CloseIcon />
 					</IconButton>
 					<Typography variant="h6">{'Nice!'}</Typography>
 					<br></br>
-					<FormControl style={{ color: tableTextColor }} component="fieldset">
-						<FormLabel style={{ color: tableTextColor }} component="legend">{`台: `}</FormLabel>
+					<FormControl component="fieldset">
+						<FormLabel component="legend">{`台: `}</FormLabel>
 						<RadioGroup row value={tai} onChange={handleSetTaiNumber}>
 							{[1, 2, 3, 4, 5].map((tai: number) => {
-								return (
-									<FormControlLabel
-										key={tai}
-										value={tai}
-										control={<Radio style={{ color: tableTextColor }} />}
-										label={tai}
-									/>
-								);
+								return <FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />;
 							})}
 						</RadioGroup>
 					</FormControl>
 					<br></br>
 					<FormControlLabel
-						style={{ color: tableTextColor }}
 						label="自摸"
 						control={
 							<Checkbox
 								onChange={() => {
 									setZimo(!zimo);
 								}}
-								style={{ color: tableTextColor }}
 							/>
 						}
 					/>
 					<DialogActions>
-						<StyledButton
-							label={`胡`}
-							color={tableTextColor}
-							onClick={hu}
-							disabled={!tai || game.hu.length === 3}
-						/>
+						<StyledButton label={`胡`} onClick={hu} disabled={!tai || game.hu.length === 3} />
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
