@@ -14,17 +14,17 @@ import ShownTiles from './ShownTiles';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
+
+	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const selectedTilesIds = selectedTiles.map(tile => {
+		return tile.id;
+	});
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		shownTiles: player?.shownTiles,
 		allHiddenTiles,
 		toRotate: false
-	});
-	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
-
-	const selectedTilesIds = selectedTiles.map(tile => {
-		return tile.id;
 	});
 
 	const selectTile = useCallback(
@@ -124,9 +124,9 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	return (
 		<div className={`row-section-${tilesSize || Sizes.medium} bottom`}>
 			{player.showTiles ? shownHiddenHand : hiddenHand()}
-			{renderShownTiles()}
-			{unusedTiles}
-			{renderDiscardedTiles()}
+			{player?.shownTiles?.length > 0 && renderShownTiles()}
+			{player?.unusedTiles > 0 && unusedTiles}
+			{player?.discardedTiles?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);
 };

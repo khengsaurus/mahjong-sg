@@ -1,7 +1,7 @@
-import Button from '@material-ui/core/Button';
 import React from 'react';
 import { Sizes } from '../../global/enums';
 import { MuiStyles } from '../../global/MuiStyles';
+import { ControlButton } from '../../global/StyledComponents';
 import './controlsLarge.scss';
 import './controlsMedium.scss';
 import './controlsSmall.scss';
@@ -14,6 +14,7 @@ interface BottomLeftControlsProps {
 	pongText: string;
 	pongDisabled: boolean;
 	okToShow: boolean;
+	huShowing: boolean;
 	huCallback: () => void;
 	huDisabled: boolean;
 }
@@ -27,40 +28,32 @@ const BottomLeftControls = (props: BottomLeftControlsProps) => {
 		pongCallback,
 		pongDisabled,
 		okToShow,
+		huShowing,
 		huCallback,
 		huDisabled
 	} = props;
 
 	return (
 		<div className={`bottom-left-controls-${controlsSize}`}>
-			<Button
-				className="button"
-				variant="text"
-				onClick={chiCallback}
+			<ControlButton
+				label={pongText}
+				callback={chiCallback}
 				disabled={chiDisabled}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-			>
-				{`吃`}
-			</Button>
-			<Button
-				className="button"
-				variant="text"
-				onClick={pongCallback}
+			/>
+			<ControlButton
+				label={pongText}
+				callback={pongCallback}
 				disabled={pongDisabled}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-			>
-				{pongText}
-			</Button>
-			{okToShow && (
-				<Button
-					className="button"
-					variant="text"
-					onClick={huCallback}
+			/>
+			{okToShow && !huShowing && (
+				<ControlButton
+					label="开!"
+					callback={huCallback}
 					disabled={huDisabled}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-				>
-					<p>{`开!`}</p>
-				</Button>
+				/>
 			)}
 		</div>
 	);

@@ -14,12 +14,13 @@ import ShownTiles from './ShownTiles';
 const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
+
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		shownTiles: player?.shownTiles,
 		allHiddenTiles,
 		toRotate: false
 	});
-	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
 
 	const shownHiddenHand = useMemo(() => {
 		return (
@@ -82,10 +83,10 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`row-section-${tilesSize || Sizes.medium}`}>
-			{player.showTiles ? shownHiddenHand : hiddenHand}
-			{renderShownTiles()}
-			{unusedTiles}
-			{renderDiscardedTiles()}
+			{player?.showTiles ? shownHiddenHand : hiddenHand}
+			{player?.shownTiles?.length > 0 && renderShownTiles()}
+			{player?.unusedTiles > 0 && unusedTiles}
+			{player?.discardedTiles?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);
 };

@@ -1,7 +1,7 @@
-import Button from '@material-ui/core/Button';
 import React from 'react';
 import { Sizes } from '../../global/enums';
 import { MuiStyles } from '../../global/MuiStyles';
+import { ControlButton } from '../../global/StyledComponents';
 import './controlsLarge.scss';
 import './controlsMedium.scss';
 import './controlsSmall.scss';
@@ -15,40 +15,41 @@ interface BottomRightControlsProps {
 	drawDisabled: boolean;
 	openCallback: () => void;
 	okToShow: boolean;
+	huShowing: boolean;
 }
 
 const BottomRightControls = (props: BottomRightControlsProps) => {
-	const { controlsSize, throwCallback, throwDisabled, drawText, drawCallback, drawDisabled, okToShow, openCallback } =
-		props;
+	const {
+		controlsSize,
+		throwCallback,
+		throwDisabled,
+		drawText,
+		drawCallback,
+		drawDisabled,
+		openCallback,
+		okToShow,
+		huShowing
+	} = props;
 	return (
 		<div className={`bottom-right-controls-${controlsSize}`}>
-			<Button
-				className="button"
-				variant="text"
-				onClick={throwCallback}
+			<ControlButton
+				label={`丢`}
+				callback={throwCallback}
 				disabled={throwDisabled}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-			>
-				{`丢`}
-			</Button>
-			<Button
-				className="button"
-				variant="text"
-				onClick={drawCallback}
+			/>
+			<ControlButton
+				label={drawText}
+				callback={drawCallback}
 				disabled={drawDisabled}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-			>
-				{drawText}
-			</Button>
-			{!okToShow && (
-				<Button
-					className="button"
-					variant="text"
-					onClick={openCallback}
+			/>
+			{!okToShow && !huShowing && (
+				<ControlButton
+					label={`开?`}
+					callback={openCallback}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-				>
-					{`开?`}
-				</Button>
+				/>
 			)}
 		</div>
 	);

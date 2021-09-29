@@ -21,7 +21,7 @@ import './controlsMedium.scss';
 interface Props {
 	game: Game;
 	playerSeat: number;
-	onClose: () => void;
+	onClose: (didHu?: boolean) => void;
 	show: boolean;
 }
 
@@ -36,7 +36,7 @@ const HuDialog = (props: Props) => {
 		game.flagProgress = Number(game.dealer) === playerSeat ? Boolean(false) : Boolean(true);
 		game.endRound();
 		FBService.updateGame(game);
-		onClose();
+		onClose(true);
 	}
 
 	const handleSetTaiNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +48,7 @@ const HuDialog = (props: Props) => {
 			<Dialog
 				open={show}
 				BackdropProps={{ invisible: true }}
-				onClose={onClose}
+				onClose={() => onClose(false)}
 				PaperProps={{
 					style: {
 						minWidth: '350px',
@@ -59,7 +59,7 @@ const HuDialog = (props: Props) => {
 				<DialogContent>
 					<IconButton
 						style={{ color: tableTextColor, position: 'absolute', top: 5, right: 5 }}
-						onClick={onClose}
+						onClick={() => onClose(false)}
 					>
 						<CloseIcon />
 					</IconButton>

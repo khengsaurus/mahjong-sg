@@ -1,15 +1,8 @@
 import isEmpty from 'lodash.isempty';
-import React, { useEffect, useMemo, useRef } from 'react';
-import {
-	FrontBackTag,
-	IPlayerComponentProps,
-	Segments,
-	ShownTileHeights,
-	ShownTileWidths,
-	Sizes
-} from '../../global/enums';
+import React, { useMemo, useRef } from 'react';
+import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import useTiles from '../../util/hooks/useTiles';
-import { useWindowSize } from '../../util/hooks/useWindowSize';
+import { useDynamicShownTilesWidth } from '../../util/hooks/useWindowSize';
 import DiscardedTiles from './DiscardedTiles';
 import HiddenHand from './HiddenTiles/HiddenHand';
 import UnusedTiles from './HiddenTiles/UnusedTiles';
@@ -23,23 +16,19 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
-	const shownTilesRef = useRef(null);
+
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		shownTiles: player?.shownTiles,
 		allHiddenTiles
 	});
-	const { height } = useWindowSize();
-	useEffect(() => {
-		let length = nonFlowers.length + flowers.length + Number(dealer);
-		// let length = player.hiddenTiles.length + player.shownTiles.length + Number(dealer);
-		let shownTilesHeight = shownTilesRef.current?.offsetHeight || 0;
-		if (!!Number(length) && !!Number(shownTilesHeight) && shownTilesRef.current) {
-			let reqHeight = length * ShownTileWidths[tilesSize];
-			let cols = Math.ceil(reqHeight / shownTilesHeight);
-			let toSet = `${cols * ShownTileHeights[tilesSize]}px`;
-			shownTilesRef.current.style.width = toSet;
-		}
-	}, [height, nonFlowers.length, flowers.length, tilesSize, dealer]);
+	const shownTilesRef = useRef(null);
+	useDynamicShownTilesWidth({
+		shownTilesRef,
+		nonFlowersLength: nonFlowers.length,
+		flowersLength: flowers.length,
+		tilesSize: tilesSize,
+		dealer
+	});
 
 	const shownHiddenHand = useMemo(() => {
 		return (
@@ -102,10 +91,10 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.medium}`}>
-			{player.showTiles ? shownHiddenHand : hiddenHand}
-			{renderShownTiles()}
-			{unusedTiles}
-			{renderDiscardedTiles()}
+			{player?.showTiles ? shownHiddenHand : hiddenHand}
+			{player?.shownTiles?.length > 0 && renderShownTiles()}
+			{player?.unusedTiles > 0 && unusedTiles}
+			{player?.discardedTiles?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);
 };

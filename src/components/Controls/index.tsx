@@ -286,9 +286,9 @@ const Controls = (props: ControlsProps) => {
 		handleAction(game);
 	}
 
-	function hideHuDialog() {
-		if (hu.length !== 3) {
-			setDeclareHu(false);
+	function hideHuDialog(didHu?: boolean) {
+		setDeclareHu(false);
+		if (!didHu) {
 			if (isHoldingLastThrown) {
 				returnLastThrown();
 			}
@@ -339,6 +339,7 @@ const Controls = (props: ControlsProps) => {
 					pongDisabled={!canPong && !canKang}
 					huCallback={showHuDialog}
 					okToShow={okToShow}
+					huShowing={declareHu}
 					huDisabled={game.hu.length === 3}
 				/>
 				<BottomRightControls
@@ -352,6 +353,7 @@ const Controls = (props: ControlsProps) => {
 					drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
 					openCallback={handleShow}
 					okToShow={okToShow}
+					huShowing={declareHu}
 				/>
 				{showPay && (
 					<PaymentWindow

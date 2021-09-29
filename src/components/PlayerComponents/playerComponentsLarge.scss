@@ -63,20 +63,17 @@ $tiles-per-column: $shown-tiles-per-row;
 		justify-content: center;
 		align-content: flex-start;
 		margin: $tile-padding-large;
-		max-width: 80vw;
+		max-width: floor(80vw);
 		&.top {
 			flex-flow: row-reverse wrap;
 		}
 		&.discarded {
 			@media all and (max-width: floor(12 * $shown-tile-width-large / 0.7)) {
-				max-width: 70vw;
+				max-width: floor(70vw);
 			}
 			@media all and (max-width: floor(9 * $shown-tile-width-large / 0.6)) {
-				max-width: 60vw;
+				max-width: floor(60vw);
 			}
-			// @media all and (max-width: floor(6 * $shown-tile-width-large / 0.5)) {
-			// 	max-width: 50vw;
-			// }
 		}
 	}
 
@@ -146,20 +143,17 @@ $tiles-per-column: $shown-tiles-per-row;
 		justify-content: center;
 		align-content: flex-start;
 		margin: $tile-padding-large;
-		height: 80vh;
+		height: floor(80vh);
 		&.left {
 			transform: rotate(180deg);
 		}
 		&.discarded {
 			@media all and (max-height: 12 * $shown-tile-width-large / 0.7) {
-				max-height: 70vh;
+				max-height: floor(70vh);
 			}
 			@media all and (max-height: 9 * $shown-tile-width-large / 0.6) {
-				max-height: 60vh;
+				max-height: floor(60vh);
 			}
-			// @media all and (max-height: 6 * $shown-tile-width-large / 0.5) {
-			// 	max-height: 50vh;
-			// }
 		}
 	}
 
