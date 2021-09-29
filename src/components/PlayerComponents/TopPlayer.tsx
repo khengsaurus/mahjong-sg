@@ -2,14 +2,14 @@ import isEmpty from 'lodash.isempty';
 import React, { useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import useTiles from '../../util/hooks/useTiles';
-import DiscardedTiles from './DiscardedTiles';
-import HiddenHand from './HiddenTiles/HiddenHand';
-import UnusedTiles from './HiddenTiles/UnusedTiles';
+import DiscardedTiles from '../Tiles/DiscardedTiles';
+import HiddenHand from '../Tiles/HiddenHand';
+import ShownTile from '../Tiles/ShownTile';
+import ShownTiles from '../Tiles/ShownTiles';
+import UnusedTiles from '../Tiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
-import ShownTile from './ShownTile';
-import ShownTiles from './ShownTiles';
 
 const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;

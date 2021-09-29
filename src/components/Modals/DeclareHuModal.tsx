@@ -11,11 +11,11 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext, useState } from 'react';
-import { MainTransparent, StyledButton } from '../../global/StyledComponents';
+import { MainTransparent } from '../../global/StyledComponents';
+import { StyledButton } from '../../global/StyledMui';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import './controlsMedium.scss';
 
 interface Props {
 	game: Game;
@@ -24,7 +24,7 @@ interface Props {
 	show: boolean;
 }
 
-const HuDialog = (props: Props) => {
+const DeclareHuModal = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
 	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [tai, setTai] = useState<number>(null);
@@ -106,4 +106,4 @@ const HuDialog = (props: Props) => {
 	);
 };
 
-export default HuDialog;
+export default DeclareHuModal;

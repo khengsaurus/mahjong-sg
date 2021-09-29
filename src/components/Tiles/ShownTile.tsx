@@ -1,9 +1,6 @@
 import React from 'react';
 import { Segments } from '../../global/enums';
 import getTileSrc from '../../images';
-import './playerComponentsLarge.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsSmall.scss';
 
 interface ShownTileProps {
 	tileID: string;

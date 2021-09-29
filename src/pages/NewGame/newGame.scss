@@ -1,22 +1,32 @@
 @import '../../App.scss';
 
-.panel-segment {
-	flex-direction: column;
+.panels {
+	display: flex;
+	flex-direction: row;
 	justify-content: center;
-	margin-top: 20px;
-	width: $panel-segment-width;
+	align-items: flex-start;
+	height: 50vh;
+	min-height: 140px;
+	.panel-segment {
+		flex-direction: column;
+		justify-content: center;
+		width: $panel-segment-width;
+		&.padding-top {
+			padding-top: 11px !important;
+		}
+	}
 }
 
 .list {
 	display: flex;
 	flex-direction: column;
 	width: $panel-segment-width;
-	margin: 10px 0;
+	padding-top: 50px;
 	transition: 200ms;
 }
 
 .user {
-	margin: 0 20px;
+	// margin: 0 20px;
 }
 
 .Button:disabled {

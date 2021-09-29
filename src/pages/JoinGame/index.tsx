@@ -7,10 +7,10 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import firebase from 'firebase/app';
 import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
-import HomeButton from '../../components/HomeButton';
 import { Pages } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Centered, Main, Title } from '../../global/StyledComponents';
+import { Centered, Main } from '../../global/StyledComponents';
+import { HomeButton, Title } from '../../global/StyledMui';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -52,12 +52,13 @@ const JoinGame = () => {
 		<HomeTheme>
 			<Main>
 				<Centered className="join-game-panel">
-					<Title title={'Available games:'} />
+					<Title title={'Available games:'} variant="subtitle1" padding="5px" />
 					{user && gameInvites.length > 0 && (
 						<List dense className="list">
 							{gameInvites.map(game => {
 								return (
 									<ListItem
+										style={{ padding: 0, margin: 0 }}
 										button
 										key={game.playersString + game.createdAt.toString()}
 										onClick={() => handleJoinGame(game)}

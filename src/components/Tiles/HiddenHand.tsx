@@ -1,10 +1,7 @@
 import React, { useMemo } from 'react';
-import { Segments } from '../../../global/enums';
-import { HiddenTile } from '../../../global/StyledComponents';
-import { generateNumberArray } from '../../../util/utilFns';
-import '../playerComponentsLarge.scss';
-import '../playerComponentsMedium.scss';
-import '../playerComponentsSmall.scss';
+import { Segments } from '../../global/enums';
+import { HiddenTile } from '../../global/StyledComponents';
+import { generateNumberArray } from '../../util/utilFns';
 
 interface Props {
 	tiles: number;

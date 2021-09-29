@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sizes } from '../../global/enums';
 import { MuiStyles } from '../../global/MuiStyles';
-import { ControlButton } from '../../global/StyledComponents';
+import { ControlButton } from '../../global/StyledMui';
 import './controlsLarge.scss';
 import './controlsMedium.scss';
 import './controlsSmall.scss';

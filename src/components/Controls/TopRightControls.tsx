@@ -4,10 +4,10 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import React, { useContext } from 'react';
 import { Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
+import LogModal from '../Modals/LogModal';
 import './controlsLarge.scss';
 import './controlsMedium.scss';
 import './controlsSmall.scss';
-import LogBox from './LogBox';
 
 interface TopRightControlsProps {
 	payCallback: () => void;
@@ -19,7 +19,6 @@ interface TopRightControlsProps {
 const TopRightControls = (props: TopRightControlsProps) => {
 	const { payCallback, logsCallback, showLogs, logs } = props;
 	const { controlsSize, tableColor } = useContext(AppContext);
-	const boxId = 'logs';
 
 	return (
 		<div className={`top-right-controls-${controlsSize}`}>
@@ -29,13 +28,7 @@ const TopRightControls = (props: TopRightControlsProps) => {
 			<IconButton color="primary" className="icon-button" onClick={logsCallback}>
 				<SubjectIcon />
 			</IconButton>
-			<LogBox
-				id={boxId}
-				expanded={showLogs}
-				logs={logs}
-				size={controlsSize || Sizes.medium}
-				tableColor={tableColor}
-			/>
+			<LogModal expanded={showLogs} logs={logs} size={controlsSize || Sizes.medium} tableColor={tableColor} />
 		</div>
 	);
 };

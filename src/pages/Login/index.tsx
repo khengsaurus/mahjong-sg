@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import LoginForm from '../../components/FormComponents/LoginForm';
 import RegisterForm from '../../components/FormComponents/RegisterForm';
-import { Main, StyledButton } from '../../global/StyledComponents';
+import { Main } from '../../global/StyledComponents';
+import { StyledButton } from '../../global/StyledMui';
 import './login.scss';
 
 const Login = () => {

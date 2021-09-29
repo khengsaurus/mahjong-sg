@@ -1,7 +1,4 @@
 import getTileSrc from '../../images';
-import './playerComponentsLarge.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsSmall.scss';
 
 interface HandTileProps {
 	card: string;

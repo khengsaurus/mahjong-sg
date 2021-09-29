@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Pages } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Main, StyledButton, Title } from '../../global/StyledComponents';
+import { Main } from '../../global/StyledComponents';
+import { StyledButton, Title } from '../../global/StyledMui';
 import { AppContext } from '../../util/hooks/AppContext';
 import './sample.scss';
 

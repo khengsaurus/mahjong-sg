@@ -10,15 +10,15 @@ import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import { findLeft, sortTiles } from '../../util/utilFns';
+import AnnounceHuModal from '../Modals/AnnounceHuModal';
+import DeclareHuModal from '../Modals/DeclareHuModal';
+import PaymentModal from '../Modals/PaymentModal';
+import SettingsWindow from '../SettingsWindow/SettingsWindow';
+import BottomLeftControls from './BottomLeftControls';
+import BottomRightControls from './BottomRightControls';
 import './controlsLarge.scss';
 import './controlsMedium.scss';
 import './controlsSmall.scss';
-import SettingsWindow from '../SettingsWindow/SettingsWindow';
-import Announcement from './Announcement';
-import BottomLeftControls from './BottomLeftControls';
-import BottomRightControls from './BottomRightControls';
-import HuDialog from './HuDialog';
-import PaymentWindow from './PaymentWindow';
 import TopLeftControls from './TopLeftControls';
 import TopRightControls from './TopRightControls';
 
@@ -44,11 +44,11 @@ const Controls = (props: ControlsProps) => {
 	const player: User = useSelector((state: IStore) => state.player);
 	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs, hu, draw } = game;
 
-	// Logic to showHuDialog when user shows, leaves the game, then returns
+	// Logic to showDeclareHuModal when user shows, leaves the game, then returns
 	useEffect(() => {
 		if (player && player.showTiles && hu.length !== 3) {
 			if (!declareHu) {
-				showHuDialog();
+				showDeclareHuModal();
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -276,7 +276,7 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Hu ----------------------------------- */
 
-	function showHuDialog() {
+	function showDeclareHuModal() {
 		setDeclareHu(true);
 		if (lastThrownAvailable) {
 			takeLastThrown();
@@ -286,7 +286,7 @@ const Controls = (props: ControlsProps) => {
 		handleAction(game);
 	}
 
-	function hideHuDialog(didHu?: boolean) {
+	function hideDeclareHuModal(didHu?: boolean) {
 		setDeclareHu(false);
 		if (!didHu) {
 			if (isHoldingLastThrown) {
@@ -338,7 +338,7 @@ const Controls = (props: ControlsProps) => {
 						}}
 						pongText={canKang ? `杠` : `碰`}
 						pongDisabled={!canPong && !canKang}
-						huCallback={showHuDialog}
+						huCallback={showDeclareHuModal}
 						okToShow={okToShow}
 						huShowing={declareHu}
 						huDisabled={game.hu.length === 3}
@@ -360,7 +360,7 @@ const Controls = (props: ControlsProps) => {
 					/>
 				)}
 				{showPay && (
-					<PaymentWindow
+					<PaymentModal
 						game={game}
 						playerSeat={playerSeat}
 						show={showPay}
@@ -377,8 +377,10 @@ const Controls = (props: ControlsProps) => {
 						}}
 					/>
 				)}
-				{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-				{(game.hu.length === 3 || draw) && <Announcement playerSeat={playerSeat} game={game} />}
+				{declareHu && (
+					<DeclareHuModal game={game} playerSeat={playerSeat} show={declareHu} onClose={hideDeclareHuModal} />
+				)}
+				{(game.hu.length === 3 || draw) && <AnnounceHuModal playerSeat={playerSeat} game={game} />}
 			</MainTransparent>
 		</TableTheme>
 	) : null;

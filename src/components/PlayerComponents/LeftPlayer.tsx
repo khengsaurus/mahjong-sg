@@ -3,14 +3,14 @@ import React, { useMemo, useRef } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import useTiles from '../../util/hooks/useTiles';
 import { useDynamicShownTilesWidth } from '../../util/hooks/useWindowSize';
-import DiscardedTiles from './DiscardedTiles';
-import HiddenHand from './HiddenTiles/HiddenHand';
-import UnusedTiles from './HiddenTiles/UnusedTiles';
+import DiscardedTiles from '../Tiles/DiscardedTiles';
+import HiddenHand from '../Tiles/HiddenHand';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
-import ShownTile from './ShownTile';
-import ShownTiles from './ShownTiles';
+import ShownTile from '../Tiles/ShownTile';
+import UnusedTiles from '../Tiles/UnusedTiles';
+import ShownTiles from '../Tiles/ShownTiles';
 
 const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;

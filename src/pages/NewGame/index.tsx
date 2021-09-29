@@ -9,11 +9,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
 import { useContext, useEffect, useState } from 'react';
 import { history } from '../../App';
-import HomeButton from '../../components/HomeButton';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
 import { Pages, TextColors } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Centered, Main, Title } from '../../global/StyledComponents';
+import { Centered, Main, VerticalDivider } from '../../global/StyledComponents';
+import { HomeButton, Title } from '../../global/StyledMui';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -73,13 +73,12 @@ const NewGame = () => {
 	const markup = (
 		<HomeTheme>
 			<Main>
-				<Centered>
-					<Title title="Create a new game" />
-					<div className="panel-segment">
-						<UserSearchForm />
-					</div>
-					<div className="panel-segment">
-						<Title variant="subtitle1" title="Players:" />
+				<Title title="Create a new game" />
+				<div className="panels">
+					<UserSearchForm />
+					<VerticalDivider />
+					<div className="panel-segment padding-top">
+						{/* <Title variant="subtitle1" title="Players:" padding="0px" /> */}
 						<List className="list">
 							{user &&
 								players.length > 0 &&
@@ -108,18 +107,17 @@ const NewGame = () => {
 								})}
 						</List>
 					</div>
-					<br></br>
-					<Button
-						size="medium"
-						variant="text"
-						onClick={handleButtonClick}
-						disabled={players.length < 4}
-						classes={{ disabled: classes.disabledButton }}
-					>
-						{startedGame ? 'Join game' : 'Start game'}
-					</Button>
-					<HomeButton />
-				</Centered>
+				</div>
+				<Button
+					size="medium"
+					variant="text"
+					onClick={handleButtonClick}
+					disabled={players.length < 4}
+					classes={{ disabled: classes.disabledButton }}
+				>
+					{startedGame ? 'Join game' : 'Start game'}
+				</Button>
+				<HomeButton />
 			</Main>
 		</HomeTheme>
 	);

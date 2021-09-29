@@ -3,14 +3,14 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import useTiles from '../../util/hooks/useTiles';
-import DiscardedTiles from './DiscardedTiles';
-import { HandTile } from './HandTile';
-import UnusedTiles from './HiddenTiles/UnusedTiles';
+import DiscardedTiles from '../Tiles/DiscardedTiles';
+import { HandTile } from '../Tiles/HandTile';
+import ShownTile from '../Tiles/ShownTile';
+import ShownTiles from '../Tiles/ShownTiles';
+import UnusedTiles from '../Tiles/UnusedTiles';
 import './playerComponentsLarge.scss';
 import './playerComponentsMedium.scss';
 import './playerComponentsSmall.scss';
-import ShownTile from './ShownTile';
-import ShownTiles from './ShownTiles';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;

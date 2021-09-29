@@ -93,7 +93,7 @@ const UserSearchForm: React.FC = () => {
 						}}
 						InputProps={{
 							color: 'secondary',
-							readOnly: players.length === 4,
+							disabled: players.length >= 4,
 							endAdornment: (
 								<InputAdornment position="end" style={{ marginRight: -11 }}>
 									<IconButton

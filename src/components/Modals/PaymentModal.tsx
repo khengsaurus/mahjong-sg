@@ -17,7 +17,6 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import './controlsSmall.scss';
 
 interface Props {
 	game: Game;
@@ -26,7 +25,7 @@ interface Props {
 	show: boolean;
 }
 
-const PaymentWindow = (props: Props) => {
+const PaymentModal = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
 	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [recipientIndex, setRecipientIndex] = useState(10);
@@ -34,8 +33,8 @@ const PaymentWindow = (props: Props) => {
 	let playerUsername = game.players[playerSeat].username;
 
 	async function pay() {
-		game.players[playerSeat].balance -= amount;
-		game.players[recipientIndex].balance += amount;
+		game.players[playerSeat].balance = Math.round(game.players[playerSeat].balance - amount);
+		game.players[recipientIndex].balance = Math.round(game.players[recipientIndex].balance + amount);
 		game.newLog(
 			`${game.players[playerSeat].username} sent ${game.players[recipientIndex].username} ${amount} chips`
 		);
@@ -126,4 +125,4 @@ const PaymentWindow = (props: Props) => {
 	);
 };
 
-export default PaymentWindow;
+export default PaymentModal;
