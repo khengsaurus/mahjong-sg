@@ -10,6 +10,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext, useState } from 'react';
+import { Amounts } from '../../global/enums';
 import { MuiStyles } from '../../global/MuiStyles';
 import { MainTransparent } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
@@ -30,13 +31,14 @@ const PaymentWindow = (props: Props) => {
 	const { tableColor, tableTextColor } = useContext(AppContext);
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
-	const amounts = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8];
 	let playerUsername = game.players[playerSeat].username;
 
 	async function pay() {
 		game.players[playerSeat].balance -= amount;
 		game.players[recipientIndex].balance += amount;
-		game.newLog(`${game.players[playerSeat].username} sent ${game.players[recipientIndex].username} $${amount}`);
+		game.newLog(
+			`${game.players[playerSeat].username} sent ${game.players[recipientIndex].username} ${amount} chips`
+		);
 		FBService.updateGame(game);
 		setRecipientIndex(10);
 		setAmount(0);
@@ -71,8 +73,7 @@ const PaymentWindow = (props: Props) => {
 					>
 						<CloseIcon />
 					</IconButton>
-					<Typography variant="subtitle1">{'Send money'}</Typography>
-					<br></br>
+					<Typography variant="h6">{'Send chips'}</Typography>
 					<FormControl component="fieldset">
 						<Typography variant="subtitle1">{'To: '}</Typography>
 						<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
@@ -91,21 +92,22 @@ const PaymentWindow = (props: Props) => {
 
 					<FormControl component="fieldset">
 						<Typography variant="subtitle1">{'Amount: '}</Typography>
-						<RadioGroup row value={amount} onChange={handleSelectAmount}>
-							{amounts.map((amount: number, index: number) => {
+						<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
+							{Amounts.map((amount: number, index: number) => {
 								return (
 									<FormControlLabel
 										key={index}
 										value={amount}
 										control={<Radio style={{ color: tableTextColor }} />}
-										label={`$${amount}`}
+										label={`${amount}`}
 										labelPlacement="end"
+										style={{ width: '60px' }}
 									/>
 								);
 							})}
 						</RadioGroup>
 					</FormControl>
-					<br></br>
+
 					<DialogActions>
 						<Button
 							style={{ color: tableTextColor, position: 'absolute', bottom: 15, right: 15 }}

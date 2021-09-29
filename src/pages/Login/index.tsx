@@ -19,8 +19,8 @@ const Login = () => {
 				</div>
 			)}
 			<StyledButton
+				label={showRegister ? `Back to login` : `Register now`}
 				padding="0px"
-				title={showRegister ? `Back to login` : `Register now`}
 				onClick={() => {
 					setShowRegister(!showRegister);
 				}}

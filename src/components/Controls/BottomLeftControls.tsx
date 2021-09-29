@@ -37,14 +37,14 @@ const BottomLeftControls = (props: BottomLeftControlsProps) => {
 		<div className={`bottom-left-controls-${controlsSize}`}>
 			<ControlButton
 				label={pongText}
-				callback={chiCallback}
-				disabled={chiDisabled}
+				callback={pongCallback}
+				disabled={pongDisabled}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
 			<ControlButton
-				label={pongText}
-				callback={pongCallback}
-				disabled={pongDisabled}
+				label={`吃`}
+				callback={chiCallback}
+				disabled={chiDisabled}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
 			{okToShow && !huShowing && (

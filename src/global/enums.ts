@@ -78,6 +78,8 @@ export enum TextColors {
 	green = 'rgb(0, 130, 20)'
 }
 
+export const Amounts = [1, 2, 4, 8, 16, 32, 64];
+
 export enum Decorations {
 	default = ''
 }

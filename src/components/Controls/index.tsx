@@ -42,7 +42,7 @@ const Controls = (props: ControlsProps) => {
 
 	const game: Game = useSelector((state: IStore) => state.game);
 	const player: User = useSelector((state: IStore) => state.player);
-	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs, hu } = game;
+	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs, hu, draw } = game;
 
 	// Logic to showHuDialog when user shows, leaves the game, then returns
 	useEffect(() => {
@@ -311,9 +311,9 @@ const Controls = (props: ControlsProps) => {
 					}}
 					texts={[
 						`Dealer: ${players[dealer].username}`,
-						`Seat: ${playerWind}`,
 						`Tiles left: ${tilesLeft}`,
-						`$ ${Math.round(Number(player.balance) * 100) / 100}`
+						`Chips: ${Math.round(player.balance)}`,
+						`Seat: ${playerWind}`
 					]}
 				/>
 				<TopRightControls
@@ -324,37 +324,41 @@ const Controls = (props: ControlsProps) => {
 					showLogs={showLogs}
 					logs={logs}
 				/>
-				<BottomLeftControls
-					controlsSize={controlsSize}
-					chiCallback={() => handleTake()}
-					chiDisabled={!canChi}
-					pongCallback={() => {
-						if (selectedTiles.length === 1) {
-							selfKang();
-						} else {
-							handleTake();
-						}
-					}}
-					pongText={canKang ? `杠` : `碰`}
-					pongDisabled={!canPong && !canKang}
-					huCallback={showHuDialog}
-					okToShow={okToShow}
-					huShowing={declareHu}
-					huDisabled={game.hu.length === 3}
-				/>
-				<BottomRightControls
-					controlsSize={controlsSize}
-					throwCallback={() => {
-						handleThrow(selectedTiles[0]);
-					}}
-					throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
-					drawCallback={() => handleDraw()}
-					drawText={tilesLeft === 15 ? `完` : `摸`}
-					drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
-					openCallback={handleShow}
-					okToShow={okToShow}
-					huShowing={declareHu}
-				/>
+				{hu.length !== 3 && !draw && !declareHu && (
+					<BottomLeftControls
+						controlsSize={controlsSize}
+						chiCallback={() => handleTake()}
+						chiDisabled={!canChi}
+						pongCallback={() => {
+							if (selectedTiles.length === 1) {
+								selfKang();
+							} else {
+								handleTake();
+							}
+						}}
+						pongText={canKang ? `杠` : `碰`}
+						pongDisabled={!canPong && !canKang}
+						huCallback={showHuDialog}
+						okToShow={okToShow}
+						huShowing={declareHu}
+						huDisabled={game.hu.length === 3}
+					/>
+				)}
+				{hu.length !== 3 && !draw && !declareHu && (
+					<BottomRightControls
+						controlsSize={controlsSize}
+						throwCallback={() => {
+							handleThrow(selectedTiles[0]);
+						}}
+						throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
+						drawCallback={() => handleDraw()}
+						drawText={tilesLeft === 15 ? `完` : `摸`}
+						drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
+						openCallback={handleShow}
+						okToShow={okToShow}
+						huShowing={declareHu}
+					/>
+				)}
 				{showPay && (
 					<PaymentWindow
 						game={game}
@@ -374,7 +378,7 @@ const Controls = (props: ControlsProps) => {
 					/>
 				)}
 				{declareHu && <HuDialog game={game} playerSeat={playerSeat} show={declareHu} onClose={hideHuDialog} />}
-				{(game.hu.length === 3 || game.draw) && <Announcement playerSeat={playerSeat} game={game} />}
+				{(game.hu.length === 3 || draw) && <Announcement playerSeat={playerSeat} game={game} />}
 			</MainTransparent>
 		</TableTheme>
 	) : null;

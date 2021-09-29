@@ -1,9 +1,8 @@
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
 import React, { useContext } from 'react';
 import { MuiStyles } from '../../global/MuiStyles';
+import { Centered, StyledButton, Title } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -16,7 +15,7 @@ interface Props {
 
 const Announcement = (props: Props) => {
 	const { game, playerSeat } = props;
-	const { tableColor, tableTextColor } = useContext(AppContext);
+	const { tableColor } = useContext(AppContext);
 
 	async function nextRound() {
 		game.initRound();
@@ -35,35 +34,28 @@ const Announcement = (props: Props) => {
 			}}
 		>
 			<DialogContent>
-				{game.hu.length > 1 && (
-					<>
-						<Typography style={{ color: tableTextColor }} variant="h6">{`${
-							game.players[game.hu[0]].username
-						} hu`}</Typography>
-						<Typography style={{ color: tableTextColor }} variant="subtitle1">{`${game.hu[1]} 台${
-							game.hu[2] === 1 ? ` 自摸` : ``
-						}`}</Typography>
-					</>
-				)}
-				{game.draw && <Typography style={{ color: tableTextColor }} variant="h6">{`15 tiles left`}</Typography>}
-				{game.ongoing ? (
-					playerSeat === Number(game.dealer) && (
-						<Button
-							style={{ color: tableTextColor }}
-							variant="text"
-							size="small"
-							onClick={nextRound}
-							autoFocus
-						>
-							Next round
-						</Button>
-					)
-				) : (
-					<Typography
-						style={{ color: tableTextColor }}
-						variant="h6"
-					>{`The game has ended, thank you for playing!`}</Typography>
-				)}
+				<Centered>
+					{game.hu.length === 3 ? (
+						<>
+							<Title title={`${game.players[game.hu[0]].username} hu`} padding="5px" />
+							<Title
+								title={`${game.hu[1]} 台${game.hu[2] === 1 ? ` 自摸` : ``}`}
+								variant="subtitle1"
+								padding="5px"
+							/>
+						</>
+					) : game.draw ? (
+						<>
+							<Title title={`Draw!`} padding="5px" />
+							<Title title={`15 tiles left`} variant="subtitle1" padding="5px" />
+						</>
+					) : null}
+					{game.ongoing ? (
+						playerSeat === Number(game.dealer) && <StyledButton label={`Next round`} onClick={nextRound} />
+					) : (
+						<Title title={`The game has ended, thank you for playing!`} padding="5px" />
+					)}
+				</Centered>
 			</DialogContent>
 		</Dialog>
 	);

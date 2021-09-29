@@ -85,21 +85,23 @@ export const HiddenTile = styled.div`
 
 interface TitleProps {
 	title: string;
+	color?: string;
 	padding?: string;
 	variant?: 'h6' | 'subtitle1';
 }
 
-export const Title = ({ title, padding = '15px', variant = 'h6' }: TitleProps) => {
+export const Title = ({ title, color, padding = '15px', variant = 'h6' }: TitleProps) => {
 	return (
-		<Typography style={{ padding }} variant={variant}>
+		<Typography style={{ color, padding }} variant={variant}>
 			{title}
 		</Typography>
 	);
 };
 
 interface StyledButtonProps {
-	title: string;
+	label: string;
 	navigate?: Pages;
+	color?: string;
 	padding?: string;
 	onClick?: () => void;
 	size?: 'small' | 'medium' | 'large';
@@ -108,8 +110,9 @@ interface StyledButtonProps {
 }
 
 export const StyledButton = ({
-	title,
+	label,
 	navigate,
+	color,
 	padding = '15px',
 	onClick,
 	size = 'medium',
@@ -118,13 +121,13 @@ export const StyledButton = ({
 }: StyledButtonProps) => {
 	return (
 		<Button
-			style={{ padding }}
+			style={{ color, padding }}
 			size={size}
 			variant={variant}
 			onClick={() => (navigate ? history.push(navigate) : onClick ? onClick() : null)}
 			disabled={disabled}
 		>
-			{title}
+			{label}
 		</Button>
 	);
 };

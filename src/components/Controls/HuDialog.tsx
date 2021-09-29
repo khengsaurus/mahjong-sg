@@ -1,4 +1,3 @@
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,7 +11,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useContext, useState } from 'react';
-import { MainTransparent } from '../../global/StyledComponents';
+import { MainTransparent, StyledButton } from '../../global/StyledComponents';
 import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -32,7 +31,7 @@ const HuDialog = (props: Props) => {
 	const [zimo, setZimo] = useState(false);
 
 	async function hu() {
-		game.hu = [playerSeat, tai, zimo ? 1 : 0];
+		game.hu = [playerSeat, tai, Number(zimo)];
 		game.flagProgress = Number(game.dealer) === playerSeat ? Boolean(false) : Boolean(true);
 		game.endRound();
 		FBService.updateGame(game);
@@ -63,9 +62,7 @@ const HuDialog = (props: Props) => {
 					>
 						<CloseIcon />
 					</IconButton>
-					<Typography style={{ color: tableTextColor }} variant="h6">
-						{'Nice!'}
-					</Typography>
+					<Typography variant="h6">{'Nice!'}</Typography>
 					<br></br>
 					<FormControl style={{ color: tableTextColor }} component="fieldset">
 						<FormLabel style={{ color: tableTextColor }} component="legend">{`台: `}</FormLabel>
@@ -96,16 +93,12 @@ const HuDialog = (props: Props) => {
 						}
 					/>
 					<DialogActions>
-						<Button
-							style={{ color: tableTextColor }}
-							variant="text"
-							size="small"
+						<StyledButton
+							label={`胡`}
+							color={tableTextColor}
 							onClick={hu}
 							disabled={!tai || game.hu.length === 3}
-							autoFocus
-						>
-							胡
-						</Button>
+						/>
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
