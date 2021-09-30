@@ -1,70 +1,73 @@
-import React, { useContext, useEffect } from 'react';
-import { Pages } from '../../global/enums';
+import React from 'react';
+import { Loader } from '../../components/Loader';
+import { Pages, Status } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
 import { Main } from '../../global/StyledComponents';
 import { StyledButton, Title } from '../../global/StyledMui';
-import { AppContext } from '../../util/hooks/AppContext';
+import getTileSrc from '../../images';
+import { useAsync, useLocalStorage } from '../../util/hooks/useHooks';
+import useSession from '../../util/hooks/useSession';
 import './sample.scss';
 
+const myFunction = (): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			const rnd = Math.random() * 10;
+			rnd <= 5 ? resolve('Success 🙌') : reject('Error 😞');
+		}, 1000);
+	});
+};
+
+const wans = ['1万', '2万', '3万', '4万', '5万', '6万', '7万', '8万', '9万'];
+
+function getRandomWanTile(): ITile {
+	let number = Math.floor(Math.random() * 9);
+	let card = wans[number];
+	return {
+		card,
+		suit: '万',
+		number,
+		id: `${card}1`,
+		uuid: '123',
+		index: 1,
+		show: false,
+		isValidFlower: false
+	};
+}
+
 const Sample = () => {
-	const { user, handleUserState, tableColor, backgroundColor, tableTextColor } = useContext(AppContext);
+	const { execute, status, value, error } = useAsync(myFunction, false);
+	const [wanTile, setWanTile] = useLocalStorage<ITile>('randomWanTile', null);
+	const { verifyingSession } = useSession();
 
-	useEffect(() => {
-		if (!user) {
-			handleUserState();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const arr = [1, 2, 3, 4, 5, 6, 7, 8];
 	return (
 		<HomeTheme>
 			<Main>
-				<Title title={'Sample'} />
-				<div className="container">
-					<div className="col" style={{ backgroundColor: tableColor }}>
-						{arr.map(i => {
-							return (
-								<div
-									className="cell"
-									style={{ backgroundColor: backgroundColor, color: tableTextColor }}
-									key={i}
-								>
-									{i}
-								</div>
-							);
-						})}
-					</div>
-					<br />
-					<div className="col" style={{ backgroundColor: tableColor }}>
-						{arr.map(i => {
-							return (
-								<div
-									className="cell"
-									style={{ backgroundColor: backgroundColor, color: tableTextColor }}
-									key={`${i}-2`}
-								>
-									{i}
-								</div>
-							);
-						})}
-					</div>
-					<br />
-					{/* <div className="row" style={{ backgroundColor: tableColor }}>
-						{arr.map(i => {
-							return (
-								<div
-									className="cell"
-									style={{ backgroundColor: backgroundColor, color: tableTextColor }}
-									key={i}
-								>
-									{i}
-								</div>
-							);
-						})}
-					</div> */}
-				</div>
-				<StyledButton label={'Home'} navigate={Pages.INDEX} />
+				<Title title={verifyingSession === Status.SUCCESS ? 'Logged in' : 'Not logged in'} />
+				{verifyingSession === Status.PENDING ? (
+					<Loader />
+				) : (
+					<>
+						<div className="container">
+							<button className="button" onClick={() => execute()}>{`Call Fn`}</button>
+							<br />
+							<div className={status}>
+								{status === Status.PENDING ? <Loader /> : value || error || ''}
+							</div>
+							<br />
+							<br />
+							<button
+								className="button"
+								onClick={() => setWanTile(getRandomWanTile())}
+							>{`几万？`}</button>
+							<br />
+							{wanTile && <img className={`tile`} src={getTileSrc(wanTile.card)} alt="tile" />}
+							<br />
+							<br />
+						</div>
+						<StyledButton label={'Home'} navigate={Pages.INDEX} />
+					</>
+				)}
 			</Main>
 		</HomeTheme>
 	);

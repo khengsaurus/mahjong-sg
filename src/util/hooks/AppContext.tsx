@@ -5,6 +5,7 @@ import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } f
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { objToUser, userToObj } from '../utilFns';
+import { useLocalStorage } from './useHooks';
 
 interface AppContextInt {
 	user: User;
@@ -13,7 +14,7 @@ interface AppContextInt {
 	signJwt: (user: User) => void;
 	login: (user: User, existingJwt: boolean) => void;
 	logout: () => void;
-	handleUserState: () => void;
+	handleUserState: () => Promise<boolean>;
 	players: User[];
 	setPlayers: (players: User[]) => void;
 	gameId?: string;
@@ -45,7 +46,7 @@ const initialContext: AppContextInt = {
 	signJwt: (user: User) => {},
 	login: (user: User, existingJwt: boolean) => {},
 	logout: () => {},
-	handleUserState: async () => {},
+	handleUserState: async () => false,
 	players: [],
 	setPlayers: (players: User[]) => {},
 	gameId: null,
@@ -72,6 +73,7 @@ const initialContext: AppContextInt = {
 export const AppContext = createContext<AppContextInt>(initialContext);
 
 export const AppContextProvider = (props: any) => {
+	const [localJwt, setLocalJwt] = useLocalStorage<string>('jwt', null);
 	const [user, setUser] = useState<User>(null);
 	const [userEmail, setUserEmail] = useState('');
 	const [players, setPlayers] = useState<User[]>([user]);
@@ -84,6 +86,7 @@ export const AppContextProvider = (props: any) => {
 	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.BROWN);
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
+
 	const mainTextColor = useMemo(() => {
 		return [BackgroundColors.DARK, BackgroundColors.GREEN, BackgroundColors.BLUE, BackgroundColors.RED].includes(
 			backgroundColor
@@ -96,38 +99,47 @@ export const AppContextProvider = (props: any) => {
 	}, [tableColor]);
 	const secretKey = 'shouldBeServerSideKey';
 
-	async function handleUserState() {
-		if (!FBService.userAuthenticated()) {
-			logout();
-		} else {
-			resolveJwt().then(verifiedUser => {
-				if (verifiedUser) {
-					login(verifiedUser, true);
-				} else {
+	async function handleUserState(): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			try {
+				if (!FBService.userAuthenticated()) {
 					logout();
+					resolve(false);
+				} else {
+					resolveJwt().then(verifiedUser => {
+						if (verifiedUser) {
+							login(verifiedUser, true);
+							resolve(true);
+						} else {
+							logout();
+							resolve(false);
+						}
+					});
 				}
-			});
-		}
+			} catch (err) {
+				logout();
+				reject(err);
+			}
+		});
 	}
 
-	// Creates and stores a user token in localStorage
 	function signJwt(user: User) {
 		const token = jwt.sign(userToObj(user), secretKey, {
 			algorithm: 'HS256'
 		});
-		localStorage.setItem('jwt', token);
+		setLocalJwt(token);
 	}
 
-	// Looks for a user token in localStorage, reads it and returns User
 	function resolveJwt(): Promise<User> {
 		return new Promise((resolve, reject) => {
 			let user: User;
 			try {
-				let token = localStorage.getItem('jwt');
-				user = token ? objToUser(jwt.verify(token, secretKey) as IJwtData) : null;
+				user = localJwt ? objToUser(jwt.verify(localJwt, secretKey) as IJwtData) : null;
 				if (user) {
 					handleUserContext(user);
 					resolve(user);
+				} else {
+					resolve(null);
 				}
 			} catch (err) {
 				reject(new Error('User token not found: ' + err.msg));
@@ -136,7 +148,7 @@ export const AppContextProvider = (props: any) => {
 	}
 
 	function handleUserContext(user?: User) {
-		console.log(user ? 'Setting user preferences' : 'Clearing user preferences');
+		// console.log(user ? 'Setting user preferences' : 'Clearing user preferences');
 		setPlayers(user ? [user] : []);
 		setUser(user || null);
 		setUserEmail(user ? user.email : '');
@@ -177,11 +189,10 @@ export const AppContextProvider = (props: any) => {
 	function logout(): void {
 		FBService.authLogout();
 		handleUserContext();
-		localStorage.clear();
+		setLocalJwt(null);
 		sessionStorage.clear();
 		deleteAllCookies();
-		history.push(Pages.INDEX);
-		console.log('User logged out');
+		history.push(Pages.LOGIN);
 	}
 
 	return (

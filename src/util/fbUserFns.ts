@@ -31,7 +31,7 @@ export function resolveUser_Email(email: string): Promise<User | null> {
 		try {
 			FBService.getUserReprByEmail(email).then((userData: any) => {
 				if (userData.docs.length === 0) {
-					console.log('User not registered -> NewUser');
+					// console.log('User not registered -> NewUser');
 					resolve(null);
 				} else {
 					resolve(objToUser(userData));

@@ -1,8 +1,7 @@
 @import '../../App.scss';
 
 .container {
-	display: flex;
-	flex-direction: row;
+	@include centered;
 }
 
 .col {
@@ -19,8 +18,50 @@
 	width: max-content;
 }
 
-.cell {
-	height: 20px;
-	width: 20px;
-	margin: 2px;
+@mixin cell {
+	height: 30px;
+	width: 100px;
+}
+
+.button {
+	border: none;
+	background-color: blue;
+	color: white;
+	@include cell;
+	@include centered;
+}
+
+.centered {
+	@include centered;
+}
+
+.idle {
+	background-color: grey;
+	@include cell;
+	@include centered;
+}
+
+.pending {
+	background-color: grey;
+	@include cell;
+	@include centered;
+}
+
+.error {
+	background-color: red;
+	@include cell;
+	@include centered;
+}
+
+.success {
+	background-color: green;
+	@include cell;
+	@include centered;
+}
+
+.tile {
+	height: 100px;
+	width: 70px;
+	background-color: gainsboro;
+	border-radius: 9%;
 }

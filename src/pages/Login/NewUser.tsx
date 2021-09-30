@@ -1,5 +1,4 @@
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
 import { useContext, useState } from 'react';
@@ -8,6 +7,7 @@ import '../../App.scss';
 import FormField from '../../components/FormComponents/FormField';
 import { Pages, Status } from '../../global/enums';
 import { Main } from '../../global/StyledComponents';
+import { StyledButton, Title } from '../../global/StyledMui';
 import { User } from '../../Models/User';
 import { deleteCurrentFBUser, newUser_IEmailUser, resolveUser_Email } from '../../util/fbUserFns';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -60,7 +60,7 @@ const NewUser = () => {
 			>
 				{({ values }) => (
 					<>
-						<Typography variant="h6">{`Welcome! Choose a username`}</Typography>
+						<Title title={`Welcome! Choose a username`} />
 						<Form>
 							<Field name="username" label="Username" component={FormField} />
 							<br></br>
@@ -69,13 +69,7 @@ const NewUser = () => {
 								Submit
 							</Button>
 							<br></br>
-							<br></br>
-							{alert.status !== Status.SUCCESS && (
-								<Button variant={'outlined'} onClick={handleCancel}>
-									Cancel
-								</Button>
-							)}
-							<br></br>
+							{alert.status !== Status.SUCCESS && <StyledButton label="Cancel" onClick={handleCancel} />}
 							<br></br>
 							{alert.msg !== '' ? (
 								<>

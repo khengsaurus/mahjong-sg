@@ -21,7 +21,7 @@ $discarded-tiles-per-row: 9;
 $border-px: 1px;
 $tile-border-px: 1px;
 $default-border-radius: 4px;
-$default-tile-border-radius: 8%;
+$default-tile-border-radius: 9%;
 
 $original-height: 200px;
 $original-width: 140px;
@@ -121,6 +121,14 @@ $transform-rotate: rotate(90deg) translateX(-1 * $transform-percent);
 	opacity: 1;
 	transform: translate(0, 0);
 	transition: all 500ms ease-in;
+}
+
+@mixin centered {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
 @mixin default-border {

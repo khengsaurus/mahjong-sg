@@ -3,23 +3,47 @@ import firebase from 'firebase/app';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Controls from '../../components/Controls';
+import { Loader } from '../../components/Loader';
 import BottomPlayer from '../../components/PlayerComponents/BottomPlayer';
 import LeftPlayer from '../../components/PlayerComponents/LeftPlayer';
 import RightPlayer from '../../components/PlayerComponents/RightPlayer';
 import TopPlayer from '../../components/PlayerComponents/TopPlayer';
+import { Status } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Main, TableDiv, Wind } from '../../global/StyledComponents';
-import { HomeButton } from '../../global/StyledMui';
+import { Centered, Main, TableDiv, Wind } from '../../global/StyledComponents';
+import { HomeButton, Title } from '../../global/StyledMui';
 import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
+import useSession from '../../util/hooks/useSession';
 import { setGame, setPlayer } from '../../util/store/actions';
 import { objToGame } from '../../util/utilFns';
 import './table.scss';
 
+const loadingScreen = (
+	<HomeTheme>
+		<Main>
+			<Loader />
+		</Main>
+	</HomeTheme>
+);
+
+const noGameMarkup = (
+	<HomeTheme>
+		<Main>
+			<Centered>
+				<Title title={`No ongoing game`} />
+				<HomeButton />
+			</Centered>
+		</Main>
+	</HomeTheme>
+);
+
 const Table = () => {
-	const { user, handleUserState, gameId, tilesSize } = useContext(AppContext);
+	const { verifyingSession } = useSession();
+	const { user, gameId, tilesSize } = useContext(AppContext);
+	const [pendingScreen, setPendingScreen] = useState(loadingScreen);
 	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
@@ -27,19 +51,11 @@ const Table = () => {
 	const [front, setFront] = useState(null);
 	const [back, setBack] = useState(null);
 	const [dealer, setDealer] = useState(null);
-
 	const dispatch = useDispatch();
 	const game: Game = useSelector((state: IStore) => state.game);
 
 	useEffect(() => {
-		if (!user) {
-			handleUserState();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	useEffect(() => {
-		console.log('Table/index - game listener called');
+		// console.log('Table/index - game listener called');
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(gameData, false);
@@ -87,7 +103,7 @@ const Table = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const gameMarkup = () => {
+	const getMarkup = () => {
 		if (game && game.stage !== 0) {
 			let currentWind = game.repr()[0];
 			let topPlayer = game.players[TopPlayerIndex];
@@ -178,25 +194,16 @@ const Table = () => {
 		}
 	};
 
-	const noActiveGame = () => {
-		return (
-			<HomeTheme>
-				<Main>
-					<div className="rotated">
-						<Typography variant="h6">{`No ongoing game`}</Typography>
-						<br></br>
-						<HomeButton />
-					</div>
-				</Main>
-			</HomeTheme>
-		);
+	const getPending = () => {
+		if (!game) {
+			setTimeout(function () {
+				setPendingScreen(noGameMarkup);
+			}, 1000);
+		}
+		return pendingScreen;
 	};
 
-	if (user && game) {
-		return gameMarkup();
-	} else {
-		return noActiveGame();
-	}
+	return game && verifyingSession !== Status.PENDING ? getMarkup() : getPending();
 };
 
 export default Table;

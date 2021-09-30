@@ -1,17 +1,17 @@
 import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
+import './App.scss';
+import { Styled } from './global/StyledComponents';
 import Home from './pages/Home';
 import JoinGame from './pages/JoinGame';
-import NewUser from './pages/Login/NewUser';
 import Login from './pages/Login';
+import NewUser from './pages/Login/NewUser';
 import NewGame from './pages/NewGame';
+import Sample from './pages/Sample';
 import Table from './pages/Table';
 import { AppContextProvider } from './util/hooks/AppContext';
 import store from './util/store/store';
-import { Styled } from './global/StyledComponents';
-import './App.scss';
-import Sample from './pages/Sample';
 
 export const history = createBrowserHistory();
 
@@ -19,8 +19,8 @@ function App() {
 	return (
 		<Provider store={store}>
 			<AppContextProvider>
-				<Styled>
-					<Router history={history}>
+				<Router history={history}>
+					<Styled>
 						<Switch>
 							<Route exact path="/" component={Home} />
 							<Route exact path="/Home" component={Home} />
@@ -31,8 +31,8 @@ function App() {
 							<Route exact path="/Table" component={Table} />
 							<Route exact path="/Sample" component={Sample} />
 						</Switch>
-					</Router>
-				</Styled>
+					</Styled>
+				</Router>
 			</AppContextProvider>
 		</Provider>
 	);

@@ -113,7 +113,7 @@ class FirebaseService {
 				t.set(userValNew, { username, password });
 				t.set(userReprNew, { username, photoUrl: '', groups: [] });
 			});
-			console.log('User created successfully');
+			// console.log('User created successfully');
 		} catch (err) {
 			console.log('FirebaseService - user was not created: ', +err);
 		}
@@ -136,7 +136,7 @@ class FirebaseService {
 					decoration: Decorations.DEFAULT,
 					groups: []
 				});
-				console.log('User created successfully');
+				// console.log('User created successfully');
 				resolve(true);
 			} catch (err) {
 				console.log('FirebaseService - user was not created: ', +err);
@@ -285,7 +285,7 @@ class FirebaseService {
 						logs: []
 					})
 					.then(newGame => {
-						console.log(`Game created successfully: gameId ${newGame.id}`);
+						// console.log(`Game created successfully: gameId ${newGame.id}`);
 						const game: Game = new Game(
 							newGame.id,
 							user.username,
