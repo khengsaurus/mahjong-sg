@@ -15,7 +15,7 @@ import './playerComponentsSmall.scss';
 const RightPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-	const frontBackTag = hasFront ? FrontBackTag.front : hasBack ? FrontBackTag.back : null;
+	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		shownTiles: player?.shownTiles,
@@ -34,14 +34,14 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		return (
 			<div className="vtss col-r">
 				{player.hiddenTiles.map((tile: ITile) => {
-					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.right} />;
+					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.RIGHT} />;
 				})}
 				{!isEmpty(player.lastTakenTile) && (
 					<ShownTile
 						key={player.lastTakenTile.id}
 						tileID={player.lastTakenTile.id}
 						tileCard={player.lastTakenTile.card}
-						segment={Segments.right}
+						segment={Segments.RIGHT}
 						highlight
 						classSuffix="margin-bottom"
 					/>
@@ -52,7 +52,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	}, [hiddenCards]);
 
 	const hiddenHand = useMemo(() => {
-		return <HiddenHand tiles={allHiddenTiles.length} segment={Segments.right} />;
+		return <HiddenHand tiles={allHiddenTiles.length} segment={Segments.RIGHT} />;
 	}, [allHiddenTiles.length]);
 
 	const renderShownTiles = () => {
@@ -64,7 +64,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
-					segment={Segments.right}
+					segment={Segments.RIGHT}
 					dealer={dealer}
 					tilesSize={tilesSize}
 					lastThrownId={lastThrown?.id}
@@ -74,7 +74,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	};
 
 	const unusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.right} tag={frontBackTag} />;
+		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.RIGHT} tag={frontBackTag} />;
 	}, [player?.unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
@@ -83,14 +83,14 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 				className="vtss discarded"
 				tiles={player.discardedTiles}
 				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
-				segment={Segments.right}
+				segment={Segments.RIGHT}
 				lastThrownId={lastThrown?.id}
 			/>
 		);
 	};
 
 	return (
-		<div className={`column-section-${tilesSize || Sizes.medium} right`}>
+		<div className={`column-section-${tilesSize || Sizes.MEDIUM} right`}>
 			{player?.showTiles ? shownHiddenHand : hiddenHand}
 			{player?.shownTiles?.length > 0 && renderShownTiles()}
 			{player?.unusedTiles > 0 && unusedTiles}

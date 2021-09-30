@@ -55,7 +55,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			selectedColor: backgroundColor,
 			handleSelect: setBackgroundColor,
 			colors: Object.keys(BackgroundColors).map(key => {
-				return BackgroundColors[key];
+				return BackgroundColors[key.toUpperCase()];
 			})
 		},
 		{
@@ -63,7 +63,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			selectedColor: tableColor,
 			handleSelect: setTableColor,
 			colors: Object.keys(TableColors).map(key => {
-				return TableColors[key];
+				return TableColors[key.toUpperCase()];
 			})
 		},
 		{
@@ -71,7 +71,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			selectedColor: tileBackColor,
 			handleSelect: setTileBackColor,
 			colors: Object.keys(TileColors).map(key => {
-				return TileColors[key];
+				return TileColors[key.toUpperCase()];
 			})
 		}
 	];
@@ -121,7 +121,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 											indicatorColor="secondary"
 										>
 											{Object.keys(Sizes).map(key => {
-												let size = Sizes[key];
+												let size = Sizes[key.toUpperCase()];
 												return (
 													<Tab
 														style={{

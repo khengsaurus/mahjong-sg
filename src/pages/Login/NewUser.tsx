@@ -14,24 +14,24 @@ import { AppContext } from '../../util/hooks/AppContext';
 
 const NewUser = () => {
 	const { userEmail, login, logout } = useContext(AppContext);
-	const [alert, setAlert] = useState<IAlert>({ status: Status.info, msg: '' });
+	const [alert, setAlert] = useState<IAlert>({ status: Status.INFO, msg: '' });
 
 	function handleCancel() {
 		deleteCurrentFBUser();
 		logout();
-		history.push(Pages.login);
+		history.push(Pages.LOGIN);
 	}
 
 	function handleSubmit(values: IEmailUser, callback: () => void) {
 		newUser_IEmailUser(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: Status.success, msg: 'Username set' });
+					setAlert({ status: Status.SUCCESS, msg: 'Username set' });
 					callback();
 				}
 			})
 			.catch(err => {
-				setAlert({ status: Status.error, msg: err.toString() });
+				setAlert({ status: Status.ERROR, msg: err.toString() });
 			});
 	}
 
@@ -40,12 +40,12 @@ const NewUser = () => {
 			.then((user: User) => {
 				login(user, false);
 				setTimeout(function () {
-					history.push(Pages.home);
+					history.push(Pages.HOME);
 				}, 1500);
 			})
 			.catch(err => {
 				if (err.message === 'Username already taken') {
-					setAlert({ status: Status.error, msg: err.message });
+					setAlert({ status: Status.ERROR, msg: err.message });
 				}
 			});
 	}
@@ -70,7 +70,7 @@ const NewUser = () => {
 							</Button>
 							<br></br>
 							<br></br>
-							{alert.status !== Status.success && (
+							{alert.status !== Status.SUCCESS && (
 								<Button variant={'outlined'} onClick={handleCancel}>
 									Cancel
 								</Button>

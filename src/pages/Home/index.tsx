@@ -23,10 +23,10 @@ const Home = () => {
 		<HomeTheme>
 			<Main>
 				{user && <Title title={`Welcome ${user.username}`} />}
-				<StyledButton label={'New Game'} navigate={Pages.newGame} />
-				<StyledButton label={'Join Game'} navigate={Pages.joinGame} />
+				<StyledButton label={'New Game'} navigate={Pages.NEWGAME} />
+				<StyledButton label={'Join Game'} navigate={Pages.JOINGAME} />
 				<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
-				{/* <StyledButton label={'Sample'} navigate={Pages.sample} /> */}
+				{/* <StyledButton label={'Sample'} navigate={Pages.SAMPLE} /> */}
 				<StyledButton label={'Logout'} onClick={logout} />
 				{showSettings && (
 					<SettingsWindow

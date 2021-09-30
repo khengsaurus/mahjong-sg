@@ -68,5 +68,5 @@ export const ControlButton = ({ label, callback, disabled = false, style }: Cont
 };
 
 export const HomeButton = () => {
-	return <StyledButton label="Home" navigate={Pages.index} />;
+	return <StyledButton label="Home" navigate={Pages.INDEX} />;
 };

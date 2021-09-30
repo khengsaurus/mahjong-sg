@@ -54,19 +54,19 @@ const initialContext: AppContextInt = {
 	setSelectedTiles: (tiles: ITile[]) => {},
 	loading: false,
 	setLoading: () => {},
-	handSize: Sizes.medium,
+	handSize: Sizes.MEDIUM,
 	setHandSize: (size: Sizes) => {},
-	tilesSize: Sizes.medium,
+	tilesSize: Sizes.MEDIUM,
 	setTilesSize: (size: Sizes) => {},
-	controlsSize: Sizes.medium,
+	controlsSize: Sizes.MEDIUM,
 	setControlsSize: (size: Sizes) => {},
-	backgroundColor: BackgroundColors.brown,
+	backgroundColor: BackgroundColors.BROWN,
 	setBackgroundColor: (color: BackgroundColors) => {},
-	tableColor: TableColors.brown,
+	tableColor: TableColors.BROWN,
 	setTableColor: (color: TableColors) => {},
-	tileBackColor: TileColors.green,
+	tileBackColor: TileColors.GREEN,
 	setTileBackColor: (color: TileColors) => {},
-	tableTextColor: TextColors.dark
+	tableTextColor: TextColors.DARK
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -81,18 +81,18 @@ export const AppContextProvider = (props: any) => {
 	const [handSize, setHandSize] = useState<Sizes>();
 	const [tilesSize, setTilesSize] = useState<Sizes>();
 	const [controlsSize, setControlsSize] = useState<Sizes>();
-	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.brown);
+	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.BROWN);
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
 	const mainTextColor = useMemo(() => {
-		return [BackgroundColors.dark, BackgroundColors.green, BackgroundColors.blue, BackgroundColors.red].includes(
+		return [BackgroundColors.DARK, BackgroundColors.GREEN, BackgroundColors.BLUE, BackgroundColors.RED].includes(
 			backgroundColor
 		)
-			? TextColors.light
-			: TextColors.dark;
+			? TextColors.LIGHT
+			: TextColors.DARK;
 	}, [backgroundColor]);
 	const tableTextColor = useMemo(() => {
-		return [TableColors.dark, TableColors.red].includes(tableColor) ? TextColors.light : TextColors.dark;
+		return [TableColors.DARK, TableColors.RED].includes(tableColor) ? TextColors.LIGHT : TextColors.DARK;
 	}, [tableColor]);
 	const secretKey = 'shouldBeServerSideKey';
 
@@ -143,10 +143,10 @@ export const AppContextProvider = (props: any) => {
 		setHandSize(user ? user.handSize : null);
 		setTilesSize(user ? user.tilesSize : null);
 		setControlsSize(user ? user.controlsSize : null);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.brown);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.BROWN);
 		setTableColor(user ? user.tableColor : null);
 		setTileBackColor(user ? user.tileBackColor : null);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.brown);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.BROWN);
 		setTableColor(user ? user.tableColor : null);
 		setTileBackColor(user ? user.tileBackColor : null);
 	}
@@ -180,7 +180,7 @@ export const AppContextProvider = (props: any) => {
 		localStorage.clear();
 		sessionStorage.clear();
 		deleteAllCookies();
-		history.push(Pages.index);
+		history.push(Pages.INDEX);
 		console.log('User logged out');
 	}
 

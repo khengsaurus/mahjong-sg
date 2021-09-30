@@ -10,18 +10,18 @@ import FormField from './FormField';
  * Email and password -> create a new set of firebase auth credentials
  */
 const RegisterForm: React.FC = () => {
-	const [alert, setAlert] = useState<IAlert>({ status: Status.info, msg: '' });
+	const [alert, setAlert] = useState<IAlert>({ status: Status.INFO, msg: '' });
 
 	function handleSubmit(values: IEmailPass, formCallback: () => void) {
 		authRegister_EmailPass(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: Status.success, msg: 'Registered successfully' });
+					setAlert({ status: Status.SUCCESS, msg: 'Registered successfully' });
 					formCallback();
 				}
 			})
 			.catch(err => {
-				setAlert({ status: Status.error, msg: err.toString() });
+				setAlert({ status: Status.ERROR, msg: err.toString() });
 			});
 	}
 

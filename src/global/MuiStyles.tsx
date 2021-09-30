@@ -7,7 +7,7 @@ import { TextColors } from './enums';
 export const HomeTheme = (props: any) => {
 	const { mainTextColor } = useContext(AppContext);
 	const highlightColor = useMemo(() => {
-		return mainTextColor === TextColors.light ? blue[700] : indigo[500];
+		return mainTextColor === TextColors.LIGHT ? blue[700] : indigo[500];
 	}, [mainTextColor]);
 
 	const theme = createTheme({
@@ -83,7 +83,7 @@ export const HomeTheme = (props: any) => {
 export const TableTheme = (props: any) => {
 	const { tableColor, tableTextColor } = useContext(AppContext);
 	const highlightColor = useMemo(() => {
-		return tableTextColor === TextColors.light ? blue[700] : indigo[500];
+		return tableTextColor === TextColors.LIGHT ? blue[700] : indigo[500];
 	}, [tableTextColor]);
 
 	const theme = createTheme({

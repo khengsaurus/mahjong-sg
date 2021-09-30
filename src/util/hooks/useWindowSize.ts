@@ -53,9 +53,9 @@ export function useDynamicShownTilesWidth({ shownTilesRef, nonFlowersLength, flo
 		let length = nonFlowersLength + flowersLength + Number(dealer);
 		let shownTilesHeight = shownTilesRef.current?.offsetHeight || 0;
 		if (!!Number(length) && !!Number(shownTilesHeight) && shownTilesRef.current) {
-			let reqHeight = length * ShownTileWidths[tilesSize];
+			let reqHeight = length * ShownTileWidths[tilesSize.toUpperCase()];
 			let cols = Math.ceil(reqHeight / shownTilesHeight);
-			let toSet = `${cols * ShownTileHeights[tilesSize]}px`;
+			let toSet = `${cols * ShownTileHeights[tilesSize.toUpperCase()]}px`;
 			shownTilesRef.current.style.width = toSet;
 		}
 	}, [windowHeight, shownTilesRef, nonFlowersLength, flowersLength, tilesSize, dealer]);

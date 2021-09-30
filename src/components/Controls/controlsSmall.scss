@@ -8,6 +8,7 @@
 	flex-flow: column;
 	align-items: flex-start;
 	z-index: 10;
+	transition: 200ms;
 	.buttons {
 		display: flex;
 		flex-direction: row;
@@ -40,6 +41,7 @@
 	align-items: flex-start;
 	z-index: 10;
 	margin-bottom: 2 * $main-padding;
+	transition: 200ms;
 	.button {
 		max-width: $button-width-small;
 		max-height: $button-height-small;
@@ -59,6 +61,7 @@
 	align-items: flex-start;
 	z-index: 10;
 	margin-bottom: 2 * $main-padding;
+	transition: 200ms;
 	.button {
 		max-width: $button-width-small;
 		max-height: $button-height-small;
@@ -76,6 +79,7 @@
 	align-items: flex-start;
 	justify-content: flex-start;
 	z-index: 10;
+	transition: 200ms;
 	.icon-button {
 		width: $icon-button-size-small;
 		height: $icon-button-size-small;

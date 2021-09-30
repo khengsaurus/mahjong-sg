@@ -126,14 +126,14 @@ class FirebaseService {
 					username,
 					email,
 					photoUrl: '',
-					handSize: Sizes.medium,
-					tilesSize: Sizes.medium,
-					controlsSize: Sizes.medium,
-					backgroundColor: BackgroundColors.brown,
-					tableColor: TableColors.brown,
-					tileBackColor: TileColors.green,
-					tileFrontColor: TileColors.light,
-					decoration: Decorations.default,
+					handSize: Sizes.MEDIUM,
+					tilesSize: Sizes.MEDIUM,
+					controlsSize: Sizes.MEDIUM,
+					backgroundColor: BackgroundColors.BROWN,
+					tableColor: TableColors.BROWN,
+					tileBackColor: TileColors.GREEN,
+					tileFrontColor: TileColors.LIGHT,
+					decoration: Decorations.DEFAULT,
 					groups: []
 				});
 				console.log('User created successfully');

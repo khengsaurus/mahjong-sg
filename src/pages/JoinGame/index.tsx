@@ -45,7 +45,7 @@ const JoinGame = () => {
 
 	function handleJoinGame(game: Game) {
 		setGameId(game.id);
-		history.push(Pages.table);
+		history.push(Pages.TABLE);
 	}
 
 	let markup = (

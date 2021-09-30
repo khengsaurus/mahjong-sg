@@ -13,13 +13,13 @@ interface ShownTileProps {
 
 function getClass(segment: Segments) {
 	switch (segment) {
-		case Segments.top:
+		case Segments.TOP:
 			return 'hts';
-		case Segments.bottom:
+		case Segments.BOTTOM:
 			return 'hts';
-		case Segments.left:
+		case Segments.LEFT:
 			return 'vts';
-		case Segments.right:
+		case Segments.RIGHT:
 			return 'vts';
 		default:
 			return '';

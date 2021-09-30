@@ -309,7 +309,7 @@ const Controls = (props: ControlsProps) => {
 			<MainTransparent>
 				<TopLeftControls
 					homeCallback={() => {
-						history.push(Pages.index);
+						history.push(Pages.INDEX);
 					}}
 					settingsCallback={() => {
 						setShowSettings(!showSettings);

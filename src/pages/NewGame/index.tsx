@@ -52,7 +52,7 @@ const NewGame = () => {
 
 	function handleButtonClick() {
 		if (startedGame) {
-			history.push(Pages.table);
+			history.push(Pages.TABLE);
 		} else {
 			startGame();
 		}
@@ -64,7 +64,7 @@ const NewGame = () => {
 				color: mainTextColor
 			},
 			disabledButton: {
-				color: mainTextColor === TextColors.light ? 'grey !important' : null
+				color: mainTextColor === TextColors.LIGHT ? 'grey !important' : null
 			}
 		})
 	);

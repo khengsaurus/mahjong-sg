@@ -9,7 +9,7 @@ import { AppContext } from '../../util/hooks/AppContext';
 import FormField from './FormField';
 
 const LoginForm: React.FC = () => {
-	const [alert, setAlert] = useState<IAlert>({ status: Status.info, msg: '' });
+	const [alert, setAlert] = useState<IAlert>({ status: Status.INFO, msg: '' });
 	const { login, setUserEmail } = useContext(AppContext);
 
 	function handleSubmit(values: IEmailPass) {
@@ -21,10 +21,10 @@ const LoginForm: React.FC = () => {
 						.then(user => {
 							if (user) {
 								login(user, false);
-								history.push(Pages.index);
+								history.push(Pages.INDEX);
 							} else {
 								// User not registered, redirect to NewUser
-								history.push(Pages.newUser);
+								history.push(Pages.NEWUSER);
 							}
 						})
 						.catch(err => {
@@ -35,7 +35,7 @@ const LoginForm: React.FC = () => {
 				}
 			})
 			.catch(err => {
-				setAlert({ status: Status.error, msg: err.toString() });
+				setAlert({ status: Status.ERROR, msg: err.toString() });
 			});
 	}
 

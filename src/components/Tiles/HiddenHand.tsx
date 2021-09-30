@@ -13,7 +13,7 @@ const HiddenHand = ({ tiles, segment }: Props) => {
 		return generateNumberArray(tiles);
 	}, [tiles]);
 
-	return segment === Segments.top ? (
+	return segment === Segments.TOP ? (
 		<div className="htsh">
 			{tilesArray.map(ITilendex => {
 				return <HiddenTile key={`${segment}-hidden-${ITilendex}`} className="hth" />;

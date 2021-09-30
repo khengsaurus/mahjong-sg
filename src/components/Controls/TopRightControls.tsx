@@ -28,7 +28,7 @@ const TopRightControls = (props: TopRightControlsProps) => {
 			<IconButton className="icon-button" onClick={logsCallback}>
 				<SubjectIcon />
 			</IconButton>
-			<LogModal expanded={showLogs} logs={logs} size={controlsSize || Sizes.medium} tableColor={tableColor} />
+			<LogModal expanded={showLogs} logs={logs} size={controlsSize || Sizes.MEDIUM} tableColor={tableColor} />
 		</div>
 	);
 };

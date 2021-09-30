@@ -11,15 +11,13 @@
 	}
 }
 
-$tiles-per-row: $shown-tiles-per-row;
-$tiles-per-column: $shown-tiles-per-row;
-
 .row-section-medium {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	margin: 2 * $tile-padding-medium;
+	transition: 200ms;
 	&.bottom {
 		flex-direction: column-reverse;
 	}
@@ -100,6 +98,7 @@ $tiles-per-column: $shown-tiles-per-row;
 	justify-content: center;
 	align-items: center;
 	margin: 2 * $tile-padding-medium;
+	transition: 200ms;
 	&.right {
 		flex-direction: row-reverse;
 	}

@@ -14,14 +14,14 @@ const UnusedTiles = ({ tiles, segment, tag }: Props) => {
 		return generateNumberArray(tiles);
 	}, [tiles]);
 
-	return segment === Segments.top || segment === Segments.bottom ? (
-		<div className={`htsh unused ${segment === Segments.bottom ? `bottom ` : ``}${tag || ``}`}>
+	return segment === Segments.TOP || segment === Segments.BOTTOM ? (
+		<div className={`htsh unused ${segment === Segments.BOTTOM ? `bottom ` : ``}${tag || ``}`}>
 			{tilesArray.map(i => {
 				return <HiddenTile key={`${segment}-unused-${i}`} className="hth" />;
 			})}
 		</div>
 	) : (
-		<div className={`vtsh unused ${segment === Segments.right ? `right ` : ``}${tag || ``}`}>
+		<div className={`vtsh unused ${segment === Segments.RIGHT ? `right ` : ``}${tag || ``}`}>
 			{tilesArray.map(i => {
 				return <HiddenTile key={`${segment}-unused-${i}`} className="vth" />;
 			})}

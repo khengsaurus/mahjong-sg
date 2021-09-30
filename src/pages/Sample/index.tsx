@@ -64,7 +64,7 @@ const Sample = () => {
 						})}
 					</div> */}
 				</div>
-				<StyledButton label={'Home'} navigate={Pages.index} />
+				<StyledButton label={'Home'} navigate={Pages.INDEX} />
 			</Main>
 		</HomeTheme>
 	);

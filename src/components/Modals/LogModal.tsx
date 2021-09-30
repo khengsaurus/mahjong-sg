@@ -37,7 +37,7 @@ const LogModal = (props: LogModalProps) => {
 	return (
 		<TransitionGroup
 			id={id}
-			className={`log-box-${size || Sizes.medium}${expanded ? ` expanded` : ``}`}
+			className={`log-box-${size || Sizes.MEDIUM}${expanded ? ` expanded` : ``}`}
 			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 		>
 			{logs.map((log: ILog, index) => {

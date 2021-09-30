@@ -72,7 +72,7 @@ export const TableText = styled.p`
 `;
 
 export const GreenTableText = styled.p`
-	color: ${TextColors.green};
+	color: ${TextColors.GREEN};
 	margin: 0;
 `;
 
