@@ -46,16 +46,16 @@
 				@include flow(row wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
 				margin: getTilePadding($size);
-				max-width: floor(80vw);
+				width: floor(80vw);
 				&.top {
 					flex-flow: row-reverse wrap;
 				}
 				&.discarded {
 					@media all and (max-width: floor(12 * getShownTileWidth($size) / 0.7)) {
-						max-width: floor(70vw);
+						width: floor(70vw);
 					}
 					@media all and (max-width: floor(9 * getShownTileWidth($size) / 0.6)) {
-						max-width: floor(60vw);
+						width: floor(60vw);
 					}
 				}
 			}
@@ -135,10 +135,10 @@
 				}
 				&.discarded {
 					@media all and (max-height: 12 * getShownTileWidth($size) / 0.7) {
-						max-height: floor(70vh);
+						height: floor(70vh);
 					}
 					@media all and (max-height: 9 * getShownTileWidth($size) / 0.6) {
-						max-height: floor(60vh);
+						height: floor(60vh);
 					}
 				}
 			}
