@@ -90,6 +90,7 @@ const NewGame = () => {
 											<IconButton
 												onClick={() => handleRemovePlayer(player)}
 												style={{ justifyContent: 'flex-end', marginRight: -12 }}
+												disableRipple
 											>
 												<ClearIcon />
 											</IconButton>
@@ -106,6 +107,7 @@ const NewGame = () => {
 				onClick={handleButtonClick}
 				disabled={players.length < 4}
 				classes={{ disabled: classes.disabledButton }}
+				disableRipple
 			>
 				{startedGame ? 'Join game' : 'Start game'}
 			</Button>

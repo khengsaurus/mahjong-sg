@@ -53,6 +53,7 @@ export const StyledButton = ({
 			variant={variant}
 			onClick={() => (navigate ? history.push(navigate) : onClick ? onClick() : null)}
 			disabled={disabled}
+			disableRipple
 		>
 			{label}
 		</Button>
@@ -61,7 +62,7 @@ export const StyledButton = ({
 
 export const ControlButton = ({ label, callback, disabled = false, style }: ControlButtonProps) => {
 	return (
-		<Button className="button" variant="text" onClick={callback} disabled={disabled} style={style}>
+		<Button className="button" variant="text" onClick={callback} disabled={disabled} style={style} disableRipple>
 			{label}
 		</Button>
 	);

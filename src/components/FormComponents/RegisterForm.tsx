@@ -45,8 +45,9 @@ const RegisterForm: React.FC = () => {
 						variant="text"
 						disabled={values.email.trim() === '' || values.password.trim() === ''}
 						type="submit"
+						disableRipple
 					>
-						Register
+						{`Register`}
 					</Button>
 					<br></br>
 					<br></br>

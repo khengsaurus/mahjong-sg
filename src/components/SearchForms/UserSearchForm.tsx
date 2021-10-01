@@ -102,6 +102,7 @@ const UserSearchForm: React.FC = () => {
 											showOptions ? setShowOptions(false) : searchForUser(searchFor);
 										}}
 										disabled={searchFor.trim() === ''}
+										disableRipple
 									>
 										<ChevronRightIcon
 											className={showOptions ? classes.downChevron : classes.rightChevron}

@@ -60,6 +60,7 @@ const LoginForm: React.FC = () => {
 							variant="text"
 							disabled={values.email.trim() === '' || values.password.trim() === ''}
 							type="submit"
+							disableRipple
 						>
 							{`Login`}
 						</Button>

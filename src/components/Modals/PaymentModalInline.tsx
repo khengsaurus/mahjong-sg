@@ -57,6 +57,7 @@ const PaymentModalInline = (props: Props) => {
 				}}
 				disabled={!Number(amount)}
 				size="small"
+				disableRipple
 			>
 				<SendIcon />
 			</IconButton>

@@ -53,7 +53,11 @@ const DeclareHuModal = (props: Props) => {
 				}}
 			>
 				<DialogContent>
-					<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={() => onClose(false)}>
+					<IconButton
+						style={{ position: 'absolute', top: 5, right: 5 }}
+						onClick={() => onClose(false)}
+						disableRipple
+					>
 						<CloseIcon />
 					</IconButton>
 					<Typography variant="h6">{'Nice!'}</Typography>

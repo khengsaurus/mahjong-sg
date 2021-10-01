@@ -57,16 +57,17 @@ const JoinGame = () => {
 					{gameInvites.map(game => {
 						return (
 							<ListItem
-								style={{ padding: 0, margin: 0 }}
 								button
+								style={{ padding: 0, margin: 0 }}
 								key={game.playersString + game.createdAt.toString()}
 								onClick={() => handleJoinGame(game)}
+								disableRipple
 							>
 								<ListItemText
 									primary={<Typography variant="body2">{formatDateToDay(game.createdAt)}</Typography>}
 									secondary={<Typography variant="body2">{game.playersString}</Typography>}
 								/>
-								<IconButton>
+								<IconButton disableRipple>
 									<ArrowForwardIcon />
 								</IconButton>
 							</ListItem>

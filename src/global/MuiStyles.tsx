@@ -29,9 +29,18 @@ export const HomeTheme = (props: any) => {
 					}
 				}
 			},
+			MuiButtonBase: {
+				root: {
+					color: `${mainTextColor}`,
+					'&:hover': {
+						backgroundColor: 'transparent !imporant',
+						color: `${highlightColor}`
+					}
+				}
+			},
 			MuiButton: {
 				root: {
-					disableRipple: true,
+					color: `${mainTextColor}`,
 					'&:hover': {
 						backgroundColor: 'transparent !imporant',
 						color: `${highlightColor}`
@@ -40,18 +49,23 @@ export const HomeTheme = (props: any) => {
 			},
 			MuiIconButton: {
 				root: {
-					disableRipple: true,
 					color: `${mainTextColor}`,
 					'&:hover': {
+						backgroundColor: 'transparent !imporant',
 						color: `${highlightColor}`
 					}
 				}
 			},
 			MuiListItem: {
 				root: {
-					backgroundColor: 'transparent !imporant',
 					color: mainTextColor,
 					'&:hover': {
+						color: `${highlightColor}`
+					}
+				},
+				button: {
+					'&:hover': {
+						backgroundColor: 'transparent !important',
 						color: `${highlightColor}`
 					}
 				}
@@ -105,7 +119,6 @@ export const TableTheme = (props: any) => {
 			},
 			MuiButton: {
 				root: {
-					disableRipple: true,
 					color: `${tableTextColor}`,
 					'&:hover': {
 						backgroundColor: 'transparent !imporant',
@@ -115,7 +128,6 @@ export const TableTheme = (props: any) => {
 			},
 			MuiIconButton: {
 				root: {
-					disableRipple: true,
 					color: `${tableTextColor}`,
 					'&:hover': {
 						backgroundColor: 'transparent !imporant',

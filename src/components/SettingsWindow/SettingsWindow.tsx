@@ -102,7 +102,11 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			<MainTransparent>
 				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={handleClose}>
 					<DialogContent>
-						<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={handleClose}>
+						<IconButton
+							style={{ position: 'absolute', top: 5, right: 5 }}
+							onClick={handleClose}
+							disableRipple
+						>
 							<CloseIcon />
 						</IconButton>
 						<FormControl component="fieldset">
