@@ -126,8 +126,8 @@ export const TableTheme = (props: any) => {
 			MuiDialog: {
 				paper: {
 					backgroundColor: tableColor,
-					maxWidth: '420px',
-					minWidth: '420px',
+					maxWidth: '420px !important',
+					minWidth: '420px !important',
 					overflow: 'scroll'
 				}
 			},
