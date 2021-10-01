@@ -8,9 +8,7 @@ import { HandTile } from '../Tiles/HandTile';
 import ShownTile from '../Tiles/ShownTile';
 import ShownTiles from '../Tiles/ShownTiles';
 import UnusedTiles from '../Tiles/UnusedTiles';
-import './playerComponentsLarge.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsSmall.scss';
+import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;

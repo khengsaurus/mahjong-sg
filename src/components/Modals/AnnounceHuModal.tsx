@@ -18,7 +18,7 @@ interface Props {
 
 const AnnounceHuModal = (props: Props) => {
 	const { game, playerSeat, showing, showCallback } = props;
-	const { hu, draw, ongoing } = game;
+	const { hu, draw, ongoing, dealer } = game;
 
 	async function nextRound() {
 		game.initRound();
@@ -38,20 +38,19 @@ const AnnounceHuModal = (props: Props) => {
 			<DialogContent style={{ paddingBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 				{hu.length === 3 && (
 					<>
-						<Title title={`${game.players[hu[0]]?.username} hu`} padding="5px" />
+						<Title title={`${game.players[hu[0]]?.username} hu`} padding="2px" />
 						<Title title={`${hu[1]} 台${hu[2] === 1 ? ` 自摸` : ``}`} variant="subtitle1" padding="2px" />
 					</>
 				)}
+				{hu.length === 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 				{draw && (
 					<>
-						<Title title={`Draw!`} padding="5px" />
+						<Title title={`Draw!`} padding="2px" />
 						<Title title={`15 tiles left`} variant="subtitle1" padding="2px" />
 					</>
 				)}
-				{!ongoing && (
-					<Title title={`The game has ended, thank you for playing!`} variant="subtitle1" padding="2px" />
-				)}
-				{hu.length === 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
+				{/* {!ongoing ||
+					(dealer === 10 && <Title title={`The game has ended!`} variant="subtitle1" padding="2px" />)} */}
 			</DialogContent>
 			<DialogActions
 				style={{

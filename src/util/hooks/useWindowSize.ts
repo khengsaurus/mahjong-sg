@@ -36,27 +36,27 @@ export function useWindowHeight() {
 }
 
 interface Args {
-	shownTilesRef: React.MutableRefObject<any>;
-	nonFlowersLength: number;
-	flowersLength: number;
+	ref: React.MutableRefObject<any>;
+	tiles: number;
 	tilesSize: Sizes;
-	dealer: boolean;
+	dealer?: boolean;
+	addHalfTile?: boolean;
 }
 
 /**
  * Workaround for column-wrap div's not having dynamic width
  * https://stackoverflow.com/questions/33891709/when-flexbox-items-wrap-in-column-mode-container-does-not-grow-its-width
  */
-export function useDynamicShownTilesWidth({ shownTilesRef, nonFlowersLength, flowersLength, tilesSize, dealer }: Args) {
+export function useDynamicWidth({ ref, tiles, tilesSize, dealer = false, addHalfTile = false }: Args) {
 	const windowHeight = useWindowHeight();
 	useEffect(() => {
-		let length = nonFlowersLength + flowersLength + Number(dealer);
-		let shownTilesHeight = shownTilesRef.current?.offsetHeight || 0;
-		if (!!Number(length) && !!Number(shownTilesHeight) && shownTilesRef.current) {
-			let reqHeight = length * ShownTileWidths[tilesSize.toUpperCase()];
+		let length = tiles + Number(dealer) + (addHalfTile ? 0.5 : 0);
+		let shownTilesHeight = ref.current?.offsetHeight || 0;
+		if (!!Number(length) && !!Number(shownTilesHeight) && ref.current) {
+			let reqHeight = length * ShownTileWidths[tilesSize.toUpperCase()] + 1;
 			let cols = Math.ceil(reqHeight / shownTilesHeight);
 			let toSet = `${cols * ShownTileHeights[tilesSize.toUpperCase()]}px`;
-			shownTilesRef.current.style.width = toSet;
+			ref.current.style.width = toSet;
 		}
-	}, [windowHeight, shownTilesRef, nonFlowersLength, flowersLength, tilesSize, dealer]);
+	}, [windowHeight, ref, tiles, tilesSize, dealer, addHalfTile]);
 }

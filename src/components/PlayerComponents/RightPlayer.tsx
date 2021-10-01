@@ -2,15 +2,13 @@ import isEmpty from 'lodash.isempty';
 import React, { useMemo, useRef } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import useTiles from '../../util/hooks/useTiles';
-import { useDynamicShownTilesWidth } from '../../util/hooks/useWindowSize';
+import { useDynamicWidth } from '../../util/hooks/useWindowSize';
 import DiscardedTiles from '../Tiles/DiscardedTiles';
 import HiddenHand from '../Tiles/HiddenHand';
 import ShownTile from '../Tiles/ShownTile';
 import ShownTiles from '../Tiles/ShownTiles';
 import UnusedTiles from '../Tiles/UnusedTiles';
-import './playerComponentsLarge.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsSmall.scss';
+import './playerComponents.scss';
 
 const RightPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
@@ -22,17 +20,23 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		allHiddenTiles
 	});
 	const shownTilesRef = useRef(null);
-	useDynamicShownTilesWidth({
-		shownTilesRef,
-		nonFlowersLength: nonFlowers.length,
-		flowersLength: flowers.length,
+	const shownHiddenHandRef = useRef(null);
+	useDynamicWidth({
+		ref: shownTilesRef,
+		tiles: nonFlowers.length + flowers.length,
 		tilesSize: tilesSize,
 		dealer
+	});
+	useDynamicWidth({
+		ref: shownHiddenHandRef,
+		tiles: player.allHiddenTiles().length,
+		tilesSize: tilesSize
+		// addHalfTile: !isEmpty(player.lastTakenTile)
 	});
 
 	const shownHiddenHand = useMemo(() => {
 		return (
-			<div className="vtss col-r">
+			<div className="vtss col-r" ref={shownHiddenHandRef}>
 				{player.hiddenTiles.map((tile: ITile) => {
 					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.RIGHT} />;
 				})}

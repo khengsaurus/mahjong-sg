@@ -14,15 +14,14 @@ $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 
 /*-------------------- Tiles --------------------*/
-// original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
-$shown-tiles-per-row: 14;
-$discarded-tiles-per-row: 9;
+$sizes: 'small', 'medium', 'large';
 
 $border-px: 1px;
 $tile-border-px: 1px;
 $default-border-radius: 4px;
-$default-tile-border-radius: 9%;
+$default-tile-border-radius: calc(min(10%, 4px));
 
+// original tile svg: 140 x 200 -> 14 20, 21 30, 24 34, 28 40, 42 60
 $original-height: 200px;
 $original-width: 140px;
 
@@ -36,16 +35,6 @@ $shown-tile-width-small: 20px;
 $self-hidden-tile-height-small: 35px;
 $self-hidden-tile-width-small: 24px;
 
-// Medium: round($original~ / 6)
-$tile-padding-medium: 2px;
-$hidden-tile-height-medium: 9px;
-$hidden-tile-width-medium: 6px;
-$shown-tile-height-medium: 33px;
-$shown-tile-width-medium: 23px;
-
-$self-hidden-tile-height-medium: 40px;
-$self-hidden-tile-width-medium: 27px;
-
 // Large: round($original~ / 5)
 $tile-padding-large: 3px;
 $hidden-tile-height-large: 12px;
@@ -56,71 +45,246 @@ $shown-tile-width-large: 28px;
 $self-hidden-tile-height-large: 48px;
 $self-hidden-tile-width-large: 33px;
 
+// Medium: round($original~ / 6)
+$tile-padding-medium: 2px;
+$hidden-tile-height-medium: 9px;
+$hidden-tile-width-medium: 6px;
+$shown-tile-height-medium: 33px;
+$shown-tile-width-medium: 23px;
+
+$self-hidden-tile-height-medium: 40px;
+$self-hidden-tile-width-medium: 27px;
+
 /*-------------------- Controls & logs --------------------*/
 // Small
 $icon-button-size-small: 30px;
 $button-height-small: 40px;
 $button-width-small: 45px;
 
-$text-line-width-small: 80px;
-$text-font-size-small: 14px;
 $text-line-height-small: 14px;
-$font-weighted-small: 400;
+$text-font-size-small: 14px;
 
 $log-line-width-small: 200px;
 $log-margin-left-small: 7px;
-
-// Medium
-$icon-button-size-medium: 36px;
-$button-height-medium: 50px;
-$button-width-medium: 55px;
-
-$text-line-width-medium: 90px;
-$text-font-size-medium: 16px;
-$text-line-height-medium: 16px;
-$font-weighted-medium: 450;
-
-$log-line-width-medium: 220px;
-$log-margin-left-medium: 10px;
 
 // Large
 $icon-button-size-large: 45px;
 $button-height-large: 60px;
 $button-width-large: 52px;
 
-$text-line-width-large: 100px;
-$text-font-size-large: 19px;
 $text-line-height-large: 19px;
-$font-weighted-large: 500;
+$text-font-size-large: 19px;
 
 $log-line-width-large: 250px;
 $log-margin-left-large: 15px;
 
+// Medium
+$icon-button-size-medium: 36px;
+$button-height-medium: 50px;
+$button-width-medium: 55px;
+
+$text-line-height-medium: 16px;
+$text-font-size-medium: 16px;
+
+$log-line-width-medium: 220px;
+$log-margin-left-medium: 10px;
+
+/*-------------------- Functions --------------------*/
+
+@function getTilePadding($size) {
+	@if $size == 'small' {
+		@return $tile-padding-small;
+	} @else if $size == 'large' {
+		@return $tile-padding-large;
+	} @else {
+		@return $tile-padding-medium;
+	}
+}
+
+@function getHiddenTileHeight($size) {
+	@if $size == 'small' {
+		@return $hidden-tile-height-small;
+	} @else if $size == 'large' {
+		@return $hidden-tile-height-large;
+	} @else {
+		@return $hidden-tile-height-medium;
+	}
+}
+
+@function getHiddenTileWidth($size) {
+	@if $size == 'small' {
+		@return $hidden-tile-width-small;
+	} @else if $size == 'large' {
+		@return $hidden-tile-width-large;
+	} @else {
+		@return $hidden-tile-width-medium;
+	}
+}
+
+@function getShownTileHeight($size) {
+	@if $size == 'small' {
+		@return $shown-tile-height-small;
+	} @else if $size == 'large' {
+		@return $shown-tile-height-large;
+	} @else {
+		@return $shown-tile-height-medium;
+	}
+}
+
+@function getShownTileWidth($size) {
+	@if $size == 'small' {
+		@return $shown-tile-width-small;
+	} @else if $size == 'large' {
+		@return $shown-tile-width-large;
+	} @else {
+		@return $shown-tile-width-medium;
+	}
+}
+
+@function getSelfHiddenTileHeight($size) {
+	@if $size == 'small' {
+		@return $self-hidden-tile-height-small;
+	} @else if $size == 'large' {
+		@return $self-hidden-tile-height-large;
+	} @else {
+		@return $self-hidden-tile-height-medium;
+	}
+}
+
+@function getSelfHiddenTileWidth($size) {
+	@if $size == 'small' {
+		@return $self-hidden-tile-width-small;
+	} @else if $size == 'large' {
+		@return $self-hidden-tile-width-large;
+	} @else {
+		@return $self-hidden-tile-width-medium;
+	}
+}
+
+@function getIconButtonSize($size) {
+	@if $size == 'small' {
+		@return $icon-button-size-small;
+	} @else if $size == 'large' {
+		@return $icon-button-size-large;
+	} @else {
+		@return $icon-button-size-medium;
+	}
+}
+
+@function getButtonHeight($size) {
+	@if $size == 'small' {
+		@return $button-height-small;
+	} @else if $size == 'large' {
+		@return $button-height-large;
+	} @else {
+		@return $button-height-medium;
+	}
+}
+
+@function getButtonWidth($size) {
+	@if $size == 'small' {
+		@return $button-width-small;
+	} @else if $size == 'large' {
+		@return $button-width-large;
+	} @else {
+		@return $button-width-medium;
+	}
+}
+
+@function getTextLineHeight($size) {
+	@if $size == 'small' {
+		@return $text-line-height-small;
+	} @else if $size == 'large' {
+		@return $text-line-height-large;
+	} @else {
+		@return $text-line-height-medium;
+	}
+}
+
+@function getTextFontSize($size) {
+	@if $size == 'small' {
+		@return $text-font-size-small;
+	} @else if $size == 'large' {
+		@return $text-font-size-large;
+	} @else {
+		@return $text-font-size-medium;
+	}
+}
+
+@function getLogLineWidth($size) {
+	@if $size == 'small' {
+		@return $log-line-width-small;
+	} @else if $size == 'large' {
+		@return $log-line-width-large;
+	} @else {
+		@return $log-line-width-medium;
+	}
+}
+
+@function getLogMarginLeft($size) {
+	@if $size == 'small' {
+		@return $log-margin-left-small;
+	} @else if $size == 'large' {
+		@return $log-margin-left-large;
+	} @else {
+		@return $log-margin-left-medium;
+	}
+}
+
 /*-------------------- Safe Area --------------------*/
-.safe-area {
+
+@mixin safe-area-insets {
 	margin-top: calc(env(safe-area-inset-top));
 	margin-right: calc(env(safe-area-inset-right));
 	margin-bottom: calc(env(safe-area-inset-bottom));
 	margin-left: calc(env(safe-area-inset-left));
 }
 
-.list-item {
-	align-self: center;
-	height: 30px;
-}
-$enlarge: 1.2;
-$transform-percent: 22%;
-$transform-rotate: rotate(90deg) translateX(-1 * $transform-percent);
-
-.move-enter {
-	opacity: 0;
-	transition: all 500ms ease-in;
+.safe-area {
+	@include safe-area-insets;
 }
 
-.move-enter-active {
-	opacity: 1;
-	transform: translate(0, 0);
-	transition: all 500ms ease-in;
+/*-------------------- Mixins --------------------*/
+
+@mixin alignI-justifyC($i, $c) {
+	align-items: #{$i};
+	justify-content: #{$c};
+}
+
+@mixin alignC-justifyC($i, $c) {
+	align-content: #{$i};
+	justify-content: #{$c};
+}
+
+@mixin flex-dir($d) {
+	display: flex;
+	flex-direction: #{$d};
+}
+
+@mixin flow($d) {
+	display: flex;
+	flex-flow: #{$d};
+}
+
+@mixin align-items-text($i, $t) {
+	align-items: #{$i};
+	text-align: #{$t};
+}
+
+@mixin absolute-padding($t, $r, $b, $l) {
+	position: absolute;
+	@if $t != 0 {
+		top: #{$t};
+	}
+	@if $r != 0 {
+		right: #{$r};
+	}
+	@if $b != 0 {
+		bottom: #{$b};
+	}
+	@if $l != 0 {
+		left: #{$l};
+	}
 }
 
 @mixin centered {
@@ -184,3 +348,24 @@ $transform-rotate: rotate(90deg) translateX(-1 * $transform-percent);
 		background-position: 0% 50%;
 	}
 }
+
+/*-------------------- . --------------------*/
+
+.move-enter {
+	opacity: 0;
+	transition: all 500ms ease-in;
+}
+
+.move-enter-active {
+	opacity: 1;
+	transform: translate(0, 0);
+	transition: all 500ms ease-in;
+}
+
+.list-item {
+	align-self: center;
+	height: 30px;
+}
+
+$transform-percent: 22%;
+$transform-rotate: rotate(90deg) translateX(-1 * $transform-percent);

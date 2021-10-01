@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import firebase from 'firebase/app';
 import { useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { history } from '../../App';
 import { Loader } from '../../components/Loader';
 import { Pages, Status } from '../../global/enums';
@@ -16,6 +17,7 @@ import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import useSession from '../../util/hooks/useSession';
+import { setGame, setPlayer } from '../../util/store/actions';
 import { formatDateToDay, objToGame } from '../../util/utilFns';
 import './joinGame.scss';
 
@@ -23,8 +25,12 @@ const JoinGame = () => {
 	const { verifyingSession } = useSession();
 	const { user, setGameId } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
+		dispatch(setGame(null));
+		dispatch(setPlayer(null));
+
 		let games: Game[] = [];
 		const unsubscribe = FBService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {

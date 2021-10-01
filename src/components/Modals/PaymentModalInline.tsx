@@ -52,7 +52,7 @@ const PaymentModalInline = (props: Props) => {
 				style={{ marginLeft: '10px' }}
 				onClick={() => {
 					sendChips(game, playerSeat, winner, amount, () => {
-						setAmountStr(null);
+						setAmountStr('');
 					});
 				}}
 				disabled={!Number(amount)}

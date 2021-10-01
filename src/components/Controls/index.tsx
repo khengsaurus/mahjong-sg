@@ -16,9 +16,7 @@ import PaymentModal from '../Modals/PaymentModal';
 import SettingsWindow from '../SettingsWindow/SettingsWindow';
 import BottomLeftControls from './BottomLeftControls';
 import BottomRightControls from './BottomRightControls';
-import './controlsLarge.scss';
-import './controlsMedium.scss';
-import './controlsSmall.scss';
+import './controls.scss';
 import TopLeftControls from './TopLeftControls';
 import TopRightControls from './TopRightControls';
 
@@ -314,12 +312,16 @@ const Controls = (props: ControlsProps) => {
 					settingsCallback={() => {
 						setShowSettings(!showSettings);
 					}}
-					texts={[
-						`Dealer: ${players[dealer].username}`,
-						`Tiles left: ${tilesLeft}`,
-						`Chips: ${Math.round(player.balance)}`,
-						`Seat: ${playerWind}`
-					]}
+					texts={
+						game.ongoing && players[dealer]
+							? [
+									`Dealer: ${players[dealer].username}`,
+									`Tiles left: ${tilesLeft}`,
+									`Chips: ${Math.round(player.balance)}`,
+									`Seat: ${playerWind}`
+							  ]
+							: [`Chips: ${Math.round(player.balance)}`, `Game has ended!`]
+					}
 				/>
 				<TopRightControls
 					payCallback={() => {

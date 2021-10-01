@@ -5,9 +5,7 @@ import React, { useContext } from 'react';
 import { Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import LogModal from '../Modals/LogModal';
-import './controlsLarge.scss';
-import './controlsMedium.scss';
-import './controlsSmall.scss';
+import './controls.scss';
 
 interface TopRightControlsProps {
 	payCallback: () => void;

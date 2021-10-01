@@ -408,7 +408,8 @@ export class Game {
 		});
 		this.takenTile = true;
 		this.takenBy = this.dealer;
-		if (this.players[0].username === 'test20Left') {
+		// TODO:
+		if (!!this.players.find(player => player.username.toUpperCase() === 'TEST20TILESLEFT')) {
 			this.tiles = this.tiles.slice(0, 20);
 		}
 	}
@@ -476,7 +477,13 @@ export class Game {
 			this.stage += 1;
 		}
 		if (this.stage === 1) {
-			this.dealer = 0;
+			// TODO:
+			if (!!this.players.find(player => player.username.toUpperCase() === 'TEST2ROUNDSLEFT')) {
+				this.stage = 15;
+				this.dealer = 2;
+			} else {
+				this.dealer = 0;
+			}
 		}
 		this.newLog(`Starting round ${this.stage}${this.previousStage === this.stage ? ` 连` : ``}`);
 		this.prepForNewRound();

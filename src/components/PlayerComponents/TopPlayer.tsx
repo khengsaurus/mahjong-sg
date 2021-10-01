@@ -7,9 +7,7 @@ import HiddenHand from '../Tiles/HiddenHand';
 import ShownTile from '../Tiles/ShownTile';
 import ShownTiles from '../Tiles/ShownTiles';
 import UnusedTiles from '../Tiles/UnusedTiles';
-import './playerComponentsLarge.scss';
-import './playerComponentsMedium.scss';
-import './playerComponentsSmall.scss';
+import './playerComponents.scss';
 
 const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;

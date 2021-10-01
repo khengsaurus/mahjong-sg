@@ -225,7 +225,7 @@ export const rotatedMUIButton = createTheme({
 
 export const MuiStyles = {
 	announce_hu_dialog: {
-		minHeight: '140px',
+		minHeight: '120px',
 		minWidth: '320px',
 		maxWidth: '320px',
 		justifyContent: 'center'

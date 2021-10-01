@@ -4,6 +4,23 @@
 	@include centered;
 }
 
+$size: 'medium';
+
+$bg-: blue;
+$bg-small: red;
+$bg-medium: blue;
+$bg-large: green;
+
+@function getColorFromSize($size) {
+	@if $size == 'small' {
+		@return red;
+	} @else if $size == 'large' {
+		@return green;
+	} @else {
+		@return blue;
+	}
+}
+
 .col {
 	display: flex;
 	flex-flow: column wrap;
@@ -21,12 +38,27 @@
 @mixin cell {
 	height: 30px;
 	width: 100px;
+	@include centered;
 }
+
+$sizes: 'small', 'medium', 'large';
+
+@mixin dynamic- {
+	@each $size in $sizes {
+		.dynamic-#{$size} {
+			@include cell;
+			background-color: getColorFromSize($size);
+		}
+	}
+}
+
+@include dynamic-;
 
 .button {
 	border: none;
 	background-color: blue;
 	color: white;
+	margin: 10px;
 	@include cell;
 	@include centered;
 }
