@@ -62,6 +62,7 @@
 
 			.hts {
 				height: getShownTileHeight($size);
+				width: getShownTileWidth($size);
 				border-radius: $default-tile-border-radius;
 				background: $color-tile-front;
 				&.margin-right {
