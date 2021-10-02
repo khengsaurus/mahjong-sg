@@ -44,7 +44,7 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"buildapp": "react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
+		"buildapp": "REACT_APP_PLATFORM=mobile react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
 		"test": "jest",
 		"eject": "react-scripts eject"
 	},

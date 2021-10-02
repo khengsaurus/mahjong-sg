@@ -49,8 +49,8 @@ const AnnounceHuModal = (props: Props) => {
 						<Title title={`15 tiles left`} variant="subtitle1" padding="2px" />
 					</>
 				)}
-				{/* {!ongoing ||
-					(dealer === 10 && <Title title={`The game has ended!`} variant="subtitle1" padding="2px" />)} */}
+				{!ongoing ||
+					(dealer === 10 && <Title title={`The game has ended!`} variant="subtitle1" padding="2px" />)}
 			</DialogContent>
 			<DialogActions
 				style={{

@@ -15,9 +15,11 @@ interface StyledButtonProps {
 	navigate?: Pages;
 	color?: string;
 	padding?: string;
-	onClick?: () => void;
 	size?: 'small' | 'medium' | 'large';
 	variant?: 'text' | 'outlined' | 'contained';
+	autoFocus?: boolean;
+	onClick?: () => void;
+	type?: 'button' | 'submit' | 'reset';
 	disabled?: boolean;
 }
 
@@ -41,9 +43,11 @@ export const StyledButton = ({
 	navigate,
 	color,
 	padding = '10px',
-	onClick,
 	size = 'medium',
 	variant = 'text',
+	autoFocus = false,
+	onClick,
+	type,
 	disabled = false
 }: StyledButtonProps) => {
 	return (
@@ -51,7 +55,9 @@ export const StyledButton = ({
 			style={{ color, padding }}
 			size={size}
 			variant={variant}
+			autoFocus={autoFocus}
 			onClick={() => (navigate ? history.push(navigate) : onClick ? onClick() : null)}
+			type={type}
 			disabled={disabled}
 			disableRipple
 		>

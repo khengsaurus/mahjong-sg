@@ -80,6 +80,13 @@ export enum TextColors {
 	GREEN = 'rgb(0, 130, 20)'
 }
 
+export enum MuiColorTypes {
+	DEFAULT = 'default',
+	PRIMARY = 'primary',
+	SECONDARY = 'secondary',
+	INHERIT = 'inherit'
+}
+
 export const Amounts = [1, 2, 4, 8, 16, 32, 64];
 
 export enum Decorations {

@@ -19,10 +19,10 @@ const TopLeftControls = (props: TopLeftControlsProps) => {
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
 				<IconButton className="icon-button" onClick={props.homeCallback} disableRipple>
-					<HomeIcon />
+					<HomeIcon fontSize={controlsSize} />
 				</IconButton>
 				<IconButton className="icon-button" onClick={props.settingsCallback} disableRipple>
-					<SettingsIcon />
+					<SettingsIcon fontSize={controlsSize} />
 				</IconButton>
 			</div>
 			<div className="text-container">

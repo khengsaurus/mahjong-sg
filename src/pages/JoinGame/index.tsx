@@ -1,4 +1,3 @@
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -67,9 +66,7 @@ const JoinGame = () => {
 									primary={<Typography variant="body2">{formatDateToDay(game.createdAt)}</Typography>}
 									secondary={<Typography variant="body2">{game.playersString}</Typography>}
 								/>
-								<IconButton disableRipple>
-									<ArrowForwardIcon />
-								</IconButton>
+								<ArrowForwardIcon />
 							</ListItem>
 						);
 					})}

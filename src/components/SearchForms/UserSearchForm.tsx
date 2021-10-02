@@ -24,7 +24,7 @@ const UserSearchForm: React.FC = () => {
 
 	async function searchForUser(username: string) {
 		let foundUsers: Array<User> = [];
-		await FBService.searchUser(username).then(data => {
+		await FBService.searchUser(username, user.username).then(data => {
 			if (!data.empty) {
 				data.docs.forEach(doc => {
 					let data = doc.data();

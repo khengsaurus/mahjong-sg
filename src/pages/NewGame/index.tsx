@@ -1,20 +1,18 @@
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
 import { useContext, useState } from 'react';
 import { history } from '../../App';
 import { Loader } from '../../components/Loader';
 import UserSearchForm from '../../components/SearchForms/UserSearchForm';
-import { Pages, Status, TextColors } from '../../global/enums';
+import { Pages, Status } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
 import { Main, VerticalDivider } from '../../global/StyledComponents';
-import { HomeButton, Title } from '../../global/StyledMui';
+import { HomeButton, StyledButton, Title } from '../../global/StyledMui';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
@@ -23,7 +21,7 @@ import './newGame.scss';
 
 const NewGame = () => {
 	const { verifyingSession } = useSession();
-	const { user, players, setPlayers, setGameId, mainTextColor } = useContext(AppContext);
+	const { user, players, setPlayers, setGameId } = useContext(AppContext);
 	const [startedGame, setStartedGame] = useState(false);
 
 	function handleRemovePlayer(player: User) {
@@ -53,18 +51,6 @@ const NewGame = () => {
 		}
 	}
 
-	const useStyles = makeStyles((theme: ITheme) =>
-		createStyles({
-			text: {
-				color: mainTextColor
-			},
-			disabledButton: {
-				color: mainTextColor === TextColors.LIGHT ? 'grey !important' : null
-			}
-		})
-	);
-	const classes = useStyles();
-
 	const markup = (
 		<>
 			<Title title="Create a new game" padding="5px" />
@@ -77,7 +63,7 @@ const NewGame = () => {
 							players.map(player => {
 								return player ? (
 									<ListItem className="user list-item" key={player.id}>
-										<ListItemText primary={player.username} className={classes.text} />
+										<ListItemText primary={player.username} />
 										{player.username === user?.username ? (
 											<ListItemIcon
 												style={{
@@ -101,16 +87,11 @@ const NewGame = () => {
 					</List>
 				</div>
 			</div>
-			<Button
-				size="medium"
-				variant="text"
+			<StyledButton
+				label={startedGame ? 'Join game' : 'Start game'}
 				onClick={handleButtonClick}
 				disabled={players.length < 4}
-				classes={{ disabled: classes.disabledButton }}
-				disableRipple
-			>
-				{startedGame ? 'Join game' : 'Start game'}
-			</Button>
+			/>
 			<HomeButton />
 		</>
 	);

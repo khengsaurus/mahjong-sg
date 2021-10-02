@@ -39,6 +39,12 @@ export const Main = styled(Centered)`
 	width: 100%;
 	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.backgroundColor};
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 `;
 
 export const MainTransparent = styled(Main)`
@@ -57,6 +63,12 @@ export const TableDiv = styled.div`
 	max-width: 900px;
 	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.tableColor};
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 `;
 
 export const Wind = styled.div`

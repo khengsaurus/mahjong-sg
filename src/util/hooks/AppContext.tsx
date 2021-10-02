@@ -37,6 +37,8 @@ interface AppContextInt {
 	setTileBackColor?: (color: TileColors) => void;
 	tableTextColor?: TextColors;
 	mainTextColor?: TextColors;
+	alert?: IAlert;
+	setAlert?: (alert: IAlert) => void;
 }
 
 const initialContext: AppContextInt = {
@@ -67,7 +69,9 @@ const initialContext: AppContextInt = {
 	setTableColor: (color: TableColors) => {},
 	tileBackColor: TileColors.GREEN,
 	setTileBackColor: (color: TileColors) => {},
-	tableTextColor: TextColors.DARK
+	tableTextColor: TextColors.DARK,
+	alert: null,
+	setAlert: (alert: IAlert) => {}
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -86,6 +90,7 @@ export const AppContextProvider = (props: any) => {
 	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.BROWN);
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
+	const [alert, setAlert] = useState<IAlert>(null);
 
 	const mainTextColor = useMemo(() => {
 		return [BackgroundColors.DARK, BackgroundColors.GREEN, BackgroundColors.BLUE, BackgroundColors.RED].includes(
@@ -94,9 +99,11 @@ export const AppContextProvider = (props: any) => {
 			? TextColors.LIGHT
 			: TextColors.DARK;
 	}, [backgroundColor]);
+
 	const tableTextColor = useMemo(() => {
 		return [TableColors.DARK, TableColors.RED].includes(tableColor) ? TextColors.LIGHT : TextColors.DARK;
 	}, [tableColor]);
+
 	const secretKey = 'shouldBeServerSideKey';
 
 	async function handleUserState(): Promise<boolean> {
@@ -226,7 +233,9 @@ export const AppContextProvider = (props: any) => {
 				tableColor,
 				setTableColor,
 				tableTextColor,
-				mainTextColor
+				mainTextColor,
+				alert,
+				setAlert
 			}}
 			{...props}
 		/>

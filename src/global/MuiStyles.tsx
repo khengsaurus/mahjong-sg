@@ -1,143 +1,145 @@
-import { blue, indigo } from '@material-ui/core/colors';
+import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useContext, useMemo } from 'react';
 import { AppContext } from '../util/hooks/AppContext';
-import { TextColors } from './enums';
+import { BackgroundColors, TableColors, TextColors } from './enums';
+
+// function getHighlightColor(textColor: TextColors) {
+// 	return textColor === TextColors.LIGHT ? blue[700] : indigo[500];
+// }
+
+function getHighlightColor(color: TableColors | BackgroundColors) {
+	if ([TableColors.DARK, BackgroundColors.DARK].includes(color)) {
+		return blue[700];
+	} else if ([TableColors.BROWN, BackgroundColors.BROWN].includes(color)) {
+		return indigo[500];
+	} else if ([TableColors.GREEN, BackgroundColors.GREEN].includes(color)) {
+		return red[600];
+	} else if ([TableColors.RED, BackgroundColors.RED].includes(color)) {
+		return teal[700];
+	} else if ([TableColors.PURPLE, BackgroundColors.PURPLE].includes(color)) {
+		return amber[600];
+	} else if ([TableColors.BLUE, BackgroundColors.BLUE].includes(color)) {
+		return yellow[700];
+	}
+}
 
 export const HomeTheme = (props: any) => {
-	const { mainTextColor } = useContext(AppContext);
-	const highlightColor = useMemo(() => {
-		return mainTextColor === TextColors.LIGHT ? blue[700] : indigo[500];
-	}, [mainTextColor]);
+	const { backgroundColor, mainTextColor } = useContext(AppContext);
+	const theme = useMemo(() => {
+		const highlightColor = getHighlightColor(backgroundColor);
+		return newMuiTheme(backgroundColor, mainTextColor, highlightColor);
+	}, [backgroundColor, mainTextColor]);
 
-	const theme = createTheme({
-		overrides: {
-			MuiInput: {
-				underline: {
-					'&&::before': {
-						borderColor: mainTextColor
-					},
-					'&&:hover::before': {
-						borderColor: highlightColor
-					}
-				}
-			},
-			MuiInputLabel: {
-				shrink: {
-					'&.MuiInputLabel-animated': {
-						color: `${highlightColor}`
-					}
-				}
-			},
-			MuiButtonBase: {
-				root: {
-					color: `${mainTextColor}`,
-					'&:hover': {
-						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor}`
-					}
-				}
-			},
-			MuiButton: {
-				root: {
-					color: `${mainTextColor}`,
-					'&:hover': {
-						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor}`
-					}
-				}
-			},
-			MuiIconButton: {
-				root: {
-					color: `${mainTextColor}`,
-					'&:hover': {
-						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor}`
-					}
-				}
-			},
-			MuiListItem: {
-				root: {
-					color: mainTextColor,
-					'&:hover': {
-						color: `${highlightColor}`
-					}
-				},
-				button: {
-					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: `${highlightColor}`
-					}
-				}
-			}
-		},
-		palette: {
-			primary: {
-				main: mainTextColor
-			},
-			secondary: {
-				main: highlightColor
-			},
-			text: {
-				primary: mainTextColor
-			}
-		},
-		typography: {
-			h6: {
-				color: mainTextColor
-			},
-			subtitle1: {
-				color: mainTextColor
-			}
-		}
-	});
 	return <ThemeProvider theme={theme} {...props} />;
 };
 
 export const TableTheme = (props: any) => {
 	const { tableColor, tableTextColor } = useContext(AppContext);
-	const highlightColor = useMemo(() => {
-		return tableTextColor === TextColors.LIGHT ? blue[700] : indigo[500];
-	}, [tableTextColor]);
+	const theme = useMemo(() => {
+		const highlightColor = getHighlightColor(tableColor);
+		return newMuiTheme(tableColor, tableTextColor, highlightColor);
+	}, [tableColor, tableTextColor]);
 
-	const theme = createTheme({
+	return <ThemeProvider theme={theme} {...props} />;
+};
+
+function newMuiTheme(backgroundColor: BackgroundColors | TableColors, textColor: TextColors, highlightColor: string) {
+	return createTheme({
+		palette: {
+			primary: {
+				main: textColor
+			},
+			secondary: {
+				main: highlightColor
+			},
+			text: {
+				primary: textColor
+			},
+			action: {
+				active: textColor,
+				hover: highlightColor,
+				disabled: 'grey'
+			}
+		},
+		typography: {
+			h6: {
+				color: textColor
+			},
+			subtitle1: {
+				color: textColor
+			}
+		},
 		overrides: {
 			MuiFormLabel: {
 				root: {
-					color: tableTextColor
+					color: textColor
 				}
 			},
 			MuiRadio: {
 				root: {
-					color: tableTextColor
+					color: textColor
 				}
 			},
 			MuiCheckbox: {
 				root: {
-					color: tableTextColor
+					color: textColor
+				}
+			},
+			MuiButtonBase: {
+				root: {
+					color: `${textColor}`,
+					'&:active': {
+						backgroundColor: 'transparent !important'
+					},
+					'&:focus': {
+						backgroundColor: 'transparent !important'
+					},
+					'&:hover': {
+						backgroundColor: 'transparent !important',
+						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+					}
 				}
 			},
 			MuiButton: {
 				root: {
-					color: `${tableTextColor}`,
+					color: `${textColor}`,
+					'&:active': {
+						backgroundColor: 'transparent !important'
+					},
+					'&:focus': {
+						backgroundColor: 'transparent !important'
+					},
 					'&:hover': {
-						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor}`
+						backgroundColor: 'transparent !important',
+						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 					}
 				}
+				// label: {
+				// 	color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				// }
 			},
 			MuiIconButton: {
+				colorInherit: {
+					color: `${textColor}`
+				},
 				root: {
-					color: `${tableTextColor}`,
+					color: `${textColor}`,
+					'&:active': {
+						backgroundColor: 'transparent !important'
+					},
+					'&:focus': {
+						backgroundColor: 'transparent !important'
+					},
 					'&:hover': {
-						backgroundColor: 'transparent !imporant',
-						color: `${highlightColor}`
+						backgroundColor: 'transparent !important',
+						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 					}
 				}
 			},
 			MuiDialog: {
 				paper: {
-					backgroundColor: tableColor,
+					backgroundColor: backgroundColor,
 					maxWidth: '420px !important',
 					minWidth: '420px !important',
 					overflow: 'scroll'
@@ -145,13 +147,13 @@ export const TableTheme = (props: any) => {
 			},
 			MuiPopover: {
 				paper: {
-					backgroundColor: tableColor
+					backgroundColor: backgroundColor
 				}
 			},
 			MuiInput: {
 				underline: {
 					'&&::before': {
-						borderColor: tableTextColor
+						borderColor: textColor
 					},
 					'&&:hover::before': {
 						borderColor: highlightColor
@@ -161,13 +163,13 @@ export const TableTheme = (props: any) => {
 			MuiInputLabel: {
 				shrink: {
 					'&.MuiInputLabel-animated': {
-						color: `${highlightColor} !important`
+						color: `${highlightColor}`
 					}
 				}
 			},
 			MuiList: {
 				root: {
-					backgroundColor: tableColor
+					backgroundColor: backgroundColor
 				},
 				padding: {
 					paddingTop: '0px',
@@ -176,18 +178,28 @@ export const TableTheme = (props: any) => {
 			},
 			MuiListItem: {
 				root: {
-					backgroundColor: tableColor,
-					maxHeight: '30px !important',
-					minHeight: '30px !important',
-					overflowY: 'scroll',
-					paddingLeft: '15px'
+					color: textColor,
+					'&:hover': {
+						backgroundColor: 'transparent !important',
+						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+					}
+				},
+				button: {
+					'&:hover': {
+						backgroundColor: 'transparent !important',
+						color: `${highlightColor}`
+					}
 				}
 			},
 			MuiMenuItem: {
 				root: {
 					justifyContent: 'center',
 					'&$selected': {
-						backgroundColor: 'transparent'
+						backgroundColor: 'transparent !important'
+					},
+					'&:hover': {
+						backgroundColor: 'transparent !important',
+						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 					}
 				}
 			},
@@ -197,43 +209,13 @@ export const TableTheme = (props: any) => {
 					paddingLeft: '12px !important',
 					paddingRight: '12px !important',
 					'&:focus': {
-						backgroundColor: 'transparent'
+						backgroundColor: 'transparent !important'
 					}
 				}
 			}
-		},
-		palette: {
-			primary: {
-				main: tableTextColor
-			},
-			secondary: {
-				main: highlightColor
-			},
-			text: {
-				primary: tableTextColor
-			}
-		},
-		typography: {
-			h6: {
-				color: tableTextColor
-			},
-			subtitle1: {
-				color: tableTextColor
-			}
 		}
 	});
-	return <ThemeProvider theme={theme} {...props} />;
-};
-
-export const rotatedMUIButton = createTheme({
-	overrides: {
-		MuiButton: {
-			root: {
-				transform: 'rotate(90deg)'
-			}
-		}
-	}
-});
+}
 
 export const MuiStyles = {
 	announce_hu_dialog: {

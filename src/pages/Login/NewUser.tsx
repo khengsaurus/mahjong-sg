@@ -1,7 +1,5 @@
-import Button from '@material-ui/core/Button';
-import Alert from '@material-ui/lab/Alert';
 import { Field, Form, Formik } from 'formik';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { history } from '../../App';
 import '../../App.scss';
 import FormField from '../../components/FormComponents/FormField';
@@ -13,8 +11,7 @@ import { deleteCurrentFBUser, newUser_IEmailUser, resolveUser_Email } from '../.
 import { AppContext } from '../../util/hooks/AppContext';
 
 const NewUser = () => {
-	const { userEmail, login, logout } = useContext(AppContext);
-	const [alert, setAlert] = useState<IAlert>({ status: Status.INFO, msg: '' });
+	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
 
 	function handleCancel() {
 		deleteCurrentFBUser();
@@ -65,17 +62,18 @@ const NewUser = () => {
 							<Field name="username" label="Username" component={FormField} />
 							<br></br>
 							<br></br>
-							<Button variant="text" disabled={values.username.trim() === ''} type="submit" disableRipple>
-								Submit
-							</Button>
-							<br></br>
-							{alert.status !== Status.SUCCESS && <StyledButton label="Cancel" onClick={handleCancel} />}
-							<br></br>
-							{alert.msg !== '' ? (
+							<StyledButton
+								label={`Submit`}
+								autoFocus
+								type="submit"
+								disabled={values.username.trim() === ''}
+							/>
+							{alert?.status !== Status.SUCCESS && (
 								<>
-									<Alert severity={alert.status}>{alert.msg}</Alert> <br></br>
+									<br></br>
+									<StyledButton label="Cancel" onClick={handleCancel} />
 								</>
-							) : null}
+							)}
 						</Form>
 					</>
 				)}

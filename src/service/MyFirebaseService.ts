@@ -161,11 +161,12 @@ class FirebaseService {
 		return this.userRepr.doc(id).get();
 	}
 
-	searchUser(partUsername: string) {
+	searchUser(partUsername: string, exclude: string) {
 		return this.userRepr
+			.where('username', '!=', exclude)
 			.where('username', '>=', partUsername)
 			.where('username', '<=', partUsername + '\uf8ff')
-			.limit(5)
+			.limit(4)
 			.get();
 	}
 
