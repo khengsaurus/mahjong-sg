@@ -51,6 +51,16 @@ export const MainTransparent = styled(Main)`
 	background-color: transparent;
 `;
 
+export const PlatformSpecs = styled.div`
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	bottom: 5px;
+	right: 5px;
+	font-size: 10px;
+	color: ${props => props.theme.mainTextColor};
+`;
+
 export const TableDiv = styled.div`
 	display: flex;
 	flex-direction: column;

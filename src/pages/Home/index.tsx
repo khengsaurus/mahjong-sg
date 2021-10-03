@@ -3,7 +3,7 @@ import { Loader } from '../../components/Loader';
 import SettingsWindow from '../../components/SettingsWindow/SettingsWindow';
 import { Pages, Status } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
-import { Main } from '../../global/StyledComponents';
+import { Main, PlatformSpecs } from '../../global/StyledComponents';
 import { StyledButton, Title } from '../../global/StyledMui';
 import { AppContext } from '../../util/hooks/AppContext';
 import useSession from '../../util/hooks/useSession';
@@ -16,12 +16,15 @@ const Home = () => {
 
 	let markup = (
 		<>
-			<Title title={`Welcome ${user?.username}, platform: ${process.env.REACT_APP_PLATFORM}`} />
+			<Title title={`Welcome ${user?.username}`} />
 			<StyledButton label={'New Game'} navigate={Pages.NEWGAME} />
 			<StyledButton label={'Join Game'} navigate={Pages.JOINGAME} />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			{/* <StyledButton label={'Sample'} navigate={Pages.SAMPLE} /> */}
 			<StyledButton label={'Logout'} onClick={logout} />
+			<PlatformSpecs>
+				<p> {`Platform: ${process.env.REACT_APP_PLATFORM}`} </p>
+			</PlatformSpecs>
 			{showSettings && (
 				<SettingsWindow
 					show={showSettings}
