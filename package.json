@@ -42,9 +42,9 @@
 		"web-vitals": "^1.0.1"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"buildapp": "REACT_APP_PLATFORM=mobile react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
+		"start": "REACT_APP_PLATFORM=web react-scripts start",
+		"build": "REACT_APP_PLATFORM=web react-scripts build",
+		"buildapp": "react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
 		"test": "jest",
 		"eject": "react-scripts eject"
 	},

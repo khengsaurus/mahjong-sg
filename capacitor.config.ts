@@ -1,10 +1,10 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'mahjongApp',
-  webDir: 'build',
-  bundledWebRuntime: false
+	appId: 'com.tk.mahjongApp',
+	appName: 'mahjongApp',
+	webDir: 'build',
+	bundledWebRuntime: false
 };
 
 export default config;

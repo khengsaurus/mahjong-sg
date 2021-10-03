@@ -1,4 +1,4 @@
-import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors';
+import { amber, blue, indigo, orange, teal, yellow } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useContext, useMemo } from 'react';
 import { AppContext } from '../util/hooks/AppContext';
@@ -14,7 +14,8 @@ function getHighlightColor(color: TableColors | BackgroundColors) {
 	} else if ([TableColors.BROWN, BackgroundColors.BROWN].includes(color)) {
 		return indigo[500];
 	} else if ([TableColors.GREEN, BackgroundColors.GREEN].includes(color)) {
-		return red[600];
+		// return red[800];
+		return orange[500];
 	} else if ([TableColors.RED, BackgroundColors.RED].includes(color)) {
 		return teal[700];
 	} else if ([TableColors.PURPLE, BackgroundColors.PURPLE].includes(color)) {
@@ -89,14 +90,7 @@ function newMuiTheme(backgroundColor: BackgroundColors | TableColors, textColor:
 			MuiButtonBase: {
 				root: {
 					color: `${textColor}`,
-					'&:active': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:focus': {
-						backgroundColor: 'transparent !important'
-					},
 					'&:hover': {
-						backgroundColor: 'transparent !important',
 						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 					}
 				}
@@ -155,6 +149,9 @@ function newMuiTheme(backgroundColor: BackgroundColors | TableColors, textColor:
 					'&&::before': {
 						borderColor: textColor
 					},
+					'&&::after': {
+						borderColor: highlightColor
+					},
 					'&&:hover::before': {
 						borderColor: highlightColor
 					}
@@ -163,7 +160,7 @@ function newMuiTheme(backgroundColor: BackgroundColors | TableColors, textColor:
 			MuiInputLabel: {
 				shrink: {
 					'&.MuiInputLabel-animated': {
-						color: `${highlightColor}`
+						color: `${textColor}`
 					}
 				}
 			},
@@ -180,8 +177,8 @@ function newMuiTheme(backgroundColor: BackgroundColors | TableColors, textColor:
 				root: {
 					color: textColor,
 					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						backgroundColor: 'transparent !important'
+						// color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 					}
 				},
 				button: {

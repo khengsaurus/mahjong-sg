@@ -56,7 +56,7 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 					/>
 				);
 			})}
-			{dealer && <CasinoIcon color="disabled" fontSize={tilesSize} />}
+			{dealer && <CasinoIcon color="primary" fontSize={tilesSize} />}
 		</>
 	);
 };

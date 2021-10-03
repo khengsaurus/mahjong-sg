@@ -35,8 +35,8 @@ interface AppContextInt {
 	setTableColor?: (color: TableColors) => void;
 	tileBackColor?: TileColors;
 	setTileBackColor?: (color: TileColors) => void;
-	tableTextColor?: TextColors;
 	mainTextColor?: TextColors;
+	tableTextColor?: TextColors;
 	alert?: IAlert;
 	setAlert?: (alert: IAlert) => void;
 }
@@ -63,12 +63,13 @@ const initialContext: AppContextInt = {
 	setTilesSize: (size: Sizes) => {},
 	controlsSize: Sizes.MEDIUM,
 	setControlsSize: (size: Sizes) => {},
-	backgroundColor: BackgroundColors.BROWN,
+	backgroundColor: BackgroundColors.BLUE,
 	setBackgroundColor: (color: BackgroundColors) => {},
-	tableColor: TableColors.BROWN,
+	tableColor: TableColors.GREEN,
 	setTableColor: (color: TableColors) => {},
 	tileBackColor: TileColors.GREEN,
 	setTileBackColor: (color: TileColors) => {},
+	mainTextColor: TextColors.DARK,
 	tableTextColor: TextColors.DARK,
 	alert: null,
 	setAlert: (alert: IAlert) => {}
@@ -87,15 +88,13 @@ export const AppContextProvider = (props: any) => {
 	const [handSize, setHandSize] = useState<Sizes>();
 	const [tilesSize, setTilesSize] = useState<Sizes>();
 	const [controlsSize, setControlsSize] = useState<Sizes>();
-	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.BROWN);
+	const [backgroundColor, setBackgroundColor] = useState<BackgroundColors>(BackgroundColors.BLUE);
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
 	const [alert, setAlert] = useState<IAlert>(null);
 
 	const mainTextColor = useMemo(() => {
-		return [BackgroundColors.DARK, BackgroundColors.GREEN, BackgroundColors.BLUE, BackgroundColors.RED].includes(
-			backgroundColor
-		)
+		return [BackgroundColors.DARK, BackgroundColors.BLUE, BackgroundColors.RED].includes(backgroundColor)
 			? TextColors.LIGHT
 			: TextColors.DARK;
 	}, [backgroundColor]);
@@ -159,15 +158,12 @@ export const AppContextProvider = (props: any) => {
 		setPlayers(user ? [user] : []);
 		setUser(user || null);
 		setUserEmail(user ? user.email : '');
-		setHandSize(user ? user.handSize : null);
-		setTilesSize(user ? user.tilesSize : null);
-		setControlsSize(user ? user.controlsSize : null);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.BROWN);
-		setTableColor(user ? user.tableColor : null);
-		setTileBackColor(user ? user.tileBackColor : null);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.BROWN);
-		setTableColor(user ? user.tableColor : null);
-		setTileBackColor(user ? user.tileBackColor : null);
+		setHandSize(user ? user.handSize : Sizes.MEDIUM);
+		setTilesSize(user ? user.tilesSize : Sizes.MEDIUM);
+		setControlsSize(user ? user.controlsSize : Sizes.MEDIUM);
+		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.BLUE);
+		setTableColor(user ? user.tableColor : TableColors.GREEN);
+		setTileBackColor(user ? user.tileBackColor : TileColors.GREEN);
 	}
 
 	function login(user: User, existingJwt: boolean) {
@@ -232,8 +228,8 @@ export const AppContextProvider = (props: any) => {
 				setTileBackColor,
 				tableColor,
 				setTableColor,
-				tableTextColor,
 				mainTextColor,
+				tableTextColor,
 				alert,
 				setAlert
 			}}

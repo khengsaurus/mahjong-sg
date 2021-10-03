@@ -82,7 +82,7 @@ const DeclareHuModal = (props: Props) => {
 						}
 					/>
 					<DialogActions>
-						<StyledButton label={`胡`} onClick={hu} disabled={!tai || game.hu.length === 3} />
+						<StyledButton label={`胡`} size="large" onClick={hu} disabled={!tai || game.hu.length === 3} />
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
