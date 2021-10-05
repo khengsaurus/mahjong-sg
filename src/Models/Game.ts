@@ -8,6 +8,7 @@ export function gameToObj(game: Game) {
 		creator: game.creator || '',
 		createdAt: game.createdAt || new Date(),
 		playersString: game.playersString || '',
+		emails: game.emails || [],
 		ongoing: game.ongoing || true,
 		stage: game.stage || 0,
 		previousStage: game.previousStage || 0,
@@ -41,6 +42,7 @@ export class Game {
 	creator: string;
 	createdAt: Date;
 	playersString?: string;
+	emails?: string[];
 	ongoing?: boolean;
 	stage?: number;
 	previousStage?: number;
@@ -68,6 +70,7 @@ export class Game {
 		creator?: string,
 		createdAt?: Date,
 		playersString?: string,
+		emails?: string[],
 		ongoing?: boolean,
 		stage?: number,
 		previousStage?: number,
@@ -94,6 +97,7 @@ export class Game {
 		this.creator = creator;
 		this.createdAt = createdAt;
 		this.playersString = playersString;
+		this.emails = emails;
 		this.ongoing = ongoing;
 		this.stage = stage;
 		this.previousStage = previousStage;

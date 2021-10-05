@@ -248,9 +248,11 @@ class FirebaseService {
 
 	async createGame(user: User, players: User[], startingBal?: number): Promise<Game> {
 		let playerIds: string[] = [];
+		let emails: string[] = [];
 		let playersString: string = '';
 		players.forEach(player => {
 			playerIds.push(player.id);
+			emails.push(player.email);
 			playersString += player.username + ' ';
 		});
 		return new Promise((resolve, reject) => {
@@ -269,6 +271,7 @@ class FirebaseService {
 						whoseMove: 0,
 						playerIds,
 						playersString,
+						emails,
 						players: players.map(function (player: User) {
 							return playerToObj(player);
 						}),
@@ -292,6 +295,7 @@ class FirebaseService {
 							user.username,
 							createdAt,
 							playersString,
+							emails,
 							true,
 							0,
 							-1,
