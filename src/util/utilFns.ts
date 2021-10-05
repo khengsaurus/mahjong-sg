@@ -1,4 +1,3 @@
-import { createTheme } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import moment from 'moment';
 import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
@@ -144,6 +143,18 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 	}
 };
 
+export function shuffle<T extends any[] | []>(array: T) {
+	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+	var currentIndex = array.length,
+		randomIndex: number;
+	while (0 !== currentIndex) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+		[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+	}
+	return array;
+}
+
 export function generateNumberArray(n: number) {
 	let unusedTiles = [];
 	for (let i: number = 0; i < n; i++) {
@@ -163,26 +174,6 @@ export function indexOfCard(tile: ITile, tiles: ITile[]) {
 		}
 	}
 }
-
-export const rotatedMUIDialog = createTheme({
-	overrides: {
-		MuiDialog: {
-			root: {
-				transform: 'rotate(90deg)'
-			}
-		}
-	}
-});
-
-export const rotatedMUIButton = createTheme({
-	overrides: {
-		MuiButton: {
-			root: {
-				transform: 'rotate(90deg)'
-			}
-		}
-	}
-});
 
 export function addClassToElement(ITiled: string, className: string) {
 	try {

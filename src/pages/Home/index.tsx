@@ -22,9 +22,7 @@ const Home = () => {
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			{/* <StyledButton label={'Sample'} navigate={Pages.SAMPLE} /> */}
 			<StyledButton label={'Logout'} onClick={logout} />
-			<PlatformSpecs>
-				<p> {`Platform: ${process.env.REACT_APP_PLATFORM}`} </p>
-			</PlatformSpecs>
+			<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			{showSettings && (
 				<SettingsWindow
 					show={showSettings}

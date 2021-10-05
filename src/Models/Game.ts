@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { findLeft, findOpp, findRight, playerToObj } from '../util/utilFns';
+import { findLeft, findOpp, findRight, playerToObj, shuffle } from '../util/utilFns';
 import { User } from './User';
 
 export function gameToObj(game: Game) {
@@ -129,19 +129,6 @@ export class Game {
 		}
 	}
 
-	shuffle(array: any[]) {
-		this.newLog('Shuffling tiles');
-		// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-		var currentIndex = array.length,
-			randomIndex;
-		while (0 !== currentIndex) {
-			randomIndex = Math.floor(Math.random() * currentIndex);
-			currentIndex--;
-			[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-		}
-		return array;
-	}
-
 	generateShuffledTiles(): ITile[] {
 		let tiles: ITile[] = [];
 		const oneToFour = [1, 2, 3, 4];
@@ -223,7 +210,7 @@ export class Game {
 			tiles.push(tile);
 		});
 		this.newLog(`Generated ${tiles.length} tiles`);
-		return this.shuffle(tiles);
+		return shuffle(tiles);
 	}
 
 	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): ITile {
@@ -306,7 +293,6 @@ export class Game {
 	//TODO: optimise
 	distributeTiles() {
 		this.newLog('Distributing tiles');
-
 		let dealer = this.players[this.dealer];
 		let leftPlayer = this.players[findLeft(this.dealer)];
 		let rightPlayer = this.players[findRight(this.dealer)];
@@ -412,7 +398,7 @@ export class Game {
 		});
 		this.takenTile = true;
 		this.takenBy = this.dealer;
-		// TODO:
+		// TODO: remove
 		if (!!this.players.find(player => player.username.toUpperCase() === 'TEST20TILESLEFT')) {
 			this.tiles = this.tiles.slice(0, 20);
 		}
@@ -481,7 +467,7 @@ export class Game {
 			this.stage += 1;
 		}
 		if (this.stage === 1) {
-			// TODO:
+			// TODO: remove
 			if (!!this.players.find(player => player.username.toUpperCase() === 'TEST2ROUNDSLEFT')) {
 				this.stage = 15;
 				this.dealer = 2;

@@ -73,6 +73,7 @@ export const TableDiv = styled.div`
 	max-width: 900px;
 	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.tableColor};
+
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */
 	-khtml-user-select: none; /* Konqueror HTML */
@@ -104,9 +105,9 @@ export const HiddenTile = styled.div`
 
 export const VerticalDivider = styled.div`
 	position: relative;
-	top: 10%;
+	top: 5%;
 	height: 80%;
-	max-height: 200px;
+	max-height: 180px;
 	width: 1px;
 	background-color: ${props => props.theme.mainTextColor};
 `;

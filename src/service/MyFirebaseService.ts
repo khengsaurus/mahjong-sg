@@ -4,7 +4,7 @@ import 'firebase/firestore';
 import { BackgroundColors, Decorations, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game, gameToObj } from '../Models/Game';
 import { User } from '../Models/User';
-import { playerToObj } from '../util/utilFns';
+import { playerToObj, shuffle } from '../util/utilFns';
 import FirebaseConfig from './FirebaseConfig';
 
 class FirebaseService {
@@ -246,11 +246,13 @@ class FirebaseService {
 		}
 	}
 
-	async createGame(user: User, players: User[], startingBal?: number): Promise<Game> {
+	async createGame(user: User, players: User[], random?: boolean, startingBal?: number): Promise<Game> {
+		let shuffledPlayers: User[];
+		shuffledPlayers = random ? shuffle(players) : players;
 		let playerIds: string[] = [];
 		let emails: string[] = [];
 		let playersString: string = '';
-		players.forEach(player => {
+		shuffledPlayers.forEach(player => {
 			playerIds.push(player.id);
 			emails.push(player.email);
 			playersString += player.username + ' ';
@@ -272,7 +274,7 @@ class FirebaseService {
 						playerIds,
 						playersString,
 						emails,
-						players: players.map(function (player: User) {
+						players: shuffledPlayers.map(function (player: User) {
 							return playerToObj(player);
 						}),
 						tiles: [],
@@ -304,7 +306,7 @@ class FirebaseService {
 							true,
 							0,
 							playerIds,
-							players,
+							shuffledPlayers,
 							[],
 							null,
 							null,
