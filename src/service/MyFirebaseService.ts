@@ -13,6 +13,7 @@ class FirebaseService {
 	private userVal: firebase.firestore.CollectionReference;
 	private userRepr: firebase.firestore.CollectionReference;
 	private gameRef: firebase.firestore.CollectionReference;
+	private actionsRef: firebase.firestore.CollectionReference;
 	private app: firebase.app.App;
 	private auth: firebase.auth.Auth;
 	private authProvider: firebase.auth.GoogleAuthProvider;
@@ -25,6 +26,7 @@ class FirebaseService {
 			this.userVal = this.db.collection('userVal');
 			this.userRepr = this.db.collection('userRepr');
 			this.gameRef = this.db.collection('games');
+			this.actionsRef = this.db.collection('actions');
 			this.auth.onAuthStateChanged(user => {
 				this.user = user;
 			});
@@ -259,21 +261,24 @@ class FirebaseService {
 		});
 		return new Promise((resolve, reject) => {
 			let createdAt = new Date();
+			let gameId = '';
 			try {
 				this.gameRef
 					.add({
 						creator: user.username,
 						createdAt,
+						lastExec: 0,
+						lastUpdated: createdAt,
+						playersString,
+						emails,
+						ongoing: true,
 						stage: 0,
 						previousStage: -1,
-						ongoing: true,
-						midRound: false,
 						dealer: 0,
+						midRound: false,
 						flagProgress: true,
 						whoseMove: 0,
 						playerIds,
-						playersString,
-						emails,
 						players: shuffledPlayers.map(function (player: User) {
 							return playerToObj(player);
 						}),
@@ -291,10 +296,12 @@ class FirebaseService {
 						logs: []
 					})
 					.then(newGame => {
-						// console.log(`Game created successfully: gameId ${newGame.id}`);
+						gameId = newGame.id;
 						const game: Game = new Game(
 							newGame.id,
 							user.username,
+							createdAt,
+							0,
 							createdAt,
 							playersString,
 							emails,
@@ -320,6 +327,7 @@ class FirebaseService {
 							false,
 							[]
 						);
+						this.actionsRef.doc(gameId).set({ actions: [] });
 						resolve(game);
 					});
 			} catch (err) {
@@ -348,6 +356,28 @@ class FirebaseService {
 		if (gameId) {
 			return this.gameRef.doc(gameId).onSnapshot(observer);
 		}
+	}
+
+	/* ------------------------- Actions related ------------------------- */
+
+	async listenToActions(gameId: string, observer: any) {
+		if (gameId) {
+			return this.actionsRef.doc(gameId).onSnapshot(observer);
+		}
+	}
+
+	updateActions(gameId: string, actions: IAction[]): Promise<boolean> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const ref = this.actionsRef.doc(gameId);
+				await ref.set({ ...actions }).then(() => {
+					resolve(true);
+				});
+			} catch (err) {
+				console.log(err);
+				reject(new Error('FirebaseService - actions doc was not updated'));
+			}
+		});
 	}
 }
 

@@ -19,6 +19,17 @@ interface IJwtData {
 	exp: number;
 }
 
+interface IAction {
+	timestamp: Date;
+	index: number;
+	username: string;
+	action: Actions;
+	huStatus: number[];
+	tile: ITile[];
+	sentToUsername: string;
+	amount: Amounts;
+}
+
 interface IGroup {
 	name: string;
 	users: User[];

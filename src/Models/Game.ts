@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Actions } from '../global/enums';
 import { findLeft, findOpp, findRight, playerToObj, shuffle } from '../util/utilFns';
 import { User } from './User';
 
@@ -7,14 +8,16 @@ export function gameToObj(game: Game) {
 		id: game.id || '',
 		creator: game.creator || '',
 		createdAt: game.createdAt || new Date(),
+		lastExec: game.lastExec || 0,
+		lastUpdated: game.lastUpdated || new Date(),
 		playersString: game.playersString || '',
 		emails: game.emails || [],
 		ongoing: game.ongoing || true,
 		stage: game.stage || 0,
 		previousStage: game.previousStage || 0,
+		dealer: game.dealer || 0,
 		midRound: game.midRound || false,
 		flagProgress: game.flagProgress || false,
-		dealer: game.dealer || 0,
 		whoseMove: game.whoseMove || 0,
 		playerIds: game.playerIds || [],
 		players: game.players
@@ -41,6 +44,8 @@ export class Game {
 	id: string;
 	creator: string;
 	createdAt: Date;
+	lastExec: number;
+	lastUpdated: Date;
 	playersString?: string;
 	emails?: string[];
 	ongoing?: boolean;
@@ -69,6 +74,8 @@ export class Game {
 		id: string,
 		creator?: string,
 		createdAt?: Date,
+		lastExec?: number,
+		lastUpdated?: Date,
 		playersString?: string,
 		emails?: string[],
 		ongoing?: boolean,
@@ -96,6 +103,8 @@ export class Game {
 		this.id = id;
 		this.creator = creator;
 		this.createdAt = createdAt;
+		this.lastExec = lastExec;
+		this.lastUpdated = lastUpdated;
 		this.playersString = playersString;
 		this.emails = emails;
 		this.ongoing = ongoing;
@@ -120,6 +129,49 @@ export class Game {
 		this.draw = draw;
 		this.logs = logs;
 	}
+
+	/*---------------------------------------- Actions ----------------------------------------*/
+	findPlayerIndexByUsername(Username: string) {
+		for (var n in [0, 1, 2, 3]) {
+			if (this.players[n].username === Username) {
+				return n;
+			}
+			return -1;
+		}
+	}
+
+	// TODO:
+	execute(event: IAction) {
+		const { username, action, huStatus, tile, sentToUsername, amount } = event;
+		switch (action) {
+			case Actions.TAKE:
+				return;
+			case Actions.DRAW:
+				return;
+			case Actions.RETURN:
+				return;
+			case Actions.KANG:
+				return;
+			case Actions.THROW:
+				this.nextPlayerMove();
+				break;
+			case Actions.SHOW:
+				return;
+			case Actions.HIDE:
+				return;
+			case Actions.HU:
+				return;
+			case Actions.START:
+				return;
+			case Actions.END:
+				this.hu = huStatus;
+				this.endRound();
+				break;
+			default:
+				return;
+		}
+	}
+	/*---------------------------------------- End actions ----------------------------------------*/
 
 	newLog(log: string) {
 		let newLog = { msg: log, timeStamp: new Date() };

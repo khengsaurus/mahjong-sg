@@ -10,6 +10,21 @@ export interface IPlayerComponentProps {
 	tilesSize?: Sizes;
 }
 
+export const Amounts = [1, 2, 4, 8, 16, 32, 64];
+
+export enum Actions {
+	TAKE = 'take',
+	DRAW = 'draw',
+	RETURN = 'return',
+	KANG = 'kang',
+	THROW = 'throw',
+	SHOW = 'show',
+	HIDE = 'hide',
+	HU = 'hu',
+	START = 'start',
+	END = 'end'
+}
+
 export enum Status {
 	ERROR = 'error',
 	IDLE = 'idle',
@@ -86,8 +101,6 @@ export enum MuiColorTypes {
 	SECONDARY = 'secondary',
 	INHERIT = 'inherit'
 }
-
-export const Amounts = [1, 2, 4, 8, 16, 32, 64];
 
 export enum Decorations {
 	DEFAULT = ''

@@ -114,6 +114,8 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 			doc.id,
 			ref.creator,
 			ref.createdAt.toDate(),
+			Number(ref.lastExec),
+			ref.lastUpdated.toDate(),
 			ref.playersString,
 			ref.emails,
 			Boolean(ref.ongoing),
