@@ -4,6 +4,18 @@ interface IStore {
 	player: User;
 }
 
+interface IHasId {
+	id?: string;
+}
+
+interface IHasIndex {
+	index?: string;
+}
+
+interface IHasTimestamp {
+	timestamp?: Date;
+}
+
 interface IJwtData {
 	id: string;
 	username: string;
@@ -74,7 +86,7 @@ interface IEmailPass {
 
 interface ILog {
 	msg: string;
-	timeStamp: Date;
+	timestamp: Date;
 }
 
 interface ITheme {

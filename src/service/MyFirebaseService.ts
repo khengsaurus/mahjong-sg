@@ -2,9 +2,9 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { BackgroundColors, Decorations, Sizes, TableColors, TileColors } from '../global/enums';
-import { Game, gameToObj } from '../Models/Game';
+import { Game } from '../Models/Game';
 import { User } from '../Models/User';
-import { playerToObj, shuffle } from '../util/utilFns';
+import { addSecondsToDate, gameToObj, playerToObj, shuffle } from '../util/utilFns';
 import FirebaseConfig from './FirebaseConfig';
 
 class FirebaseService {
@@ -261,6 +261,7 @@ class FirebaseService {
 		});
 		return new Promise((resolve, reject) => {
 			let createdAt = new Date();
+			let delayed = addSecondsToDate(createdAt, -10);
 			let gameId = '';
 			try {
 				this.gameRef
@@ -269,6 +270,7 @@ class FirebaseService {
 						createdAt,
 						lastExec: 0,
 						lastUpdated: createdAt,
+						pongDelayFrom: delayed,
 						playersString,
 						emails,
 						ongoing: true,
@@ -301,11 +303,12 @@ class FirebaseService {
 							newGame.id,
 							user.username,
 							createdAt,
-							0,
-							createdAt,
 							playersString,
 							emails,
 							true,
+							0,
+							createdAt,
+							delayed,
 							0,
 							-1,
 							null,

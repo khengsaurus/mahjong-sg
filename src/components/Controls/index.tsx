@@ -9,7 +9,7 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { findLeft, sortTiles } from '../../util/utilFns';
+import { addSecondsToDate, findLeft, sortTiles } from '../../util/utilFns';
 import AnnounceHuModal from '../Modals/AnnounceHuModal';
 import DeclareHuModal from '../Modals/DeclareHuModal';
 import PaymentModal from '../Modals/PaymentModal';
@@ -25,8 +25,9 @@ interface ControlsProps {
 }
 
 const Controls = (props: ControlsProps) => {
-	const { playerSeat } = props;
 	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const game: Game = useSelector((state: IStore) => state.game);
+	const player: User = useSelector((state: IStore) => state.player);
 	const [meld, setMeld] = useState<ITile[]>([]);
 	const [canChi, setCanChi] = useState(false);
 	const [canPong, setCanPong] = useState(false);
@@ -35,14 +36,15 @@ const Controls = (props: ControlsProps) => {
 	const [showLogs, setShowLogs] = useState(false);
 	const [okToShow, setOkToShow] = useState(false);
 	const [declareHu, setDeclareHu] = useState(false);
-	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 	const [showSettings, setShowSettings] = useState(false);
+	const [pongDelay, setPongDelay] = useState(false);
+	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
 
-	const game: Game = useSelector((state: IStore) => state.game);
-	const player: User = useSelector((state: IStore) => state.player);
-	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, tiles, logs, hu, draw } = game;
+	const { playerSeat } = props;
+	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, pongDelayFrom, tiles, logs, hu, draw } = game;
+	const pongDelayDuration = 6;
 
-	// Logic to showDeclareHuModal when user shows, leaves the game, then returns
+	// showDeclareHuModal when user shows, leaves the game, then returns
 	useEffect(() => {
 		if (player && player.showTiles && hu.length !== 3) {
 			if (!declareHu) {
@@ -51,6 +53,20 @@ const Controls = (props: ControlsProps) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [player?.showTiles]);
+
+	// handle pong delay when a user can pong lastThrown
+	useEffect(() => {
+		let now = new Date();
+		let delayTill = addSecondsToDate(pongDelayFrom, pongDelayDuration);
+		if (delayTill > now) {
+			setPongDelay(true);
+			let duration = delayTill.getSeconds() - now.getSeconds();
+			setTimeout(function () {
+				console.log('setPongDelay');
+				setPongDelay(false);
+			}, duration * 1000);
+		}
+	}, [pongDelayFrom]);
 
 	/* ----------------------------------- Util ----------------------------------- */
 
@@ -98,7 +114,7 @@ const Controls = (props: ControlsProps) => {
 	}
 
 	function setShowTimeout() {
-		setTimeoutId(
+		setOpenTimeoutId(
 			setTimeout(function () {
 				setOkToShow(false);
 			}, 2000)
@@ -107,7 +123,7 @@ const Controls = (props: ControlsProps) => {
 
 	function handleShow() {
 		if (okToShow) {
-			clearTimeout(timeoutId);
+			clearTimeout(openTimeoutId);
 		}
 		setOkToShow(true);
 		setShowTimeout();
@@ -182,6 +198,7 @@ const Controls = (props: ControlsProps) => {
 		player.discard(tile);
 		player.setHiddenTiles();
 		game.tileThrown(tile, playerSeat);
+		game.handlePongDelay();
 		handleAction(game);
 	}
 
@@ -305,6 +322,14 @@ const Controls = (props: ControlsProps) => {
 	return game && player ? (
 		<TableTheme>
 			<MainTransparent>
+				<TopRightControls
+					payCallback={() => {
+						setShowPay(!showPay);
+					}}
+					logsCallback={handleShowLogs}
+					showLogs={showLogs}
+					logs={logs}
+				/>
 				<TopLeftControls
 					homeCallback={() => {
 						history.push(Pages.INDEX);
@@ -322,14 +347,6 @@ const Controls = (props: ControlsProps) => {
 							  ]
 							: [`Chips: ${Math.round(player.balance)}`, `Game has ended!`]
 					}
-				/>
-				<TopRightControls
-					payCallback={() => {
-						setShowPay(!showPay);
-					}}
-					logsCallback={handleShowLogs}
-					showLogs={showLogs}
-					logs={logs}
 				/>
 				{hu.length !== 3 && !draw && !declareHu && (
 					<BottomLeftControls
@@ -360,7 +377,7 @@ const Controls = (props: ControlsProps) => {
 						throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
 						drawCallback={() => handleDraw()}
 						drawText={tilesLeft === 15 ? `完` : `摸`}
-						drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile)}
+						drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile) || pongDelay}
 						openCallback={handleShow}
 						okToShow={okToShow}
 						huShowing={declareHu}

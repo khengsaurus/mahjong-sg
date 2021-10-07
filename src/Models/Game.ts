@@ -1,44 +1,7 @@
+import { isEmpty } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { Actions } from '../global/enums';
-import { findLeft, findOpp, findRight, playerToObj, shuffle } from '../util/utilFns';
+import { findLeft, findOpp, findRight, findTwoInSorted, shuffle } from '../util/utilFns';
 import { User } from './User';
-
-export function gameToObj(game: Game) {
-	return {
-		id: game.id || '',
-		creator: game.creator || '',
-		createdAt: game.createdAt || new Date(),
-		lastExec: game.lastExec || 0,
-		lastUpdated: game.lastUpdated || new Date(),
-		playersString: game.playersString || '',
-		emails: game.emails || [],
-		ongoing: game.ongoing || true,
-		stage: game.stage || 0,
-		previousStage: game.previousStage || 0,
-		dealer: game.dealer || 0,
-		midRound: game.midRound || false,
-		flagProgress: game.flagProgress || false,
-		whoseMove: game.whoseMove || 0,
-		playerIds: game.playerIds || [],
-		players: game.players
-			? game.players.map(player => {
-					return playerToObj(player);
-			  })
-			: [],
-		tiles: game.tiles,
-		frontTiles: game.frontTiles || 0,
-		backTiles: game.backTiles || 0,
-		lastThrown: game.lastThrown || {},
-		thrownBy: game.thrownBy || 0,
-		thrownTile: game.thrownTile || false,
-		takenTile: game.takenTile || false,
-		takenBy: game.takenBy || 0,
-		uncachedAction: game.uncachedAction || false,
-		hu: game.hu || [],
-		draw: game.draw || false,
-		logs: game.logs || []
-	};
-}
 
 export class Game {
 	id: string;
@@ -46,6 +9,7 @@ export class Game {
 	createdAt: Date;
 	lastExec: number;
 	lastUpdated: Date;
+	pongDelayFrom: Date;
 	playersString?: string;
 	emails?: string[];
 	ongoing?: boolean;
@@ -74,11 +38,12 @@ export class Game {
 		id: string,
 		creator?: string,
 		createdAt?: Date,
-		lastExec?: number,
-		lastUpdated?: Date,
 		playersString?: string,
 		emails?: string[],
 		ongoing?: boolean,
+		lastExec?: number,
+		lastUpdated?: Date,
+		pongDelayFrom?: Date,
 		stage?: number,
 		previousStage?: number,
 		dealer?: number,
@@ -103,11 +68,12 @@ export class Game {
 		this.id = id;
 		this.creator = creator;
 		this.createdAt = createdAt;
-		this.lastExec = lastExec;
-		this.lastUpdated = lastUpdated;
 		this.playersString = playersString;
 		this.emails = emails;
 		this.ongoing = ongoing;
+		this.lastExec = lastExec;
+		this.lastUpdated = lastUpdated;
+		this.pongDelayFrom = pongDelayFrom;
 		this.stage = stage;
 		this.previousStage = previousStage;
 		this.dealer = dealer;
@@ -140,41 +106,40 @@ export class Game {
 		}
 	}
 
-	// TODO:
-	execute(event: IAction) {
-		const { username, action, huStatus, tile, sentToUsername, amount } = event;
-		switch (action) {
-			case Actions.TAKE:
-				return;
-			case Actions.DRAW:
-				return;
-			case Actions.RETURN:
-				return;
-			case Actions.KANG:
-				return;
-			case Actions.THROW:
-				this.nextPlayerMove();
-				break;
-			case Actions.SHOW:
-				return;
-			case Actions.HIDE:
-				return;
-			case Actions.HU:
-				return;
-			case Actions.START:
-				return;
-			case Actions.END:
-				this.hu = huStatus;
-				this.endRound();
-				break;
-			default:
-				return;
-		}
-	}
+	// execute(event: IAction) {
+	// 	const { username, action, huStatus, tile, sentToUsername, amount } = event;
+	// 	switch (action) {
+	// 		case Actions.TAKE:
+	// 			return;
+	// 		case Actions.DRAW:
+	// 			return;
+	// 		case Actions.RETURN:
+	// 			return;
+	// 		case Actions.KANG:
+	// 			return;
+	// 		case Actions.THROW:
+	// 			this.nextPlayerMove();
+	// 			break;
+	// 		case Actions.SHOW:
+	// 			return;
+	// 		case Actions.HIDE:
+	// 			return;
+	// 		case Actions.HU:
+	// 			return;
+	// 		case Actions.START:
+	// 			return;
+	// 		case Actions.END:
+	// 			this.hu = huStatus;
+	// 			this.endRound();
+	// 			break;
+	// 		default:
+	// 			return;
+	// 	}
+	// }
 	/*---------------------------------------- End actions ----------------------------------------*/
 
 	newLog(log: string) {
-		let newLog = { msg: log, timeStamp: new Date() };
+		let newLog = { msg: log, timestamp: new Date() };
 		this.logs = [...this.logs, newLog];
 		if (this.logs.length >= 50) {
 			this.logs = this.logs.slice(-15);
@@ -466,6 +431,16 @@ export class Game {
 				this.giveTiles(13 - this.players[n].countAllHiddenTiles(), n, true, true);
 			}
 		});
+	}
+
+	handlePongDelay() {
+		if (!isEmpty(this.lastThrown)) {
+			for (let n = 0; n < this.players.length; n++) {
+				if (n !== this.thrownBy && findTwoInSorted(this.lastThrown, this.players[n].hiddenTiles, 'card')) {
+					this.pongDelayFrom = new Date();
+				}
+			}
+		}
 	}
 
 	nextPlayerMove() {

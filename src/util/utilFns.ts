@@ -108,17 +108,18 @@ export function playerToObj(user: User, startingBal?: number) {
 export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): Game => {
 	let ref = doc.data();
 	if (repr) {
-		return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersString, ref.ongoing);
+		return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersString, ref.emails, ref.ongoing);
 	} else {
 		return new Game(
 			doc.id,
 			ref.creator,
 			ref.createdAt.toDate(),
-			Number(ref.lastExec),
-			ref.lastUpdated.toDate(),
 			ref.playersString,
 			ref.emails,
 			Boolean(ref.ongoing),
+			Number(ref.lastExec),
+			ref.lastUpdated.toDate(),
+			ref.pongDelayFrom.toDate(),
 			Number(ref.stage),
 			Number(ref.previousStage),
 			Number(ref.dealer),
@@ -144,6 +145,44 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 		);
 	}
 };
+
+export function gameToObj(game: Game) {
+	return {
+		id: game.id || '',
+		creator: game.creator || '',
+		createdAt: game.createdAt || new Date(),
+		lastExec: game.lastExec || 0,
+		lastUpdated: game.lastUpdated || new Date(),
+		pongDelayFrom: game.pongDelayFrom || new Date(),
+		playersString: game.playersString || '',
+		emails: game.emails || [],
+		ongoing: game.ongoing || true,
+		stage: game.stage || 0,
+		previousStage: game.previousStage || 0,
+		dealer: game.dealer || 0,
+		midRound: game.midRound || false,
+		flagProgress: game.flagProgress || false,
+		whoseMove: game.whoseMove || 0,
+		playerIds: game.playerIds || [],
+		players: game.players
+			? game.players.map(player => {
+					return playerToObj(player);
+			  })
+			: [],
+		tiles: game.tiles,
+		frontTiles: game.frontTiles || 0,
+		backTiles: game.backTiles || 0,
+		lastThrown: game.lastThrown || {},
+		thrownBy: game.thrownBy || 0,
+		thrownTile: game.thrownTile || false,
+		takenTile: game.takenTile || false,
+		takenBy: game.takenBy || 0,
+		uncachedAction: game.uncachedAction || false,
+		hu: game.hu || [],
+		draw: game.draw || false,
+		logs: game.logs || []
+	};
+}
 
 export function shuffle<T extends any[] | []>(array: T) {
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -261,4 +300,33 @@ export function rotateShownTiles(tiles: ITile[]): ITile[] {
 		}
 	}
 	return tiles;
+}
+
+export function findTwoInSorted<T extends any>(i: T, arr: T[], field: string) {
+	let flag = false;
+	for (let n = 0; n < arr.length; n++) {
+		if (i[field] && arr[n][field]) {
+			if (arr[n][field] === i[field]) {
+				if (flag === true) {
+					return true;
+				} else {
+					flag = true;
+				}
+			}
+		} else {
+			if (arr[n] === i) {
+				if (flag === true) {
+					return true;
+				} else {
+					flag = true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+export function addSecondsToDate(t: Date, s: number): Date {
+	t.setSeconds(t.getSeconds() + s);
+	return t;
 }
