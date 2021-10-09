@@ -8,26 +8,26 @@
 	position: absolute;
 	width: 100%;
 	top: $main-padding;
-	z-index: 0;
+	z-index: 3;
 }
 
 .right-player-container {
 	position: absolute;
 	right: $main-padding;
-	z-index: 0;
+	z-index: 4;
 }
 
 .bottom-player-container {
 	position: absolute;
 	width: 100%;
 	bottom: $main-padding;
-	z-index: 1;
+	z-index: 5;
 }
 
 .left-player-container {
 	position: absolute;
 	left: $main-padding;
-	z-index: 0;
+	z-index: 2;
 }
 
 @keyframes color-change {

@@ -46,16 +46,21 @@
 				@include flow(row wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
 				margin: getTilePadding($size);
-				width: floor(80vw);
+				width: floor(75vw);
 				&.top {
 					flex-flow: row-reverse wrap;
 				}
 				&.discarded {
-					@media all and (max-width: floor(12 * getShownTileWidth($size) / 0.7)) {
-						width: floor(70vw);
-					}
-					@media all and (max-width: floor(9 * getShownTileWidth($size) / 0.6)) {
-						width: floor(60vw);
+					width: floor(65vw);
+					@media all and (min-aspect-ratio: 4/3) {
+						// Landscape
+						width: floor(45vw);
+						@media all and (max-width: floor(12 * getShownTileWidth($size) / 0.7)) {
+							width: floor(35vw);
+						}
+						@media all and (max-width: floor(9 * getShownTileWidth($size) / 0.7)) {
+							width: floor(25vw);
+						}
 					}
 				}
 			}
@@ -81,6 +86,10 @@
 				}
 				&.last {
 					@include highlight;
+				}
+				&.enlarge {
+					height: $enlarge * getShownTileHeight($size);
+					width: $enlarge * getShownTileWidth($size);
 				}
 			}
 		}
@@ -130,16 +139,21 @@
 				@include flow(column-reverse wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
 				margin: getTilePadding($size);
-				height: floor(80vh);
+				height: floor(75vh);
 				&.left {
 					transform: rotate(180deg);
 				}
 				&.discarded {
-					@media all and (max-height: 12 * getShownTileWidth($size) / 0.7) {
-						height: floor(70vh);
-					}
-					@media all and (max-height: 9 * getShownTileWidth($size) / 0.6) {
-						height: floor(60vh);
+					height: floor(65vh);
+					@media all and (max-aspect-ratio: 3/4) {
+						// Portrait
+						height: floor(45vh);
+						@media all and (max-height: 12 * getShownTileWidth($size) / 0.7) {
+							height: floor(35vh);
+						}
+						@media all and (max-height: 9 * getShownTileWidth($size) / 0.7) {
+							height: floor(25vh);
+						}
 					}
 				}
 			}
@@ -147,12 +161,16 @@
 			.vts {
 				height: getShownTileWidth($size);
 				width: getShownTileHeight($size);
-				// &.margin-top {
-				// 	margin-top: getShownTileWidth($size) / 2;
-				// }
-				// &.margin-bottom {
-				// 	margin-bottom: getShownTileWidth($size) / 2;
-				// }
+				&.margin-top {
+					margin-top: getHiddenTileWidth($size);
+				}
+				&.margin-bottom {
+					margin-bottom: getHiddenTileWidth($size);
+				}
+				&.enlarge {
+					height: $enlarge * getShownTileHeight($size);
+					width: $enlarge * getShownTileWidth($size);
+				}
 			}
 
 			.vts-bg {

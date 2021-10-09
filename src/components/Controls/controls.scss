@@ -19,10 +19,16 @@
 				@include flex-dir(column);
 				align-items: flex-start;
 				padding-left: getLogMarginLeft($size);
-				.text {
-					text-align: start;
-					font-size: getTextFontSize($size);
-				}
+			}
+			.text {
+				text-align: start;
+				font-size: getTextFontSize($size);
+			}
+			.notif {
+				@include flex-dir(column);
+				@include default-border;
+				justify-content: center;
+				padding: 0 10px;
 			}
 		}
 
@@ -89,6 +95,17 @@
 				min-width: getLogLineWidth($size);
 				padding-left: 2 * $main-padding;
 				@include default-border;
+			}
+		}
+
+		.center-modal {
+			padding: 20px;
+			z-index: 1;
+			.center-tile-#{$size} {
+				height: $enlarge * getShownTileHeight($size);
+				width: $enlarge * getShownTileWidth($size);
+				border-radius: $default-tile-border-radius;
+				@include highlight;
 			}
 		}
 	}
