@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../../components/Loader';
 import { Pages, Sizes, Status } from '../../global/enums';
 import { HomeTheme } from '../../global/MuiStyles';
 import { Main, Row } from '../../global/StyledComponents';
 import { StyledButton, Title } from '../../global/StyledMui';
 import getTileSrc from '../../images';
+import useCountdown from '../../util/hooks/useCountdown';
 import { useAsync, useLocalStorage } from '../../util/hooks/useHooks';
 import useSession from '../../util/hooks/useSession';
 import './sample.scss';
 
-const myFunction = (): Promise<string> => {
+const asynFn = (): Promise<string> => {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			const rnd = Math.random() * 10;
@@ -36,11 +37,15 @@ function getRandomWanTile(): ITile {
 }
 
 const Sample = () => {
-	const { execute, status, value, error } = useAsync(myFunction, false);
+	const { execute, status, value, error } = useAsync(asynFn, false);
 	const [wanTile, setWanTile] = useLocalStorage<ITile>('randomWanTile', null);
 	const [size, setSize] = useLocalStorage<Sizes>('testSize', Sizes.MEDIUM);
+	const [delayFrom, setDelayFrom] = useState<Date>(null);
+	const { delayOn, delayLeft } = useCountdown(delayFrom, 6);
 	const { verifyingSession } = useSession();
-	const hideHooks = true;
+	const showHooks = false;
+	const showSizes = false;
+	const showDelay = true;
 
 	const testHooks = (
 		<div className="container">
@@ -70,6 +75,17 @@ const Sample = () => {
 		</div>
 	);
 
+	function handleDelayClick() {
+		console.log('Starting delay');
+		setDelayFrom(new Date());
+	}
+	const testDelay = (
+		<div className="container">
+			<button className="button" onClick={handleDelayClick}>{`Start delay`}</button>
+			{delayOn && <div className={`dynamic-large`}>{delayLeft}</div>}
+		</div>
+	);
+
 	return (
 		<HomeTheme>
 			<Main>
@@ -78,8 +94,9 @@ const Sample = () => {
 					<Loader />
 				) : (
 					<>
-						{!hideHooks && testHooks}
-						{testSizes}
+						{showHooks && testHooks}
+						{showSizes && testSizes}
+						{showDelay && testDelay}
 						<StyledButton label={'Home'} navigate={Pages.INDEX} />
 					</>
 				)}

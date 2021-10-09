@@ -23,12 +23,23 @@ export const Centered = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	justify-self: center;
 	align-items: center;
+	align-self: center;
 	text-align: center;
 `;
 
 export const CenteredColored = styled(Centered)`
 	background-color: ${props => props.theme.backgroundColor};
+`;
+
+export const CenteredTableColored = styled(Centered)`
+	background-color: ${props => props.theme.tableColor};
+`;
+
+export const Notification = styled.div`
+	background-color: ${props => props.theme.tableColor};
+	color: ${props => props.theme.tableTextColor};
 `;
 
 export const Main = styled(Centered)`

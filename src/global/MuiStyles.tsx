@@ -1,12 +1,8 @@
-import { amber, blue, indigo, orange, teal, yellow } from '@material-ui/core/colors';
+import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useContext, useMemo } from 'react';
 import { AppContext } from '../util/hooks/AppContext';
 import { BackgroundColors, TableColors, TextColors } from './enums';
-
-// function getHighlightColor(textColor: TextColors) {
-// 	return textColor === TextColors.LIGHT ? blue[700] : indigo[500];
-// }
 
 function getHighlightColor(color: TableColors | BackgroundColors) {
 	if ([TableColors.DARK, BackgroundColors.DARK].includes(color)) {
@@ -14,8 +10,7 @@ function getHighlightColor(color: TableColors | BackgroundColors) {
 	} else if ([TableColors.BROWN, BackgroundColors.BROWN].includes(color)) {
 		return indigo[500];
 	} else if ([TableColors.GREEN, BackgroundColors.GREEN].includes(color)) {
-		// return red[800];
-		return orange[500];
+		return red[800];
 	} else if ([TableColors.RED, BackgroundColors.RED].includes(color)) {
 		return teal[700];
 	} else if ([TableColors.PURPLE, BackgroundColors.PURPLE].includes(color)) {

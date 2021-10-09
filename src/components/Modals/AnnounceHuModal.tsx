@@ -27,7 +27,7 @@ const AnnounceHuModal = (props: Props) => {
 
 	return (
 		<Dialog
-			open={!isEmpty(hu)}
+			open={!isEmpty(hu) || draw}
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
 				style: {
@@ -56,7 +56,8 @@ const AnnounceHuModal = (props: Props) => {
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
-					justifyContent: 'center'
+					justifyContent: 'center',
+					paddingTop: '0px'
 				}}
 			>
 				<HomeButton />

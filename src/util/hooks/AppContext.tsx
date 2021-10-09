@@ -94,7 +94,9 @@ export const AppContextProvider = (props: any) => {
 	const [alert, setAlert] = useState<IAlert>(null);
 
 	const mainTextColor = useMemo(() => {
-		return [BackgroundColors.DARK, BackgroundColors.BLUE, BackgroundColors.RED].includes(backgroundColor)
+		return [BackgroundColors.DARK, BackgroundColors.BLUE, BackgroundColors.GREEN, BackgroundColors.RED].includes(
+			backgroundColor
+		)
 			? TextColors.LIGHT
 			: TextColors.DARK;
 	}, [backgroundColor]);

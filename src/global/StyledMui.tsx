@@ -32,7 +32,7 @@ interface ControlButtonProps {
 
 export const Title = ({ title, color, padding = '10px', variant = 'h6' }: TitleProps) => {
 	return (
-		<Typography style={{ color, padding }} variant={variant}>
+		<Typography style={{ color, padding, justifySelf: 'center', alignSelf: 'center' }} variant={variant}>
 			{title}
 		</Typography>
 	);
