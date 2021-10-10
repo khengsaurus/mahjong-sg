@@ -1,5 +1,4 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import isEmpty from 'lodash';
 import React from 'react';
 import { Segments, Sizes } from '../../global/enums';
 import ShownTile from './ShownTile';
@@ -36,7 +35,7 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 	return (
 		<>
 			{nonFlowers.map(tile => {
-				return !isEmpty(tile) ? (
+				return (
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
@@ -44,10 +43,10 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 						segment={segment}
 						lastID={lastThrownId}
 					/>
-				) : null;
+				);
 			})}
 			{flowers.map(tile => {
-				return !isEmpty(tile) ? (
+				return (
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
@@ -55,7 +54,7 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 						segment={segment}
 						classSuffix={tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''}
 					/>
-				) : null;
+				);
 			})}
 			{dealer && <CasinoIcon color="primary" fontSize={tilesSize} />}
 		</>
