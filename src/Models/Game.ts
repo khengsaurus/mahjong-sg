@@ -436,7 +436,11 @@ export class Game {
 	handlePongDelay() {
 		if (!isEmpty(this.lastThrown)) {
 			for (let n = 0; n < this.players.length; n++) {
-				if (n !== this.thrownBy && findTwoInSorted(this.lastThrown, this.players[n].hiddenTiles, 'card')) {
+				if (
+					n !== this.thrownBy &&
+					n !== findRight(this.thrownBy) &&
+					findTwoInSorted(this.lastThrown, this.players[n].hiddenTiles, 'card')
+				) {
 					this.pongDelayFrom = new Date();
 				}
 			}

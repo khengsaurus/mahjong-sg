@@ -12,16 +12,18 @@ import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const { hiddenTiles, shownTiles, melds, discardedTiles, lastTakenTile, unusedTiles, showTiles } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
+	const allHiddenTiles = player?.allHiddenTiles() || [];
 
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const selectedTilesIds = selectedTiles.map(tile => {
 		return tile.id;
 	});
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
-		shownTiles: player?.shownTiles,
+		shownTiles,
 		allHiddenTiles,
+		melds,
 		toRotate: false
 	});
 
@@ -39,14 +41,14 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const shownHiddenHand = useMemo(() => {
 		return (
 			<div className="htss">
-				{player.hiddenTiles.map((tile: ITile) => {
+				{hiddenTiles.map((tile: ITile) => {
 					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.BOTTOM} />;
 				})}
-				{!isEmpty(player.lastTakenTile) && (
+				{!isEmpty(lastTakenTile) && (
 					<ShownTile
-						key={player.lastTakenTile.id}
-						tileID={player.lastTakenTile.id}
-						tileCard={player.lastTakenTile.card}
+						key={lastTakenTile.id}
+						tileID={lastTakenTile.id}
+						tileCard={lastTakenTile.card}
 						segment={Segments.BOTTOM}
 						highlight
 						classSuffix="margin-left"
@@ -60,7 +62,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const hiddenHand = useCallback(() => {
 		return (
 			<div className={`self-hidden-tiles-${handSize || Sizes.MEDIUM}`}>
-				{player.hiddenTiles.map((tile: ITile) => {
+				{hiddenTiles.map((tile: ITile) => {
 					return (
 						<HandTile
 							key={tile.uuid}
@@ -71,26 +73,26 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 						/>
 					);
 				})}
-				{!isEmpty(player.lastTakenTile) && (
+				{!isEmpty(lastTakenTile) && (
 					<HandTile
-						key={player.lastTakenTile.uuid}
-						card={player.lastTakenTile.card}
-						selected={selectedTiles.includes(player.lastTakenTile)}
+						key={lastTakenTile.uuid}
+						card={lastTakenTile.card}
+						selected={selectedTiles.includes(lastTakenTile)}
 						last={true}
-						callback={() => selectTile(player.lastTakenTile)}
+						callback={() => selectTile(lastTakenTile)}
 					/>
 				)}
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectTile, handSize, hiddenCards, player.showTiles, selectedTilesIds]);
+	}, [selectTile, handSize, hiddenCards, showTiles, selectedTilesIds]);
 
 	const renderShownTiles = () => {
 		return (
 			<div id="bottom-shown" className="htss">
 				<ShownTiles
 					nonFlowers={nonFlowers}
-					// nonFlowers={[...player.hiddenTiles, ...nonFlowers]}
+					// nonFlowers={[...hiddenTiles, ...nonFlowers]}
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
@@ -103,16 +105,16 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		);
 	};
 
-	const unusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.BOTTOM} tag={frontBackTag} />;
-	}, [player?.unusedTiles, frontBackTag]);
+	const renderUnusedTiles = useMemo(() => {
+		return <UnusedTiles tiles={unusedTiles} segment={Segments.BOTTOM} tag={frontBackTag} />;
+	}, [unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
 		return (
 			<DiscardedTiles
 				className="htss discarded"
-				tiles={player.discardedTiles}
-				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
+				tiles={discardedTiles}
+				// tiles={[...hiddenTiles, ...discardedTiles]}
 				segment={Segments.BOTTOM}
 				lastThrownId={lastThrown?.id}
 			/>
@@ -122,9 +124,9 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	return (
 		<div className={`row-section-${tilesSize || Sizes.MEDIUM} bottom`}>
 			{player.showTiles ? shownHiddenHand : hiddenHand()}
-			{player?.shownTiles?.length > 0 && renderShownTiles()}
-			{player?.unusedTiles > 0 && unusedTiles}
-			{player?.discardedTiles?.length > 0 && renderDiscardedTiles()}
+			{shownTiles?.length > 0 && renderShownTiles()}
+			{unusedTiles > 0 && renderUnusedTiles}
+			{discardedTiles?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);
 };

@@ -9,7 +9,9 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
-import { addSecondsToDate, findLeft, sortTiles } from '../../util/utilFns';
+import useCountdown from '../../util/hooks/useCountdown';
+import { findLeft, findTwoInSorted, indexToWind, sortTiles } from '../../util/utilFns';
+import { Loader } from '../Loader';
 import AnnounceHuModal from '../Modals/AnnounceHuModal';
 import DeclareHuModal from '../Modals/DeclareHuModal';
 import PaymentModal from '../Modals/PaymentModal';
@@ -24,94 +26,53 @@ interface ControlsProps {
 	playerSeat?: number;
 }
 
-const Controls = (props: ControlsProps) => {
+const Controls = ({ playerSeat }: ControlsProps) => {
 	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
-	const game: Game = useSelector((state: IStore) => state.game);
 	const player: User = useSelector((state: IStore) => state.player);
-	const [meld, setMeld] = useState<ITile[]>([]);
-	const [canChi, setCanChi] = useState(false);
+	const game: Game = useSelector((state: IStore) => state.game);
+	const {
+		players,
+		dealer: dealerIndex,
+		lastThrown,
+		thrownBy,
+		takenTile,
+		whoseMove,
+		pongDelayFrom,
+		tiles,
+		logs,
+		hu,
+		draw
+	} = game;
+	const { delayOn, delayLeft } = useCountdown(pongDelayFrom, 6);
+	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
+	const [showSettings, setShowSettings] = useState(false);
+	const [declareHu, setDeclareHu] = useState(false);
+	const [okToShow, setOkToShow] = useState(false);
+	const [showLogs, setShowLogs] = useState(false);
+	const [showPay, setShowPay] = useState(false);
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
-	const [showPay, setShowPay] = useState(false);
-	const [showLogs, setShowLogs] = useState(false);
-	const [okToShow, setOkToShow] = useState(false);
-	const [declareHu, setDeclareHu] = useState(false);
-	const [showSettings, setShowSettings] = useState(false);
-	const [pongDelay, setPongDelay] = useState(false);
-	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
+	const [canChi, setCanChi] = useState(false);
+	const [meld, setMeld] = useState<ITile[]>([]);
+	const dealer = players && dealerIndex ? players[dealerIndex] : null;
 
-	const { playerSeat } = props;
-	const { players, dealer, lastThrown, thrownBy, takenTile, whoseMove, pongDelayFrom, tiles, logs, hu, draw } = game;
-	const pongDelayDuration = 6;
-
-	// showDeclareHuModal when user shows, leaves the game, then returns
-	useEffect(() => {
-		if (player && player.showTiles && hu.length !== 3) {
-			if (!declareHu) {
-				showDeclareHuModal();
-			}
-		}
+	const offerPong = useMemo(() => {
+		return delayOn && thrownBy !== playerSeat && findTwoInSorted(lastThrown, player?.hiddenTiles, 'card');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player?.showTiles]);
+	}, [delayOn]);
 
-	// handle pong delay when a user can pong lastThrown
-	useEffect(() => {
-		let now = new Date();
-		let delayTill = addSecondsToDate(pongDelayFrom, pongDelayDuration);
-		if (delayTill > now) {
-			setPongDelay(true);
-			let duration = delayTill.getSeconds() - now.getSeconds();
-			setTimeout(function () {
-				console.log('setPongDelay');
-				setPongDelay(false);
-			}, duration * 1000);
-		}
-	}, [pongDelayFrom]);
+	const texts = useMemo(() => {
+		return game?.ongoing
+			? [
+					`Dealer: ${dealer?.username || ``}`,
+					`Tiles left: ${tiles?.length || 0}`,
+					`Chips: ${Math.round(player?.balance) || ``}`,
+					`Seat: ${indexToWind((playerSeat - dealerIndex + 4) % 4)}`
+			  ]
+			: [`Chips: ${Math.round(player?.balance) || 0}`, `Game has ended!`];
+	}, [game?.ongoing, player?.balance, dealer?.username, tiles?.length, playerSeat, dealerIndex]);
 
-	/* ----------------------------------- Util ----------------------------------- */
-
-	function setOptions(kang: boolean, pong: boolean, chi: boolean, tiles: ITile[]) {
-		setCanKang(kang);
-		setCanPong(pong);
-		setCanChi(chi);
-		setMeld(tiles);
-	}
-
-	const tilesLeft: number = useMemo(() => {
-		return tiles.length;
-	}, [tiles]);
-
-	const lastThrownAvailable: boolean = useMemo(() => {
-		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
-	}, [players, lastThrown, thrownBy, takenTile]);
-
-	const isHoldingLastThrown: boolean = useMemo(() => {
-		return (
-			!isEmpty(lastThrown) &&
-			player &&
-			player.allHiddenTilesContain(lastThrown) &&
-			!players[thrownBy].lastDiscardedTileIs(lastThrown)
-		);
-	}, [player, players, lastThrown, thrownBy]);
-
-	const playerWind: string = useMemo(() => {
-		switch ((playerSeat - dealer + 4) % 4) {
-			case 0:
-				return '東';
-			case 1:
-				return '南';
-			case 2:
-				return '西';
-			case 3:
-				return '北';
-			default:
-				return '';
-		}
-	}, [playerSeat, dealer]);
-
-	function handleShowLogs() {
-		setShowLogs(!showLogs);
-	}
+	/* ----------------------------------- Show ----------------------------------- */
 
 	function setShowTimeout() {
 		setOpenTimeoutId(
@@ -129,7 +90,39 @@ const Controls = (props: ControlsProps) => {
 		setShowTimeout();
 	}
 
-	/* ----------------------------------- useEffect to set options ----------------------------------- */
+	useEffect(() => {
+		if (player && player.showTiles && hu.length !== 3) {
+			if (!declareHu) {
+				showDeclareHuModal();
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [player?.showTiles]);
+
+	/* ----------------------------------- Options ----------------------------------- */
+
+	const lastThrownAvailable: boolean = useMemo(() => {
+		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
+	}, [players, lastThrown, thrownBy, takenTile]);
+
+	const isHoldingLastThrown: boolean = useMemo(() => {
+		return (
+			!isEmpty(lastThrown) &&
+			player &&
+			player.allHiddenTilesContain(lastThrown) &&
+			!players[thrownBy].lastDiscardedTileIs(lastThrown)
+		);
+	}, [player, players, lastThrown, thrownBy]);
+
+	const setOptions = useCallback(
+		(kang: boolean, pong: boolean, chi: boolean, tiles: ITile[]) => {
+			setCanKang(kang);
+			setCanPong(pong);
+			setCanChi(chi);
+			setMeld(tiles);
+		},
+		[setCanKang, setCanPong, setCanChi, setMeld]
+	);
 
 	useEffect(() => {
 		let tiles: ITile[] = [];
@@ -155,52 +148,9 @@ const Controls = (props: ControlsProps) => {
 		} else {
 			setOptions(false, false, false, tiles);
 		}
-	}, [lastThrown, thrownBy, lastThrownAvailable, whoseMove, selectedTiles, player, playerSeat]);
+	}, [lastThrown, lastThrownAvailable, player, playerSeat, selectedTiles, setOptions, thrownBy, whoseMove]);
 
-	/* ----------------------------------- Draw ----------------------------------- */
-
-	function handleDraw() {
-		let drawnTile: ITile;
-		if (tilesLeft > 15) {
-			drawnTile = game.giveTiles(1, playerSeat, false, true);
-			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
-				drawnTile = buHua();
-			}
-			updateGameStateTakenTile();
-		} else {
-			game.draw = true;
-			game.endRound();
-		}
-		setSelectedTiles(drawnTile ? [drawnTile] : []);
-		handleAction(game);
-	}
-
-	const buHua = useCallback(() => {
-		let drawnTile: ITile;
-		let initNoHiddenTiles = player.countAllHiddenTiles();
-		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
-			if (tilesLeft > 15) {
-				drawnTile = game.giveTiles(1, playerSeat, true, true);
-			} else {
-				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
-				game.draw = true;
-				game.endRound();
-				break;
-			}
-		}
-		return drawnTile;
-	}, [game, player, playerSeat, tilesLeft]);
-
-	/* ----------------------------------- Throw ----------------------------------- */
-
-	function handleThrow(tile: ITile) {
-		tile.show = true;
-		player.discard(tile);
-		player.setHiddenTiles();
-		game.tileThrown(tile, playerSeat);
-		game.handlePongDelay();
-		handleAction(game);
-	}
+	/* ----------------------------------- Action handling ----------------------------------- */
 
 	const handleAction = useCallback(
 		(game: Game) => {
@@ -217,17 +167,6 @@ const Controls = (props: ControlsProps) => {
 		[player, playerSeat, setSelectedTiles, takenTile]
 	);
 
-	/* ----------------------------------- Take ----------------------------------- */
-	function takeLastThrown() {
-		game.players[thrownBy].removeFromDiscarded(lastThrown);
-		player.getNewTile(lastThrown);
-	}
-
-	function returnLastThrown() {
-		player.returnNewTile();
-		game.players[thrownBy].addToDiscarded(lastThrown);
-	}
-
 	const updateGameStateTakenTile = useCallback(
 		(resetLastThrown: boolean = true, halfMove: boolean = true) => {
 			if (resetLastThrown) {
@@ -242,7 +181,53 @@ const Controls = (props: ControlsProps) => {
 		[game, player?.username, playerSeat]
 	);
 
-	const handleTake = useCallback(() => {
+	/* ----------------------------------- Draw ----------------------------------- */
+
+	function handleDraw() {
+		let drawnTile: ITile;
+		if (tiles?.length > 15) {
+			drawnTile = game.giveTiles(1, playerSeat, false, true);
+			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
+				drawnTile = buHua();
+			}
+			updateGameStateTakenTile();
+		} else {
+			game.draw = true;
+			game.endRound();
+		}
+		setSelectedTiles(drawnTile ? [drawnTile] : []);
+		handleAction(game);
+	}
+
+	function buHua() {
+		let drawnTile: ITile;
+		let initNoHiddenTiles = player.countAllHiddenTiles();
+		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
+			if (tiles?.length > 15) {
+				drawnTile = game.giveTiles(1, playerSeat, true, true);
+			} else {
+				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
+				game.draw = true;
+				game.endRound();
+				break;
+			}
+		}
+		return drawnTile;
+	}
+
+	/* ----------------------------------- Take ----------------------------------- */
+
+	function takeLastThrown() {
+		game.players[thrownBy].removeFromDiscarded(lastThrown);
+		player.getNewTile(lastThrown);
+	}
+
+	function returnLastThrown() {
+		player.returnNewTile();
+		game.players[thrownBy].addToDiscarded(lastThrown);
+	}
+
+	function handleTake() {
 		game.whoseMove = playerSeat;
 		if (meld.includes(lastThrown)) {
 			game.players[thrownBy].removeFromDiscarded(lastThrown);
@@ -251,7 +236,7 @@ const Controls = (props: ControlsProps) => {
 			tile.show = true;
 		});
 		if (canKang || canPong) {
-			player.pongOrKang(meld);
+			player.moveIntoShown(meld);
 			if (canKang) {
 				game.flagProgress = true;
 				game.newLog(`${player.username} kang'd ${meld[0].card}`);
@@ -260,34 +245,33 @@ const Controls = (props: ControlsProps) => {
 				game.newLog(`${player.username} pong'd ${meld[0].card}`);
 			}
 		} else {
-			player.moveMeldFromHiddenIntoShown(meld);
+			player.moveIntoShown(meld);
 			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 		}
 		updateGameStateTakenTile(false);
 		handleAction(game);
-	}, [
-		buHua,
-		canKang,
-		canPong,
-		game,
-		handleAction,
-		lastThrown,
-		meld,
-		player,
-		playerSeat,
-		thrownBy,
-		updateGameStateTakenTile
-	]);
+	}
 
-	const selfKang = useCallback(() => {
+	function selfKang() {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
 		game.flagProgress = true;
 		game.newLog(`${player.username} kang'd - ${toKang.card}`);
+		game.lastThrown = toKang;
 		buHua();
-		updateGameStateTakenTile();
 		handleAction(game);
-	}, [buHua, game, handleAction, player, selectedTiles, updateGameStateTakenTile]);
+	}
+
+	/* ----------------------------------- Throw ----------------------------------- */
+
+	function handleThrow(tile: ITile) {
+		tile.show = true;
+		player.discard(tile);
+		player.setHiddenTiles();
+		game.tileThrown(tile, playerSeat);
+		game.handlePongDelay();
+		handleAction(game);
+	}
 
 	/* ----------------------------------- Hu ----------------------------------- */
 
@@ -319,102 +303,111 @@ const Controls = (props: ControlsProps) => {
 
 	/* ----------------------------------- Markup ----------------------------------- */
 
-	return game && player ? (
+	return (
 		<TableTheme>
-			<MainTransparent>
-				<TopRightControls
-					payCallback={() => {
-						setShowPay(!showPay);
-					}}
-					logsCallback={handleShowLogs}
-					showLogs={showLogs}
-					logs={logs}
-				/>
-				<TopLeftControls
-					homeCallback={() => {
-						history.push(Pages.INDEX);
-					}}
-					settingsCallback={() => {
-						setShowSettings(!showSettings);
-					}}
-					texts={
-						game.ongoing && players[dealer]
-							? [
-									`Dealer: ${players[dealer].username}`,
-									`Tiles left: ${tilesLeft}`,
-									`Chips: ${Math.round(player.balance)}`,
-									`Seat: ${playerWind}`
-							  ]
-							: [`Chips: ${Math.round(player.balance)}`, `Game has ended!`]
-					}
-				/>
-				{hu.length !== 3 && !draw && !declareHu && (
-					<BottomLeftControls
-						controlsSize={controlsSize}
-						chiCallback={() => handleTake()}
-						chiDisabled={!canChi}
-						pongCallback={() => {
-							if (selectedTiles.length === 1) {
-								selfKang();
-							} else {
-								handleTake();
+			{game && player ? (
+				<MainTransparent>
+					<TopRightControls
+						payCallback={() => {
+							setShowPay(!showPay);
+						}}
+						logsCallback={() => setShowLogs(!showLogs)}
+						showLogs={showLogs}
+						logs={logs}
+					/>
+					<TopLeftControls
+						homeCallback={() => {
+							history.push(Pages.INDEX);
+						}}
+						settingsCallback={() => {
+							setShowSettings(!showSettings);
+						}}
+						texts={texts}
+						notif={`${
+							delayOn && offerPong
+								? `You have ${delayLeft}s to pong ${lastThrown?.card || ``}`
+								: delayOn && !offerPong
+								? `Waiting... (${delayLeft})`
+								: ``
+						}`}
+					/>
+					{hu.length !== 3 && !draw && !declareHu && (
+						<BottomLeftControls
+							controlsSize={controlsSize}
+							chiCallback={() => handleTake()}
+							chiDisabled={!canChi}
+							pongCallback={() => {
+								if (selectedTiles.length === 1) {
+									selfKang();
+								} else {
+									handleTake();
+								}
+							}}
+							pongText={canKang ? `杠` : `碰`}
+							pongDisabled={!canPong && !canKang}
+							huCallback={showDeclareHuModal}
+							okToShow={okToShow}
+							huShowing={declareHu}
+							huDisabled={game.hu.length === 3}
+						/>
+					)}
+					{hu.length !== 3 && !draw && !declareHu && (
+						<BottomRightControls
+							controlsSize={controlsSize}
+							throwCallback={() => {
+								handleThrow(selectedTiles[0]);
+							}}
+							throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
+							drawCallback={() => handleDraw()}
+							drawText={tiles?.length === 15 ? `完` : `摸`}
+							drawDisabled={
+								whoseMove !== playerSeat || takenTile || delayOn || canChi || canPong || canKang
 							}
-						}}
-						pongText={canKang ? `杠` : `碰`}
-						pongDisabled={!canPong && !canKang}
-						huCallback={showDeclareHuModal}
-						okToShow={okToShow}
-						huShowing={declareHu}
-						huDisabled={game.hu.length === 3}
-					/>
-				)}
-				{hu.length !== 3 && !draw && !declareHu && (
-					<BottomRightControls
-						controlsSize={controlsSize}
-						throwCallback={() => {
-							handleThrow(selectedTiles[0]);
-						}}
-						throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
-						drawCallback={() => handleDraw()}
-						drawText={tilesLeft === 15 ? `完` : `摸`}
-						drawDisabled={whoseMove !== playerSeat || (tilesLeft > 15 && takenTile) || pongDelay}
-						openCallback={handleShow}
-						okToShow={okToShow}
-						huShowing={declareHu}
-					/>
-				)}
-				{showPay && (
-					<PaymentModal
-						game={game}
-						playerSeat={playerSeat}
-						show={showPay}
-						onClose={() => {
-							setShowPay(false);
-						}}
-					/>
-				)}
-				{showSettings && (
-					<SettingsWindow
-						show={showSettings}
-						onClose={() => {
-							setShowSettings(false);
-						}}
-					/>
-				)}
-				{declareHu && (
-					<DeclareHuModal game={game} playerSeat={playerSeat} show={declareHu} onClose={hideDeclareHuModal} />
-				)}
-				{(game.hu.length === 3 || draw) && (
-					<AnnounceHuModal
-						game={game}
-						playerSeat={playerSeat}
-						showing={player.showTiles}
-						showCallback={handleShowTiles}
-					/>
-				)}
-			</MainTransparent>
+							openCallback={handleShow}
+							okToShow={okToShow}
+							huShowing={declareHu}
+						/>
+					)}
+					{showPay && (
+						<PaymentModal
+							game={game}
+							playerSeat={playerSeat}
+							show={showPay}
+							onClose={() => {
+								setShowPay(false);
+							}}
+						/>
+					)}
+					{showSettings && (
+						<SettingsWindow
+							show={showSettings}
+							onClose={() => {
+								setShowSettings(false);
+							}}
+						/>
+					)}
+					{declareHu && (
+						<DeclareHuModal
+							game={game}
+							playerSeat={playerSeat}
+							show={declareHu}
+							onClose={hideDeclareHuModal}
+						/>
+					)}
+					{(game.hu.length === 3 || draw) && (
+						<AnnounceHuModal
+							game={game}
+							playerSeat={playerSeat}
+							showing={player.showTiles}
+							showCallback={handleShowTiles}
+						/>
+					)}
+				</MainTransparent>
+			) : (
+				<Loader />
+			)}
 		</TableTheme>
-	) : null;
+	);
 };
 
 export default Controls;

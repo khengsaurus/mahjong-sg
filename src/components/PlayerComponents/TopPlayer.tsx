@@ -11,26 +11,27 @@ import './playerComponents.scss';
 
 const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
-	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const { hiddenTiles, shownTiles, melds, discardedTiles, lastTakenTile, unusedTiles, showTiles } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
+	const allHiddenTiles = player?.allHiddenTiles() || [];
 
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
-		shownTiles: player?.shownTiles,
-		allHiddenTiles,
-		toRotate: false
+		shownTiles,
+		melds,
+		allHiddenTiles
 	});
 
 	const shownHiddenHand = useMemo(() => {
 		return (
 			<div className="htss top">
-				{player.hiddenTiles.map((tile: ITile) => {
+				{hiddenTiles.map((tile: ITile) => {
 					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.TOP} />;
 				})}
-				{!isEmpty(player.lastTakenTile) && (
+				{!isEmpty(lastTakenTile) && (
 					<ShownTile
-						key={player.lastTakenTile.id}
-						tileID={player.lastTakenTile.id}
-						tileCard={player.lastTakenTile.card}
+						key={lastTakenTile.id}
+						tileID={lastTakenTile.id}
+						tileCard={lastTakenTile.card}
 						segment={Segments.TOP}
 						highlight
 						// classSuffix="margin-right"
@@ -50,7 +51,7 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 			<div id="top-shown" className="htss top">
 				<ShownTiles
 					nonFlowers={nonFlowers}
-					// nonFlowers={[...player.hiddenTiles, ...nonFlowers]}
+					// nonFlowers={[...hiddenTiles, ...nonFlowers]}
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
@@ -63,16 +64,16 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 		);
 	};
 
-	const unusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.TOP} tag={frontBackTag} />;
-	}, [player?.unusedTiles, frontBackTag]);
+	const renderUnusedTiles = useMemo(() => {
+		return <UnusedTiles tiles={unusedTiles} segment={Segments.TOP} tag={frontBackTag} />;
+	}, [unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
 		return (
 			<DiscardedTiles
 				className="htss top discarded"
-				tiles={player.discardedTiles}
-				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
+				tiles={discardedTiles}
+				// tiles={[...hiddenTiles, ...discardedTiles]}
 				segment={Segments.TOP}
 				lastThrownId={lastThrown?.id}
 			/>
@@ -81,10 +82,10 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`row-section-${tilesSize || Sizes.MEDIUM}`}>
-			{player?.showTiles ? shownHiddenHand : hiddenHand}
-			{player?.shownTiles?.length > 0 && renderShownTiles()}
-			{player?.unusedTiles > 0 && unusedTiles}
-			{player?.discardedTiles?.length > 0 && renderDiscardedTiles()}
+			{showTiles ? shownHiddenHand : hiddenHand}
+			{shownTiles?.length > 0 && renderShownTiles()}
+			{unusedTiles > 0 && renderUnusedTiles}
+			{discardedTiles?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);
 };

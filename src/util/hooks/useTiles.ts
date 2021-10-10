@@ -3,12 +3,13 @@ import { rotateShownTiles, sortShownTiles } from '../utilFns';
 
 interface Args {
 	shownTiles: ITile[];
+	melds: string[];
 	allHiddenTiles: ITile[];
 	toRotate?: boolean;
 }
 
 const useTiles = (args: Args) => {
-	const { shownTiles = [], allHiddenTiles = [], toRotate = true } = args;
+	const { shownTiles = [], melds = [], allHiddenTiles = [], toRotate = true } = args;
 
 	const shownCards = useMemo(() => {
 		return shownTiles?.map(tile => tile.id);
@@ -21,7 +22,7 @@ const useTiles = (args: Args) => {
 	}, [shownCards]);
 
 	const rotatedNonFlowers = useMemo(() => {
-		return toRotate ? rotateShownTiles(nonFlowers) : nonFlowers;
+		return toRotate && melds.length > 0 ? rotateShownTiles(nonFlowers, melds) : nonFlowers;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [nonFlowerIds.length]);
 

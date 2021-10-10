@@ -13,7 +13,7 @@ class FirebaseService {
 	private userVal: firebase.firestore.CollectionReference;
 	private userRepr: firebase.firestore.CollectionReference;
 	private gameRef: firebase.firestore.CollectionReference;
-	private actionsRef: firebase.firestore.CollectionReference;
+	// private actionsRef: firebase.firestore.CollectionReference;
 	private app: firebase.app.App;
 	private auth: firebase.auth.Auth;
 	private authProvider: firebase.auth.GoogleAuthProvider;
@@ -26,7 +26,7 @@ class FirebaseService {
 			this.userVal = this.db.collection('userVal');
 			this.userRepr = this.db.collection('userRepr');
 			this.gameRef = this.db.collection('games');
-			this.actionsRef = this.db.collection('actions');
+			// this.actionsRef = this.db.collection('actions');
 			this.auth.onAuthStateChanged(user => {
 				this.user = user;
 			});
@@ -300,7 +300,7 @@ class FirebaseService {
 					.then(newGame => {
 						gameId = newGame.id;
 						const game: Game = new Game(
-							newGame.id,
+							gameId,
 							user.username,
 							createdAt,
 							playersString,
@@ -330,7 +330,7 @@ class FirebaseService {
 							false,
 							[]
 						);
-						this.actionsRef.doc(gameId).set({ actions: [] });
+						// this.actionsRef.doc(gameId).set({ actions: [] });
 						resolve(game);
 					});
 			} catch (err) {
@@ -363,25 +363,25 @@ class FirebaseService {
 
 	/* ------------------------- Actions related ------------------------- */
 
-	async listenToActions(gameId: string, observer: any) {
-		if (gameId) {
-			return this.actionsRef.doc(gameId).onSnapshot(observer);
-		}
-	}
+	// async listenToActions(gameId: string, observer: any) {
+	// 	if (gameId) {
+	// 		return this.actionsRef.doc(gameId).onSnapshot(observer);
+	// 	}
+	// }
 
-	updateActions(gameId: string, actions: IAction[]): Promise<boolean> {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const ref = this.actionsRef.doc(gameId);
-				await ref.set({ ...actions }).then(() => {
-					resolve(true);
-				});
-			} catch (err) {
-				console.log(err);
-				reject(new Error('FirebaseService - actions doc was not updated'));
-			}
-		});
-	}
+	// updateActions(gameId: string, actions: IAction[]): Promise<boolean> {
+	// 	return new Promise(async (resolve, reject) => {
+	// 		try {
+	// 			const ref = this.actionsRef.doc(gameId);
+	// 			await ref.set({ ...actions }).then(() => {
+	// 				resolve(true);
+	// 			});
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			reject(new Error('FirebaseService - actions doc was not updated'));
+	// 		}
+	// 	});
+	// }
 }
 
 const FBService = new FirebaseService();

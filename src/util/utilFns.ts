@@ -78,11 +78,11 @@ export function objToPlayer(data: any): User {
 		TableColors.BROWN,
 		TileColors.GREEN,
 		data.shownTiles,
+		data.melds,
 		data.hiddenTiles,
 		data.discardedTiles,
 		data.lastTakenTile,
 		data.unusedTiles,
-		data.pongs,
 		data.balance,
 		data.showTiles
 	);
@@ -96,10 +96,10 @@ export function playerToObj(user: User, startingBal?: number) {
 		email: '',
 		hiddenTiles: user.hiddenTiles || [],
 		shownTiles: user.shownTiles || [],
+		melds: user.melds || [],
 		discardedTiles: user.discardedTiles || [],
 		lastTakenTile: user.lastTakenTile || {},
 		unusedTiles: user.unusedTiles || 0,
-		pongs: user.pongs || [],
 		balance: user.balance || startingBal || 0,
 		showTiles: user.showTiles || false
 	};
@@ -260,66 +260,48 @@ export function sortShownTiles(tiles: ITile[]): ShownTiles {
 	return { flowers, nonFlowers, flowerIds, nonFlowerIds };
 }
 
-export function rotateShownTiles(tiles: ITile[]): ITile[] {
-	let copy = [...tiles];
+export function rotateShownTiles(tiles: ITile[], melds: string[]): ITile[] {
 	let temp: ITile;
-	let j: number;
-	let k: number;
-	if (tiles.length > 0) {
-		try {
-			//TODO: edge case - 3 kangs
-			if (tiles.length % 3 === 0) {
-				for (let i = 0; i < tiles.length; i += 3) {
-					j = i + 2;
-					if (tiles[i].card !== tiles[j].card) {
-						temp = tiles[i];
-						tiles[i] = tiles[j];
-						tiles[j] = temp;
-					}
-				}
-			} else {
-				for (let i = 0; i < tiles.length; i += 3) {
-					if (tiles.length - i !== 4) {
-						k = i + 3;
-						if (tiles.length > k + 1 && tiles[i].card === tiles[k].card) {
-							i += 1;
-						} else {
-							j = i + 2;
-							if (tiles[i].card !== tiles[j].card) {
-								temp = tiles[i];
-								tiles[i] = tiles[j];
-								tiles[j] = temp;
-							}
-						}
-					}
-				}
-			}
-		} catch (err) {
-			console.log(err);
-			return copy;
+	let i = 0;
+	let j = 0;
+	while (i < tiles.length && j < melds.length) {
+		if (melds[j][0] === 'k') {
+			i += 4;
+		} else if (melds[j][0] === 'c') {
+			temp = tiles[i];
+			tiles[i] = tiles[i + 2];
+			tiles[i + 2] = temp;
+			i += 3;
+		} else {
+			i += 3;
 		}
+		j += 1;
 	}
 	return tiles;
 }
 
-export function findTwoInSorted<T extends any>(i: T, arr: T[], field: string) {
+export function findTwoInSorted<T extends any>(i: T, arr: T[], field?: string) {
 	let flag = false;
-	for (let n = 0; n < arr.length; n++) {
-		if (i[field] && arr[n][field]) {
+	for (let n = 0; n < arr?.length; n++) {
+		if (field && i[field] && arr[n][field]) {
 			if (arr[n][field] === i[field]) {
 				if (flag === true) {
 					return true;
 				} else {
 					flag = true;
 				}
+			} else if (flag === true) {
+				return false;
 			}
 		} else {
-			if (arr[n] === i) {
+			if (i === arr[n]) {
 				if (flag === true) {
 					return true;
 				} else {
 					flag = true;
 				}
+			} else if (flag === true) {
+				return false;
 			}
 		}
 	}
@@ -327,6 +309,20 @@ export function findTwoInSorted<T extends any>(i: T, arr: T[], field: string) {
 }
 
 export function addSecondsToDate(t: Date, s: number): Date {
-	t.setSeconds(t.getSeconds() + s);
-	return t;
+	return t ? new Date(t?.getTime() + s * 1000) : null;
+}
+
+export function indexToWind(n: number): string {
+	switch (n) {
+		case 0:
+			return '東';
+		case 1:
+			return '南';
+		case 2:
+			return '西';
+		case 3:
+			return '北';
+		default:
+			return '';
+	}
 }

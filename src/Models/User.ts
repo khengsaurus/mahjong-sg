@@ -14,11 +14,12 @@ export class User {
 	tableColor: TableColors;
 	tileBackColor: TileColors;
 	shownTiles?: ITile[];
+	melds?: string[];
 	hiddenTiles?: ITile[];
 	discardedTiles?: ITile[];
 	lastTakenTile?: ITile;
 	unusedTiles?: number;
-	pongs?: string[];
+	// pongs?: string[];
 	balance?: number;
 	showTiles?: boolean;
 
@@ -34,11 +35,11 @@ export class User {
 		tableColor?: TableColors,
 		tileBackColor?: TileColors,
 		shownTiles?: ITile[],
+		melds?: string[],
 		hiddenTiles?: ITile[],
 		discardedTiles?: ITile[],
 		lastTakenTile?: ITile,
 		unusedTiles?: number,
-		pongs?: string[],
 		balance?: number,
 		showTiles?: boolean
 	) {
@@ -53,11 +54,11 @@ export class User {
 		this.tableColor = tableColor;
 		this.tileBackColor = tileBackColor;
 		this.shownTiles = shownTiles || [];
+		this.melds = melds || [];
 		this.hiddenTiles = hiddenTiles || [];
 		this.discardedTiles = discardedTiles || [];
 		this.lastTakenTile = lastTakenTile || {};
 		this.unusedTiles = unusedTiles || 0;
-		this.pongs = pongs || [];
 		this.balance = balance || 0;
 		this.showTiles = showTiles || false;
 	}
@@ -93,7 +94,7 @@ export class User {
 		this.discardedTiles = [];
 		this.lastTakenTile = {};
 		this.unusedTiles = 0;
-		this.pongs = [];
+		this.melds = [];
 		this.showTiles = false;
 	}
 
@@ -122,7 +123,7 @@ export class User {
 		return tiles.length === 3 && tiles.every(tile => tile.card === tiles[0].card) ? true : false;
 	}
 	canKang(tiles: ITile[]): boolean {
-		if (tiles.length === 1 && this.pongs.includes(tiles[0].card)) {
+		if (tiles.length === 1 && this.hasPong(tiles[0].card)) {
 			return true;
 		} else if (tiles.length === 4) {
 			return tiles.every(tile => tile.card === tiles[0].card) ? true : false;
@@ -188,6 +189,28 @@ export class User {
 		}
 	}
 
+	/* ----------------------------------- Add meld ----------------------------------- */
+
+	addMeld(card: string, type: string) {
+		this.melds = [`${type}-${card}`, ...this.melds];
+	}
+	containsMeld(card: string, type: string) {
+		let repr = `${type}-${card}`;
+		return this.melds.find(meld => {
+			return meld === repr;
+		});
+	}
+	hasPong(card: string) {
+		return this.containsMeld(card, 'p');
+	}
+	updatePongToKang(card: string) {
+		let repr = `p-${card}`;
+		let i = this.melds.indexOf(repr);
+		if (i !== -1) {
+			this.melds[i] = `k-${card}`;
+		}
+	}
+
 	/* ----------------------------------- Add ----------------------------------- */
 	addToHidden(t: ITile): void;
 	addToHidden(t: ITile[]): void;
@@ -206,11 +229,14 @@ export class User {
 			if (index) {
 				let initLength = this.shownTiles.length;
 				this.shownTiles = [...this.shownTiles.slice(0, index), t, ...this.shownTiles.slice(index, initLength)];
+				t.card && this.updatePongToKang(t.card);
 			} else {
 				this.shownTiles = [t, ...this.shownTiles];
 			}
 		} else {
 			this.shownTiles = [...t, ...this.shownTiles];
+			let type = this.canKang(t) ? 'k' : this.canPong(t) ? 'p' : 'c';
+			this.addMeld(t[1].card, type);
 		}
 	}
 
@@ -224,7 +250,7 @@ export class User {
 		}
 	}
 
-	// /* ----------------------------------- Remove ----------------------------------- */
+	/* ----------------------------------- Remove ----------------------------------- */
 	removeFromHidden(t: ITile): void;
 	removeFromHidden(t: ITile[]): void;
 	removeFromHidden(t: any) {
@@ -268,13 +294,10 @@ export class User {
 		this.addToDiscarded(tileToThrow);
 		return tileToThrow;
 	}
-	moveMeldFromHiddenIntoShown(tiles: ITile[]) {
+	moveIntoShown(tiles: ITile[]) {
 		this.removeFromHidden(tiles);
 		this.addToShown(tiles);
-	}
-	pongOrKang(tiles: ITile[]) {
-		this.moveMeldFromHiddenIntoShown(tiles);
-		this.pongs = [...this.pongs, tiles[0].card];
+		// this.pongs = [...this.pongs, tiles[0].card];
 	}
 	selfKang(toKang: ITile) {
 		this.removeFromHidden(toKang);

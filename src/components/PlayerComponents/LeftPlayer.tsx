@@ -12,11 +12,13 @@ import './playerComponents.scss';
 
 const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
-	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const { hiddenTiles, shownTiles, melds, discardedTiles, lastTakenTile, unusedTiles, showTiles } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
+	const allHiddenTiles = player?.allHiddenTiles() || [];
 
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
-		shownTiles: player?.shownTiles,
+		shownTiles,
+		melds,
 		allHiddenTiles
 	});
 
@@ -33,20 +35,20 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		tiles: player.allHiddenTiles().length,
 		tilesSize: tilesSize
-		// addHalfTile: !isEmpty(player.lastTakenTile)
+		// addHalfTile: !isEmpty(lastTakenTile)
 	});
 
 	const shownHiddenHand = useMemo(() => {
 		return (
 			<div className="vtss left" ref={shownHiddenHandRef}>
-				{player.hiddenTiles.map(tile => {
+				{hiddenTiles.map(tile => {
 					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.LEFT} />;
 				})}
-				{!isEmpty(player.lastTakenTile) && (
+				{!isEmpty(lastTakenTile) && (
 					<ShownTile
-						key={player.lastTakenTile.id}
-						tileID={player.lastTakenTile.id}
-						tileCard={player.lastTakenTile.card}
+						key={lastTakenTile.id}
+						tileID={lastTakenTile.id}
+						tileCard={lastTakenTile.card}
 						segment={Segments.LEFT}
 						classSuffix="margin-bottom"
 						highlight
@@ -66,7 +68,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 			<div ref={shownTilesRef} className="vtss left">
 				<ShownTiles
 					nonFlowers={nonFlowers}
-					// nonFlowers={[...player.hiddenTiles, ...nonFlowers]}
+					// nonFlowers={[...hiddenTiles, ...nonFlowers]}
 					flowers={flowers}
 					flowerIds={flowerIds}
 					nonFlowerIds={nonFlowerIds}
@@ -79,16 +81,16 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 		);
 	};
 
-	const unusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={player.unusedTiles} segment={Segments.LEFT} tag={frontBackTag} />;
-	}, [player?.unusedTiles, frontBackTag]);
+	const renderUnusedTiles = useMemo(() => {
+		return <UnusedTiles tiles={unusedTiles} segment={Segments.LEFT} tag={frontBackTag} />;
+	}, [unusedTiles, frontBackTag]);
 
 	const renderDiscardedTiles = () => {
 		return (
 			<DiscardedTiles
 				className="vtss left discarded"
-				tiles={player.discardedTiles}
-				// tiles={[...player.hiddenTiles, ...player.discardedTiles]}
+				tiles={discardedTiles}
+				// tiles={[...hiddenTiles, ...discardedTiles]}
 				segment={Segments.LEFT}
 				lastThrownId={lastThrown?.id}
 			/>
@@ -97,10 +99,10 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.MEDIUM}`}>
-			{player?.showTiles ? shownHiddenHand : hiddenHand}
-			{player?.shownTiles?.length > 0 && renderShownTiles()}
-			{player?.unusedTiles > 0 && unusedTiles}
-			{player?.discardedTiles?.length > 0 && renderDiscardedTiles()}
+			{showTiles ? shownHiddenHand : hiddenHand}
+			{shownTiles?.length > 0 && renderShownTiles()}
+			{unusedTiles > 0 && renderUnusedTiles}
+			{discardedTiles?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);
 };
