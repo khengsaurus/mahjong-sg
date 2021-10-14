@@ -55,7 +55,6 @@ const Table = () => {
 	const game: Game = useSelector((state: IStore) => state.game);
 
 	useEffect(() => {
-		// console.log('Table/index - game listener called');
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(gameData, false);

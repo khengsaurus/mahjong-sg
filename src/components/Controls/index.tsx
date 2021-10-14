@@ -37,13 +37,13 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		thrownBy,
 		takenTile,
 		whoseMove,
-		pongDelayFrom,
+		delayFrom,
 		tiles,
 		logs,
 		hu,
 		draw
 	} = game;
-	const { delayOn, delayLeft } = useCountdown(pongDelayFrom, 6);
+	const { delayOn, delayLeft } = useCountdown(delayFrom, 6);
 	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
 	const [showSettings, setShowSettings] = useState(false);
 	const [declareHu, setDeclareHu] = useState(false);
@@ -159,7 +159,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 				player.setHiddenTiles();
 				game.nextPlayerMove();
 			} else {
-				game.uncachedAction = true;
+				game.halfMove = true;
 			}
 			game.players[playerSeat] = player;
 			FBService.updateGame(game);
@@ -168,11 +168,11 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	);
 
 	const updateGameStateTakenTile = useCallback(
-		(resetLastThrown: boolean = true, halfMove: boolean = true) => {
+		(resetLastThrown: boolean = true, halfAction: boolean = true) => {
 			if (resetLastThrown) {
 				game.lastThrown = {};
 			}
-			if (halfMove) {
+			if (halfAction) {
 				game.takenTile = true;
 				game.takenBy = playerSeat;
 				game.newLog(`${player.username}'s turn - to throw`);
@@ -238,7 +238,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		if (canKang || canPong) {
 			player.moveIntoShown(meld);
 			if (canKang) {
-				game.flagProgress = true;
+				game.flagNext = true;
 				game.newLog(`${player.username} kang'd ${meld[0].card}`);
 				buHua();
 			} else {
@@ -255,7 +255,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	function selfKang() {
 		let toKang = selectedTiles[0];
 		player.selfKang(toKang);
-		game.flagProgress = true;
+		game.flagNext = true;
 		game.newLog(`${player.username} kang'd - ${toKang.card}`);
 		game.lastThrown = toKang;
 		buHua();

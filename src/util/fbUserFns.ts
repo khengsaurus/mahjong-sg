@@ -31,7 +31,6 @@ export function resolveUser_Email(email: string): Promise<User | null> {
 		try {
 			FBService.getUserReprByEmail(email).then((userData: any) => {
 				if (userData.docs.length === 0) {
-					// console.log('User not registered -> NewUser');
 					resolve(null);
 				} else {
 					resolve(objToUser(userData));
@@ -54,7 +53,7 @@ export async function newUser_IEmailUser(values: IEmailUser): Promise<boolean> {
 						resolve(res);
 					})
 					.catch(err => {
-						console.log('Unable to register user');
+						console.error('Unable to register user');
 						reject(err);
 					});
 			}

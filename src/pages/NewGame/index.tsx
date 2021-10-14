@@ -43,7 +43,6 @@ const NewGame = () => {
 	}
 
 	async function startGame() {
-		// console.log('Newgame - creator calling startGame');
 		await FBService.createGame(user, players, random).then(game => {
 			game.initRound();
 			FBService.updateGame(game).then(() => {

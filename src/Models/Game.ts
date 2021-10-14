@@ -1,22 +1,22 @@
 import { isEmpty } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { findLeft, findOpp, findRight, findTwoInSorted, shuffle } from '../util/utilFns';
+import { createJwt, findLeft, findOpp, findRight, findTwoInSorted, shuffle } from '../util/utilFns';
 import { User } from './User';
 
 export class Game {
 	id: string;
 	creator: string;
 	createdAt: Date;
-	lastExec: number;
-	lastUpdated: Date;
-	pongDelayFrom: Date;
-	playersString?: string;
+	// lastExec: number;
+	updated: Date;
+	delayFrom: Date;
+	playersStr?: string;
 	emails?: string[];
 	ongoing?: boolean;
 	stage?: number;
-	previousStage?: number;
+	prev?: number;
 	midRound?: boolean;
-	flagProgress?: boolean;
+	flagNext?: boolean;
 	dealer?: number;
 	whoseMove?: number;
 	playerIds?: string[];
@@ -29,7 +29,7 @@ export class Game {
 	thrownTile?: boolean;
 	takenTile?: boolean;
 	takenBy?: number;
-	uncachedAction?: boolean;
+	halfMove?: boolean;
 	hu?: number[];
 	draw?: boolean;
 	logs?: ILog[];
@@ -38,17 +38,17 @@ export class Game {
 		id: string,
 		creator?: string,
 		createdAt?: Date,
-		playersString?: string,
+		playersStr?: string,
 		emails?: string[],
 		ongoing?: boolean,
-		lastExec?: number,
-		lastUpdated?: Date,
-		pongDelayFrom?: Date,
+		// lastExec?: number,
+		updated?: Date,
+		delayFrom?: Date,
 		stage?: number,
-		previousStage?: number,
+		prev?: number,
 		dealer?: number,
 		midRound?: boolean,
-		flagProgress?: boolean,
+		flagNext?: boolean,
 		whoseMove?: number,
 		playerIds?: string[],
 		players?: User[],
@@ -60,7 +60,7 @@ export class Game {
 		thrownTile?: boolean,
 		takenTile?: boolean,
 		takenBy?: number,
-		uncachedAction?: boolean,
+		halfMove?: boolean,
 		hu?: number[],
 		draw?: boolean,
 		logs?: ILog[]
@@ -68,17 +68,17 @@ export class Game {
 		this.id = id;
 		this.creator = creator;
 		this.createdAt = createdAt;
-		this.playersString = playersString;
+		this.playersStr = playersStr;
 		this.emails = emails;
 		this.ongoing = ongoing;
-		this.lastExec = lastExec;
-		this.lastUpdated = lastUpdated;
-		this.pongDelayFrom = pongDelayFrom;
+		// // this.lastExec = lastExec;
+		this.updated = updated;
+		this.delayFrom = delayFrom;
 		this.stage = stage;
-		this.previousStage = previousStage;
+		this.prev = prev;
 		this.dealer = dealer;
 		this.midRound = midRound;
-		this.flagProgress = flagProgress;
+		this.flagNext = flagNext;
 		this.whoseMove = whoseMove;
 		this.playerIds = playerIds;
 		this.players = players;
@@ -90,7 +90,7 @@ export class Game {
 		this.thrownTile = thrownTile;
 		this.takenTile = takenTile;
 		this.takenBy = takenBy;
-		this.uncachedAction = uncachedAction;
+		this.halfMove = halfMove;
 		this.hu = hu;
 		this.draw = draw;
 		this.logs = logs;
@@ -146,6 +146,11 @@ export class Game {
 		}
 	}
 
+	createHashedTilesRef(tiles: ITile[]): string {
+		let cards = tiles.map(tile => tile.id);
+		return createJwt(cards, `${this.id}-${this.stage}`);
+	}
+
 	generateShuffledTiles(): ITile[] {
 		let tiles: ITile[] = [];
 		const oneToFour = [1, 2, 3, 4];
@@ -155,7 +160,6 @@ export class Game {
 		const daPai = ['红中', '白板', '发财'];
 		const animals = ['cat', 'mouse', 'rooster', 'worm'];
 		const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
-
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
@@ -212,7 +216,6 @@ export class Game {
 			};
 			tiles.push(tile);
 		});
-
 		animals.forEach(animal => {
 			let tile: ITile = {
 				card: animal,
@@ -272,7 +275,7 @@ export class Game {
 						this.players[playerIndex].shownTilesContainCard(`mouse`))
 				) {
 					this.newLog(`${this.players[playerIndex].username} drew matching animals`);
-					this.flagProgress = true;
+					this.flagNext = true;
 				}
 			} else if (newTile.suit === '花' && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
 				newTile.isValidFlower = true;
@@ -281,7 +284,7 @@ export class Game {
 					this.players[playerIndex].shownTilesContainCard(`blue${newTile.card.slice(-1)}`)
 				) {
 					this.newLog(`${this.players[playerIndex].username} drew both his/her flowers`);
-					this.flagProgress = true;
+					this.flagNext = true;
 				}
 			}
 			if (newTile.suit === '花' || newTile.suit === '动物') {
@@ -441,7 +444,7 @@ export class Game {
 					n !== findRight(this.thrownBy) &&
 					findTwoInSorted(this.lastThrown, this.players[n].hiddenTiles, 'card')
 				) {
-					this.pongDelayFrom = new Date();
+					this.delayFrom = new Date();
 				}
 			}
 		}
@@ -451,7 +454,7 @@ export class Game {
 		this.whoseMove = findRight(this.whoseMove);
 		this.takenTile = false;
 		this.thrownTile = false;
-		this.uncachedAction = false;
+		this.halfMove = false;
 		this.newLog(`${this.players[this.whoseMove].username}'s turn`);
 	}
 
@@ -466,7 +469,7 @@ export class Game {
 		} else if (this.stage <= 16) {
 			res = ['北', ((this.stage - 1) % 12) + 1];
 		}
-		if (this.stage === this.previousStage) {
+		if (this.stage === this.prev) {
 			res.push(['连']);
 		}
 		return res;
@@ -486,15 +489,15 @@ export class Game {
 		this.thrownTile = false;
 		this.takenTile = true;
 		this.takenBy = this.dealer;
-		this.uncachedAction = false;
+		this.halfMove = false;
 		this.hu = [];
 		this.draw = false;
 		this.logs = [];
-		this.flagProgress = false;
+		this.flagNext = false;
 	}
 
 	initRound() {
-		if (this.flagProgress) {
+		if (this.flagNext) {
 			this.stage += 1;
 		}
 		if (this.stage === 1) {
@@ -506,15 +509,16 @@ export class Game {
 				this.dealer = 0;
 			}
 		}
-		this.newLog(`Starting round ${this.stage}${this.previousStage === this.stage ? ` 连` : ``}`);
+		this.newLog(`Starting round ${this.stage}${this.prev === this.stage ? ` 连` : ``}`);
 		this.prepForNewRound();
-		this.tiles = this.generateShuffledTiles();
+		let generatedTiles = this.generateShuffledTiles();
+		this.tiles = generatedTiles;
 		this.distributeTiles();
 		this.newLog(`${this.players[this.dealer].username}'s turn - to throw`);
 	}
 
 	/**
-	 * => this.previousStage(stage),
+	 * => this.prev(stage),
 	 * if game is to continue => this.midRound(false), this.stage+=1, next this.dealer
 	 */
 	endRound() {
@@ -528,12 +532,12 @@ export class Game {
 			this.newLog(huLog);
 		}
 		this.midRound = false;
-		this.previousStage = this.stage;
-		if (this.dealer === 3 && this.stage === 16 && this.flagProgress) {
+		this.prev = this.stage;
+		if (this.dealer === 3 && this.stage === 16 && this.flagNext) {
 			this.dealer = 10;
 			this.newLog('Game ended');
 			this.ongoing = false;
-		} else if (this.flagProgress) {
+		} else if (this.flagNext) {
 			this.dealer = (this.dealer + 1) % 4;
 			this.newLog('Round ended');
 		}

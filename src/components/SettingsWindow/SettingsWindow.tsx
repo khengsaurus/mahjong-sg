@@ -91,7 +91,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 					}
 				})
 				.catch(err => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 		onClose();

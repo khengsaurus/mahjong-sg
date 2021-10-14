@@ -30,7 +30,7 @@ const DeclareHuModal = (props: Props) => {
 
 	async function hu() {
 		game.hu = [playerSeat, tai, Number(zimo)];
-		game.flagProgress = Number(game.dealer) === playerSeat ? false : true;
+		game.flagNext = Number(game.dealer) === playerSeat ? false : true;
 		game.endRound();
 		FBService.updateGame(game);
 		onClose(true);

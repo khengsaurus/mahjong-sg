@@ -156,7 +156,6 @@ export const AppContextProvider = (props: any) => {
 	}
 
 	function handleUserContext(user?: User) {
-		// console.log(user ? 'Setting user preferences' : 'Clearing user preferences');
 		setPlayers(user ? [user] : []);
 		setUser(user || null);
 		setUserEmail(user ? user.email : '');
@@ -170,9 +169,9 @@ export const AppContextProvider = (props: any) => {
 
 	function login(user: User, existingJwt: boolean) {
 		// if (!FBService.userAuthenticated()) {
-		// 	console.log('Failed to log into firebase with email credentials -> logging in anonymously');
+		// 	console.error('Failed to log into firebase with email credentials -> logging in anonymously');
 		// 	FBService.authLoginAnon().catch(err => {
-		// 		console.log(err);
+		// 		console.error(err);
 		// 	});
 		// }
 		if (!existingJwt) {

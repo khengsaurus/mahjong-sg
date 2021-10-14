@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { addSecondsToDate } from '../utilFns';
 
 const useCountdown = (from: Date, delay: number, interval = 200) => {
-	const fromString = from.toString();
+	const fromString = from ? from.toString() : '';
 	const [delayOn, setDelayOn] = useState(false);
 	const [delayLeft, setDelayLeft] = useState(delay - 1);
 	const intervalRef = useRef<NodeJS.Timeout>();
@@ -25,10 +25,12 @@ const useCountdown = (from: Date, delay: number, interval = 200) => {
 	);
 
 	useEffect(() => {
-		let till = addSecondsToDate(from, delay);
-		if (till > new Date()) {
-			setDelayOn(true);
-			startCountdown(till);
+		if (fromString !== '') {
+			let till = addSecondsToDate(from, delay);
+			if (till > new Date()) {
+				setDelayOn(true);
+				startCountdown(till);
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fromString, delay, startCountdown]);

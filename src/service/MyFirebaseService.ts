@@ -51,7 +51,7 @@ class FirebaseService {
 		try {
 			return await firebase.auth().signInAnonymously();
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	}
 
@@ -115,9 +115,8 @@ class FirebaseService {
 				t.set(userValNew, { username, password });
 				t.set(userReprNew, { username, photoUrl: '', groups: [] });
 			});
-			// console.log('User created successfully');
 		} catch (err) {
-			console.log('FirebaseService - user was not created: ', +err);
+			console.error('FirebaseService - user was not created: ', +err);
 		}
 	}
 
@@ -138,10 +137,9 @@ class FirebaseService {
 					decoration: Decorations.DEFAULT,
 					groups: []
 				});
-				// console.log('User created successfully');
 				resolve(true);
 			} catch (err) {
-				console.log('FirebaseService - user was not created: ', +err);
+				console.error('FirebaseService - user was not created: ', +err);
 				resolve(false);
 			}
 		});
@@ -188,7 +186,7 @@ class FirebaseService {
 					// filter group.name like partGroupName
 				})
 				.catch(err => {
-					console.log(err);
+					console.error(err);
 					groups = [];
 				});
 			resolve(groups);
@@ -253,11 +251,11 @@ class FirebaseService {
 		shuffledPlayers = random ? shuffle(players) : players;
 		let playerIds: string[] = [];
 		let emails: string[] = [];
-		let playersString: string = '';
+		let playersStr: string = '';
 		shuffledPlayers.forEach(player => {
 			playerIds.push(player.id);
 			emails.push(player.email);
-			playersString += player.username + ' ';
+			playersStr += player.username + ' ';
 		});
 		return new Promise((resolve, reject) => {
 			let createdAt = new Date();
@@ -268,17 +266,17 @@ class FirebaseService {
 					.add({
 						creator: user.username,
 						createdAt,
-						lastExec: 0,
-						lastUpdated: createdAt,
-						pongDelayFrom: delayed,
-						playersString,
+						playersStr,
 						emails,
 						ongoing: true,
+						// lastExec: 0,
+						updated: createdAt,
+						delayFrom: delayed,
 						stage: 0,
-						previousStage: -1,
+						prev: -1,
 						dealer: 0,
 						midRound: false,
-						flagProgress: true,
+						flagNext: true,
 						whoseMove: 0,
 						playerIds,
 						players: shuffledPlayers.map(function (player: User) {
@@ -292,7 +290,7 @@ class FirebaseService {
 						thrownTile: false,
 						takenTile: true,
 						takenBy: 0,
-						uncachedAction: false,
+						halfMove: false,
 						hu: [],
 						draw: false,
 						logs: []
@@ -303,10 +301,10 @@ class FirebaseService {
 							gameId,
 							user.username,
 							createdAt,
-							playersString,
+							playersStr,
 							emails,
 							true,
-							0,
+							// 0,
 							createdAt,
 							delayed,
 							0,
@@ -334,7 +332,7 @@ class FirebaseService {
 						resolve(game);
 					});
 			} catch (err) {
-				console.log('FirebaseService - game was not created');
+				console.error('FirebaseService - game was not created');
 				reject(err);
 			}
 		});
@@ -349,7 +347,7 @@ class FirebaseService {
 					resolve(game);
 				});
 			} catch (err) {
-				console.log(err);
+				console.error(err);
 				reject(new Error('FirebaseService - game doc was not updated'));
 			}
 		});
@@ -377,7 +375,7 @@ class FirebaseService {
 	// 				resolve(true);
 	// 			});
 	// 		} catch (err) {
-	// 			console.log(err);
+	// 			console.error(err);
 	// 			reject(new Error('FirebaseService - actions doc was not updated'));
 	// 		}
 	// 	});

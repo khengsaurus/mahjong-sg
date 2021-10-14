@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import moment from 'moment';
 import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
@@ -51,7 +52,7 @@ export function objToUser(obj: any): User {
 			ref.tileBackColor
 		);
 	} catch (err) {
-		console.log(err.message + 'Failed to resolve user object');
+		console.error(err.message + 'Failed to resolve user object');
 	} finally {
 		return user;
 	}
@@ -108,23 +109,23 @@ export function playerToObj(user: User, startingBal?: number) {
 export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): Game => {
 	let ref = doc.data();
 	if (repr) {
-		return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersString, ref.emails, ref.ongoing);
+		return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersStr, ref.emails, ref.ongoing);
 	} else {
 		return new Game(
 			doc.id,
 			ref.creator,
 			ref.createdAt.toDate(),
-			ref.playersString,
+			ref.playersStr,
 			ref.emails,
 			Boolean(ref.ongoing),
-			Number(ref.lastExec),
-			ref.lastUpdated.toDate(),
-			ref.pongDelayFrom.toDate(),
+			// Number(ref.lastExec),
+			ref.updated.toDate(),
+			ref.delayFrom.toDate(),
 			Number(ref.stage),
-			Number(ref.previousStage),
+			Number(ref.prev),
 			Number(ref.dealer),
 			Boolean(ref.midRound),
-			Boolean(ref.flagProgress),
+			Boolean(ref.flagNext),
 			Number(ref.whoseMove),
 			ref.playerIds,
 			ref.players.map((player: any) => {
@@ -138,7 +139,7 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 			Boolean(ref.thrownTile),
 			Boolean(ref.takenTile),
 			Number(ref.takenBy),
-			Boolean(ref.uncachedAction),
+			Boolean(ref.halfMove),
 			ref.hu,
 			Boolean(ref.draw),
 			ref.logs
@@ -151,17 +152,17 @@ export function gameToObj(game: Game) {
 		id: game.id || '',
 		creator: game.creator || '',
 		createdAt: game.createdAt || new Date(),
-		lastExec: game.lastExec || 0,
-		lastUpdated: game.lastUpdated || new Date(),
-		pongDelayFrom: game.pongDelayFrom || new Date(),
-		playersString: game.playersString || '',
+		playersStr: game.playersStr || '',
 		emails: game.emails || [],
 		ongoing: game.ongoing || true,
+		// lastExec: game.lastExec || 0,
+		updated: game.updated || new Date(),
+		delayFrom: game.delayFrom || new Date(),
 		stage: game.stage || 0,
-		previousStage: game.previousStage || 0,
+		prev: game.prev || 0,
 		dealer: game.dealer || 0,
 		midRound: game.midRound || false,
-		flagProgress: game.flagProgress || false,
+		flagNext: game.flagNext || false,
 		whoseMove: game.whoseMove || 0,
 		playerIds: game.playerIds || [],
 		players: game.players
@@ -177,7 +178,7 @@ export function gameToObj(game: Game) {
 		thrownTile: game.thrownTile || false,
 		takenTile: game.takenTile || false,
 		takenBy: game.takenBy || 0,
-		uncachedAction: game.uncachedAction || false,
+		halfMove: game.halfMove || false,
 		hu: game.hu || [],
 		draw: game.draw || false,
 		logs: game.logs || []
@@ -223,7 +224,7 @@ export function addClassToElement(ITiled: string, className: string) {
 			e.classList.add(className);
 		}
 	} catch (err) {
-		console.log(`Element with id ${ITiled} not found`);
+		console.error(`Element with id ${ITiled} not found`);
 	}
 }
 
@@ -232,7 +233,7 @@ export function removeClassFromElement(ITiled: string, className: string) {
 		var e = document.getElementById(ITiled);
 		e.classList.remove(className);
 	} catch (err) {
-		console.log(`Element with id ${ITiled} not found`);
+		console.error(`Element with id ${ITiled} not found`);
 	}
 }
 
@@ -325,4 +326,45 @@ export function indexToWind(n: number): string {
 		default:
 			return '';
 	}
+}
+
+export function createJwt(obj: any, key: string) {
+	const token = jwt.sign(JSON.stringify(obj), key, {
+		algorithm: 'HS256'
+	});
+	return token;
+}
+
+export function resolveJwt(token: string, key: string): string | JwtPayload {
+	try {
+		let resolved = jwt.verify(token, key);
+		return typeof resolved === 'object' ? resolved : JSON.parse(resolved);
+	} catch (err) {
+		console.error(err);
+	}
+}
+
+export function getHashMul(gameId: string, stage: number) {
+	let i = Math.min(stage, gameId.length - 1);
+	return (gameId.charCodeAt(0) + gameId.charCodeAt(i)) * stage;
+}
+
+export function hashTile(tile: ITile, hashMul: number): ITile {
+	let id = '';
+	tile.id.split('').forEach(i => {
+		id += `${i.charCodeAt(0) * hashMul}|`;
+	});
+	return { id, show: false };
+}
+
+export function unhashTile(hashedTile: ITile, hashMul): ITile {
+	let nums = [];
+	hashedTile.id.split('|').forEach(piece => {
+		if (!!Number(piece)) {
+			let num = Math.round(Number(piece) / hashMul);
+			nums = [...nums, num];
+		}
+	});
+	let id = String.fromCharCode(...nums);
+	return { id, show: true };
 }
