@@ -29,14 +29,14 @@ import _blue1 from './tiles/blue1.svg';
 import _blue2 from './tiles/blue2.svg';
 import _blue3 from './tiles/blue3.svg';
 import _blue4 from './tiles/blue4.svg';
-import _cat from './tiles/cat.svg';
-import _rooster from './tiles/rooster.svg';
-import _mouse from './tiles/mouse.svg';
+import _cat from './tiles/猫.svg';
+import _rooster from './tiles/公鸡.svg';
+import _mouse from './tiles/老鼠.svg';
 import _red1 from './tiles/red1.svg';
 import _red2 from './tiles/red2.svg';
 import _red3 from './tiles/red3.svg';
 import _red4 from './tiles/red4.svg';
-import _worm from './tiles/worm.svg';
+import _worm from './tiles/虫.svg';
 import _東 from './tiles/東.svg';
 import _北 from './tiles/北.svg';
 import _南 from './tiles/南.svg';
@@ -104,13 +104,13 @@ export default function getTileSrc(card: string): string {
 		case '9筒':
 			return _9筒;
 
-		case 'mouse':
+		case '老鼠':
 			return _mouse;
-		case 'cat':
+		case '猫':
 			return _cat;
-		case 'rooster':
+		case '公鸡':
 			return _rooster;
-		case 'worm':
+		case '虫':
 			return _worm;
 		case 'red1':
 			return _red1;

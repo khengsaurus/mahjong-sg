@@ -1,6 +1,6 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import React from 'react';
-import { Segments, Sizes } from '../../global/enums';
+import { Segments, Sizes, Suits } from '../../global/enums';
 import ShownTile from './ShownTile';
 
 interface Props {
@@ -52,7 +52,7 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 						tileID={tile.id}
 						tileCard={tile.card}
 						segment={segment}
-						classSuffix={tile.isValidFlower ? (tile.suit === '动物' ? 'flower animal' : 'hts flower') : ''}
+						classSuffix={tile.isVF ? (tile.suit === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
 					/>
 				);
 			})}

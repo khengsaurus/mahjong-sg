@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
+import { Animals, CardCategories, DaPai, Flowers, Suits, Winds } from '../global/enums';
 import { createJwt, findLeft, findOpp, findRight, findTwoInSorted, shuffle } from '../util/utilFns';
 import { User } from './User';
 
@@ -155,11 +156,20 @@ export class Game {
 		let tiles: ITile[] = [];
 		const oneToFour = [1, 2, 3, 4];
 		const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-		const suits = ['万', '筒', '索'];
-		const winds = ['東', '南', '西', '北'];
-		const daPai = ['红中', '白板', '发财'];
-		const animals = ['cat', 'mouse', 'rooster', 'worm'];
-		const flowers = ['red1', 'red2', 'red3', 'red4', 'blue1', 'blue2', 'blue3', 'blue4'];
+		const suits = [Suits.WAN, Suits.TONG, Suits.SUO];
+		const winds = [Winds.E, Winds.S, Winds.W, Winds.N];
+		const daPai = [DaPai.RED, DaPai.WHITE, DaPai.GREEN];
+		const animals = [Animals.CAT, Animals.MOUSE, Animals.ROOSTER, Animals.WORM];
+		const flowers = [
+			Flowers.RED1,
+			Flowers.RED2,
+			Flowers.RED3,
+			Flowers.RED4,
+			Flowers.BLUE1,
+			Flowers.BLUE2,
+			Flowers.BLUE3,
+			Flowers.BLUE4
+		];
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
@@ -168,8 +178,8 @@ export class Game {
 						suit,
 						number,
 						index,
-						isValidFlower: false,
-						id: `a${suit}${number}${index}`,
+						isVF: false,
+						id: `${CardCategories.REGULAR}${number}${suit}${index}`,
 						uuid: uuidv4(),
 						show: false
 					};
@@ -179,11 +189,11 @@ export class Game {
 			winds.forEach(pai => {
 				let tile: ITile = {
 					card: pai,
-					suit: '大牌',
+					suit: Suits.DAPAI,
 					number: 1,
 					index,
-					isValidFlower: false,
-					id: `b${pai}${index}`,
+					isVF: false,
+					id: `${CardCategories.WINDS}${pai}${index}`,
 					uuid: uuidv4(),
 					show: false
 				};
@@ -192,11 +202,11 @@ export class Game {
 			daPai.forEach(pai => {
 				let tile: ITile = {
 					card: pai,
-					suit: '大牌',
+					suit: Suits.DAPAI,
 					number: 1,
 					index,
-					isValidFlower: false,
-					id: `c${pai}${index}`,
+					isVF: false,
+					id: `${CardCategories.HBF}${pai}${index}`,
 					uuid: uuidv4(),
 					show: false
 				};
@@ -206,11 +216,11 @@ export class Game {
 		flowers.forEach(flower => {
 			let tile: ITile = {
 				card: flower,
-				suit: '花',
+				suit: Suits.FLOWER,
 				number: 1,
 				index: 1,
-				isValidFlower: false,
-				id: `y${flower}`,
+				isVF: false,
+				id: `${CardCategories.FLOWER}${flower}`,
 				uuid: uuidv4(),
 				show: false
 			};
@@ -219,11 +229,11 @@ export class Game {
 		animals.forEach(animal => {
 			let tile: ITile = {
 				card: animal,
-				suit: '动物',
+				suit: Suits.ANIMAL,
 				number: 1,
 				index: 1,
-				isValidFlower: true,
-				id: `z${animal}`,
+				isVF: true,
+				id: `${CardCategories.ANIMAL}${animal}`,
 				uuid: uuidv4(),
 				show: false
 			};
@@ -267,7 +277,7 @@ export class Game {
 					}
 				}
 			}
-			if (newTile.suit === '动物') {
+			if (newTile.suit === Suits.ANIMAL) {
 				if (
 					(this.players[playerIndex].shownTilesContainCard(`rooster`) &&
 						this.players[playerIndex].shownTilesContainCard(`worm`)) ||
@@ -277,8 +287,8 @@ export class Game {
 					this.newLog(`${this.players[playerIndex].username} drew matching animals`);
 					this.flagNext = true;
 				}
-			} else if (newTile.suit === '花' && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
-				newTile.isValidFlower = true;
+			} else if (newTile.suit === Suits.FLOWER && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
+				newTile.isVF = true;
 				if (
 					this.players[playerIndex].shownTilesContainCard(`red${newTile.card.slice(-1)}`) &&
 					this.players[playerIndex].shownTilesContainCard(`blue${newTile.card.slice(-1)}`)
@@ -287,7 +297,7 @@ export class Game {
 					this.flagNext = true;
 				}
 			}
-			if (newTile.suit === '花' || newTile.suit === '动物') {
+			if (newTile.suit === Suits.FLOWER || newTile.suit === Suits.ANIMAL) {
 				newTile.show = true;
 				receivedFlower = true;
 				flowerReceived = newTile.card;

@@ -52,14 +52,14 @@ interface IAlert {
 }
 
 interface ITile {
-	card?: string;
-	suit?: string;
-	number?: number;
 	id?: string;
+	show?: boolean;
+	isVF?: boolean;
+	card?: string;
+	suit?: Suits;
+	number?: number;
 	uuid?: string;
 	index?: number;
-	show?: boolean;
-	isValidFlower?: boolean;
 }
 
 interface ShownTiles {

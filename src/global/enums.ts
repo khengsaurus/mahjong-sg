@@ -56,6 +56,61 @@ export enum FrontBackTag {
 	BACK = 'back'
 }
 
+export enum Indexes {
+	ONE = 1,
+	TWO = 2,
+	THREE = 3,
+	FOUR = 4
+}
+
+export enum Suits {
+	WAN = '万',
+	TONG = '筒',
+	SUO = '索',
+	DAPAI = '大牌',
+	FLOWER = '花',
+	ANIMAL = '动物'
+}
+
+export enum Winds {
+	E = '東',
+	S = '南',
+	W = '西',
+	N = '北'
+}
+
+export enum DaPai {
+	RED = '红中',
+	WHITE = '白板',
+	GREEN = '发财'
+}
+
+export enum Animals {
+	CAT = '猫',
+	MOUSE = '老鼠',
+	ROOSTER = '公鸡',
+	WORM = '虫'
+}
+
+export enum Flowers {
+	RED1 = 'red1',
+	RED2 = 'red2',
+	RED3 = 'red3',
+	RED4 = 'red4',
+	BLUE1 = 'blue1',
+	BLUE2 = 'blue2',
+	BLUE3 = 'blue3',
+	BLUE4 = 'blue4'
+}
+
+export enum CardCategories {
+	REGULAR = 'a',
+	WINDS = 'b',
+	HBF = 'c',
+	FLOWER = 'y',
+	ANIMAL = 'z'
+}
+
 export enum Sizes {
 	SMALL = 'small',
 	MEDIUM = 'medium',
