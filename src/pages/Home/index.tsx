@@ -20,7 +20,7 @@ const Home = () => {
 			<StyledButton label={'New Game'} navigate={Pages.NEWGAME} />
 			<StyledButton label={'Join Game'} navigate={Pages.JOINGAME} />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
-			{/* <StyledButton label={'Sample'} navigate={Pages.SAMPLE} /> */}
+			{process.env.REACT_APP_DEV_FLAG === '1' && <StyledButton label={'Sample'} navigate={Pages.SAMPLE} />}
 			<StyledButton label={'Logout'} onClick={logout} />
 			<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			{showSettings && (

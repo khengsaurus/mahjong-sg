@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { ActionTypes, SET_CACHE, SET_PLAYER, SET_GAME } from './actions';
+import { ActionTypes, SET_GAME, SET_PLAYER } from './actions';
 
 function storeReducer(
 	state: IStore = {
@@ -14,11 +14,6 @@ function storeReducer(
 			return {
 				...state,
 				game: action.payload
-			};
-		case SET_CACHE:
-			return {
-				...state,
-				gameCache: action.payload
 			};
 		case SET_PLAYER:
 			return {
