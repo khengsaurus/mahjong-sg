@@ -6,7 +6,7 @@ export interface IPlayerComponentProps {
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
-	lastThrown?: ITile;
+	lastThrown?: IShownTile;
 	tilesSize?: Sizes;
 }
 
@@ -109,6 +109,12 @@ export enum CardCategories {
 	HBF = 'c',
 	FLOWER = 'y',
 	ANIMAL = 'z'
+}
+
+export enum MeldTypes {
+	PONG = 'p',
+	KANG = 'k',
+	CHI = 'c'
 }
 
 export enum Sizes {

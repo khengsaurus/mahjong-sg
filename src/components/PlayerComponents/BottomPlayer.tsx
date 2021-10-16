@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
 import { AppContext } from '../../util/hooks/AppContext';
 import useTiles from '../../util/hooks/useTiles';
+import { revealTile } from '../../util/utilFns';
 import DiscardedTiles from '../Tiles/DiscardedTiles';
 import { HandTile } from '../Tiles/HandTile';
 import ShownTile from '../Tiles/ShownTile';
@@ -16,7 +17,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
-	const { tilesSize, handSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const { tilesSize, handSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
 	const selectedTilesIds = selectedTiles.map(tile => {
 		return tile.id;
 	});
@@ -28,30 +29,32 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	});
 
 	const selectTile = useCallback(
-		(tile: ITile) => {
-			if (!selectedTiles.includes(tile) && selectedTiles.length < 4) {
+		(tile: IHiddenTile) => {
+			if (!selectedTiles.map(tile => tile.ref).includes(tile.ref) && selectedTiles.length < 4) {
 				setSelectedTiles([...selectedTiles, tile]);
 			} else {
-				setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.id !== tile.id));
+				setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.ref !== tile.ref));
 			}
 		},
 		[selectedTiles, setSelectedTiles]
 	);
 
 	const shownHiddenHand = useMemo(() => {
+		let revLTT = !isEmpty(lastTakenTile) ? revealTile(lastTakenTile, tileHashKey) : null;
 		return (
 			<div className="htss">
-				{hiddenTiles.map((tile: ITile) => {
-					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.BOTTOM} />;
+				{hiddenTiles.map((tile: IHiddenTile) => {
+					let revT = revealTile(tile, tileHashKey);
+					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.card} segment={Segments.BOTTOM} />;
 				})}
-				{!isEmpty(lastTakenTile) && (
+				{revLTT && (
 					<ShownTile
-						key={lastTakenTile.id}
-						tileID={lastTakenTile.id}
-						tileCard={lastTakenTile.card}
+						key={revLTT.id}
+						tileID={revLTT.id}
+						tileCard={revLTT.card}
 						segment={Segments.BOTTOM}
 						highlight
-						classSuffix="margin-left"
+						// classSuffix="margin-left"
 					/>
 				)}
 			</div>
@@ -60,26 +63,28 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	}, [hiddenCards]);
 
 	const hiddenHand = useCallback(() => {
+		let revLTT = !isEmpty(lastTakenTile) ? revealTile(lastTakenTile, tileHashKey) : null;
 		return (
 			<div className={`self-hidden-tiles-${handSize || Sizes.MEDIUM}`}>
-				{hiddenTiles.map((tile: ITile) => {
+				{hiddenTiles.map((tile: IHiddenTile) => {
+					let revealedTile = revealTile(tile, tileHashKey);
 					return (
 						<HandTile
-							key={tile.uuid}
-							card={tile.card}
-							selected={selectedTiles.includes(tile)}
+							key={revealedTile.id}
+							card={revealedTile.card}
+							selected={selectedTiles.includes(revealedTile)}
 							last={false}
-							callback={() => selectTile(tile)}
+							callback={() => selectTile(revealedTile)}
 						/>
 					);
 				})}
-				{!isEmpty(lastTakenTile) && (
+				{revLTT && (
 					<HandTile
-						key={lastTakenTile.uuid}
-						card={lastTakenTile.card}
-						selected={selectedTiles.includes(lastTakenTile)}
+						key={revLTT.id}
+						card={revLTT.card}
+						selected={selectedTiles.includes(revLTT)}
 						last={true}
-						callback={() => selectTile(lastTakenTile)}
+						callback={() => selectTile(revLTT)}
 					/>
 				)}
 			</div>

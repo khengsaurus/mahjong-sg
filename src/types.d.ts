@@ -37,7 +37,7 @@ interface IAction {
 	username: string;
 	action: Actions;
 	huStatus: number[];
-	tile: ITile[];
+	tile: IShownTile[] | IHiddenTile[];
 	sentToUsername: string;
 	amount: Amounts;
 }
@@ -51,20 +51,24 @@ interface IAlert {
 	msg: string;
 }
 
-interface ITile {
+interface IShownTile {
 	id?: string;
-	show?: boolean;
-	isVF?: boolean;
+	ref?: number;
+	v?: boolean;
 	card?: string;
 	suit?: Suits;
-	number?: number;
-	uuid?: string;
-	index?: number;
+	num?: number;
+	ix?: number;
+}
+
+interface IHiddenTile {
+	id?: string;
+	ref?: number;
 }
 
 interface ShownTiles {
-	flowers?: ITile[];
-	nonFlowers?: ITile[];
+	flowers?: IShownTile[];
+	nonFlowers?: IShownTile[];
 	flowerIds?: string[];
 	nonFlowerIds?: string[];
 }

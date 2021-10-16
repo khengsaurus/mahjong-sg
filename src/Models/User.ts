@@ -1,5 +1,5 @@
 import isEmpty from 'lodash.isempty';
-import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
+import { BackgroundColors, MeldTypes, Sizes, TableColors, TileColors } from '../global/enums';
 import { indexOfCard, sortTiles } from '../util/utilFns';
 
 export class User {
@@ -13,11 +13,11 @@ export class User {
 	backgroundColor: BackgroundColors;
 	tableColor: TableColors;
 	tileBackColor: TileColors;
-	shownTiles?: ITile[];
+	shownTiles?: IShownTile[];
 	melds?: string[];
-	hiddenTiles?: ITile[];
-	discardedTiles?: ITile[];
-	lastTakenTile?: ITile;
+	hiddenTiles?: IHiddenTile[];
+	discardedTiles?: IShownTile[];
+	lastTakenTile?: IHiddenTile;
 	unusedTiles?: number;
 	// pongs?: string[];
 	balance?: number;
@@ -34,11 +34,11 @@ export class User {
 		backgroundColor?: BackgroundColors,
 		tableColor?: TableColors,
 		tileBackColor?: TileColors,
-		shownTiles?: ITile[],
+		shownTiles?: IShownTile[],
 		melds?: string[],
-		hiddenTiles?: ITile[],
-		discardedTiles?: ITile[],
-		lastTakenTile?: ITile,
+		hiddenTiles?: IHiddenTile[],
+		discardedTiles?: IShownTile[],
+		lastTakenTile?: IShownTile,
 		unusedTiles?: number,
 		balance?: number,
 		showTiles?: boolean
@@ -70,13 +70,8 @@ export class User {
 		return randInt1 + randInt2 + randInt3;
 	}
 
-	draw(tiles: ITile[]): ITile[] {
+	draw(tiles: IHiddenTile[]): IHiddenTile[] {
 		this.hiddenTiles.push(tiles.pop());
-		return tiles;
-	}
-
-	buHua(tiles: ITile[]): ITile[] {
-		this.hiddenTiles.push(tiles.shift());
 		return tiles;
 	}
 
@@ -102,27 +97,27 @@ export class User {
 		return this.hiddenTiles.length + (isEmpty(this.lastTakenTile) ? 0 : 1);
 	}
 
-	allHiddenTiles(): ITile[] {
+	allHiddenTiles(): IHiddenTile[] {
 		return isEmpty(this.lastTakenTile) ? this.hiddenTiles : [...this.hiddenTiles, this.lastTakenTile];
 	}
 
 	/* ----------------------------------- Take options ----------------------------------- */
-	canChi(tiles: ITile[]): boolean {
+	canChi(tiles: IShownTile[]): boolean {
 		if (
 			tiles.length === 3 &&
 			tiles[0].suit === tiles[1].suit &&
 			tiles[1].suit === tiles[2].suit &&
-			tiles[2].number - 1 === tiles[1].number &&
-			tiles[1].number - 1 === tiles[0].number
+			tiles[2].num - 1 === tiles[1].num &&
+			tiles[1].num - 1 === tiles[0].num
 		) {
 			return true;
 		}
 		return false;
 	}
-	canPong(tiles: ITile[]): boolean {
+	canPong(tiles: IShownTile[]): boolean {
 		return tiles.length === 3 && tiles.every(tile => tile.card === tiles[0].card) ? true : false;
 	}
-	canKang(tiles: ITile[]): boolean {
+	canKang(tiles: IShownTile[]): boolean {
 		if (tiles.length === 1 && this.hasPong(tiles[0].card)) {
 			return true;
 		} else if (tiles.length === 4) {
@@ -133,7 +128,7 @@ export class User {
 	}
 
 	/* ----------------------------------- Handle last taken tile ----------------------------------- */
-	putNewITilentoHidden() {
+	putNewTileIntoHidden() {
 		if (!isEmpty(this.lastTakenTile) && !this.hiddenTilesContain(this.lastTakenTile)) {
 			this.addToHidden(this.lastTakenTile);
 		}
@@ -141,52 +136,45 @@ export class User {
 	}
 
 	setHiddenTiles() {
-		this.putNewITilentoHidden();
+		this.putNewTileIntoHidden();
 		this.sortHiddenTiles();
 	}
 
-	getNewTile(t: ITile) {
-		this.putNewITilentoHidden();
+	getNewTile(t: IHiddenTile) {
+		this.putNewTileIntoHidden();
 		this.lastTakenTile = t;
 	}
 
-	returnNewTile(): ITile {
+	returnNewTile(): IShownTile {
 		let t = !isEmpty(this.lastTakenTile) ? null : this.lastTakenTile;
 		this.lastTakenTile = {};
 		return t;
 	}
 
 	/* ----------------------------------- Contains ----------------------------------- */
-	allHiddenTilesContain(t: ITile): boolean {
+	allHiddenTilesContain(t: IShownTile | IHiddenTile): boolean {
 		return (!isEmpty(this.lastTakenTile) ? [...this.hiddenTiles, this.lastTakenTile] : this.hiddenTiles)
-			.map(tile => tile.id)
-			.includes(t.id);
+			.map(tile => tile.ref)
+			.includes(t.ref);
 	}
-	hiddenTilesContain(t: ITile): boolean {
-		return this.hiddenTiles?.map(tile => tile.id).includes(t.id);
+	hiddenTilesContain(t: IShownTile | IHiddenTile): boolean {
+		return this.hiddenTiles?.map(tile => tile.ref).includes(t.ref);
 	}
-	shownTilesContain(t: ITile): boolean {
-		return this.shownTiles?.map(tile => tile.id).includes(t.id);
+	shownTilesContain(t: IShownTile | IHiddenTile): boolean {
+		return this.shownTiles?.map(tile => tile.ref).includes(t.ref);
 	}
-	shownTilesContainCard(card: string): boolean {
-		return this.shownTiles?.map(tile => tile.card).includes(card);
+	discardedTilesContain(t: IShownTile | IHiddenTile): boolean {
+		return this.discardedTiles?.map(tile => tile.ref).includes(t.ref);
 	}
-	discardedTilesContain(t: ITile): boolean {
-		return this.discardedTiles?.map(tile => tile.id).includes(t.id);
-	}
-	lastTakenTileUUID(): string {
-		let all = this.allHiddenTiles();
-		return all.length > 0 ? all[all.length - 1].uuid : '';
-	}
-	lastDiscardedTileUUID(): string {
-		return this.discardedTiles.length > 0 ? this.discardedTiles.slice(-1)[0].uuid : '';
-	}
-	lastDiscardedTileIs(t: ITile): boolean {
+	lastDiscardedTileIs(t: IShownTile | IHiddenTile): boolean {
 		if (isEmpty(t) || this.discardedTiles.length === 0) {
 			return false;
 		} else {
-			return this.discardedTiles.slice(-1)[0].id === t.id;
+			return this.discardedTiles.slice(-1)[0].ref === t.ref;
 		}
+	}
+	shownTilesContainCard(card: string): boolean {
+		return this.shownTiles?.map(tile => tile.card).includes(card);
 	}
 
 	/* ----------------------------------- Add meld ----------------------------------- */
@@ -201,19 +189,19 @@ export class User {
 		});
 	}
 	hasPong(card: string) {
-		return this.containsMeld(card, 'p');
+		return this.containsMeld(card, MeldTypes.PONG);
 	}
 	updatePongToKang(card: string) {
-		let repr = `p-${card}`;
+		let repr = `${MeldTypes.PONG}-${card}`;
 		let i = this.melds.indexOf(repr);
 		if (i !== -1) {
-			this.melds[i] = `k-${card}`;
+			this.melds[i] = `${MeldTypes.KANG}-${card}`;
 		}
 	}
 
 	/* ----------------------------------- Add ----------------------------------- */
-	addToHidden(t: ITile): void;
-	addToHidden(t: ITile[]): void;
+	addToHidden(t: IHiddenTile): void;
+	addToHidden(t: IHiddenTile[]): void;
 	addToHidden(t: any) {
 		if (!t.length) {
 			this.hiddenTiles = [...this.hiddenTiles, t];
@@ -222,8 +210,8 @@ export class User {
 		}
 	}
 
-	addToShown(t: ITile, index?: number): void;
-	addToShown(t: ITile[]): void;
+	addToShown(t: IShownTile, index?: number): void;
+	addToShown(t: IShownTile[]): void;
 	addToShown(t: any, index?: number) {
 		if (!t.length) {
 			if (index) {
@@ -235,13 +223,13 @@ export class User {
 			}
 		} else {
 			this.shownTiles = [...t, ...this.shownTiles];
-			let type = this.canKang(t) ? 'k' : this.canPong(t) ? 'p' : 'c';
+			let type = this.canKang(t) ? MeldTypes.KANG : this.canPong(t) ? MeldTypes.PONG : MeldTypes.CHI;
 			this.addMeld(t[1].card, type);
 		}
 	}
 
-	addToDiscarded(t: ITile): void;
-	addToDiscarded(t: ITile[]): void;
+	addToDiscarded(t: IShownTile): void;
+	addToDiscarded(t: IShownTile[]): void;
 	addToDiscarded(t: any) {
 		if (!t.length) {
 			this.discardedTiles = [...this.discardedTiles, t];
@@ -251,11 +239,11 @@ export class User {
 	}
 
 	/* ----------------------------------- Remove ----------------------------------- */
-	removeFromHidden(t: ITile): void;
-	removeFromHidden(t: ITile[]): void;
+	removeFromHidden(t: IHiddenTile | IShownTile): void;
+	removeFromHidden(t: IHiddenTile[] | IShownTile[]): void;
 	removeFromHidden(t: any) {
 		let toRemove: string[] = t.length
-			? t.map((tile: ITile) => {
+			? t.map((tile: IHiddenTile) => {
 					return tile.id;
 			  })
 			: [t.id];
@@ -265,64 +253,41 @@ export class User {
 		this.hiddenTiles = this.hiddenTiles.filter(tile => !toRemove.includes(tile.id));
 	}
 
-	removeFromShown(t: ITile): void;
-	removeFromShown(t: ITile[]): void;
+	removeFromShown(t: IShownTile): void;
+	removeFromShown(t: IShownTile[]): void;
 	removeFromShown(t: any) {
 		let toRemove: string[] = t.length
-			? t.map((tile: ITile) => {
-					return tile.id;
+			? t.map((tile: IShownTile) => {
+					return tile.ref;
 			  })
-			: [t.id];
+			: [t.ref];
 		this.shownTiles = this.shownTiles.filter(tile => !toRemove.includes(tile.id));
 	}
 
-	removeFromDiscarded(t: ITile): void;
-	removeFromDiscarded(t: ITile[]): void;
+	removeFromDiscarded(t: IShownTile): void;
+	removeFromDiscarded(t: IShownTile[]): void;
 	removeFromDiscarded(t: any) {
 		let toRemove: string[] = t.length
-			? t.map((tile: ITile) => {
-					return tile.id;
+			? t.map((tile: IShownTile) => {
+					return tile.ref;
 			  })
-			: [t.id];
+			: [t.ref];
 		this.discardedTiles = this.discardedTiles.filter(tile => !toRemove.includes(tile.id));
 	}
 
 	/* ----------------------------------- Take ----------------------------------- */
-	discard(tileToThrow: ITile): ITile {
-		this.putNewITilentoHidden();
-		this.removeFromHidden(tileToThrow);
-		this.addToDiscarded(tileToThrow);
-		return tileToThrow;
+	discard(tile: IShownTile): IShownTile {
+		this.putNewTileIntoHidden();
+		this.removeFromHidden(tile);
+		this.addToDiscarded(tile);
+		return tile;
 	}
-	moveIntoShown(tiles: ITile[]) {
+	moveIntoShown(tiles: IShownTile[]) {
 		this.removeFromHidden(tiles);
 		this.addToShown(tiles);
-		// this.pongs = [...this.pongs, tiles[0].card];
 	}
-	selfKang(toKang: ITile) {
-		this.removeFromHidden(toKang);
-		this.addToShown(toKang, indexOfCard(toKang, this.shownTiles));
-	}
-
-	/* ----------------------------------- Hu: show/hide tiles ----------------------------------- */
-
-	showTilesHu(lastThrown?: ITile) {
-		this.shownTiles = lastThrown
-			? [...this.shownTiles, ...this.hiddenTiles, lastThrown]
-			: [...this.shownTiles, ...this.hiddenTiles];
-		this.hiddenTiles = [];
-	}
-
-	hideTilesHu(lastThrown?: ITile) {
-		this.hiddenTiles = this.shownTiles.filter((tile: ITile) => {
-			return tile.show === false && lastThrown?.id !== tile.id;
-		});
-		this.shownTiles = this.shownTiles.filter((tile: ITile) => {
-			return tile.show === true && lastThrown?.id !== tile.id;
-		});
-		if (!lastThrown) {
-			// TODO:
-			// console.log('Zimo ??');
-		}
+	selfKang(tile: IShownTile) {
+		this.removeFromHidden(tile);
+		this.addToShown(tile, indexOfCard(tile, this.shownTiles));
 	}
 }

@@ -4,8 +4,8 @@ import { Segments, Sizes, Suits } from '../../global/enums';
 import ShownTile from './ShownTile';
 
 interface Props {
-	nonFlowers: ITile[];
-	flowers: ITile[];
+	nonFlowers: IShownTile[];
+	flowers: IShownTile[];
 	flowerIds: string[];
 	nonFlowerIds: string[];
 	segment: Segments;
@@ -52,7 +52,7 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 						tileID={tile.id}
 						tileCard={tile.card}
 						segment={segment}
-						classSuffix={tile.isVF ? (tile.suit === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
+						classSuffix={tile.v ? (tile.suit === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
 					/>
 				);
 			})}

@@ -1,7 +1,15 @@
 import { isEmpty } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
 import { Animals, CardCategories, DaPai, Flowers, Suits, Winds } from '../global/enums';
-import { createJwt, findLeft, findOpp, findRight, findTwoInSorted, shuffle } from '../util/utilFns';
+import {
+	findLeft,
+	findOpp,
+	findRight,
+	findTwoInSorted,
+	getTileHashKey,
+	hashTileId,
+	revealTile,
+	shuffle
+} from '../util/utilFns';
 import { User } from './User';
 
 export class Game {
@@ -22,10 +30,10 @@ export class Game {
 	whoseMove?: number;
 	playerIds?: string[];
 	players?: User[];
-	tiles?: ITile[];
+	tiles?: IHiddenTile[];
 	frontTiles?: number;
 	backTiles?: number;
-	lastThrown?: ITile;
+	lastThrown?: IShownTile;
 	thrownBy?: number;
 	thrownTile?: boolean;
 	takenTile?: boolean;
@@ -34,6 +42,11 @@ export class Game {
 	hu?: number[];
 	draw?: boolean;
 	logs?: ILog[];
+	// Constants
+	dHTs?: number;
+	nDHTs?: number;
+	dTs?: number;
+	nDTs?: number;
 
 	constructor(
 		id: string,
@@ -53,10 +66,10 @@ export class Game {
 		whoseMove?: number,
 		playerIds?: string[],
 		players?: User[],
-		tiles?: ITile[],
+		tiles?: IHiddenTile[],
 		frontTiles?: number,
 		backTiles?: number,
-		lastThrown?: ITile,
+		lastThrown?: IShownTile,
 		thrownBy?: number,
 		thrownTile?: boolean,
 		takenTile?: boolean,
@@ -95,6 +108,11 @@ export class Game {
 		this.hu = hu;
 		this.draw = draw;
 		this.logs = logs;
+		// Constants
+		this.dHTs = 38;
+		this.nDHTs = 36;
+		this.dTs = 14;
+		this.nDTs = 13;
 	}
 
 	/*---------------------------------------- Actions ----------------------------------------*/
@@ -147,13 +165,9 @@ export class Game {
 		}
 	}
 
-	createHashedTilesRef(tiles: ITile[]): string {
-		let cards = tiles.map(tile => tile.id);
-		return createJwt(cards, `${this.id}-${this.stage}`);
-	}
-
-	generateShuffledTiles(): ITile[] {
-		let tiles: ITile[] = [];
+	generateHiddenTiles(): IHiddenTile[] {
+		let tiles: IHiddenTile[] = [];
+		let tileHashKey = getTileHashKey(this.id, this.stage);
 		const oneToFour = [1, 2, 3, 4];
 		const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 		const suits = [Suits.WAN, Suits.TONG, Suits.SUO];
@@ -173,79 +187,46 @@ export class Game {
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
-					let tile: ITile = {
-						card: `${number}${suit}`,
-						suit,
-						number,
-						index,
-						isVF: false,
-						id: `${CardCategories.REGULAR}${number}${suit}${index}`,
-						uuid: uuidv4(),
-						show: false
+					let tile: IHiddenTile = {
+						id: hashTileId(`${CardCategories.REGULAR}${number}${suit}${index}`, tileHashKey)
 					};
 					tiles.push(tile);
 				});
 			});
 			winds.forEach(pai => {
-				let tile: ITile = {
-					card: pai,
-					suit: Suits.DAPAI,
-					number: 1,
-					index,
-					isVF: false,
-					id: `${CardCategories.WINDS}${pai}${index}`,
-					uuid: uuidv4(),
-					show: false
+				let tile: IHiddenTile = {
+					id: hashTileId(`${CardCategories.WINDS}${pai}${index}`, tileHashKey)
 				};
 				tiles.push(tile);
 			});
 			daPai.forEach(pai => {
-				let tile: ITile = {
-					card: pai,
-					suit: Suits.DAPAI,
-					number: 1,
-					index,
-					isVF: false,
-					id: `${CardCategories.HBF}${pai}${index}`,
-					uuid: uuidv4(),
-					show: false
+				let tile: IHiddenTile = {
+					id: hashTileId(`${CardCategories.HBF}${pai}${index}`, tileHashKey)
 				};
 				tiles.push(tile);
 			});
 		});
 		flowers.forEach(flower => {
-			let tile: ITile = {
-				card: flower,
-				suit: Suits.FLOWER,
-				number: 1,
-				index: 1,
-				isVF: false,
-				id: `${CardCategories.FLOWER}${flower}`,
-				uuid: uuidv4(),
-				show: false
+			let tile: IHiddenTile = {
+				id: hashTileId(`${CardCategories.FLOWER}${flower}`, tileHashKey)
 			};
 			tiles.push(tile);
 		});
 		animals.forEach(animal => {
-			let tile: ITile = {
-				card: animal,
-				suit: Suits.ANIMAL,
-				number: 1,
-				index: 1,
-				isVF: true,
-				id: `${CardCategories.ANIMAL}${animal}`,
-				uuid: uuidv4(),
-				show: false
+			let tile: IHiddenTile = {
+				id: hashTileId(`${CardCategories.ANIMAL}${animal}`, tileHashKey)
 			};
 			tiles.push(tile);
 		});
 		this.newLog(`Generated ${tiles.length} tiles`);
-		return shuffle(tiles);
+		return tiles;
 	}
 
-	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): ITile {
+	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): IHiddenTile {
 		let player = this.players[playerIndex];
-		let newTile: ITile;
+		let hiddenTile: IHiddenTile;
+		let revealedTile: IShownTile;
+		let tileHashKey: number;
 		let receivedFlower: boolean = false;
 		let log = `${player.username} ${buHua ? `bu hua, ` : ``} received `;
 		let flowerReceived = '';
@@ -255,7 +236,7 @@ export class Game {
 		}
 		for (let i: number = 0; i < n; i++) {
 			if (buHua) {
-				newTile = this.tiles.shift();
+				hiddenTile = this.tiles.shift();
 				// Logic to update shortening stack of back(hua) tiles
 				if (offsetUnused) {
 					if (this.players[this.backTiles].unusedTiles === 1) {
@@ -266,7 +247,7 @@ export class Game {
 					}
 				}
 			} else {
-				newTile = this.tiles.pop();
+				hiddenTile = this.tiles.pop();
 				// Logic to update shortening stack of front tiles
 				if (offsetUnused) {
 					if (this.players[this.frontTiles].unusedTiles === 1) {
@@ -277,7 +258,9 @@ export class Game {
 					}
 				}
 			}
-			if (newTile.suit === Suits.ANIMAL) {
+			tileHashKey = getTileHashKey(this.id, this.stage);
+			revealedTile = revealTile(hiddenTile, tileHashKey);
+			if (revealedTile.suit === Suits.ANIMAL) {
 				if (
 					(this.players[playerIndex].shownTilesContainCard(`rooster`) &&
 						this.players[playerIndex].shownTilesContainCard(`worm`)) ||
@@ -287,25 +270,25 @@ export class Game {
 					this.newLog(`${this.players[playerIndex].username} drew matching animals`);
 					this.flagNext = true;
 				}
-			} else if (newTile.suit === Suits.FLOWER && parseInt(newTile.card.slice(-1)) === playerIndex + 1) {
-				newTile.isVF = true;
+			} else if (
+				revealedTile.suit === Suits.FLOWER &&
+				parseInt(revealedTile.card.slice(-1)) === playerIndex + 1
+			) {
 				if (
-					this.players[playerIndex].shownTilesContainCard(`red${newTile.card.slice(-1)}`) &&
-					this.players[playerIndex].shownTilesContainCard(`blue${newTile.card.slice(-1)}`)
+					this.players[playerIndex].shownTilesContainCard(`red${revealedTile.card.slice(-1)}`) &&
+					this.players[playerIndex].shownTilesContainCard(`blue${revealedTile.card.slice(-1)}`)
 				) {
 					this.newLog(`${this.players[playerIndex].username} drew both his/her flowers`);
 					this.flagNext = true;
 				}
 			}
-			if (newTile.suit === Suits.FLOWER || newTile.suit === Suits.ANIMAL) {
-				newTile.show = true;
+			if (revealedTile.suit === Suits.FLOWER || revealedTile.suit === Suits.ANIMAL) {
 				receivedFlower = true;
-				flowerReceived = newTile.card;
-				flowersReceived += ` ${newTile.card}`;
-				player.shownTiles = [...player.shownTiles, newTile];
+				flowerReceived = revealedTile.card;
+				flowersReceived += ` ${revealedTile.card}`;
+				player.shownTiles = [...player.shownTiles, hiddenTile];
 			} else {
-				// player.hiddenTiles = [...player.hiddenTiles, newTile];
-				player.getNewTile(newTile);
+				player.getNewTile(hiddenTile);
 			}
 		}
 		if (n === 1 && receivedFlower) {
@@ -317,7 +300,7 @@ export class Game {
 			}
 		}
 		this.newLog(log);
-		return newTile;
+		return hiddenTile;
 	}
 
 	//TODO: optimise
@@ -331,7 +314,7 @@ export class Game {
 		let toBeDealtByLeft: number;
 		let toBeDealtByRight: number;
 		let toBeDealtByOpp: number;
-
+		let initDealtTiles = this.dTs + 3 * this.nDTs;
 		let rolled = dealer.rollDice();
 		this.newLog(`${dealer.username} rolled: ${rolled}`);
 
@@ -340,85 +323,85 @@ export class Game {
 			case 0: // deal from left
 				this.newLog(`Dealing from ${this.players[findLeft(this.dealer)].username}`);
 				this.backTiles = findLeft(this.dealer);
-				toBeDealtByLeft = 36 - 2 * rolled;
+				toBeDealtByLeft = this.nDHTs - 2 * rolled;
 				leftPlayer.unusedTiles = 2 * rolled;
-				toBeDealtByOpp = 53 - toBeDealtByLeft;
-				if (toBeDealtByOpp > 38) {
+				toBeDealtByOpp = initDealtTiles - toBeDealtByLeft;
+				if (toBeDealtByOpp > this.dHTs) {
 					oppPlayer.unusedTiles = 0;
-					toBeDealtByRight = toBeDealtByOpp - 38;
-					rightPlayer.unusedTiles = 36 - toBeDealtByRight;
+					toBeDealtByRight = toBeDealtByOpp - this.dHTs;
+					rightPlayer.unusedTiles = this.nDHTs - toBeDealtByRight;
 					this.frontTiles = findRight(this.dealer);
 				} else {
-					oppPlayer.unusedTiles = 38 - toBeDealtByOpp;
-					rightPlayer.unusedTiles = 36;
+					oppPlayer.unusedTiles = this.dHTs - toBeDealtByOpp;
+					rightPlayer.unusedTiles = this.nDHTs;
 					this.frontTiles = findOpp(this.dealer);
 				}
-				dealer.unusedTiles = 38;
+				dealer.unusedTiles = this.dHTs;
 				break;
 			case 1: // deal from dealer
 				this.newLog(`Dealing from ${this.players[this.dealer].username}`);
 				this.backTiles = this.dealer;
-				toBeDealtByDealer = 38 - 2 * rolled;
+				toBeDealtByDealer = this.dHTs - 2 * rolled;
 				dealer.unusedTiles = 2 * rolled;
-				toBeDealtByLeft = 53 - toBeDealtByDealer;
-				if (toBeDealtByLeft > 36) {
+				toBeDealtByLeft = initDealtTiles - toBeDealtByDealer;
+				if (toBeDealtByLeft > this.nDHTs) {
 					leftPlayer.unusedTiles = 0;
-					toBeDealtByOpp = toBeDealtByLeft - 36;
-					oppPlayer.unusedTiles = 38 - toBeDealtByOpp;
+					toBeDealtByOpp = toBeDealtByLeft - this.nDHTs;
+					oppPlayer.unusedTiles = this.dHTs - toBeDealtByOpp;
 					this.frontTiles = findOpp(this.dealer);
 				} else {
-					leftPlayer.unusedTiles = 36 - toBeDealtByLeft;
-					oppPlayer.unusedTiles = 38;
+					leftPlayer.unusedTiles = this.nDHTs - toBeDealtByLeft;
+					oppPlayer.unusedTiles = this.dHTs;
 					this.frontTiles = findLeft(this.dealer);
 				}
-				rightPlayer.unusedTiles = 36;
+				rightPlayer.unusedTiles = this.nDHTs;
 				break;
 			case 2: // deal from right
 				this.newLog(`Dealing from ${this.players[findRight(this.dealer)].username}`);
 				this.backTiles = findRight(this.dealer);
-				toBeDealtByRight = 36 - 2 * rolled;
+				toBeDealtByRight = this.nDHTs - 2 * rolled;
 				rightPlayer.unusedTiles = 2 * rolled;
-				toBeDealtByDealer = 53 - toBeDealtByRight;
-				if (toBeDealtByDealer > 38) {
+				toBeDealtByDealer = initDealtTiles - toBeDealtByRight;
+				if (toBeDealtByDealer > this.dHTs) {
 					dealer.unusedTiles = 0;
-					toBeDealtByLeft = toBeDealtByDealer - 38;
-					leftPlayer.unusedTiles = 36 - toBeDealtByLeft;
+					toBeDealtByLeft = toBeDealtByDealer - this.dHTs;
+					leftPlayer.unusedTiles = this.nDHTs - toBeDealtByLeft;
 					this.frontTiles = findLeft(this.dealer);
 				} else {
-					dealer.unusedTiles = 38 - toBeDealtByDealer;
-					leftPlayer.unusedTiles = 36;
+					dealer.unusedTiles = this.dHTs - toBeDealtByDealer;
+					leftPlayer.unusedTiles = this.nDHTs;
 					this.frontTiles = this.dealer;
 				}
-				oppPlayer.unusedTiles = 38;
+				oppPlayer.unusedTiles = this.dHTs;
 				break;
 			case 3: // deal from opposite
 				this.newLog(`Dealing from ${this.players[findOpp(this.dealer)].username}`);
 				this.backTiles = findOpp(this.dealer);
 				oppPlayer.unusedTiles = 2 * rolled;
-				toBeDealtByOpp = 38 - 2 * rolled;
-				toBeDealtByRight = 53 - toBeDealtByOpp;
-				if (toBeDealtByRight > 36) {
+				toBeDealtByOpp = this.dHTs - 2 * rolled;
+				toBeDealtByRight = initDealtTiles - toBeDealtByOpp;
+				if (toBeDealtByRight > this.nDHTs) {
 					rightPlayer.unusedTiles = 0;
-					toBeDealtByDealer = toBeDealtByRight - 36;
-					dealer.unusedTiles = 38 - toBeDealtByDealer;
+					toBeDealtByDealer = toBeDealtByRight - this.nDHTs;
+					dealer.unusedTiles = this.dHTs - toBeDealtByDealer;
 					this.frontTiles = this.dealer;
 				} else {
-					rightPlayer.unusedTiles = 36 - toBeDealtByRight;
-					dealer.unusedTiles = 38;
+					rightPlayer.unusedTiles = this.nDHTs - toBeDealtByRight;
+					dealer.unusedTiles = this.dHTs;
 					this.frontTiles = findRight(this.dealer);
 				}
-				leftPlayer.unusedTiles = 36;
+				leftPlayer.unusedTiles = this.nDHTs;
 				break;
 		}
-		this.giveTiles(14, this.dealer, false, false);
-		this.giveTiles(13, findRight(this.dealer), false, false);
-		this.giveTiles(13, findOpp(this.dealer), false, false);
-		this.giveTiles(13, findLeft(this.dealer), false, false);
+		this.giveTiles(this.dTs, this.dealer, false, false);
+		this.giveTiles(this.nDTs, findRight(this.dealer), false, false);
+		this.giveTiles(this.nDTs, findOpp(this.dealer), false, false);
+		this.giveTiles(this.nDTs, findLeft(this.dealer), false, false);
 		while (
-			this.players[this.dealer].countAllHiddenTiles() < 14 ||
-			this.players[findRight(this.dealer)].countAllHiddenTiles() < 13 ||
-			this.players[findOpp(this.dealer)].countAllHiddenTiles() < 13 ||
-			this.players[findLeft(this.dealer)].countAllHiddenTiles() < 13
+			this.players[this.dealer].countAllHiddenTiles() < this.dTs ||
+			this.players[findRight(this.dealer)].countAllHiddenTiles() < this.nDTs ||
+			this.players[findOpp(this.dealer)].countAllHiddenTiles() < this.nDTs ||
+			this.players[findLeft(this.dealer)].countAllHiddenTiles() < this.nDTs
 		) {
 			this.buHua();
 		}
@@ -435,13 +418,13 @@ export class Game {
 	}
 
 	buHua() {
-		if (this.players[this.dealer].countAllHiddenTiles() < 14) {
-			this.giveTiles(14 - this.players[this.dealer].countAllHiddenTiles(), this.dealer, true, true);
+		if (this.players[this.dealer].countAllHiddenTiles() < this.dTs) {
+			this.giveTiles(this.dTs - this.players[this.dealer].countAllHiddenTiles(), this.dealer, true, true);
 		}
 		let others: number[] = [findRight(this.dealer), findOpp(this.dealer), findLeft(this.dealer)];
 		others.forEach((n: number) => {
-			if (this.players[n].countAllHiddenTiles() < 13) {
-				this.giveTiles(13 - this.players[n].countAllHiddenTiles(), n, true, true);
+			if (this.players[n].countAllHiddenTiles() < this.nDTs) {
+				this.giveTiles(this.nDTs - this.players[n].countAllHiddenTiles(), n, true, true);
 			}
 		});
 	}
@@ -521,8 +504,13 @@ export class Game {
 		}
 		this.newLog(`Starting round ${this.stage}${this.prev === this.stage ? ` 连` : ``}`);
 		this.prepForNewRound();
-		let generatedTiles = this.generateShuffledTiles();
-		this.tiles = generatedTiles;
+
+		let hiddenTiles = this.generateHiddenTiles();
+		let shuffledTiles = shuffle(hiddenTiles);
+		for (let i = 0; i < shuffledTiles.length; i++) {
+			shuffledTiles[i].ref = i;
+		}
+		this.tiles = shuffledTiles;
 		this.distributeTiles();
 		this.newLog(`${this.players[this.dealer].username}'s turn - to throw`);
 	}
@@ -553,7 +541,7 @@ export class Game {
 		}
 	}
 
-	tileThrown(tile: ITile, player: number) {
+	tileThrown(tile: IShownTile, player: number) {
 		this.lastThrown = tile;
 		this.thrownBy = player;
 		this.thrownTile = true;

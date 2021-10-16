@@ -1,8 +1,10 @@
 import isEmpty from 'lodash.isempty';
-import React, { useMemo, useRef } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import { FrontBackTag, IPlayerComponentProps, Segments, Sizes } from '../../global/enums';
+import { AppContext } from '../../util/hooks/AppContext';
 import useTiles from '../../util/hooks/useTiles';
 import { useDynamicWidth } from '../../util/hooks/useWindowSize';
+import { revealTile } from '../../util/utilFns';
 import DiscardedTiles from '../Tiles/DiscardedTiles';
 import HiddenHand from '../Tiles/HiddenHand';
 import ShownTile from '../Tiles/ShownTile';
@@ -11,11 +13,12 @@ import UnusedTiles from '../Tiles/UnusedTiles';
 import './playerComponents.scss';
 
 const LeftPlayer = (props: IPlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown, tilesSize } = props;
+	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hiddenTiles, shownTiles, melds, discardedTiles, lastTakenTile, unusedTiles, showTiles } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
+	const { tilesSize, tileHashKey } = useContext(AppContext);
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		shownTiles,
 		melds,
@@ -39,18 +42,20 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	});
 
 	const shownHiddenHand = useMemo(() => {
+		let revLTT = !isEmpty(lastTakenTile) ? revealTile(lastTakenTile, tileHashKey) : null;
 		return (
 			<div className="vtss left" ref={shownHiddenHandRef}>
 				{hiddenTiles.map(tile => {
-					return <ShownTile key={tile.id} tileID={tile.id} tileCard={tile.card} segment={Segments.LEFT} />;
+					let revT = revealTile(tile, tileHashKey);
+					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.card} segment={Segments.LEFT} />;
 				})}
-				{!isEmpty(lastTakenTile) && (
+				{revLTT && (
 					<ShownTile
-						key={lastTakenTile.id}
-						tileID={lastTakenTile.id}
-						tileCard={lastTakenTile.card}
+						key={revLTT.id}
+						tileID={revLTT.id}
+						tileCard={revLTT.card}
 						segment={Segments.LEFT}
-						classSuffix="margin-bottom"
+						// classSuffix="margin-bottom"
 						highlight
 					/>
 				)}

@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { rotateShownTiles, sortShownTiles } from '../utilFns';
 
 interface Args {
-	shownTiles: ITile[];
+	shownTiles: IShownTile[];
 	melds: string[];
-	allHiddenTiles: ITile[];
+	allHiddenTiles: IHiddenTile[];
 	toRotate?: boolean;
 }
 
@@ -27,7 +27,7 @@ const useTiles = (args: Args) => {
 	}, [nonFlowerIds.length]);
 
 	const hiddenCards = useMemo(() => {
-		return allHiddenTiles.map(tile => tile.uuid);
+		return allHiddenTiles.map(tile => tile.id);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [allHiddenTiles.length]);
 

@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import moment from 'moment';
-import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
+import { BackgroundColors, CardCategories, Sizes, Suits, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 
@@ -205,11 +205,11 @@ export function generateNumberArray(n: number) {
 	return unusedTiles;
 }
 
-export function sortTiles(tiles: ITile[]): ITile[] {
+export function sortTiles(tiles: IShownTile[]): IShownTile[] {
 	return tiles.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 }
 
-export function indexOfCard(tile: ITile, tiles: ITile[]) {
+export function indexOfCard(tile: IShownTile, tiles: IShownTile[]) {
 	for (var i = 0; i < tiles.length; i++) {
 		if (tiles[i].card === tile.card) {
 			return i;
@@ -253,16 +253,17 @@ export function validateEmail(email: string) {
 	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
-export function sortShownTiles(tiles: ITile[]): ShownTiles {
-	const flowers: ITile[] = tiles.filter(tile => tile.suit === '花' || tile.suit === '动物') || [];
-	const nonFlowers: ITile[] = tiles.filter(tile => tile.suit !== '花' && tile.suit !== '动物') || [];
+export function sortShownTiles(tiles: IShownTile[]): ShownTiles {
+	const flowers: IShownTile[] = tiles.filter(tile => tile.suit === Suits.FLOWER || tile.suit === Suits.ANIMAL) || [];
+	const nonFlowers: IShownTile[] =
+		tiles.filter(tile => tile.suit !== Suits.FLOWER && tile.suit !== Suits.ANIMAL) || [];
 	const flowerIds = flowers.map(tile => tile.id);
 	const nonFlowerIds = nonFlowers.map(tile => tile.id);
 	return { flowers, nonFlowers, flowerIds, nonFlowerIds };
 }
 
-export function rotateShownTiles(tiles: ITile[], melds: string[]): ITile[] {
-	let temp: ITile;
+export function rotateShownTiles(tiles: IShownTile[], melds: string[]): IShownTile[] {
+	let temp: IShownTile;
 	let i = 0;
 	let j = 0;
 	while (i < tiles.length && j < melds.length) {
@@ -344,27 +345,80 @@ export function resolveJwt(token: string, key: string): string | JwtPayload {
 	}
 }
 
-export function getHashMul(gameId: string, stage: number) {
+export function getTileHashKey(gameId: string, stage: number) {
 	let i = Math.min(stage, gameId.length - 1);
 	return (gameId.charCodeAt(0) + gameId.charCodeAt(i)) * stage;
 }
 
-export function hashTile(tile: ITile, hashMul: number): ITile {
-	let id = '';
-	tile.id.split('').forEach(i => {
-		id += `${i.charCodeAt(0) * hashMul}|`;
+export function hashTileId(id: string, tileHashKey): string {
+	let hashId = '';
+	id.split('').forEach(i => {
+		hashId += `${i.charCodeAt(0) * tileHashKey}|`;
 	});
-	return { id, show: false };
+	return hashId;
 }
 
-export function unhashTile(hashedTile: ITile, hashMul): ITile {
+export function getCardFromUnhashedId(id: string): string {
+	switch (id[0]) {
+		case CardCategories.REGULAR:
+			return `${id[1]}${id[2]}`;
+		case CardCategories.WINDS:
+		case CardCategories.HBF:
+		case CardCategories.FLOWER:
+		case CardCategories.ANIMAL:
+			return `${id[1]}`;
+		default:
+			return ``;
+	}
+}
+
+export function getSuitFromUnhashedId(id: string): string {
+	switch (id[0]) {
+		case CardCategories.REGULAR:
+			return `${id[2]}`;
+		case CardCategories.WINDS:
+		case CardCategories.HBF:
+			return Suits.DAPAI;
+		case CardCategories.FLOWER:
+			return Suits.FLOWER;
+		case CardCategories.ANIMAL:
+			return Suits.ANIMAL;
+		default:
+			return ``;
+	}
+}
+
+export function getIxFromUnhashedId(id: string): number {
+	switch (id[0]) {
+		case CardCategories.REGULAR:
+			return Number(id[3]);
+		case CardCategories.WINDS:
+		case CardCategories.HBF:
+			return Number(id[2]);
+		default:
+			return 1;
+	}
+}
+
+export function hashTile(tile: IShownTile, tileHashKey: number): IHiddenTile {
+	return { id: hashTileId(tile.id, tileHashKey), ref: tile.ref };
+}
+
+export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShownTile {
 	let nums = [];
 	hashedTile.id.split('|').forEach(piece => {
 		if (!!Number(piece)) {
-			let num = Math.round(Number(piece) / hashMul);
+			let num = Math.round(Number(piece) / tileHashKey);
 			nums = [...nums, num];
 		}
 	});
 	let id = String.fromCharCode(...nums);
-	return { id, show: true };
+	return {
+		id,
+		card: getCardFromUnhashedId(id),
+		suit: getSuitFromUnhashedId(id),
+		num: id[0] === CardCategories.REGULAR ? Number(id[1]) : 1,
+		ix: getIxFromUnhashedId(id),
+		ref: hashedTile.ref
+	};
 }

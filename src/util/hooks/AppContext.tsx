@@ -4,7 +4,7 @@ import { history } from '../../App';
 import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } from '../../global/enums';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
-import { objToUser, userToObj } from '../utilFns';
+import { getTileHashKey, objToUser, userToObj } from '../utilFns';
 import { useLocalStorage } from './useHooks';
 
 interface AppContextInt {
@@ -21,8 +21,8 @@ interface AppContextInt {
 	setGameId: (gameId: string) => void;
 	stage?: string;
 	setStage: (stage: number) => void;
-	selectedTiles?: ITile[];
-	setSelectedTiles: (tiles: ITile[]) => void;
+	selectedTiles?: IHiddenTile[];
+	setSelectedTiles: (tiles: IHiddenTile[]) => void;
 	loading: boolean;
 	setLoading: () => void;
 	handSize?: Sizes;
@@ -41,6 +41,7 @@ interface AppContextInt {
 	tableTextColor?: TextColors;
 	alert?: IAlert;
 	setAlert?: (alert: IAlert) => void;
+	tileHashKey?: number;
 }
 
 const initialContext: AppContextInt = {
@@ -58,7 +59,7 @@ const initialContext: AppContextInt = {
 	stage: null,
 	setStage: (stage: number) => {},
 	selectedTiles: [],
-	setSelectedTiles: (tiles: ITile[]) => {},
+	setSelectedTiles: (tiles: IHiddenTile[]) => {},
 	loading: false,
 	setLoading: () => {},
 	handSize: Sizes.MEDIUM,
@@ -76,7 +77,8 @@ const initialContext: AppContextInt = {
 	mainTextColor: TextColors.DARK,
 	tableTextColor: TextColors.DARK,
 	alert: null,
-	setAlert: (alert: IAlert) => {}
+	setAlert: (alert: IAlert) => {},
+	tileHashKey: null
 };
 
 export const AppContext = createContext<AppContextInt>(initialContext);
@@ -88,7 +90,7 @@ export const AppContextProvider = (props: any) => {
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [stage, setStage] = useState(0);
-	const [selectedTiles, setSelectedTiles] = useState<ITile[]>([]);
+	const [selectedTiles, setSelectedTiles] = useState<IHiddenTile[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState<Sizes>();
 	const [tilesSize, setTilesSize] = useState<Sizes>();
@@ -110,6 +112,10 @@ export const AppContextProvider = (props: any) => {
 	const tableTextColor = useMemo(() => {
 		return [TableColors.DARK, TableColors.RED].includes(tableColor) ? TextColors.LIGHT : TextColors.DARK;
 	}, [tableColor]);
+
+	const tileHashKey = useMemo(() => {
+		return getTileHashKey(gameId, stage);
+	}, [gameId, stage]);
 
 	async function handleUserState(): Promise<boolean> {
 		return new Promise((resolve, reject) => {
@@ -238,7 +244,8 @@ export const AppContextProvider = (props: any) => {
 				mainTextColor,
 				tableTextColor,
 				alert,
-				setAlert
+				setAlert,
+				tileHashKey
 			}}
 			{...props}
 		/>

@@ -4,7 +4,7 @@ import ShownTile from './ShownTile';
 
 interface Props {
 	className: string;
-	tiles: ITile[];
+	tiles: IShownTile[];
 	segment: Segments;
 	lastThrownId?: string;
 }

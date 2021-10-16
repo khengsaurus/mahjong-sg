@@ -10,7 +10,7 @@ import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import useCountdown from '../../util/hooks/useCountdown';
-import { findLeft, findTwoInSorted, indexToWind, sortTiles } from '../../util/utilFns';
+import { findLeft, findTwoInSorted, indexToWind, revealTile, sortTiles } from '../../util/utilFns';
 import { Loader } from '../Loader';
 import AnnounceHuModal from '../Modals/AnnounceHuModal';
 import DeclareHuModal from '../Modals/DeclareHuModal';
@@ -27,7 +27,7 @@ interface ControlsProps {
 }
 
 const Controls = ({ playerSeat }: ControlsProps) => {
-	const { controlsSize, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const { controlsSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
 	const player: User = useSelector((state: IStore) => state.player);
 	const game: Game = useSelector((state: IStore) => state.game);
 	const {
@@ -53,7 +53,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
 	const [canChi, setCanChi] = useState(false);
-	const [meld, setMeld] = useState<ITile[]>([]);
+	const [meld, setMeld] = useState<IShownTile[]>([]);
 	const dealer = players && dealerIndex ? players[dealerIndex] : null;
 
 	const offerPong = useMemo(() => {
@@ -115,7 +115,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	}, [player, players, lastThrown, thrownBy]);
 
 	const setOptions = useCallback(
-		(kang: boolean, pong: boolean, chi: boolean, tiles: ITile[]) => {
+		(kang: boolean, pong: boolean, chi: boolean, tiles: IShownTile[]) => {
 			setCanKang(kang);
 			setCanPong(pong);
 			setCanChi(chi);
@@ -125,7 +125,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	);
 
 	useEffect(() => {
-		let tiles: ITile[] = [];
+		let tiles: IShownTile[] = [];
 		if (whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
 			// Can self kang during turn & selecting 1 || 4
 			tiles = selectedTiles;
@@ -184,10 +184,12 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	/* ----------------------------------- Draw ----------------------------------- */
 
 	function handleDraw() {
-		let drawnTile: ITile;
+		let drawnTile: IHiddenTile;
+		let revealedTile: IShownTile;
 		if (tiles?.length > 15) {
+			revealedTile = revealTile(drawnTile, tileHashKey);
 			drawnTile = game.giveTiles(1, playerSeat, false, true);
-			if (drawnTile.suit === '花' || drawnTile.suit === '动物') {
+			if (revealedTile.suit === '花' || revealedTile.suit === '动物') {
 				drawnTile = buHua();
 			}
 			updateGameStateTakenTile();
@@ -195,12 +197,11 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 			game.draw = true;
 			game.endRound();
 		}
-		setSelectedTiles(drawnTile ? [drawnTile] : []);
 		handleAction(game);
 	}
 
 	function buHua() {
-		let drawnTile: ITile;
+		let drawnTile: IHiddenTile;
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (tiles?.length > 15) {
@@ -232,20 +233,18 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		if (meld.includes(lastThrown)) {
 			game.players[thrownBy].removeFromDiscarded(lastThrown);
 		}
-		meld.forEach(tile => {
-			tile.show = true;
-		});
+		let revealedMeld = meld.map(tile => revealTile(tile, tileHashKey));
 		if (canKang || canPong) {
-			player.moveIntoShown(meld);
+			player.moveIntoShown(revealedMeld);
 			if (canKang) {
 				game.flagNext = true;
-				game.newLog(`${player.username} kang'd ${meld[0].card}`);
+				game.newLog(`${player.username} kang'd ${revealedMeld[0].card}`);
 				buHua();
 			} else {
-				game.newLog(`${player.username} pong'd ${meld[0].card}`);
+				game.newLog(`${player.username} pong'd ${revealedMeld[0].card}`);
 			}
 		} else {
-			player.moveIntoShown(meld);
+			player.moveIntoShown(revealedMeld);
 			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
 		}
 		updateGameStateTakenTile(false);
@@ -253,7 +252,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	}
 
 	function selfKang() {
-		let toKang = selectedTiles[0];
+		let toKang = revealTile(selectedTiles[0], tileHashKey);
 		player.selfKang(toKang);
 		game.flagNext = true;
 		game.newLog(`${player.username} kang'd - ${toKang.card}`);
@@ -264,11 +263,11 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
-	function handleThrow(tile: ITile) {
-		tile.show = true;
-		player.discard(tile);
+	function handleThrow(tile: IHiddenTile) {
+		let toDiscard = revealTile(tile, tileHashKey);
+		player.discard(toDiscard);
 		player.setHiddenTiles();
-		game.tileThrown(tile, playerSeat);
+		game.tileThrown(toDiscard, playerSeat);
 		game.handlePongDelay();
 		handleAction(game);
 	}

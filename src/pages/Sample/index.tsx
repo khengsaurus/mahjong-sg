@@ -21,24 +21,22 @@ const asynFn = (): Promise<string> => {
 
 const wans = ['1万', '2万', '3万', '4万', '5万', '6万', '7万', '8万', '9万'];
 
-function getRandomWanTile(): ITile {
-	let number = Math.floor(Math.random() * 9);
-	let card = wans[number];
+function getRandomWanTile(): IShownTile {
+	let num = Math.floor(Math.random() * 9);
+	let card = wans[num];
 	return {
 		card,
 		suit: '万',
-		number,
+		num: num + 1,
 		id: `${card}1`,
-		uuid: '123',
-		index: 1,
-		show: false,
-		isVF: false
+		ix: 1,
+		v: false
 	};
 }
 
 const Sample = () => {
 	const { execute, status, value, error } = useAsync(asynFn, false);
-	const [wanTile, setWanTile] = useLocalStorage<ITile>('randomWanTile', null);
+	const [wanTile, setWanTile] = useLocalStorage<IShownTile>('randomWanTile', null);
 	const [size, setSize] = useLocalStorage<Sizes>('testSize', Sizes.MEDIUM);
 	const [delayFrom, setDelayFrom] = useState<Date>(null);
 	const { delayOn, delayLeft } = useCountdown(delayFrom, 6);
