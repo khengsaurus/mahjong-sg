@@ -47,7 +47,6 @@ const Login = () => {
 		authRegister_EmailPass(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: Status.SUCCESS, msg: 'Registered successfully' });
 					formCallback();
 					handleLogin(values);
 				}

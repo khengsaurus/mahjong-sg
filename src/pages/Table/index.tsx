@@ -64,29 +64,29 @@ const Table = () => {
 				setFront(currentGame.front);
 				setBack(currentGame.back);
 				let player: User;
-				switch (user.username) {
-					case currentGame.ps[0].username:
+				switch (user.uN) {
+					case currentGame.ps[0].uN:
 						player = currentGame.ps[0];
 						setBottomPlayerIndex(0);
 						setLeftPlayerIndex(3);
 						setTopPlayerIndex(2);
 						setRightPlayerIndex(1);
 						break;
-					case currentGame.ps[1].username:
+					case currentGame.ps[1].uN:
 						player = currentGame.ps[1];
 						setBottomPlayerIndex(1);
 						setLeftPlayerIndex(0);
 						setTopPlayerIndex(3);
 						setRightPlayerIndex(2);
 						break;
-					case currentGame.ps[2].username:
+					case currentGame.ps[2].uN:
 						player = currentGame.ps[2];
 						setBottomPlayerIndex(2);
 						setLeftPlayerIndex(1);
 						setTopPlayerIndex(0);
 						setRightPlayerIndex(3);
 						break;
-					case currentGame.ps[3].username:
+					case currentGame.ps[3].uN:
 						player = currentGame.ps[3];
 						setBottomPlayerIndex(3);
 						setLeftPlayerIndex(2);
@@ -122,7 +122,7 @@ const Table = () => {
 									hasFront={front === TopPlayerIndex}
 									hasBack={back === TopPlayerIndex}
 									tilesSize={tilesSize}
-									lastT={
+									lastThrown={
 										game.tBy === TopPlayerIndex || game.wM === TopPlayerIndex ? game.lastT : null
 									}
 								/>
@@ -136,7 +136,7 @@ const Table = () => {
 									hasFront={front === RightPlayerIndex}
 									hasBack={back === RightPlayerIndex}
 									tilesSize={tilesSize}
-									lastT={
+									lastThrown={
 										game.tBy === RightPlayerIndex || game.wM === RightPlayerIndex
 											? game.lastT
 											: null
@@ -151,7 +151,7 @@ const Table = () => {
 									dealer={dealer === BottomPlayerIndex}
 									hasFront={front === BottomPlayerIndex}
 									hasBack={back === BottomPlayerIndex}
-									lastT={
+									lastThrown={
 										game.tBy === BottomPlayerIndex || game.wM === BottomPlayerIndex
 											? game.lastT
 											: null
@@ -167,7 +167,7 @@ const Table = () => {
 									hasFront={front === LeftPlayerIndex}
 									hasBack={back === LeftPlayerIndex}
 									tilesSize={tilesSize}
-									lastT={
+									lastThrown={
 										game.tBy === LeftPlayerIndex || game.wM === LeftPlayerIndex ? game.lastT : null
 									}
 								/>

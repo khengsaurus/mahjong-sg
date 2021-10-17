@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { Animals, CardCategories, DaPai, Flowers, Suits, Winds } from '../global/enums';
+import { Animals, CardCategories, DaPai, Flowers, PlayerFlowers, Suits, Winds } from '../global/enums';
 import {
 	findLeft,
 	findOpp,
@@ -28,7 +28,6 @@ export class Game {
 	fN?: boolean;
 	dealer?: number;
 	wM?: number;
-	// pIds?: string[];
 	ps?: User[];
 	tiles?: IHiddenTile[];
 	front?: number;
@@ -38,7 +37,6 @@ export class Game {
 	thrown?: boolean;
 	taken?: boolean;
 	takenB?: number;
-	// halfMove?: boolean;
 	hu?: number[];
 	draw?: boolean;
 	logs?: ILog[];
@@ -64,7 +62,6 @@ export class Game {
 		mid?: boolean,
 		fN?: boolean,
 		wM?: number,
-		// pIds?: string[],
 		ps?: User[],
 		tiles?: IHiddenTile[],
 		front?: number,
@@ -74,7 +71,6 @@ export class Game {
 		thrown?: boolean,
 		taken?: boolean,
 		takenB?: number,
-		// halfMove?: boolean,
 		hu?: number[],
 		draw?: boolean,
 		logs?: ILog[]
@@ -94,7 +90,6 @@ export class Game {
 		this.mid = mid;
 		this.fN = fN;
 		this.wM = wM;
-		// this.pIds = pIds;
 		this.ps = ps;
 		this.tiles = tiles;
 		this.front = front;
@@ -104,7 +99,6 @@ export class Game {
 		this.thrown = thrown;
 		this.taken = taken;
 		this.takenB = takenB;
-		// this.halfMove = halfMove;
 		this.hu = hu;
 		this.draw = draw;
 		this.logs = logs;
@@ -118,7 +112,7 @@ export class Game {
 	/*---------------------------------------- Actions ----------------------------------------*/
 	findPlayerIndexByUsername(Username: string) {
 		for (var n in [0, 1, 2, 3]) {
-			if (this.ps[n].username === Username) {
+			if (this.ps[n].uN === Username) {
 				return n;
 			}
 			return -1;
@@ -126,7 +120,7 @@ export class Game {
 	}
 
 	// execute(event: IAction) {
-	// 	const { username, action, huStatus, tile, sentToUsername, amount } = event;
+	// 	const { uN, action, huStatus, tile, sentToUsername, amount } = event;
 	// 	switch (action) {
 	// 		case Actions.TAKE:
 	// 			return;
@@ -175,46 +169,51 @@ export class Game {
 		const daPai = [DaPai.RED, DaPai.WHITE, DaPai.GREEN];
 		const animals = [Animals.CAT, Animals.MOUSE, Animals.ROOSTER, Animals.WORM];
 		const flowers = [
-			Flowers.RED1,
-			Flowers.RED2,
-			Flowers.RED3,
-			Flowers.RED4,
-			Flowers.BLUE1,
-			Flowers.BLUE2,
-			Flowers.BLUE3,
-			Flowers.BLUE4
+			Flowers.R1,
+			Flowers.R2,
+			Flowers.R3,
+			Flowers.R4,
+			Flowers.B1,
+			Flowers.B2,
+			Flowers.B3,
+			Flowers.B4
 		];
 		oneToFour.forEach(index => {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
 					let tile: IHiddenTile = {
-						id: hashTileId(`${CardCategories.REGULAR}${suit}${number}${index}`, tileHashKey)
+						id: hashTileId(`${CardCategories.REGULAR}${suit}${number}${index}`, tileHashKey),
+						ix: 0
 					};
 					tiles.push(tile);
 				});
 			});
 			winds.forEach(pai => {
 				let tile: IHiddenTile = {
-					id: hashTileId(`${CardCategories.WINDS}${pai}${index}`, tileHashKey)
+					id: hashTileId(`${CardCategories.WINDS}${pai}${index}`, tileHashKey),
+					ix: 0
 				};
 				tiles.push(tile);
 			});
 			daPai.forEach(pai => {
 				let tile: IHiddenTile = {
-					id: hashTileId(`${CardCategories.HBF}${pai}${index}`, tileHashKey)
+					id: hashTileId(`${CardCategories.HBF}${pai}${index}`, tileHashKey),
+					ix: 0
 				};
 				tiles.push(tile);
 			});
 		});
 		flowers.forEach(flower => {
 			let tile: IHiddenTile = {
-				id: hashTileId(`${CardCategories.FLOWER}${flower}`, tileHashKey)
+				id: hashTileId(`${CardCategories.FLOWER}${flower}`, tileHashKey),
+				ix: 0
 			};
 			tiles.push(tile);
 		});
 		animals.forEach(animal => {
 			let tile: IHiddenTile = {
-				id: hashTileId(`${CardCategories.ANIMAL}${animal}`, tileHashKey)
+				id: hashTileId(`${CardCategories.ANIMAL}${animal}`, tileHashKey),
+				ix: 0
 			};
 			tiles.push(tile);
 		});
@@ -222,73 +221,82 @@ export class Game {
 		return tiles;
 	}
 
+	// Pop/shift tile from deck and shortens front/back of deck if offsetUnused
+	removeTileFromDeck(buHua = false, offsetUnused = true): IHiddenTile {
+		let hiddenTile: IHiddenTile;
+		if (buHua) {
+			hiddenTile = this.tiles.shift();
+			if (offsetUnused) {
+				if (this.ps[this.back].uTs === 1) {
+					this.ps[this.back].uTs = 0;
+					this.back = findRight(this.back);
+				} else {
+					this.ps[this.back].uTs -= 1;
+				}
+			}
+		} else {
+			hiddenTile = this.tiles.pop();
+			if (offsetUnused) {
+				if (this.ps[this.front].uTs === 1) {
+					this.ps[this.front].uTs = 0;
+					this.front = findLeft(this.front);
+				} else {
+					this.ps[this.front].uTs -= 1;
+				}
+			}
+		}
+		return hiddenTile;
+	}
+
+	// Checks if player has drawn matching animals/flowers
+	validateFlower(flower: IShownTile, playerIndex: number): IShownTile {
+		if (flower.suit === Suits.ANIMAL) {
+			flower.v = true;
+			if (
+				(this.ps[playerIndex].shownTilesContainCard(Animals.CAT) &&
+					this.ps[playerIndex].shownTilesContainCard(Animals.MOUSE)) ||
+				(this.ps[playerIndex].shownTilesContainCard(Animals.ROOSTER) &&
+					this.ps[playerIndex].shownTilesContainCard(Animals.WORM))
+			) {
+				this.newLog(`${this.ps[playerIndex].uN} drew matching animals`);
+				this.fN = true;
+			}
+		} else if (flower.suit === Suits.FLOWER && PlayerFlowers[playerIndex].includes(flower.card)) {
+			flower.v = true;
+			if (
+				this.ps[playerIndex].shownTilesContainCard(PlayerFlowers[playerIndex][0]) &&
+				this.ps[playerIndex].shownTilesContainCard(PlayerFlowers[playerIndex][1])
+			) {
+				this.newLog(`${this.ps[playerIndex].uN} drew both his/her flowers`);
+				this.fN = true;
+			}
+		}
+		return flower;
+	}
+
 	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): IHiddenTile {
 		let player = this.ps[playerIndex];
 		let hiddenTile: IHiddenTile;
 		let revealedTile: IShownTile;
-		let tileHashKey: number;
+		let tileHashKey = getTileHashKey(this.id, this.st);
 		let receivedFlower: boolean = false;
-		let log = `${player.username} ${buHua ? `bu hua, ` : ``} received `;
+		let log = `${player.uN} ${buHua ? `bu hua, ` : ``} received `;
 		let flowerReceived = '';
 		let flowersReceived = ', including';
-		if (!player.hiddenTiles) {
-			player.hiddenTiles = [];
+		if (!player.hTs) {
+			player.hTs = [];
 		}
 		for (let i: number = 0; i < n; i++) {
-			if (buHua) {
-				hiddenTile = this.tiles.shift();
-				// Logic to update shortening stack of back(hua) tiles
-				if (offsetUnused) {
-					if (this.ps[this.back].unusedTiles === 1) {
-						this.ps[this.back].unusedTiles = 0;
-						this.back = findRight(this.back);
-					} else {
-						this.ps[this.back].unusedTiles -= 1;
-					}
-				}
-			} else {
-				hiddenTile = this.tiles.pop();
-				// Logic to update shortening stack of front tiles
-				if (offsetUnused) {
-					if (this.ps[this.front].unusedTiles === 1) {
-						this.ps[this.front].unusedTiles = 0;
-						this.front = findLeft(this.front);
-					} else {
-						this.ps[this.front].unusedTiles -= 1;
-					}
-				}
-			}
-			tileHashKey = getTileHashKey(this.id, this.st);
-			revealedTile = revealTile(hiddenTile, tileHashKey);
-			if (revealedTile.suit === Suits.ANIMAL) {
-				if (
-					(this.ps[playerIndex].shownTilesContainCard(`rooster`) &&
-						this.ps[playerIndex].shownTilesContainCard(`worm`)) ||
-					(this.ps[playerIndex].shownTilesContainCard(`cat`) &&
-						this.ps[playerIndex].shownTilesContainCard(`mouse`))
-				) {
-					this.newLog(`${this.ps[playerIndex].username} drew matching animals`);
-					this.fN = true;
-				}
-			} else if (
-				revealedTile.suit === Suits.FLOWER &&
-				parseInt(revealedTile.card.slice(-1)) === playerIndex + 1
-			) {
-				if (
-					this.ps[playerIndex].shownTilesContainCard(`red${revealedTile.card.slice(-1)}`) &&
-					this.ps[playerIndex].shownTilesContainCard(`blue${revealedTile.card.slice(-1)}`)
-				) {
-					this.newLog(`${this.ps[playerIndex].username} drew both his/her flowers`);
-					this.fN = true;
-				}
-			}
+			hiddenTile = revealedTile = null;
+			hiddenTile = this.removeTileFromDeck(buHua, offsetUnused);
+			revealedTile = this.validateFlower(revealTile(hiddenTile, tileHashKey), playerIndex);
 			if (revealedTile.suit === Suits.FLOWER || revealedTile.suit === Suits.ANIMAL) {
-				receivedFlower = true;
 				flowerReceived = revealedTile.card;
-				flowersReceived += ` ${revealedTile.card}`;
-				player.shownTiles = [...player.shownTiles, hiddenTile];
+				flowersReceived += `${receivedFlower ? `,` : ``} ${revealedTile.card}`;
+				receivedFlower = true;
+				player.sTs = [...player.sTs, revealedTile];
 			} else {
-				player.getNewTile(hiddenTile);
+				player.hTs = [...player.hTs, hiddenTile];
 			}
 		}
 		if (n === 1 && receivedFlower) {
@@ -300,7 +308,7 @@ export class Game {
 			}
 		}
 		this.newLog(log);
-		return hiddenTile;
+		return revealedTile.suit === Suits.FLOWER || revealedTile.suit === Suits.ANIMAL ? revealedTile : hiddenTile;
 	}
 
 	//TODO: optimise
@@ -316,81 +324,81 @@ export class Game {
 		let toBeDealtByOpp: number;
 		let initDealtTiles = this.dTs + 3 * this.nDTs;
 		let rolled = dealer.rollDice();
-		this.newLog(`${dealer.username} rolled: ${rolled}`);
+		this.newLog(`${dealer.uN} rolled: ${rolled}`);
 
 		// Set front and back, and how many unused tiles each dealer has
 		switch (rolled % 4) {
 			case 0: // deal from left
-				this.newLog(`Dealing from ${this.ps[findLeft(this.dealer)].username}`);
+				this.newLog(`Dealing from ${this.ps[findLeft(this.dealer)].uN}`);
 				this.back = findLeft(this.dealer);
 				toBeDealtByLeft = this.nDHTs - 2 * rolled;
-				leftPlayer.unusedTiles = 2 * rolled;
+				leftPlayer.uTs = 2 * rolled;
 				toBeDealtByOpp = initDealtTiles - toBeDealtByLeft;
 				if (toBeDealtByOpp > this.dHTs) {
-					oppPlayer.unusedTiles = 0;
+					oppPlayer.uTs = 0;
 					toBeDealtByRight = toBeDealtByOpp - this.dHTs;
-					rightPlayer.unusedTiles = this.nDHTs - toBeDealtByRight;
+					rightPlayer.uTs = this.nDHTs - toBeDealtByRight;
 					this.front = findRight(this.dealer);
 				} else {
-					oppPlayer.unusedTiles = this.dHTs - toBeDealtByOpp;
-					rightPlayer.unusedTiles = this.nDHTs;
+					oppPlayer.uTs = this.dHTs - toBeDealtByOpp;
+					rightPlayer.uTs = this.nDHTs;
 					this.front = findOpp(this.dealer);
 				}
-				dealer.unusedTiles = this.dHTs;
+				dealer.uTs = this.dHTs;
 				break;
 			case 1: // deal from dealer
-				this.newLog(`Dealing from ${this.ps[this.dealer].username}`);
+				this.newLog(`Dealing from ${this.ps[this.dealer].uN}`);
 				this.back = this.dealer;
 				toBeDealtByDealer = this.dHTs - 2 * rolled;
-				dealer.unusedTiles = 2 * rolled;
+				dealer.uTs = 2 * rolled;
 				toBeDealtByLeft = initDealtTiles - toBeDealtByDealer;
 				if (toBeDealtByLeft > this.nDHTs) {
-					leftPlayer.unusedTiles = 0;
+					leftPlayer.uTs = 0;
 					toBeDealtByOpp = toBeDealtByLeft - this.nDHTs;
-					oppPlayer.unusedTiles = this.dHTs - toBeDealtByOpp;
+					oppPlayer.uTs = this.dHTs - toBeDealtByOpp;
 					this.front = findOpp(this.dealer);
 				} else {
-					leftPlayer.unusedTiles = this.nDHTs - toBeDealtByLeft;
-					oppPlayer.unusedTiles = this.dHTs;
+					leftPlayer.uTs = this.nDHTs - toBeDealtByLeft;
+					oppPlayer.uTs = this.dHTs;
 					this.front = findLeft(this.dealer);
 				}
-				rightPlayer.unusedTiles = this.nDHTs;
+				rightPlayer.uTs = this.nDHTs;
 				break;
 			case 2: // deal from right
-				this.newLog(`Dealing from ${this.ps[findRight(this.dealer)].username}`);
+				this.newLog(`Dealing from ${this.ps[findRight(this.dealer)].uN}`);
 				this.back = findRight(this.dealer);
 				toBeDealtByRight = this.nDHTs - 2 * rolled;
-				rightPlayer.unusedTiles = 2 * rolled;
+				rightPlayer.uTs = 2 * rolled;
 				toBeDealtByDealer = initDealtTiles - toBeDealtByRight;
 				if (toBeDealtByDealer > this.dHTs) {
-					dealer.unusedTiles = 0;
+					dealer.uTs = 0;
 					toBeDealtByLeft = toBeDealtByDealer - this.dHTs;
-					leftPlayer.unusedTiles = this.nDHTs - toBeDealtByLeft;
+					leftPlayer.uTs = this.nDHTs - toBeDealtByLeft;
 					this.front = findLeft(this.dealer);
 				} else {
-					dealer.unusedTiles = this.dHTs - toBeDealtByDealer;
-					leftPlayer.unusedTiles = this.nDHTs;
+					dealer.uTs = this.dHTs - toBeDealtByDealer;
+					leftPlayer.uTs = this.nDHTs;
 					this.front = this.dealer;
 				}
-				oppPlayer.unusedTiles = this.dHTs;
+				oppPlayer.uTs = this.dHTs;
 				break;
 			case 3: // deal from opposite
-				this.newLog(`Dealing from ${this.ps[findOpp(this.dealer)].username}`);
+				this.newLog(`Dealing from ${this.ps[findOpp(this.dealer)].uN}`);
 				this.back = findOpp(this.dealer);
-				oppPlayer.unusedTiles = 2 * rolled;
+				oppPlayer.uTs = 2 * rolled;
 				toBeDealtByOpp = this.dHTs - 2 * rolled;
 				toBeDealtByRight = initDealtTiles - toBeDealtByOpp;
 				if (toBeDealtByRight > this.nDHTs) {
-					rightPlayer.unusedTiles = 0;
+					rightPlayer.uTs = 0;
 					toBeDealtByDealer = toBeDealtByRight - this.nDHTs;
-					dealer.unusedTiles = this.dHTs - toBeDealtByDealer;
+					dealer.uTs = this.dHTs - toBeDealtByDealer;
 					this.front = this.dealer;
 				} else {
-					rightPlayer.unusedTiles = this.nDHTs - toBeDealtByRight;
-					dealer.unusedTiles = this.dHTs;
+					rightPlayer.uTs = this.nDHTs - toBeDealtByRight;
+					dealer.uTs = this.dHTs;
 					this.front = findRight(this.dealer);
 				}
-				leftPlayer.unusedTiles = this.nDHTs;
+				leftPlayer.uTs = this.nDHTs;
 				break;
 		}
 		this.giveTiles(this.dTs, this.dealer, false, false);
@@ -411,8 +419,10 @@ export class Game {
 		});
 		this.taken = true;
 		this.takenB = this.dealer;
-		// TODO: remove
-		if (!!this.ps.find(player => player.username.toUpperCase() === 'TEST20TILESLEFT')) {
+		if (
+			process.env.REACT_APP_DEV_FLAG === '1' &&
+			!!this.ps.find(player => player.uN.toUpperCase() === 'TEST20TILESLEFT')
+		) {
 			this.tiles = this.tiles.slice(0, 20);
 		}
 	}
@@ -423,8 +433,9 @@ export class Game {
 		}
 		let others: number[] = [findRight(this.dealer), findOpp(this.dealer), findLeft(this.dealer)];
 		others.forEach((n: number) => {
-			if (this.ps[n].countAllHiddenTiles() < this.nDTs) {
-				this.giveTiles(this.nDTs - this.ps[n].countAllHiddenTiles(), n, true, true);
+			let initNum = this.ps[n].countAllHiddenTiles();
+			if (initNum < this.nDTs) {
+				this.giveTiles(this.nDTs - initNum, n, true, true);
 			}
 		});
 	}
@@ -435,7 +446,7 @@ export class Game {
 				if (
 					n !== this.tBy &&
 					n !== findRight(this.tBy) &&
-					findTwoInSorted(this.lastT, this.ps[n].hiddenTiles, 'card')
+					findTwoInSorted(this.lastT, this.ps[n].hTs, 'card')
 				) {
 					this.dFr = new Date();
 				}
@@ -447,8 +458,7 @@ export class Game {
 		this.wM = findRight(this.wM);
 		this.taken = false;
 		this.thrown = false;
-		// this.halfMove = false;
-		this.newLog(`${this.ps[this.wM].username}'s turn`);
+		this.newLog(`${this.ps[this.wM].uN}'s turn`);
 	}
 
 	repr(): any[] {
@@ -482,7 +492,6 @@ export class Game {
 		this.thrown = false;
 		this.taken = true;
 		this.takenB = this.dealer;
-		// this.halfMove = false;
 		this.hu = [];
 		this.draw = false;
 		this.logs = [];
@@ -494,8 +503,10 @@ export class Game {
 			this.st += 1;
 		}
 		if (this.st === 1) {
-			// TODO: remove
-			if (!!this.ps.find(player => player.username.toUpperCase() === 'TEST2ROUNDSLEFT')) {
+			if (
+				process.env.REACT_APP_DEV_FLAG === '1' &&
+				!!this.ps.find(player => player.uN.toUpperCase() === 'TEST2ROUNDSLEFT')
+			) {
 				this.st = 15;
 				this.dealer = 2;
 			} else {
@@ -512,7 +523,7 @@ export class Game {
 		}
 		this.tiles = shuffledTiles;
 		this.distributeTiles();
-		this.newLog(`${this.ps[this.dealer].username}'s turn - to throw`);
+		this.newLog(`${this.ps[this.dealer].uN}'s turn - to throw`);
 	}
 
 	/**
@@ -521,11 +532,11 @@ export class Game {
 	 */
 	endRound() {
 		if (this.hu.length === 3) {
-			let huLog: string = `${this.ps[this.hu[0]].username} hu with ${this.hu[1]}台`;
+			let huLog: string = `${this.ps[this.hu[0]].uN} hu with ${this.hu[1]}台`;
 			if (this.hu[2] === 1) {
 				huLog += ` 自摸`;
-			} else if (this.tBy && this.ps[this.tBy].username !== this.ps[this.hu[0]].username) {
-				huLog += `, last tile thrown by ${this.ps[this.tBy].username}`;
+			} else if (this.tBy && this.ps[this.tBy].uN !== this.ps[this.hu[0]].uN) {
+				huLog += `, last tile thrown by ${this.ps[this.tBy].uN}`;
 			}
 			this.newLog(huLog);
 		}
@@ -545,6 +556,6 @@ export class Game {
 		this.lastT = tile;
 		this.tBy = player;
 		this.thrown = true;
-		this.newLog(`${this.ps[player].username} discarded ${tile.card}`);
+		this.newLog(`${this.ps[player].uN} discarded ${tile.card}`);
 	}
 }

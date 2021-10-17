@@ -44,11 +44,11 @@ export function resolveUser_Email(email: string): Promise<User | null> {
 
 export async function newUser_IEmailUser(values: IEmailUser): Promise<boolean> {
 	return new Promise((resolve, reject) => {
-		FBService.getUserReprByUsername(values.username).then(data => {
+		FBService.getUserReprByUsername(values.uN).then(data => {
 			if (!data.empty) {
 				reject(new Error('Username already taken'));
 			} else {
-				FBService.registerUserEmail(values.username, values.email)
+				FBService.registerUserEmail(values.uN, values.email)
 					.then(res => {
 						resolve(res);
 					})

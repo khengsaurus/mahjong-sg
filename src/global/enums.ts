@@ -6,7 +6,7 @@ export interface IPlayerComponentProps {
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
-	lastT?: IShownTile;
+	lastThrown?: IShownTile;
 	tilesSize?: Sizes;
 }
 
@@ -87,21 +87,28 @@ export enum DaPai {
 
 export enum Animals {
 	CAT = '猫',
-	MOUSE = '老鼠',
-	ROOSTER = '公鸡',
+	MOUSE = '鼠',
+	ROOSTER = '鸡',
 	WORM = '虫'
 }
 
 export enum Flowers {
-	RED1 = 'red1',
-	RED2 = 'red2',
-	RED3 = 'red3',
-	RED4 = 'red4',
-	BLUE1 = 'blue1',
-	BLUE2 = 'blue2',
-	BLUE3 = 'blue3',
-	BLUE4 = 'blue4'
+	R1 = '春',
+	R2 = '夏',
+	R3 = '秋',
+	R4 = '冬',
+	B1 = '梅',
+	B2 = '蘭',
+	B3 = '菊',
+	B4 = '竹'
 }
+
+export const PlayerFlowers = {
+	0: ['春', '梅'],
+	1: ['夏', '蘭'],
+	2: ['秋', '菊'],
+	3: ['冬', '竹']
+};
 
 export enum CardCategories {
 	REGULAR = 'a',

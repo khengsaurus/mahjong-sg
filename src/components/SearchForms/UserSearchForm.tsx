@@ -22,13 +22,13 @@ const UserSearchForm: React.FC = () => {
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
 
-	async function searchForUser(username: string) {
+	async function searchForUser(uN: string) {
 		let foundUsers: Array<User> = [];
-		await FBService.searchUser(username, user.username).then(data => {
+		await FBService.searchUser(uN, user.uN).then(data => {
 			if (!data.empty) {
 				data.docs.forEach(doc => {
 					let data = doc.data();
-					foundUsers.push(new User(doc.id, data.username, data.photoUrl, data.email));
+					foundUsers.push(new User(doc.id, data.uN, data.pUrl, data.email));
 				});
 				if (foundUsers.length > 0) {
 					setFoundUsers(foundUsers);
@@ -49,7 +49,7 @@ const UserSearchForm: React.FC = () => {
 
 	function notSelected(user: User): boolean {
 		for (let i = 0; i < players.length; i++) {
-			if (user.username === players[i].username) {
+			if (user.uN === players[i].uN) {
 				return false;
 			}
 		}
@@ -135,7 +135,7 @@ const UserSearchForm: React.FC = () => {
 											handleSelect(foundUser);
 										}}
 									>
-										<ListItemText primary={foundUser.username} className={classes.text} />
+										<ListItemText primary={foundUser.uN} className={classes.text} />
 										<ListItemIcon
 											style={{
 												justifyContent: 'flex-end'

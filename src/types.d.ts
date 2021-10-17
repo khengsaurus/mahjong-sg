@@ -18,15 +18,15 @@ interface IHasTimestamp {
 
 interface IJwtData {
 	id: string;
-	username: string;
-	photoUrl: string;
+	uN: string;
+	pUrl: string;
 	email: string;
-	handSize: Sizes;
-	tilesSize: Sizes;
-	controlsSize: Sizes;
-	backgroundColor: BackgroundColors;
-	tableColor: BackgroundColors;
-	tileBackColor: TileColors;
+	hSz: Sizes;
+	tSz: Sizes;
+	cSz: Sizes;
+	bgC: BackgroundColors;
+	tC: BackgroundColors;
+	tBC: TileColors;
 	iat: number;
 	exp: number;
 }
@@ -34,7 +34,7 @@ interface IJwtData {
 interface IAction {
 	timestamp: Date;
 	index: number;
-	username: string;
+	uN: string;
 	action: Actions;
 	huStatus: number[];
 	tile: IShownTile[] | IHiddenTile[];
@@ -64,6 +64,7 @@ interface IShownTile {
 interface IHiddenTile {
 	id?: string;
 	ref?: number;
+	ix?: number;
 }
 
 interface ShownTiles {
@@ -74,12 +75,12 @@ interface ShownTiles {
 }
 
 interface IUserPass {
-	username: string;
+	uN: string;
 	password: string;
 }
 
 interface IEmailUser {
-	username: string;
+	uN: string;
 	email: string;
 }
 
@@ -94,8 +95,8 @@ interface ILog {
 }
 
 interface ITheme {
-	backgroundColor: BackgroundColors;
-	tableColor: BackgroundColors;
-	tileBackColor: TileColors;
+	bgC: BackgroundColors;
+	tC: BackgroundColors;
+	tBC: TileColors;
 	textColor: string;
 }

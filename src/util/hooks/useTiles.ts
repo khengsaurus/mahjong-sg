@@ -2,22 +2,22 @@ import { useMemo } from 'react';
 import { rotateShownTiles, sortShownTiles } from '../utilFns';
 
 interface Args {
-	shownTiles: IShownTile[];
+	sTs: IShownTile[];
 	melds: string[];
 	allHiddenTiles: IHiddenTile[];
 	toRotate?: boolean;
 }
 
 const useTiles = (args: Args) => {
-	const { shownTiles = [], melds = [], allHiddenTiles = [], toRotate = true } = args;
+	const { sTs = [], melds = [], allHiddenTiles = [], toRotate = true } = args;
 
 	const shownCards = useMemo(() => {
-		return shownTiles?.map(tile => tile.id);
+		return sTs?.map(tile => tile.id);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [shownTiles.length]);
+	}, [sTs.length]);
 
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds } = useMemo(() => {
-		return sortShownTiles(shownTiles);
+		return sortShownTiles(sTs);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [shownCards]);
 

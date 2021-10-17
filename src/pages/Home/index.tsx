@@ -16,7 +16,7 @@ const Home = () => {
 
 	let markup = (
 		<>
-			<Title title={`Welcome ${user?.username}`} />
+			<Title title={`Welcome ${user?.uN || ''}`} />
 			<StyledButton label={'New Game'} navigate={Pages.NEWGAME} />
 			<StyledButton label={'Join Game'} navigate={Pages.JOINGAME} />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />

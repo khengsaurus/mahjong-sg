@@ -35,57 +35,57 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
 	const [showSettings, setShowSettings] = useState(false);
 	const [declareHu, setDeclareHu] = useState(false);
-	const [okToShow, setOkToShow] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
 	const [showLogs, setShowLogs] = useState(false);
 	const [showPay, setShowPay] = useState(false);
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
 	const [canChi, setCanChi] = useState(false);
 	const [meld, setMeld] = useState<IShownTile[]>([]);
-	const dealer = ps && dealerIndex ? ps[dealerIndex] : null;
+	const dealer = ps ? ps[dealerIndex] : null;
 
 	const offerPong = useMemo(() => {
-		return delayOn && tBy !== playerSeat && findTwoInSorted(lastT, player?.hiddenTiles, 'card');
+		return delayOn && tBy !== playerSeat && findTwoInSorted(lastT, player?.hTs, 'card');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [delayOn]);
 
 	const texts = useMemo(() => {
 		return game?.on
 			? [
-					`Dealer: ${dealer?.username || ``}`,
+					`Dealer: ${dealer?.uN || ``}`,
 					`Tiles left: ${tiles?.length || 0}`,
-					`Chips: ${Math.round(player?.balance) || ``}`,
+					`Chips: ${Math.round(player?.bal) || ``}`,
 					`Seat: ${indexToWind((playerSeat - dealerIndex + 4) % 4)}`
 			  ]
-			: [`Chips: ${Math.round(player?.balance) || 0}`, `Game has ended!`];
-	}, [game?.on, player?.balance, dealer?.username, tiles?.length, playerSeat, dealerIndex]);
+			: [`Chips: ${Math.round(player?.bal) || 0}`, `Game has ended!`];
+	}, [game?.on, player?.bal, dealer?.uN, tiles?.length, playerSeat, dealerIndex]);
 
 	/* ----------------------------------- Show ----------------------------------- */
 
 	function setShowTimeout() {
 		setOpenTimeoutId(
 			setTimeout(function () {
-				setOkToShow(false);
+				setShowConfirm(false);
 			}, 2000)
 		);
 	}
 
-	function handleShow() {
-		if (okToShow) {
+	function showCheck() {
+		if (showConfirm) {
 			clearTimeout(openTimeoutId);
 		}
-		setOkToShow(true);
+		setShowConfirm(true);
 		setShowTimeout();
 	}
 
 	useEffect(() => {
-		if (player && player.showTiles && hu.length !== 3) {
+		if (player && player.sT && hu.length !== 3) {
 			if (!declareHu) {
 				showDeclareHuModal();
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [player?.showTiles]);
+	}, [player?.sT]);
 
 	/* ----------------------------------- Options ----------------------------------- */
 
@@ -110,21 +110,22 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	useEffect(() => {
 		let tiles: IShownTile[] = [];
 		if (wM === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
+			console.log(selectedTiles);
 			// Can self kang during turn & selecting 1 || 4
-			tiles = selectedTiles;
-			setOptions(player.canKang(tiles), false, false, tiles);
+			setOptions(player.canKang(selectedTiles), false, false, selectedTiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 3) {
 			// Can kang during anyone's turn if last thrown tile available & selecting 3
 			tiles = [lastT, ...selectedTiles];
+			console.log(tiles);
 			setOptions(player.canKang(tiles), false, false, tiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 2) {
 			// If last thrown available, can pong during anyone's turn, can chi only during own's turn
-			tiles = player.canPong([lastT, ...selectedTiles])
-				? [lastT, ...selectedTiles]
-				: sortTiles([...selectedTiles, lastT]);
+			let canPongFlag = player.canPong([lastT, ...selectedTiles]);
+			tiles = canPongFlag ? [lastT, ...selectedTiles] : sortTiles([...selectedTiles, lastT]);
+			console.log(tiles);
 			setOptions(
 				false,
-				player.canPong(tiles),
+				canPongFlag,
 				tBy === findLeft(playerSeat) && wM === playerSeat && player.canChi(tiles),
 				tiles
 			);
@@ -142,9 +143,6 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 				player.setHiddenTiles();
 				game.nextPlayerMove();
 			}
-			// else {
-			// 	game.halfMove = true;
-			// }
 			game.ps[playerSeat] = player;
 			FBService.updateGame(game);
 		},
@@ -159,10 +157,10 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 			if (halfAction) {
 				game.taken = true;
 				game.takenB = playerSeat;
-				game.newLog(`${player.username}'s turn - to throw`);
+				game.newLog(`${player.uN}'s turn - to throw`);
 			}
 		},
-		[game, player?.username, playerSeat]
+		[game, player?.uN, playerSeat]
 	);
 
 	/* ----------------------------------- Draw ----------------------------------- */
@@ -171,10 +169,10 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		let drawnTile: IHiddenTile;
 		let revealedTile: IShownTile;
 		if (tiles?.length > 15) {
-			revealedTile = revealTile(drawnTile, tileHashKey);
 			drawnTile = game.giveTiles(1, playerSeat, false, true);
+			revealedTile = revealTile(drawnTile, tileHashKey);
 			if (revealedTile.suit === '花' || revealedTile.suit === '动物') {
-				drawnTile = buHua();
+				drawnTile = handleBuHua();
 			}
 			updateGameStateTakenTile();
 		} else {
@@ -184,14 +182,14 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		handleAction(game);
 	}
 
-	function buHua() {
+	function handleBuHua() {
 		let drawnTile: IHiddenTile;
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (tiles?.length > 15) {
 				drawnTile = game.giveTiles(1, playerSeat, true, true);
 			} else {
-				game.newLog(`${player.username} trying to bu hua but 15 tiles left`);
+				game.newLog(`${player.uN} trying to bu hua but 15 tiles left`);
 				game.draw = true;
 				game.endRound();
 				break;
@@ -217,19 +215,17 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		if (meld.includes(lastT)) {
 			game.ps[tBy].removeFromDiscarded(lastT);
 		}
-		let revealedMeld = meld.map(tile => revealTile(tile, tileHashKey));
+		player.moveIntoShown(meld);
 		if (canKang || canPong) {
-			player.moveIntoShown(revealedMeld);
 			if (canKang) {
 				game.fN = true;
-				game.newLog(`${player.username} kang'd ${revealedMeld[0].card}`);
-				buHua();
+				game.newLog(`${player.uN} kang'd ${meld[0].card}`);
+				handleBuHua();
 			} else {
-				game.newLog(`${player.username} pong'd ${revealedMeld[0].card}`);
+				game.newLog(`${player.uN} pong'd ${meld[0].card}`);
 			}
 		} else {
-			player.moveIntoShown(revealedMeld);
-			game.newLog(`${player.username} chi'd ${lastT.card}`);
+			game.newLog(`${player.uN} chi'd ${lastT.card}`);
 		}
 		updateGameStateTakenTile(false);
 		handleAction(game);
@@ -239,19 +235,18 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		let toKang = revealTile(selectedTiles[0], tileHashKey);
 		player.selfKang(toKang);
 		game.fN = true;
-		game.newLog(`${player.username} kang'd - ${toKang.card}`);
+		game.newLog(`${player.uN} kang'd - ${toKang.card}`);
 		game.lastT = toKang;
-		buHua();
+		handleBuHua();
 		handleAction(game);
 	}
 
 	/* ----------------------------------- Throw ----------------------------------- */
 
-	function handleThrow(tile: IHiddenTile) {
-		let toDiscard = revealTile(tile, tileHashKey);
-		player.discard(toDiscard);
+	function handleThrow(tile: IShownTile) {
+		player.discard(tile);
 		player.setHiddenTiles();
-		game.tileThrown(toDiscard, playerSeat);
+		game.tileThrown(tile, playerSeat);
 		game.handlePongDelay();
 		handleAction(game);
 	}
@@ -264,7 +259,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 			takeLastThrown();
 			updateGameStateTakenTile(false, false);
 		}
-		player.showTiles = true;
+		player.sT = true;
 		handleAction(game);
 	}
 
@@ -274,13 +269,13 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 			if (isHoldingLastThrown) {
 				returnLastThrown();
 			}
-			player.showTiles = false;
+			player.sT = false;
 			handleAction(game);
 		}
 	}
 
 	function handleShowTiles() {
-		player.showTiles = !player.showTiles;
+		player.sT = !player.sT;
 		handleAction(game);
 	}
 
@@ -329,7 +324,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 							pongText={canKang ? `杠` : `碰`}
 							pongDisabled={!canPong && !canKang}
 							huCallback={showDeclareHuModal}
-							okToShow={okToShow}
+							okToShow={showConfirm}
 							huShowing={declareHu}
 							huDisabled={game.hu.length === 3}
 						/>
@@ -344,8 +339,8 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 							drawCallback={() => handleDraw()}
 							drawText={tiles?.length === 15 ? `完` : `摸`}
 							drawDisabled={wM !== playerSeat || taken || delayOn || canChi || canPong || canKang}
-							openCallback={handleShow}
-							okToShow={okToShow}
+							openCallback={showCheck}
+							okToShow={showConfirm}
 							huShowing={declareHu}
 						/>
 					)}
@@ -379,7 +374,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 						<AnnounceHuModal
 							game={game}
 							playerSeat={playerSeat}
-							showing={player.showTiles}
+							showing={player.sT}
 							showCallback={handleShowTiles}
 						/>
 					)}

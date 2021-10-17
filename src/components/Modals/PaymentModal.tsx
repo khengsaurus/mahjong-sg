@@ -30,9 +30,9 @@ export async function sendChips(
 	amount: number,
 	sendCallback?: () => void
 ) {
-	game.ps[sender].balance = Math.round(game.ps[sender].balance - amount);
-	game.ps[recipient].balance = Math.round(game.ps[recipient].balance + amount);
-	game.newLog(`${game.ps[sender].username} sent ${game.ps[recipient].username} ${amount} chips`);
+	game.ps[sender].bal = Math.round(game.ps[sender].bal - amount);
+	game.ps[recipient].bal = Math.round(game.ps[recipient].bal + amount);
+	game.newLog(`${game.ps[sender].uN} sent ${game.ps[recipient].uN} ${amount} chips`);
 	FBService.updateGame(game);
 	sendCallback && sendCallback();
 }
@@ -41,7 +41,7 @@ const PaymentModal = (props: Props) => {
 	const { game, playerSeat, onClose, show } = props;
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
-	let playerUsername = game.ps[playerSeat].username;
+	let playerUsername = game.ps[playerSeat].uN;
 	function sendCallback() {
 		setRecipientIndex(10);
 		setAmount(0);
@@ -68,12 +68,12 @@ const PaymentModal = (props: Props) => {
 						<Typography variant="subtitle1">{'To: '}</Typography>
 						<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
 							{game.ps.map((otherPlayer: User, index: number) => {
-								return otherPlayer.username !== playerUsername ? (
+								return otherPlayer.uN !== playerUsername ? (
 									<FormControlLabel
-										key={otherPlayer.username}
+										key={otherPlayer.uN}
 										value={index}
 										control={<Radio />}
-										label={otherPlayer.username}
+										label={otherPlayer.uN}
 									/>
 								) : null;
 							})}

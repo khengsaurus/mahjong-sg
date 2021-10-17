@@ -25,17 +25,17 @@ import _8索 from './tiles/8索.svg';
 import _9万 from './tiles/9万.svg';
 import _9筒 from './tiles/9筒.svg';
 import _9索 from './tiles/9索.svg';
-import _blue1 from './tiles/blue1.svg';
-import _blue2 from './tiles/blue2.svg';
-import _blue3 from './tiles/blue3.svg';
-import _blue4 from './tiles/blue4.svg';
+import _b1 from './tiles/梅.svg';
+import _b2 from './tiles/蘭.svg';
+import _b3 from './tiles/菊.svg';
+import _b4 from './tiles/竹.svg';
 import _cat from './tiles/猫.svg';
-import _rooster from './tiles/公鸡.svg';
-import _mouse from './tiles/老鼠.svg';
-import _red1 from './tiles/red1.svg';
-import _red2 from './tiles/red2.svg';
-import _red3 from './tiles/red3.svg';
-import _red4 from './tiles/red4.svg';
+import _rooster from './tiles/鸡.svg';
+import _mouse from './tiles/鼠.svg';
+import _r1 from './tiles/春.svg';
+import _r2 from './tiles/夏.svg';
+import _r3 from './tiles/秋.svg';
+import _r4 from './tiles/冬.svg';
 import _worm from './tiles/虫.svg';
 import _東 from './tiles/東.svg';
 import _北 from './tiles/北.svg';
@@ -104,30 +104,30 @@ export default function getTileSrc(card: string): string {
 		case '9筒':
 			return _9筒;
 
-		case '老鼠':
+		case '鼠':
 			return _mouse;
 		case '猫':
 			return _cat;
-		case '公鸡':
+		case '鸡':
 			return _rooster;
 		case '虫':
 			return _worm;
-		case 'red1':
-			return _red1;
-		case 'red2':
-			return _red2;
-		case 'red3':
-			return _red3;
-		case 'red4':
-			return _red4;
-		case 'blue1':
-			return _blue1;
-		case 'blue2':
-			return _blue2;
-		case 'blue3':
-			return _blue3;
-		case 'blue4':
-			return _blue4;
+		case '春':
+			return _r1;
+		case '夏':
+			return _r2;
+		case '秋':
+			return _r3;
+		case '冬':
+			return _r4;
+		case '梅':
+			return _b1;
+		case '蘭':
+			return _b2;
+		case '菊':
+			return _b3;
+		case '竹':
+			return _b4;
 		case '東':
 			return _東;
 		case '南':

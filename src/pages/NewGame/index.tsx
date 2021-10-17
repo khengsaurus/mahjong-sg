@@ -36,7 +36,7 @@ const NewGame = () => {
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
-			return player.username !== userToRemove.username;
+			return player.uN !== userToRemove.uN;
 		}
 		setPlayers(players.filter(isNotUserToRemove));
 		setStartedGame(false);
@@ -92,12 +92,12 @@ const NewGame = () => {
 					<List className="list">
 						{players.length > 0 &&
 							players.map((player, index) => {
-								let isUser = player?.username === user?.username;
+								let isUser = player?.uN === user?.uN;
 								return (
 									<React.Fragment key={`player-${index}`}>
 										<Fade in timeout={isUser ? 0 : fadeTimeout}>
 											<ListItem className="user list-item">
-												<ListItemText primary={player?.username} />
+												<ListItemText primary={player?.uN} />
 												{isUser ? (
 													<ListItemIcon
 														style={{

@@ -4,6 +4,7 @@ import { history } from '../../App';
 import '../../App.scss';
 import FormField from '../../components/FormComponents/FormField';
 import { Pages, Status } from '../../global/enums';
+import { HomeTheme } from '../../global/MuiStyles';
 import { Main } from '../../global/StyledComponents';
 import { StyledButton, Title } from '../../global/StyledMui';
 import { User } from '../../Models/User';
@@ -23,7 +24,7 @@ const NewUser = () => {
 		newUser_IEmailUser(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: Status.SUCCESS, msg: 'Username set' });
+					setAlert({ status: Status.SUCCESS, msg: 'Registered successfully' });
 					callback();
 				}
 			})
@@ -38,7 +39,8 @@ const NewUser = () => {
 				login(user, false);
 				setTimeout(function () {
 					history.push(Pages.HOME);
-				}, 1500);
+					setAlert(null);
+				}, 1000);
 			})
 			.catch(err => {
 				if (err.message === 'Username already taken') {
@@ -48,37 +50,39 @@ const NewUser = () => {
 	}
 
 	const markup = (
-		<Main>
-			<Formik
-				initialValues={{ username: '', email: userEmail }}
-				onSubmit={async values => {
-					handleSubmit(values, successCallback);
-				}}
-			>
-				{({ values }) => (
-					<>
-						<Title title={`Welcome! Choose a username`} />
-						<Form>
-							<Field name="username" label="Username" component={FormField} />
-							<br></br>
-							<br></br>
-							<StyledButton
-								label={`Submit`}
-								autoFocus
-								type="submit"
-								disabled={values.username.trim() === ''}
-							/>
-							{alert?.status !== Status.SUCCESS && (
-								<>
-									<br></br>
-									<StyledButton label="Cancel" onClick={handleCancel} />
-								</>
-							)}
-						</Form>
-					</>
-				)}
-			</Formik>
-		</Main>
+		<HomeTheme>
+			<Main>
+				<Formik
+					initialValues={{ uN: '', email: userEmail }}
+					onSubmit={async values => {
+						handleSubmit(values, successCallback);
+					}}
+				>
+					{({ values }) => (
+						<>
+							<Title title={`Welcome! Choose a username`} />
+							<Form>
+								<Field name="uN" label="Username" component={FormField} />
+								<br></br>
+								<br></br>
+								<StyledButton
+									label={`Submit`}
+									autoFocus
+									type="submit"
+									disabled={values.uN.trim() === ''}
+								/>
+								{alert?.status !== Status.SUCCESS && (
+									<>
+										<br></br>
+										<StyledButton label="Cancel" onClick={handleCancel} />
+									</>
+								)}
+							</Form>
+						</>
+					)}
+				</Formik>
+			</Main>
+		</HomeTheme>
 	);
 
 	return markup;

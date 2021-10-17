@@ -21,8 +21,8 @@ interface AppContextInt {
 	setGameId: (gameId: string) => void;
 	st?: string;
 	setStage: (st: number) => void;
-	selectedTiles?: IHiddenTile[];
-	setSelectedTiles: (tiles: IHiddenTile[]) => void;
+	selectedTiles?: IShownTile[];
+	setSelectedTiles: (tiles: IShownTile[]) => void;
 	loading: boolean;
 	setLoading: () => void;
 	handSize?: Sizes;
@@ -59,7 +59,7 @@ const initialContext: AppContextInt = {
 	st: null,
 	setStage: (st: number) => {},
 	selectedTiles: [],
-	setSelectedTiles: (tiles: IHiddenTile[]) => {},
+	setSelectedTiles: (tiles: IShownTile[]) => {},
 	loading: false,
 	setLoading: () => {},
 	handSize: Sizes.MEDIUM,
@@ -90,7 +90,7 @@ export const AppContextProvider = (props: any) => {
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [st, setStage] = useState(0);
-	const [selectedTiles, setSelectedTiles] = useState<IHiddenTile[]>([]);
+	const [selectedTiles, setSelectedTiles] = useState<IShownTile[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState<Sizes>();
 	const [tilesSize, setTilesSize] = useState<Sizes>();
@@ -169,12 +169,12 @@ export const AppContextProvider = (props: any) => {
 		setPlayers(user ? [user] : []);
 		setUser(user || null);
 		setUserEmail(user ? user.email : '');
-		setHandSize(user ? user.handSize : Sizes.MEDIUM);
-		setTilesSize(user ? user.tilesSize : Sizes.MEDIUM);
-		setControlsSize(user ? user.controlsSize : Sizes.MEDIUM);
-		setBackgroundColor(user ? user.backgroundColor : BackgroundColors.BLUE);
-		setTableColor(user ? user.tableColor : TableColors.GREEN);
-		setTileBackColor(user ? user.tileBackColor : TileColors.GREEN);
+		setHandSize(user ? user.hSz : Sizes.MEDIUM);
+		setTilesSize(user ? user.tSz : Sizes.MEDIUM);
+		setControlsSize(user ? user.cSz : Sizes.MEDIUM);
+		setBackgroundColor(user ? user.bgC : BackgroundColors.BLUE);
+		setTableColor(user ? user.tC : TableColors.GREEN);
+		setTileBackColor(user ? user.tBC : TileColors.GREEN);
 	}
 
 	function login(user: User, existingJwt: boolean) {

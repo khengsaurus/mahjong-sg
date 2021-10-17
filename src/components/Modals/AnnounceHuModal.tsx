@@ -38,7 +38,7 @@ const AnnounceHuModal = (props: Props) => {
 			<DialogContent style={{ paddingBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 				{hu.length === 3 && (
 					<>
-						<Title title={`${game.ps[hu[0]]?.username} hu`} padding="2px" />
+						<Title title={`${game.ps[hu[0]]?.uN} hu`} padding="2px" />
 						<Title title={`${hu[1]} 台${hu[2] === 1 ? ` 自摸` : ``}`} variant="subtitle1" padding="2px" />
 					</>
 				)}

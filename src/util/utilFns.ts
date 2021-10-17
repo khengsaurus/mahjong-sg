@@ -8,22 +8,22 @@ import { User } from '../Models/User';
 export function userToObj(user: User) {
 	return {
 		id: user.id,
-		username: user.username,
-		photoUrl: user.photoUrl,
+		uN: user.uN,
+		pUrl: user.pUrl,
 		email: user.email,
-		handSize: user.handSize,
-		tilesSize: user.tilesSize,
-		controlsSize: user.controlsSize,
-		backgroundColor: user.backgroundColor,
-		tableColor: user.tableColor,
-		tileBackColor: user.tileBackColor
+		hSz: user.hSz,
+		tSz: user.tSz,
+		cSz: user.cSz,
+		bgC: user.bgC,
+		tC: user.tC,
+		tBC: user.tBC
 	};
 }
 
 /**
  * Overloaded method to resolve User object from IJwtData or firebase.firestore.DocumentData
  * @param: IJwtData | firebase.firestore.DocumentData
- * @returns: new User(id, username, photoUrl, email);
+ * @returns: new User(id, uN, pUrl, email);
  */
 export function objToUser(obj: firebase.firestore.DocumentData): User;
 export function objToUser(obj: IJwtData): User;
@@ -39,18 +39,7 @@ export function objToUser(obj: any): User {
 			ref = obj as IJwtData;
 			id = ref.id;
 		}
-		user = new User(
-			id,
-			ref.username,
-			ref.photoUrl,
-			ref.email,
-			ref.handSize,
-			ref.tilesSize,
-			ref.controlsSize,
-			ref.backgroundColor,
-			ref.tableColor,
-			ref.tileBackColor
-		);
+		user = new User(id, ref.uN, ref.pUrl, ref.email, ref.hSz, ref.tSz, ref.cSz, ref.bgC, ref.tC, ref.tBC);
 	} catch (err) {
 		console.error(err.message + 'Failed to resolve user object');
 	} finally {
@@ -69,8 +58,8 @@ export function formatDateToDay(date: Date): string {
 export function objToPlayer(data: any): User {
 	return new User(
 		data.id,
-		data.username,
-		data.photoUrl,
+		data.uN,
+		data.pUrl,
 		data.email || '',
 		Sizes.MEDIUM,
 		Sizes.MEDIUM,
@@ -78,31 +67,31 @@ export function objToPlayer(data: any): User {
 		BackgroundColors.BROWN,
 		TableColors.BROWN,
 		TileColors.GREEN,
-		data.shownTiles,
+		data.sTs,
 		data.melds,
-		data.hiddenTiles,
-		data.discardedTiles,
-		data.lastTakenTile,
-		data.unusedTiles,
-		data.balance,
-		data.showTiles
+		data.hTs,
+		data.dTs,
+		data.lTaken,
+		data.uTs,
+		data.bal,
+		data.sT
 	);
 }
 
-export function playerToObj(user: User, startingBal?: number) {
+export function playerToObj(user: User) {
 	return {
 		id: user.id,
-		username: user.username,
-		photoUrl: user.photoUrl,
+		uN: user.uN,
+		pUrl: user.pUrl,
 		email: '',
-		hiddenTiles: user.hiddenTiles || [],
-		shownTiles: user.shownTiles || [],
+		hTs: user.hTs || [],
+		sTs: user.sTs || [],
 		melds: user.melds || [],
-		discardedTiles: user.discardedTiles || [],
-		lastTakenTile: user.lastTakenTile || {},
-		unusedTiles: user.unusedTiles || 0,
-		balance: user.balance || startingBal || 0,
-		showTiles: user.showTiles || false
+		dTs: user.dTs || [],
+		lTaken: user.lTaken || {},
+		uTs: user.uTs || 0,
+		bal: user.bal || 0,
+		sT: user.sT || false
 	};
 }
 
@@ -283,7 +272,7 @@ export function rotateShownTiles(tiles: IShownTile[], melds: string[]): IShownTi
 	return tiles;
 }
 
-export function findTwoInSorted<T extends any>(i: T, arr: T[], field?: string) {
+export function findTwoInSorted<T extends any>(i: T, arr: T[], field?: string): boolean {
 	let flag = false;
 	for (let n = 0; n < arr?.length; n++) {
 		if (field && i[field] && arr[n][field]) {
@@ -354,7 +343,7 @@ export function getTileHashKey(gameId: string, st: number) {
 export function hashTileId(id: string, tileHashKey: number): string {
 	let hashId = '';
 	id.split('').forEach(i => {
-		hashId += `${i.charCodeAt(0) * tileHashKey}|`;
+		hashId += `${i.charCodeAt(0) + tileHashKey}|`;
 	});
 	return hashId;
 }
@@ -364,10 +353,11 @@ export function getCardFromUnhashedId(id: string): string {
 		case CardCategories.REGULAR:
 			return `${id[2]}${id[1]}`;
 		case CardCategories.WINDS:
-		case CardCategories.HBF:
 		case CardCategories.FLOWER:
 		case CardCategories.ANIMAL:
 			return `${id[1]}`;
+		case CardCategories.HBF:
+			return `${id[1]}${id[2]}`;
 		default:
 			return ``;
 	}
@@ -409,7 +399,7 @@ export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShown
 	let nums = [];
 	hashedTile.id.split('|').forEach(piece => {
 		if (!!Number(piece)) {
-			let num = Math.round(Number(piece) / tileHashKey);
+			let num = Number(piece) - tileHashKey;
 			nums = [...nums, num];
 		}
 	});
@@ -418,7 +408,7 @@ export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShown
 		id,
 		card: getCardFromUnhashedId(id),
 		suit: getSuitFromUnhashedId(id),
-		num: id[0] === CardCategories.REGULAR ? Number(id[1]) : 1,
+		num: id[0] === CardCategories.REGULAR ? Number(id[2]) : 1,
 		ix: getIxFromUnhashedId(id),
 		ref: hashedTile.ref
 	};

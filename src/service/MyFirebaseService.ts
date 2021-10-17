@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { BackgroundColors, Decorations, Sizes, TableColors, TileColors } from '../global/enums';
+import { BackgroundColors, Sizes, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
 import { User } from '../Models/User';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from '../util/utilFns';
@@ -103,7 +103,7 @@ class FirebaseService {
 	}
 
 	/* ------------------------- User related ------------------------- */
-	async registerByIUserPass(username: string, password: string) {
+	async registerByIUserPass(uN: string, password: string) {
 		let userId = '';
 		try {
 			await this.userVal.add({}).then(user => {
@@ -112,30 +112,30 @@ class FirebaseService {
 			const userValNew = this.userVal.doc(userId);
 			const userReprNew = this.userRepr.doc(userId);
 			await this.db.runTransaction(async t => {
-				t.set(userValNew, { username, password });
-				t.set(userReprNew, { username, photoUrl: '', groups: [] });
+				t.set(userValNew, { uN, password });
+				t.set(userReprNew, { uN, pUrl: '', groups: [] });
 			});
 		} catch (err) {
 			console.error('FirebaseService - user was not created: ', +err);
 		}
 	}
 
-	async registerUserEmail(username: string, email: string): Promise<boolean> {
+	async registerUserEmail(uN: string, email: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			try {
 				this.userRepr.add({
-					username,
+					uN,
 					email,
-					photoUrl: '',
-					handSize: Sizes.MEDIUM,
-					tilesSize: Sizes.MEDIUM,
-					controlsSize: Sizes.MEDIUM,
-					backgroundColor: BackgroundColors.BLUE,
-					tableColor: TableColors.GREEN,
-					tileBackColor: TileColors.GREEN,
-					tileFrontColor: TileColors.LIGHT,
-					decoration: Decorations.DEFAULT,
-					groups: []
+					pUrl: '',
+					hSz: Sizes.MEDIUM,
+					tSz: Sizes.MEDIUM,
+					cSz: Sizes.MEDIUM,
+					bgC: BackgroundColors.BLUE,
+					tC: TableColors.GREEN,
+					tBC: TileColors.GREEN
+					// tileFrontColor: TileColors.LIGHT,
+					// decoration: Decorations.DEFAULT,
+					// groups: []
 				});
 				resolve(true);
 			} catch (err) {
@@ -145,12 +145,12 @@ class FirebaseService {
 		});
 	}
 
-	getUserValByUsername(username: string) {
-		return this.userVal.where('username', '==', username).get();
+	getUserValByUsername(uN: string) {
+		return this.userVal.where('uN', '==', uN).get();
 	}
 
-	getUserReprByUsername(username: string) {
-		return this.userRepr.where('username', '==', username).get();
+	getUserReprByUsername(uN: string) {
+		return this.userRepr.where('uN', '==', uN).get();
 	}
 
 	getUserReprByEmail(email: string) {
@@ -163,9 +163,9 @@ class FirebaseService {
 
 	searchUser(partUsername: string, exclude: string) {
 		return this.userRepr
-			.where('username', '!=', exclude)
-			.where('username', '>=', partUsername)
-			.where('username', '<=', partUsername + '\uf8ff')
+			.where('uN', '!=', exclude)
+			.where('uN', '>=', partUsername)
+			.where('uN', '<=', partUsername + '\uf8ff')
 			.limit(4)
 			.get();
 	}
@@ -246,7 +246,7 @@ class FirebaseService {
 		}
 	}
 
-	async createGame(user: User, ps: User[], random?: boolean, startingBal?: number): Promise<Game> {
+	async createGame(user: User, ps: User[], random?: boolean): Promise<Game> {
 		let shuffledPlayers: User[];
 		shuffledPlayers = random ? shuffle(ps) : ps;
 		// let pIds: string[] = [];
@@ -255,7 +255,7 @@ class FirebaseService {
 		shuffledPlayers.forEach(player => {
 			// pIds.push(player.id);
 			es.push(player.email);
-			pS += player.username + ' ';
+			pS += player.uN + ' ';
 		});
 		return new Promise((resolve, reject) => {
 			let crA = new Date();
@@ -264,7 +264,7 @@ class FirebaseService {
 			try {
 				this.gameRef
 					.add({
-						cro: user.username,
+						cro: user.uN,
 						crA,
 						pS,
 						es,
@@ -299,7 +299,7 @@ class FirebaseService {
 						gameId = newGame.id;
 						const game: Game = new Game(
 							gameId,
-							user.username,
+							user.uN,
 							crA,
 							pS,
 							es,

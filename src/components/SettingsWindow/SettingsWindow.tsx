@@ -81,9 +81,9 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 			tableColor !== initialValues.current[1] ||
 			tileBackColor !== initialValues.current[2]
 		) {
-			user.backgroundColor = backgroundColor;
-			user.tableColor = tableColor;
-			user.tileBackColor = tileBackColor;
+			user.bgC = backgroundColor;
+			user.tC = tableColor;
+			user.tBC = tileBackColor;
 			FBService.updateUser(user)
 				.then(res => {
 					if (res) {
