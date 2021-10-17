@@ -39,7 +39,7 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 						tileCard={revLTT.card}
 						segment={Segments.TOP}
 						highlight
-						// classSuffix="margin-right"
+						classSuffix="margin-right"
 					/>
 				)}
 			</div>

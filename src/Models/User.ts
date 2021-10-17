@@ -129,7 +129,7 @@ export class User {
 
 	/* ----------------------------------- Handle last taken tile ----------------------------------- */
 	moveLastTakenTileIntoHidden() {
-		if (!isEmpty(this.lTaken) && !this.hiddenTilesContain(this.lTaken) && this.lTaken.ix !== 0) {
+		if (!isEmpty(this.lTaken) && !this.hiddenTilesContain(this.lTaken) && this.lTaken.ix === 0) {
 			this.addToHidden(this.lTaken);
 		}
 		this.lTaken = {};

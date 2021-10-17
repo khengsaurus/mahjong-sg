@@ -55,7 +55,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 						tileID={revLTT.id}
 						tileCard={revLTT.card}
 						segment={Segments.LEFT}
-						// classSuffix="margin-bottom"
+						classSuffix="margin-bottom"
 						highlight
 					/>
 				)}

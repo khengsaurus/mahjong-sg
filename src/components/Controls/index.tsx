@@ -10,7 +10,7 @@ import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import useCountdown from '../../util/hooks/useCountdown';
-import { findLeft, findTwoInSorted, indexToWind, revealTile, sortTiles } from '../../util/utilFns';
+import { findLeft, findTwo, hashTileString, indexToWind, revealTile, sortTiles } from '../../util/utilFns';
 import { Loader } from '../Loader';
 import AnnounceHuModal from '../Modals/AnnounceHuModal';
 import DeclareHuModal from '../Modals/DeclareHuModal';
@@ -45,7 +45,8 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	const dealer = ps ? ps[dealerIndex] : null;
 
 	const offerPong = useMemo(() => {
-		return delayOn && tBy !== playerSeat && findTwoInSorted(lastT, player?.hTs, 'card');
+		let hashCard = hashTileString(lastT?.card, tileHashKey);
+		return delayOn && tBy !== playerSeat && findTwo(hashCard, player?.hTs, 'id');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [delayOn]);
 
@@ -54,7 +55,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 			? [
 					`Dealer: ${dealer?.uN || ``}`,
 					`Tiles left: ${tiles?.length || 0}`,
-					`Chips: ${Math.round(player?.bal) || ``}`,
+					`Chips: ${Math.round(player?.bal) || 0}`,
 					`Seat: ${indexToWind((playerSeat - dealerIndex + 4) % 4)}`
 			  ]
 			: [`Chips: ${Math.round(player?.bal) || 0}`, `Game has ended!`];
@@ -110,19 +111,16 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	useEffect(() => {
 		let tiles: IShownTile[] = [];
 		if (wM === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
-			console.log(selectedTiles);
 			// Can self kang during turn & selecting 1 || 4
 			setOptions(player.canKang(selectedTiles), false, false, selectedTiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 3) {
 			// Can kang during anyone's turn if last thrown tile available & selecting 3
 			tiles = [lastT, ...selectedTiles];
-			console.log(tiles);
 			setOptions(player.canKang(tiles), false, false, tiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 2) {
 			// If last thrown available, can pong during anyone's turn, can chi only during own's turn
 			let canPongFlag = player.canPong([lastT, ...selectedTiles]);
 			tiles = canPongFlag ? [lastT, ...selectedTiles] : sortTiles([...selectedTiles, lastT]);
-			console.log(tiles);
 			setOptions(
 				false,
 				canPongFlag,
@@ -169,7 +167,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		let drawnTile: IHiddenTile;
 		let revealedTile: IShownTile;
 		if (tiles?.length > 15) {
-			drawnTile = game.giveTiles(1, playerSeat, false, true);
+			drawnTile = game.giveTiles(1, playerSeat, false, true, true);
 			revealedTile = revealTile(drawnTile, tileHashKey);
 			if (revealedTile.suit === '花' || revealedTile.suit === '动物') {
 				drawnTile = handleBuHua();
@@ -187,7 +185,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (tiles?.length > 15) {
-				drawnTile = game.giveTiles(1, playerSeat, true, true);
+				drawnTile = game.giveTiles(1, playerSeat, true, true, true);
 			} else {
 				game.newLog(`${player.uN} trying to bu hua but 15 tiles left`);
 				game.draw = true;

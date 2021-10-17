@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { BackgroundColors, CardCategories, Sizes, Suits, TableColors, TileColors } from '../global/enums';
 import { Game } from '../Models/Game';
@@ -272,32 +273,23 @@ export function rotateShownTiles(tiles: IShownTile[], melds: string[]): IShownTi
 	return tiles;
 }
 
-export function findTwoInSorted<T extends any>(i: T, arr: T[], field?: string): boolean {
-	let flag = false;
-	for (let n = 0; n < arr?.length; n++) {
-		if (field && i[field] && arr[n][field]) {
-			if (arr[n][field] === i[field]) {
-				if (flag === true) {
+export function findTwo(id: string, arr: any[], field?: string): boolean {
+	if (!id || id === '' || isEmpty(arr)) {
+		return false;
+	} else {
+		let flag = false;
+		let arrToSearch: string[] = arr.map(t => t[field] || '');
+		for (let n = 0; n < arrToSearch?.length; n++) {
+			if (arrToSearch[n].includes(id)) {
+				if (flag) {
 					return true;
 				} else {
 					flag = true;
 				}
-			} else if (flag === true) {
-				return false;
-			}
-		} else {
-			if (i === arr[n]) {
-				if (flag === true) {
-					return true;
-				} else {
-					flag = true;
-				}
-			} else if (flag === true) {
-				return false;
 			}
 		}
+		return false;
 	}
-	return false;
 }
 
 export function addSecondsToDate(t: Date, s: number): Date {
@@ -340,11 +332,13 @@ export function getTileHashKey(gameId: string, st: number) {
 	return gameId.charCodeAt(i) + st;
 }
 
-export function hashTileId(id: string, tileHashKey: number): string {
+export function hashTileString(id: string, tileHashKey: number): string {
 	let hashId = '';
-	id.split('').forEach(i => {
-		hashId += `${i.charCodeAt(0) + tileHashKey}|`;
-	});
+	if (id && id !== '') {
+		id.split('').forEach(i => {
+			hashId += `${i.charCodeAt(0) + tileHashKey}|`;
+		});
+	}
 	return hashId;
 }
 
@@ -392,7 +386,7 @@ export function getIxFromUnhashedId(id: string): number {
 }
 
 export function hashTile(tile: IShownTile, tileHashKey: number): IHiddenTile {
-	return { id: hashTileId(tile.id, tileHashKey), ref: tile.ref };
+	return { id: hashTileString(tile.id, tileHashKey), ref: tile.ref };
 }
 
 export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShownTile {
@@ -412,4 +406,19 @@ export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShown
 		ix: getIxFromUnhashedId(id),
 		ref: hashedTile.ref
 	};
+}
+
+export function getHashCardFromHashId(id: string): string {
+	let pieces = id.split('|');
+	switch (String.fromCharCode(Number(pieces[0]))) {
+		case CardCategories.REGULAR:
+			return `${pieces[2]}|${pieces[1]}`;
+		case CardCategories.WINDS:
+		case CardCategories.HBF:
+		case CardCategories.FLOWER:
+		case CardCategories.ANIMAL:
+			return pieces[1];
+		default:
+			return '';
+	}
 }

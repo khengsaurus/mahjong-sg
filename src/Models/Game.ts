@@ -4,9 +4,9 @@ import {
 	findLeft,
 	findOpp,
 	findRight,
-	findTwoInSorted,
+	findTwo,
 	getTileHashKey,
-	hashTileId,
+	hashTileString,
 	revealTile,
 	shuffle
 } from '../util/utilFns';
@@ -182,7 +182,7 @@ export class Game {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
 					let tile: IHiddenTile = {
-						id: hashTileId(`${CardCategories.REGULAR}${suit}${number}${index}`, tileHashKey),
+						id: hashTileString(`${CardCategories.REGULAR}${suit}${number}${index}`, tileHashKey),
 						ix: 0
 					};
 					tiles.push(tile);
@@ -190,14 +190,14 @@ export class Game {
 			});
 			winds.forEach(pai => {
 				let tile: IHiddenTile = {
-					id: hashTileId(`${CardCategories.WINDS}${pai}${index}`, tileHashKey),
+					id: hashTileString(`${CardCategories.WINDS}${pai}${index}`, tileHashKey),
 					ix: 0
 				};
 				tiles.push(tile);
 			});
 			daPai.forEach(pai => {
 				let tile: IHiddenTile = {
-					id: hashTileId(`${CardCategories.HBF}${pai}${index}`, tileHashKey),
+					id: hashTileString(`${CardCategories.HBF}${pai}${index}`, tileHashKey),
 					ix: 0
 				};
 				tiles.push(tile);
@@ -205,14 +205,14 @@ export class Game {
 		});
 		flowers.forEach(flower => {
 			let tile: IHiddenTile = {
-				id: hashTileId(`${CardCategories.FLOWER}${flower}`, tileHashKey),
+				id: hashTileString(`${CardCategories.FLOWER}${flower}`, tileHashKey),
 				ix: 0
 			};
 			tiles.push(tile);
 		});
 		animals.forEach(animal => {
 			let tile: IHiddenTile = {
-				id: hashTileId(`${CardCategories.ANIMAL}${animal}`, tileHashKey),
+				id: hashTileString(`${CardCategories.ANIMAL}${animal}`, tileHashKey),
 				ix: 0
 			};
 			tiles.push(tile);
@@ -274,7 +274,7 @@ export class Game {
 		return flower;
 	}
 
-	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean): IHiddenTile {
+	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean, draw = false): IHiddenTile {
 		let player = this.ps[playerIndex];
 		let hiddenTile: IHiddenTile;
 		let revealedTile: IShownTile;
@@ -296,7 +296,11 @@ export class Game {
 				receivedFlower = true;
 				player.sTs = [...player.sTs, revealedTile];
 			} else {
-				player.hTs = [...player.hTs, hiddenTile];
+				if (draw) {
+					player.getNewTile(hiddenTile);
+				} else {
+					player.hTs = [...player.hTs, hiddenTile];
+				}
 			}
 		}
 		if (n === 1 && receivedFlower) {
@@ -442,12 +446,10 @@ export class Game {
 
 	handlePongDelay() {
 		if (!isEmpty(this.lastT)) {
+			let tileHashKey = getTileHashKey(this.id, this.st);
+			let hashCard = hashTileString(this.lastT.card, tileHashKey);
 			for (let n = 0; n < this.ps.length; n++) {
-				if (
-					n !== this.tBy &&
-					n !== findRight(this.tBy) &&
-					findTwoInSorted(this.lastT, this.ps[n].hTs, 'card')
-				) {
+				if (n !== this.tBy && n !== findRight(this.tBy) && findTwo(hashCard, this.ps[n].hTs, 'id')) {
 					this.dFr = new Date();
 				}
 			}
