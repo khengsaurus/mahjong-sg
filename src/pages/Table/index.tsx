@@ -42,7 +42,7 @@ const noGameMarkup = (
 
 const Table = () => {
 	const { verifyingSession } = useSession();
-	const { user, gameId, tilesSize } = useContext(AppContext);
+	const { user, gameId, tilesSize, setStage } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(loadingScreen);
 	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
@@ -59,6 +59,7 @@ const Table = () => {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(gameData, false);
 				dispatch(setGame(currentGame));
+				setStage(currentGame.stage);
 				setDealer(currentGame.dealer);
 				setFront(currentGame.frontTiles);
 				setBack(currentGame.backTiles);

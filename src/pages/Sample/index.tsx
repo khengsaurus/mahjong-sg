@@ -32,7 +32,7 @@ function getRandomWanTile(): ITile {
 		uuid: '123',
 		index: 1,
 		show: false,
-		isValidFlower: false
+		isVF: false
 	};
 }
 

@@ -19,6 +19,8 @@ interface AppContextInt {
 	setPlayers: (players: User[]) => void;
 	gameId?: string;
 	setGameId: (gameId: string) => void;
+	stage?: string;
+	setStage: (stage: number) => void;
 	selectedTiles?: ITile[];
 	setSelectedTiles: (tiles: ITile[]) => void;
 	loading: boolean;
@@ -53,6 +55,8 @@ const initialContext: AppContextInt = {
 	setPlayers: (players: User[]) => {},
 	gameId: null,
 	setGameId: (gameId: string) => {},
+	stage: null,
+	setStage: (stage: number) => {},
 	selectedTiles: [],
 	setSelectedTiles: (tiles: ITile[]) => {},
 	loading: false,
@@ -83,6 +87,7 @@ export const AppContextProvider = (props: any) => {
 	const [userEmail, setUserEmail] = useState('');
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
+	const [stage, setStage] = useState(0);
 	const [selectedTiles, setSelectedTiles] = useState<ITile[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState<Sizes>();
@@ -92,6 +97,7 @@ export const AppContextProvider = (props: any) => {
 	const [tableColor, setTableColor] = useState<TableColors>();
 	const [tileBackColor, setTileBackColor] = useState<TileColors>();
 	const [alert, setAlert] = useState<IAlert>(null);
+	const secretKey = 'shouldBeServerSideKey';
 
 	const mainTextColor = useMemo(() => {
 		return [BackgroundColors.DARK, BackgroundColors.BLUE, BackgroundColors.GREEN, BackgroundColors.RED].includes(
@@ -104,8 +110,6 @@ export const AppContextProvider = (props: any) => {
 	const tableTextColor = useMemo(() => {
 		return [TableColors.DARK, TableColors.RED].includes(tableColor) ? TextColors.LIGHT : TextColors.DARK;
 	}, [tableColor]);
-
-	const secretKey = 'shouldBeServerSideKey';
 
 	async function handleUserState(): Promise<boolean> {
 		return new Promise((resolve, reject) => {
@@ -213,6 +217,8 @@ export const AppContextProvider = (props: any) => {
 				setPlayers,
 				gameId,
 				setGameId,
+				stage,
+				setStage,
 				selectedTiles,
 				setSelectedTiles,
 				loading,

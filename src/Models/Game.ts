@@ -179,7 +179,7 @@ export class Game {
 						number,
 						index,
 						isVF: false,
-						id: `${CardCategories.REGULAR}${number}${suit}${index}`,
+						id: `${CardCategories.REGULAR}${suit}${number}${index}`,
 						uuid: uuidv4(),
 						show: false
 					};
