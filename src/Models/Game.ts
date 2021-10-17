@@ -188,7 +188,7 @@ export class Game {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
 					let tile: IHiddenTile = {
-						id: hashTileId(`${CardCategories.REGULAR}${number}${suit}${index}`, tileHashKey)
+						id: hashTileId(`${CardCategories.REGULAR}${suit}${number}${index}`, tileHashKey)
 					};
 					tiles.push(tile);
 				});

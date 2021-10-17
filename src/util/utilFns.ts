@@ -361,7 +361,7 @@ export function hashTileId(id: string, tileHashKey): string {
 export function getCardFromUnhashedId(id: string): string {
 	switch (id[0]) {
 		case CardCategories.REGULAR:
-			return `${id[1]}${id[2]}`;
+			return `${id[2]}${id[1]}`;
 		case CardCategories.WINDS:
 		case CardCategories.HBF:
 		case CardCategories.FLOWER:
@@ -375,7 +375,7 @@ export function getCardFromUnhashedId(id: string): string {
 export function getSuitFromUnhashedId(id: string): string {
 	switch (id[0]) {
 		case CardCategories.REGULAR:
-			return `${id[2]}`;
+			return `${id[1]}`;
 		case CardCategories.WINDS:
 		case CardCategories.HBF:
 			return Suits.DAPAI;
