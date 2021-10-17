@@ -30,20 +30,8 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	const { controlsSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
 	const player: User = useSelector((state: IStore) => state.player);
 	const game: Game = useSelector((state: IStore) => state.game);
-	const {
-		players,
-		dealer: dealerIndex,
-		lastThrown,
-		thrownBy,
-		takenTile,
-		whoseMove,
-		delayFrom,
-		tiles,
-		logs,
-		hu,
-		draw
-	} = game;
-	const { delayOn, delayLeft } = useCountdown(delayFrom, 6);
+	const { ps, dealer: dealerIndex, lastT, tBy, taken, wM, dFr, tiles, logs, hu, draw } = game;
+	const { delayOn, delayLeft } = useCountdown(dFr, 6);
 	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
 	const [showSettings, setShowSettings] = useState(false);
 	const [declareHu, setDeclareHu] = useState(false);
@@ -54,15 +42,15 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	const [canKang, setCanKang] = useState(false);
 	const [canChi, setCanChi] = useState(false);
 	const [meld, setMeld] = useState<IShownTile[]>([]);
-	const dealer = players && dealerIndex ? players[dealerIndex] : null;
+	const dealer = ps && dealerIndex ? ps[dealerIndex] : null;
 
 	const offerPong = useMemo(() => {
-		return delayOn && thrownBy !== playerSeat && findTwoInSorted(lastThrown, player?.hiddenTiles, 'card');
+		return delayOn && tBy !== playerSeat && findTwoInSorted(lastT, player?.hiddenTiles, 'card');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [delayOn]);
 
 	const texts = useMemo(() => {
-		return game?.ongoing
+		return game?.on
 			? [
 					`Dealer: ${dealer?.username || ``}`,
 					`Tiles left: ${tiles?.length || 0}`,
@@ -70,7 +58,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 					`Seat: ${indexToWind((playerSeat - dealerIndex + 4) % 4)}`
 			  ]
 			: [`Chips: ${Math.round(player?.balance) || 0}`, `Game has ended!`];
-	}, [game?.ongoing, player?.balance, dealer?.username, tiles?.length, playerSeat, dealerIndex]);
+	}, [game?.on, player?.balance, dealer?.username, tiles?.length, playerSeat, dealerIndex]);
 
 	/* ----------------------------------- Show ----------------------------------- */
 
@@ -102,17 +90,12 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	/* ----------------------------------- Options ----------------------------------- */
 
 	const lastThrownAvailable: boolean = useMemo(() => {
-		return !isEmpty(lastThrown) && !takenTile && players[thrownBy].lastDiscardedTileIs(lastThrown);
-	}, [players, lastThrown, thrownBy, takenTile]);
+		return !isEmpty(lastT) && !taken && ps[tBy].lastDiscardedTileIs(lastT);
+	}, [ps, lastT, tBy, taken]);
 
 	const isHoldingLastThrown: boolean = useMemo(() => {
-		return (
-			!isEmpty(lastThrown) &&
-			player &&
-			player.allHiddenTilesContain(lastThrown) &&
-			!players[thrownBy].lastDiscardedTileIs(lastThrown)
-		);
-	}, [player, players, lastThrown, thrownBy]);
+		return !isEmpty(lastT) && player && player.allHiddenTilesContain(lastT) && !ps[tBy].lastDiscardedTileIs(lastT);
+	}, [player, ps, lastT, tBy]);
 
 	const setOptions = useCallback(
 		(kang: boolean, pong: boolean, chi: boolean, tiles: IShownTile[]) => {
@@ -126,55 +109,56 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 
 	useEffect(() => {
 		let tiles: IShownTile[] = [];
-		if (whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
+		if (wM === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
 			// Can self kang during turn & selecting 1 || 4
 			tiles = selectedTiles;
 			setOptions(player.canKang(tiles), false, false, tiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 3) {
 			// Can kang during anyone's turn if last thrown tile available & selecting 3
-			tiles = [lastThrown, ...selectedTiles];
+			tiles = [lastT, ...selectedTiles];
 			setOptions(player.canKang(tiles), false, false, tiles);
 		} else if (lastThrownAvailable && selectedTiles.length === 2) {
 			// If last thrown available, can pong during anyone's turn, can chi only during own's turn
-			tiles = player.canPong([lastThrown, ...selectedTiles])
-				? [lastThrown, ...selectedTiles]
-				: sortTiles([...selectedTiles, lastThrown]);
+			tiles = player.canPong([lastT, ...selectedTiles])
+				? [lastT, ...selectedTiles]
+				: sortTiles([...selectedTiles, lastT]);
 			setOptions(
 				false,
 				player.canPong(tiles),
-				thrownBy === findLeft(playerSeat) && whoseMove === playerSeat && player.canChi(tiles),
+				tBy === findLeft(playerSeat) && wM === playerSeat && player.canChi(tiles),
 				tiles
 			);
 		} else {
 			setOptions(false, false, false, tiles);
 		}
-	}, [lastThrown, lastThrownAvailable, player, playerSeat, selectedTiles, setOptions, thrownBy, whoseMove]);
+	}, [lastT, lastThrownAvailable, player, playerSeat, selectedTiles, setOptions, tBy, wM]);
 
 	/* ----------------------------------- Action handling ----------------------------------- */
 
 	const handleAction = useCallback(
 		(game: Game) => {
 			setSelectedTiles([]);
-			if (takenTile && game.thrownTile) {
+			if (taken && game.thrown) {
 				player.setHiddenTiles();
 				game.nextPlayerMove();
-			} else {
-				game.halfMove = true;
 			}
-			game.players[playerSeat] = player;
+			// else {
+			// 	game.halfMove = true;
+			// }
+			game.ps[playerSeat] = player;
 			FBService.updateGame(game);
 		},
-		[player, playerSeat, setSelectedTiles, takenTile]
+		[player, playerSeat, setSelectedTiles, taken]
 	);
 
 	const updateGameStateTakenTile = useCallback(
 		(resetLastThrown: boolean = true, halfAction: boolean = true) => {
 			if (resetLastThrown) {
-				game.lastThrown = {};
+				game.lastT = {};
 			}
 			if (halfAction) {
-				game.takenTile = true;
-				game.takenBy = playerSeat;
+				game.taken = true;
+				game.takenB = playerSeat;
 				game.newLog(`${player.username}'s turn - to throw`);
 			}
 		},
@@ -219,25 +203,25 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	/* ----------------------------------- Take ----------------------------------- */
 
 	function takeLastThrown() {
-		game.players[thrownBy].removeFromDiscarded(lastThrown);
-		player.getNewTile(lastThrown);
+		game.ps[tBy].removeFromDiscarded(lastT);
+		player.getNewTile(lastT);
 	}
 
 	function returnLastThrown() {
 		player.returnNewTile();
-		game.players[thrownBy].addToDiscarded(lastThrown);
+		game.ps[tBy].addToDiscarded(lastT);
 	}
 
 	function handleTake() {
-		game.whoseMove = playerSeat;
-		if (meld.includes(lastThrown)) {
-			game.players[thrownBy].removeFromDiscarded(lastThrown);
+		game.wM = playerSeat;
+		if (meld.includes(lastT)) {
+			game.ps[tBy].removeFromDiscarded(lastT);
 		}
 		let revealedMeld = meld.map(tile => revealTile(tile, tileHashKey));
 		if (canKang || canPong) {
 			player.moveIntoShown(revealedMeld);
 			if (canKang) {
-				game.flagNext = true;
+				game.fN = true;
 				game.newLog(`${player.username} kang'd ${revealedMeld[0].card}`);
 				buHua();
 			} else {
@@ -245,7 +229,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 			}
 		} else {
 			player.moveIntoShown(revealedMeld);
-			game.newLog(`${player.username} chi'd ${lastThrown.card}`);
+			game.newLog(`${player.username} chi'd ${lastT.card}`);
 		}
 		updateGameStateTakenTile(false);
 		handleAction(game);
@@ -254,9 +238,9 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	function selfKang() {
 		let toKang = revealTile(selectedTiles[0], tileHashKey);
 		player.selfKang(toKang);
-		game.flagNext = true;
+		game.fN = true;
 		game.newLog(`${player.username} kang'd - ${toKang.card}`);
-		game.lastThrown = toKang;
+		game.lastT = toKang;
 		buHua();
 		handleAction(game);
 	}
@@ -324,7 +308,7 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 						texts={texts}
 						notif={`${
 							delayOn && offerPong
-								? `You have ${delayLeft}s to pong ${lastThrown?.card || ``}`
+								? `You have ${delayLeft}s to pong ${lastT?.card || ``}`
 								: delayOn && !offerPong
 								? `Waiting... (${delayLeft})`
 								: ``
@@ -356,12 +340,10 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 							throwCallback={() => {
 								handleThrow(selectedTiles[0]);
 							}}
-							throwDisabled={selectedTiles.length !== 1 || whoseMove !== playerSeat || !takenTile}
+							throwDisabled={selectedTiles.length !== 1 || wM !== playerSeat || !taken}
 							drawCallback={() => handleDraw()}
 							drawText={tiles?.length === 15 ? `完` : `摸`}
-							drawDisabled={
-								whoseMove !== playerSeat || takenTile || delayOn || canChi || canPong || canKang
-							}
+							drawDisabled={wM !== playerSeat || taken || delayOn || canChi || canPong || canKang}
 							openCallback={handleShow}
 							okToShow={okToShow}
 							huShowing={declareHu}

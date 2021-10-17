@@ -58,13 +58,13 @@ const JoinGame = () => {
 							<ListItem
 								button
 								style={{ padding: 0, margin: 0 }}
-								key={game.playersStr + game.createdAt.toString()}
+								key={game.pS + game.crA.toString()}
 								onClick={() => handleJoinGame(game)}
 								disableRipple
 							>
 								<ListItemText
-									primary={<Typography variant="body2">{formatDateToDay(game.createdAt)}</Typography>}
-									secondary={<Typography variant="body2">{game.playersStr}</Typography>}
+									primary={<Typography variant="body2">{formatDateToDay(game.crA)}</Typography>}
+									secondary={<Typography variant="body2">{game.pS}</Typography>}
 								/>
 								<ArrowForwardIcon />
 							</ListItem>

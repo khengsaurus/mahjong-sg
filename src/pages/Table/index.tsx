@@ -59,35 +59,35 @@ const Table = () => {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(gameData, false);
 				dispatch(setGame(currentGame));
-				setStage(currentGame.stage);
+				setStage(currentGame.st);
 				setDealer(currentGame.dealer);
-				setFront(currentGame.frontTiles);
-				setBack(currentGame.backTiles);
+				setFront(currentGame.front);
+				setBack(currentGame.back);
 				let player: User;
 				switch (user.username) {
-					case currentGame.players[0].username:
-						player = currentGame.players[0];
+					case currentGame.ps[0].username:
+						player = currentGame.ps[0];
 						setBottomPlayerIndex(0);
 						setLeftPlayerIndex(3);
 						setTopPlayerIndex(2);
 						setRightPlayerIndex(1);
 						break;
-					case currentGame.players[1].username:
-						player = currentGame.players[1];
+					case currentGame.ps[1].username:
+						player = currentGame.ps[1];
 						setBottomPlayerIndex(1);
 						setLeftPlayerIndex(0);
 						setTopPlayerIndex(3);
 						setRightPlayerIndex(2);
 						break;
-					case currentGame.players[2].username:
-						player = currentGame.players[2];
+					case currentGame.ps[2].username:
+						player = currentGame.ps[2];
 						setBottomPlayerIndex(2);
 						setLeftPlayerIndex(1);
 						setTopPlayerIndex(0);
 						setRightPlayerIndex(3);
 						break;
-					case currentGame.players[3].username:
-						player = currentGame.players[3];
+					case currentGame.ps[3].username:
+						player = currentGame.ps[3];
 						setBottomPlayerIndex(3);
 						setLeftPlayerIndex(2);
 						setTopPlayerIndex(1);
@@ -104,12 +104,12 @@ const Table = () => {
 	}, []);
 
 	const getMarkup = () => {
-		if (game && game.stage !== 0) {
+		if (game && game.st !== 0) {
 			let currentWind = game.repr()[0];
-			let topPlayer = game.players[TopPlayerIndex];
-			let rightPlayer = game.players[RightPlayerIndex];
-			let bottomPlayer = game.players[BottomPlayerIndex];
-			let leftPlayer = game.players[LeftPlayerIndex];
+			let topPlayer = game.ps[TopPlayerIndex];
+			let rightPlayer = game.ps[RightPlayerIndex];
+			let bottomPlayer = game.ps[BottomPlayerIndex];
+			let leftPlayer = game.ps[LeftPlayerIndex];
 			return (
 				<Main>
 					<TableDiv className="safe-area">
@@ -122,10 +122,8 @@ const Table = () => {
 									hasFront={front === TopPlayerIndex}
 									hasBack={back === TopPlayerIndex}
 									tilesSize={tilesSize}
-									lastThrown={
-										game.thrownBy === TopPlayerIndex || game.whoseMove === TopPlayerIndex
-											? game.lastThrown
-											: null
+									lastT={
+										game.tBy === TopPlayerIndex || game.wM === TopPlayerIndex ? game.lastT : null
 									}
 								/>
 							)}
@@ -138,9 +136,9 @@ const Table = () => {
 									hasFront={front === RightPlayerIndex}
 									hasBack={back === RightPlayerIndex}
 									tilesSize={tilesSize}
-									lastThrown={
-										game.thrownBy === RightPlayerIndex || game.whoseMove === RightPlayerIndex
-											? game.lastThrown
+									lastT={
+										game.tBy === RightPlayerIndex || game.wM === RightPlayerIndex
+											? game.lastT
 											: null
 									}
 								/>
@@ -153,9 +151,9 @@ const Table = () => {
 									dealer={dealer === BottomPlayerIndex}
 									hasFront={front === BottomPlayerIndex}
 									hasBack={back === BottomPlayerIndex}
-									lastThrown={
-										game.thrownBy === BottomPlayerIndex || game.whoseMove === BottomPlayerIndex
-											? game.lastThrown
+									lastT={
+										game.tBy === BottomPlayerIndex || game.wM === BottomPlayerIndex
+											? game.lastT
 											: null
 									}
 								/>
@@ -169,10 +167,8 @@ const Table = () => {
 									hasFront={front === LeftPlayerIndex}
 									hasBack={back === LeftPlayerIndex}
 									tilesSize={tilesSize}
-									lastThrown={
-										game.thrownBy === LeftPlayerIndex || game.whoseMove === LeftPlayerIndex
-											? game.lastThrown
-											: null
+									lastT={
+										game.tBy === LeftPlayerIndex || game.wM === LeftPlayerIndex ? game.lastT : null
 									}
 								/>
 							)}

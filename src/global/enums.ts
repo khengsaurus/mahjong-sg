@@ -6,7 +6,7 @@ export interface IPlayerComponentProps {
 	hasFront?: boolean;
 	hasBack?: boolean;
 	isPlayerTurn?: boolean;
-	lastThrown?: IShownTile;
+	lastT?: IShownTile;
 	tilesSize?: Sizes;
 }
 

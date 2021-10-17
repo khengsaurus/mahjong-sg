@@ -18,7 +18,7 @@ interface Props {
 
 const AnnounceHuModal = (props: Props) => {
 	const { game, playerSeat, showing, showCallback } = props;
-	const { hu, draw, ongoing, dealer } = game;
+	const { hu, draw, on, dealer } = game;
 
 	async function nextRound() {
 		game.initRound();
@@ -38,7 +38,7 @@ const AnnounceHuModal = (props: Props) => {
 			<DialogContent style={{ paddingBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 				{hu.length === 3 && (
 					<>
-						<Title title={`${game.players[hu[0]]?.username} hu`} padding="2px" />
+						<Title title={`${game.ps[hu[0]]?.username} hu`} padding="2px" />
 						<Title title={`${hu[1]} 台${hu[2] === 1 ? ` 自摸` : ``}`} variant="subtitle1" padding="2px" />
 					</>
 				)}
@@ -49,8 +49,7 @@ const AnnounceHuModal = (props: Props) => {
 						<Title title={`15 tiles left`} variant="subtitle1" padding="2px" />
 					</>
 				)}
-				{!ongoing ||
-					(dealer === 10 && <Title title={`The game has ended!`} variant="subtitle1" padding="2px" />)}
+				{!on || (dealer === 10 && <Title title={`The game has ended!`} variant="subtitle1" padding="2px" />)}
 			</DialogContent>
 			<DialogActions
 				style={{
@@ -64,9 +63,7 @@ const AnnounceHuModal = (props: Props) => {
 				{hu.length === 3 && hu[0] !== playerSeat && (
 					<StyledButton label={showing ? 'Close' : 'Open'} onClick={showCallback} />
 				)}
-				{ongoing && playerSeat === Number(game.dealer) && (
-					<StyledButton label={`Next Round`} onClick={nextRound} />
-				)}
+				{on && playerSeat === Number(game.dealer) && <StyledButton label={`Next Round`} onClick={nextRound} />}
 			</DialogActions>
 		</Dialog>
 	);

@@ -200,7 +200,7 @@ class FirebaseService {
 				userRef.set({ ...user });
 				resolve(true);
 			} catch (err) {
-				reject(new Error('FirebaseService - user doc was not updated: ' + err.msg));
+				reject(new Error('FirebaseService - user doc was not up: ' + err.msg));
 			}
 		});
 	}
@@ -210,9 +210,9 @@ class FirebaseService {
 	async getInvites(user: User) {
 		if (user) {
 			return await this.gameRef
-				.where('playerIds', 'array-contains', user.id)
-				.where('ongoing', '==', true)
-				// .orderBy('createdAt', 'desc')
+				.where('es', 'array-contains', user.email)
+				.where('on', '==', true)
+				// .orderBy('crA', 'desc')
 				.limit(5)
 				.get();
 		} else {
@@ -224,9 +224,9 @@ class FirebaseService {
 		if (user) {
 			return (
 				this.gameRef
-					.where('playerIds', 'array-contains', user.id)
-					.where('ongoing', '==', true)
-					// .orderBy('createdAt', 'desc')
+					.where('es', 'array-contains', user.email)
+					.where('on', '==', true)
+					// .orderBy('crA', 'desc')
 					.limit(5)
 					.onSnapshot(observer)
 			);
@@ -246,51 +246,51 @@ class FirebaseService {
 		}
 	}
 
-	async createGame(user: User, players: User[], random?: boolean, startingBal?: number): Promise<Game> {
+	async createGame(user: User, ps: User[], random?: boolean, startingBal?: number): Promise<Game> {
 		let shuffledPlayers: User[];
-		shuffledPlayers = random ? shuffle(players) : players;
-		let playerIds: string[] = [];
-		let emails: string[] = [];
-		let playersStr: string = '';
+		shuffledPlayers = random ? shuffle(ps) : ps;
+		// let pIds: string[] = [];
+		let es: string[] = [];
+		let pS: string = '';
 		shuffledPlayers.forEach(player => {
-			playerIds.push(player.id);
-			emails.push(player.email);
-			playersStr += player.username + ' ';
+			// pIds.push(player.id);
+			es.push(player.email);
+			pS += player.username + ' ';
 		});
 		return new Promise((resolve, reject) => {
-			let createdAt = new Date();
-			let delayed = addSecondsToDate(createdAt, -10);
+			let crA = new Date();
+			let delayed = addSecondsToDate(crA, -10);
 			let gameId = '';
 			try {
 				this.gameRef
 					.add({
-						creator: user.username,
-						createdAt,
-						playersStr,
-						emails,
-						ongoing: true,
+						cro: user.username,
+						crA,
+						pS,
+						es,
+						on: true,
 						// lastExec: 0,
-						updated: createdAt,
-						delayFrom: delayed,
-						stage: 0,
+						up: crA,
+						dFr: delayed,
+						st: 0,
 						prev: -1,
 						dealer: 0,
-						midRound: false,
-						flagNext: true,
-						whoseMove: 0,
-						playerIds,
-						players: shuffledPlayers.map(function (player: User) {
+						mid: false,
+						fN: true,
+						wM: 0,
+						// pIds,
+						ps: shuffledPlayers.map(function (player: User) {
 							return playerToObj(player);
 						}),
 						tiles: [],
-						frontTiles: 0,
-						backTiles: 0,
-						lastThrown: {},
-						thrownBy: 0,
-						thrownTile: false,
-						takenTile: true,
-						takenBy: 0,
-						halfMove: false,
+						front: 0,
+						back: 0,
+						lastT: {},
+						tBy: 0,
+						thrown: false,
+						taken: true,
+						takenB: 0,
+						// halfMove: false,
 						hu: [],
 						draw: false,
 						logs: []
@@ -300,12 +300,12 @@ class FirebaseService {
 						const game: Game = new Game(
 							gameId,
 							user.username,
-							createdAt,
-							playersStr,
-							emails,
+							crA,
+							pS,
+							es,
 							true,
 							// 0,
-							createdAt,
+							crA,
 							delayed,
 							0,
 							-1,
@@ -313,7 +313,7 @@ class FirebaseService {
 							false,
 							true,
 							0,
-							playerIds,
+							// pIds,
 							shuffledPlayers,
 							[],
 							null,
@@ -323,7 +323,7 @@ class FirebaseService {
 							false,
 							true,
 							0,
-							false,
+							// false,
 							[],
 							false,
 							[]
@@ -348,7 +348,7 @@ class FirebaseService {
 				});
 			} catch (err) {
 				console.error(err);
-				reject(new Error('FirebaseService - game doc was not updated'));
+				reject(new Error('FirebaseService - game doc was not up'));
 			}
 		});
 	}
@@ -376,7 +376,7 @@ class FirebaseService {
 	// 			});
 	// 		} catch (err) {
 	// 			console.error(err);
-	// 			reject(new Error('FirebaseService - actions doc was not updated'));
+	// 			reject(new Error('FirebaseService - actions doc was not up'));
 	// 		}
 	// 	});
 	// }

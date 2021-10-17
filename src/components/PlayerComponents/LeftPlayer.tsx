@@ -13,7 +13,7 @@ import UnusedTiles from '../Tiles/UnusedTiles';
 import './playerComponents.scss';
 
 const LeftPlayer = (props: IPlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown } = props;
+	const { player, dealer, hasFront, hasBack, lastT } = props;
 	const { hiddenTiles, shownTiles, melds, discardedTiles, lastTakenTile, unusedTiles, showTiles } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
@@ -80,7 +80,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 					segment={Segments.LEFT}
 					dealer={dealer}
 					tilesSize={tilesSize}
-					lastThrownId={lastThrown?.id}
+					lastThrownId={lastT?.id}
 				/>
 			</div>
 		);
@@ -97,7 +97,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 				tiles={discardedTiles}
 				// tiles={[...hiddenTiles, ...discardedTiles]}
 				segment={Segments.LEFT}
-				lastThrownId={lastThrown?.id}
+				lastThrownId={lastT?.id}
 			/>
 		);
 	};

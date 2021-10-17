@@ -19,8 +19,8 @@ interface AppContextInt {
 	setPlayers: (players: User[]) => void;
 	gameId?: string;
 	setGameId: (gameId: string) => void;
-	stage?: string;
-	setStage: (stage: number) => void;
+	st?: string;
+	setStage: (st: number) => void;
 	selectedTiles?: IHiddenTile[];
 	setSelectedTiles: (tiles: IHiddenTile[]) => void;
 	loading: boolean;
@@ -56,8 +56,8 @@ const initialContext: AppContextInt = {
 	setPlayers: (players: User[]) => {},
 	gameId: null,
 	setGameId: (gameId: string) => {},
-	stage: null,
-	setStage: (stage: number) => {},
+	st: null,
+	setStage: (st: number) => {},
 	selectedTiles: [],
 	setSelectedTiles: (tiles: IHiddenTile[]) => {},
 	loading: false,
@@ -89,7 +89,7 @@ export const AppContextProvider = (props: any) => {
 	const [userEmail, setUserEmail] = useState('');
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
-	const [stage, setStage] = useState(0);
+	const [st, setStage] = useState(0);
 	const [selectedTiles, setSelectedTiles] = useState<IHiddenTile[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState<Sizes>();
@@ -114,8 +114,8 @@ export const AppContextProvider = (props: any) => {
 	}, [tableColor]);
 
 	const tileHashKey = useMemo(() => {
-		return getTileHashKey(gameId, stage);
-	}, [gameId, stage]);
+		return getTileHashKey(gameId, st);
+	}, [gameId, st]);
 
 	async function handleUserState(): Promise<boolean> {
 		return new Promise((resolve, reject) => {
@@ -223,7 +223,7 @@ export const AppContextProvider = (props: any) => {
 				setPlayers,
 				gameId,
 				setGameId,
-				stage,
+				st,
 				setStage,
 				selectedTiles,
 				setSelectedTiles,

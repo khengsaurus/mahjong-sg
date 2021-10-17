@@ -109,37 +109,38 @@ export function playerToObj(user: User, startingBal?: number) {
 export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): Game => {
 	let ref = doc.data();
 	if (repr) {
-		return new Game(doc.id, ref.creator, ref.createdAt.toDate(), ref.playersStr, ref.emails, ref.ongoing);
+		// return new Game(doc.id, ref.cro, ref.crA.toDate(), ref.pS, ref.es, ref.on);
+		return new Game(doc.id, ref.cro, ref.crA.toDate(), ref.pS, ref.on);
 	} else {
 		return new Game(
 			doc.id,
-			ref.creator,
-			ref.createdAt.toDate(),
-			ref.playersStr,
-			ref.emails,
-			Boolean(ref.ongoing),
+			ref.cro,
+			ref.crA.toDate(),
+			ref.pS,
+			ref.es,
+			Boolean(ref.on),
 			// Number(ref.lastExec),
-			ref.updated.toDate(),
-			ref.delayFrom.toDate(),
-			Number(ref.stage),
+			ref.up.toDate(),
+			ref.dFr.toDate(),
+			Number(ref.st),
 			Number(ref.prev),
 			Number(ref.dealer),
-			Boolean(ref.midRound),
-			Boolean(ref.flagNext),
-			Number(ref.whoseMove),
-			ref.playerIds,
-			ref.players.map((player: any) => {
+			Boolean(ref.mid),
+			Boolean(ref.fN),
+			Number(ref.wM),
+			// ref.pIds,
+			ref.ps.map((player: any) => {
 				return objToPlayer(player);
 			}),
 			ref.tiles,
-			Number(ref.frontTiles),
-			Number(ref.backTiles),
-			ref.lastThrown,
-			Number(ref.thrownBy),
-			Boolean(ref.thrownTile),
-			Boolean(ref.takenTile),
-			Number(ref.takenBy),
-			Boolean(ref.halfMove),
+			Number(ref.front),
+			Number(ref.back),
+			ref.lastT,
+			Number(ref.tBy),
+			Boolean(ref.thrown),
+			Boolean(ref.taken),
+			Number(ref.takenB),
+			// Boolean(ref.halfMove),
 			ref.hu,
 			Boolean(ref.draw),
 			ref.logs
@@ -150,35 +151,35 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 export function gameToObj(game: Game) {
 	return {
 		id: game.id || '',
-		creator: game.creator || '',
-		createdAt: game.createdAt || new Date(),
-		playersStr: game.playersStr || '',
-		emails: game.emails || [],
-		ongoing: game.ongoing || true,
+		cro: game.cro || '',
+		crA: game.crA || new Date(),
+		pS: game.pS || '',
+		es: game.es || [],
+		on: game.on || true,
 		// lastExec: game.lastExec || 0,
-		updated: game.updated || new Date(),
-		delayFrom: game.delayFrom || new Date(),
-		stage: game.stage || 0,
+		up: game.up || new Date(),
+		dFr: game.dFr || new Date(),
+		st: game.st || 0,
 		prev: game.prev || 0,
 		dealer: game.dealer || 0,
-		midRound: game.midRound || false,
-		flagNext: game.flagNext || false,
-		whoseMove: game.whoseMove || 0,
-		playerIds: game.playerIds || [],
-		players: game.players
-			? game.players.map(player => {
+		mid: game.mid || false,
+		fN: game.fN || false,
+		wM: game.wM || 0,
+		// pIds: game.pIds || [],
+		ps: game.ps
+			? game.ps.map(player => {
 					return playerToObj(player);
 			  })
 			: [],
 		tiles: game.tiles,
-		frontTiles: game.frontTiles || 0,
-		backTiles: game.backTiles || 0,
-		lastThrown: game.lastThrown || {},
-		thrownBy: game.thrownBy || 0,
-		thrownTile: game.thrownTile || false,
-		takenTile: game.takenTile || false,
-		takenBy: game.takenBy || 0,
-		halfMove: game.halfMove || false,
+		front: game.front || 0,
+		back: game.back || 0,
+		lastT: game.lastT || {},
+		tBy: game.tBy || 0,
+		thrown: game.thrown || false,
+		taken: game.taken || false,
+		takenB: game.takenB || 0,
+		// halfMove: game.halfMove || false,
 		hu: game.hu || [],
 		draw: game.draw || false,
 		logs: game.logs || []
@@ -345,12 +346,12 @@ export function resolveJwt(token: string, key: string): string | JwtPayload {
 	}
 }
 
-export function getTileHashKey(gameId: string, stage: number) {
-	let i = Math.min(stage, gameId.length - 1);
-	return (gameId.charCodeAt(0) + gameId.charCodeAt(i)) * stage;
+export function getTileHashKey(gameId: string, st: number) {
+	let i = Math.min(st, gameId.length - 1);
+	return gameId.charCodeAt(i) + st;
 }
 
-export function hashTileId(id: string, tileHashKey): string {
+export function hashTileId(id: string, tileHashKey: number): string {
 	let hashId = '';
 	id.split('').forEach(i => {
 		hashId += `${i.charCodeAt(0) * tileHashKey}|`;
