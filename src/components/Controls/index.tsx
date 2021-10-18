@@ -90,9 +90,16 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 
 	/* ----------------------------------- Options ----------------------------------- */
 
-	const lastThrownAvailable: boolean = useMemo(() => {
-		return !isEmpty(lastT) && !taken && ps[tBy].lastDiscardedTileIs(lastT);
-	}, [ps, lastT, tBy, taken]);
+	const lastThrownAvailable = useCallback(
+		(toHu = false) => {
+			if (!isEmpty(lastT) && ps[tBy].lastDiscardedTileIs(lastT)) {
+				return toHu ? true : !taken;
+			} else {
+				return false;
+			}
+		},
+		[ps, lastT, tBy, taken]
+	);
 
 	const isHoldingLastThrown: boolean = useMemo(() => {
 		return !isEmpty(lastT) && player && player.allHiddenTilesContain(lastT) && !ps[tBy].lastDiscardedTileIs(lastT);
@@ -113,11 +120,11 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 		if (wM === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4)) {
 			// Can self kang during turn & selecting 1 || 4
 			setOptions(player.canKang(selectedTiles), false, false, selectedTiles);
-		} else if (lastThrownAvailable && selectedTiles.length === 3) {
+		} else if (lastThrownAvailable() && selectedTiles.length === 3) {
 			// Can kang during anyone's turn if last thrown tile available & selecting 3
 			tiles = [lastT, ...selectedTiles];
 			setOptions(player.canKang(tiles), false, false, tiles);
-		} else if (lastThrownAvailable && selectedTiles.length === 2) {
+		} else if (lastThrownAvailable() && selectedTiles.length === 2) {
 			// If last thrown available, can pong during anyone's turn, can chi only during own's turn
 			let canPongFlag = player.canPong([lastT, ...selectedTiles]);
 			tiles = canPongFlag ? [lastT, ...selectedTiles] : sortTiles([...selectedTiles, lastT]);
@@ -164,15 +171,12 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	/* ----------------------------------- Draw ----------------------------------- */
 
 	function handleDraw() {
-		let drawnTile: IHiddenTile;
-		let revealedTile: IShownTile;
 		if (tiles?.length > 15) {
-			drawnTile = game.giveTiles(1, playerSeat, false, true, true);
-			revealedTile = revealTile(drawnTile, tileHashKey);
-			if (revealedTile.suit === '花' || revealedTile.suit === '动物') {
-				drawnTile = handleBuHua();
+			const { drewHua } = game.giveTiles(1, playerSeat, false, true, true);
+			if (drewHua) {
+				handleBuHua();
 			}
-			updateGameStateTakenTile();
+			updateGameStateTakenTile(false);
 		} else {
 			game.draw = true;
 			game.endRound();
@@ -181,11 +185,10 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 	}
 
 	function handleBuHua() {
-		let drawnTile: IHiddenTile;
 		let initNoHiddenTiles = player.countAllHiddenTiles();
 		while (player.countAllHiddenTiles() === initNoHiddenTiles) {
 			if (tiles?.length > 15) {
-				drawnTile = game.giveTiles(1, playerSeat, true, true, true);
+				game.giveTiles(1, playerSeat, true, true, true);
 			} else {
 				game.newLog(`${player.uN} trying to bu hua but 15 tiles left`);
 				game.draw = true;
@@ -193,19 +196,13 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 				break;
 			}
 		}
-		return drawnTile;
 	}
 
 	/* ----------------------------------- Take ----------------------------------- */
 
-	function takeLastThrown() {
-		game.ps[tBy].removeFromDiscarded(lastT);
-		player.getNewTile(lastT);
-	}
-
 	function returnLastThrown() {
 		player.returnNewTile();
-		game.ps[tBy].addToDiscarded(lastT);
+		taken ? player.getNewTile(lastT) : game.ps[tBy].addToDiscarded(lastT);
 	}
 
 	function handleTake() {
@@ -253,9 +250,9 @@ const Controls = ({ playerSeat }: ControlsProps) => {
 
 	function showDeclareHuModal() {
 		setDeclareHu(true);
-		if (lastThrownAvailable) {
-			takeLastThrown();
-			updateGameStateTakenTile(false, false);
+		if (lastThrownAvailable(true) && isEmpty(player.lTaken)) {
+			game.ps[tBy].removeFromDiscarded(lastT);
+			player.getNewTile(lastT);
 		}
 		player.sT = true;
 		handleAction(game);

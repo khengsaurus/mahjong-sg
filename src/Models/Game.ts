@@ -1,5 +1,18 @@
 import { isEmpty } from 'lodash';
-import { Animals, CardCategories, DaPai, Flowers, PlayerFlowers, Suits, Winds } from '../global/enums';
+import {
+	Animals,
+	AnimalIndex,
+	CardCategories,
+	DaPai,
+	DaPaiIndex,
+	Flowers,
+	FlowerIndex,
+	PlayerFlowers,
+	Suits,
+	SuitsIndex,
+	Winds,
+	WindIndex
+} from '../global/enums';
 import {
 	findLeft,
 	findOpp,
@@ -7,6 +20,8 @@ import {
 	findTwo,
 	getTileHashKey,
 	hashTileString,
+	isHua,
+	randomNum,
 	revealTile,
 	shuffle
 } from '../util/utilFns';
@@ -182,7 +197,10 @@ export class Game {
 			suits.forEach(suit => {
 				oneToNine.forEach(number => {
 					let tile: IHiddenTile = {
-						id: hashTileString(`${CardCategories.REGULAR}${suit}${number}${index}`, tileHashKey),
+						id: hashTileString(
+							`${CardCategories.REGULAR}${SuitsIndex[suit]}${number}${suit}${index}`,
+							tileHashKey
+						),
 						ix: 0
 					};
 					tiles.push(tile);
@@ -190,14 +208,20 @@ export class Game {
 			});
 			winds.forEach(pai => {
 				let tile: IHiddenTile = {
-					id: hashTileString(`${CardCategories.WINDS}${pai}${index}`, tileHashKey),
+					id: hashTileString(
+						`${CardCategories.WINDS}${WindIndex[pai]}${pai}${index}${randomNum(9)}`,
+						tileHashKey
+					),
 					ix: 0
 				};
 				tiles.push(tile);
 			});
 			daPai.forEach(pai => {
 				let tile: IHiddenTile = {
-					id: hashTileString(`${CardCategories.HBF}${pai}${index}`, tileHashKey),
+					id: hashTileString(
+						`${CardCategories.HBF}${DaPaiIndex[pai]}${pai}${index}${randomNum(9)}`,
+						tileHashKey
+					),
 					ix: 0
 				};
 				tiles.push(tile);
@@ -205,14 +229,20 @@ export class Game {
 		});
 		flowers.forEach(flower => {
 			let tile: IHiddenTile = {
-				id: hashTileString(`${CardCategories.FLOWER}${flower}`, tileHashKey),
+				id: hashTileString(
+					`${CardCategories.FLOWER}${FlowerIndex[flower]}${flower}${randomNum(9)}`,
+					tileHashKey
+				),
 				ix: 0
 			};
 			tiles.push(tile);
 		});
 		animals.forEach(animal => {
 			let tile: IHiddenTile = {
-				id: hashTileString(`${CardCategories.ANIMAL}${animal}`, tileHashKey),
+				id: hashTileString(
+					`${CardCategories.ANIMAL}${AnimalIndex[animal]}${animal}${randomNum(9)}${randomNum(9)}`,
+					tileHashKey
+				),
 				ix: 0
 			};
 			tiles.push(tile);
@@ -249,70 +279,103 @@ export class Game {
 	}
 
 	// Checks if player has drawn matching animals/flowers
-	validateFlower(flower: IShownTile, playerIndex: number): IShownTile {
-		if (flower.suit === Suits.ANIMAL) {
-			flower.v = true;
-			if (
-				(this.ps[playerIndex].shownTilesContainCard(Animals.CAT) &&
-					this.ps[playerIndex].shownTilesContainCard(Animals.MOUSE)) ||
-				(this.ps[playerIndex].shownTilesContainCard(Animals.ROOSTER) &&
-					this.ps[playerIndex].shownTilesContainCard(Animals.WORM))
-			) {
-				this.newLog(`${this.ps[playerIndex].uN} drew matching animals`);
-				this.fN = true;
-			}
-		} else if (flower.suit === Suits.FLOWER && PlayerFlowers[playerIndex].includes(flower.card)) {
-			flower.v = true;
-			if (
-				this.ps[playerIndex].shownTilesContainCard(PlayerFlowers[playerIndex][0]) &&
-				this.ps[playerIndex].shownTilesContainCard(PlayerFlowers[playerIndex][1])
-			) {
-				this.newLog(`${this.ps[playerIndex].uN} drew both his/her flowers`);
-				this.fN = true;
-			}
+
+	getMatchingFlowersMsg(tile: IShownTile, playerIndex: number) {
+		switch (tile.suit) {
+			case Suits.ANIMAL:
+				return (tile.card === Animals.CAT && this.ps[playerIndex].shownTilesContainCard(Animals.MOUSE)) ||
+					(tile.card === Animals.MOUSE && this.ps[playerIndex].shownTilesContainCard(Animals.CAT)) ||
+					(tile.card === Animals.ROOSTER && this.ps[playerIndex].shownTilesContainCard(Animals.WORM)) ||
+					(tile.card === Animals.WORM && this.ps[playerIndex].shownTilesContainCard(Animals.ROOSTER))
+					? `${this.ps[playerIndex].uN} drew matching animals`
+					: '';
+			case Suits.FLOWER:
+				return this.ps[playerIndex].shownTilesContainCard(PlayerFlowers[playerIndex][0]) &&
+					this.ps[playerIndex].shownTilesContainCard(PlayerFlowers[playerIndex][1])
+					? `${this.ps[playerIndex].uN} drew both his/her flowers`
+					: '';
+			default:
+				return '';
 		}
-		return flower;
 	}
 
-	giveTiles(n: number, playerIndex: number, buHua?: boolean, offsetUnused?: boolean, draw = false): IHiddenTile {
+	/**
+	 * Validates if a shownTile is a flower
+	 * Side effects: shownTile.v = true if player's flower
+	 * @returns: {tile, tile.card, announcement if player drew matching flowers}
+	 */
+	validateFlower(tile: IShownTile, playerIndex: number): { tile: IShownTile; hua: string; msg: string } {
+		let msg = '';
+		if (!isHua(tile)) {
+			return { tile, hua: '', msg };
+		} else if (
+			tile.suit === Suits.ANIMAL ||
+			(tile.suit === Suits.FLOWER && PlayerFlowers[playerIndex].includes(tile.card))
+		) {
+			tile.v = true;
+		}
+		if (isHua(tile)) {
+			msg = this.getMatchingFlowersMsg(tile, playerIndex);
+			if (msg !== '') {
+				this.fN = true;
+			}
+		}
+		return { tile, hua: tile.card, msg };
+	}
+
+	/**
+	 * Side effects: calls validateFlower
+	 * If new tile is a flower, -> player.sTs
+	 * Else, draw ? player.getNewTile(tile) : -> player.hTs
+	 */
+	handleNewTile(tile: IHiddenTile, playerIndex: number, draw: boolean) {
+		let tileHashKey = getTileHashKey(this.id, this.st);
+		let revealedTile = revealTile(tile, tileHashKey);
+		const { tile: valTile, hua, msg } = this.validateFlower(revealedTile, playerIndex);
+		if (hua !== '') {
+			this.ps[playerIndex].sTs = [...this.ps[playerIndex].sTs, valTile];
+		} else {
+			draw
+				? this.ps[playerIndex].getNewTile(tile)
+				: (this.ps[playerIndex].hTs = [...this.ps[playerIndex].hTs, tile]);
+		}
+		return { hua, msg };
+	}
+
+	giveTiles(
+		n: number,
+		playerIndex: number,
+		buHua?: boolean,
+		offsetUnused?: boolean,
+		draw = false
+	): { drewHua: boolean; tile: IHiddenTile } {
 		let player = this.ps[playerIndex];
 		let hiddenTile: IHiddenTile;
-		let revealedTile: IShownTile;
-		let tileHashKey = getTileHashKey(this.id, this.st);
 		let receivedFlower: boolean = false;
 		let log = `${player.uN} ${buHua ? `bu hua, ` : ``} received `;
+		let announcements: string[] = [];
 		let flowerReceived = '';
 		let flowersReceived = ', including';
-		if (!player.hTs) {
-			player.hTs = [];
-		}
+		player.hTs = player.hTs || [];
 		for (let i: number = 0; i < n; i++) {
-			hiddenTile = revealedTile = null;
+			hiddenTile = null;
 			hiddenTile = this.removeTileFromDeck(buHua, offsetUnused);
-			revealedTile = this.validateFlower(revealTile(hiddenTile, tileHashKey), playerIndex);
-			if (revealedTile.suit === Suits.FLOWER || revealedTile.suit === Suits.ANIMAL) {
-				flowerReceived = revealedTile.card;
-				flowersReceived += `${receivedFlower ? `,` : ``} ${revealedTile.card}`;
+			const { hua, msg } = this.handleNewTile(hiddenTile, playerIndex, draw);
+			announcements = msg !== '' ? [...announcements, msg] : announcements;
+			if (hua !== '') {
+				flowerReceived = hua;
+				flowersReceived += `${receivedFlower ? `,` : ``} ${hua}`;
 				receivedFlower = true;
-				player.sTs = [...player.sTs, revealedTile];
-			} else {
-				if (draw) {
-					player.getNewTile(hiddenTile);
-				} else {
-					player.hTs = [...player.hTs, hiddenTile];
-				}
 			}
 		}
 		if (n === 1 && receivedFlower) {
 			log += flowerReceived;
 		} else {
-			log += `${n} tile(s)`;
-			if (receivedFlower) {
-				log += flowersReceived;
-			}
+			log += `${n} tile${n === 1 ? `` : `s`}${receivedFlower ? flowersReceived : ``}`;
 		}
 		this.newLog(log);
-		return revealedTile.suit === Suits.FLOWER || revealedTile.suit === Suits.ANIMAL ? revealedTile : hiddenTile;
+		announcements.forEach(announce => announce !== '' && this.newLog(announce));
+		return { drewHua: receivedFlower, tile: hiddenTile };
 	}
 
 	//TODO: optimise
@@ -448,7 +511,7 @@ export class Game {
 		if (!isEmpty(this.lastT)) {
 			let tileHashKey = getTileHashKey(this.id, this.st);
 			let hashCard = hashTileString(this.lastT.card, tileHashKey);
-			for (let n = 0; n < this.ps.length; n++) {
+			for (let n = 0; n < 4; n++) {
 				if (n !== this.tBy && n !== findRight(this.tBy) && findTwo(hashCard, this.ps[n].hTs, 'id')) {
 					this.dFr = new Date();
 				}

@@ -193,11 +193,11 @@ class FirebaseService {
 		});
 	}
 
-	updateUser(user: User): Promise<boolean> {
+	updateUser(userId: string, keyVals: object): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			try {
-				const userRef = this.userRepr.doc(user.id);
-				userRef.set({ ...user });
+				const userRef = this.userRepr.doc(userId);
+				userRef.update({ ...keyVals });
 				resolve(true);
 			} catch (err) {
 				reject(new Error('FirebaseService - user doc was not up: ' + err.msg));

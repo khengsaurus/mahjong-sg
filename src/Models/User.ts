@@ -75,21 +75,17 @@ export class User {
 		return tiles;
 	}
 
-	sortHiddenTiles(): void {
-		this.hTs = sortTiles(this.hTs);
-	}
-
 	sortShownTiles(): void {
 		this.sTs = sortTiles(this.sTs);
 	}
 
 	prepareForNewRound(): void {
 		this.sTs = [];
+		this.melds = [];
 		this.hTs = [];
 		this.dTs = [];
 		this.lTaken = {};
 		this.uTs = 0;
-		this.melds = [];
 		this.sT = false;
 	}
 
@@ -137,7 +133,7 @@ export class User {
 
 	setHiddenTiles() {
 		this.moveLastTakenTileIntoHidden();
-		this.sortHiddenTiles();
+		this.hTs = sortTiles(this.hTs);
 	}
 
 	getNewTile(t: IHiddenTile) {
@@ -146,7 +142,7 @@ export class User {
 	}
 
 	returnNewTile(): IShownTile | IHiddenTile {
-		let t = !isEmpty(this.lTaken) ? null : this.lTaken;
+		let t = isEmpty(this.lTaken) ? {} : this.lTaken;
 		this.lTaken = {};
 		return t;
 	}

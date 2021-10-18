@@ -327,6 +327,14 @@ export function resolveJwt(token: string, key: string): string | JwtPayload {
 	}
 }
 
+export function randomNum(n: number) {
+	return Math.round(Math.random() * n);
+}
+
+export function isHua(tile: IShownTile) {
+	return tile.suit === Suits.ANIMAL || tile.suit === Suits.FLOWER;
+}
+
 export function getTileHashKey(gameId: string, st: number) {
 	let i = Math.min(st, gameId.length - 1);
 	return gameId.charCodeAt(i) + st;
@@ -345,13 +353,12 @@ export function hashTileString(id: string, tileHashKey: number): string {
 export function getCardFromUnhashedId(id: string): string {
 	switch (id[0]) {
 		case CardCategories.REGULAR:
-			return `${id[2]}${id[1]}`;
+		case CardCategories.HBF:
+			return `${id[2]}${id[3]}`;
 		case CardCategories.WINDS:
 		case CardCategories.FLOWER:
 		case CardCategories.ANIMAL:
-			return `${id[1]}`;
-		case CardCategories.HBF:
-			return `${id[1]}${id[2]}`;
+			return `${id[2]}`;
 		default:
 			return ``;
 	}
@@ -360,7 +367,7 @@ export function getCardFromUnhashedId(id: string): string {
 export function getSuitFromUnhashedId(id: string): string {
 	switch (id[0]) {
 		case CardCategories.REGULAR:
-			return `${id[1]}`;
+			return `${id[3]}`;
 		case CardCategories.WINDS:
 		case CardCategories.HBF:
 			return Suits.DAPAI;
@@ -376,10 +383,10 @@ export function getSuitFromUnhashedId(id: string): string {
 export function getIxFromUnhashedId(id: string): number {
 	switch (id[0]) {
 		case CardCategories.REGULAR:
-			return Number(id[3]);
+			return Number(id[4]);
 		case CardCategories.WINDS:
 		case CardCategories.HBF:
-			return Number(id[2]);
+			return Number(id[3]);
 		default:
 			return 1;
 	}
@@ -412,12 +419,12 @@ export function getHashCardFromHashId(id: string): string {
 	let pieces = id.split('|');
 	switch (String.fromCharCode(Number(pieces[0]))) {
 		case CardCategories.REGULAR:
-			return `${pieces[2]}|${pieces[1]}`;
+			return `${pieces[3]}|${pieces[2]}`;
 		case CardCategories.WINDS:
 		case CardCategories.HBF:
 		case CardCategories.FLOWER:
 		case CardCategories.ANIMAL:
-			return pieces[1];
+			return pieces[2];
 		default:
 			return '';
 	}

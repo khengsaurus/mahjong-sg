@@ -12,6 +12,13 @@ export interface IPlayerComponentProps {
 
 export const Amounts = [1, 2, 4, 8, 16, 32, 64];
 
+export const PlayerFlowers = {
+	0: ['春', '梅'],
+	1: ['夏', '蘭'],
+	2: ['秋', '菊'],
+	3: ['冬', '竹']
+};
+
 export enum Actions {
 	TAKE = 'take',
 	DRAW = 'draw',
@@ -63,6 +70,14 @@ export enum Indexes {
 	FOUR = 4
 }
 
+export enum CardCategories {
+	REGULAR = 'a',
+	WINDS = 'b',
+	HBF = 'c',
+	FLOWER = 'y',
+	ANIMAL = 'z'
+}
+
 export enum Suits {
 	WAN = '万',
 	TONG = '筒',
@@ -103,19 +118,44 @@ export enum Flowers {
 	B4 = '竹'
 }
 
-export const PlayerFlowers = {
-	0: ['春', '梅'],
-	1: ['夏', '蘭'],
-	2: ['秋', '菊'],
-	3: ['冬', '竹']
-};
+export enum SuitsIndex {
+	万 = '1',
+	筒 = '2',
+	索 = '3',
+	大牌 = '4',
+	花 = '4',
+	动物 = '4'
+}
 
-export enum CardCategories {
-	REGULAR = 'a',
-	WINDS = 'b',
-	HBF = 'c',
-	FLOWER = 'y',
-	ANIMAL = 'z'
+export enum WindIndex {
+	東 = '1',
+	南 = '2',
+	西 = '3',
+	北 = '4'
+}
+
+export enum DaPaiIndex {
+	红中 = '1',
+	白板 = '2',
+	发财 = '3'
+}
+
+export enum AnimalIndex {
+	猫 = '1',
+	鼠 = '2',
+	鸡 = '3',
+	虫 = '4'
+}
+
+export enum FlowerIndex {
+	春 = '1',
+	夏 = '2',
+	秋 = '3',
+	冬 = '4',
+	梅 = '1',
+	蘭 = '2',
+	菊 = '3',
+	竹 = '4'
 }
 
 export enum MeldTypes {

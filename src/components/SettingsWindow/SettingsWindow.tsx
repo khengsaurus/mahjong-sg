@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import { isEqual } from 'lodash';
 import { useContext, useRef } from 'react';
 import { BackgroundColors, Sizes, TableColors, TileColors } from '../../global/enums';
 import { MuiStyles, TableTheme } from '../../global/MuiStyles';
@@ -45,7 +46,7 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 		tileBackColor,
 		setTileBackColor
 	} = useContext(AppContext);
-	const initialValues = useRef([backgroundColor, tableColor, tileBackColor]);
+	const initialValues = useRef([controlsSize, handSize, tilesSize, backgroundColor, tableColor, tileBackColor]);
 	const preferences: Preference[] = [
 		{ label: 'Controls', size: controlsSize, handleSelect: setControlsSize },
 		{ label: 'Hand', size: handSize, handleSelect: setHandSize },
@@ -77,14 +78,20 @@ const SettingsWindow = ({ onClose, show }: Props) => {
 	];
 	function handleClose() {
 		if (
-			backgroundColor !== initialValues.current[0] ||
-			tableColor !== initialValues.current[1] ||
-			tileBackColor !== initialValues.current[2]
+			!isEqual(
+				[controlsSize, handSize, tilesSize, backgroundColor, tableColor, tileBackColor],
+				initialValues.current
+			)
 		) {
-			user.bgC = backgroundColor;
-			user.tC = tableColor;
-			user.tBC = tileBackColor;
-			FBService.updateUser(user)
+			let keyVal = {
+				cSz: controlsSize,
+				hSz: handSize,
+				tSz: tilesSize,
+				bgC: backgroundColor,
+				tC: tableColor,
+				tBC: tileBackColor
+			};
+			FBService.updateUser(user.id, keyVal)
 				.then(res => {
 					if (res) {
 						signJwt(user);
