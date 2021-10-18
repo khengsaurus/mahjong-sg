@@ -118,7 +118,6 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 			Boolean(ref.mid),
 			Boolean(ref.fN),
 			Number(ref.wM),
-			// ref.pIds,
 			ref.ps.map((player: any) => {
 				return objToPlayer(player);
 			}),
@@ -130,7 +129,6 @@ export const objToGame = (doc: firebase.firestore.DocumentData, repr: boolean): 
 			Boolean(ref.thrown),
 			Boolean(ref.taken),
 			Number(ref.takenB),
-			// Boolean(ref.halfMove),
 			ref.hu,
 			Boolean(ref.draw),
 			ref.logs
@@ -155,7 +153,6 @@ export function gameToObj(game: Game) {
 		mid: game.mid || false,
 		fN: game.fN || false,
 		wM: game.wM || 0,
-		// pIds: game.pIds || [],
 		ps: game.ps
 			? game.ps.map(player => {
 					return playerToObj(player);
@@ -169,7 +166,6 @@ export function gameToObj(game: Game) {
 		thrown: game.thrown || false,
 		taken: game.taken || false,
 		takenB: game.takenB || 0,
-		// halfMove: game.halfMove || false,
 		hu: game.hu || [],
 		draw: game.draw || false,
 		logs: game.logs || []
@@ -350,6 +346,25 @@ export function hashTileString(id: string, tileHashKey: number): string {
 	return hashId;
 }
 
+export function hashTile(tile: IShownTile, tileHashKey: number): IHiddenTile {
+	return { id: hashTileString(tile.id, tileHashKey), ref: tile.ref };
+}
+
+export function getHashCardFromHashId(id: string): string {
+	let pieces = id.split('|');
+	switch (String.fromCharCode(Number(pieces[0]))) {
+		case CardCategories.REGULAR:
+			return `${pieces[3]}|${pieces[2]}`;
+		case CardCategories.WINDS:
+		case CardCategories.HBF:
+		case CardCategories.FLOWER:
+		case CardCategories.ANIMAL:
+			return pieces[2];
+		default:
+			return '';
+	}
+}
+
 export function getCardFromUnhashedId(id: string): string {
 	switch (id[0]) {
 		case CardCategories.REGULAR:
@@ -392,10 +407,6 @@ export function getIxFromUnhashedId(id: string): number {
 	}
 }
 
-export function hashTile(tile: IShownTile, tileHashKey: number): IHiddenTile {
-	return { id: hashTileString(tile.id, tileHashKey), ref: tile.ref };
-}
-
 export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShownTile {
 	let nums = [];
 	hashedTile.id.split('|').forEach(piece => {
@@ -413,19 +424,4 @@ export function revealTile(hashedTile: IHiddenTile, tileHashKey: number): IShown
 		ix: getIxFromUnhashedId(id),
 		ref: hashedTile.ref
 	};
-}
-
-export function getHashCardFromHashId(id: string): string {
-	let pieces = id.split('|');
-	switch (String.fromCharCode(Number(pieces[0]))) {
-		case CardCategories.REGULAR:
-			return `${pieces[3]}|${pieces[2]}`;
-		case CardCategories.WINDS:
-		case CardCategories.HBF:
-		case CardCategories.FLOWER:
-		case CardCategories.ANIMAL:
-			return pieces[2];
-		default:
-			return '';
-	}
 }

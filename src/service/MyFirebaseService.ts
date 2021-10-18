@@ -249,11 +249,9 @@ class FirebaseService {
 	async createGame(user: User, ps: User[], random?: boolean): Promise<Game> {
 		let shuffledPlayers: User[];
 		shuffledPlayers = random ? shuffle(ps) : ps;
-		// let pIds: string[] = [];
 		let es: string[] = [];
 		let pS: string = '';
 		shuffledPlayers.forEach(player => {
-			// pIds.push(player.id);
 			es.push(player.email);
 			pS += player.uN + ' ';
 		});
@@ -278,7 +276,6 @@ class FirebaseService {
 						mid: false,
 						fN: true,
 						wM: 0,
-						// pIds,
 						ps: shuffledPlayers.map(function (player: User) {
 							return playerToObj(player);
 						}),
@@ -290,7 +287,6 @@ class FirebaseService {
 						thrown: false,
 						taken: true,
 						takenB: 0,
-						// halfMove: false,
 						hu: [],
 						draw: false,
 						logs: []
@@ -313,7 +309,6 @@ class FirebaseService {
 							false,
 							true,
 							0,
-							// pIds,
 							shuffledPlayers,
 							[],
 							null,
@@ -323,7 +318,6 @@ class FirebaseService {
 							false,
 							true,
 							0,
-							// false,
 							[],
 							false,
 							[]

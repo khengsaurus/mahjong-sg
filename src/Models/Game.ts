@@ -96,7 +96,7 @@ export class Game {
 		this.pS = pS;
 		this.es = es;
 		this.on = on;
-		// // this.lastExec = lastExec;
+		// this.lastExec = lastExec;
 		this.up = up;
 		this.dFr = dFr;
 		this.st = st;
@@ -277,8 +277,6 @@ export class Game {
 		}
 		return hiddenTile;
 	}
-
-	// Checks if player has drawn matching animals/flowers
 
 	getMatchingFlowersMsg(tile: IShownTile, playerIndex: number) {
 		switch (tile.suit) {
