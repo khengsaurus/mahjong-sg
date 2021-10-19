@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Sizes, TableColors } from '../../global/enums';
 import { GreenTableText, TableText } from '../../global/StyledComponents';
+import useEventListener from '../../util/hooks/useEventListener';
 
 interface LogModalProps {
-	logs: ILog[];
 	expanded: boolean;
+	onClose: () => void;
+	externalRef?: React.MutableRefObject<any>;
+	logs: ILog[];
 	size: Sizes;
 	tableColor: TableColors;
 }
@@ -20,38 +23,45 @@ function compare(prev: LogModalProps, next: LogModalProps) {
 }
 
 const LogModal = (props: LogModalProps) => {
-	const { logs = [], expanded, size, tableColor } = props;
+	const { expanded, onClose, externalRef, logs = [], size, tableColor } = props;
+	const modalRef = useRef(null);
 	const id = 'logBox';
 
-	function scroll() {
+	const scroll = useCallback(() => {
 		const logsList = document.getElementById(id);
 		if (logsList) {
 			logsList.scrollTop = logsList.scrollHeight;
 		}
-	}
+	}, [id]);
+
+	useEventListener(expanded, onClose, modalRef, externalRef);
 
 	useEffect(() => {
-		scroll();
-	}, [logs.length, expanded]);
+		setTimeout(() => {
+			scroll();
+		}, 250);
+	}, [logs.length, expanded, scroll]);
 
 	return (
-		<TransitionGroup
-			id={id}
-			className={`log-box-${size || Sizes.MEDIUM}${expanded ? ` expanded` : ``}`}
-			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
-		>
-			{logs.map((log: ILog, index) => {
-				return (
-					<CSSTransition key={`${index}`} timeout={500} classNames="move">
-						{log.msg.includes('sent') ? (
-							<GreenTableText>{log.msg}</GreenTableText>
-						) : (
-							<TableText>{log.msg}</TableText>
-						)}
-					</CSSTransition>
-				);
-			})}
-		</TransitionGroup>
+		<div ref={modalRef}>
+			<TransitionGroup
+				id={id}
+				className={`log-box-${size || Sizes.MEDIUM}${expanded ? ` expanded` : ``}`}
+				style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
+			>
+				{logs.map((log: ILog, index) => {
+					return (
+						<CSSTransition key={`${index}`} timeout={500} classNames="move">
+							{log.msg.includes('sent') ? (
+								<GreenTableText>{log.msg}</GreenTableText>
+							) : (
+								<TableText>{log.msg}</TableText>
+							)}
+						</CSSTransition>
+					);
+				})}
+			</TransitionGroup>
+		</div>
 	);
 };
 

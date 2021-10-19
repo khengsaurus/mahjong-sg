@@ -97,6 +97,9 @@
 				@include default-border;
 			}
 		}
+		.log-box-#{$size}::-webkit-scrollbar {
+			display: none;
+		}
 
 		.center-modal {
 			padding: 20px;

@@ -12,4 +12,7 @@
 		overflow: scroll;
 		// @include default-border;
 	}
+	.list::-webkit-scrollbar {
+		display: none;
+	}
 }
