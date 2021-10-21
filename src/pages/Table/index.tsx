@@ -42,7 +42,7 @@ const noGameMarkup = (
 
 const Table = () => {
 	const { verifyingSession } = useSession();
-	const { user, gameId, tilesSize, setStage } = useContext(AppContext);
+	const { user, gameId, tilesSize, setStage, setPlayerSeat } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(loadingScreen);
 	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
@@ -68,6 +68,7 @@ const Table = () => {
 					case currentGame.ps[0].uN:
 						player = currentGame.ps[0];
 						setBottomPlayerIndex(0);
+						setPlayerSeat(0);
 						setLeftPlayerIndex(3);
 						setTopPlayerIndex(2);
 						setRightPlayerIndex(1);
@@ -75,6 +76,7 @@ const Table = () => {
 					case currentGame.ps[1].uN:
 						player = currentGame.ps[1];
 						setBottomPlayerIndex(1);
+						setPlayerSeat(1);
 						setLeftPlayerIndex(0);
 						setTopPlayerIndex(3);
 						setRightPlayerIndex(2);
@@ -82,6 +84,7 @@ const Table = () => {
 					case currentGame.ps[2].uN:
 						player = currentGame.ps[2];
 						setBottomPlayerIndex(2);
+						setPlayerSeat(2);
 						setLeftPlayerIndex(1);
 						setTopPlayerIndex(0);
 						setRightPlayerIndex(3);
@@ -89,6 +92,7 @@ const Table = () => {
 					case currentGame.ps[3].uN:
 						player = currentGame.ps[3];
 						setBottomPlayerIndex(3);
+						setPlayerSeat(3);
 						setLeftPlayerIndex(2);
 						setTopPlayerIndex(1);
 						setRightPlayerIndex(0);
@@ -173,7 +177,7 @@ const Table = () => {
 								/>
 							)}
 						</div>
-						<Controls playerSeat={BottomPlayerIndex} />
+						<Controls />
 					</TableDiv>
 				</Main>
 			);

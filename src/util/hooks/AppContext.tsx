@@ -21,6 +21,8 @@ interface AppContextInt {
 	setGameId: (gameId: string) => void;
 	st?: string;
 	setStage: (st: number) => void;
+	playerSeat?: number;
+	setPlayerSeat: (seat: number) => void;
 	selectedTiles?: IShownTile[];
 	setSelectedTiles: (tiles: IShownTile[]) => void;
 	loading: boolean;
@@ -58,6 +60,8 @@ const initialContext: AppContextInt = {
 	setGameId: (gameId: string) => {},
 	st: null,
 	setStage: (st: number) => {},
+	playerSeat: 0,
+	setPlayerSeat: (seat: number) => {},
 	selectedTiles: [],
 	setSelectedTiles: (tiles: IShownTile[]) => {},
 	loading: false,
@@ -90,6 +94,7 @@ export const AppContextProvider = (props: any) => {
 	const [players, setPlayers] = useState<User[]>([user]);
 	const [gameId, setGameId] = useState('');
 	const [st, setStage] = useState(0);
+	const [playerSeat, setPlayerSeat] = useState(0);
 	const [selectedTiles, setSelectedTiles] = useState<IShownTile[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [handSize, setHandSize] = useState<Sizes>();
@@ -225,6 +230,8 @@ export const AppContextProvider = (props: any) => {
 				setGameId,
 				st,
 				setStage,
+				playerSeat,
+				setPlayerSeat,
 				selectedTiles,
 				setSelectedTiles,
 				loading,

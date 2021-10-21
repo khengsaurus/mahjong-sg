@@ -16,13 +16,6 @@ import { Game } from '../../Models/Game';
 import { User } from '../../Models/User';
 import FBService from '../../service/MyFirebaseService';
 
-interface Props {
-	game: Game;
-	playerSeat: number;
-	onClose: () => void;
-	show: boolean;
-}
-
 export async function sendChips(
 	game: Game,
 	sender: number,
@@ -37,8 +30,7 @@ export async function sendChips(
 	sendCallback && sendCallback();
 }
 
-const PaymentModal = (props: Props) => {
-	const { game, playerSeat, onClose, show } = props;
+const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
 	let playerUsername = game.ps[playerSeat].uN;

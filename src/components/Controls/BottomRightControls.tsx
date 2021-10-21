@@ -1,51 +1,31 @@
-import React from 'react';
-import { Sizes } from '../../global/enums';
+import React, { useContext } from 'react';
 import { MuiStyles } from '../../global/MuiStyles';
 import { ControlButton } from '../../global/StyledMui';
+import { AppContext } from '../../util/hooks/AppContext';
 import './controls.scss';
 
-interface BottomRightControlsProps {
-	controlsSize: Sizes;
-	throwCallback: () => void;
-	throwDisabled: boolean;
-	drawCallback: () => void;
-	drawText: string;
-	drawDisabled: boolean;
-	openCallback: () => void;
-	okToShow: boolean;
-	huShowing: boolean;
-}
+const BottomRightControls = (props: IBottomRightControls) => {
+	const { handleThrow, disableThrow, drawText, handleDraw, disableDraw, handleOpen, confirmHu, showHu } = props;
+	const { controlsSize } = useContext(AppContext);
 
-const BottomRightControls = (props: BottomRightControlsProps) => {
-	const {
-		controlsSize,
-		throwCallback,
-		throwDisabled,
-		drawText,
-		drawCallback,
-		drawDisabled,
-		openCallback,
-		okToShow,
-		huShowing
-	} = props;
 	return (
 		<div className={`bottom-right-controls-${controlsSize}`}>
 			<ControlButton
 				label={`丢`}
-				callback={throwCallback}
-				disabled={throwDisabled}
+				callback={handleThrow}
+				disabled={disableThrow}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
 			<ControlButton
 				label={drawText}
-				callback={drawCallback}
-				disabled={drawDisabled}
+				callback={handleDraw}
+				disabled={disableDraw}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			{!okToShow && !huShowing && (
+			{!confirmHu && !showHu && (
 				<ControlButton
 					label={`开?`}
-					callback={openCallback}
+					callback={handleOpen}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 				/>
 			)}

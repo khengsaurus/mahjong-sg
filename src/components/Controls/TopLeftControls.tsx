@@ -7,23 +7,16 @@ import { Notification, TableText } from '../../global/StyledComponents';
 import { AppContext } from '../../util/hooks/AppContext';
 import './controls.scss';
 
-interface TopLeftControlsProps {
-	homeCallback: () => void;
-	settingsCallback: () => void;
-	texts?: string[];
-	notif?: string;
-}
-
-const TopLeftControls = ({ homeCallback, settingsCallback, texts, notif }: TopLeftControlsProps) => {
+const TopLeftControls = ({ handleHome, handleSettings, texts, notif }: ITopLeftControls) => {
 	const { controlsSize } = useContext(AppContext);
 
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
-				<IconButton className="icon-button" onClick={homeCallback} disableRipple>
+				<IconButton className="icon-button" onClick={handleHome} disableRipple>
 					<HomeIcon fontSize={controlsSize} />
 				</IconButton>
-				<IconButton className="icon-button" onClick={settingsCallback} disableRipple>
+				<IconButton className="icon-button" onClick={handleSettings} disableRipple>
 					<SettingsIcon fontSize={controlsSize} />
 				</IconButton>
 				{notif !== '' && (

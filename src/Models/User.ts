@@ -19,7 +19,6 @@ export class User {
 	dTs?: IShownTile[];
 	lTaken?: IShownTile | IHiddenTile;
 	uTs?: number;
-	// pongs?: string[];
 	bal?: number;
 	sT?: boolean;
 

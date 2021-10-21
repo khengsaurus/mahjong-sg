@@ -46,6 +46,7 @@ interface IGroup {
 	name: string;
 	users: User[];
 }
+
 interface IAlert {
 	status: Status;
 	msg: string;
@@ -99,4 +100,48 @@ interface ITheme {
 	tC: BackgroundColors;
 	tBC: TileColors;
 	textColor: string;
+}
+
+interface IModalProps {
+	onClose: (boolean?) => void;
+	show: boolean;
+	game?: Game;
+	playerSeat?: number;
+}
+
+interface ITopLeftControls {
+	handleHome: () => void;
+	handleSettings: () => void;
+	texts?: string[];
+	notif?: string;
+}
+
+interface ITopRightControls {
+	handlePay: () => void;
+	handleLogs: () => void;
+	showLogs: boolean;
+	logs: ILog[];
+}
+
+interface IBottomLeftControls {
+	handleChi: () => void;
+	handlePong: () => void;
+	handleHu: () => void;
+	disableChi: boolean;
+	disablePong: boolean;
+	disableHu: boolean;
+	pongText: string;
+	confirmHu: boolean;
+	showHu: boolean;
+}
+
+interface IBottomRightControls {
+	handleThrow: () => void;
+	handleDraw: () => void;
+	handleOpen: () => void;
+	disableThrow: boolean;
+	disableDraw: boolean;
+	drawText: string;
+	confirmHu: boolean;
+	showHu: boolean;
 }

@@ -1,55 +1,32 @@
-import React from 'react';
-import { Sizes } from '../../global/enums';
+import React, { useContext } from 'react';
 import { MuiStyles } from '../../global/MuiStyles';
 import { ControlButton } from '../../global/StyledMui';
+import { AppContext } from '../../util/hooks/AppContext';
 import './controls.scss';
 
-interface BottomLeftControlsProps {
-	controlsSize: Sizes;
-	chiCallback: () => void;
-	chiDisabled: boolean;
-	pongCallback: () => void;
-	pongText: string;
-	pongDisabled: boolean;
-	okToShow: boolean;
-	huShowing: boolean;
-	huCallback: () => void;
-	huDisabled: boolean;
-}
-
-const BottomLeftControls = (props: BottomLeftControlsProps) => {
-	const {
-		controlsSize,
-		chiCallback,
-		chiDisabled,
-		pongText,
-		pongCallback,
-		pongDisabled,
-		okToShow,
-		huShowing,
-		huCallback,
-		huDisabled
-	} = props;
+const BottomLeftControls = (props: IBottomLeftControls) => {
+	const { handleChi, handlePong, handleHu, disableChi, disablePong, disableHu, pongText, confirmHu, showHu } = props;
+	const { controlsSize } = useContext(AppContext);
 
 	return (
 		<div className={`bottom-left-controls-${controlsSize}`}>
 			<ControlButton
 				label={pongText}
-				callback={pongCallback}
-				disabled={pongDisabled}
+				callback={handlePong}
+				disabled={disablePong}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
 			<ControlButton
 				label={`吃`}
-				callback={chiCallback}
-				disabled={chiDisabled}
+				callback={handleChi}
+				disabled={disableChi}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			{okToShow && !huShowing && (
+			{confirmHu && !showHu && (
 				<ControlButton
 					label="开!"
-					callback={huCallback}
-					disabled={huDisabled}
+					callback={handleHu}
+					disabled={disableHu}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 				/>
 			)}

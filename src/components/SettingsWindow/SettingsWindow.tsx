@@ -16,11 +16,6 @@ import FBService from '../../service/MyFirebaseService';
 import { AppContext } from '../../util/hooks/AppContext';
 import './settingsWindow.scss';
 
-interface Props {
-	onClose: () => void;
-	show: boolean;
-}
-
 interface Preference {
 	label: string;
 	size?: Sizes;
@@ -29,7 +24,7 @@ interface Preference {
 	colors?: any[];
 }
 
-const SettingsWindow = ({ onClose, show }: Props) => {
+const SettingsWindow = ({ onClose, show }: IModalProps) => {
 	const {
 		user,
 		signJwt,

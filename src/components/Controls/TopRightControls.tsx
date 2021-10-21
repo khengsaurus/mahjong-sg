@@ -7,29 +7,22 @@ import { AppContext } from '../../util/hooks/AppContext';
 import LogModal from '../Modals/LogModal';
 import './controls.scss';
 
-interface TopRightControlsProps {
-	payCallback: () => void;
-	logsCallback: () => void;
-	showLogs: boolean;
-	logs: ILog[];
-}
-
-const TopRightControls = (props: TopRightControlsProps) => {
-	const { payCallback, logsCallback, showLogs, logs } = props;
+const TopRightControls = (props: ITopRightControls) => {
+	const { handlePay, handleLogs, showLogs, logs } = props;
 	const { controlsSize, tableColor } = useContext(AppContext);
 	const logRef = useRef(null);
 
 	return (
 		<div className={`top-right-controls-${controlsSize}`}>
-			<IconButton className="icon-button" onClick={payCallback} disableRipple>
+			<IconButton className="icon-button" onClick={handlePay} disableRipple>
 				<MonetizationOnIcon fontSize={controlsSize} />
 			</IconButton>
-			<IconButton className="icon-button" onClick={logsCallback} disableRipple ref={logRef}>
+			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
 				<SubjectIcon fontSize={controlsSize} />
 			</IconButton>
 			<LogModal
 				expanded={showLogs}
-				onClose={logsCallback}
+				onClose={handleLogs}
 				externalRef={logRef}
 				logs={logs}
 				size={controlsSize || Sizes.MEDIUM}

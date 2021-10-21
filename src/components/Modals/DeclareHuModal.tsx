@@ -13,18 +13,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
 import { MainTransparent } from '../../global/StyledComponents';
 import { StyledButton } from '../../global/StyledMui';
-import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 
-interface Props {
-	game: Game;
-	playerSeat: number;
-	onClose: (didHu?: boolean) => void;
-	show: boolean;
-}
-
-const DeclareHuModal = (props: Props) => {
-	const { game, playerSeat, onClose, show } = props;
+const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 	const [tai, setTai] = useState<number>(null);
 	const [zimo, setZimo] = useState(false);
 

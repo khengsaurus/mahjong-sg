@@ -5,19 +5,10 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { MuiStyles } from '../../global/MuiStyles';
 import { HomeButton, StyledButton, Title } from '../../global/StyledMui';
-import { Game } from '../../Models/Game';
 import FBService from '../../service/MyFirebaseService';
 import PaymentModalInline from './PaymentModalInline';
 
-interface Props {
-	game: Game;
-	playerSeat: number;
-	showing: boolean;
-	showCallback: () => void;
-}
-
-const AnnounceHuModal = (props: Props) => {
-	const { game, playerSeat, showing, showCallback } = props;
+const AnnounceHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 	const { hu, draw, on, dealer } = game;
 
 	async function nextRound() {
@@ -61,7 +52,7 @@ const AnnounceHuModal = (props: Props) => {
 			>
 				<HomeButton />
 				{hu.length === 3 && hu[0] !== playerSeat && (
-					<StyledButton label={showing ? 'Close' : 'Open'} onClick={showCallback} />
+					<StyledButton label={show ? 'Hide' : 'Show'} onClick={onClose} />
 				)}
 				{on && playerSeat === Number(game.dealer) && <StyledButton label={`Next Round`} onClick={nextRound} />}
 			</DialogActions>
