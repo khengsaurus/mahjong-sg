@@ -176,6 +176,7 @@
 			.vts-bg {
 				align-self: flex-start;
 				height: getShownTileHeight($size);
+				width: getShownTileWidth($size);
 				border-radius: $default-tile-border-radius;
 				transform: $transform-rotate;
 				background-color: $color-tile-front;
