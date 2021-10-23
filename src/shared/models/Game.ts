@@ -26,6 +26,7 @@ import {
 	revealTile,
 	shuffle
 } from 'shared/util';
+
 export class Game {
 	id: string;
 	cro: string;

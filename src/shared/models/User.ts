@@ -1,6 +1,7 @@
 import isEmpty from 'lodash.isempty';
 import { BackgroundColors, MeldTypes, Sizes, TableColors, TileColors } from 'shared/enums';
 import { indexOfCard, sortTiles } from 'shared/util';
+
 export class User {
 	id: string;
 	uN: string;

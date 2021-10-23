@@ -1,10 +1,10 @@
 import { history } from 'App';
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import useLocalUserObject from 'platform/hooks/useLocalUserObject';
+import { createContext, useCallback, useMemo, useState } from 'react';
 import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } from 'shared/enums';
 import { User } from 'shared/models';
 import FBService from 'shared/service/MyFirebaseService';
 import { getTileHashKey } from 'shared/util';
-import useLocalUserObject from 'web/hooks/useLocalUserObject';
 
 interface AppContextInt {
 	user: User;

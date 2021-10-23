@@ -1,16 +1,16 @@
 import { createBrowserHistory } from 'history';
+import Home from 'platform/pages/Home';
+import JoinGame from 'platform/pages/JoinGame';
+import Login from 'platform/pages/Login';
+import NewUser from 'platform/pages/Login/NewUser';
+import NewGame from 'platform/pages/NewGame';
+import Sample from 'platform/pages/Sample';
+import Table from 'platform/pages/Table';
+import { Styled } from 'platform/style/StyledComponents';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import { AppContextProvider } from 'shared/hooks/AppContext';
 import store from 'shared/store';
-import Home from 'web/pages/Home';
-import JoinGame from 'web/pages/JoinGame';
-import Login from 'web/pages/Login';
-import NewUser from 'web/pages/Login/NewUser';
-import NewGame from 'web/pages/NewGame';
-import Sample from 'web/pages/Sample';
-import Table from 'web/pages/Table';
-import { Styled } from 'web/style/StyledComponents';
 import './App.scss';
 
 export const history = createBrowserHistory();
