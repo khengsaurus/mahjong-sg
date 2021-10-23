@@ -46,27 +46,6 @@ export class FirebaseService {
 
 	/* ------------------------- Auth related ------------------------- */
 
-	async authLoginAnon(): Promise<firebase.auth.UserCredential> {
-		try {
-			return await firebase.auth().signInAnonymously();
-		} catch (err) {
-			console.error(err);
-		}
-	}
-
-	async authLoginWithGoogle(): Promise<string> {
-		return new Promise((resolve, reject) => {
-			this.auth
-				.signInWithPopup(this.authProvider)
-				.then((values: firebase.auth.UserCredential) => {
-					resolve(values.user.email);
-				})
-				.catch(err => {
-					reject(err);
-				});
-		});
-	}
-
 	async authRegisterEmailPass(email: string, password: string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			this.auth
@@ -100,6 +79,27 @@ export class FirebaseService {
 	authDeleteCurrentUser() {
 		this.auth.currentUser.delete();
 	}
+
+	// async authLoginAnon(): Promise<firebase.auth.UserCredential> {
+	// 	try {
+	// 		return await firebase.auth().signInAnonymously();
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// }
+
+	// async authLoginWithGoogle(): Promise<string> {
+	// 	return new Promise((resolve, reject) => {
+	// 		this.auth
+	// 			.signInWithPopup(this.authProvider)
+	// 			.then((values: firebase.auth.UserCredential) => {
+	// 				resolve(values.user.email);
+	// 			})
+	// 			.catch(err => {
+	// 				reject(err);
+	// 			});
+	// 	});
+	// }
 
 	/* ------------------------- User related ------------------------- */
 	async registerByIUserPass(uN: string, password: string) {

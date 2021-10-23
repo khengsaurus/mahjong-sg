@@ -27,7 +27,7 @@ interface Preference {
 const SettingsWindow = ({ onClose, show }: IModalProps) => {
 	const {
 		user,
-		signJwt,
+		handleLocalUO,
 		controlsSize,
 		setControlsSize,
 		handSize,
@@ -89,7 +89,7 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 			FBService.updateUser(user.id, keyVal)
 				.then(res => {
 					if (res) {
-						signJwt(user);
+						handleLocalUO(user);
 					}
 				})
 				.catch(err => {
