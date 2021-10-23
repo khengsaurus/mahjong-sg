@@ -11,7 +11,7 @@ import MoodIcon from '@material-ui/icons/Mood';
 import { history } from 'App';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Pages, Status } from 'shared/enums';
-import { User } from 'shared/models2';
+import { User } from 'shared/models';
 import { AppContext } from 'shared/hooks/AppContext';
 import useSession from 'shared/hooks/useSession';
 import { Loader } from 'web/components/Loader';

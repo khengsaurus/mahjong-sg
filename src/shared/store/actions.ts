@@ -1,4 +1,4 @@
-import { Game, User } from 'shared/models2';
+import { Game, User } from 'shared/models';
 
 export const SET_GAME = 'SET_GAME';
 export const SET_PLAYER = 'SET_PLAYER';

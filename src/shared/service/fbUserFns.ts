@@ -1,4 +1,4 @@
-import { User } from 'shared/models2';
+import { User } from 'shared/models';
 import { objToUser } from 'shared/util';
 import FBService from './MyFirebaseService';
 
@@ -37,7 +37,7 @@ export function resolveUser_Email(email: string): Promise<User | null> {
 				}
 			});
 		} catch (err) {
-			reject(new Error('Login attempt failed'));
+			reject(new Error('Email or password incorrect'));
 		}
 	});
 }

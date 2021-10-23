@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { Pages, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks/AppContext';
 import useSession from 'shared/hooks/useSession';
-import { Game } from 'shared/models2';
+import { Game } from 'shared/models';
 import FBService from 'shared/service/MyFirebaseService';
 import { setGame, setPlayer } from 'shared/store/actions';
 import { formatDateToDay, objToGame } from 'shared/util';

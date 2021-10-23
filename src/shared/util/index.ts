@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { BackgroundColors, CardCategories, Sizes, Suits, TableColors, TileColors } from 'shared/enums';
-import { Game, User } from 'shared/models2';
+import { Game, User } from 'shared/models';
 
 export function userToObj(user: User) {
 	return {
