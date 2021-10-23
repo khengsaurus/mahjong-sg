@@ -1,0 +1,26 @@
+@import '../../../App.scss';
+
+.panels {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	height: 190px;
+	.panel-segment {
+		flex-direction: column;
+		justify-content: center;
+		width: $panel-segment-width;
+		padding: 0 10px;
+		&.padding-top {
+			padding-top: 11px !important;
+		}
+	}
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	width: $panel-segment-width;
+	padding-top: 50px;
+	transition: 200ms;
+}

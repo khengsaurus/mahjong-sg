@@ -1,0 +1,117 @@
+@import '../../../App.scss';
+
+@mixin controlStyles {
+	@each $size in $sizes {
+		.top-left-controls-#{$size} {
+			@include absolute-padding($main-padding, 0, 0, $main-padding);
+			@include flow(column);
+			align-items: flex-start;
+			z-index: 10;
+			transition: 200ms;
+			.buttons {
+				@include flex-dir(row);
+			}
+			.icon-button {
+				width: getIconButtonSize($size);
+				height: getIconButtonSize($size);
+			}
+			.text-container {
+				@include flex-dir(column);
+				align-items: flex-start;
+				padding-left: getLogMarginLeft($size);
+			}
+			.text {
+				text-align: start;
+				font-size: getTextFontSize($size);
+			}
+			.notif {
+				@include flex-dir(column);
+				@include default-border;
+				justify-content: center;
+				padding: 0 10px;
+			}
+		}
+
+		.bottom-left-controls-#{$size} {
+			@include absolute-padding(0, 0, $main-padding, $main-padding);
+			@include flow(row wrap-reverse);
+			@include alignI-justifyC(flex-start, flex-start);
+			height: 2 * getButtonHeight($size);
+			width: 2 * getButtonWidth($size);
+			z-index: 10;
+			margin-bottom: 2 * $main-padding;
+			transition: 200ms;
+			.button {
+				max-width: getButtonWidth($size);
+				max-height: getButtonHeight($size);
+				min-width: getButtonWidth($size);
+				min-height: getButtonHeight($size);
+			}
+		}
+
+		.bottom-right-controls-#{$size} {
+			@include absolute-padding(0, $main-padding, $main-padding, 0);
+			@include flow(row-reverse wrap-reverse);
+			align-items: flex-start;
+			height: 2 * getButtonHeight($size);
+			width: 2 * getButtonWidth($size);
+			margin-bottom: 2 * $main-padding;
+			z-index: 10;
+			transition: 200ms;
+			.button {
+				max-width: getButtonWidth($size);
+				max-height: getButtonHeight($size);
+				min-width: getButtonWidth($size);
+				min-height: getButtonHeight($size);
+			}
+		}
+
+		.top-right-controls-#{$size} {
+			@include absolute-padding($main-padding, $main-padding, 0, 0);
+			@include flex-dir(row-reverse);
+			@include alignI-justifyC(flex-start, flex-start);
+			z-index: 10;
+			transition: 200ms;
+			.icon-button {
+				width: getIconButtonSize($size);
+				height: getIconButtonSize($size);
+			}
+		}
+
+		.log-box-#{$size} {
+			@include flex-dir(column);
+			@include align-items-text(flex-end, end);
+			overflow: hidden;
+			overflow-y: scroll;
+			scroll-behavior: smooth;
+			height: getIconButtonSize($size);
+			max-width: getLogLineWidth($size);
+			font-size: getTextFontSize($size);
+			$line-height: getTextLineHeight($size);
+			transition: 200ms;
+			&.expanded {
+				@include align-items-text(flex-start, start);
+				height: 4 * getIconButtonSize($size);
+				min-width: getLogLineWidth($size);
+				padding-left: 2 * $main-padding;
+				@include default-border;
+			}
+		}
+		.log-box-#{$size}::-webkit-scrollbar {
+			display: none;
+		}
+
+		.center-modal {
+			padding: 20px;
+			z-index: 1;
+			.center-tile-#{$size} {
+				height: $enlarge * getShownTileHeight($size);
+				width: $enlarge * getShownTileWidth($size);
+				border-radius: $default-tile-border-radius;
+				@include highlight;
+			}
+		}
+	}
+}
+
+@include controlStyles;

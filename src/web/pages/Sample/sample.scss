@@ -1,0 +1,99 @@
+@import '../../../App.scss';
+
+.container {
+	@include centered;
+}
+
+$size: 'medium';
+
+$bg-: blue;
+$bg-small: red;
+$bg-medium: blue;
+$bg-large: green;
+
+@function getColorFromSize($size) {
+	@if $size == 'small' {
+		@return red;
+	} @else if $size == 'large' {
+		@return green;
+	} @else {
+		@return blue;
+	}
+}
+
+.col {
+	display: flex;
+	flex-flow: column wrap;
+	max-height: 120px;
+	min-width: stretch;
+}
+
+.row {
+	display: flex;
+	flex-flow: row wrap;
+	max-width: 120px;
+	width: max-content;
+}
+
+@mixin cell {
+	height: 30px;
+	width: 100px;
+	@include centered;
+}
+
+$sizes: 'small', 'medium', 'large';
+
+@mixin dynamic- {
+	@each $size in $sizes {
+		.dynamic-#{$size} {
+			@include cell;
+			background-color: getColorFromSize($size);
+		}
+	}
+}
+
+@include dynamic-;
+
+.button {
+	border: none;
+	background-color: blue;
+	color: white;
+	margin: 10px;
+	@include cell;
+	@include centered;
+}
+
+.centered {
+	@include centered;
+}
+
+.idle {
+	background-color: grey;
+	@include cell;
+	@include centered;
+}
+
+.pending {
+	background-color: grey;
+	@include cell;
+	@include centered;
+}
+
+.error {
+	background-color: red;
+	@include cell;
+	@include centered;
+}
+
+.success {
+	background-color: green;
+	@include cell;
+	@include centered;
+}
+
+.tile {
+	height: 100px;
+	width: 70px;
+	background-color: gainsboro;
+	border-radius: 9%;
+}
