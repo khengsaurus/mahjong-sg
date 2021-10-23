@@ -2,7 +2,7 @@ import { history } from 'App';
 import jwt from 'jsonwebtoken';
 import { createContext, useMemo, useState } from 'react';
 import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } from 'shared/enums';
-import { User } from 'shared/models';
+import { User } from 'shared/models2';
 import FBService from 'shared/service/MyFirebaseService';
 import { getTileHashKey, objToUser, userToObj } from 'shared/util';
 import { useLocalStorage } from './useHooks';

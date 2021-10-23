@@ -1,4 +1,4 @@
-import { User } from 'shared/models';
+import { User } from 'shared/models2';
 import { objToUser } from 'shared/util';
 import FBService from './MyFirebaseService';
 

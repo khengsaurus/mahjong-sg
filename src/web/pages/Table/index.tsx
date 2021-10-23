@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks/AppContext';
 import useSession from 'shared/hooks/useSession';
-import { Game, User } from 'shared/models';
+import { Game, User } from 'shared/models2';
 import FBService from 'shared/service/MyFirebaseService';
 import { setGame, setPlayer } from 'shared/store/actions';
 import { objToGame } from 'shared/util';

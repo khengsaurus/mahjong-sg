@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { BackgroundColors, Sizes, TableColors, TileColors } from 'shared/enums';
-import { Game, User } from 'shared/models';
+import { Game, User } from 'shared/models2';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
 

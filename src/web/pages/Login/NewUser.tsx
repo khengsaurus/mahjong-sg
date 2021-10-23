@@ -4,7 +4,7 @@ import { Field, Form, Formik } from 'formik';
 import { useContext } from 'react';
 import { Pages, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks/AppContext';
-import { User } from 'shared/models';
+import { User } from 'shared/models2';
 import { deleteCurrentFBUser, newUser_IEmailUser, resolveUser_Email } from 'shared/service/fbUserFns';
 import FormField from 'web/components/FormComponents/FormField';
 import { HomeTheme } from 'web/style/MuiStyles';

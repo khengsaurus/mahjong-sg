@@ -13,7 +13,7 @@ import {
 	WindIndex,
 	Winds
 } from 'shared/enums';
-import { User } from 'shared/models';
+import { User } from 'shared/models2';
 import {
 	findLeft,
 	findOpp,

@@ -5,7 +5,7 @@ import Select from '@material-ui/core/Select';
 import SendIcon from '@material-ui/icons/Send';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
-import { Game } from 'shared/models';
+import { Game } from 'shared/models2';
 import { MuiStyles } from 'web/style/MuiStyles';
 import { Row } from 'web/style/StyledComponents';
 import { Title } from 'web/style/StyledMui';

@@ -3,7 +3,7 @@ import isEmpty from 'lodash.isempty';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Pages } from 'shared/enums';
-import { Game, User } from 'shared/models';
+import { Game, User } from 'shared/models2';
 import { FirebaseService } from 'shared/service/MyFirebaseService';
 import { findLeft, findTwo, hashTileString, indexToWind, revealTile, sortTiles } from 'shared/util';
 import { AppContext } from './AppContext';
