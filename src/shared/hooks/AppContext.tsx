@@ -2,9 +2,9 @@ import { history } from 'App';
 import jwt from 'jsonwebtoken';
 import { createContext, useMemo, useState } from 'react';
 import { BackgroundColors, Pages, Sizes, TableColors, TextColors, TileColors } from 'shared/enums';
-import { User } from 'shared/Models';
-import { getTileHashKey, objToUser, userToObj } from 'shared/util/utilFns';
-import FBService from 'web/service/MyFirebaseService';
+import { User } from 'shared/models';
+import FBService from 'shared/service/MyFirebaseService';
+import { getTileHashKey, objToUser, userToObj } from 'shared/util';
 import { useLocalStorage } from './useHooks';
 
 interface AppContextInt {

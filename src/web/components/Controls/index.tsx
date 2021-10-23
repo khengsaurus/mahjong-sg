@@ -1,4 +1,5 @@
-import useControlsLogic from 'shared/util/hooks/useControlsLogic';
+import useControlsLogic from 'shared/hooks/useControlsLogic';
+import FBService from 'shared/service/MyFirebaseService';
 import { Loader } from 'web/components/Loader';
 import AnnounceHuModal from 'web/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'web/components/Modals/DeclareHuModal';
@@ -26,7 +27,7 @@ const Controls = () => {
 		announceHuModal,
 		showBottomControls,
 		showAnnounceHuModal
-	} = useControlsLogic();
+	} = useControlsLogic(FBService);
 
 	/* ----------------------------------- Markup ----------------------------------- */
 

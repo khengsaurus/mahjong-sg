@@ -3,7 +3,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import FBService from 'web/service/MyFirebaseService';
+import FBService from 'shared/service/MyFirebaseService';
 import { MuiStyles } from 'web/style/MuiStyles';
 import { HomeButton, StyledButton, Title } from 'web/style/StyledMui';
 import PaymentModalInline from './PaymentModalInline';

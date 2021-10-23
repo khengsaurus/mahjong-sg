@@ -11,8 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
-import { Game, User } from 'shared/Models';
-import FBService from 'web/service/MyFirebaseService';
+import { Game, User } from 'shared/models';
+import FBService from 'shared/service/MyFirebaseService';
 import { MainTransparent } from 'web/style/StyledComponents';
 
 export async function sendChips(

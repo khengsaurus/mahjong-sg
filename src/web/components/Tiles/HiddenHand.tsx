@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Segments } from 'shared/enums';
-import { generateNumberArray } from 'shared/util/utilFns';
+import { generateNumberArray } from 'shared/util';
 import { HiddenTile } from 'web/style/StyledComponents';
 
 interface Props {

@@ -13,7 +13,7 @@ import {
 	WindIndex,
 	Winds
 } from 'shared/enums';
-import { User } from 'shared/Models';
+import { User } from 'shared/models';
 import {
 	findLeft,
 	findOpp,
@@ -25,7 +25,7 @@ import {
 	randomNum,
 	revealTile,
 	shuffle
-} from 'shared/util/utilFns';
+} from 'shared/util';
 export class Game {
 	id: string;
 	cro: string;

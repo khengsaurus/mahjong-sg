@@ -3,9 +3,9 @@ import isEmpty from 'lodash.isempty';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Pages } from 'shared/enums';
-import { Game, User } from 'shared/Models';
-import { findLeft, findTwo, hashTileString, indexToWind, revealTile, sortTiles } from 'shared/util/utilFns';
-import FBService from 'web/service/MyFirebaseService';
+import { Game, User } from 'shared/models';
+import { FirebaseService } from 'shared/service/MyFirebaseService';
+import { findLeft, findTwo, hashTileString, indexToWind, revealTile, sortTiles } from 'shared/util';
 import { AppContext } from './AppContext';
 import useCountdown from './useCountdown';
 
@@ -24,7 +24,7 @@ interface IControls {
 	showAnnounceHuModal: boolean;
 }
 
-function useControlsLogic(): IControls {
+function useControlsLogic(FBService: FirebaseService): IControls {
 	const { selectedTiles, setSelectedTiles, tileHashKey, playerSeat } = useContext(AppContext);
 	const player: User = useSelector((state: IStore) => state.player);
 	const game: Game = useSelector((state: IStore) => state.game);
@@ -150,7 +150,8 @@ function useControlsLogic(): IControls {
 			game.ps[playerSeat] = player;
 			FBService.updateGame(game);
 		},
-		[player, playerSeat, setSelectedTiles, taken]
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[player, playerSeat, taken]
 	);
 
 	const updateGameStateTakenTile = useCallback(

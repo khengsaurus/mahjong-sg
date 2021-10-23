@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { TextColors } from 'shared/enums';
-import { AppContext } from 'shared/util/hooks/AppContext';
+import { AppContext } from 'shared/hooks/AppContext';
 import styled, { ThemeProvider } from 'styled-components';
 
 export const Styled = (props: any) => {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Pages, Sizes, Status, Suits } from 'shared/enums';
 import getTileSrc from 'shared/images';
-import useCountdown from 'shared/util/hooks/useCountdown';
-import { useAsync, useLocalStorage } from 'shared/util/hooks/useHooks';
-import useSession from 'shared/util/hooks/useSession';
+import useCountdown from 'shared/hooks/useCountdown';
+import { useAsync, useLocalStorage } from 'shared/hooks/useHooks';
+import useSession from 'shared/hooks/useSession';
 import { Loader } from 'web/components/Loader';
 import { HomeTheme } from 'web/style/MuiStyles';
 import { Main, Row } from 'web/style/StyledComponents';

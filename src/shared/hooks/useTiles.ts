@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { rotateShownTiles, sortShownTiles } from 'shared/util/utilFns';
+import { rotateShownTiles, sortShownTiles } from 'shared/util';
 
 interface Args {
 	sTs: IShownTile[];

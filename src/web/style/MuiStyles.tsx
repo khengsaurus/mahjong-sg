@@ -2,7 +2,7 @@ import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useContext, useMemo } from 'react';
 import { BackgroundColors, TableColors, TextColors } from 'shared/enums';
-import { AppContext } from 'shared/util/hooks/AppContext';
+import { AppContext } from 'shared/hooks/AppContext';
 
 function getHighlightColor(color: TableColors | BackgroundColors) {
 	if ([TableColors.DARK, BackgroundColors.DARK].includes(color)) {

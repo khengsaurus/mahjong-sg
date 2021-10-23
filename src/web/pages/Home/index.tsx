@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Pages, Status } from 'shared/enums';
-import { AppContext } from 'shared/util/hooks/AppContext';
-import useSession from 'shared/util/hooks/useSession';
+import { AppContext } from 'shared/hooks/AppContext';
+import useSession from 'shared/hooks/useSession';
 import { Loader } from 'web/components/Loader';
 import SettingsWindow from 'web/components/SettingsWindow/SettingsWindow';
 import { HomeTheme } from 'web/style/MuiStyles';

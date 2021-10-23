@@ -11,7 +11,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
-import FBService from 'web/service/MyFirebaseService';
+import FBService from 'shared/service/MyFirebaseService';
 import { MainTransparent } from 'web/style/StyledComponents';
 import { StyledButton } from 'web/style/StyledMui';
 

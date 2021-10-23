@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import FBService from 'web/service/MyFirebaseService';
+import FBService from 'shared/service/MyFirebaseService';
 import { AppContext } from './AppContext';
 import { useAsync } from './useHooks';
 

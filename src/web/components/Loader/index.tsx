@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useContext } from 'react';
 import BarLoader from 'react-spinners/BarLoader';
-import { AppContext } from 'shared/util/hooks/AppContext';
+import { AppContext } from 'shared/hooks/AppContext';
 import { Centered } from 'web/style/StyledComponents';
 
 interface LoaderProps {

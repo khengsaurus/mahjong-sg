@@ -2,11 +2,11 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { BackgroundColors, Sizes, TableColors, TileColors } from 'shared/enums';
-import { Game, User } from 'shared/Models';
+import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
-import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util/utilFns';
+import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
 
-class FirebaseService {
+export class FirebaseService {
 	private user: firebase.User;
 	private db: firebase.firestore.Firestore;
 	private userVal: firebase.firestore.CollectionReference;

@@ -1,6 +1,6 @@
-import { User } from 'shared/Models';
-import FBService from 'web/service/MyFirebaseService';
-import { objToUser } from './utilFns';
+import { User } from 'shared/models';
+import { objToUser } from 'shared/util';
+import FBService from './MyFirebaseService';
 
 export async function authRegister_EmailPass(props: IEmailPass): Promise<string> {
 	return new Promise((resolve, reject) => {

@@ -1,9 +1,9 @@
 import isEmpty from 'lodash.isempty';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, Segments, Sizes } from 'shared/enums';
-import { AppContext } from 'shared/util/hooks/AppContext';
-import useTiles from 'shared/util/hooks/useTiles';
-import { revealTile } from 'shared/util/utilFns';
+import { AppContext } from 'shared/hooks/AppContext';
+import useTiles from 'shared/hooks/useTiles';
+import { revealTile } from 'shared/util';
 import { DiscardedTiles, HandTile, ShownTile, ShownTiles, UnusedTiles } from 'web/components/Tiles';
 import './playerComponents.scss';
 

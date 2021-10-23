@@ -1,9 +1,8 @@
 import firebase from 'firebase';
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { BackgroundColors, CardCategories, Sizes, Suits, TableColors, TileColors } from 'shared/enums';
-import { Game, User } from 'shared/Models';
+import { Game, User } from 'shared/models';
 
 export function userToObj(user: User) {
 	return {
@@ -303,22 +302,6 @@ export function indexToWind(n: number): string {
 			return '北';
 		default:
 			return '';
-	}
-}
-
-export function createJwt(obj: any, key: string) {
-	const token = jwt.sign(JSON.stringify(obj), key, {
-		algorithm: 'HS256'
-	});
-	return token;
-}
-
-export function resolveJwt(token: string, key: string): string | JwtPayload {
-	try {
-		let resolved = jwt.verify(token, key);
-		return typeof resolved === 'object' ? resolved : JSON.parse(resolved);
-	} catch (err) {
-		console.error(err);
 	}
 }
 

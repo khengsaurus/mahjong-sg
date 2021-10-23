@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { addSecondsToDate } from 'shared/util/utilFns';
+import { addSecondsToDate } from 'shared/util';
 
 const useCountdown = (from: Date, delay: number, interval = 200) => {
 	const fromString = from ? from.toString() : '';

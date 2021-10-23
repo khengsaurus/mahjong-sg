@@ -1,10 +1,10 @@
 import isEmpty from 'lodash.isempty';
 import React, { useContext, useMemo, useRef } from 'react';
 import { FrontBackTag, Segments, Sizes } from 'shared/enums';
-import { AppContext } from 'shared/util/hooks/AppContext';
-import useTiles from 'shared/util/hooks/useTiles';
-import { useDynamicWidth } from 'shared/util/hooks/useWindowSize';
-import { revealTile } from 'shared/util/utilFns';
+import { AppContext } from 'shared/hooks/AppContext';
+import useTiles from 'shared/hooks/useTiles';
+import { useDynamicWidth } from 'shared/hooks/useWindowSize';
+import { revealTile } from 'shared/util';
 import { DiscardedTiles, HiddenHand, ShownTile, ShownTiles, UnusedTiles } from 'web/components/Tiles';
 import './playerComponents.scss';
 

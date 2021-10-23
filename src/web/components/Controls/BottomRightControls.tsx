@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from 'shared/util/hooks/AppContext';
+import { AppContext } from 'shared/hooks/AppContext';
 import { MuiStyles } from 'web/style/MuiStyles';
 import { ControlButton } from 'web/style/StyledMui';
 import './controls.scss';

@@ -10,9 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import { useContext, useState } from 'react';
-import { User } from 'shared/Models';
-import { AppContext } from 'shared/util/hooks/AppContext';
-import FBService from 'web/service/MyFirebaseService';
+import { User } from 'shared/models';
+import { AppContext } from 'shared/hooks/AppContext';
+import FBService from 'shared/service/MyFirebaseService';
 import { CenteredColored } from 'web/style/StyledComponents';
 import './searchForms.scss';
 

@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useContext } from 'react';
-import { AppContext } from 'shared/util/hooks/AppContext';
+import { AppContext } from 'shared/hooks/AppContext';
 import { Notification, TableText } from 'web/style/StyledComponents';
 import './controls.scss';
 
