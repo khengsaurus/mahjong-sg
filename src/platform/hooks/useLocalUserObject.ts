@@ -16,7 +16,7 @@ function useLocalUserObject(): IUseLocalUserObject {
 	const resolveLocalUO = useCallback(() => {
 		return new Promise<User>((resolve, reject) => {
 			try {
-				resolve(localUO ? objToUser(jwt.verify(localUO, secretKey) as IJwtData) : null);
+				resolve(localUO ? objToUser(jwt.verify(localUO, secretKey) as IUserObj) : null);
 			} catch (err) {
 				reject(new Error('User token not found: ' + err.msg));
 			}

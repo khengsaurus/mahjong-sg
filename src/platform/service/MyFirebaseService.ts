@@ -129,7 +129,7 @@ export class FirebaseService {
 				userRef.update({ ...keyVals });
 				resolve(true);
 			} catch (err) {
-				reject(new Error('FirebaseService - user doc was not up: ' + err.msg));
+				reject(new Error('FirebaseService - user doc was not updated: ' + err.msg));
 			}
 		});
 	}
@@ -228,7 +228,6 @@ export class FirebaseService {
 							pS,
 							es,
 							true,
-							// 0,
 							crA,
 							delayed,
 							0,
