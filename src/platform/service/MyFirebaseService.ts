@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { BackgroundColors, Sizes, TableColors, TileColors } from 'shared/enums';
+import { BackgroundColors, Collections, Sizes, TableColors, TileColors } from 'shared/enums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
@@ -9,23 +9,17 @@ import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
 export class FirebaseService {
 	private user: firebase.User;
 	private db: firebase.firestore.Firestore;
-	private userVal: firebase.firestore.CollectionReference;
 	private userRepr: firebase.firestore.CollectionReference;
 	private gameRef: firebase.firestore.CollectionReference;
-	// private actionsRef: firebase.firestore.CollectionReference;
 	private app: firebase.app.App;
 	private auth: firebase.auth.Auth;
-	private authProvider: firebase.auth.GoogleAuthProvider;
 
 	constructor() {
 		this.init().then(() => {
 			this.auth = firebase.auth();
-			this.authProvider = new firebase.auth.GoogleAuthProvider();
 			this.db = firebase.firestore();
-			this.userVal = this.db.collection('userVal');
-			this.userRepr = this.db.collection('userRepr');
-			this.gameRef = this.db.collection('games');
-			// this.actionsRef = this.db.collection('actions');
+			this.userRepr = this.db.collection(Collections.USERREPR);
+			this.gameRef = this.db.collection(Collections.GAMES);
 			this.auth.onAuthStateChanged(user => {
 				this.user = user;
 			});
@@ -80,44 +74,7 @@ export class FirebaseService {
 		this.auth.currentUser.delete();
 	}
 
-	// async authLoginAnon(): Promise<firebase.auth.UserCredential> {
-	// 	try {
-	// 		return await firebase.auth().signInAnonymously();
-	// 	} catch (err) {
-	// 		console.error(err);
-	// 	}
-	// }
-
-	// async authLoginWithGoogle(): Promise<string> {
-	// 	return new Promise((resolve, reject) => {
-	// 		this.auth
-	// 			.signInWithPopup(this.authProvider)
-	// 			.then((values: firebase.auth.UserCredential) => {
-	// 				resolve(values.user.email);
-	// 			})
-	// 			.catch(err => {
-	// 				reject(err);
-	// 			});
-	// 	});
-	// }
-
 	/* ------------------------- User related ------------------------- */
-	async registerByUserPass(uN: string, password: string) {
-		let userId = '';
-		try {
-			await this.userVal.add({}).then(user => {
-				userId = user.id;
-			});
-			const userValNew = this.userVal.doc(userId);
-			const userReprNew = this.userRepr.doc(userId);
-			await this.db.runTransaction(async t => {
-				t.set(userValNew, { uN, password });
-				t.set(userReprNew, { uN, pUrl: '', groups: [] });
-			});
-		} catch (err) {
-			console.error('FirebaseService - user was not created: ', +err);
-		}
-	}
 
 	async registerUserEmail(uN: string, email: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
@@ -144,10 +101,6 @@ export class FirebaseService {
 		});
 	}
 
-	getUserValByUsername(uN: string) {
-		return this.userVal.where('uN', '==', uN).get();
-	}
-
 	getUserReprByUsername(uN: string) {
 		return this.userRepr.where('uN', '==', uN).get();
 	}
@@ -167,29 +120,6 @@ export class FirebaseService {
 			.where('uN', '<=', partUsername + '\uf8ff')
 			.limit(4)
 			.get();
-	}
-
-	async createGroup(user: User, groupName: string, users: User[]) {
-		const userRef = this.userRepr.doc(user.id);
-		await userRef.update({ groups: { [groupName]: users } });
-	}
-
-	async searchGroups(user: User, partGroupName: string) {
-		return new Promise((resolve, reject) => {
-			let groups: IGroup[] = [];
-			this.userRepr
-				.doc(user.id)
-				.get()
-				.then(data => {
-					groups = data.data().groups;
-					// filter group.name like partGroupName
-				})
-				.catch(err => {
-					console.error(err);
-					groups = [];
-				});
-			resolve(groups);
-		});
 	}
 
 	updateUser(userId: string, keyVals: object): Promise<boolean> {
@@ -266,7 +196,6 @@ export class FirebaseService {
 						pS,
 						es,
 						on: true,
-						// lastExec: 0,
 						up: crA,
 						dFr: delayed,
 						st: 0,
@@ -321,7 +250,6 @@ export class FirebaseService {
 							false,
 							[]
 						);
-						// this.actionsRef.doc(gameId).set({ actions: [] });
 						resolve(game);
 					});
 			} catch (err) {
@@ -351,28 +279,6 @@ export class FirebaseService {
 			return this.gameRef.doc(gameId).onSnapshot(observer);
 		}
 	}
-
-	/* ------------------------- Actions related ------------------------- */
-
-	// async listenToActions(gameId: string, observer: any) {
-	// 	if (gameId) {
-	// 		return this.actionsRef.doc(gameId).onSnapshot(observer);
-	// 	}
-	// }
-
-	// updateActions(gameId: string, actions: IAction[]): Promise<boolean> {
-	// 	return new Promise(async (resolve, reject) => {
-	// 		try {
-	// 			const ref = this.actionsRef.doc(gameId);
-	// 			await ref.set({ ...actions }).then(() => {
-	// 				resolve(true);
-	// 			});
-	// 		} catch (err) {
-	// 			console.error(err);
-	// 			reject(new Error('FirebaseService - actions doc was not up'));
-	// 		}
-	// 	});
-	// }
 }
 
 const FBService = new FirebaseService();
