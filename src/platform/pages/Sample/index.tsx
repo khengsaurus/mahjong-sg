@@ -1,12 +1,12 @@
 import { Loader } from 'platform/components/Loader';
+import { useLocalSession } from 'platform/hooks';
+import useLocalStorage from 'platform/hooks/useLocalStorage';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { Pages, Sizes, Status, Suits } from 'shared/enums';
-import useCountdown from 'shared/hooks/useCountdown';
-import { useAsync, useLocalStorage } from 'shared/hooks/useHooks';
-import useSession from 'shared/hooks/useSession';
+import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
 import './sample.scss';
 
@@ -40,7 +40,7 @@ const Sample = () => {
 	const [size, setSize] = useLocalStorage<Sizes>('testSize', Sizes.MEDIUM);
 	const [dFr, setDelayFrom] = useState<Date>(null);
 	const { delayOn, delayLeft } = useCountdown(dFr, 6);
-	const { verifyingSession } = useSession();
+	const { verifyingSession } = useLocalSession();
 	const showHooks = false;
 	const showSizes = false;
 	const showDelay = true;

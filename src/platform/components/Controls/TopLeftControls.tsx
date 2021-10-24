@@ -4,7 +4,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Notification, TableText } from 'platform/style/StyledComponents';
 import { useContext } from 'react';
-import { AppContext } from 'shared/hooks/AppContext';
+import { AppContext } from 'shared/hooks';
 import './controls.scss';
 
 const TopLeftControls = ({ handleHome, handleSettings, texts, notif }: ITopLeftControls) => {

@@ -13,7 +13,7 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
 import { Game, User } from 'shared/models';
-import FBService from 'shared/service/MyFirebaseService';
+import FBService from 'platform/service/MyFirebaseService';
 
 export async function sendChips(
 	game: Game,

@@ -7,8 +7,8 @@ import { Centered, Main } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
 import { Pages, Status } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
-import { authLogin_EmailPass, authRegister_EmailPass, resolveUser_Email } from 'shared/service/fbUserFns';
+import { AppContext } from 'shared/hooks';
+import { FBAuthLogin_EmailPass, FBAuthRegister_EmailPass, FBResolveUser_Email } from 'shared/service/fbUserFns';
 import './login.scss';
 
 const Login = () => {
@@ -16,11 +16,11 @@ const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
 
 	function handleLogin(values: IEmailPass) {
-		authLogin_EmailPass(values)
+		FBAuthLogin_EmailPass(values)
 			.then(email => {
 				if (email === values.email) {
 					setUserEmail(email);
-					resolveUser_Email(email)
+					FBResolveUser_Email(email)
 						.then(user => {
 							setAlert(null);
 							if (user) {
@@ -44,7 +44,7 @@ const Login = () => {
 	}
 
 	function handleRegister(values: IEmailPass, formCallback: () => void) {
-		authRegister_EmailPass(values)
+		FBAuthRegister_EmailPass(values)
 			.then(res => {
 				if (res) {
 					formCallback();

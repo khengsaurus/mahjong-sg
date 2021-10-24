@@ -13,7 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useState } from 'react';
-import FBService from 'shared/service/MyFirebaseService';
+import FBService from 'platform/service/MyFirebaseService';
 
 const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 	const [tai, setTai] = useState<number>(null);

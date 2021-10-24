@@ -2,8 +2,7 @@ import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HiddenHand, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useContext, useMemo } from 'react';
 import { FrontBackTag, Segments, Sizes } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
-import useTiles from 'shared/hooks/useTiles';
+import { AppContext, useTiles } from 'shared/hooks';
 import { revealTile } from 'shared/util';
 import './playerComponents.scss';
 

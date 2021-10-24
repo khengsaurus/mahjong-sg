@@ -18,5 +18,5 @@
 		"jsx": "react-jsx",
 		"strictNullChecks": false
 	},
-	"include": ["src", "shared/enums.ts"]
+	"include": ["src"]
 }

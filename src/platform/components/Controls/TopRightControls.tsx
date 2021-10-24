@@ -3,7 +3,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SubjectIcon from '@material-ui/icons/Subject';
 import { useContext, useRef } from 'react';
 import { Sizes } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
+import { AppContext } from 'shared/hooks';
 import LogModal from '../Modals/LogModal';
 import './controls.scss';
 

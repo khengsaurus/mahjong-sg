@@ -1,23 +1,23 @@
 import Typography from '@material-ui/core/Typography';
 import firebase from 'firebase/app';
-import { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Status } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
-import useSession from 'shared/hooks/useSession';
-import { Game, User } from 'shared/models';
-import FBService from 'shared/service/MyFirebaseService';
-import { setGame, setPlayer } from 'shared/store/actions';
-import { objToGame } from 'shared/util';
 import Controls from 'platform/components/Controls';
 import { Loader } from 'platform/components/Loader';
 import BottomPlayer from 'platform/components/PlayerComponents/BottomPlayer';
 import LeftPlayer from 'platform/components/PlayerComponents/LeftPlayer';
 import RightPlayer from 'platform/components/PlayerComponents/RightPlayer';
 import TopPlayer from 'platform/components/PlayerComponents/TopPlayer';
+import { useLocalSession } from 'platform/hooks';
+import FBService from 'platform/service/MyFirebaseService';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents';
 import { HomeButton, Title } from 'platform/style/StyledMui';
+import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Status } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
+import { Game, User } from 'shared/models';
+import { setGame, setPlayer } from 'shared/store/actions';
+import { objToGame } from 'shared/util';
 import './table.scss';
 
 const loadingScreen = (
@@ -40,7 +40,7 @@ const noGameMarkup = (
 );
 
 const Table = () => {
-	const { verifyingSession } = useSession();
+	const { verifyingSession } = useLocalSession();
 	const { user, gameId, tilesSize, setStage, setPlayerSeat } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(loadingScreen);
 	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);

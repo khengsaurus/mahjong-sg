@@ -2,7 +2,7 @@ import { GreenTableText, TableText } from 'platform/style/StyledComponents';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Sizes, TableColors } from 'shared/enums';
-import useEventListener from 'shared/hooks/useEventListener';
+import { useEventListener } from 'shared/hooks';
 
 interface LogModalProps {
 	expanded: boolean;

@@ -12,8 +12,8 @@ import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useRef } from 'react';
 import { BackgroundColors, Sizes, TableColors, TileColors } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
-import FBService from 'shared/service/MyFirebaseService';
+import { AppContext } from 'shared/hooks';
+import FBService from 'platform/service/MyFirebaseService';
 import './settingsWindow.scss';
 
 interface Preference {

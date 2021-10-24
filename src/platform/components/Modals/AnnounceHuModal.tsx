@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import React from 'react';
-import FBService from 'shared/service/MyFirebaseService';
+import FBService from 'platform/service/MyFirebaseService';
 import PaymentModalInline from './PaymentModalInline';
 
 const AnnounceHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {

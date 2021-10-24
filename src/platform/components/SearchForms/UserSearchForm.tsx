@@ -11,9 +11,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import { CenteredColored } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
-import { AppContext } from 'shared/hooks/AppContext';
+import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import FBService from 'shared/service/MyFirebaseService';
+import FBService from 'platform/service/MyFirebaseService';
 import './searchForms.scss';
 
 const UserSearchForm: React.FC = () => {

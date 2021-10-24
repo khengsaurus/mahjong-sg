@@ -6,22 +6,22 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { history } from 'App';
 import firebase from 'firebase/app';
 import { Loader } from 'platform/components/Loader';
+import { useLocalSession } from 'platform/hooks';
+import FBService from 'platform/service/MyFirebaseService';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { HomeButton, Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Pages, Status } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
-import useSession from 'shared/hooks/useSession';
+import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
-import FBService from 'shared/service/MyFirebaseService';
 import { setGame, setPlayer } from 'shared/store/actions';
 import { formatDateToDay, objToGame } from 'shared/util';
 import './joinGame.scss';
 
 const JoinGame = () => {
-	const { verifyingSession } = useSession();
+	const { verifyingSession } = useLocalSession();
 	const { user, setGameId } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 	const dispatch = useDispatch();

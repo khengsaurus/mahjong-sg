@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
+import useLocalStorage from 'platform/hooks/useLocalStorage';
 import { useCallback } from 'react';
-import { useLocalStorage } from 'shared/hooks/useHooks';
 import { User } from 'shared/models';
 import { objToUser, userToObj } from 'shared/util';
 

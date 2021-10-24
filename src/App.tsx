@@ -9,7 +9,7 @@ import Table from 'platform/pages/Table';
 import { Styled } from 'platform/style/StyledComponents';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
-import { AppContextProvider } from 'shared/hooks/AppContext';
+import { AppContextProvider } from 'shared/hooks';
 import store from 'shared/store';
 import './App.scss';
 

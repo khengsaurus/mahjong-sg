@@ -11,19 +11,19 @@ import MoodIcon from '@material-ui/icons/Mood';
 import { history } from 'App';
 import { Loader } from 'platform/components/Loader';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
+import { useLocalSession } from 'platform/hooks';
+import FBService from 'platform/service/MyFirebaseService';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { Pages, Status } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
-import useSession from 'shared/hooks/useSession';
+import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import FBService from 'shared/service/MyFirebaseService';
 import './newGame.scss';
 
 const NewGame = () => {
-	const { verifyingSession } = useSession();
+	const { verifyingSession } = useLocalSession();
 	const { user, players, setPlayers, setGameId } = useContext(AppContext);
 	const showRandomize = useRef(players.length === 4);
 	const [startedGame, setStartedGame] = useState(false);

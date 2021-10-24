@@ -7,21 +7,21 @@ import { Main } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext } from 'react';
 import { Pages, Status } from 'shared/enums';
-import { AppContext } from 'shared/hooks/AppContext';
+import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import { deleteCurrentFBUser, newUser_IEmailUser, resolveUser_Email } from 'shared/service/fbUserFns';
+import { FBDeleteCurrentFBUser, FBNewUser_EmailUser, FBResolveUser_Email } from 'shared/service/fbUserFns';
 
 const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
 
 	function handleCancel() {
-		deleteCurrentFBUser();
+		FBDeleteCurrentFBUser();
 		logout();
 		history.push(Pages.LOGIN);
 	}
 
 	function handleSubmit(values: IEmailUser, callback: () => void) {
-		newUser_IEmailUser(values)
+		FBNewUser_EmailUser(values)
 			.then(res => {
 				if (res) {
 					setAlert({ status: Status.SUCCESS, msg: 'Registered successfully' });
@@ -34,9 +34,9 @@ const NewUser = () => {
 	}
 
 	function successCallback() {
-		resolveUser_Email(userEmail)
+		FBResolveUser_Email(userEmail)
 			.then((user: User) => {
-				login(user, false);
+				login(user, true);
 				setTimeout(function () {
 					history.push(Pages.HOME);
 					setAlert(null);
