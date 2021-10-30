@@ -1,49 +1,38 @@
-@import '../../../App.scss';
+@import "../../../App.scss";
 
 .wind-background {
-	font-size: $wind-font-size;
+  font-size: $wind-font-size;
+}
+
+.table {
+  @include safe-area-insets;
+  position: relative;
+  max-height: 900px;
+  max-width: 900px;
 }
 
 .top-player-container {
-	position: absolute;
-	width: 100%;
-	top: $main-padding;
-	z-index: 3;
+  position: absolute;
+  width: 100%;
+  top: $main-padding;
+  z-index: 3;
 }
 
 .right-player-container {
-	position: absolute;
-	right: $main-padding;
-	z-index: 4;
+  position: absolute;
+  right: $main-padding;
+  z-index: 4;
 }
 
 .bottom-player-container {
-	position: absolute;
-	width: 100%;
-	bottom: $main-padding;
-	z-index: 5;
+  position: absolute;
+  width: 100%;
+  bottom: $main-padding;
+  z-index: 5;
 }
 
 .left-player-container {
-	position: absolute;
-	left: $main-padding;
-	z-index: 2;
-}
-
-@keyframes color-change {
-	0% {
-		color: #aeaeae;
-	}
-	25% {
-		color: #a2a2a2;
-	}
-	50% {
-		color: #9a9a9a;
-	}
-	75% {
-		color: #a2a2a2;
-	}
-	100% {
-		color: #aeaeae;
-	}
+  position: absolute;
+  left: $main-padding;
+  z-index: 2;
 }
