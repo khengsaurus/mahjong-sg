@@ -5,7 +5,6 @@
 		.row-section-#{$size} {
 			@include flex-dir(column);
 			@include alignI-justifyC(center, center);
-			margin: 2 * getTilePadding($size);
 			transition: 200ms;
 			&.bottom {
 				flex-direction: column-reverse;
@@ -97,7 +96,6 @@
 		.column-section-#{$size} {
 			@include flow(row wrap);
 			@include alignI-justifyC(center, center);
-			margin: 2 * getTilePadding($size);
 			transition: 200ms;
 			&.right {
 				flex-direction: row-reverse;
@@ -198,8 +196,8 @@
 			align-self: center;
 			@include flex-dir(row);
 			margin: getTilePadding($size);
+			@include handleBottomMargin($size);
 			z-index: 20;
-
 			.self-hidden-tile {
 				height: getSelfHiddenTileHeight($size);
 				width: getSelfHiddenTileWidth($size);
