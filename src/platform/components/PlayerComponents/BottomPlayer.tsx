@@ -37,7 +37,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const shownHiddenHand = useMemo(() => {
 		let revLTT: IShownTile = !isEmpty(lTaken) ? (lTaken.ix === 0 ? revealTile(lTaken, tileHashKey) : lTaken) : null;
 		return (
-			<div className="htss">
+			<div className="htss bottom">
 				{hTs.map((tile: IHiddenTile) => {
 					let revT = revealTile(tile, tileHashKey);
 					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.card} segment={Segments.BOTTOM} />;

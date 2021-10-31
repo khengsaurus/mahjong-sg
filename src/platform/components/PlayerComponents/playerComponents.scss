@@ -12,8 +12,8 @@
 			.htsh {
 				@include flex-dir(row);
 				justify-content: center;
-				margin: getTilePadding($size) 0;
 				min-height: getHiddenTileHeight($size);
+				margin: getTilePadding($size);
 				&.unused {
 					align-self: center;
 					flex-flow: column wrap;
@@ -44,10 +44,13 @@
 			.htss {
 				@include flow(row wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
-				margin: getTilePadding($size);
 				width: floor(75vw);
+				margin: getTilePadding($size);
 				&.top {
 					flex-flow: row-reverse wrap;
+				}
+				&.bottom {
+					@include handleBottomMargin($size);
 				}
 				&.discarded {
 					width: floor(65vw);
@@ -104,8 +107,8 @@
 			.vtsh {
 				@include flex-dir(column);
 				justify-content: flex-start;
-				margin: 0 getTilePadding($size);
 				min-width: getHiddenTileHeight($size);
+				margin: getTilePadding($size);
 				&.unused {
 					align-self: center;
 					align-content: flex-start;
@@ -136,8 +139,8 @@
 			.vtss {
 				@include flow(column-reverse wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
-				margin: getTilePadding($size);
 				height: floor(75vh);
+				margin: getTilePadding($size);
 				&.left {
 					transform: rotate(180deg);
 				}
