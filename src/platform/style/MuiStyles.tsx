@@ -250,8 +250,8 @@ export const MuiStyles = {
 		right: 5
 	},
 	buttons_small: {
-		fontSize: 16,
-		fontWeight: 500
+		fontSize: 18,
+		fontWeight: 600
 	},
 	buttons_medium: {
 		fontSize: 20,

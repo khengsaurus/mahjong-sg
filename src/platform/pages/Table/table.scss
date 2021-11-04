@@ -14,7 +14,6 @@
 
 .top-player-container {
 	position: absolute;
-	width: 100%;
 	top: $main-padding;
 	z-index: 3;
 }
@@ -27,9 +26,9 @@
 
 .bottom-player-container {
 	position: absolute;
-	width: 100%;
-	// bottom: $main-padding;
-	bottom: 0;
+	bottom: $main-padding;
+	margin-bottom: const(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
 	z-index: 5;
 }
 

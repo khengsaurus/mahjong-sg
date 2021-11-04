@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap');
 
 $sizes: 'small', 'medium', 'large';
-$zero_list: 0, 0px;
+$zero_list: 0, 0px, '0', '0px';
 
 $main-padding: 2px;
 $panel-segment-width: 180px;
@@ -29,35 +29,35 @@ $default-tile-border-radius: calc(min(10%, 4px));
 $original-height: 200px;
 $original-width: 140px;
 
-// Small: : round($original~ / 7)
+// Small
 $tile-padding-small: 2px;
 $hidden-tile-height-small: 8px;
 $hidden-tile-width-small: 5px;
-$shown-tile-height-small: 29px;
-$shown-tile-width-small: 20px;
+$shown-tile-height-small: 31px;
+$shown-tile-width-small: 22px;
 
 $self-hidden-tile-height-small: 39px;
-$self-hidden-tile-width-small: 27px;
+$self-hidden-tile-width-small: 26px;
 
-// Large: round($original~ / 5)
-$tile-padding-large: 4px;
+// Large
+$tile-padding-large: 3px;
 $hidden-tile-height-large: 12px;
 $hidden-tile-width-large: 8px;
-$shown-tile-height-large: 40px;
-$shown-tile-width-large: 28px;
+$shown-tile-height-large: 43px;
+$shown-tile-width-large: 30px;
 
 $self-hidden-tile-height-large: 57px;
-$self-hidden-tile-width-large: 40px;
+$self-hidden-tile-width-large: 38px;
 
-// Medium: round($original~ / 6)
-$tile-padding-medium: 3px;
+// Medium
+$tile-padding-medium: 2px;
 $hidden-tile-height-medium: 9px;
 $hidden-tile-width-medium: 6px;
-$shown-tile-height-medium: 33px;
-$shown-tile-width-medium: 23px;
+$shown-tile-height-medium: 36px;
+$shown-tile-width-medium: 25px;
 
 $self-hidden-tile-height-medium: 48px;
-$self-hidden-tile-width-medium: 33px;
+$self-hidden-tile-width-medium: 32px;
 
 /*-------------------- Controls & logs --------------------*/
 // Small
@@ -239,7 +239,7 @@ $log-margin-left-medium: 10px;
 	}
 }
 
-/*-------------------- Safe area insets --------------------*/
+/*-------------------- Safe area --------------------*/
 
 @mixin safeAreaHeight {
 	@supports ((top: const(safe-area-inset-top)) and (bottom: const(safe-area-inset-bottom))) {
@@ -265,7 +265,7 @@ $log-margin-left-medium: 10px;
 	}
 }
 
-@function getBottomMargin($saib, $size) {
+@function getBottomMarginWithSize($saib, $size) {
 	@if (in_list($saib, $zero_list)) {
 		@return getTilePadding($size);
 	} @else {
@@ -273,21 +273,13 @@ $log-margin-left-medium: 10px;
 	}
 }
 
-@mixin handleBottomMargin($size) {
-	margin-bottom: getTilePadding($size);
-	margin-bottom: const(safe-area-inset-bottom);
-	margin-bottom: env(safe-area-inset-bottom);
-
-	// // iOS 11.0 - 11.2
-	// @supports (bottom: const(safe-area-inset-bottom)) {
-	// 	margin-bottom: getBottomMargin(const(safe-area-inset-bottom), $size);
-	// }
-	// // iOS >= 11.2
-	// @supports (bottom: env(safe-area-inset-bottom)) {
-	// 	margin-bottom: getBottomMargin(env(safe-area-inset-bottom), $size);
-	// }
+@function getBottomMargin($saib) {
+	@if (in_list($saib, $zero_list)) {
+		@return $main-padding;
+	} @else {
+		@return $saib;
+	}
 }
-
 /*-------------------- Mixins --------------------*/
 
 @mixin alignI-justifyC($i, $c) {

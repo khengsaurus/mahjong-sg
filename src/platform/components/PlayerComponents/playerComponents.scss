@@ -49,9 +49,6 @@
 				&.top {
 					flex-flow: row-reverse wrap;
 				}
-				&.bottom {
-					@include handleBottomMargin($size);
-				}
 				&.discarded {
 					width: floor(65vw);
 					@media all and (min-aspect-ratio: 4/3) {
@@ -199,7 +196,6 @@
 			align-self: center;
 			@include flex-dir(row);
 			margin: getTilePadding($size);
-			@include handleBottomMargin($size);
 			z-index: 20;
 			.self-hidden-tile {
 				height: getSelfHiddenTileHeight($size);
