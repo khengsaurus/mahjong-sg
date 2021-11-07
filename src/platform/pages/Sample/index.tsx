@@ -86,8 +86,8 @@ const Sample = () => {
 		</div>
 	);
 
-	const extraCard = { card: '9万', num: 9, suit: '万' };
 	useMemo(() => {
+		const extraCard = { card: '9万', num: 9, suit: '万' };
 		console.log(getHands([..._2ChiMix1PairMix_2, extraCard]));
 		console.log(handsWithMeld([..._2ChiMix1PairMix_2, extraCard]));
 		console.log(handsWithPair([..._2ChiMix1PairMix_2, extraCard]));
