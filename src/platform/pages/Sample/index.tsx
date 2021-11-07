@@ -1,10 +1,12 @@
 import { Loader } from 'platform/components/Loader';
 import { useLocalSession } from 'platform/hooks';
 import useLocalStorage from 'platform/hooks/useLocalStorage';
+import { _2ChiMix1PairMix_2, _nothing12Tiles } from 'platform/pages/Sample/sampleHands';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
-import { useState } from 'react';
+import { StyledButton } from 'platform/style/StyledMui';
+import { useMemo, useState } from 'react';
+import { getHands, handsWithMeld, handsWithMeldWithPair, handsWithPair } from 'shared/AI/handLogic';
 import { Pages, Sizes, Status, Suits } from 'shared/enums';
 import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
@@ -84,10 +86,22 @@ const Sample = () => {
 		</div>
 	);
 
+	const extraCard = { card: '9万', num: 9, suit: '万' };
+	useMemo(() => {
+		console.log(getHands([..._2ChiMix1PairMix_2, extraCard]));
+		console.log(handsWithMeld([..._2ChiMix1PairMix_2, extraCard]));
+		console.log(handsWithPair([..._2ChiMix1PairMix_2, extraCard]));
+		console.log(handsWithMeldWithPair([..._2ChiMix1PairMix_2, extraCard]));
+		console.log('12');
+		console.log(getHands(_nothing12Tiles));
+		console.log(handsWithMeld(_nothing12Tiles));
+		console.log(handsWithPair(_nothing12Tiles));
+		console.log(handsWithMeldWithPair(_nothing12Tiles));
+	}, []);
+
 	return (
 		<HomeTheme>
 			<Main>
-				<Title title={verifyingSession === Status.SUCCESS ? 'Logged in' : 'Not logged in'} />
 				{verifyingSession === Status.PENDING ? (
 					<Loader />
 				) : (
