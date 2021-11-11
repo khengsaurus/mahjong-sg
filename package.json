@@ -20,6 +20,7 @@
 		"firebase": "^8.6.8",
 		"framer-motion": "^4.1.17",
 		"include-media": "^1.4.10",
+		"jsdom": "^18.0.1",
 		"jsonwebtoken": "^8.5.1",
 		"lodash.isempty": "^4.4.0",
 		"lodash.isequal": "^4.5.0",
@@ -36,6 +37,7 @@
 		"sass-loader": "^10.2.0",
 		"styled-components": "^5.3.1",
 		"testing-library": "^0.0.2",
+		"ts-node": "^10.4.0",
 		"typescript": "^4.4.2",
 		"web-vitals": "^1.0.1"
 	},
@@ -73,11 +75,16 @@
 		]
 	},
 	"devDependencies": {
+		"@babel/preset-env": "^7.16.0",
+		"@babel/preset-typescript": "^7.16.0",
 		"@capacitor/cli": "3.2.3",
-		"@testing-library/jest-dom": "^5.11.4",
+		"@testing-library/jest-dom": "^5.15.0",
 		"@testing-library/react": "^11.2.7",
+		"@testing-library/react-hooks": "^7.0.2",
 		"@testing-library/user-event": "^12.1.10",
+		"@types/enzyme": "^3.10.10",
 		"@types/firebase": "^3.2.1",
+		"@types/jest": "^27.0.2",
 		"@types/jsonwebtoken": "^8.5.2",
 		"@types/lodash.isempty": "^4.4.6",
 		"@types/lodash.isequal": "^4.5.5",
@@ -91,8 +98,15 @@
 		"@types/react-transition-group": "^4.4.2",
 		"@types/reselect": "^2.2.0",
 		"@types/styled-components": "^5.1.13",
+		"@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
+		"babel": "^6.23.0",
+		"babel-jest": "^27.3.1",
+		"enzyme": "^3.11.0",
 		"eslint-plugin-import": "^2.25.2",
-		"react-test-renderer": "^17.0.2"
+		"jest": "^27.3.1",
+		"jest-environment-jsdom": "^27.3.1",
+		"react-test-renderer": "^17.0.2",
+		"ts-jest": "^27.0.7"
 	},
 	"prettier": {
 		"printWidth": 120,
