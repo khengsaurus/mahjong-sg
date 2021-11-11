@@ -1,15 +1,15 @@
 import { Loader } from 'platform/components/Loader';
 import { useLocalSession } from 'platform/hooks';
 import useLocalStorage from 'platform/hooks/useLocalStorage';
-import { _1Chi1PongMix1PairMix_mix } from 'platform/pages/Sample/sampleHands';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
-import { useEffect, useMemo, useState } from 'react';
-import { getHands } from 'shared/AI/handLogic';
-import { Pages, Sizes, Status, Suits } from 'shared/enums';
+import { useEffect, useState } from 'react';
+import { isChiHand, useHand } from 'shared/AI/handLogic';
+import { Pages, Sizes, Status, Suits, Winds } from 'shared/enums';
 import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
+import { getSuitedTileMock } from 'shared/util';
 import './sample.scss';
 
 const asynFn = (): Promise<string> => {
@@ -86,18 +86,28 @@ const Sample = () => {
 		</div>
 	);
 
-	const allHands = useMemo(() => {
-		return getHands([..._1Chi1PongMix1PairMix_mix]);
-	}, []);
+	const { validHands } = useHand(
+		[1, 1, 2, 2, 2, 3, 3, 3, 4, 4].map((i, index) => {
+			return getSuitedTileMock(Suits.WAN, i, index);
+		}),
+		getSuitedTileMock(Suits.WAN, 1, 1)
+	);
 
 	useEffect(() => {
-		console.log('hands with meld: ');
-		console.log(allHands.filter(hand => hand.melds.length > 0));
-		console.log('hands with pair: ');
-		console.log(allHands.filter(hand => hand.pair !== ''));
-		console.log('hands with meld and pair: ');
-		console.log(allHands.filter(hand => hand.melds.length > 0 && hand.pair !== ''));
-	}, [allHands]);
+		// console.log('all hands');
+		// console.log(allHands);
+		// console.log('hands with pair: ');
+		// console.log(allHandsWithPair);
+		// console.log('hands with meld: ');
+		// console.log(allHandsWithMeld);
+		// console.log('hands with meld and pair: ');
+		// console.log(allHandsWithMeldAndPair);
+		console.log('Valid hands:');
+		console.log(validHands);
+		console.log('isChiHand: ' + isChiHand(validHands[0], false, Winds.S, Winds.S));
+		console.log('isChiHand: ' + isChiHand(validHands[2], false, Winds.S, Winds.S));
+		// console.log('isSuited: ' + isSuited(validHands[0]));
+	}, []);
 
 	return (
 		<HomeTheme>
