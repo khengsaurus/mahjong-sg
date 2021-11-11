@@ -87,10 +87,10 @@ const Sample = () => {
 	);
 
 	const { validHands } = useHand(
-		[1, 1, 2, 2, 2, 3, 3, 3, 4, 4].map((i, index) => {
+		[1, 1, 1, 2, 2, 2, 3, 3, 4, 4].map((i, index) => {
 			return getSuitedTileMock(Suits.WAN, i, index);
 		}),
-		getSuitedTileMock(Suits.WAN, 1, 1)
+		getSuitedTileMock(Suits.WAN, 3, 3)
 	);
 
 	useEffect(() => {
@@ -107,7 +107,7 @@ const Sample = () => {
 		console.log('isChiHand: ' + isChiHand(validHands[0], false, Winds.S, Winds.S));
 		console.log('isChiHand: ' + isChiHand(validHands[2], false, Winds.S, Winds.S));
 		// console.log('isSuited: ' + isSuited(validHands[0]));
-	}, []);
+	}, [validHands]);
 
 	return (
 		<HomeTheme>
