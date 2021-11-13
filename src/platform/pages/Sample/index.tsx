@@ -5,7 +5,7 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useEffect, useState } from 'react';
-import { isChiHand, useHand } from 'shared/AI/handLogic';
+import useHand from 'shared/bot/useHand';
 import { Pages, Sizes, Status, Suits, Winds } from 'shared/enums';
 import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
@@ -86,28 +86,25 @@ const Sample = () => {
 		</div>
 	);
 
-	const { validHands } = useHand(
-		[1, 1, 1, 2, 2, 2, 3, 3, 4, 4].map((i, index) => {
+	const { validHands, validHandsWithTai } = useHand(
+		[1, 1, 1, 4, 4].map((i, index) => {
 			return getSuitedTileMock(Suits.WAN, i, index);
 		}),
-		getSuitedTileMock(Suits.WAN, 3, 3)
+		getSuitedTileMock(Suits.WAN, 4, 4),
+		[],
+		true,
+		Winds.E,
+		Winds.E
 	);
 
 	useEffect(() => {
 		// console.log('all hands');
 		// console.log(allHands);
-		// console.log('hands with pair: ');
-		// console.log(allHandsWithPair);
-		// console.log('hands with meld: ');
-		// console.log(allHandsWithMeld);
-		// console.log('hands with meld and pair: ');
-		// console.log(allHandsWithMeldAndPair);
 		console.log('Valid hands:');
 		console.log(validHands);
-		console.log('isChiHand: ' + isChiHand(validHands[0], false, Winds.S, Winds.S));
-		console.log('isChiHand: ' + isChiHand(validHands[2], false, Winds.S, Winds.S));
-		// console.log('isSuited: ' + isSuited(validHands[0]));
-	}, [validHands]);
+		console.log('validHandsWithTai: ');
+		console.log(validHandsWithTai);
+	}, [validHands, validHandsWithTai]);
 
 	return (
 		<HomeTheme>
