@@ -6,10 +6,10 @@ import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useEffect, useState } from 'react';
 import useHand from 'shared/bot/useHand';
-import { Pages, Sizes, Status, Suits, Winds } from 'shared/enums';
+import { DaPai, Pages, Sizes, Status, Suits } from 'shared/enums';
 import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
-import { getSuitedTileMock } from 'shared/util';
+import { getHBFMock, getSuitedTileMock } from 'shared/util';
 import './sample.scss';
 
 const asynFn = (): Promise<string> => {
@@ -86,25 +86,30 @@ const Sample = () => {
 		</div>
 	);
 
-	const { validHands, validHandsWithTai } = useHand(
-		[1, 1, 1, 4, 4].map((i, index) => {
-			return getSuitedTileMock(Suits.WAN, i, index);
-		}),
-		getSuitedTileMock(Suits.WAN, 4, 4),
-		[],
-		true,
-		Winds.E,
-		Winds.E
+	const suitedTiles = [1, 9, 9, 9].map((i, index) => {
+		return getSuitedTileMock(Suits.WAN, i, index);
+	});
+	const daPaiTiles = [DaPai.RED, DaPai.RED, DaPai.RED].map((i, index) => {
+		return getHBFMock(i, index);
+	});
+	const { handsWithPoints, handRepr, highestHand } = useHand(
+		[...suitedTiles, ...daPaiTiles],
+		getSuitedTileMock(Suits.WAN, 1, 1),
+		['p-发'],
+		false
 	);
 
 	useEffect(() => {
 		// console.log('all hands');
-		// console.log(allHands);
-		console.log('Valid hands:');
-		console.log(validHands);
-		console.log('validHandsWithTai: ');
-		console.log(validHandsWithTai);
-	}, [validHands, validHandsWithTai]);
+		// console.log(hands);
+		// console.log('Valid hands:');
+		// console.log(fullHands);
+		console.log('handsWithPoints: ');
+		console.log(handsWithPoints);
+		console.log('highestHand: ');
+		console.log(highestHand);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [handRepr]);
 
 	return (
 		<HomeTheme>

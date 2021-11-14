@@ -25,6 +25,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	const selectTile = useCallback(
 		(tile: IShownTile) => {
+			console.log(tile);
 			if (!selectedTiles.map(tile => tile.ref).includes(tile.ref) && selectedTiles.length < 4) {
 				setSelectedTiles([...selectedTiles, tile]);
 			} else {

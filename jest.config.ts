@@ -1,6 +1,9 @@
 const config = {
   // testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-  testMatch: ['**/__tests__/**handLogic.test.tsx'],
+  testMatch: [
+    '**/__tests__/**handLogic.test.tsx',
+    '**/__tests__/**handLogic_withPoints.test.tsx',
+  ],
   clearMocks: true,
   collectCoverage: false,
   coverageDirectory: 'coverage',
