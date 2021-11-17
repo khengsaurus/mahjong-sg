@@ -4,12 +4,10 @@ import useLocalStorage from 'platform/hooks/useLocalStorage';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
-import { useEffect, useState } from 'react';
-import useHand from 'shared/bot/useHand';
-import { DaPai, Pages, Sizes, Status, Suits } from 'shared/enums';
+import { useState } from 'react';
+import { Pages, Sizes, Status, Suits } from 'shared/enums';
 import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
-import { getHBFMock, getSuitedTileMock } from 'shared/util';
 import './sample.scss';
 
 const asynFn = (): Promise<string> => {
@@ -76,7 +74,6 @@ const Sample = () => {
 	);
 
 	function handleDelayClick() {
-		console.log('Starting delay');
 		setDelayFrom(new Date());
 	}
 	const testDelay = (
@@ -85,31 +82,6 @@ const Sample = () => {
 			{delayOn && <div className={`dynamic-large`}>{delayLeft}</div>}
 		</div>
 	);
-
-	const suitedTiles = [1, 9, 9, 9].map((i, index) => {
-		return getSuitedTileMock(Suits.WAN, i, index);
-	});
-	const daPaiTiles = [DaPai.RED, DaPai.RED, DaPai.RED].map((i, index) => {
-		return getHBFMock(i, index);
-	});
-	const { handsWithPoints, handRepr, highestHand } = useHand(
-		[...suitedTiles, ...daPaiTiles],
-		getSuitedTileMock(Suits.WAN, 1, 1),
-		['p-发'],
-		false
-	);
-
-	useEffect(() => {
-		// console.log('all hands');
-		// console.log(hands);
-		// console.log('Valid hands:');
-		// console.log(fullHands);
-		console.log('handsWithPoints: ');
-		console.log(handsWithPoints);
-		console.log('highestHand: ');
-		console.log(highestHand);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [handRepr]);
 
 	return (
 		<HomeTheme>
