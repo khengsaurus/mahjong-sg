@@ -9,7 +9,7 @@ import './playerComponents.scss';
 
 const RightPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { hTs, sTs, ms, dTs, lT, uTs, sT } = player;
+	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
@@ -33,11 +33,11 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		tiles: player.allHiddenTiles().length,
 		tilesSize: tilesSize
-		// addHalfTile: !isEmpty(lT)
+		// addHalfTile: !isEmpty(lTa)
 	});
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = !isEmpty(lT) ? (lT.ix === 0 ? revealTile(lT, tileHashKey) : lT) : null;
+		let revLTT: IShownTile = !isEmpty(lTa) ? (lTa.ix === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="vtss col-r" ref={shownHiddenHandRef}>
 				{hTs.map((tile: IHiddenTile) => {

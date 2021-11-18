@@ -57,7 +57,6 @@ const Table = () => {
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(gameData, false);
-				console.log(JSON.stringify(currentGame));
 				dispatch(setGame(currentGame));
 				setStage(currentGame.st);
 				setDealer(currentGame.dealer);
@@ -128,9 +127,7 @@ const Table = () => {
 										hasBack={back === TopPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.tBy === TopPlayerIndex || game.wM === TopPlayerIndex
-												? game.lastT
-												: null
+											game.tBy === TopPlayerIndex || game.wM === TopPlayerIndex ? game.lTh : null
 										}
 									/>
 								)}
@@ -145,7 +142,7 @@ const Table = () => {
 										tilesSize={tilesSize}
 										lastThrown={
 											game.tBy === RightPlayerIndex || game.wM === RightPlayerIndex
-												? game.lastT
+												? game.lTh
 												: null
 										}
 									/>
@@ -160,7 +157,7 @@ const Table = () => {
 										hasBack={back === BottomPlayerIndex}
 										lastThrown={
 											game.tBy === BottomPlayerIndex || game.wM === BottomPlayerIndex
-												? game.lastT
+												? game.lTh
 												: null
 										}
 									/>
@@ -176,7 +173,7 @@ const Table = () => {
 										tilesSize={tilesSize}
 										lastThrown={
 											game.tBy === LeftPlayerIndex || game.wM === LeftPlayerIndex
-												? game.lastT
+												? game.lTh
 												: null
 										}
 									/>

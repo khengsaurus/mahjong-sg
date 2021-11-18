@@ -8,7 +8,7 @@ import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { hTs, sTs, ms, dTs, lT, uTs, sT } = player;
+	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
@@ -35,7 +35,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = !isEmpty(lT) ? (lT.ix === 0 ? revealTile(lT, tileHashKey) : lT) : null;
+		let revLTT: IShownTile = !isEmpty(lTa) ? (lTa.ix === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="htss">
 				{hTs.map((tile: IHiddenTile) => {
@@ -59,7 +59,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	const hiddenHand = useCallback(() => {
 		let selectedTilesRef = selectedTiles.map(tile => tile.r);
-		let revLTT = !isEmpty(lT) ? revealTile(lT, tileHashKey) : null;
+		let revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
 		return (
 			<div className={`self-hidden-tiles-${handSize || Sizes.MEDIUM}`}>
 				{hTs.map((tile: IHiddenTile) => {

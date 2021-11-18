@@ -207,7 +207,7 @@ export class FirebaseService {
 						ps: shuffledPlayers.map(function (player: User) {
 							return playerToObj(player);
 						}),
-						tiles: [],
+						ts: [],
 						front: 0,
 						back: 0,
 						lastT: {},
@@ -268,7 +268,7 @@ export class FirebaseService {
 				});
 			} catch (err) {
 				console.error(err);
-				reject(new Error('FirebaseService - game doc was not up'));
+				reject(new Error('FirebaseService - game doc was not updated'));
 			}
 		});
 	}
