@@ -39,7 +39,7 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
-						tileCard={tile.card}
+						tileCard={tile.c}
 						segment={segment}
 						lastID={lastThrownId}
 					/>
@@ -50,9 +50,9 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
-						tileCard={tile.card}
+						tileCard={tile.c}
 						segment={segment}
-						classSuffix={tile.v ? (tile.suit === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
+						classSuffix={tile.v ? (tile.s === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
 					/>
 				);
 			})}

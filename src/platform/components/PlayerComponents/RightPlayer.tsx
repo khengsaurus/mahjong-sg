@@ -9,14 +9,14 @@ import './playerComponents.scss';
 
 const RightPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { hTs, sTs, melds, dTs, lTaken, uTs, sT } = player;
+	const { hTs, sTs, ms, dTs, lT, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
 	const { tilesSize, tileHashKey } = useContext(AppContext);
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		sTs,
-		melds,
+		ms,
 		allHiddenTiles
 	});
 	const shownTilesRef = useRef(null);
@@ -33,22 +33,22 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		tiles: player.allHiddenTiles().length,
 		tilesSize: tilesSize
-		// addHalfTile: !isEmpty(lTaken)
+		// addHalfTile: !isEmpty(lT)
 	});
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = !isEmpty(lTaken) ? (lTaken.ix === 0 ? revealTile(lTaken, tileHashKey) : lTaken) : null;
+		let revLTT: IShownTile = !isEmpty(lT) ? (lT.ix === 0 ? revealTile(lT, tileHashKey) : lT) : null;
 		return (
 			<div className="vtss col-r" ref={shownHiddenHandRef}>
 				{hTs.map((tile: IHiddenTile) => {
 					let revT = revealTile(tile, tileHashKey);
-					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.card} segment={Segments.RIGHT} />;
+					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.c} segment={Segments.RIGHT} />;
 				})}
 				{revLTT && (
 					<ShownTile
 						key={revLTT.id}
 						tileID={revLTT.id}
-						tileCard={revLTT.card}
+						tileCard={revLTT.c}
 						segment={Segments.RIGHT}
 						highlight
 						classSuffix="margin-bottom"

@@ -30,7 +30,7 @@ const DiscardedTiles = ({ className, tiles, segment, lastThrownId }: Props) => {
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
-						tileCard={tile.card}
+						tileCard={tile.c}
 						segment={segment}
 						lastID={lastThrownId}
 					/>

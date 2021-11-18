@@ -8,7 +8,7 @@ import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { hTs, sTs, melds, dTs, lTaken, uTs, sT } = player;
+	const { hTs, sTs, ms, dTs, lT, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
@@ -19,35 +19,34 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		sTs,
 		allHiddenTiles,
-		melds,
+		ms,
 		toRotate: false
 	});
 
 	const selectTile = useCallback(
 		(tile: IShownTile) => {
-			console.log(tile);
-			if (!selectedTiles.map(tile => tile.ref).includes(tile.ref) && selectedTiles.length < 4) {
+			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
 				setSelectedTiles([...selectedTiles, tile]);
 			} else {
-				setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.ref !== tile.ref));
+				setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.r !== tile.r));
 			}
 		},
 		[selectedTiles, setSelectedTiles]
 	);
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = !isEmpty(lTaken) ? (lTaken.ix === 0 ? revealTile(lTaken, tileHashKey) : lTaken) : null;
+		let revLTT: IShownTile = !isEmpty(lT) ? (lT.ix === 0 ? revealTile(lT, tileHashKey) : lT) : null;
 		return (
 			<div className="htss">
 				{hTs.map((tile: IHiddenTile) => {
 					let revT = revealTile(tile, tileHashKey);
-					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.card} segment={Segments.BOTTOM} />;
+					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.c} segment={Segments.BOTTOM} />;
 				})}
 				{revLTT && (
 					<ShownTile
 						key={revLTT.id}
 						tileID={revLTT.id}
-						tileCard={revLTT.card}
+						tileCard={revLTT.c}
 						segment={Segments.BOTTOM}
 						highlight
 						classSuffix="margin-left"
@@ -59,8 +58,8 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	}, [hiddenCards]);
 
 	const hiddenHand = useCallback(() => {
-		let selectedTilesRef = selectedTiles.map(tile => tile.ref);
-		let revLTT = !isEmpty(lTaken) ? revealTile(lTaken, tileHashKey) : null;
+		let selectedTilesRef = selectedTiles.map(tile => tile.r);
+		let revLTT = !isEmpty(lT) ? revealTile(lT, tileHashKey) : null;
 		return (
 			<div className={`self-hidden-tiles-${handSize || Sizes.MEDIUM}`}>
 				{hTs.map((tile: IHiddenTile) => {
@@ -68,8 +67,8 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 					return (
 						<HandTile
 							key={revealedTile.id}
-							card={revealedTile.card}
-							selected={selectedTilesRef.includes(revealedTile.ref)}
+							card={revealedTile.c}
+							selected={selectedTilesRef.includes(revealedTile.r)}
 							last={false}
 							callback={() => selectTile(revealedTile)}
 						/>
@@ -78,8 +77,8 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 				{revLTT && (
 					<HandTile
 						key={revLTT.id}
-						card={revLTT.card}
-						selected={selectedTilesRef.includes(revLTT.ref)}
+						card={revLTT.c}
+						selected={selectedTilesRef.includes(revLTT.r)}
 						last={true}
 						callback={() => selectTile(revLTT)}
 					/>

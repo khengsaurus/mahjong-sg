@@ -25,9 +25,9 @@ function getRandomWanTile(): IShownTile {
 	let num = Math.floor(Math.random() * 9);
 	let card = wans[num];
 	return {
-		card,
-		suit: Suits.WAN,
-		num: num + 1,
+		c: card,
+		s: Suits.WAN,
+		n: num + 1,
 		id: `${card}1`,
 		ix: 1,
 		v: false
@@ -54,7 +54,7 @@ const Sample = () => {
 			<br />
 			<button className="button" onClick={() => setWanTile(getRandomWanTile())}>{`几万？`}</button>
 			<br />
-			{wanTile && <img className={`tile`} src={getTileSrc(wanTile.card)} alt="tile" />}
+			{wanTile && <img className={`tile`} src={getTileSrc(wanTile.c)} alt="tile" />}
 			<br />
 			<br />
 		</div>
