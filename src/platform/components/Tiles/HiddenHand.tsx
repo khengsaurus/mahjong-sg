@@ -4,27 +4,25 @@ import { useMemo } from 'react';
 import { Segments } from 'shared/enums';
 import { generateNumberArray } from 'shared/util';
 
-interface Props {
+interface IHiddenHand {
 	tiles: number;
 	segment: Segments;
 }
 
-const HiddenHand = ({ tiles, segment }: Props) => {
-	const tilesArray = useMemo(() => {
-		return generateNumberArray(tiles);
-	}, [tiles]);
+const HiddenHand = ({ tiles, segment }: IHiddenHand) => {
+	const tilesArray = useMemo(() => generateNumberArray(tiles), [tiles]);
 
 	return segment === Segments.TOP ? (
 		<div className="htsh">
-			{tilesArray.map(ITilendex => {
-				return <HiddenTile key={`${segment}-hidden-${ITilendex}`} className="hth" />;
-			})}
+			{tilesArray.map(ITilendex => (
+				<HiddenTile key={`${segment}-hidden-${ITilendex}`} className="hth" />
+			))}
 		</div>
 	) : (
 		<div className="vtsh">
-			{tilesArray.map(ITilendex => {
-				return <HiddenTile key={`${segment}-hidden-${ITilendex}`} className="vth" />;
-			})}
+			{tilesArray.map(ITilendex => (
+				<HiddenTile key={`${segment}-hidden-${ITilendex}`} className="vth" />
+			))}
 		</div>
 	);
 };

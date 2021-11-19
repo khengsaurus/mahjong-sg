@@ -121,34 +121,30 @@ const UserSearchForm: React.FC = () => {
 				</ListItem>
 				<Collapse in={showOptions} timeout={300} unmountOnExit className="search-box list-item">
 					{foundUsers.length > 0 &&
-						foundUsers.map(foundUser => {
-							if (user && user.id !== foundUser.id && notSelected(foundUser)) {
-								return (
-									<ListItem
-										className="user list-item"
-										button
-										key={foundUser.id}
+						foundUsers.map(foundUser =>
+							user && user.id !== foundUser.id && notSelected(foundUser) ? (
+								<ListItem
+									className="user list-item"
+									button
+									key={foundUser.id}
+									style={{
+										borderRadius: '5px'
+									}}
+									onClick={() => {
+										handleSelect(foundUser);
+									}}
+								>
+									<ListItemText primary={foundUser.uN} className={classes.text} />
+									<ListItemIcon
 										style={{
-											borderRadius: '5px'
-										}}
-										onClick={() => {
-											handleSelect(foundUser);
+											justifyContent: 'flex-end'
 										}}
 									>
-										<ListItemText primary={foundUser.uN} className={classes.text} />
-										<ListItemIcon
-											style={{
-												justifyContent: 'flex-end'
-											}}
-										>
-											<FaceIcon color="primary" />
-										</ListItemIcon>
-									</ListItem>
-								);
-							} else {
-								return null;
-							}
-						})}
+										<FaceIcon color="primary" />
+									</ListItemIcon>
+								</ListItem>
+							) : null
+						)}
 				</Collapse>
 			</List>
 		</CenteredColored>

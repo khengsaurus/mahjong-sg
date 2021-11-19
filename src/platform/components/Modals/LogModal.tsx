@@ -49,17 +49,15 @@ const LogModal = (props: LogModalProps) => {
 				className={`log-box-${size || Sizes.MEDIUM}${expanded ? ` expanded` : ``}`}
 				style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 			>
-				{logs.map((log: ILog, index) => {
-					return (
-						<CSSTransition key={`${index}`} timeout={500} classNames="move">
-							{log.msg.includes('sent') ? (
-								<GreenTableText>{log.msg}</GreenTableText>
-							) : (
-								<TableText>{log.msg}</TableText>
-							)}
-						</CSSTransition>
-					);
-				})}
+				{logs.map((log: ILog, index) => (
+					<CSSTransition key={`${index}`} timeout={500} classNames="move">
+						{log.msg.includes('sent') ? (
+							<GreenTableText>{log.msg}</GreenTableText>
+						) : (
+							<TableText>{log.msg}</TableText>
+						)}
+					</CSSTransition>
+				))}
 			</TransitionGroup>
 		</div>
 	);

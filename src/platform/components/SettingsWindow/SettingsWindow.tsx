@@ -50,25 +50,19 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 			label: 'Background',
 			selectedColor: backgroundColor,
 			handleSelect: setBackgroundColor,
-			colors: Object.keys(BackgroundColors).map(key => {
-				return BackgroundColors[key.toUpperCase()];
-			})
+			colors: Object.keys(BackgroundColors).map(key => BackgroundColors[key.toUpperCase()])
 		},
 		{
 			label: 'Table',
 			selectedColor: tableColor,
 			handleSelect: setTableColor,
-			colors: Object.keys(TableColors).map(key => {
-				return TableColors[key.toUpperCase()];
-			})
+			colors: Object.keys(TableColors).map(key => TableColors[key.toUpperCase()])
 		},
 		{
 			label: 'Tiles',
 			selectedColor: tileBackColor,
 			handleSelect: setTileBackColor,
-			colors: Object.keys(TileColors).map(key => {
-				return TileColors[key.toUpperCase()];
-			})
+			colors: Object.keys(TileColors).map(key => TileColors[key.toUpperCase()])
 		}
 	];
 	function handleClose() {
@@ -112,8 +106,8 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 							<CloseIcon />
 						</IconButton>
 						<FormControl component="fieldset">
-							{preferences.map(preference => {
-								return preference.size ? (
+							{preferences.map(preference =>
+								preference.size ? (
 									<div className="preference" key={`preference-${preference.label}`}>
 										<Typography variant="subtitle1" display="inline">
 											{`${preference.label}:`}
@@ -145,10 +139,10 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 											})}
 										</Tabs>
 									</div>
-								) : null;
-							})}
-							{preferences.map(preference => {
-								return preference.colors ? (
+								) : null
+							)}
+							{preferences.map(preference =>
+								preference.colors ? (
 									<div className="preference" key={`preference-${preference.label}`}>
 										<Typography variant="subtitle1" display="inline">
 											{`${preference.label}:`}
@@ -162,26 +156,24 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 												value={preference.selectedColor}
 												indicatorColor="secondary"
 											>
-												{preference.colors.map(rgb => {
-													return (
-														<Tab
-															style={{
-																...MuiStyles.tabColorOptions,
-																backgroundColor: rgb
-															}}
-															key={rgb}
-															value={rgb}
-															onClick={() => {
-																preference.handleSelect(rgb);
-															}}
-														/>
-													);
-												})}
+												{preference.colors.map(rgb => (
+													<Tab
+														style={{
+															...MuiStyles.tabColorOptions,
+															backgroundColor: rgb
+														}}
+														key={rgb}
+														value={rgb}
+														onClick={() => {
+															preference.handleSelect(rgb);
+														}}
+													/>
+												))}
 											</Tabs>
 										</Paper>
 									</div>
-								) : null;
-							})}
+								) : null
+							)}
 						</FormControl>
 					</DialogContent>
 				</Dialog>

@@ -54,13 +54,11 @@ const TopLeftControls = ({
 			</div>
 			{showText && (
 				<div className="text-container">
-					{texts?.map((text, index) => {
-						return (
-							<TableText className="text" key={`top-left-text-${index}`}>
-								{text}
-							</TableText>
-						);
-					})}
+					{texts?.map((text, index) => (
+						<TableText className="text" key={`top-left-text-${index}`}>
+							{text}
+						</TableText>
+					))}
 				</div>
 			)}
 		</div>

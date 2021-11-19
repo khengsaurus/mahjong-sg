@@ -14,9 +14,9 @@ const Scenarios = ({ set }: IDevControls) => {
 
 	return (
 		<>
-			{gameStateOptions.map((o, ix) => {
-				return <StyledButton key={ix} label={o.label} onClick={() => set(o.obj)} />;
-			})}
+			{gameStateOptions.map((o, ix) => (
+				<StyledButton key={ix} label={o.label} onClick={() => set(o.obj)} />
+			))}
 		</>
 	);
 };

@@ -91,35 +91,32 @@ const NewGame = () => {
 				<div className="panel-segment padding-top">
 					<List className="list">
 						{players.length > 0 &&
-							players.map((player, index) => {
-								let isUser = player?.uN === user?.uN;
-								return (
-									<Fragment key={`player-${index}`}>
-										<Fade in timeout={isUser ? 0 : fadeTimeout}>
-											<ListItem className="user list-item">
-												<ListItemText primary={player?.uN} />
-												{isUser ? (
-													<ListItemIcon
-														style={{
-															justifyContent: 'flex-end'
-														}}
-													>
-														<MoodIcon color="primary" />
-													</ListItemIcon>
-												) : (
-													<IconButton
-														onClick={() => handleRemovePlayer(player)}
-														style={{ justifyContent: 'flex-end', marginRight: -12 }}
-														disableRipple
-													>
-														<ClearIcon />
-													</IconButton>
-												)}
-											</ListItem>
-										</Fade>
-									</Fragment>
-								);
-							})}
+							players.map((player, index) => (
+								<Fragment key={`player-${index}`}>
+									<Fade in timeout={player?.uN === user?.uN ? 0 : fadeTimeout}>
+										<ListItem className="user list-item">
+											<ListItemText primary={player?.uN} />
+											{player?.uN === user?.uN ? (
+												<ListItemIcon
+													style={{
+														justifyContent: 'flex-end'
+													}}
+												>
+													<MoodIcon color="primary" />
+												</ListItemIcon>
+											) : (
+												<IconButton
+													onClick={() => handleRemovePlayer(player)}
+													style={{ justifyContent: 'flex-end', marginRight: -12 }}
+													disableRipple
+												>
+													<ClearIcon />
+												</IconButton>
+											)}
+										</ListItem>
+									</Fade>
+								</Fragment>
+							))}
 						{players.length === 4 && <RandomizeOption />}
 					</List>
 				</div>

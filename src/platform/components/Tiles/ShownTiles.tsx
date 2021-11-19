@@ -1,9 +1,10 @@
 import CasinoIcon from '@material-ui/icons/Casino';
-import { memo } from 'react';
+import React, { MutableRefObject } from 'react';
 import { Segments, Sizes, Suits } from 'shared/enums';
 import ShownTile from './ShownTile';
 
-interface Props {
+interface IShownTiles {
+	className: string;
 	nonFlowers: IShownTile[];
 	flowers: IShownTile[];
 	flowerIds: string[];
@@ -14,13 +15,13 @@ interface Props {
 	lastThrownId?: string;
 }
 
-function compare(prev: Props, next: Props) {
+function compare(prev: IShownTiles, next: IShownTiles) {
 	return (
 		prev.dealer === next.dealer &&
 		prev.segment === next.segment &&
 		prev.tilesSize === next.tilesSize &&
-		prev.flowerIds.length === next.flowerIds.length &&
-		prev.nonFlowerIds.length === next.nonFlowerIds.length &&
+		JSON.stringify(prev.flowerIds) === JSON.stringify(next.flowerIds) &&
+		JSON.stringify(prev.nonFlowerIds) === JSON.stringify(next.nonFlowerIds) &&
 		(!!prev.nonFlowerIds.find(tileId => {
 			return tileId === prev.lastThrownId;
 		})
@@ -31,11 +32,12 @@ function compare(prev: Props, next: Props) {
 	);
 }
 
-const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrownId }: Props) => {
-	return (
-		<>
-			{nonFlowers.map(tile => {
-				return (
+const ShownTiles = React.forwardRef<MutableRefObject<any>, IShownTiles>(
+	(props: IShownTiles, ref?: MutableRefObject<any>) => {
+		const { className, nonFlowers, flowers, segment, dealer, tilesSize, lastThrownId } = props;
+		return (
+			<div id={segment + '-shown'} className={className} ref={ref}>
+				{nonFlowers.map(tile => (
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
@@ -43,10 +45,8 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 						segment={segment}
 						lastID={lastThrownId}
 					/>
-				);
-			})}
-			{flowers.map(tile => {
-				return (
+				))}
+				{flowers.map(tile => (
 					<ShownTile
 						key={tile.id}
 						tileID={tile.id}
@@ -54,11 +54,11 @@ const ShownTiles = ({ nonFlowers, flowers, segment, dealer, tilesSize, lastThrow
 						segment={segment}
 						classSuffix={tile.v ? (tile.s === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
 					/>
-				);
-			})}
-			{dealer && <CasinoIcon color="primary" fontSize={tilesSize} />}
-		</>
-	);
-};
+				))}
+				{dealer && <CasinoIcon color="primary" fontSize={tilesSize} />}
+			</div>
+		);
+	}
+);
 
-export default memo(ShownTiles, compare);
+export default React.memo(ShownTiles, compare);

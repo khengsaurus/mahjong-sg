@@ -56,9 +56,9 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 					<FormControl component="fieldset">
 						<FormLabel component="legend">{`台: `}</FormLabel>
 						<RadioGroup row value={tai} onChange={handleSetTaiNumber}>
-							{[1, 2, 3, 4, 5].map((tai: number) => {
-								return <FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />;
-							})}
+							{[1, 2, 3, 4, 5].map((tai: number) => (
+								<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
+							))}
 						</RadioGroup>
 					</FormControl>
 					<br></br>

@@ -204,9 +204,7 @@ export class FirebaseService {
 						mid: false,
 						fN: true,
 						wM: 0,
-						ps: shuffledPlayers.map(function (player: User) {
-							return playerToObj(player);
-						}),
+						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
 						front: 0,
 						back: 0,

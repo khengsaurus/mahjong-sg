@@ -11,12 +11,12 @@ import { Amounts } from 'shared/enums';
 import { Game } from 'shared/models';
 import { sendChips } from './PaymentModal';
 
-interface Props {
+interface IPaymentModalInline {
 	game: Game;
 	playerSeat: number;
 }
 
-const PaymentModalInline = (props: Props) => {
+const PaymentModalInline = (props: IPaymentModalInline) => {
 	const { game, playerSeat } = props;
 	const winner = game.hu[0];
 	const [amountStr, setAmountStr] = useState<string>('');
@@ -39,13 +39,11 @@ const PaymentModalInline = (props: Props) => {
 					label="Chips"
 					IconComponent={() => null}
 				>
-					{Amounts.map(amount => {
-						return (
-							<MenuItem key={`amount-${amount}`} style={{ ...MuiStyles.dropdown_item }} value={amount}>
-								{amount}
-							</MenuItem>
-						);
-					})}
+					{Amounts.map(amount => (
+						<MenuItem key={`amount-${amount}`} style={{ ...MuiStyles.dropdown_item }} value={amount}>
+							{amount}
+						</MenuItem>
+					))}
 				</Select>
 			</FormControl>
 			<IconButton

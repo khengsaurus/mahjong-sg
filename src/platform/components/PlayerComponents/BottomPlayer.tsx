@@ -13,9 +13,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
-	const selectedTilesIds = selectedTiles.map(tile => {
-		return tile.id;
-	});
+	const selectedTilesIds = selectedTiles.map(tile => tile.id);
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		sTs,
 		allHiddenTiles,
@@ -88,45 +86,36 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectTile, handSize, hiddenCards, sT, selectedTilesIds]);
 
-	const renderShownTiles = () => {
-		return (
-			<div id="bottom-shown" className="htss">
-				<ShownTiles
-					nonFlowers={nonFlowers}
-					// nonFlowers={[...hTs, ...nonFlowers]}
-					flowers={flowers}
-					flowerIds={flowerIds}
-					nonFlowerIds={nonFlowerIds}
-					segment={Segments.BOTTOM}
-					dealer={dealer}
-					tilesSize={tilesSize}
-					lastThrownId={lastThrown?.id}
-				/>
-			</div>
-		);
-	};
+	const renderShownTiles = () => (
+		<ShownTiles
+			className="htss"
+			nonFlowers={nonFlowers}
+			// nonFlowers={[...hTs, ...nonFlowers]}
+			flowers={flowers}
+			flowerIds={flowerIds}
+			nonFlowerIds={nonFlowerIds}
+			segment={Segments.BOTTOM}
+			dealer={dealer}
+			tilesSize={tilesSize}
+			lastThrownId={lastThrown?.id}
+		/>
+	);
 
-	const renderUnusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={uTs} segment={Segments.BOTTOM} tag={frontBackTag} />;
-	}, [uTs, frontBackTag]);
-
-	const renderDiscardedTiles = () => {
-		return (
-			<DiscardedTiles
-				className="htss discarded"
-				tiles={dTs}
-				// tiles={[...hTs, ...dTs]}
-				segment={Segments.BOTTOM}
-				lastThrownId={lastThrown?.id}
-			/>
-		);
-	};
+	const renderDiscardedTiles = () => (
+		<DiscardedTiles
+			className="htss discarded"
+			tiles={dTs}
+			// tiles={[...hTs, ...dTs]}
+			segment={Segments.BOTTOM}
+			lastThrownId={lastThrown?.id}
+		/>
+	);
 
 	return (
 		<div className={`row-section-${tilesSize || Sizes.MEDIUM} bottom`}>
 			{player.sT ? shownHiddenHand : hiddenHand()}
 			{sTs?.length > 0 && renderShownTiles()}
-			{uTs > 0 && renderUnusedTiles}
+			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segments.BOTTOM} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);

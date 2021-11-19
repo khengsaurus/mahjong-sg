@@ -59,49 +59,37 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hiddenCards]);
 
-	const hiddenHand = useMemo(() => {
-		return <HiddenHand tiles={allHiddenTiles.length} segment={Segments.LEFT} />;
-	}, [allHiddenTiles.length]);
+	const renderShownTiles = () => (
+		<ShownTiles
+			className="vtss left"
+			nonFlowers={nonFlowers}
+			// nonFlowers={[...hTs, ...nonFlowers]}
+			flowers={flowers}
+			flowerIds={flowerIds}
+			nonFlowerIds={nonFlowerIds}
+			segment={Segments.LEFT}
+			dealer={dealer}
+			tilesSize={tilesSize}
+			lastThrownId={lastThrown?.id}
+			ref={shownTilesRef}
+		/>
+	);
 
-	const renderShownTiles = () => {
-		return (
-			<div ref={shownTilesRef} className="vtss left">
-				<ShownTiles
-					nonFlowers={nonFlowers}
-					// nonFlowers={[...hTs, ...nonFlowers]}
-					flowers={flowers}
-					flowerIds={flowerIds}
-					nonFlowerIds={nonFlowerIds}
-					segment={Segments.LEFT}
-					dealer={dealer}
-					tilesSize={tilesSize}
-					lastThrownId={lastThrown?.id}
-				/>
-			</div>
-		);
-	};
-
-	const renderUnusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={uTs} segment={Segments.LEFT} tag={frontBackTag} />;
-	}, [uTs, frontBackTag]);
-
-	const renderDiscardedTiles = () => {
-		return (
-			<DiscardedTiles
-				className="vtss left discarded"
-				tiles={dTs}
-				// tiles={[...hTs, ...dTs]}
-				segment={Segments.LEFT}
-				lastThrownId={lastThrown?.id}
-			/>
-		);
-	};
+	const renderDiscardedTiles = () => (
+		<DiscardedTiles
+			className="vtss left discarded"
+			tiles={dTs}
+			// tiles={[...hTs, ...dTs]}
+			segment={Segments.LEFT}
+			lastThrownId={lastThrown?.id}
+		/>
+	);
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.MEDIUM}`}>
-			{sT ? shownHiddenHand : hiddenHand}
+			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segments.LEFT} />}
 			{sTs?.length > 0 && renderShownTiles()}
-			{uTs > 0 && renderUnusedTiles}
+			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segments.LEFT} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);

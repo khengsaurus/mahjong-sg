@@ -12,7 +12,6 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-
 	const { tilesSize, tileHashKey } = useContext(AppContext);
 	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
 		sTs,
@@ -59,49 +58,37 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hiddenCards]);
 
-	const hiddenHand = useMemo(() => {
-		return <HiddenHand tiles={allHiddenTiles.length} segment={Segments.RIGHT} />;
-	}, [allHiddenTiles.length]);
+	const renderShownTiles = () => (
+		<ShownTiles
+			className="vtss"
+			nonFlowers={nonFlowers}
+			// nonFlowers={[...hTs, ...nonFlowers]}
+			flowers={flowers}
+			flowerIds={flowerIds}
+			nonFlowerIds={nonFlowerIds}
+			segment={Segments.RIGHT}
+			dealer={dealer}
+			tilesSize={tilesSize}
+			lastThrownId={lastThrown?.id}
+			ref={shownTilesRef}
+		/>
+	);
 
-	const renderShownTiles = () => {
-		return (
-			<div ref={shownTilesRef} id="right-shown" className="vtss">
-				<ShownTiles
-					nonFlowers={nonFlowers}
-					// nonFlowers={[...hTs, ...nonFlowers]}
-					flowers={flowers}
-					flowerIds={flowerIds}
-					nonFlowerIds={nonFlowerIds}
-					segment={Segments.RIGHT}
-					dealer={dealer}
-					tilesSize={tilesSize}
-					lastThrownId={lastThrown?.id}
-				/>
-			</div>
-		);
-	};
-
-	const renderUnusedTiles = useMemo(() => {
-		return <UnusedTiles tiles={uTs} segment={Segments.RIGHT} tag={frontBackTag} />;
-	}, [uTs, frontBackTag]);
-
-	const renderDiscardedTiles = () => {
-		return (
-			<DiscardedTiles
-				className="vtss discarded"
-				tiles={dTs}
-				// tiles={[...hTs, ...dTs]}
-				segment={Segments.RIGHT}
-				lastThrownId={lastThrown?.id}
-			/>
-		);
-	};
+	const renderDiscardedTiles = () => (
+		<DiscardedTiles
+			className="vtss discarded"
+			tiles={dTs}
+			// tiles={[...hTs, ...dTs]}
+			segment={Segments.RIGHT}
+			lastThrownId={lastThrown?.id}
+		/>
+	);
 
 	return (
 		<div className={`column-section-${tilesSize || Sizes.MEDIUM} right`}>
-			{sT ? shownHiddenHand : hiddenHand}
+			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segments.RIGHT} />}
 			{sTs?.length > 0 && renderShownTiles()}
-			{uTs > 0 && renderUnusedTiles}
+			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segments.RIGHT} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);

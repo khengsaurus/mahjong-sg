@@ -53,23 +53,21 @@ const JoinGame = () => {
 			<Title title={'Available games:'} variant="h6" padding="5px" />
 			{user && gameInvites.length > 0 && (
 				<List dense className="list">
-					{gameInvites.map(game => {
-						return (
-							<ListItem
-								button
-								style={{ padding: 0, margin: 0 }}
-								key={game.id}
-								onClick={() => handleJoinGame(game)}
-								disableRipple
-							>
-								<ListItemText
-									primary={<Typography variant="body2">{formatDate(game.crA)}</Typography>}
-									secondary={<Typography variant="body2">{game.pS}</Typography>}
-								/>
-								<ArrowForwardIcon />
-							</ListItem>
-						);
-					})}
+					{gameInvites.map(game => (
+						<ListItem
+							button
+							style={{ padding: 0, margin: 0 }}
+							key={game.id}
+							onClick={() => handleJoinGame(game)}
+							disableRipple
+						>
+							<ListItemText
+								primary={<Typography variant="body2">{formatDate(game.crA)}</Typography>}
+								secondary={<Typography variant="body2">{game.pS}</Typography>}
+							/>
+							<ArrowForwardIcon />
+						</ListItem>
+					))}
 				</List>
 			)}
 			<HomeButton />

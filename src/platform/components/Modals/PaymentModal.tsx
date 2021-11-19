@@ -58,34 +58,32 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 					<FormControl component="fieldset">
 						<Typography variant="subtitle1">{'To: '}</Typography>
 						<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
-							{game.ps.map((otherPlayer: User, index: number) => {
-								return otherPlayer.uN !== playerUsername ? (
+							{game.ps.map((otherPlayer: User, index: number) =>
+								otherPlayer.uN !== playerUsername ? (
 									<FormControlLabel
 										key={otherPlayer.uN}
 										value={index}
 										control={<Radio />}
 										label={otherPlayer.uN}
 									/>
-								) : null;
-							})}
+								) : null
+							)}
 						</RadioGroup>
 					</FormControl>
 
 					<FormControl component="fieldset">
 						<Typography variant="subtitle1">{'Amount: '}</Typography>
 						<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
-							{Amounts.map((amount: number, index: number) => {
-								return (
-									<FormControlLabel
-										key={index}
-										value={amount}
-										control={<Radio />}
-										label={`${amount}`}
-										labelPlacement="end"
-										style={{ width: '60px' }}
-									/>
-								);
-							})}
+							{Amounts.map((amount: number, index: number) => (
+								<FormControlLabel
+									key={index}
+									value={amount}
+									control={<Radio />}
+									label={`${amount}`}
+									labelPlacement="end"
+									style={{ width: '60px' }}
+								/>
+							))}
 						</RadioGroup>
 					</FormControl>
 
