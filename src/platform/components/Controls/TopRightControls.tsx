@@ -1,14 +1,14 @@
 import IconButton from '@material-ui/core/IconButton';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SubjectIcon from '@material-ui/icons/Subject';
+import LogModal from 'platform/components/Modals/LogModal';
 import { useContext, useRef } from 'react';
 import { Sizes } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import LogModal from '../Modals/LogModal';
 import './controls.scss';
 
 const TopRightControls = (props: ITopRightControls) => {
-	const { handlePay, handleLogs, showLogs, logs } = props;
+	const { handlePay, handleLogs, showLogs, logs, showText } = props;
 	const { controlsSize, tableColor } = useContext(AppContext);
 	const logRef = useRef(null);
 
@@ -20,14 +20,16 @@ const TopRightControls = (props: ITopRightControls) => {
 			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
 				<SubjectIcon fontSize={controlsSize} />
 			</IconButton>
-			<LogModal
-				expanded={showLogs}
-				onClose={handleLogs}
-				externalRef={logRef}
-				logs={logs}
-				size={controlsSize || Sizes.MEDIUM}
-				tableColor={tableColor}
-			/>
+			{showText && (
+				<LogModal
+					expanded={showLogs}
+					onClose={handleLogs}
+					externalRef={logRef}
+					logs={logs}
+					size={controlsSize || Sizes.MEDIUM}
+					tableColor={tableColor}
+				/>
+			)}
 		</div>
 	);
 };

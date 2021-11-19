@@ -3,17 +3,18 @@ import { Segments } from 'shared/enums';
 import ShownTile from './ShownTile';
 
 interface Props {
-	className: string;
 	tiles: IShownTile[];
 	segment: Segments;
+	className: string;
 	lastThrownId?: string;
 }
 
 function compare(prev: Props, next: Props) {
 	return (
+		prev.segment === next.segment &&
 		prev.className === next.className &&
 		prev.tiles.length === next.tiles.length &&
-		prev.segment === next.segment &&
+		(prev.tiles.slice(-1)[0]?.id || '' === next.tiles.slice(-1)[0]?.id || '') &&
 		(!!prev.tiles.find(tile => {
 			return tile.id === prev.lastThrownId;
 		})

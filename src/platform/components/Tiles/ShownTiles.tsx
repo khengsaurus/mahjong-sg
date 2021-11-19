@@ -16,11 +16,11 @@ interface Props {
 
 function compare(prev: Props, next: Props) {
 	return (
+		prev.dealer === next.dealer &&
+		prev.segment === next.segment &&
+		prev.tilesSize === next.tilesSize &&
 		prev.flowerIds.length === next.flowerIds.length &&
 		prev.nonFlowerIds.length === next.nonFlowerIds.length &&
-		prev.segment === next.segment &&
-		prev.dealer === next.dealer &&
-		prev.tilesSize === next.tilesSize &&
 		(!!prev.nonFlowerIds.find(tileId => {
 			return tileId === prev.lastThrownId;
 		})

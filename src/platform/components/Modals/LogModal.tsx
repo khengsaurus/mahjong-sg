@@ -15,10 +15,10 @@ interface LogModalProps {
 
 function compare(prev: LogModalProps, next: LogModalProps) {
 	return (
-		prev.logs.length === next.logs.length &&
-		prev.expanded === next.expanded &&
 		prev.size === next.size &&
-		prev.tableColor === next.tableColor
+		prev.expanded === next.expanded &&
+		prev.tableColor === next.tableColor &&
+		prev.logs.length === next.logs.length
 	);
 }
 
