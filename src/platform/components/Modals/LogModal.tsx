@@ -2,15 +2,15 @@ import { useEventListener } from 'platform/hooks';
 import { GreenTableText, TableText } from 'platform/style/StyledComponents';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { Sizes, TableColors } from 'shared/enums';
+import { Size, TableColor } from 'shared/enums';
 
 interface LogModalProps {
 	expanded: boolean;
 	onClose: () => void;
 	externalRef?: React.MutableRefObject<any>;
 	logs: ILog[];
-	size: Sizes;
-	tableColor: TableColors;
+	size: Size;
+	tableColor: TableColor;
 }
 
 function compare(prev: LogModalProps, next: LogModalProps) {
@@ -46,7 +46,7 @@ const LogModal = (props: LogModalProps) => {
 		<div ref={modalRef}>
 			<TransitionGroup
 				id={id}
-				className={`log-box-${size || Sizes.MEDIUM}${expanded ? ` expanded` : ``}`}
+				className={`log-box-${size || Size.MEDIUM}${expanded ? ` expanded` : ``}`}
 				style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 			>
 				{logs.map((log: ILog, index) => (

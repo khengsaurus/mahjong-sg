@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TextColors } from 'shared/enums';
+import { TextColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -94,7 +94,7 @@ export const TableText = styled.p`
 `;
 
 export const GreenTableText = styled.p`
-	color: ${TextColors.GREEN};
+	color: ${TextColor.GREEN};
 	margin: 0;
 `;
 

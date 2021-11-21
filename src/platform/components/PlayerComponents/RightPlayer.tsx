@@ -2,7 +2,7 @@ import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HiddenHand, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useDynamicWidth } from 'platform/hooks';
 import { useContext, useMemo, useRef } from 'react';
-import { FrontBackTag, Segments, Sizes } from 'shared/enums';
+import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
 import { revealTile } from 'shared/util';
 import './playerComponents.scss';
@@ -41,14 +41,14 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			<div className="vtss col-r" ref={shownHiddenHandRef}>
 				{hTs.map((tile: IHiddenTile) => {
 					let revT = revealTile(tile, tileHashKey);
-					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.c} segment={Segments.RIGHT} />;
+					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.c} segment={Segment.RIGHT} />;
 				})}
 				{revLTT && (
 					<ShownTile
 						key={revLTT.id}
 						tileID={revLTT.id}
 						tileCard={revLTT.c}
-						segment={Segments.RIGHT}
+						segment={Segment.RIGHT}
 						highlight
 						classSuffix="margin-bottom"
 					/>
@@ -66,7 +66,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			flowers={flowers}
 			flowerIds={flowerIds}
 			nonFlowerIds={nonFlowerIds}
-			segment={Segments.RIGHT}
+			segment={Segment.RIGHT}
 			dealer={dealer}
 			tilesSize={tilesSize}
 			lastThrownId={lastThrown?.id}
@@ -79,16 +79,16 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			className="vtss discarded"
 			tiles={dTs}
 			// tiles={[...hTs, ...dTs]}
-			segment={Segments.RIGHT}
+			segment={Segment.RIGHT}
 			lastThrownId={lastThrown?.id}
 		/>
 	);
 
 	return (
-		<div className={`column-section-${tilesSize || Sizes.MEDIUM} right`}>
-			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segments.RIGHT} />}
+		<div className={`column-section-${tilesSize || Size.MEDIUM} right`}>
+			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.RIGHT} />}
 			{sTs?.length > 0 && renderShownTiles()}
-			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segments.RIGHT} tag={frontBackTag} />}
+			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.RIGHT} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ShownTileHeights, ShownTileWidths, Sizes } from 'shared/enums';
+import { ShownTileHeight, ShownTileWidth, Size } from 'shared/enums';
 
 interface useDynamicWidthProps {
 	ref: React.MutableRefObject<any>;
 	tiles: number;
-	tilesSize: Sizes;
+	tilesSize: Size;
 	dealer?: boolean;
 	addHalfTile?: boolean;
 }
@@ -53,9 +53,9 @@ export function useDynamicWidth({ ref, tiles, tilesSize, dealer = false, addHalf
 		let length = tiles + Number(dealer) + (addHalfTile ? 0.5 : 0);
 		let shownTilesHeight = ref.current?.offsetHeight || 0;
 		if (!!Number(length) && !!Number(shownTilesHeight) && ref.current) {
-			let reqHeight = length * ShownTileWidths[tilesSize.toUpperCase()] + 1;
+			let reqHeight = length * ShownTileWidth[tilesSize.toUpperCase()] + 1;
 			let cols = Math.ceil(reqHeight / shownTilesHeight);
-			let toSet = `${cols * ShownTileHeights[tilesSize.toUpperCase()]}px`;
+			let toSet = `${cols * ShownTileHeight[tilesSize.toUpperCase()]}px`;
 			ref.current.style.width = toSet;
 		}
 	}, [windowHeight, ref, tiles, tilesSize, dealer, addHalfTile]);

@@ -1,21 +1,21 @@
 import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { useContext, useMemo } from 'react';
-import { BackgroundColors, TableColors, TextColors } from 'shared/enums';
+import { BackgroundColors, TableColor, TextColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 
-function getHighlightColor(color: TableColors | BackgroundColors) {
-	if ([TableColors.DARK, BackgroundColors.DARK].includes(color)) {
+function getHighlightColor(color: TableColor | BackgroundColors) {
+	if ([TableColor.DARK, BackgroundColors.DARK].includes(color)) {
 		return blue[700];
-	} else if ([TableColors.BROWN, BackgroundColors.BROWN].includes(color)) {
+	} else if ([TableColor.BROWN, BackgroundColors.BROWN].includes(color)) {
 		return indigo[500];
-	} else if ([TableColors.GREEN, BackgroundColors.GREEN].includes(color)) {
+	} else if ([TableColor.GREEN, BackgroundColors.GREEN].includes(color)) {
 		return red[800];
-	} else if ([TableColors.RED, BackgroundColors.RED].includes(color)) {
+	} else if ([TableColor.RED, BackgroundColors.RED].includes(color)) {
 		return teal[700];
-	} else if ([TableColors.PURPLE, BackgroundColors.PURPLE].includes(color)) {
+	} else if ([TableColor.PURPLE, BackgroundColors.PURPLE].includes(color)) {
 		return amber[600];
-	} else if ([TableColors.BLUE, BackgroundColors.BLUE].includes(color)) {
+	} else if ([TableColor.BLUE, BackgroundColors.BLUE].includes(color)) {
 		return yellow[700];
 	}
 }
@@ -40,7 +40,7 @@ export const TableTheme = (props: any) => {
 	return <ThemeProvider theme={theme} {...props} />;
 };
 
-function newMuiTheme(backgroundColor: BackgroundColors | TableColors, textColor: TextColors, highlightColor: string) {
+function newMuiTheme(backgroundColor: BackgroundColors | TableColor, textColor: TextColor, highlightColor: string) {
 	return createTheme({
 		palette: {
 			primary: {

@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { BackgroundColors, Collections, Sizes, TableColors, TileColors } from 'shared/enums';
+import { BackgroundColors, FBCollection, Size, TableColor, TileColor } from 'shared/enums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
@@ -18,8 +18,8 @@ export class FirebaseService {
 		this.init().then(() => {
 			this.auth = firebase.auth();
 			this.db = firebase.firestore();
-			this.userRepr = this.db.collection(Collections.USERREPR);
-			this.gameRef = this.db.collection(Collections.GAMES);
+			this.userRepr = this.db.collection(FBCollection.USERREPR);
+			this.gameRef = this.db.collection(FBCollection.GAMES);
 			this.auth.onAuthStateChanged(user => {
 				this.user = user;
 			});
@@ -83,14 +83,14 @@ export class FirebaseService {
 					uN,
 					email,
 					pUrl: '',
-					hSz: Sizes.MEDIUM,
-					tSz: Sizes.MEDIUM,
-					cSz: Sizes.MEDIUM,
+					hSz: Size.MEDIUM,
+					tSz: Size.MEDIUM,
+					cSz: Size.MEDIUM,
 					bgC: BackgroundColors.BLUE,
-					tC: TableColors.GREEN,
-					tBC: TileColors.GREEN
-					// tileFrontColor: TileColors.LIGHT,
-					// decoration: Decorations.DEFAULT,
+					tC: TableColor.GREEN,
+					tBC: TileColor.GREEN
+					// tileFrontColor: TileColor.LIGHT,
+					// decoration: Decoration.DEFAULT,
 					// groups: []
 				});
 				resolve(true);

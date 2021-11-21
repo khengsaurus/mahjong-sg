@@ -11,16 +11,16 @@ import { isEqual } from 'lodash';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useRef } from 'react';
-import { BackgroundColors, Sizes, TableColors, TileColors } from 'shared/enums';
+import { BackgroundColors, Size, TableColor, TileColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import FBService from 'platform/service/MyFirebaseService';
 import './settingsWindow.scss';
 
 interface Preference {
 	label: string;
-	size?: Sizes;
-	selectedColor?: BackgroundColors | TableColors | TileColors;
-	handleSelect: (value: Sizes | BackgroundColors | TableColors | TileColors) => void;
+	size?: Size;
+	selectedColor?: BackgroundColors | TableColor | TileColor;
+	handleSelect: (value: Size | BackgroundColors | TableColor | TileColor) => void;
 	colors?: any[];
 }
 
@@ -56,13 +56,13 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 			label: 'Table',
 			selectedColor: tableColor,
 			handleSelect: setTableColor,
-			colors: Object.keys(TableColors).map(key => TableColors[key.toUpperCase()])
+			colors: Object.keys(TableColor).map(key => TableColor[key.toUpperCase()])
 		},
 		{
 			label: 'Tiles',
 			selectedColor: tileBackColor,
 			handleSelect: setTileBackColor,
-			colors: Object.keys(TileColors).map(key => TileColors[key.toUpperCase()])
+			colors: Object.keys(TileColor).map(key => TileColor[key.toUpperCase()])
 		}
 	];
 	function handleClose() {
@@ -120,8 +120,8 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 											value={preference.size}
 											indicatorColor="secondary"
 										>
-											{Object.keys(Sizes).map(key => {
-												let size = Sizes[key.toUpperCase()];
+											{Object.keys(Size).map(key => {
+												let size = Size[key.toUpperCase()];
 												return (
 													<Tab
 														style={{

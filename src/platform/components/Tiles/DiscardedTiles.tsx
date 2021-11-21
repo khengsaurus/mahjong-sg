@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import { Segments } from 'shared/enums';
+import { Segment } from 'shared/enums';
 import ShownTile from './ShownTile';
 
 interface IDiscardedTiles {
 	tiles: IShownTile[];
-	segment: Segments;
+	segment: Segment;
 	className: string;
 	lastThrownId?: string;
 }

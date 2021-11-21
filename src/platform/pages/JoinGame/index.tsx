@@ -13,7 +13,7 @@ import { Centered, Main } from 'platform/style/StyledComponents';
 import { HomeButton, Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Pages, Status } from 'shared/enums';
+import { Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { setGame, setPlayer } from 'shared/store/actions';
@@ -45,7 +45,7 @@ const JoinGame = () => {
 
 	function handleJoinGame(game: Game) {
 		setGameId(game.id);
-		history.push(Pages.TABLE);
+		history.push(Page.TABLE);
 	}
 
 	const markup = (

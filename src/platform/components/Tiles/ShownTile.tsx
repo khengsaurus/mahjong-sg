@@ -1,25 +1,25 @@
 import { memo } from 'react';
-import { Segments } from 'shared/enums';
+import { Segment } from 'shared/enums';
 import getTileSrc from 'shared/images';
 
 interface ShownTileProps {
 	tileID: string;
 	tileCard: string;
-	segment: Segments;
+	segment: Segment;
 	lastID?: string;
 	highlight?: boolean;
 	classSuffix?: string;
 }
 
-function getClass(segment: Segments) {
+function getClass(segment: Segment) {
 	switch (segment) {
-		case Segments.TOP:
+		case Segment.TOP:
 			return 'hts';
-		case Segments.BOTTOM:
+		case Segment.BOTTOM:
 			return 'hts';
-		case Segments.LEFT:
+		case Segment.LEFT:
 			return 'vts';
-		case Segments.RIGHT:
+		case Segment.RIGHT:
 			return 'vts';
 		default:
 			return '';

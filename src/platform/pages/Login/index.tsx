@@ -5,7 +5,7 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useContext, useState } from 'react';
-import { Pages, Status } from 'shared/enums';
+import { Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { FBAuthLogin_EmailPass, FBAuthRegister_EmailPass, FBResolveUser_Email } from 'shared/service/fbUserFns';
 import './login.scss';
@@ -33,10 +33,10 @@ const Login = () => {
 								if (user) {
 									callback();
 									login(user, false);
-									history.push(Pages.INDEX);
+									history.push(Page.INDEX);
 								} else {
 									// User not registered, redirect to NewUser
-									history.push(Pages.NEWUSER);
+									history.push(Page.NEWUSER);
 								}
 							})
 							.catch(err => {

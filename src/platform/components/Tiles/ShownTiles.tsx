@@ -1,6 +1,6 @@
 import CasinoIcon from '@material-ui/icons/Casino';
 import React, { MutableRefObject } from 'react';
-import { Segments, Sizes, Suits } from 'shared/enums';
+import { Segment, Size, Suit } from 'shared/enums';
 import ShownTile from './ShownTile';
 
 interface IShownTiles {
@@ -9,9 +9,9 @@ interface IShownTiles {
 	flowers: IShownTile[];
 	flowerIds: string[];
 	nonFlowerIds: string[];
-	segment: Segments;
+	segment: Segment;
 	dealer: boolean;
-	tilesSize: Sizes;
+	tilesSize: Size;
 	lastThrownId?: string;
 }
 
@@ -52,7 +52,7 @@ const ShownTiles = React.forwardRef<MutableRefObject<any>, IShownTiles>(
 						tileID={tile.id}
 						tileCard={tile.c}
 						segment={segment}
-						classSuffix={tile.v ? (tile.s === Suits.ANIMAL ? 'flower animal' : 'hts flower') : ''}
+						classSuffix={tile.v ? (tile.s === Suit.ANIMAL ? 'flower animal' : 'hts flower') : ''}
 					/>
 				))}
 				{dealer && <CasinoIcon color="primary" fontSize={tilesSize} />}

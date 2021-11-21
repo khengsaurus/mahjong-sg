@@ -6,7 +6,7 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
-import { Pages, Status } from 'shared/enums';
+import { Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { FBDeleteCurrentFBUser, FBNewUser_EmailUser, FBResolveUser_Email } from 'shared/service/fbUserFns';
@@ -19,7 +19,7 @@ const NewUser = () => {
 		setAlert(null);
 		FBDeleteCurrentFBUser();
 		logout();
-		history.push(Pages.LOGIN);
+		history.push(Page.LOGIN);
 	}
 
 	function handleSubmit(values: IEmailUser, callback: () => void) {
@@ -40,7 +40,7 @@ const NewUser = () => {
 			.then((user: User) => {
 				login(user, true);
 				setTimeout(function () {
-					history.push(Pages.HOME);
+					history.push(Page.HOME);
 					setAlert(null);
 				}, 1000);
 			})

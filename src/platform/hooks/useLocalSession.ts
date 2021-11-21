@@ -1,6 +1,6 @@
 import { history } from 'App';
 import { useContext, useEffect } from 'react';
-import { Pages, Status } from 'shared/enums';
+import { Page, Status } from 'shared/enums';
 import { AppContext, useSession } from 'shared/hooks';
 
 function useLocalSession() {
@@ -10,7 +10,7 @@ function useLocalSession() {
 	useEffect(() => {
 		if (verifyingSession === Status.SUCCESS && !sessionVerified) {
 			logout();
-			history.push(Pages.LOGIN);
+			history.push(Page.LOGIN);
 		}
 	}, [verifyingSession, sessionVerified, logout]);
 

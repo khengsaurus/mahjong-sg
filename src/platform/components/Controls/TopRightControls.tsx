@@ -3,7 +3,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SubjectIcon from '@material-ui/icons/Subject';
 import LogModal from 'platform/components/Modals/LogModal';
 import { useContext, useRef } from 'react';
-import { Sizes } from 'shared/enums';
+import { Size } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './controls.scss';
 
@@ -26,7 +26,7 @@ const TopRightControls = (props: ITopRightControls) => {
 					onClose={handleLogs}
 					externalRef={logRef}
 					logs={logs}
-					size={controlsSize || Sizes.MEDIUM}
+					size={controlsSize || Size.MEDIUM}
 					tableColor={tableColor}
 				/>
 			)}

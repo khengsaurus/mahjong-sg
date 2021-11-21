@@ -5,7 +5,7 @@ import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useCallback } from 'react';
-import { Pages } from 'shared/enums';
+import { Page } from 'shared/enums';
 import { useControls } from 'shared/hooks';
 import AdminControls from '../AdminControls';
 import BottomLeftControls from './BottomLeftControls';
@@ -16,7 +16,7 @@ import TopRightControls from './TopRightControls';
 
 const Controls = () => {
 	const handleHome = useCallback(() => {
-		history.push(Pages.INDEX);
+		history.push(Page.INDEX);
 	}, []);
 
 	const {

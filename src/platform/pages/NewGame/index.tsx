@@ -17,7 +17,7 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import { Pages, Status } from 'shared/enums';
+import { Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import './newGame.scss';
@@ -54,7 +54,7 @@ const NewGame = () => {
 
 	function handleButtonClick() {
 		if (startedGame) {
-			history.push(Pages.TABLE);
+			history.push(Page.TABLE);
 			setPlayers([user]);
 		} else {
 			startGame();

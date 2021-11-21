@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { history } from 'App';
-import { Pages } from 'shared/enums';
+import { Page } from 'shared/enums';
 
 interface TitleProps {
 	title: string;
@@ -12,7 +12,7 @@ interface TitleProps {
 
 interface StyledButtonProps {
 	label: string;
-	navigate?: Pages;
+	navigate?: Page;
 	color?: string;
 	padding?: string;
 	size?: 'small' | 'medium' | 'large';
@@ -75,5 +75,5 @@ export const ControlButton = ({ label, callback, disabled = false, style }: Cont
 };
 
 export const HomeButton = () => {
-	return <StyledButton label="Home" navigate={Pages.INDEX} />;
+	return <StyledButton label="Home" navigate={Page.INDEX} />;
 };
