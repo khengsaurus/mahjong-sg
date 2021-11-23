@@ -5,7 +5,8 @@ import { AppContext } from 'shared/hooks';
 import './controls.scss';
 
 const BottomRightControls = (props: IBottomRightControls) => {
-	const { handleThrow, disableThrow, drawText, handleDraw, disableDraw, handleOpen, confirmHu, showHu } = props;
+	const { handleThrow, handleDraw, handleOpen, disableThrow, disableDraw, drawText, confirmHu, showHu, HHStr } =
+		props;
 	const { controlsSize } = useContext(AppContext);
 
 	return (
@@ -22,7 +23,7 @@ const BottomRightControls = (props: IBottomRightControls) => {
 				disabled={disableDraw}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			{!confirmHu && !showHu && (
+			{!confirmHu && !showHu && HHStr !== '' && (
 				<ControlButton
 					label={`开?`}
 					callback={handleOpen}

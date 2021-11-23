@@ -17,9 +17,11 @@ const TopRightControls = (props: ITopRightControls) => {
 			<IconButton className="icon-button" onClick={handlePay} disableRipple>
 				<MonetizationOnIcon fontSize={controlsSize} />
 			</IconButton>
-			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
-				<SubjectIcon fontSize={controlsSize} />
-			</IconButton>
+			{showText && (
+				<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
+					<SubjectIcon fontSize={controlsSize} />
+				</IconButton>
+			)}
 			{showText && (
 				<LogModal
 					expanded={showLogs}
