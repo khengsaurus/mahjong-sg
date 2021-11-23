@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { generateNumberArray } from 'shared/util';
 
 const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal) => {
-	const [tai, setTai] = useState<number>(HH?.maxPs || null);
+	const [tai, setTai] = useState<number>(HH?.maxPx || null);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
@@ -52,7 +52,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal
 					<br></br>
 					<FormControl component="fieldset">
 						<FormLabel component="legend">{`台: `}</FormLabel>
-						<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPs}>
+						<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
 							{generateNumberArray(game?.gMaxPx || 5).map((tai: number) => (
 								<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
 							))}

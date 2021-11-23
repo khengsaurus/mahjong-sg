@@ -1,9 +1,9 @@
 const config = {
   testMatch: [
     // '**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)',
-    '**/__tests__/**useHand_handLogic.test.tsx',
-    '**/__tests__/**useHand_handLogic_chi.test.tsx',
-    '**/__tests__/**useHand_handLogic_others.test.tsx',
+    '**/__tests__/**useHand_handValue.test.tsx',
+    '**/__tests__/**useHand_handValue_chi.test.tsx',
+    '**/__tests__/**useHand_handValue_others.test.tsx',
   ],
   clearMocks: true,
   collectCoverage: false,
