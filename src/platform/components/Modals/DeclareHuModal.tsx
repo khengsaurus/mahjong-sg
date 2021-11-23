@@ -10,18 +10,19 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import FBService from 'platform/service/MyFirebaseService';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useState } from 'react';
-import FBService from 'platform/service/MyFirebaseService';
+import { generateNumberArray } from 'shared/util';
 
-const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
-	const [tai, setTai] = useState<number>(null);
-	const [zimo, setZimo] = useState(false);
+const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal) => {
+	const [tai, setTai] = useState<number>(HH?.maxPs || null);
+	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
-		game.hu = [playerSeat, tai, Number(zimo)];
-		game.fN = Number(game.dealer) === playerSeat ? false : true;
+		game.hu = [playerSeat, tai, Number(zimo), ...(HH.pxs || [].map(p => `${p.hD}-${p.px}`))];
+		game.fN = Number(game?.dealer) !== playerSeat;
 		game.endRound();
 		FBService.updateGame(game);
 		onClose(true);
@@ -37,11 +38,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 				open={show}
 				BackdropProps={{ invisible: true }}
 				onClose={() => onClose(false)}
-				PaperProps={{
-					style: {
-						minWidth: '350px'
-					}
-				}}
+				PaperProps={{ style: { minWidth: '350px' } }}
 			>
 				<DialogContent>
 					<IconButton
@@ -55,8 +52,8 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 					<br></br>
 					<FormControl component="fieldset">
 						<FormLabel component="legend">{`台: `}</FormLabel>
-						<RadioGroup row value={tai} onChange={handleSetTaiNumber}>
-							{[1, 2, 3, 4, 5].map((tai: number) => (
+						<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPs}>
+							{generateNumberArray(game?.gMaxPx || 5).map((tai: number) => (
 								<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
 							))}
 						</RadioGroup>
@@ -66,6 +63,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 						label="自摸"
 						control={
 							<Checkbox
+								defaultChecked={!!HH?.self}
 								onChange={() => {
 									setZimo(!zimo);
 								}}
@@ -73,7 +71,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 						}
 					/>
 					<DialogActions>
-						<StyledButton label={`胡`} size="large" onClick={hu} disabled={!tai || game.hu.length === 3} />
+						<StyledButton label={`胡`} size="large" onClick={hu} disabled={!tai || game?.hu.length === 3} />
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
