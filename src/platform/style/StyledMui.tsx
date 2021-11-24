@@ -7,7 +7,7 @@ interface TitleProps {
 	title: string;
 	color?: string;
 	padding?: string;
-	variant?: 'h6' | 'subtitle1';
+	variant?: 'h6' | 'subtitle1' | 'subtitle2';
 }
 
 interface StyledButtonProps {

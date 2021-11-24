@@ -1,4 +1,5 @@
 import { history } from 'App';
+import isEmpty from 'lodash.isempty';
 import { Loader } from 'platform/components/Loader';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
@@ -8,11 +9,8 @@ import { useCallback } from 'react';
 import { Page } from 'shared/enums';
 import { useControls } from 'shared/hooks';
 import AdminControls from '../AdminControls';
-import BottomLeftControls from './BottomLeftControls';
-import BottomRightControls from './BottomRightControls';
+import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
-import TopLeftControls from './TopLeftControls';
-import TopRightControls from './TopRightControls';
 
 const Controls = () => {
 	const handleHome = useCallback(() => {
@@ -45,7 +43,7 @@ const Controls = () => {
 			{showBottomControls && <BottomRightControls {...bottomRight} />}
 			{payModal.show && <PaymentModal {...payModal} />}
 			{settingsModal.show && <SettingsWindow {...settingsModal} />}
-			{declareHuModal.show && <DeclareHuModal {...declareHuModal} />}
+			{declareHuModal.show && isEmpty(game?.hu) && <DeclareHuModal {...declareHuModal} />}
 			{adminControlsModal.show && <AdminControls {...adminControlsModal} />}
 			{showAnnounceHuModal && <AnnounceHuModal {...announceHuModal} />}
 		</>

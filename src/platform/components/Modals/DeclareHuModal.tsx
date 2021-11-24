@@ -21,11 +21,11 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
-		game.hu = [playerSeat, tai, Number(zimo), ...(HH.pxs || [].map(p => `${p.hD}-${p.px}`))];
+		onClose(true);
+		game.hu = [playerSeat, tai, Number(zimo), ...(HH?.pxs || []).map(p => p.hD)];
 		game.fN = Number(game?.dealer) !== playerSeat;
 		game.endRound();
 		FBService.updateGame(game);
-		onClose(true);
 	}
 
 	const handleSetTaiNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
