@@ -7,13 +7,13 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { isEqual } from 'lodash';
+import { extend, isEqual } from 'lodash';
+import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useRef } from 'react';
 import { BackgroundColors, Size, TableColor, TileColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import FBService from 'platform/service/MyFirebaseService';
 import './settingsWindow.scss';
 
 interface Preference {
@@ -42,6 +42,7 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 		setTileBackColor
 	} = useContext(AppContext);
 	const initialValues = useRef([controlsSize, handSize, tilesSize, backgroundColor, tableColor, tileBackColor]);
+
 	const preferences: Preference[] = [
 		{ label: 'Controls', size: controlsSize, handleSelect: setControlsSize },
 		{ label: 'Hand', size: handSize, handleSelect: setHandSize },
@@ -65,6 +66,7 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 			colors: Object.keys(TileColor).map(key => TileColor[key.toUpperCase()])
 		}
 	];
+
 	function handleClose() {
 		if (
 			!isEqual(
@@ -83,7 +85,8 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 			FBService.updateUser(user.id, keyVal)
 				.then(res => {
 					if (res) {
-						handleLocalUO(user);
+						let updatedUser = extend(user, keyVal);
+						handleLocalUO(updatedUser);
 					}
 				})
 				.catch(err => {
