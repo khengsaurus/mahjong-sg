@@ -131,7 +131,15 @@ function newMuiTheme(backgroundColor: BackgroundColors | TableColor, textColor: 
 					backgroundColor: backgroundColor,
 					maxWidth: '420px !important',
 					minWidth: '420px !important',
+					maxHeight: '340px !important',
 					overflow: 'scroll'
+				}
+			},
+			MuiDialogContent: {
+				root: {
+					'&:first-child': {
+						paddingTop: null
+					}
 				}
 			},
 			MuiPopover: {
