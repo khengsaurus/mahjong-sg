@@ -39,7 +39,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModal
 			}}
 		>
 			<DialogContent style={{ paddingBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-				{hu.length >= 3 && (
+				{hu.length > 3 && (
 					<>
 						<Title title={`${game.ps[hu[0]]?.uN} hu`} padding="2px" />
 						<Title title={`${hu[1]} 台${hu[2] === 1 ? ` 自摸` : ``}`} variant="subtitle1" padding="3px" />
@@ -48,7 +48,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModal
 						})}
 					</>
 				)}
-				{hu.length >= 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
+				{hu.length > 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 				{draw && (
 					<>
 						<Title title={`Draw!`} padding="2px" />
@@ -66,7 +66,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModal
 				}}
 			>
 				<HomeButton />
-				{hu.length >= 3 && hu[0] !== playerSeat && (
+				{hu.length > 3 && hu[0] !== playerSeat && (
 					<StyledButton label={show ? 'Hide' : 'Show'} onClick={handleShow} />
 				)}
 				{on && playerSeat === Number(game.dealer) && <StyledButton label={`Next Round`} onClick={nextRound} />}
