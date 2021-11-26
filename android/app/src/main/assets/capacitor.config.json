@@ -1,0 +1,6 @@
+{
+	"appId": "com.tk.mahjongApp",
+	"appName": "Mahjong",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

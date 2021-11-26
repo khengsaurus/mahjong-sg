@@ -3,7 +3,7 @@
 
 #builds
 /build
-/android
+/android/app/build
 /ios
 
 # dependencies
