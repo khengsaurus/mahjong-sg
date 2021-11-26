@@ -8,7 +8,7 @@ interface LogModalProps {
 	expanded: boolean;
 	onClose: () => void;
 	externalRef?: React.MutableRefObject<any>;
-	logs: ILog[];
+	logs: string[];
 	size: Size;
 	tableColor: TableColor;
 }
@@ -49,13 +49,9 @@ const LogModal = (props: LogModalProps) => {
 				className={`log-box-${size || Size.MEDIUM}${expanded ? ` expanded` : ``}`}
 				style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 			>
-				{logs.map((log: ILog, index) => (
+				{logs.map((log: string, index) => (
 					<CSSTransition key={`${index}`} timeout={500} classNames="move">
-						{log.msg.includes('sent') ? (
-							<GreenTableText>{log.msg}</GreenTableText>
-						) : (
-							<TableText>{log.msg}</TableText>
-						)}
+						{log.includes('sent') ? <GreenTableText>{log}</GreenTableText> : <TableText>{log}</TableText>}
 					</CSSTransition>
 				))}
 			</TransitionGroup>

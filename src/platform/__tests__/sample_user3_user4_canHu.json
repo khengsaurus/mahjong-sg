@@ -1134,54 +1134,22 @@
   "hu": [],
   "draw": false,
   "logs": [
-    {
-      "msg": "user2 received 1 tile"
-    },
-    {
-      "msg": "user2's turn - to throw"
-    },
-    {
-      "msg": "user2 discarded 北"
-    },
-    {
-      "msg": "user3's turn"
-    },
-    {
-      "msg": "user3 received 1 tile"
-    },
-    {
-      "msg": "user3's turn - to throw"
-    },
-    {
-      "msg": "user3 discarded 7万"
-    },
-    {
-      "msg": "user4's turn"
-    },
-    {
-      "msg": "user4 received 1 tile"
-    },
-    {
-      "msg": "user4's turn - to throw"
-    },
-    {
-      "msg": "user4 discarded 8筒"
-    },
-    {
-      "msg": "user1's turn"
-    },
-    {
-      "msg": "user1 received 1 tile"
-    },
-    {
-      "msg": "user1's turn - to throw"
-    },
-    {
-      "msg": "user1 discarded 发"
-    },
-    {
-      "msg": "user2's turn"
-    }
+    "user2 received 1 tile",
+    "user2's turn - to throw",
+    "user2 discarded 北",
+    "user3's turn",
+    "user3 received 1 tile",
+    "user3's turn - to throw",
+    "user3 discarded 7万",
+    "user4's turn",
+    "user4 received 1 tile",
+    "user4's turn - to throw",
+    "user4 discarded 8筒",
+    "user1's turn",
+    "user1 received 1 tile",
+    "user1's turn - to throw",
+    "user1 discarded 发",
+    "user2's turn"
   ],
   "gMaxPx": 5,
   "sHs": [

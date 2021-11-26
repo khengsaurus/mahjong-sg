@@ -1102,181 +1102,31 @@
   "hu": [],
   "draw": false,
   "logs": [
-    {
-      "time": {
-        "seconds": 1637307282,
-        "nanoseconds": 877000000
-      },
-      "msg": "user1's turn - to throw"
-    },
-    {
-      "msg": "user1 discarded 白",
-      "time": {
-        "seconds": 1637307285,
-        "nanoseconds": 381000000
-      }
-    },
-    {
-      "msg": "user2's turn",
-      "time": {
-        "seconds": 1637307285,
-        "nanoseconds": 381000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307289,
-        "nanoseconds": 62000000
-      },
-      "msg": "user4 pong'd 白"
-    },
-    {
-      "msg": "user4's turn - to throw",
-      "time": {
-        "seconds": 1637307289,
-        "nanoseconds": 62000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307314,
-        "nanoseconds": 722000000
-      },
-      "msg": "user4 discarded 東"
-    },
-    {
-      "time": {
-        "seconds": 1637307314,
-        "nanoseconds": 722000000
-      },
-      "msg": "user1's turn"
-    },
-    {
-      "msg": "user2 pong'd 東",
-      "time": {
-        "seconds": 1637307363,
-        "nanoseconds": 842000000
-      }
-    },
-    {
-      "msg": "user2's turn - to throw",
-      "time": {
-        "seconds": 1637307363,
-        "nanoseconds": 842000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307782,
-        "nanoseconds": 847000000
-      },
-      "msg": "user2 discarded 8万"
-    },
-    {
-      "time": {
-        "seconds": 1637307782,
-        "nanoseconds": 899000000
-      },
-      "msg": "user3's turn"
-    },
-    {
-      "msg": "user3 received 1 tile",
-      "time": {
-        "seconds": 1637307787,
-        "nanoseconds": 622000000
-      }
-    },
-    {
-      "msg": "user3's turn - to throw",
-      "time": {
-        "seconds": 1637307787,
-        "nanoseconds": 623000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307791,
-        "nanoseconds": 827000000
-      },
-      "msg": "user3 discarded 1索"
-    },
-    {
-      "time": {
-        "seconds": 1637307791,
-        "nanoseconds": 899000000
-      },
-      "msg": "user4's turn"
-    },
-    {
-      "msg": "user4 received 1 tile",
-      "time": {
-        "seconds": 1637307797,
-        "nanoseconds": 679000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307797,
-        "nanoseconds": 680000000
-      },
-      "msg": "user4's turn - to throw"
-    },
-    {
-      "time": {
-        "seconds": 1637307800,
-        "nanoseconds": 6000000
-      },
-      "msg": "user4 discarded 8索"
-    },
-    {
-      "msg": "user1's turn",
-      "time": {
-        "seconds": 1637307800,
-        "nanoseconds": 7000000
-      }
-    },
-    {
-      "msg": "user1 received 1 tile",
-      "time": {
-        "seconds": 1637307801,
-        "nanoseconds": 537000000
-      }
-    },
-    {
-      "msg": "user1's turn - to throw",
-      "time": {
-        "seconds": 1637307801,
-        "nanoseconds": 537000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307805,
-        "nanoseconds": 950000000
-      },
-      "msg": "user1 discarded 9筒"
-    },
-    {
-      "time": {
-        "seconds": 1637307805,
-        "nanoseconds": 951000000
-      },
-      "msg": "user2's turn"
-    },
-    {
-      "time": {
-        "seconds": 1637308001,
-        "nanoseconds": 722000000
-      },
-      "msg": "user2 received 1 tile"
-    },
-    {
-      "time": {
-        "seconds": 1637308001,
-        "nanoseconds": 722000000
-      },
-      "msg": "user2's turn - to throw"
-    }
+    "user1's turn - to throw",
+    "user1 discarded 白",
+    "user2's turn",
+    "user4 pong'd 白",
+    "user4's turn - to throw",
+    "user4 discarded 東",
+    "user1's turn",
+    "user2 pong'd 東",
+    "user2's turn - to throw",
+    "user2 discarded 8万",
+    "user3's turn",
+    "user3 received 1 tile",
+    "user3's turn - to throw",
+    "user3 discarded 1索",
+    "user4's turn",
+    "user4 received 1 tile",
+    "user4's turn - to throw",
+    "user4 discarded 8索",
+    "user1's turn",
+    "user1 received 1 tile",
+    "user1's turn - to throw",
+    "user1 discarded 9筒",
+    "user2's turn",
+    "user2 received 1 tile",
+    "user2's turn - to throw"
   ],
   "dHTs": 38,
   "nDHTs": 36,

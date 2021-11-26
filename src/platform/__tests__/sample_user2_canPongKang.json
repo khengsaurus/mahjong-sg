@@ -1083,160 +1083,28 @@
   "hu": [],
   "draw": false,
   "logs": [
-    {
-      "msg": "user4 discarded 7万",
-      "time": {
-        "seconds": 1637307204,
-        "nanoseconds": 550000000
-      }
-    },
-    {
-      "msg": "user1's turn",
-      "time": {
-        "seconds": 1637307204,
-        "nanoseconds": 550000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307207,
-        "nanoseconds": 781000000
-      },
-      "msg": "user1 pong'd 7万"
-    },
-    {
-      "time": {
-        "seconds": 1637307207,
-        "nanoseconds": 781000000
-      },
-      "msg": "user1's turn - to throw"
-    },
-    {
-      "msg": "user1 discarded 5万",
-      "time": {
-        "seconds": 1637307215,
-        "nanoseconds": 874000000
-      }
-    },
-    {
-      "msg": "user2's turn",
-      "time": {
-        "seconds": 1637307215,
-        "nanoseconds": 874000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307258,
-        "nanoseconds": 820000000
-      },
-      "msg": "user3 pong'd 5万"
-    },
-    {
-      "time": {
-        "seconds": 1637307258,
-        "nanoseconds": 820000000
-      },
-      "msg": "user3's turn - to throw"
-    },
-    {
-      "time": {
-        "seconds": 1637307268,
-        "nanoseconds": 922000000
-      },
-      "msg": "user3 discarded 4万"
-    },
-    {
-      "msg": "user4's turn",
-      "time": {
-        "seconds": 1637307268,
-        "nanoseconds": 922000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307272,
-        "nanoseconds": 256000000
-      },
-      "msg": "user4 received 1 tile"
-    },
-    {
-      "msg": "user4's turn - to throw",
-      "time": {
-        "seconds": 1637307272,
-        "nanoseconds": 256000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307278,
-        "nanoseconds": 290000000
-      },
-      "msg": "user4 discarded 北"
-    },
-    {
-      "msg": "user1's turn",
-      "time": {
-        "seconds": 1637307278,
-        "nanoseconds": 291000000
-      }
-    },
-    {
-      "msg": "user1 received 1 tile",
-      "time": {
-        "seconds": 1637307282,
-        "nanoseconds": 877000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307282,
-        "nanoseconds": 877000000
-      },
-      "msg": "user1's turn - to throw"
-    },
-    {
-      "time": {
-        "seconds": 1637307285,
-        "nanoseconds": 381000000
-      },
-      "msg": "user1 discarded 白"
-    },
-    {
-      "msg": "user2's turn",
-      "time": {
-        "seconds": 1637307285,
-        "nanoseconds": 381000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307289,
-        "nanoseconds": 62000000
-      },
-      "msg": "user4 pong'd 白"
-    },
-    {
-      "msg": "user4's turn - to throw",
-      "time": {
-        "seconds": 1637307289,
-        "nanoseconds": 62000000
-      }
-    },
-    {
-      "msg": "user4 discarded 東",
-      "time": {
-        "seconds": 1637307314,
-        "nanoseconds": 722000000
-      }
-    },
-    {
-      "time": {
-        "seconds": 1637307314,
-        "nanoseconds": 722000000
-      },
-      "msg": "user1's turn"
-    }
+    "user4 discarded 7万",
+    "user1's turn",
+    "user1 pong'd 7万",
+    "user1's turn - to throw",
+    "user1 discarded 5万",
+    "user2's turn",
+    "user3 pong'd 5万",
+    "user3's turn - to throw",
+    "user3 discarded 4万",
+    "user4's turn",
+    "user4 received 1 tile",
+    "user4's turn - to throw",
+    "user4 discarded 北",
+    "user1's turn",
+    "user1 received 1 tile",
+    "user1's turn - to throw",
+    "user1 discarded 白",
+    "user2's turn",
+    "user4 pong'd 白",
+    "user4's turn - to throw",
+    "user4 discarded 東",
+    "user1's turn"
   ],
   "dHTs": 38,
   "nDHTs": 36,
