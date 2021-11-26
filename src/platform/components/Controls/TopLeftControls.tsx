@@ -1,11 +1,10 @@
-import EditIcon from '@material-ui/icons/Edit';
-import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import { Notification, TableText } from 'platform/style/StyledComponents';
+import { TableText } from 'platform/style/StyledComponents';
 import { useContext } from 'react';
 import { AppContext } from 'shared/hooks';
 import './controls.scss';
@@ -17,8 +16,7 @@ const TopLeftControls = ({
 	handleAdmin,
 	showText,
 	isAdmin,
-	texts,
-	notif
+	texts
 }: ITopLeftControls) => {
 	const { controlsSize } = useContext(AppContext);
 
@@ -42,14 +40,6 @@ const TopLeftControls = ({
 					<IconButton className="icon-button" onClick={handleAdmin} disableRipple>
 						<EditIcon fontSize={controlsSize} />
 					</IconButton>
-				)}
-
-				{notif !== '' && (
-					<Fade in timeout={400}>
-						<Notification className="notif">
-							<TableText className="text">{notif}</TableText>
-						</Notification>
-					</Fade>
 				)}
 			</div>
 			{showText && (

@@ -38,8 +38,10 @@ export const CenteredTableColored = styled(Centered)`
 `;
 
 export const Notification = styled.div`
-	background-color: ${props => props.theme.tableColor};
-	color: ${props => props.theme.tableTextColor};
+	position: absolute;
+	border-radius: 4px; /* $default-border-radius; */
+	padding: 20px;
+	background-color: ${props => props.theme.backgroundColor};
 `;
 
 export const Main = styled(Centered)`

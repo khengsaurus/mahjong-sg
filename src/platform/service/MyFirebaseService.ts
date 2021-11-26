@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { BackgroundColors, FBCollection, Size, TableColor, TileColor } from 'shared/enums';
+import { BackgroundColor, FBCollection, Size, TableColor, TileColor } from 'shared/enums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
@@ -86,7 +86,7 @@ export class FirebaseService {
 					hSz: Size.MEDIUM,
 					tSz: Size.MEDIUM,
 					cSz: Size.MEDIUM,
-					bgC: BackgroundColors.BLUE,
+					bgC: BackgroundColor.BLUE,
 					tC: TableColor.GREEN,
 					tBC: TileColor.GREEN
 					// tileFrontColor: TileColor.LIGHT,

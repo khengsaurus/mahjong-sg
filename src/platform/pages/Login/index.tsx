@@ -4,7 +4,7 @@ import { history } from 'App';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useEffect, useContext, useState } from 'react';
 import { Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { FBAuthLogin_EmailPass, FBAuthRegister_EmailPass, FBResolveUser_Email } from 'shared/service/fbUserFns';
@@ -70,6 +70,28 @@ const Login = () => {
 		[handleLogin, setAlert]
 	);
 
+	const handleSubmit = useCallback(() => {
+		if (email.trim() !== '' && password.trim() !== '') {
+			showRegister ? handleRegister({ email, password }, clearForm) : handleLogin({ email, password }, clearForm);
+		}
+	}, [email, handleLogin, handleRegister, password, showRegister]);
+
+	const enterListener = useCallback(
+		e => {
+			if (e.key === 'Enter') {
+				handleSubmit();
+			}
+		},
+		[handleSubmit]
+	);
+
+	useEffect(() => {
+		window.addEventListener('keypress', enterListener);
+		return () => {
+			window.removeEventListener('keypress', enterListener);
+		};
+	}, [enterListener]);
+
 	return (
 		<HomeTheme>
 			<Main>
@@ -99,11 +121,7 @@ const Login = () => {
 						type="submit"
 						autoFocus
 						disabled={email.trim() === '' || password.trim() === ''}
-						onClick={() =>
-							showRegister
-								? handleRegister({ email, password }, clearForm)
-								: handleLogin({ email, password }, clearForm)
-						}
+						onClick={handleSubmit}
 					/>
 					<StyledButton
 						label={showRegister ? `Back to login` : `Register now`}

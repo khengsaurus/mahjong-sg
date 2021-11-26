@@ -12,15 +12,15 @@ import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useRef } from 'react';
-import { BackgroundColors, Size, TableColor, TileColor } from 'shared/enums';
+import { BackgroundColor, Size, TableColor, TileColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './settingsWindow.scss';
 
 interface Preference {
 	label: string;
 	size?: Size;
-	selectedColor?: BackgroundColors | TableColor | TileColor;
-	handleSelect: (value: Size | BackgroundColors | TableColor | TileColor) => void;
+	selectedColor?: BackgroundColor | TableColor | TileColor;
+	handleSelect: (value: Size | BackgroundColor | TableColor | TileColor) => void;
 	colors?: any[];
 }
 
@@ -51,7 +51,7 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 			label: 'Background',
 			selectedColor: backgroundColor,
 			handleSelect: setBackgroundColor,
-			colors: Object.keys(BackgroundColors).map(key => BackgroundColors[key.toUpperCase()])
+			colors: Object.keys(BackgroundColor).map(key => BackgroundColor[key.toUpperCase()])
 		},
 		{
 			label: 'Table',
