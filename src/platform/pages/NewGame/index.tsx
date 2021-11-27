@@ -9,21 +9,17 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
 import { history } from 'App';
-import { Loader } from 'platform/components/Loader';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
-import { useLocalSession } from 'platform/hooks';
+import HomePage from 'platform/pages/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
-import { HomeTheme } from 'platform/style/MuiStyles';
-import { Main } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import { Page, Status } from 'shared/enums';
+import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import './newGame.scss';
 
 const NewGame = () => {
-	const { verifyingSession } = useLocalSession();
 	const { user, players, setPlayers, setGameId } = useContext(AppContext);
 	const showRandomize = useRef(players.length === 4);
 	const [startedGame, setStartedGame] = useState(false);
@@ -80,7 +76,7 @@ const NewGame = () => {
 		);
 	};
 
-	const markup = (
+	const Markup = () => (
 		<>
 			<Title title="Create a new game" padding="5px" />
 			<div className="panels">
@@ -130,11 +126,7 @@ const NewGame = () => {
 		</>
 	);
 
-	return (
-		<HomeTheme>
-			<Main>{verifyingSession === Status.PENDING ? <Loader /> : markup}</Main>
-		</HomeTheme>
-	);
+	return <HomePage Markup={Markup} />;
 };
 
 export default NewGame;

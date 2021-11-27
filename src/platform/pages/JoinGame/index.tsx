@@ -5,15 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { history } from 'App';
 import firebase from 'firebase/app';
-import { Loader } from 'platform/components/Loader';
-import { useLocalSession } from 'platform/hooks';
+import HomePage from 'platform/pages/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
-import { HomeTheme } from 'platform/style/MuiStyles';
-import { Centered, Main } from 'platform/style/StyledComponents';
+import { Centered } from 'platform/style/StyledComponents';
 import { HomeButton, Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Page, Status } from 'shared/enums';
+import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { setGame, setPlayer } from 'shared/store/actions';
@@ -21,9 +19,8 @@ import { formatDate, objToGame } from 'shared/util';
 import './joinGame.scss';
 
 const JoinGame = () => {
-	const { verifyingSession } = useLocalSession();
 	const { user, setGameId } = useContext(AppContext);
-	const [gameInvites, setGameInvites] = useState<Game[]>([]);
+	const [gameInvites, setGameInvites] = useState<Game[]>(null);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -36,7 +33,7 @@ const JoinGame = () => {
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
 					games.push(objToGame(doc, true));
 				});
-				setGameInvites(games);
+				setGameInvites(games || []);
 			}
 		});
 		return unsubscribe;
@@ -48,9 +45,13 @@ const JoinGame = () => {
 		history.push(Page.TABLE);
 	}
 
-	const markup = (
+	const Markup: React.FC = () => (
 		<Centered className="join-game-panel">
-			<Title title={'Available games:'} variant="h6" padding="5px" />
+			<Title
+				title={gameInvites.length === 0 ? 'No available games' : 'Available games:'}
+				variant="h6"
+				padding="5px"
+			/>
 			{user && gameInvites.length > 0 && (
 				<List dense className="list">
 					{gameInvites.map(game => (
@@ -74,11 +75,7 @@ const JoinGame = () => {
 		</Centered>
 	);
 
-	return (
-		<HomeTheme>
-			<Main>{verifyingSession === Status.PENDING ? <Loader /> : markup}</Main>
-		</HomeTheme>
-	);
+	return <HomePage Markup={Markup} ready={gameInvites !== null} />;
 };
 
 export default JoinGame;

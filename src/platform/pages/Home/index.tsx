@@ -1,17 +1,14 @@
 import { history } from 'App';
-import { Loader } from 'platform/components/Loader';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
-import { useLocalSession } from 'platform/hooks';
-import { HomeTheme } from 'platform/style/MuiStyles';
-import { Main, PlatformSpecs } from 'platform/style/StyledComponents';
+import HomePage from 'platform/pages/HomePage';
+import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
-import { Page, Status } from 'shared/enums';
+import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './home.scss';
 
 const Home = () => {
-	const { verifyingSession } = useLocalSession();
 	const { user, logout } = useContext(AppContext);
 	const [showSettings, setShowSettings] = useState(false);
 
@@ -20,7 +17,7 @@ const Home = () => {
 		history.push(Page.LOGIN);
 	}
 
-	let markup = (
+	const Markup: React.FC = () => (
 		<>
 			<Title title={`Welcome ${user?.uN || ''}`} />
 			<StyledButton label={'New Game'} navigate={Page.NEWGAME} />
@@ -42,11 +39,7 @@ const Home = () => {
 		</>
 	);
 
-	return (
-		<HomeTheme>
-			<Main>{verifyingSession === Status.PENDING ? <Loader /> : markup}</Main>
-		</HomeTheme>
-	);
+	return <HomePage Markup={Markup} />;
 };
 
 export default Home;
