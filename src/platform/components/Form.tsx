@@ -4,25 +4,25 @@ import { Title } from 'platform/style/StyledMui';
 
 interface CheckBoxProps {
 	title: string;
+	value: boolean;
 	onChange: () => void;
 	titleVariant?: 'subtitle2' | 'h6' | 'subtitle1';
 	titlePadding?: string;
 	defaultChecked?: boolean;
-	expanded?: boolean;
 }
 
 const CheckBox = ({
 	title,
+	value,
 	onChange,
 	titleVariant = 'subtitle2',
 	titlePadding = '0px',
-	defaultChecked = false,
-	expanded = false
+	defaultChecked = false
 }: CheckBoxProps) => {
 	return (
 		<FormRow>
-			<Title title={title} variant={titleVariant} padding={titlePadding} style={{ left: expanded ? 0 : null }} />
-			<Checkbox defaultChecked={defaultChecked} onChange={onChange} style={{ right: expanded ? 0 : null }} />
+			<Title title={title} variant={titleVariant} padding={titlePadding} />
+			<Checkbox value={value} onChange={onChange} defaultChecked={defaultChecked} />
 		</FormRow>
 	);
 };

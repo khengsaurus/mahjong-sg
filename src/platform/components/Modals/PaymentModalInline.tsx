@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import SendIcon from '@material-ui/icons/Send';
 import { MuiStyles } from 'platform/style/MuiStyles';
-import { Row } from 'platform/style/StyledComponents';
+import { FormRow } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
@@ -29,9 +29,9 @@ const PaymentModalInline = (props: IPaymentModalInline) => {
 	};
 
 	return (
-		<Row>
+		<FormRow style={{ paddingTop: '5px' }}>
 			<Title variant="subtitle1" title={`Send chips:`} padding="3px" />
-			<FormControl style={{ alignSelf: 'center' }}>
+			<FormControl>
 				<Select
 					style={{ ...MuiStyles.dropdown_select }}
 					value={amountStr}
@@ -59,7 +59,7 @@ const PaymentModalInline = (props: IPaymentModalInline) => {
 			>
 				<SendIcon />
 			</IconButton>
-		</Row>
+		</FormRow>
 	);
 };
 

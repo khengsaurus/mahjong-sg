@@ -130,7 +130,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 				paper: {
 					backgroundColor: backgroundColor,
 					maxWidth: '420px !important',
-					minWidth: '300px !important',
+					minWidth: '280px !important',
 					maxHeight: '340px !important',
 					overflow: 'scroll'
 				}
@@ -270,7 +270,8 @@ export const MuiStyles = {
 		fontWeight: 800
 	},
 	dropdown_select: {
-		width: '50px'
+		width: '50px',
+		maxHeight: '28px'
 	},
 	dropdown_item: {
 		width: '50px',

@@ -27,15 +27,16 @@ const JoinGame = () => {
 		dispatch(setGame(null));
 		dispatch(setPlayer(null));
 
-		let games: Game[] = [];
 		const unsubscribe = FBService.listenInvitesSnapshot(user, {
 			next: (snapshot: any) => {
+				let games: Game[] = [];
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
 					games.push(objToGame(doc, true));
 				});
 				setGameInvites(games || []);
 			}
 		});
+
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -48,13 +49,13 @@ const JoinGame = () => {
 	const Markup: React.FC = () => (
 		<Centered className="join-game-panel">
 			<Title
-				title={gameInvites.length === 0 ? 'No available games' : 'Available games:'}
+				title={gameInvites?.length === 0 ? 'No available games' : 'Available games:'}
 				variant="h6"
 				padding="5px"
 			/>
-			{user && gameInvites.length > 0 && (
+			{user && gameInvites?.length > 0 && (
 				<List dense className="list">
-					{gameInvites.map(game => (
+					{gameInvites?.map(game => (
 						<ListItem
 							button
 							style={{ padding: 0, margin: 0 }}
@@ -75,7 +76,7 @@ const JoinGame = () => {
 		</Centered>
 	);
 
-	return <HomePage Markup={Markup} ready={gameInvites !== null} />;
+	return <HomePage Markup={Markup} ready={gameInvites !== null} timeout={1500} />;
 };
 
 export default JoinGame;

@@ -29,7 +29,7 @@ const HomePage = ({
 	const FallbackScreen = useMemo(
 		() => (
 			<Centered>
-				<Title title={fallbackTitle} />
+				<Title title={fallbackTitle} variant="subtitle1" />
 				<HomeButton />
 			</Centered>
 		),

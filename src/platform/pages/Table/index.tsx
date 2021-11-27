@@ -83,6 +83,7 @@ const Table = () => {
 				dispatch(setPlayer(player));
 			}
 		});
+
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

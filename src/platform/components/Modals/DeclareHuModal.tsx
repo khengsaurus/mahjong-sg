@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal) => {
-	const [tai, setTai] = useState<number>(HH?.maxPx || null);
+	const [tai, setTai] = useState(HH?.maxPx || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
@@ -40,10 +40,11 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal
 			</FormRow>
 			<CheckBox
 				title="自摸: "
-				defaultChecked={!!HH?.self}
+				value={zimo}
 				onChange={() => {
-					setZimo(!zimo);
+					setZimo(prev => !prev);
 				}}
+				defaultChecked={!!HH?.self}
 			/>
 		</div>
 	);
@@ -64,7 +65,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal
 						variant="subtitle1"
 						padding="7px 0px 5px"
 					/>
-					{HH.pxs.map((p: IPoint, ix: number) => {
+					{HH?.pxs?.map((p: IPoint, ix: number) => {
 						return <Title title={getHandDesc(p.hD)} variant="subtitle2" padding="2px" key={ix} />;
 					})}
 					{game?.mHu ? (
@@ -73,7 +74,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal
 						<Title
 							title={`${HH?.maxPx} 台${HH?.self ? ` 自摸` : ``}`}
 							variant="subtitle1"
-							padding="5px 0px"
+							padding="3px 0px"
 						/>
 					)}
 					<StyledButton

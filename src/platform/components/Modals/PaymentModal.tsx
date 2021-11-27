@@ -2,18 +2,17 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import FBService from 'platform/service/MyFirebaseService';
 import { MainTransparent } from 'platform/style/StyledComponents';
+import { Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
 import { Game, User } from 'shared/models';
-import FBService from 'platform/service/MyFirebaseService';
 
 export async function sendChips(
 	game: Game,
@@ -54,38 +53,34 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 					<IconButton style={{ position: 'absolute', top: 5, right: 8 }} onClick={onClose} disableRipple>
 						<CloseIcon />
 					</IconButton>
-					<Typography variant="h6">{'Send chips'}</Typography>
-					<FormControl component="fieldset">
-						<Typography variant="subtitle1">{'To: '}</Typography>
-						<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
-							{game.ps.map((otherPlayer: User, index: number) =>
-								otherPlayer.uN !== playerUsername ? (
-									<FormControlLabel
-										key={otherPlayer.uN}
-										value={index}
-										control={<Radio />}
-										label={otherPlayer.uN}
-									/>
-								) : null
-							)}
-						</RadioGroup>
-					</FormControl>
-
-					<FormControl component="fieldset">
-						<Typography variant="subtitle1">{'Amount: '}</Typography>
-						<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
-							{Amounts.map((amount: number, index: number) => (
+					<Title title="Send chips" variant="subtitle1" padding="3px 0px" />
+					<Title title="To: " variant="subtitle1" padding="2px 0px" />
+					<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
+						{game.ps.map((otherPlayer: User, index: number) =>
+							otherPlayer.uN !== playerUsername ? (
 								<FormControlLabel
-									key={index}
-									value={amount}
+									key={otherPlayer.uN}
+									value={index}
 									control={<Radio />}
-									label={`${amount}`}
-									labelPlacement="end"
-									style={{ width: '60px' }}
+									label={otherPlayer.uN}
 								/>
-							))}
-						</RadioGroup>
-					</FormControl>
+							) : null
+						)}
+					</RadioGroup>
+
+					<Title title="Amount: " variant="subtitle1" padding="2px 0px" />
+					<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
+						{Amounts.map((amount: number, index: number) => (
+							<FormControlLabel
+								key={index}
+								value={amount}
+								control={<Radio />}
+								label={`${amount}`}
+								labelPlacement="end"
+								style={{ width: '60px' }}
+							/>
+						))}
+					</RadioGroup>
 
 					<DialogActions>
 						<Button
