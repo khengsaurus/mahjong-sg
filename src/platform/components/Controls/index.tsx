@@ -1,6 +1,5 @@
 import { history } from 'App';
 import isEmpty from 'lodash.isempty';
-import { Loader } from 'platform/components/Loader';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
@@ -37,21 +36,22 @@ const Controls = () => {
 
 	/* ----------------------------------- Markup ----------------------------------- */
 
-	return game && player ? (
-		<>
-			<TopRightControls {...topRight} />
-			<TopLeftControls {...topLeft} />
-			{showBottomControls && <BottomLeftControls {...bottomLeft} />}
-			{showBottomControls && <BottomRightControls {...bottomRight} />}
-			{payModal.show && <PaymentModal {...payModal} />}
-			{settingsModal.show && <SettingsWindow {...settingsModal} />}
-			{declareHuModal.show && isEmpty(game?.hu) && <DeclareHuModal {...declareHuModal} />}
-			{adminControlsModal.show && <AdminControls {...adminControlsModal} />}
-			{showAnnounceHuModal && <AnnounceHuModal {...announceHuModal} />}
-			{notif !== '' && <TableNotif notif={notif} />}
-		</>
-	) : (
-		<Loader />
+	return (
+		game &&
+		player && (
+			<>
+				<TopRightControls {...topRight} />
+				<TopLeftControls {...topLeft} />
+				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
+				{showBottomControls && <BottomRightControls {...bottomRight} />}
+				{payModal.show && <PaymentModal {...payModal} />}
+				{settingsModal.show && <SettingsWindow {...settingsModal} />}
+				{declareHuModal.show && isEmpty(game?.hu) && <DeclareHuModal {...declareHuModal} />}
+				{adminControlsModal.show && <AdminControls {...adminControlsModal} />}
+				{showAnnounceHuModal && <AnnounceHuModal {...announceHuModal} />}
+				{notif !== '' && <TableNotif notif={notif} />}
+			</>
+		)
 	);
 };
 

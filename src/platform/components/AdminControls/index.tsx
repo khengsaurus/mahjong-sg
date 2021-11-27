@@ -3,17 +3,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Scenarios from 'platform/components/AdminControls/Scenarios';
 import FBService from 'platform/service/MyFirebaseService';
 import { TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
+import { useCallback } from 'react';
 import { objToGame } from 'shared/util';
 import './adminControls.scss';
-import Scenarios from './Scenarios';
 
 const AdminControls = ({ game, show, onClose }: IModalProps) => {
-	function setFirebaseDoc(obj: any) {
+	const setFirebaseDoc = useCallback((obj: any) => {
 		FBService.updateGame(objToGame(obj));
-	}
+	}, []);
 
 	return (
 		<TableTheme>
