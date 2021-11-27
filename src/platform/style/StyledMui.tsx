@@ -8,6 +8,7 @@ interface TitleProps {
 	color?: string;
 	padding?: string;
 	variant?: 'h6' | 'subtitle1' | 'subtitle2';
+	style?: any;
 }
 
 interface StyledButtonProps {
@@ -21,6 +22,7 @@ interface StyledButtonProps {
 	onClick?: () => void;
 	type?: 'button' | 'submit' | 'reset';
 	disabled?: boolean;
+	style?: any;
 }
 
 interface ControlButtonProps {
@@ -30,9 +32,9 @@ interface ControlButtonProps {
 	style: any;
 }
 
-export const Title = ({ title, color, padding = '10px', variant = 'h6' }: TitleProps) => {
+export const Title = ({ title, color, padding = '10px', variant = 'h6', style = {} }: TitleProps) => {
 	return (
-		<Typography style={{ color, padding, justifySelf: 'center', alignSelf: 'center' }} variant={variant}>
+		<Typography style={{ color, padding, justifySelf: 'center', alignSelf: 'center', ...style }} variant={variant}>
 			{title}
 		</Typography>
 	);
@@ -48,11 +50,12 @@ export const StyledButton = ({
 	autoFocus = false,
 	onClick,
 	type,
-	disabled = false
+	disabled = false,
+	style = {}
 }: StyledButtonProps) => {
 	return (
 		<Button
-			style={{ color, padding }}
+			style={{ color, padding, ...style }}
 			size={size}
 			variant={variant}
 			autoFocus={autoFocus}

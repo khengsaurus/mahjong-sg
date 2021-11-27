@@ -5,20 +5,8 @@ import { isEmpty } from 'lodash';
 import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
-import { HandDescEng, ScoringHand } from 'shared/handEnums';
+import { getHandDesc } from 'shared/util';
 import PaymentModalInline from './PaymentModalInline';
-
-function getHandDesc(hD: string) {
-	let arr = hD.split('-');
-	switch (arr[0] as ScoringHand) {
-		case ScoringHand.FS:
-			return `${arr[1]} ${HandDescEng[arr[0]]}`;
-		case ScoringHand.MELDED:
-			return `${HandDescEng[arr[0]]} ${arr[1]}`;
-		default:
-			return HandDescEng[arr[0]];
-	}
-}
 
 const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModalProps) => {
 	const { hu, draw, on, dealer } = game;
@@ -43,7 +31,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModal
 					<>
 						<Title title={`${game.ps[hu[0]]?.uN} hu`} padding="2px" />
 						<Title title={`${hu[1]} 台${hu[2] === 1 ? ` 自摸` : ``}`} variant="subtitle1" padding="3px" />
-						{hu.slice(3, hu.length).map((p, ix) => {
+						{hu.slice(3, hu.length).map((p: string, ix: number) => {
 							return <Title title={getHandDesc(p)} variant="subtitle2" padding="1px" key={ix} />;
 						})}
 					</>

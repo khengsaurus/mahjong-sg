@@ -1133,6 +1133,7 @@
   "takenB": 0,
   "hu": [],
   "draw": false,
+  "mHu": false,
   "logs": [
     "user2 received 1 tile",
     "user2's turn - to throw",

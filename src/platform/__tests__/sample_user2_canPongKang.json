@@ -1082,6 +1082,8 @@
   "takenB": 3,
   "hu": [],
   "draw": false,
+  "gMaxPx": 5,
+  "mHu": false,
   "logs": [
     "user4 discarded 7万",
     "user1's turn",

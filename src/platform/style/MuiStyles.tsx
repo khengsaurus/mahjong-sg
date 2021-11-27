@@ -130,7 +130,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 				paper: {
 					backgroundColor: backgroundColor,
 					maxWidth: '420px !important',
-					minWidth: '420px !important',
+					minWidth: '300px !important',
 					maxHeight: '340px !important',
 					overflow: 'scroll'
 				}

@@ -100,9 +100,9 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 		<TableTheme>
 			<MainTransparent>
 				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={handleClose}>
-					<DialogContent>
+					<DialogContent style={{ minWidth: '420px' }}>
 						<IconButton
-							style={{ position: 'absolute', top: 5, right: 5 }}
+							style={{ position: 'absolute', top: 5, right: 8 }}
 							onClick={handleClose}
 							disableRipple
 						>

@@ -51,7 +51,7 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 		<MainTransparent>
 			<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
 				<DialogContent>
-					<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={onClose} disableRipple>
+					<IconButton style={{ position: 'absolute', top: 5, right: 8 }} onClick={onClose} disableRipple>
 						<CloseIcon />
 					</IconButton>
 					<Typography variant="h6">{'Send chips'}</Typography>

@@ -9,6 +9,7 @@ import { TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useCallback } from 'react';
 import { objToGame } from 'shared/util';
+import CheckBox from 'platform/components/Form';
 import './adminControls.scss';
 
 const AdminControls = ({ game, show, onClose }: IModalProps) => {
@@ -21,10 +22,19 @@ const AdminControls = ({ game, show, onClose }: IModalProps) => {
 			<MainTransparent>
 				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
 					<DialogContent>
-						<IconButton style={{ position: 'absolute', top: 5, right: 5 }} onClick={onClose} disableRipple>
+						<IconButton style={{ position: 'absolute', top: 5, right: 8 }} onClick={onClose} disableRipple>
 							<CloseIcon />
 						</IconButton>
 						<FormControl component="fieldset">
+							<CheckBox
+								title="Manual Hu: "
+								defaultChecked={game.mHu}
+								expanded
+								onChange={() => {
+									const updatedGame = { ...game, mHu: !game.mHu };
+									setFirebaseDoc(updatedGame);
+								}}
+							/>
 							{process.env.REACT_APP_DEV_FLAG === '1' && <Scenarios set={setFirebaseDoc} />}
 						</FormControl>
 					</DialogContent>

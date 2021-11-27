@@ -118,3 +118,8 @@ export const Row = styled.div`
 	flex-direction: row;
 	justify-content: center;
 `;
+
+export const FormRow = styled(Row)`
+	align-items: center;
+	justify-content: flex-start;
+`;
