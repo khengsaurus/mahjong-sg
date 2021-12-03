@@ -136,9 +136,9 @@ export class FirebaseService {
 
 	/* ------------------------- User-game related ------------------------- */
 
-	async getInvites(user: User) {
+	getInvites(user: User) {
 		if (user) {
-			return await this.gameRef
+			return this.gameRef
 				.where('es', 'array-contains', user.email)
 				.where('on', '==', true)
 				// .orderBy('crA', 'desc')

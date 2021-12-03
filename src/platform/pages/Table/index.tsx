@@ -1,5 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import firebase from 'firebase/app';
+import isEmpty from 'lodash.isempty';
 import Controls from 'platform/components/Controls';
 import { Loader } from 'platform/components/Loader';
 import BottomPlayer from 'platform/components/PlayerComponents/BottomPlayer';
@@ -39,54 +40,58 @@ const Table = () => {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				let currentGame: Game = objToGame(gameData, false);
 				dispatch(setGame(currentGame));
-				setStage(currentGame.st);
-				setDealer(currentGame.dealer);
-				setFront(currentGame.front);
-				setBack(currentGame.back);
-				let player: User;
-				switch (user.uN) {
-					case currentGame.ps[0].uN:
-						player = currentGame.ps[0];
-						setBottomPlayerIndex(0);
-						setPlayerSeat(0);
-						setLeftPlayerIndex(3);
-						setTopPlayerIndex(2);
-						setRightPlayerIndex(1);
-						break;
-					case currentGame.ps[1].uN:
-						player = currentGame.ps[1];
-						setBottomPlayerIndex(1);
-						setPlayerSeat(1);
-						setLeftPlayerIndex(0);
-						setTopPlayerIndex(3);
-						setRightPlayerIndex(2);
-						break;
-					case currentGame.ps[2].uN:
-						player = currentGame.ps[2];
-						setBottomPlayerIndex(2);
-						setPlayerSeat(2);
-						setLeftPlayerIndex(1);
-						setTopPlayerIndex(0);
-						setRightPlayerIndex(3);
-						break;
-					case currentGame.ps[3].uN:
-						player = currentGame.ps[3];
-						setBottomPlayerIndex(3);
-						setPlayerSeat(3);
-						setLeftPlayerIndex(2);
-						setTopPlayerIndex(1);
-						setRightPlayerIndex(0);
-						break;
-					default:
-						break;
-				}
-				dispatch(setPlayer(player));
 			}
 		});
 
 		return unsubscribe;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [gameId, dispatch]);
+
+	useEffect(() => {
+		if (!isEmpty(game)) {
+			setStage(game?.st);
+			setDealer(game?.dealer);
+			setFront(game?.front);
+			setBack(game?.back);
+			let player: User;
+			switch (user.uN) {
+				case game?.ps[0]?.uN:
+					player = game?.ps[0];
+					setBottomPlayerIndex(0);
+					setPlayerSeat(0);
+					setLeftPlayerIndex(3);
+					setTopPlayerIndex(2);
+					setRightPlayerIndex(1);
+					break;
+				case game?.ps[1]?.uN:
+					player = game?.ps[1];
+					setBottomPlayerIndex(1);
+					setPlayerSeat(1);
+					setLeftPlayerIndex(0);
+					setTopPlayerIndex(3);
+					setRightPlayerIndex(2);
+					break;
+				case game?.ps[2]?.uN:
+					player = game?.ps[2];
+					setBottomPlayerIndex(2);
+					setPlayerSeat(2);
+					setLeftPlayerIndex(1);
+					setTopPlayerIndex(0);
+					setRightPlayerIndex(3);
+					break;
+				case game?.ps[3]?.uN:
+					player = game?.ps[3];
+					setBottomPlayerIndex(3);
+					setPlayerSeat(3);
+					setLeftPlayerIndex(2);
+					setTopPlayerIndex(1);
+					setRightPlayerIndex(0);
+					break;
+				default:
+					break;
+			}
+			dispatch(setPlayer(player));
+		}
+	}, [game, user?.uN, setPlayerSeat, setStage, dispatch]);
 
 	const getMarkup = () => {
 		if (game && game.st !== 0) {

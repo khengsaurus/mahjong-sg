@@ -29,8 +29,8 @@ const PaymentModalInline = (props: IPaymentModalInline) => {
 	};
 
 	return (
-		<FormRow style={{ paddingTop: '5px' }}>
-			<Title variant="subtitle1" title={`Send chips:`} padding="3px" />
+		<FormRow style={{ paddingTop: '2px' }}>
+			<Title variant="subtitle1" title={`Send chips:`} padding="2px" />
 			<FormControl>
 				<Select
 					style={{ ...MuiStyles.dropdown_select }}

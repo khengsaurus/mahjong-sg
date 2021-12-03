@@ -129,9 +129,6 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiDialog: {
 				paper: {
 					backgroundColor: backgroundColor,
-					maxWidth: '420px !important',
-					minWidth: '280px !important',
-					maxHeight: '340px !important',
 					overflow: 'scroll'
 				}
 			},
@@ -218,11 +215,15 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 }
 
 export const MuiStyles = {
-	announce_hu_dialog: {
+	large_dialog: {
+		maxWidth: '420px',
+		minWidth: '420px',
+		maxHeight: '340px'
+	},
+	small_dialog: {
 		minHeight: '120px',
-		minWidth: '320px',
-		maxWidth: '320px',
-		justifyContent: 'center'
+		minWidth: '240px',
+		maxWidth: '360px'
 	},
 	topRight5: {
 		position: 'absolute',

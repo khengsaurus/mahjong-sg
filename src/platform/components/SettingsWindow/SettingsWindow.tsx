@@ -99,8 +99,17 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 	return (
 		<TableTheme>
 			<MainTransparent>
-				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={handleClose}>
-					<DialogContent style={{ minWidth: '420px' }}>
+				<Dialog
+					open={show}
+					BackdropProps={{ invisible: true }}
+					onClose={handleClose}
+					PaperProps={{
+						style: {
+							...MuiStyles.large_dialog
+						}
+					}}
+				>
+					<DialogContent>
 						<IconButton
 							style={{ position: 'absolute', top: 5, right: 8 }}
 							onClick={handleClose}

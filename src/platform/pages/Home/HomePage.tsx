@@ -7,6 +7,7 @@ import { HomeButton, Title } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
+import './home.scss';
 
 interface IHomePage {
 	Markup: React.FC;

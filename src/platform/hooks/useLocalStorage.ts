@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-function useLocalStorage<T>(key: string, initialValue: T) {
-	const [storedValue, setStoredValue] = useState<T>(() => {
+function useLocalStorage<V>(key: string, initialValue: V) {
+	const [storedValue, setStoredValue] = useState<V>(() => {
 		try {
 			const item = window.localStorage.getItem(key);
 			return item ? JSON.parse(item) : initialValue;
@@ -10,7 +10,7 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 			return initialValue;
 		}
 	});
-	const setValue = (value: T | ((val: T) => T)) => {
+	const setValue = (value: V | ((val: V) => V)) => {
 		try {
 			const valueToStore = value instanceof Function ? value(storedValue) : value;
 			setStoredValue(valueToStore);

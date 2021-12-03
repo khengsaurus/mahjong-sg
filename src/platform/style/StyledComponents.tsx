@@ -122,4 +122,5 @@ export const Row = styled.div`
 export const FormRow = styled(Row)`
 	align-items: center;
 	justify-content: flex-start;
+	width: max-content;
 `;

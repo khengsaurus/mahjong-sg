@@ -3,15 +3,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import isEqual from 'lodash.isequal';
 import Scenarios from 'platform/components/AdminControls/Scenarios';
+import CheckBox from 'platform/components/Form';
 import FBService from 'platform/service/MyFirebaseService';
-import { TableTheme } from 'platform/style/MuiStyles';
+import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useCallback, useState } from 'react';
 import { objToGame } from 'shared/util';
-import CheckBox from 'platform/components/Form';
 import './adminControls.scss';
-import isEqual from 'lodash.isequal';
 
 const AdminControls = ({ game, show, onClose }: IModalProps) => {
 	const [manageHu, setManageHu] = useState(game?.mHu || false);
@@ -32,7 +32,16 @@ const AdminControls = ({ game, show, onClose }: IModalProps) => {
 	return (
 		<TableTheme>
 			<MainTransparent>
-				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
+				<Dialog
+					open={show}
+					BackdropProps={{ invisible: true }}
+					onClose={closeAndUpdate}
+					PaperProps={{
+						style: {
+							...MuiStyles.small_dialog
+						}
+					}}
+				>
 					<DialogContent>
 						<IconButton
 							style={{ position: 'absolute', top: 5, right: 8 }}

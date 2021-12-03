@@ -1,9 +1,9 @@
 import { history } from 'App';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
-import HomePage from 'platform/pages/HomePage';
+import HomePage from 'platform/pages/Home/HomePage';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './home.scss';

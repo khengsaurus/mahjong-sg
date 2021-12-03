@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { history } from 'App';
 import firebase from 'firebase/app';
-import HomePage from 'platform/pages/HomePage';
+import HomePage from 'platform/pages/Home/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
 import { Centered } from 'platform/style/StyledComponents';
 import { HomeButton, Title } from 'platform/style/StyledMui';
@@ -20,7 +20,7 @@ import './joinGame.scss';
 
 const JoinGame = () => {
 	const { user, setGameId } = useContext(AppContext);
-	const [gameInvites, setGameInvites] = useState<Game[]>(null);
+	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -37,6 +37,7 @@ const JoinGame = () => {
 			}
 		});
 
+		// Can't figure out why this is throwing "...state update on an unmounted component" error
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -76,7 +77,7 @@ const JoinGame = () => {
 		</Centered>
 	);
 
-	return <HomePage Markup={Markup} ready={gameInvites !== null} timeout={1500} />;
+	return <HomePage Markup={Markup} timeout={2000} />;
 };
 
 export default JoinGame;

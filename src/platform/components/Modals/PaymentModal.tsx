@@ -8,6 +8,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CloseIcon from '@material-ui/icons/Close';
 import FBService from 'platform/service/MyFirebaseService';
+import { MuiStyles } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
@@ -48,7 +49,16 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 
 	return (
 		<MainTransparent>
-			<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
+			<Dialog
+				open={show}
+				BackdropProps={{ invisible: true }}
+				onClose={onClose}
+				PaperProps={{
+					style: {
+						...MuiStyles.large_dialog
+					}
+				}}
+			>
 				<DialogContent>
 					<IconButton style={{ position: 'absolute', top: 5, right: 8 }} onClick={onClose} disableRipple>
 						<CloseIcon />

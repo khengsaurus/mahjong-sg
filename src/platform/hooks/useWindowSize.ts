@@ -22,7 +22,7 @@ export function useWindowSize() {
 		window.addEventListener('resize', handleResize);
 		handleResize();
 		return () => window.removeEventListener('resize', handleResize);
-	});
+	}, []);
 
 	return { height: windowHeight, width: windowWidth };
 }
@@ -38,7 +38,7 @@ export function useWindowHeight() {
 		window.addEventListener('resize', handleResize);
 		handleResize();
 		return () => window.removeEventListener('resize', handleResize);
-	});
+	}, []);
 
 	return windowHeight;
 }

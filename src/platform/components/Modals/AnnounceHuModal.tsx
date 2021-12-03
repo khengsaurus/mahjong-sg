@@ -22,27 +22,28 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModal
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
 				style: {
-					...MuiStyles.announce_hu_dialog
+					...MuiStyles.small_dialog
 				}
 			}}
 		>
 			<DialogContent style={{ paddingBottom: 0 }}>
 				{hu.length >= 3 && (
 					<>
-						<Title title={`${game.ps[hu[0]]?.uN} hu`} variant="h6" padding="7px 0px 5px" />
+						<Title
+							title={`${game.ps[hu[0]]?.uN} hu, ${hu[1]}台${hu[2] === 1 ? ` 自摸` : ``}`}
+							variant="h6"
+							padding="3px 0px"
+						/>
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
 							return <Title title={getHandDesc(p)} variant="subtitle2" padding="2px" key={ix} />;
 						})}
-						<Title
-							title={`${hu[1]}台${hu[2] === 1 ? ` 自摸` : ``}`}
-							variant="subtitle1"
-							padding="3px 0px"
-						/>
 					</>
 				)}
 				{hu.length >= 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
-				{draw && <Title title={`Draw!`} variant="subtitle1" padding="2px" />}
-				{(!on || dealer === 10) && <Title title={`The game has ended!`} variant="subtitle1" padding="2px" />}
+				{draw && <Title title={`Draw!`} variant="subtitle1" padding="3px 0px" />}
+				{(!on || dealer === 10) && (
+					<Title title={`The game has ended!`} variant="subtitle1" padding="3px 0px" />
+				)}
 			</DialogContent>
 			<DialogActions
 				style={{

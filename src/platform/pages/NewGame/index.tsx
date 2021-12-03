@@ -10,7 +10,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
 import { history } from 'App';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
-import HomePage from 'platform/pages/HomePage';
+import HomePage from 'platform/pages/Home/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
