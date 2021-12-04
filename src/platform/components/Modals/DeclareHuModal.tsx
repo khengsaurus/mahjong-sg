@@ -10,19 +10,29 @@ import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { User } from 'shared/models';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal) => {
+const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModalProps) => {
+	const player: User = useSelector((state: IStore) => state.player);
 	const [tai, setTai] = useState(HH?.maxPx || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
+	useEffect(() => {
+		if (game.hu?.length >= 3 || !!game?.ps.find((p: User) => p.confirmHu && p.uN !== player?.uN)) {
+			onClose();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [game.hu?.length, JSON.stringify(game.ps.map((p: User) => p.sT + p.uN)), player.uN]);
+
 	async function hu() {
-		onClose(true);
-		game.hu = [playerSeat, tai, Number(zimo), ...(HH?.pxs || []).map(p => p.hD)];
-		game.fN = Number(game?.dealer) !== playerSeat;
+		// game.ps[playerSeat].sT = true;
+		game.declareHu([playerSeat, tai, Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
 		FBService.updateGame(game);
+		onClose(true);
 	}
 
 	const handleSetTaiNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +94,7 @@ const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModal
 						<Title
 							title={`${HH?.maxPx} 台${HH?.self ? ` 自摸` : ``}`}
 							variant="subtitle1"
-							padding="3px 0px"
+							padding="3px 0px 6px"
 						/>
 					)}
 					<StyledButton

@@ -27,8 +27,8 @@ const Controls = () => {
 		bottomRight,
 		payModal,
 		settingsModal,
-		declareHuModal,
 		adminControlsModal,
+		declareHuModal,
 		announceHuModal,
 		showBottomControls,
 		showAnnounceHuModal

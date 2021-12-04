@@ -11,7 +11,7 @@ import { useLocalSession } from 'platform/hooks';
 import FBService from 'platform/service/MyFirebaseService';
 import { HomeTheme, TableTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents';
-import { HomeButton, Title } from 'platform/style/StyledMui';
+import { HomeButton, JoinGameButton, Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Status } from 'shared/enums';
@@ -190,6 +190,7 @@ const Table = () => {
 				setPendingScreen(
 					<Centered>
 						<Title title={`No ongoing game`} />
+						<JoinGameButton />
 						<HomeButton />
 					</Centered>
 				);

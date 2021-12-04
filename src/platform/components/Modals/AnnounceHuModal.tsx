@@ -5,11 +5,17 @@ import { isEmpty } from 'lodash';
 import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
-import { getHandDesc } from 'shared/util';
+import { useMemo } from 'react';
+import { findRight, getHandDesc, isBefore } from 'shared/util';
 import PaymentModalInline from './PaymentModalInline';
 
-const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModalProps) => {
-	const { hu, draw, on, dealer } = game;
+const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFirst }: IAnnounceHuModalProps) => {
+	const { hu = [], draw = false, on = true, dealer = 0 } = game || {};
+
+	const canHuFirst = useMemo((): boolean => {
+		return playerSeat !== Number(hu[0]) && isBefore(playerSeat, Number(hu[0])) && (game?.mH || HH?.maxPx);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [playerSeat, hu[0] || 0, game?.mH, HH?.maxPx]);
 
 	async function nextRound() {
 		game.initRound();
@@ -54,10 +60,16 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow }: IModal
 				}}
 			>
 				<HomeButton />
-				{hu.length >= 3 && hu[0] !== playerSeat && (
-					<StyledButton label={show ? 'Hide' : 'Show'} onClick={handleShow} />
+				{hu.length >= 3 &&
+					hu[0] !== playerSeat &&
+					(canHuFirst ? (
+						<StyledButton label={'Hu'} onClick={huFirst} />
+					) : (
+						<StyledButton label={show ? 'Hide' : 'Show'} onClick={handleShow} />
+					))}
+				{on && playerSeat === (game.fN ? findRight(Number(game.dealer)) : Number(game.dealer)) && (
+					<StyledButton label={`Next Round`} onClick={nextRound} />
 				)}
-				{on && playerSeat === Number(game.dealer) && <StyledButton label={`Next Round`} onClick={nextRound} />}
 			</DialogActions>
 		</Dialog>
 	);

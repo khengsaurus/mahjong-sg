@@ -39,7 +39,7 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hiddenCards]);
+	}, [tileHashKey, hiddenCards]);
 
 	const renderShownTiles = () => (
 		<ShownTiles

@@ -40,7 +40,7 @@ const NewGame = () => {
 
 	async function startGame() {
 		await FBService.createGame(user, players, random).then(game => {
-			game.initRound();
+			game.initRound(true);
 			FBService.updateGame(game).then(() => {
 				setGameId(game.id);
 			});

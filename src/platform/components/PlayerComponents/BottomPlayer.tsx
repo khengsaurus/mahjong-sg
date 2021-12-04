@@ -53,7 +53,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hiddenCards]);
+	}, [tileHashKey, hiddenCards]);
 
 	const hiddenHand = useCallback(() => {
 		let selectedTilesRef = selectedTiles.map(tile => tile.r);

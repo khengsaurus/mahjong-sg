@@ -80,3 +80,7 @@ export const ControlButton = ({ label, callback, disabled = false, style }: Cont
 export const HomeButton = () => {
 	return <StyledButton label="Home" navigate={Page.INDEX} />;
 };
+
+export const JoinGameButton = () => {
+	return <StyledButton label="Join Game" navigate={Page.JOINGAME} />;
+};

@@ -5,8 +5,18 @@ import { AppContext } from 'shared/hooks';
 import './controls.scss';
 
 const BottomLeftControls = (props: IBottomLeftControls) => {
-	const { handleChi, handlePong, handleHu, disableChi, disablePong, disableHu, pongText, confirmHu, showHu, HHStr } =
-		props;
+	const {
+		handleChi,
+		handlePong,
+		enterDeclareHuDialog,
+		disableChi,
+		disablePong,
+		disableHu,
+		pongText,
+		confirmHu,
+		showDeclareHu,
+		HHStr
+	} = props;
 	const { controlsSize } = useContext(AppContext);
 
 	return (
@@ -23,10 +33,10 @@ const BottomLeftControls = (props: IBottomLeftControls) => {
 				disabled={disableChi}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			{confirmHu && !showHu && HHStr !== '' && (
+			{confirmHu && !showDeclareHu && HHStr !== '' && (
 				<ControlButton
 					label="开!"
-					callback={handleHu}
+					callback={enterDeclareHuDialog}
 					disabled={disableHu}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 				/>

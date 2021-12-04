@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { BackgroundColor, FBCollection, Size, TableColor, TileColor } from 'shared/enums';
+import { ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
@@ -175,7 +176,11 @@ export class FirebaseService {
 		}
 	}
 
-	async createGame(user: User, ps: User[], random?: boolean): Promise<Game> {
+	async createGame(user: User,
+		ps: User[],
+		random?: boolean, gMaxPx = 5,
+		mHu = false,
+		sHs = [ScoringHand.ALL]): Promise<Game> {
 		let shuffledPlayers: User[];
 		shuffledPlayers = random ? shuffle(ps) : ps;
 		let es: string[] = [];
@@ -198,11 +203,11 @@ export class FirebaseService {
 						on: true,
 						up: crA,
 						dFr: delayed,
-						st: 0,
-						prev: -1,
+						st: 1,
+						prev: 0,
 						dealer: 0,
 						mid: false,
-						fN: true,
+						fN: false,
 						wM: 0,
 						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
@@ -215,7 +220,11 @@ export class FirebaseService {
 						takenB: 0,
 						hu: [],
 						draw: false,
-						logs: []
+						logs: [],
+						preEnd: {},
+						gMaxPx,
+						mHu,
+						sHs
 					})
 					.then(newGame => {
 						gameId = newGame.id;
@@ -228,11 +237,11 @@ export class FirebaseService {
 							true,
 							crA,
 							delayed,
+							1,
 							0,
-							-1,
-							null,
+							0,
 							false,
-							true,
+							false,
 							0,
 							shuffledPlayers,
 							[],
@@ -245,7 +254,11 @@ export class FirebaseService {
 							0,
 							[],
 							false,
-							[]
+							[],
+							{},
+							gMaxPx,
+							mHu,
+							sHs
 						);
 						resolve(game);
 					});

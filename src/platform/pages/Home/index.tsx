@@ -2,7 +2,7 @@ import { history } from 'App';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import HomePage from 'platform/pages/Home/HomePage';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { JoinGameButton, StyledButton, Title } from 'platform/style/StyledMui';
 import React, { useContext, useState } from 'react';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -21,7 +21,7 @@ const Home = () => {
 		<>
 			<Title title={`Welcome ${user?.uN || ''}`} />
 			<StyledButton label={'New Game'} navigate={Page.NEWGAME} />
-			<StyledButton label={'Join Game'} navigate={Page.JOINGAME} />
+			<JoinGameButton />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			{process.env.REACT_APP_DEV_FLAG === '1' && <StyledButton label={'Sample'} navigate={Page.SAMPLE} />}
 			<StyledButton label={'Logout'} onClick={handleLogout} />
