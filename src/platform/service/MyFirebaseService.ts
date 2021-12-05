@@ -139,12 +139,14 @@ export class FirebaseService {
 
 	getInvites(user: User) {
 		if (user) {
-			return this.gameRef
-				.where('es', 'array-contains', user.email)
-				.where('on', '==', true)
-				// .orderBy('crA', 'desc')
-				.limit(5)
-				.get();
+			return (
+				this.gameRef
+					.where('es', 'array-contains', user.email)
+					.where('on', '==', true)
+					// .orderBy('crA', 'desc')
+					.limit(5)
+					.get()
+			);
 		} else {
 			return null;
 		}
@@ -176,11 +178,14 @@ export class FirebaseService {
 		}
 	}
 
-	async createGame(user: User,
+	async createGame(
+		user: User,
 		ps: User[],
-		random?: boolean, gMaxPx = 5,
+		random?: boolean,
+		gMaxPx = 5,
 		mHu = false,
-		sHs = [ScoringHand.ALL]): Promise<Game> {
+		sHs = [ScoringHand.ALL]
+	): Promise<Game> {
 		let shuffledPlayers: User[];
 		shuffledPlayers = random ? shuffle(ps) : ps;
 		let es: string[] = [];
@@ -280,6 +285,39 @@ export class FirebaseService {
 			} catch (err) {
 				console.error(err);
 				reject(new Error('FirebaseService - game doc was not updated'));
+			}
+		});
+	}
+
+	/**
+	 * Using 1 more read to make sure there's no duplicate declareHu actions
+	 * Using set as transaction.update is failing... unsure why
+	 * @see https://firebase.google.com/docs/firestore/manage-data/transactions#node.js
+	 */
+	handleDeclareHu(hu: boolean, playerSeat: number, uN: string, gameId: string): Promise<boolean> {
+		return new Promise(async resolve => {
+			try {
+				const specificGameRef = this.gameRef.doc(gameId);
+				const res: boolean = await this.db.runTransaction(async t => {
+					const game = await t.get(specificGameRef);
+					if (game?.exists && !game?.data()?.ps?.find((p: any) => p.uN !== uN && p.sT)) {
+						let gameData = game.data();
+						let ps = gameData.ps;
+						let toUpdate = ps.filter((p: any) => p.uN !== uN);
+						let _p = { ...ps[playerSeat], sT: hu, confirmHu: hu };
+						toUpdate.splice(playerSeat, 0, _p);
+						// t.update(specificGameRef, { ps: toUpdate });
+						await specificGameRef.set({ ...gameData, ps: toUpdate });
+						return true;
+					} else {
+						console.info('Unable to declare hu');
+						return false;
+					}
+				});
+				resolve(res);
+			} catch (err) {
+				console.error(err);
+				resolve(false);
 			}
 		});
 	}

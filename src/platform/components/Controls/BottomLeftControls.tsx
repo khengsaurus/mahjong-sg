@@ -8,7 +8,7 @@ const BottomLeftControls = (props: IBottomLeftControls) => {
 	const {
 		handleChi,
 		handlePong,
-		enterDeclareHuDialog,
+		openDeclareHuDialog,
 		disableChi,
 		disablePong,
 		disableHu,
@@ -36,7 +36,7 @@ const BottomLeftControls = (props: IBottomLeftControls) => {
 			{confirmHu && !showDeclareHu && HHStr !== '' && (
 				<ControlButton
 					label="开!"
-					callback={enterDeclareHuDialog}
+					callback={openDeclareHuDialog}
 					disabled={disableHu}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 				/>
