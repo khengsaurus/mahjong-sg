@@ -11,7 +11,7 @@ const TableNotif = ({ notif }: ITableNotif) => {
 	const { mainTextColor } = useContext(AppContext);
 
 	return (
-		<Fade in timeout={400}>
+		<Fade in timeout={300}>
 			<Notification className="notif">
 				<TableText className="text" style={{ color: mainTextColor }}>
 					{notif}

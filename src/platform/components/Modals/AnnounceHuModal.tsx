@@ -22,7 +22,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFi
 	async function nextRound() {
 		game.ps.forEach(p => {
 			p.sT = false;
-			p.confirmHu = false;
+			p.cfH = false;
 		});
 		FBService.updateGame(game);
 		game.prepForNewRound();

@@ -47,27 +47,37 @@ const Controls = () => {
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
 				{payModal.show && (
 					<Fade in timeout={300} unmountOnExit>
-						<PaymentModal {...payModal} />
+						<div>
+							<PaymentModal {...payModal} />
+						</div>
 					</Fade>
 				)}
 				{settingsModal.show && (
 					<Fade in timeout={300} unmountOnExit>
-						<SettingsWindow {...settingsModal} />
+						<div>
+							<SettingsWindow {...settingsModal} />
+						</div>
 					</Fade>
 				)}
 				{declareHuModal.show && isEmpty(game?.hu) && (
 					<Fade in timeout={300} unmountOnExit>
-						<DeclareHuModal {...declareHuModal} />
+						<div>
+							<DeclareHuModal {...declareHuModal} />
+						</div>
 					</Fade>
 				)}
 				{adminControlsModal.show && (
 					<Fade in timeout={300} unmountOnExit>
-						<AdminControls {...adminControlsModal} />
+						<div>
+							<AdminControls {...adminControlsModal} />
+						</div>
 					</Fade>
 				)}
 				{showAnnounceHuModal && (
 					<Fade in timeout={300} unmountOnExit>
-						<AnnounceHuModal {...announceHuModal} />
+						<div>
+							<AnnounceHuModal {...announceHuModal} />
+						</div>
 					</Fade>
 				)}
 				{notif !== '' && (
