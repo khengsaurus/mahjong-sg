@@ -1,8 +1,9 @@
+import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import { history } from 'App';
 import { HomeTheme } from 'platform/style/MuiStyles';
-import { Centered, Main } from 'platform/style/StyledComponents';
+import { Centered, Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useEffect, useContext, useState } from 'react';
 import { Page, Status } from 'shared/enums';
@@ -15,10 +16,17 @@ const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+
+	useEffect(() => {
+		setConfirmPassword('');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [showRegister]);
 
 	function clearForm() {
 		setEmail('');
 		setPassword('');
+		setConfirmPassword('');
 	}
 
 	const handleLogin = useCallback(
@@ -55,19 +63,23 @@ const Login = () => {
 
 	const handleRegister = useCallback(
 		(values: IEmailPass, callback?: () => void) => {
-			FBAuthRegister_EmailPass(values)
-				.then(res => {
-					if (res) {
-						setAlert(null);
-						callback();
-						handleLogin(values);
-					}
-				})
-				.catch(err => {
-					setAlert({ status: Status.ERROR, msg: err.toString() });
-				});
+			if (values.password === confirmPassword) {
+				FBAuthRegister_EmailPass(values)
+					.then(res => {
+						if (res) {
+							setAlert(null);
+							callback();
+							handleLogin(values);
+						}
+					})
+					.catch(err => {
+						setAlert({ status: Status.ERROR, msg: err.toString() });
+					});
+			} else {
+				setAlert({ status: Status.ERROR, msg: 'Passwords do not match' });
+			}
 		},
-		[handleLogin, setAlert]
+		[confirmPassword, handleLogin, setAlert]
 	);
 
 	const handleSubmit = useCallback(() => {
@@ -104,8 +116,8 @@ const Login = () => {
 						onChange={e => {
 							setEmail(e.target.value);
 						}}
+						style={{ margin: '5px 0' }}
 					/>
-					<br></br>
 					<TextField
 						key="password"
 						label="Password"
@@ -114,30 +126,45 @@ const Login = () => {
 						onChange={e => {
 							setPassword(e.target.value);
 						}}
+						style={{ margin: '5px 0' }}
 					/>
-					<br></br>
-					<StyledButton
-						label={showRegister ? `Register` : `Login`}
-						type="submit"
-						autoFocus
-						disabled={email.trim() === '' || password.trim() === ''}
-						onClick={handleSubmit}
-					/>
-					<StyledButton
-						label={showRegister ? `Back to login` : `Register now`}
-						onClick={() => {
-							setAlert(null);
-							setShowRegister(!showRegister);
-						}}
-					/>
-					{alert && (
-						<>
-							<br></br>
-							<Alert severity={alert.status as 'success' | 'info' | 'warning' | 'error'}>
-								{alert.msg}
-							</Alert>
-						</>
-					)}
+					<Collapse in={showRegister} timeout={300} unmountOnExit>
+						<TextField
+							key="confirmPassword"
+							label="Confirm password"
+							type="password"
+							value={confirmPassword}
+							onChange={e => {
+								setConfirmPassword(e.target.value);
+							}}
+							style={{ margin: '5px 0' }}
+						/>
+					</Collapse>
+					<Row>
+						<StyledButton
+							label={showRegister ? `Back` : `Register now`}
+							onClick={() => {
+								setAlert(null);
+								setShowRegister(!showRegister);
+							}}
+						/>
+						<StyledButton
+							label={showRegister ? `Register` : `Login`}
+							type="submit"
+							autoFocus
+							disabled={
+								email.trim() === '' ||
+								password.trim() === '' ||
+								(showRegister && confirmPassword.trim() === '')
+							}
+							onClick={handleSubmit}
+						/>
+					</Row>
+					<Collapse in={!!alert} timeout={300} unmountOnExit>
+						<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>
+							{showRegister ? alert?.msg : 'Please try again'}
+						</Alert>
+					</Collapse>
 				</Centered>
 			</Main>
 		</HomeTheme>

@@ -9,7 +9,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
-import { CenteredColored } from 'platform/style/StyledComponents';
+import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
@@ -80,7 +80,7 @@ const UserSearchForm: React.FC = () => {
 	const classes = useStyles();
 
 	return (
-		<CenteredColored className="search-form-container">
+		<Centered className="search-form-container">
 			<List>
 				<ListItem className="search-box list-item">
 					<TextField
@@ -120,35 +120,39 @@ const UserSearchForm: React.FC = () => {
 						}}
 					/>
 				</ListItem>
-				<Collapse in={showOptions} timeout={300} unmountOnExit className="search-box list-item">
-					{foundUsers.length > 0 &&
-						foundUsers.map(foundUser =>
-							user && user.id !== foundUser.id && notSelected(foundUser) ? (
-								<ListItem
-									className="user list-item"
-									button
-									key={foundUser.id}
+				<Collapse
+					in={showOptions && foundUsers.length > 0}
+					className="search-box list-item"
+					timeout={300}
+					unmountOnExit
+				>
+					{foundUsers.map(foundUser =>
+						user && user.id !== foundUser.id && notSelected(foundUser) ? (
+							<ListItem
+								className="user list-item"
+								button
+								key={foundUser.id}
+								style={{
+									borderRadius: '5px'
+								}}
+								onClick={() => {
+									handleSelect(foundUser);
+								}}
+							>
+								<ListItemText primary={foundUser.uN} className={classes.text} />
+								<ListItemIcon
 									style={{
-										borderRadius: '5px'
-									}}
-									onClick={() => {
-										handleSelect(foundUser);
+										justifyContent: 'flex-end'
 									}}
 								>
-									<ListItemText primary={foundUser.uN} className={classes.text} />
-									<ListItemIcon
-										style={{
-											justifyContent: 'flex-end'
-										}}
-									>
-										<FaceIcon color="primary" />
-									</ListItemIcon>
-								</ListItem>
-							) : null
-						)}
+									<FaceIcon color="primary" />
+								</ListItemIcon>
+							</ListItem>
+						) : null
+					)}
 				</Collapse>
 			</List>
-		</CenteredColored>
+		</Centered>
 	);
 };
 

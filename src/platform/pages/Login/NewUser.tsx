@@ -1,9 +1,10 @@
+import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import { history } from 'App';
 import 'App.scss';
 import { HomeTheme } from 'platform/style/MuiStyles';
-import { Main } from 'platform/style/StyledComponents';
+import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
 import { Page, Status } from 'shared/enums';
@@ -61,24 +62,23 @@ const NewUser = () => {
 					onChange={e => {
 						setUsername(e.target.value);
 					}}
+					style={{ margin: '-3px 0 5px' }}
 				/>
-				<br></br>
-				<StyledButton
-					label={`Submit`}
-					autoFocus
-					type="submit"
-					disabled={username.trim() === ''}
-					onClick={() => {
-						handleSubmit({ email: userEmail, uN: username }, successCallback);
-					}}
-				/>
-				{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={handleCancel} /> : null}
-				{alert && (
-					<>
-						<br></br>
-						<Alert severity={alert.status as 'success' | 'info' | 'warning' | 'error'}>{alert.msg}</Alert>
-					</>
-				)}
+				<Row>
+					{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={handleCancel} /> : null}
+					<StyledButton
+						label={`Submit`}
+						autoFocus
+						type="submit"
+						disabled={username.trim() === ''}
+						onClick={() => {
+							handleSubmit({ email: userEmail, uN: username }, successCallback);
+						}}
+					/>
+				</Row>
+				<Collapse in={!!alert} timeout={300} unmountOnExit>
+					<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
+				</Collapse>
 			</Main>
 		</HomeTheme>
 	);
