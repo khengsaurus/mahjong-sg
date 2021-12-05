@@ -39,7 +39,7 @@ const ShownTiles = React.forwardRef<MutableRefObject<any>, IShownTiles>(
 			<div id={segment + '-shown'} className={className} ref={ref}>
 				{nonFlowers.map(tile => (
 					<ShownTile
-						key={tile.id}
+						key={tile.i}
 						tileRef={tile.r}
 						tileCard={tile.c}
 						segment={segment}
@@ -48,7 +48,7 @@ const ShownTiles = React.forwardRef<MutableRefObject<any>, IShownTiles>(
 				))}
 				{flowers.map(tile => (
 					<ShownTile
-						key={tile.id}
+						key={tile.i}
 						tileRef={tile.r}
 						tileCard={tile.c}
 						segment={segment}

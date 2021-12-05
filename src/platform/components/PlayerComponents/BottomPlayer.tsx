@@ -12,7 +12,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-	const htsIds = JSON.stringify(hTs.map(t => t.id));
+	const htsRefs = JSON.stringify(hTs.map(t => t.r));
 
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
@@ -34,16 +34,16 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = Number(lTa?.r) ? (lTa?.ix === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
+		let revLTT: IShownTile = Number(lTa?.r) ? (lTa?.x === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="htss">
 				{hTs.map((tile: IHiddenTile) => {
-					let revC = getCardFromHashId(tile.id, tileHashKey);
-					return <ShownTile key={tile.id} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
+					let revC = getCardFromHashId(tile.i, tileHashKey);
+					return <ShownTile key={tile.i} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
 				})}
 				{revLTT && (
 					<ShownTile
-						key={revLTT.id}
+						key={revLTT.i}
 						tileRef={revLTT.r}
 						tileCard={revLTT.c}
 						segment={Segment.BOTTOM}
@@ -54,7 +54,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [lTa?.r, lTa?.ix, tileHashKey, htsIds]);
+	}, [lTa?.r, lTa?.x, tileHashKey, htsRefs]);
 
 	const renderHiddenHand = () => {
 		let selectedTilesRef = selectedTiles.map(tile => tile.r);
@@ -65,7 +65,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 					let revealedTile = revealTile(tile, tileHashKey);
 					return (
 						<HandTile
-							key={revealedTile.id}
+							key={revealedTile.i}
 							card={revealedTile.c}
 							selected={selectedTilesRef.includes(revealedTile.r)}
 							last={false}
@@ -75,7 +75,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 				})}
 				{revLTT && (
 					<HandTile
-						key={revLTT.id}
+						key={revLTT.i}
 						card={revLTT.c}
 						selected={selectedTilesRef.includes(revLTT.r)}
 						last={true}

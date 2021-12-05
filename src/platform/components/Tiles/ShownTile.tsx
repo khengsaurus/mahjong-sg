@@ -28,7 +28,7 @@ function getClass(segment: Segment) {
 }
 
 const ShownTile = (props: ShownTileProps) => {
-	const { tileRef, tileCard, segment, lastRef = 0, highlight, classSuffix, onClick } = props;
+	const { tileRef, tileCard, segment, lastRef, highlight, classSuffix, onClick } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 

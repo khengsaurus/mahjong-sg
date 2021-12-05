@@ -24,7 +24,7 @@ const DiscardedTiles = ({ className, tiles, segment, lastThrownRef }: IDiscarded
 	return (
 		<div className={className}>
 			{tiles.map(tile => (
-				<ShownTile key={tile.id} tileRef={tile.r} tileCard={tile.c} segment={segment} lastRef={lastThrownRef} />
+				<ShownTile key={tile.i} tileRef={tile.r} tileCard={tile.c} segment={segment} lastRef={lastThrownRef} />
 			))}
 		</div>
 	);

@@ -38,16 +38,16 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	});
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = !isEmpty(lTa) ? (lTa.ix === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
+		let revLTT: IShownTile = !isEmpty(lTa) ? (lTa.x === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="vtss left" ref={shownHiddenHandRef}>
 				{hTs.map(tile => {
 					let revT = revealTile(tile, tileHashKey);
-					return <ShownTile key={revT.id} tileRef={tile.r} tileCard={revT.c} segment={Segment.LEFT} />;
+					return <ShownTile key={revT.i} tileRef={tile.r} tileCard={revT.c} segment={Segment.LEFT} />;
 				})}
 				{revLTT && (
 					<ShownTile
-						key={revLTT.id}
+						key={revLTT.i}
 						tileRef={lTa.r}
 						tileCard={revLTT.c}
 						segment={Segment.LEFT}
