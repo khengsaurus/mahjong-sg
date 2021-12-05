@@ -37,7 +37,6 @@ const JoinGame = () => {
 			}
 		});
 
-		// Can't figure out why this is throwing "...state update on an unmounted component" error
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -47,7 +46,7 @@ const JoinGame = () => {
 		history.push(Page.TABLE);
 	}
 
-	const Markup: React.FC = () => (
+	const markup = () => (
 		<Centered className="join-game-panel">
 			<Title
 				title={gameInvites?.length === 0 ? 'No available games' : 'Available games:'}
@@ -77,7 +76,7 @@ const JoinGame = () => {
 		</Centered>
 	);
 
-	return <HomePage Markup={Markup} timeout={2000} />;
+	return <HomePage markup={markup} timeout={2000} />;
 };
 
 export default JoinGame;

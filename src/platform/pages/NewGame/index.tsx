@@ -104,7 +104,7 @@ const NewGame = () => {
 		</ListItem>
 	);
 
-	const Markup = () => (
+	const markup = () => (
 		<>
 			<Title title="Create a new game" padding="5px" />
 			<div className="panels">
@@ -138,7 +138,7 @@ const NewGame = () => {
 		</>
 	);
 
-	return <HomePage Markup={Markup} />;
+	return <HomePage markup={markup} />;
 };
 
 export default NewGame;

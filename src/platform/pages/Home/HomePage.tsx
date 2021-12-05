@@ -10,14 +10,14 @@ import { AppContext } from 'shared/hooks';
 import './home.scss';
 
 interface IHomePage {
-	Markup: React.FC;
+	markup: () => React.FC | JSX.Element;
 	ready?: boolean;
 	timeout?: number;
 	fallbackTitle?: string;
 }
 
 const HomePage = ({
-	Markup,
+	markup,
 	ready = true,
 	timeout = 1000,
 	fallbackTitle = `Whoops, something went wrong...`
@@ -39,10 +39,11 @@ const HomePage = ({
 
 	useEffect(() => {
 		if (!ready) {
-			timeoutRef.current = setTimeout(function () {
+			timeoutRef.current = setTimeout(() => {
 				setPendingScreen(FallbackScreen);
 			}, timeout);
 		}
+
 		return () => {
 			clearTimeout(timeoutRef.current);
 		};
@@ -50,7 +51,7 @@ const HomePage = ({
 
 	return (
 		<HomeTheme>
-			<Main>{!isEmpty(user) && verifyingSession !== Status.PENDING && ready ? <Markup /> : pendingScreen}</Main>
+			<Main>{!isEmpty(user) && verifyingSession !== Status.PENDING && ready ? markup() : pendingScreen}</Main>
 		</HomeTheme>
 	);
 };
