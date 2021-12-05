@@ -14,7 +14,7 @@ const HandTile = (props: HandTileProps) => {
 			className={`self-hidden-tile${selected ? ` selected` : ` unselected`}${last ? ` last` : ``}`}
 			onClick={callback}
 		>
-			<img className="self-hidden-tile-bg" src={getTileSrc(card)} alt="tile" />
+			<img className="self-hidden-tile-bg" src={getTileSrc(card)} alt="tile" draggable="false" />
 		</div>
 	);
 };

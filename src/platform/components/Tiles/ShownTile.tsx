@@ -40,6 +40,7 @@ const ShownTile = (props: ShownTileProps) => {
 					src={getTileSrc(tileCard)}
 					alt="tile"
 					onClick={onClick}
+					draggable="false"
 				/>
 			);
 		case 'vts':
@@ -50,6 +51,7 @@ const ShownTile = (props: ShownTileProps) => {
 						src={getTileSrc(tileCard)}
 						alt="tile"
 						onClick={onClick}
+						draggable="false"
 					/>
 				</div>
 			);

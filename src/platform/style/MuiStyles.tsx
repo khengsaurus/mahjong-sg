@@ -128,12 +128,14 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiDialog: {
 				paper: {
+					userSelect: 'none',
 					backgroundColor: backgroundColor,
 					overflow: 'scroll'
 				}
 			},
 			MuiDialogContent: {
 				root: {
+					userSelect: 'none',
 					'&:first-child': {
 						paddingTop: null
 					}

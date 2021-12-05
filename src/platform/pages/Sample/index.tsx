@@ -45,7 +45,7 @@ const Sample = () => {
 			<br />
 			<button className="button" onClick={() => setWanTile(getRandomWanTile())}>{`几万？`}</button>
 			<br />
-			{wanTile && <img className={`tile`} src={getTileSrc(wanTile.c)} alt="tile" />}
+			{wanTile && <img className={`tile`} src={getTileSrc(wanTile.c)} alt="tile" draggable="false" />}
 			<br />
 			<br />
 		</div>
