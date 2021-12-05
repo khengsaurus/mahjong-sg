@@ -3,12 +3,13 @@ import { Segment } from 'shared/enums';
 import getTileSrc from 'shared/images';
 
 interface ShownTileProps {
-	tileID: string;
+	tileRef: number;
 	tileCard: string;
 	segment: Segment;
-	lastID?: string;
+	lastRef?: number;
 	highlight?: boolean;
 	classSuffix?: string;
+	onClick?: (p: any) => void;
 }
 
 function getClass(segment: Segment) {
@@ -27,7 +28,7 @@ function getClass(segment: Segment) {
 }
 
 const ShownTile = (props: ShownTileProps) => {
-	const { tileID, tileCard, segment, lastID = '', highlight, classSuffix } = props;
+	const { tileRef, tileCard, segment, lastRef = 0, highlight, classSuffix, onClick } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -35,18 +36,20 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					className={`${divClass} ${highlight || lastID === tileID ? `last` : ``} ${classSuffix || ``}`}
+					className={`${divClass} ${highlight || lastRef === tileRef ? `last` : ``} ${classSuffix || ``}`}
 					src={getTileSrc(tileCard)}
 					alt="tile"
+					onClick={onClick}
 				/>
 			);
 		case 'vts':
 			return (
 				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
-						className={`${bgClass} ${highlight || lastID === tileID ? `last` : ``} ${classSuffix || ``}`}
+						className={`${bgClass} ${highlight || lastRef === tileRef ? `last` : ``} ${classSuffix || ``}`}
 						src={getTileSrc(tileCard)}
 						alt="tile"
+						onClick={onClick}
 					/>
 				</div>
 			);

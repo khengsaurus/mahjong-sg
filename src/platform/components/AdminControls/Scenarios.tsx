@@ -1,17 +1,20 @@
 import { StyledButton } from 'platform/style/StyledMui';
-import sample_user2canKang from 'platform/__tests__/sample_user2_canKang.json';
-import sample_user2canPongKang from 'platform/__tests__/sample_user2_canPongKang.json';
-import sample_user3user4canHu from 'platform/__tests__/sample_user3_user4_canHu.json';
+import multi_user_hu from 'shared/__tests__/sample_multi_users_hu.json';
+import user3_pong_kang from 'shared/__tests__/sample_user3_can_pong_kang.json';
 
 interface IDevControls {
 	set: (obj?: any) => void;
 }
 
+interface IGameStateOption {
+	label: string;
+	obj: Object;
+}
+
 const Scenarios = ({ set }: IDevControls) => {
-	const gameStateOptions = [
-		{ label: 'user2 to kang', obj: sample_user2canKang },
-		{ label: 'user2 to kang/pong', obj: sample_user2canPongKang },
-		{ label: 'user3/user4 to hu', obj: sample_user3user4canHu }
+	const gameStateOptions: IGameStateOption[] = [
+		{ label: 'Multi user hu', obj: multi_user_hu },
+		{ label: 'user3 pong kang', obj: user3_pong_kang }
 	];
 
 	return (

@@ -6,18 +6,26 @@ import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { useMemo } from 'react';
+import { IAnnounceHuModalProps } from 'shared/typesPlus';
 import { findRight, getHandDesc, isBefore } from 'shared/util';
 import PaymentModalInline from './PaymentModalInline';
 
 const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFirst }: IAnnounceHuModalProps) => {
-	const { hu = [], draw = false, on = true, dealer = 0 } = game || {};
+	const { hu = [], tBy = 0, draw = false, on = true, dealer = 0 } = game || {};
 
 	const canHuFirst = useMemo((): boolean => {
-		return playerSeat !== Number(hu[0]) && isBefore(playerSeat, Number(hu[0])) && (game?.mH || HH?.maxPx);
+		const whoHu = Number(hu[0]);
+		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, tBy) && !!HH?.maxPx;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [playerSeat, hu[0] || 0, game?.mH, HH?.maxPx]);
+	}, [playerSeat, hu[0] || 0, game?.mHu, HH?.maxPx]);
 
 	async function nextRound() {
+		game.ps.forEach(p => {
+			p.sT = false;
+			p.confirmHu = false;
+		});
+		FBService.updateGame(game);
+		game.prepForNewRound();
 		game.initRound();
 		FBService.updateGame(game);
 	}
@@ -67,9 +75,10 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFi
 					) : (
 						<StyledButton label={show ? 'Hide' : 'Show'} onClick={handleShow} />
 					))}
-				{on && playerSeat === (game.fN ? findRight(Number(game.dealer)) : Number(game.dealer)) && (
-					<StyledButton label={`Next Round`} onClick={nextRound} />
-				)}
+				{(!on || dealer !== 10) &&
+					playerSeat === (game.fN ? findRight(Number(game.dealer)) : Number(game.dealer)) && (
+						<StyledButton label={`Next Round`} onClick={nextRound} />
+					)}
 			</DialogActions>
 		</Dialog>
 	);

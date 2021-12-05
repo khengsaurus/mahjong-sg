@@ -7,12 +7,12 @@ interface IShownTiles {
 	className: string;
 	nonFlowers: IShownTile[];
 	flowers: IShownTile[];
-	flowerIds: string[];
-	nonFlowerIds: string[];
+	flowerRefs: number[];
+	nonFlowerRefs: number[];
 	segment: Segment;
 	dealer: boolean;
 	tilesSize: Size;
-	lastThrownId?: string;
+	lastThrownRef?: number;
 }
 
 function compare(prev: IShownTiles, next: IShownTiles) {
@@ -20,36 +20,36 @@ function compare(prev: IShownTiles, next: IShownTiles) {
 		prev.dealer === next.dealer &&
 		prev.segment === next.segment &&
 		prev.tilesSize === next.tilesSize &&
-		JSON.stringify(prev.flowerIds) === JSON.stringify(next.flowerIds) &&
-		JSON.stringify(prev.nonFlowerIds) === JSON.stringify(next.nonFlowerIds) &&
-		(!!prev.nonFlowerIds.find(tileId => {
-			return tileId === prev.lastThrownId;
+		JSON.stringify(prev.flowerRefs) === JSON.stringify(next.flowerRefs) &&
+		JSON.stringify(prev.nonFlowerRefs) === JSON.stringify(next.nonFlowerRefs) &&
+		(!!prev.nonFlowerRefs.find(tileRef => {
+			return tileRef === prev.lastThrownRef;
 		})
-			? prev.lastThrownId === next.lastThrownId
-			: !next.nonFlowerIds.find(tileId => {
-					return tileId === next.lastThrownId;
+			? prev.lastThrownRef === next.lastThrownRef
+			: !next.nonFlowerRefs.find(tileRef => {
+					return tileRef === next.lastThrownRef;
 			  }))
 	);
 }
 
 const ShownTiles = React.forwardRef<MutableRefObject<any>, IShownTiles>(
 	(props: IShownTiles, ref?: MutableRefObject<any>) => {
-		const { className, nonFlowers, flowers, segment, dealer, tilesSize, lastThrownId } = props;
+		const { className, nonFlowers, flowers, segment, dealer, tilesSize, lastThrownRef } = props;
 		return (
 			<div id={segment + '-shown'} className={className} ref={ref}>
 				{nonFlowers.map(tile => (
 					<ShownTile
 						key={tile.id}
-						tileID={tile.id}
+						tileRef={tile.r}
 						tileCard={tile.c}
 						segment={segment}
-						lastID={lastThrownId}
+						lastRef={lastThrownRef}
 					/>
 				))}
 				{flowers.map(tile => (
 					<ShownTile
 						key={tile.id}
-						tileID={tile.id}
+						tileRef={tile.r}
 						tileCard={tile.c}
 						segment={segment}
 						classSuffix={tile.v ? (tile.s === Suit.ANIMAL ? 'flower animal' : 'hts flower') : ''}

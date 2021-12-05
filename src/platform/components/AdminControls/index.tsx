@@ -10,6 +10,7 @@ import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useCallback, useState } from 'react';
+import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util';
 import './adminControls.scss';
 

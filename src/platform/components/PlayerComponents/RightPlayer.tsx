@@ -4,6 +4,7 @@ import { useDynamicWidth } from 'platform/hooks';
 import { useContext, useMemo, useRef } from 'react';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
+import { IPlayerComponentProps } from 'shared/typesPlus';
 import { revealTile } from 'shared/util';
 import './playerComponents.scss';
 
@@ -13,7 +14,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const { tilesSize, tileHashKey } = useContext(AppContext);
-	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
+	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs, hiddenTileIds } = useTiles({
 		sTs,
 		ms,
 		allHiddenTiles
@@ -41,12 +42,19 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			<div className="vtss col-r" ref={shownHiddenHandRef}>
 				{hTs.map((tile: IHiddenTile) => {
 					let revT = revealTile(tile, tileHashKey);
-					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.c} segment={Segment.RIGHT} />;
+					return (
+						<ShownTile
+							key={revT.id}
+							tileRef={tile.r}
+							tileCard={revT.c}
+							segment={Segment.RIGHT}
+						/>
+					);
 				})}
 				{revLTT && (
 					<ShownTile
 						key={revLTT.id}
-						tileID={revLTT.id}
+						tileRef={lTa.r}
 						tileCard={revLTT.c}
 						segment={Segment.RIGHT}
 						highlight
@@ -56,7 +64,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hiddenCards, tileHashKey]);
+	}, [hiddenTileIds, tileHashKey]);
 
 	const renderShownTiles = () => (
 		<ShownTiles
@@ -64,12 +72,12 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			nonFlowers={nonFlowers}
 			// nonFlowers={[...hTs, ...nonFlowers]}
 			flowers={flowers}
-			flowerIds={flowerIds}
-			nonFlowerIds={nonFlowerIds}
+			flowerRefs={flowerRefs}
+			nonFlowerRefs={nonFlowerRefs}
 			segment={Segment.RIGHT}
 			dealer={dealer}
 			tilesSize={tilesSize}
-			lastThrownId={lastThrown?.id}
+			lastThrownRef={lastThrown?.r}
 			ref={shownTilesRef}
 		/>
 	);
@@ -80,7 +88,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			tiles={dTs}
 			// tiles={[...hTs, ...dTs]}
 			segment={Segment.RIGHT}
-			lastThrownId={lastThrown?.id}
+			lastThrownRef={lastThrown?.r}
 		/>
 	);
 

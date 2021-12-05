@@ -14,6 +14,7 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useRef } from 'react';
 import { BackgroundColor, Size, TableColor, TileColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
+import { IModalProps } from 'shared/typesPlus';
 import './settingsWindow.scss';
 
 interface Preference {

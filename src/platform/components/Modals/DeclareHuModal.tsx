@@ -10,25 +10,15 @@ import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { User } from 'shared/models';
+import { useState } from 'react';
+import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ game, playerSeat, show, onClose, HH }: IDeclareHuModalProps) => {
-	const player: User = useSelector((state: IStore) => state.player);
+const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModalProps) => {
 	const [tai, setTai] = useState(HH?.maxPx || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
-	useEffect(() => {
-		if (game.hu?.length >= 3 || !!game?.ps.find((p: User) => p.confirmHu && p.uN !== player?.uN)) {
-			onClose();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [game.hu?.length, JSON.stringify(game.ps.map((p: User) => p.sT + p.uN)), player.uN]);
-
 	async function hu() {
-		// game.ps[playerSeat].sT = true;
 		game.declareHu([playerSeat, tai, Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
 		FBService.updateGame(game);

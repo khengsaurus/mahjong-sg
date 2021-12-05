@@ -15,6 +15,7 @@ import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import FBService from 'platform/service/MyFirebaseService';
 import './searchForms.scss';
+import { ITheme } from 'shared/typesPlus';
 
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);

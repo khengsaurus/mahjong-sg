@@ -14,6 +14,7 @@ import { Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
 import { Game, User } from 'shared/models';
+import { IModalProps } from 'shared/typesPlus';
 
 export async function sendChips(
 	game: Game,

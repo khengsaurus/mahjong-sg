@@ -3,7 +3,8 @@ import { DiscardedTiles, HandTile, ShownTile, ShownTiles, UnusedTiles } from 'pl
 import { useCallback, useContext, useMemo } from 'react';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
-import { revealTile } from 'shared/util';
+import { IPlayerComponentProps } from 'shared/typesPlus';
+import { getCardFromHashId, revealTile } from 'shared/util';
 import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
@@ -11,10 +12,10 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const htsIds = JSON.stringify(hTs.map(t => t.id));
 
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
-	const selectedTilesIds = selectedTiles.map(tile => tile.id);
-	const { flowers, nonFlowers, nonFlowerIds, flowerIds, hiddenCards } = useTiles({
+	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
 		sTs,
 		allHiddenTiles,
 		ms,
@@ -22,7 +23,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	});
 
 	const selectTile = useCallback(
-		(tile: IShownTile) => {
+		tile => {
 			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
 				setSelectedTiles([...selectedTiles, tile]);
 			} else {
@@ -33,17 +34,17 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = !isEmpty(lTa) ? (lTa.ix === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
+		let revLTT: IShownTile = Number(lTa?.r) ? (lTa?.ix === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="htss">
 				{hTs.map((tile: IHiddenTile) => {
-					let revT = revealTile(tile, tileHashKey);
-					return <ShownTile key={revT.id} tileID={revT.id} tileCard={revT.c} segment={Segment.BOTTOM} />;
+					let revC = getCardFromHashId(tile.id, tileHashKey);
+					return <ShownTile key={tile.id} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
 				})}
 				{revLTT && (
 					<ShownTile
 						key={revLTT.id}
-						tileID={revLTT.id}
+						tileRef={revLTT.r}
 						tileCard={revLTT.c}
 						segment={Segment.BOTTOM}
 						highlight
@@ -53,9 +54,9 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [tileHashKey, hiddenCards]);
+	}, [lTa?.r, lTa?.ix, tileHashKey, htsIds]);
 
-	const hiddenHand = useCallback(() => {
+	const renderHiddenHand = () => {
 		let selectedTilesRef = selectedTiles.map(tile => tile.r);
 		let revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
 		return (
@@ -83,8 +84,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 				)}
 			</div>
 		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectTile, handSize, hiddenCards, sT, selectedTilesIds]);
+	};
 
 	const renderShownTiles = () => (
 		<ShownTiles
@@ -92,12 +92,12 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			nonFlowers={nonFlowers}
 			// nonFlowers={[...hTs, ...nonFlowers]}
 			flowers={flowers}
-			flowerIds={flowerIds}
-			nonFlowerIds={nonFlowerIds}
+			flowerRefs={flowerRefs}
+			nonFlowerRefs={nonFlowerRefs}
 			segment={Segment.BOTTOM}
 			dealer={dealer}
 			tilesSize={tilesSize}
-			lastThrownId={lastThrown?.id}
+			lastThrownRef={lastThrown?.r}
 		/>
 	);
 
@@ -107,13 +107,13 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			tiles={dTs}
 			// tiles={[...hTs, ...dTs]}
 			segment={Segment.BOTTOM}
-			lastThrownId={lastThrown?.id}
+			lastThrownRef={lastThrown?.r}
 		/>
 	);
 
 	return (
 		<div className={`row-section-${tilesSize || Size.MEDIUM} bottom`}>
-			{player.sT ? shownHiddenHand : hiddenHand()}
+			{sT ? shownHiddenHand : renderHiddenHand()}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.BOTTOM} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}

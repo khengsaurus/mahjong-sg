@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Page, Size, Status, Suit } from 'shared/enums';
 import { useAsync, useCountdown } from 'shared/hooks';
 import getTileSrc from 'shared/images';
+import { getSuitedTileMock } from 'shared/util';
 import './sample.scss';
 
 const asynFn = (): Promise<string> => {
@@ -19,18 +20,9 @@ const asynFn = (): Promise<string> => {
 	});
 };
 
-const wans = ['1万', '2万', '3万', '4万', '5万', '6万', '7万', '8万', '9万'];
-
 function getRandomWanTile(): IShownTile {
 	let num = Math.floor(Math.random() * 9);
-	return {
-		c: wans[num],
-		s: Suit.WAN,
-		n: num + 1,
-		id: `${wans[num]}1`,
-		ix: 1,
-		v: false
-	};
+	return getSuitedTileMock(Suit.WAN, num, num);
 }
 
 const Sample = () => {

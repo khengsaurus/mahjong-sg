@@ -6,7 +6,7 @@ interface IDiscardedTiles {
 	tiles: IShownTile[];
 	segment: Segment;
 	className: string;
-	lastThrownId?: string;
+	lastThrownRef?: number;
 }
 
 function compare(prev: IDiscardedTiles, next: IDiscardedTiles) {
@@ -14,17 +14,17 @@ function compare(prev: IDiscardedTiles, next: IDiscardedTiles) {
 		prev.segment === next.segment &&
 		prev.className === next.className &&
 		JSON.stringify(prev.tiles) === JSON.stringify(next.tiles) &&
-		(!!prev.tiles.find(tile => tile.id === prev.lastThrownId)
-			? !!next.lastThrownId && prev.lastThrownId === next.lastThrownId
+		(!!prev.tiles.find(tile => tile.r === prev.lastThrownRef)
+			? !!next.lastThrownRef && prev.lastThrownRef === next.lastThrownRef
 			: true)
 	);
 }
 
-const DiscardedTiles = ({ className, tiles, segment, lastThrownId }: IDiscardedTiles) => {
+const DiscardedTiles = ({ className, tiles, segment, lastThrownRef }: IDiscardedTiles) => {
 	return (
 		<div className={className}>
 			{tiles.map(tile => (
-				<ShownTile key={tile.id} tileID={tile.id} tileCard={tile.c} segment={segment} lastID={lastThrownId} />
+				<ShownTile key={tile.id} tileRef={tile.r} tileCard={tile.c} segment={segment} lastRef={lastThrownRef} />
 			))}
 		</div>
 	);
