@@ -30,6 +30,7 @@ const NewGame = () => {
 	useEffect(() => {
 		showRandomize.current = players.length === 4 ? true : false;
 		playersRef.current = players;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [players?.length]);
 
 	function handleRemovePlayer(player: User) {

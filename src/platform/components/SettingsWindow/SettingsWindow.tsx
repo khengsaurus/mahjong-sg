@@ -17,7 +17,7 @@ import { AppContext } from 'shared/hooks';
 import { IModalProps } from 'shared/typesPlus';
 import './settingsWindow.scss';
 
-interface Preference {
+interface IPreference {
 	label: string;
 	size?: Size;
 	selectedColor?: BackgroundColor | TableColor | TileColor;
@@ -44,7 +44,7 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 	} = useContext(AppContext);
 	const initialValues = useRef([controlsSize, handSize, tilesSize, backgroundColor, tableColor, tileBackColor]);
 
-	const preferences: Preference[] = [
+	const preferences: IPreference[] = [
 		{ label: 'Controls', size: controlsSize, handleSelect: setControlsSize },
 		{ label: 'Hand', size: handSize, handleSelect: setHandSize },
 		{ label: 'Tiles', size: tilesSize, handleSelect: setTilesSize },
