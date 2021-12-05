@@ -1,3 +1,4 @@
+import Fade from '@material-ui/core/Fade';
 import { history } from 'App';
 import isEmpty from 'lodash.isempty';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
@@ -44,12 +45,36 @@ const Controls = () => {
 				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
-				{payModal.show && <PaymentModal {...payModal} />}
-				{settingsModal.show && <SettingsWindow {...settingsModal} />}
-				{declareHuModal.show && isEmpty(game?.hu) && <DeclareHuModal {...declareHuModal} />}
-				{adminControlsModal.show && <AdminControls {...adminControlsModal} />}
-				{showAnnounceHuModal && <AnnounceHuModal {...announceHuModal} />}
-				{notif !== '' && <TableNotif notif={notif} />}
+				{payModal.show && (
+					<Fade in timeout={300} unmountOnExit>
+						<PaymentModal {...payModal} />
+					</Fade>
+				)}
+				{settingsModal.show && (
+					<Fade in timeout={300} unmountOnExit>
+						<SettingsWindow {...settingsModal} />
+					</Fade>
+				)}
+				{declareHuModal.show && isEmpty(game?.hu) && (
+					<Fade in timeout={300} unmountOnExit>
+						<DeclareHuModal {...declareHuModal} />
+					</Fade>
+				)}
+				{adminControlsModal.show && (
+					<Fade in timeout={300} unmountOnExit>
+						<AdminControls {...adminControlsModal} />
+					</Fade>
+				)}
+				{showAnnounceHuModal && (
+					<Fade in timeout={300} unmountOnExit>
+						<AnnounceHuModal {...announceHuModal} />
+					</Fade>
+				)}
+				{notif !== '' && (
+					<Fade in timeout={300} unmountOnExit>
+						<TableNotif notif={notif} />
+					</Fade>
+				)}
 			</>
 		)
 	);
