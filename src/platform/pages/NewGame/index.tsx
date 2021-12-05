@@ -21,14 +21,16 @@ import './newGame.scss';
 
 const NewGame = () => {
 	const { user, players, setPlayers, setGameId } = useContext(AppContext);
-	const showRandomize = useRef(players.length === 4);
 	const [startedGame, setStartedGame] = useState(false);
 	const [random, setRandom] = useState(true);
+	const showRandomize = useRef(players.length === 4);
+	const playersRef = useRef<User[]>(players);
 	const fadeTimeout = 500;
 
 	useEffect(() => {
 		showRandomize.current = players.length === 4 ? true : false;
-	}, [players]);
+		playersRef.current = players;
+	}, [players?.length]);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
@@ -77,6 +79,30 @@ const NewGame = () => {
 		);
 	};
 
+	// Note: to effect the animation, this cannot be returned as a FC
+	const renderUserOption = (player: User) => (
+		<ListItem className="user list-item">
+			<ListItemText primary={player?.uN} />
+			{player?.uN === user?.uN ? (
+				<ListItemIcon
+					style={{
+						justifyContent: 'flex-end'
+					}}
+				>
+					<MoodIcon color="primary" />
+				</ListItemIcon>
+			) : (
+				<IconButton
+					onClick={() => handleRemovePlayer(player)}
+					style={{ justifyContent: 'flex-end', marginRight: -12 }}
+					disableRipple
+				>
+					<ClearIcon />
+				</IconButton>
+			)}
+		</ListItem>
+	);
+
 	const Markup = () => (
 		<>
 			<Title title="Create a new game" padding="5px" />
@@ -87,33 +113,17 @@ const NewGame = () => {
 				{/* <VerticalDivider /> */}
 				<div className="panel-segment padding-top">
 					<List className="list">
-						{players.length > 0 &&
-							players.map((player, index) => (
-								<Fragment key={`player-${index}`}>
+						{players.map((player, index) => (
+							<Fragment key={`player-${index}`}>
+								{playersRef.current?.find(p => p?.uN === player?.uN) ? (
+									renderUserOption(player)
+								) : (
 									<Fade in timeout={player?.uN === user?.uN ? 0 : fadeTimeout}>
-										<ListItem className="user list-item">
-											<ListItemText primary={player?.uN} />
-											{player?.uN === user?.uN ? (
-												<ListItemIcon
-													style={{
-														justifyContent: 'flex-end'
-													}}
-												>
-													<MoodIcon color="primary" />
-												</ListItemIcon>
-											) : (
-												<IconButton
-													onClick={() => handleRemovePlayer(player)}
-													style={{ justifyContent: 'flex-end', marginRight: -12 }}
-													disableRipple
-												>
-													<ClearIcon />
-												</IconButton>
-											)}
-										</ListItem>
+										{renderUserOption(player)}
 									</Fade>
-								</Fragment>
-							))}
+								)}
+							</Fragment>
+						))}
 						{players.length === 4 && <RandomizeOption />}
 					</List>
 				</div>
