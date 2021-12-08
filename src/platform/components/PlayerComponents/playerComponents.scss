@@ -54,10 +54,10 @@
 					@media all and (min-aspect-ratio: 4/3) {
 						// Landscape
 						width: floor(45vw);
-						@media all and (max-width: floor(12 * getShownTileWidth($size) / 0.7)) {
+						@media all and (max-width: floor(calc(12 * getShownTileWidth($size) / 0.7))) {
 							width: floor(35vw);
 						}
-						@media all and (max-width: floor(9 * getShownTileWidth($size) / 0.7)) {
+						@media all and (max-width: floor(calc(9 * getShownTileWidth($size) / 0.7))) {
 							width: floor(25vw);
 						}
 					}
@@ -146,10 +146,10 @@
 					@media all and (max-aspect-ratio: 3/4) {
 						// Portrait
 						height: floor(45vh);
-						@media all and (max-height: (12 * getShownTileWidth($size) / 0.7)) {
+						@media all and (max-height: calc(12 * getShownTileWidth($size) / 0.7)) {
 							height: floor(35vh);
 						}
-						@media all and (max-height: (9 * getShownTileWidth($size) / 0.7)) {
+						@media all and (max-height: calc(9 * getShownTileWidth($size) / 0.7)) {
 							height: floor(25vh);
 						}
 					}
