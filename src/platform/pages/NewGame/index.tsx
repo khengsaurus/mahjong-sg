@@ -12,6 +12,7 @@ import { history } from 'App';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
 import HomePage from 'platform/pages/Home/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
+import { Row } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { Page } from 'shared/enums';
@@ -21,17 +22,16 @@ import './newGame.scss';
 
 const NewGame = () => {
 	const { user, players, setPlayers, setGameId } = useContext(AppContext);
+	const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
 	const [startedGame, setStartedGame] = useState(false);
 	const [random, setRandom] = useState(true);
-	const showRandomize = useRef(players.length === 4);
 	const playersRef = useRef<User[]>(players);
-	const fadeTimeout = 500;
+	const fadeTimeout = 300;
 
 	useEffect(() => {
-		showRandomize.current = players.length === 4 ? true : false;
-		playersRef.current = players;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [players?.length]);
+		const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
+		setOffsetKeyboard(buttonsHeight);
+	}, []);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
@@ -52,7 +52,7 @@ const NewGame = () => {
 		});
 	}
 
-	function handleButtonClick() {
+	function handleStartJoinClick() {
 		if (startedGame) {
 			history.push(Page.TABLE);
 			setPlayers([user]);
@@ -60,25 +60,6 @@ const NewGame = () => {
 			startGame();
 		}
 	}
-
-	const RandomizeOption = () => {
-		return (
-			<Fade in timeout={showRandomize.current ? 0 : 2 * fadeTimeout}>
-				<ListItem className="user list-item">
-					<ListItemText primary={`Randomize?`} />
-					<IconButton
-						onClick={() => {
-							setRandom(!random);
-						}}
-						style={{ justifyContent: 'flex-end', marginRight: -12 }}
-						disableRipple
-					>
-						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-					</IconButton>
-				</ListItem>
-			</Fade>
-		);
-	};
 
 	// Note: to effect the animation, this cannot be returned as a FC
 	const renderUserOption = (player: User) => (
@@ -104,6 +85,52 @@ const NewGame = () => {
 		</ListItem>
 	);
 
+	const startButton = () => (
+		<Fade in={players.length === 4} timeout={300}>
+			<div id="start-join-btn">
+				<StyledButton
+					label={startedGame ? 'Join' : 'Start'}
+					onClick={handleStartJoinClick}
+					disabled={players.length < 4}
+				/>
+			</div>
+		</Fade>
+	);
+
+	const renderBottomButtons = () => (
+		<Fade in timeout={20}>
+			<Row style={{ paddingTop: 5, transition: '300ms' }} id="bottom-btns">
+				<HomeButton
+					style={{
+						marginLeft:
+							players?.length < 4
+								? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
+								: 0,
+						transition: '450ms'
+					}}
+				/>
+				{startButton()}
+			</Row>
+		</Fade>
+	);
+
+	const renderRandomizeOption = () => (
+		<Fade in={players.length === 4} timeout={{ enter: 1.8 * fadeTimeout }} unmountOnExit>
+			<ListItem className="user list-item">
+				<ListItemText primary={`Randomize?`} />
+				<IconButton
+					onClick={() => {
+						setRandom(!random);
+					}}
+					style={{ justifyContent: 'flex-end', marginRight: -12 }}
+					disableRipple
+				>
+					{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+				</IconButton>
+			</ListItem>
+		</Fade>
+	);
+
 	const markup = () => (
 		<>
 			<Title title="Create a new game" padding="5px" />
@@ -119,26 +146,21 @@ const NewGame = () => {
 								{playersRef.current?.find(p => p?.uN === player?.uN) ? (
 									renderUserOption(player)
 								) : (
-									<Fade in timeout={player?.uN === user?.uN ? 0 : fadeTimeout}>
+									<Fade in timeout={fadeTimeout}>
 										{renderUserOption(player)}
 									</Fade>
 								)}
 							</Fragment>
 						))}
-						{players.length === 4 && <RandomizeOption />}
+						{renderRandomizeOption()}
 					</List>
 				</div>
 			</div>
-			<StyledButton
-				label={startedGame ? 'Join game' : 'Start game'}
-				onClick={handleButtonClick}
-				disabled={players.length < 4}
-			/>
-			<HomeButton />
+			{renderBottomButtons()}
 		</>
 	);
 
-	return <HomePage markup={markup} />;
+	return <HomePage markup={markup} offsetKeyboard={offsetKeyboard + 18} />;
 };
 
 export default NewGame;

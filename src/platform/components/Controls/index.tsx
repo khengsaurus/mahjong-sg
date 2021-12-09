@@ -45,41 +45,31 @@ const Controls = () => {
 				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
-				{payModal.show && (
-					<Fade in timeout={300} unmountOnExit>
-						<div>
-							<PaymentModal {...payModal} />
-						</div>
-					</Fade>
-				)}
-				{settingsModal.show && (
-					<Fade in timeout={300} unmountOnExit>
-						<div>
-							<SettingsWindow {...settingsModal} />
-						</div>
-					</Fade>
-				)}
-				{declareHuModal.show && isEmpty(game?.hu) && (
-					<Fade in timeout={300} unmountOnExit>
-						<div>
-							<DeclareHuModal {...declareHuModal} />
-						</div>
-					</Fade>
-				)}
-				{adminControlsModal.show && (
-					<Fade in timeout={300} unmountOnExit>
-						<div>
-							<AdminControls {...adminControlsModal} />
-						</div>
-					</Fade>
-				)}
-				{showAnnounceHuModal && (
-					<Fade in timeout={300} unmountOnExit>
-						<div>
-							<AnnounceHuModal {...announceHuModal} />
-						</div>
-					</Fade>
-				)}
+				<Fade in={payModal.show} timeout={300} unmountOnExit>
+					<div>
+						<PaymentModal {...payModal} />
+					</div>
+				</Fade>
+				<Fade in={settingsModal.show} timeout={300} unmountOnExit>
+					<div>
+						<SettingsWindow {...settingsModal} />
+					</div>
+				</Fade>
+				<Fade in={declareHuModal.show && isEmpty(game?.hu)} timeout={300} unmountOnExit>
+					<div>
+						<DeclareHuModal {...declareHuModal} />
+					</div>
+				</Fade>
+				<Fade in={adminControlsModal.show} timeout={300} unmountOnExit>
+					<div>
+						<AdminControls {...adminControlsModal} />
+					</div>
+				</Fade>
+				<Fade in={showAnnounceHuModal} timeout={300} unmountOnExit>
+					<div>
+						<AnnounceHuModal {...announceHuModal} />
+					</div>
+				</Fade>
 				{notif !== '' && (
 					<Fade in timeout={300} unmountOnExit>
 						<TableNotif notif={notif} />

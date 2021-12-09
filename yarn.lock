@@ -1281,7 +1281,7 @@
   "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-3.3.2.tgz"
   "version" "3.3.2"
 
-"@capacitor/keyboard@1.0.3":
+"@capacitor/keyboard@^1.0.3":
   "integrity" "sha512-s963GqVAvhdqxwtASjev/Az6gm164GbAxZGXP29VK8J+j363y++F9uDVUNfud9z7msdXaoV4btyk7cc7rmxydg=="
   "resolved" "https://registry.npmjs.org/@capacitor/keyboard/-/keyboard-1.0.3.tgz"
   "version" "1.0.3"

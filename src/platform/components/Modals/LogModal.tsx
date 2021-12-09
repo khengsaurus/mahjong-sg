@@ -51,7 +51,11 @@ const LogModal = (props: LogModalProps) => {
 			>
 				{logs.map((log: string, index) => (
 					<CSSTransition key={`${index}`} timeout={500} classNames="move">
-						{log.includes('sent') ? <GreenTableText>{log}</GreenTableText> : <TableText>{log}</TableText>}
+						{log.includes('sent') ? (
+							<GreenTableText style={{ marginLeft: 5 }}>{log}</GreenTableText>
+						) : (
+							<TableText style={{ marginLeft: 5 }}>{log}</TableText>
+						)}
 					</CSSTransition>
 				))}
 			</TransitionGroup>

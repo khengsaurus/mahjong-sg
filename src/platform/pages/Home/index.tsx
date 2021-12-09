@@ -16,7 +16,7 @@ const Home = () => {
 		logout();
 		history.push(Page.LOGIN);
 	}
-	
+
 	const markup = () => (
 		<>
 			<Title title={`Welcome ${user?.uN || ''}`} />

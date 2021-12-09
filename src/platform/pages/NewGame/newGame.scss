@@ -5,12 +5,14 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: flex-start;
-	height: 190px;
+	height: 160px;
+	transition: 300ms !important;
 	.panel-segment {
 		flex-direction: column;
 		justify-content: center;
 		width: $panel-segment-width;
 		padding: 0 10px;
+		transition: 300ms;
 		&.padding-top {
 			padding-top: 11px !important;
 		}

@@ -119,7 +119,7 @@ export class FirebaseService {
 			.where('uN', '!=', exclude)
 			.where('uN', '>=', partUsername)
 			.where('uN', '<=', partUsername + '\uf8ff')
-			.limit(4)
+			.limit(3)
 			.get();
 	}
 

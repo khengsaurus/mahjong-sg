@@ -1,3 +1,4 @@
+import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -21,6 +22,7 @@ import './joinGame.scss';
 const JoinGame = () => {
 	const { user, setGameId } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
+	const [title, setTitle] = useState('Loading...');
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -34,6 +36,7 @@ const JoinGame = () => {
 					games.push(objToGame(doc, true));
 				});
 				setGameInvites(games || []);
+				setTitle(games.length === 0 ? 'No available games' : 'Available games:');
 			}
 		});
 
@@ -49,11 +52,11 @@ const JoinGame = () => {
 	const markup = () => (
 		<Centered className="join-game-panel">
 			<Title
-				title={gameInvites?.length === 0 ? 'No available games' : 'Available games:'}
+				title={title}
 				variant="h6"
 				padding="5px"
 			/>
-			{user && gameInvites?.length > 0 && (
+			<Collapse in={user && gameInvites?.length > 0} timeout={400}>
 				<List dense className="list">
 					{gameInvites?.map(game => (
 						<ListItem
@@ -71,7 +74,7 @@ const JoinGame = () => {
 						</ListItem>
 					))}
 				</List>
-			)}
+			</Collapse>
 			<HomeButton />
 		</Centered>
 	);

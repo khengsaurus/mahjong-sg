@@ -77,10 +77,10 @@ export const ControlButton = ({ label, callback, disabled = false, style }: Cont
 	);
 };
 
-export const HomeButton = () => {
-	return <StyledButton label="Home" navigate={Page.INDEX} />;
+export const HomeButton = ({ style = {} }: IHasStyle) => {
+	return <StyledButton label="Home" navigate={Page.INDEX} style={{ ...style }} />;
 };
 
-export const JoinGameButton = () => {
-	return <StyledButton label="Join Game" navigate={Page.JOINGAME} />;
+export const JoinGameButton = ({ style = {} }: IHasStyle) => {
+	return <StyledButton label="Join Game" navigate={Page.JOINGAME} style={{ ...style }} />;
 };

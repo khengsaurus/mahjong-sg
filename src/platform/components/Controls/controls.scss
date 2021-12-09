@@ -87,12 +87,12 @@
 			height: getIconButtonSize($size);
 			max-width: getLogLineWidth($size);
 			font-size: getTextFontSize($size);
-			$line-height: getTextLineHeight($size);
+			line-height: getTextLineHeight($size);
 			transition: 200ms;
 			&.expanded {
 				@include align-items-text(flex-start, start);
 				height: 4 * getIconButtonSize($size);
-				min-width: getLogLineWidth($size);
+				max-width: getLogLineWidth($size);
 				// padding-left: 2 * $main-padding;
 				@include default-border;
 			}

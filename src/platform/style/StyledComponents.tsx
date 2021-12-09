@@ -27,6 +27,7 @@ export const Centered = styled.div`
 	align-items: center;
 	align-self: center;
 	text-align: center;
+	transition: 300ms;
 `;
 
 export const CenteredColored = styled(Centered)`
@@ -45,8 +46,10 @@ export const Notification = styled.div`
 `;
 
 export const Main = styled(Centered)`
-	position: absolute;
+	position: fixed;
 	top: 0;
+	right: 0;
+	bottom: 0;
 	left: 0;
 	height: 100%;
 	width: 100%;
@@ -113,10 +116,18 @@ export const VerticalDivider = styled.div`
 	background-color: ${props => props.theme.mainTextColor};
 `;
 
+export const Column = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transition: 300;
+`;
+
 export const Row = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+	transition: 300;
 `;
 
 export const FormRow = styled(Row)`
