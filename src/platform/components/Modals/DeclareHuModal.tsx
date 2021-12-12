@@ -64,7 +64,7 @@ const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModal
 			>
 				<DialogContent>
 					<IconButton
-						style={{ position: 'absolute', top: 5, right: 8 }}
+						style={{ position: 'absolute', top: -2, right: -2 }}
 						onClick={() => onClose(false)}
 						disableRipple
 					>

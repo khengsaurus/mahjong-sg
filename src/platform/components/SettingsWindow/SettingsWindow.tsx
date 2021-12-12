@@ -112,7 +112,7 @@ const SettingsWindow = ({ onClose, show }: IModalProps) => {
 				>
 					<DialogContent>
 						<IconButton
-							style={{ position: 'absolute', top: 5, right: 8 }}
+							style={{ position: 'absolute', top: -2, right: -2 }}
 							onClick={handleClose}
 							disableRipple
 						>

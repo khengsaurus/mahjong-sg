@@ -12,7 +12,6 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { useCallback, useState } from 'react';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util';
-import './adminControls.scss';
 
 const AdminControls = ({ game, show, onClose }: IModalProps) => {
 	const [manageHu, setManageHu] = useState(game?.mHu || false);
@@ -45,7 +44,7 @@ const AdminControls = ({ game, show, onClose }: IModalProps) => {
 				>
 					<DialogContent>
 						<IconButton
-							style={{ position: 'absolute', top: 5, right: 8 }}
+							style={{ position: 'absolute', top: -2, right: -2 }}
 							onClick={closeAndUpdate}
 							disableRipple
 						>

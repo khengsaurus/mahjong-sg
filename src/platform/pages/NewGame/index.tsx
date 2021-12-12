@@ -14,7 +14,7 @@ import HomePage from 'platform/pages/Home/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
 import { Row } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
-import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+import { Fragment, useContext, useRef, useState } from 'react';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
@@ -22,16 +22,16 @@ import './newGame.scss';
 
 const NewGame = () => {
 	const { user, players, setPlayers, setGameId } = useContext(AppContext);
-	const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
+	// const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
 	const [startedGame, setStartedGame] = useState(false);
 	const [random, setRandom] = useState(true);
 	const playersRef = useRef<User[]>(players);
 	const fadeTimeout = 300;
 
-	useEffect(() => {
-		const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
-		setOffsetKeyboard(buttonsHeight);
-	}, []);
+	// useEffect(() => {
+	// 	const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
+	// 	setOffsetKeyboard(buttonsHeight);
+	// }, []);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
@@ -160,7 +160,7 @@ const NewGame = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} offsetKeyboard={offsetKeyboard + 18} />;
+	return <HomePage markup={markup} />; // offsetKeyboard={offsetKeyboard + 18}
 };
 
 export default NewGame;

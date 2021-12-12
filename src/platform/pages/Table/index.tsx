@@ -1,3 +1,4 @@
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import Typography from '@material-ui/core/Typography';
 import firebase from 'firebase/app';
 import isEmpty from 'lodash.isempty';
@@ -14,7 +15,7 @@ import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents'
 import { HomeButton, JoinGameButton, Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Status } from 'shared/enums';
+import { Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game, User } from 'shared/models';
 import { setGame, setPlayer } from 'shared/store/actions';
@@ -35,6 +36,14 @@ const Table = () => {
 	const [front, setFront] = useState(null);
 	const [dealer, setDealer] = useState(null);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
+			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
+				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		const unsubscribe = FBService.listenToGame(gameId, {

@@ -128,13 +128,16 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiDialog: {
 				paper: {
+					overflow: 'hidden',
+					overflowX: 'hidden',
+					overflowY: 'hidden',
 					userSelect: 'none',
-					backgroundColor,
-					overflow: 'scroll'
+					backgroundColor
 				}
 			},
 			MuiDialogContent: {
 				root: {
+					padding: '14px 18px',
 					userSelect: 'none',
 					'&:first-child': {
 						paddingTop: null
@@ -218,8 +221,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 
 export const MuiStyles = {
 	large_dialog: {
-		maxWidth: '420px',
-		minWidth: '420px',
+		maxWidth: '385px',
+		minWidth: '385px',
 		maxHeight: '340px'
 	},
 	small_dialog: {
@@ -233,15 +236,14 @@ export const MuiStyles = {
 		right: 5
 	},
 	modal: {
-		maxWidth: '420px',
-		minWidth: '420px',
+		maxWidth: '385px',
+		minWidth: '385px',
 		overflow: 'scroll'
 	},
 	tabs: {
 		borderRadius: 0,
 		maxWidth: '240px',
-		minHeight: '30px',
-		maxHeight: '30px'
+		height: '30px'
 	},
 	tabOptions: {
 		minWidth: '80px',

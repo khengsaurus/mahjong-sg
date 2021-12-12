@@ -15,8 +15,8 @@
             android:name="com.tk.mahjongApp.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.Default"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape">
+            android:launchMode="singleTask">
+<!--            android:screenOrientation="sensorLandscape">-->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

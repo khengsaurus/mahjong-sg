@@ -1,10 +1,11 @@
 import Collapse from '@material-ui/core/Collapse';
+import Fade from '@material-ui/core/Fade';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import { history } from 'App';
 import { Row } from 'platform/style/StyledComponents';
-import { StyledButton } from 'platform/style/StyledMui';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { StyledButton, Title } from 'platform/style/StyledMui';
+import { useCallback, useMemo, useContext, useEffect, useState } from 'react';
 import { Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { FBAuthLogin_EmailPass, FBAuthRegister_EmailPass, FBResolveUser_Email } from 'shared/service/fbUserFns';
@@ -14,7 +15,7 @@ import './login.scss';
 const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
 	const [showRegister, setShowRegister] = useState(false);
-	const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
+	// const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,10 +26,17 @@ const Login = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showRegister]);
 
-	useEffect(() => {
-		const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
-		setOffsetKeyboard(buttonsHeight);
-	}, []);
+	// useEffect(() => {
+	// 	const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
+	// 	setOffsetKeyboard(buttonsHeight);
+	// }, []);
+
+	const loginDisabled = useMemo(() => email.trim() === '' || password.trim() === '', [email, password]);
+
+	const registerDisabled = useMemo(
+		() => email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '',
+		[email, password, confirmPassword]
+	);
 
 	function clearForm() {
 		setEmail('');
@@ -117,28 +125,55 @@ const Login = () => {
 		};
 	}, [enterListener]);
 
-	const renderRegisterButton = () => (
-		<StyledButton
-			label={showRegister ? `Register` : `Login`}
-			type="submit"
-			autoFocus
-			disabled={email.trim() === '' || password.trim() === '' || (showRegister && confirmPassword.trim() === '')}
-			onClick={handleSubmit}
-		/>
+	const renderLoginButton = () => (
+		<Fade in={!showRegister && !loginDisabled} timeout={300}>
+			<div id="login-btn">
+				<StyledButton label={`Login`} type="submit" autoFocus disabled={loginDisabled} onClick={handleSubmit} />
+			</div>
+		</Fade>
 	);
 
-	const renderLoginButton = () => (
-		<StyledButton
-			label={showRegister ? `Back` : `Register`}
-			onClick={() => {
-				setAlert(null);
-				setShowRegister(!showRegister);
-			}}
-		/>
+	const renderRegisterButton = () => (
+		<Fade in={showRegister && !registerDisabled} timeout={300}>
+			<div id="register-btn">
+				<StyledButton
+					label={`Register`}
+					type="submit"
+					autoFocus
+					disabled={registerDisabled}
+					onClick={handleSubmit}
+				/>
+			</div>
+		</Fade>
+	);
+
+	const renderBottomButtons = () => (
+		<Fade in timeout={20}>
+			<Row style={{ paddingTop: 5, transition: '300ms' }} id="bottom-btns">
+				<StyledButton
+					label={showRegister ? `Back` : `Register`}
+					onClick={() => {
+						setAlert(null);
+						setShowRegister(!showRegister);
+					}}
+					style={{
+						marginLeft:
+							showRegister && registerDisabled
+								? document.getElementById('register-btn')?.getBoundingClientRect()?.width || 86.36
+								: !showRegister && loginDisabled
+								? document.getElementById('login-btn')?.getBoundingClientRect()?.width || 64
+								: 0,
+						transition: '300ms'
+					}}
+				/>
+				{showRegister ? renderRegisterButton() : renderLoginButton()}
+			</Row>
+		</Fade>
 	);
 
 	const markup = () => (
 		<>
+			<Title title={`Welcome to Mahjong SG!`} />
 			<TextField
 				key="email"
 				label="Email"
@@ -172,8 +207,7 @@ const Login = () => {
 				/>
 			</Collapse>
 			<Row style={{ paddingTop: 10 }} id="bottom-btns">
-				{renderLoginButton()}
-				{renderRegisterButton()}
+				{renderBottomButtons()}
 			</Row>
 			<Collapse in={!!alert} timeout={300} unmountOnExit>
 				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>
@@ -184,7 +218,7 @@ const Login = () => {
 	);
 
 	return (
-		<HomePage markup={markup} timeout={2500} ready={ready} offsetKeyboard={offsetKeyboard + 10} skipVerification />
+		<HomePage markup={markup} timeout={2500} ready={ready} skipVerification /> // offset={offsetKeyboard + 10}
 	);
 };
 

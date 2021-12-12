@@ -1779,6 +1779,20 @@
   "resolved" "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz"
   "version" "1.2.0"
 
+"@ionic-native/core@^5.1.0":
+  "integrity" "sha512-lOrkktadlKYbYf1LrDyAtsu1JnQ0oCCdkOU7iHQ8oXnNOkMwobFfD2m62F1CoOr0u9LIkpYnZSPjng8lZbmbNw=="
+  "resolved" "https://registry.npmjs.org/@ionic-native/core/-/core-5.36.0.tgz"
+  "version" "5.36.0"
+  dependencies:
+    "@types/cordova" "latest"
+
+"@ionic-native/screen-orientation@^5.36.0":
+  "integrity" "sha512-+VILGrCJO76Ta6Mudd6IKc66xDek1uw5OEovFWjGCqkg0OYHFIiJFZNx4NLhF5hA1UKN2fWE6qDJaSXR+1w1Rg=="
+  "resolved" "https://registry.npmjs.org/@ionic-native/screen-orientation/-/screen-orientation-5.36.0.tgz"
+  "version" "5.36.0"
+  dependencies:
+    "@types/cordova" "latest"
+
 "@ionic/cli-framework-output@^2.2.1":
   "integrity" "sha512-eQYkqIW1/tCwSC6Bd0gjse96U11lDX/ikf3jvsjX7a8z/zwSmGzCHRizb7xogV65Ey+1/zyAZR71cpDRQuFLBQ=="
   "resolved" "https://registry.npmjs.org/@ionic/cli-framework-output/-/cli-framework-output-2.2.2.tgz"
@@ -2704,6 +2718,11 @@
   "version" "0.22.30"
   dependencies:
     "@types/node" "*"
+
+"@types/cordova@latest":
+  "integrity" "sha1-6nrd907Ow9dimCegw54smt3HPQQ="
+  "resolved" "https://registry.npmjs.org/@types/cordova/-/cordova-0.0.34.tgz"
+  "version" "0.0.34"
 
 "@types/enzyme@^3.10.10":
   "integrity" "sha512-/D4wFhiEjUDfPu+j5FVK0g/jf7rqeEIpNfAI+kyxzLpw5CKO0drnW3W5NC38alIjsWgnyQ8pbuPF5+UD+vhVyg=="
@@ -4986,6 +5005,11 @@
   "integrity" "sha1-Z29us8OZl8LuGsOpJP1hJHSPV40="
   "resolved" "https://registry.npmjs.org/copy-descriptor/-/copy-descriptor-0.1.1.tgz"
   "version" "0.1.1"
+
+"cordova-plugin-screen-orientation@^3.0.2":
+  "integrity" "sha512-2w6CMC+HGvbhogJetalwGurL2Fx8DQCCPy3wlSZHN1/W7WoQ5n9ujVozcoKrY4VaagK6bxrPFih+ElkO8Uqfzg=="
+  "resolved" "https://registry.npmjs.org/cordova-plugin-screen-orientation/-/cordova-plugin-screen-orientation-3.0.2.tgz"
+  "version" "3.0.2"
 
 "core-js-compat@^3.18.0", "core-js-compat@^3.19.0", "core-js-compat@^3.6.2":
   "integrity" "sha512-R09rKZ56ccGBebjTLZHvzDxhz93YPT37gBm6qUhnwj3Kt7aCjjZWD1injyNbyeFHxNKfeZBSyds6O9n3MKq1sw=="
@@ -12790,7 +12814,7 @@
   dependencies:
     "aproba" "^1.1.1"
 
-"rxjs@^6.0.0":
+"rxjs@^5.5.0 || ^6.5.0", "rxjs@^6.0.0":
   "integrity" "sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ=="
   "resolved" "https://registry.npmjs.org/rxjs/-/rxjs-6.6.7.tgz"
   "version" "6.6.7"

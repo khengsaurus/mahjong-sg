@@ -1,5 +1,4 @@
-import { Capacitor } from '@capacitor/core';
-import { Keyboard } from '@capacitor/keyboard';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import isEmpty from 'lodash.isempty';
 import { Loader } from 'platform/components/Loader';
 import { useLocalSession } from 'platform/hooks';
@@ -7,7 +6,7 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { HomeButton, Title } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Status } from 'shared/enums';
+import { Offset, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './home.scss';
 
@@ -16,40 +15,49 @@ interface IHomePage {
 	ready?: boolean;
 	timeout?: number;
 	fallbackTitle?: string;
-	offsetKeyboard?: number;
 	skipVerification?: boolean;
+	offset?: string | number;
 }
 
+// Disabling keyboard offset
 const HomePage = ({
 	markup,
 	ready = true,
 	timeout = 1500,
 	fallbackTitle = `Whoops, something went wrong...`,
-	offsetKeyboard = 0,
-	skipVerification = false
+	skipVerification = false,
+	offset = 0
 }: IHomePage) => {
 	const { user } = useContext(AppContext);
 	const { verifyingSession } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
-	const [marginBottom, setMarginBottom] = useState(0);
+	// const [marginBottom, setMarginBottom] = useState(0);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
-	const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
+	// const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
 
 	useEffect(() => {
-		if (keyboardAvail) {
-			Keyboard.addListener('keyboardDidShow', info => {
-				setMarginBottom(info?.keyboardHeight - offsetKeyboard);
-			});
-			Keyboard.addListener('keyboardDidHide', () => {
-				setMarginBottom(0);
+		if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
+			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
+				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
 			});
 		}
-		return () => {
-			if (keyboardAvail) {
-				Keyboard.removeAllListeners();
-			}
-		};
-	}, [keyboardAvail, offsetKeyboard]);
+	}, []);
+
+	// useEffect(() => {
+	// 	if (keyboardAvail) {
+	// 		Keyboard.addListener('keyboardDidShow', info => {
+	// 			setMarginBottom(info?.keyboardHeight - offsetKeyboard);
+	// 		});
+	// 		Keyboard.addListener('keyboardDidHide', () => {
+	// 			setMarginBottom(0);
+	// 		});
+	// 	}
+	// 	return () => {
+	// 		if (keyboardAvail) {
+	// 			Keyboard.removeAllListeners();
+	// 		}
+	// 	};
+	// }, [keyboardAvail, offsetKeyboard]);
 
 	const FallbackScreen = useMemo(
 		() => (
@@ -77,7 +85,16 @@ const HomePage = ({
 		<HomeTheme>
 			<Main>
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
-					<Centered style={{ marginBottom: marginBottom }}>{markup()}</Centered>
+					<Centered
+						style={{
+							marginBottom:
+								offset || process.env.REACT_APP_PLATFORM === Platform.MOBILE
+									? Offset.HOMEPAGE_BOTTOM_MOBILE
+									: Offset.HOMEPAGE_BOTTOM_WEB
+						}}
+					>
+						{markup()}
+					</Centered>
 				) : (
 					pendingScreen
 				)}

@@ -19,7 +19,7 @@ const Home = () => {
 
 	const markup = () => (
 		<>
-			<Title title={`Welcome ${user?.uN || ''}`} />
+			<Title title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
 			<StyledButton label={'New Game'} navigate={Page.NEWGAME} />
 			<JoinGameButton />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
