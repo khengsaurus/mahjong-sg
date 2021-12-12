@@ -95,12 +95,12 @@ export const Wind = styled.div`
 
 export const TableText = styled.p`
 	color: ${props => props.theme.tableTextColor};
-	margin: 0;
+	margin: 0px 5px;
 `;
 
 export const GreenTableText = styled.p`
 	color: ${TextColor.GREEN};
-	margin: 0;
+	margin: 0px 5px;
 `;
 
 export const HiddenTile = styled.div`

@@ -23,7 +23,7 @@ interface IHomePage {
 const HomePage = ({
 	markup,
 	ready = true,
-	timeout = 1000,
+	timeout = 1500,
 	fallbackTitle = `Whoops, something went wrong...`,
 	offsetKeyboard = 0,
 	skipVerification = false

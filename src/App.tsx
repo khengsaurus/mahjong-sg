@@ -4,7 +4,6 @@ import JoinGame from 'platform/pages/JoinGame';
 import Login from 'platform/pages/Login';
 import NewUser from 'platform/pages/Login/NewUser';
 import NewGame from 'platform/pages/NewGame';
-import Sample from 'platform/pages/Sample';
 import Table from 'platform/pages/Table';
 import { Styled } from 'platform/style/StyledComponents';
 import { Provider } from 'react-redux';
@@ -29,7 +28,7 @@ function App() {
 							<Route exact path="/NewGame" component={NewGame} />
 							<Route exact path="/JoinGame" component={JoinGame} />
 							<Route exact path="/Table" component={Table} />
-							<Route exact path="/Sample" component={Sample} />
+							{/* <Route exact path="/Sample" component={Sample} /> */}
 						</Switch>
 					</Styled>
 				</Router>

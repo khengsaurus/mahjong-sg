@@ -4,6 +4,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { isEmpty } from 'lodash';
 import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
+import { Centered } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { useMemo } from 'react';
 import { IAnnounceHuModalProps } from 'shared/typesPlus';
@@ -41,7 +42,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFi
 			}}
 		>
 			<DialogContent style={{ paddingBottom: 0 }}>
-				{hu.length >= 3 && (
+				{hu.length >= 3 ? (
 					<>
 						<Title
 							title={`${game.ps[hu[0]]?.uN} hu, ${hu[1]}台${hu[2] === 1 ? ` 自摸` : ``}`}
@@ -51,12 +52,13 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFi
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
 							return <Title title={getHandDesc(p)} variant="subtitle2" padding="2px" key={ix} />;
 						})}
+						{hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 					</>
-				)}
-				{hu.length >= 3 && hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
-				{draw && <Title title={`Draw!`} variant="subtitle1" padding="3px 0px" />}
-				{(!on || dealer === 10) && (
-					<Title title={`The game has ended!`} variant="subtitle1" padding="3px 0px" />
+				) : (
+					<Centered>
+						{draw && <Title title={`Draw!`} variant="h6" />}
+						{(!on || dealer === 10) && <Title title={`The game has ended!`} variant="h6" />}
+					</Centered>
 				)}
 			</DialogContent>
 			<DialogActions

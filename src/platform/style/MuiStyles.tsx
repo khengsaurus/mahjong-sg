@@ -10,9 +10,9 @@ function getHighlightColor(color: TableColor | BackgroundColor) {
 	} else if ([TableColor.BROWN, BackgroundColor.BROWN].includes(color)) {
 		return indigo[500];
 	} else if ([TableColor.GREEN, BackgroundColor.GREEN].includes(color)) {
-		return red[800];
+		return red[500];
 	} else if ([TableColor.RED, BackgroundColor.RED].includes(color)) {
-		return teal[700];
+		return teal[500];
 	} else if ([TableColor.PURPLE, BackgroundColor.PURPLE].includes(color)) {
 		return amber[600];
 	} else if ([TableColor.BLUE, BackgroundColor.BLUE].includes(color)) {
@@ -129,7 +129,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiDialog: {
 				paper: {
 					userSelect: 'none',
-					backgroundColor: backgroundColor,
+					backgroundColor,
 					overflow: 'scroll'
 				}
 			},
@@ -143,7 +143,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiPopover: {
 				paper: {
-					backgroundColor: backgroundColor
+					backgroundColor
 				}
 			},
 			MuiInput: {
@@ -168,7 +168,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiList: {
 				root: {
-					backgroundColor: backgroundColor
+					backgroundColor
 				},
 				padding: {
 					paddingTop: '0px',

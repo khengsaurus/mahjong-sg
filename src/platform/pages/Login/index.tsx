@@ -18,6 +18,7 @@ const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
+	const [ready, setReady] = useState(true);
 
 	useEffect(() => {
 		setConfirmPassword('');
@@ -26,7 +27,6 @@ const Login = () => {
 
 	useEffect(() => {
 		const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
-		console.log(buttonsHeight);
 		setOffsetKeyboard(buttonsHeight);
 	}, []);
 
@@ -38,12 +38,14 @@ const Login = () => {
 
 	const handleLogin = useCallback(
 		(values: IEmailPass, callback?: () => void) => {
+			setReady(false);
 			FBAuthLogin_EmailPass(values)
 				.then(email => {
 					if (email === values.email) {
 						setUserEmail(email);
 						FBResolveUser_Email(email)
 							.then(user => {
+								setReady(true);
 								setAlert(null);
 								if (user) {
 									callback();
@@ -55,14 +57,15 @@ const Login = () => {
 								}
 							})
 							.catch(err => {
-								console.error(err);
+								setReady(true);
+								setAlert({ status: Status.ERROR, msg: err.msg });
 							});
 					} else {
 						// Auth login failed
 					}
 				})
 				.catch(err => {
-					setAlert({ status: Status.ERROR, msg: err.toString() });
+					setAlert({ status: Status.ERROR, msg: err.msg });
 				});
 		},
 		[login, setAlert, setUserEmail]
@@ -71,15 +74,18 @@ const Login = () => {
 	const handleRegister = useCallback(
 		(values: IEmailPass, callback?: () => void) => {
 			if (values.password === confirmPassword) {
+				setReady(false);
 				FBAuthRegister_EmailPass(values)
 					.then(res => {
 						if (res) {
+							setReady(true);
 							setAlert(null);
 							callback();
 							handleLogin(values);
 						}
 					})
 					.catch(err => {
+						setReady(true);
 						setAlert({ status: Status.ERROR, msg: err.toString() });
 					});
 			} else {
@@ -177,7 +183,9 @@ const Login = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} skipVerification offsetKeyboard={offsetKeyboard + 10} />;
+	return (
+		<HomePage markup={markup} timeout={2500} ready={ready} offsetKeyboard={offsetKeyboard + 10} skipVerification />
+	);
 };
 
 export default Login;
