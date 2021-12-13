@@ -159,7 +159,7 @@ export class FirebaseService {
 					.where('es', 'array-contains', user.email)
 					.where('on', '==', true)
 					// .orderBy('crA', 'desc')
-					.limit(5)
+					// .limit(5)
 					.onSnapshot(observer)
 			);
 		} else {

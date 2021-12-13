@@ -66,7 +66,7 @@ const AnnounceHuModal = ({ game, playerSeat, show, onClose: handleShow, HH, huFi
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'space-between',
-					padding: '0px 15px'
+					padding: '0px 8px'
 				}}
 			>
 				<HomeButton />
