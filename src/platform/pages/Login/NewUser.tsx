@@ -62,6 +62,7 @@ const NewUser = () => {
 					onChange={e => {
 						setUsername(e.target.value);
 					}}
+					inputProps={{ maxLength: 10 }}
 					style={{ margin: '-3px 0 5px' }}
 				/>
 				<Row>

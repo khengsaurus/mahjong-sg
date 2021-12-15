@@ -3,6 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import AddIcon from '@mui/icons-material/Add';
 import ListItemText from '@material-ui/core/ListItemText';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
@@ -15,7 +16,7 @@ import FBService from 'platform/service/MyFirebaseService';
 import { Row } from 'platform/style/StyledComponents';
 import { HomeButton, StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useRef, useState } from 'react';
-import { Page } from 'shared/enums';
+import { BotName, BotIds, Page, TransitionSpeed } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import './newGame.scss';
@@ -99,14 +100,14 @@ const NewGame = () => {
 
 	const renderBottomButtons = () => (
 		<Fade in timeout={20}>
-			<Row style={{ paddingTop: 5, transition: '300ms' }} id="bottom-btns">
+			<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
 				<HomeButton
 					style={{
 						marginLeft:
 							players?.length < 4
 								? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
 								: 0,
-						transition: '450ms'
+						transition: TransitionSpeed.MEDIUM
 					}}
 				/>
 				{startButton()}
@@ -114,10 +115,35 @@ const NewGame = () => {
 		</Fade>
 	);
 
-	const renderRandomizeOption = () => (
-		<Fade in={players.length === 4} timeout={{ enter: 1.8 * fadeTimeout }} unmountOnExit>
+	const generateBot = () => {
+		const pIds = players.map(p => p.id);
+		const availBots = BotIds.filter(b => !pIds.includes(b));
+		const botIndex = Math.floor(Math.random() * (availBots.length - 0.01));
+		const botId = availBots[botIndex];
+		return new User(botId, BotName[botId] || 'Bot', '', '');
+	};
+
+	const renderAddBotButton = () => (
+		<Fade in={players.length < 4} timeout={{ enter: 2 * fadeTimeout }} unmountOnExit>
 			<ListItem className="user list-item">
-				<ListItemText primary={`Randomize?`} />
+				<ListItemText secondary={`Add bot`} />
+				<IconButton
+					onClick={() => {
+						setPlayers([...players, generateBot()]);
+					}}
+					style={{ justifyContent: 'flex-end', marginRight: -12 }}
+					disableRipple
+				>
+					<AddIcon />
+				</IconButton>
+			</ListItem>
+		</Fade>
+	);
+
+	const renderRandomizeOption = () => (
+		<Fade in={players.length === 4} timeout={{ enter: 2 * fadeTimeout }} unmountOnExit>
+			<ListItem className="user list-item">
+				<ListItemText secondary={`Randomize?`} />
 				<IconButton
 					onClick={() => {
 						setRandom(!random);
@@ -152,6 +178,7 @@ const NewGame = () => {
 								)}
 							</Fragment>
 						))}
+						{renderAddBotButton()}
 						{renderRandomizeOption()}
 					</List>
 				</div>

@@ -178,6 +178,17 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					paddingBottom: '0px'
 				}
 			},
+			MuiTypography: {
+				root: {
+					color: textColor
+				},
+				colorTextPrimary: {
+					color: `${textColor}`
+				},
+				colorTextSecondary: {
+					color: `${textColor}`
+				}
+			},
 			MuiListItem: {
 				root: {
 					color: textColor,
