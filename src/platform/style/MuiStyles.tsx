@@ -225,6 +225,14 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						backgroundColor: 'transparent !important'
 					}
 				}
+			},
+			MuiFormControlLabel: {
+				root: {
+					margin: '0px'
+				},
+				labelPlacementStart: {
+					marginLeft: '0px'
+				}
 			}
 		}
 	});

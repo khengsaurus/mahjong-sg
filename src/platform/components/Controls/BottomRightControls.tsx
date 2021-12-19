@@ -1,5 +1,5 @@
+import { ControlButton } from 'platform/components/Buttons/ControlButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
-import { ControlButton } from 'platform/style/StyledMui';
 import { useContext } from 'react';
 import { AppContext } from 'shared/hooks';
 import './controls.scss';

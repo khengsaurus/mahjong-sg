@@ -7,7 +7,7 @@ const config = {
     '**/__tests__/**getDiscardCategories.test.tsx',
     '**/__tests__/**getDiscardCategories_useHand_deadPair.test.tsx',
     '**/__tests__/**getHandObjectives.test.tsx',
-    '**/__tests__/**getDiscards.test.tsx',
+    '**/__tests__/**getHardDiscard.test.tsx',
   ],
   clearMocks: true,
   collectCoverage: false,

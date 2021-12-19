@@ -1,13 +1,30 @@
 import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import HomeIcon from '@material-ui/icons/Home';
-import SettingsIcon from '@material-ui/icons/Settings';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import EditIcon from '@mui/icons-material/Edit';
+import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { TableText } from 'platform/style/StyledComponents';
 import { useContext } from 'react';
+import { Size } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './controls.scss';
+
+interface IHasFontSize {
+	fontSize: Size;
+}
+interface IControlsButton {
+	Icon: React.FC<IHasFontSize>;
+	onClick: () => void;
+	size: Size;
+}
+
+const ControlsButton = ({ Icon, onClick, size }: IControlsButton) => (
+	<IconButton className="icon-button" onClick={onClick} disableRipple>
+		<Icon fontSize={size} />
+	</IconButton>
+);
 
 const TopLeftControls = ({
 	handleHome,
@@ -16,31 +33,23 @@ const TopLeftControls = ({
 	handleAdmin,
 	showText,
 	isAdmin,
-	texts
+	texts,
+	handleBotExec
 }: ITopLeftControls) => {
-	const { controlsSize } = useContext(AppContext);
+	const { controlsSize: size } = useContext(AppContext);
 
 	return (
-		<div className={`top-left-controls-${controlsSize}`}>
+		<div className={`top-left-controls-${size}`}>
 			<div className="buttons">
-				<IconButton className="icon-button" onClick={handleHome} disableRipple>
-					<HomeIcon fontSize={controlsSize} />
-				</IconButton>
-				<IconButton className="icon-button" onClick={handleSettings} disableRipple>
-					<SettingsIcon fontSize={controlsSize} />
-				</IconButton>
-				<IconButton className="icon-button" onClick={handleScreenText} disableRipple>
-					{showText ? (
-						<VisibilityIcon fontSize={controlsSize} />
-					) : (
-						<VisibilityOffIcon fontSize={controlsSize} />
-					)}
-				</IconButton>
-				{isAdmin && (
-					<IconButton className="icon-button" onClick={handleAdmin} disableRipple>
-						<EditIcon fontSize={controlsSize} />
-					</IconButton>
-				)}
+				<ControlsButton Icon={HomeIcon} onClick={handleHome} size={size} />
+				<ControlsButton Icon={SettingsIcon} onClick={handleSettings} size={size} />
+				<ControlsButton
+					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
+					onClick={handleScreenText}
+					size={size}
+				/>
+				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={size} />}
+				{handleBotExec && <ControlsButton Icon={ArrowForwardIosIcon} onClick={handleBotExec} size={size} />}
 			</div>
 			{showText && (
 				<div className="text-container">

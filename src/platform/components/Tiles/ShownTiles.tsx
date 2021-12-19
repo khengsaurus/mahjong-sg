@@ -39,20 +39,20 @@ const ShownTiles = React.forwardRef<MutableRefObject<any>, IShownTiles>(
 			<div id={segment + '-shown'} className={className} ref={ref}>
 				{nonFlowers.map(tile => (
 					<ShownTile
-						key={tile.i}
-						tileRef={tile.r}
-						tileCard={tile.c}
+						key={tile?.i}
+						tileRef={tile?.r}
+						tileCard={tile?.c}
 						segment={segment}
 						lastRef={lastThrownRef}
 					/>
 				))}
 				{flowers.map(tile => (
 					<ShownTile
-						key={tile.i}
-						tileRef={tile.r}
-						tileCard={tile.c}
+						key={tile?.i}
+						tileRef={tile?.r}
+						tileCard={tile?.c}
 						segment={segment}
-						classSuffix={tile.v ? (tile.s === Suit.ANIMAL ? 'flower animal' : 'hts flower') : ''}
+						classSuffix={tile?.v ? (tile?.s === Suit.ANIMAL ? 'flower animal' : 'hts flower') : ''}
 					/>
 				))}
 				{dealer && <CasinoIcon color="primary" fontSize={tilesSize} />}

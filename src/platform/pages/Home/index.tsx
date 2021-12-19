@@ -1,7 +1,9 @@
+import Fade from '@material-ui/core/Fade';
 import { history } from 'App';
+import { JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
-import { JoinGameButton, StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, Title } from 'platform/style/StyledMui';
 import React, { useContext, useState } from 'react';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -20,7 +22,7 @@ const Home = () => {
 	const markup = () => (
 		<>
 			<Title title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
-			<StyledButton label={'New Game'} navigate={Page.NEWGAME} />
+			<NewGameButton />
 			<JoinGameButton />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			{/* {process.env.REACT_APP_DEV_FLAG === '1' && <StyledButton label={'Sample'} navigate={Page.SAMPLE} />} */}
@@ -28,14 +30,14 @@ const Home = () => {
 			{process.env.REACT_APP_DEV_FLAG === '1' && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			)}
-			{showSettings && (
+			<Fade in={showSettings} timeout={300} unmountOnExit>
 				<SettingsWindow
 					show={showSettings}
 					onClose={() => {
 						setShowSettings(false);
 					}}
 				/>
-			)}
+			</Fade>
 		</>
 	);
 

@@ -1,10 +1,11 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import isEmpty from 'lodash.isempty';
+import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader } from 'platform/components/Loader';
 import { useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
-import { HomeButton, Title } from 'platform/style/StyledMui';
+import { Title } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Offset, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';

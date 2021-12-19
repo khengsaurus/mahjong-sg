@@ -21,8 +21,8 @@ interface IPreference {
 	label: string;
 	size?: Size;
 	selectedColor?: BackgroundColor | TableColor | TileColor;
-	handleSelect: (value: Size | BackgroundColor | TableColor | TileColor) => void;
 	colors?: any[];
+	handleSelect: (value: Size | BackgroundColor | TableColor | TileColor) => void;
 }
 
 const SettingsWindow = ({ onClose, show }: IModalProps) => {

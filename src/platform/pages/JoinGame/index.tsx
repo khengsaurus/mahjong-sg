@@ -6,11 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { history } from 'App';
 import firebase from 'firebase/app';
+import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
 import { Centered } from 'platform/style/StyledComponents';
-import { HomeButton, Title } from 'platform/style/StyledMui';
-import { useContext, useEffect, useState } from 'react';
+import { Title } from 'platform/style/StyledMui';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -44,6 +45,24 @@ const JoinGame = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const handleKeyListeners = useCallback(
+		e => {
+			let n = Number(e.key);
+			if (gameInvites[n]) {
+				handleJoinGame(gameInvites[n]);
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[JSON.stringify(gameInvites?.map(g => g.id))]
+	);
+
+	useEffect(() => {
+		document.addEventListener('keydown', handleKeyListeners);
+		return () => {
+			document.removeEventListener('keydown', handleKeyListeners);
+		};
+	}, [handleKeyListeners]);
+
 	function handleJoinGame(game: Game) {
 		setGameId(game.id);
 		history.push(Page.TABLE);
@@ -51,11 +70,7 @@ const JoinGame = () => {
 
 	const markup = () => (
 		<Centered className="join-game-panel">
-			<Title
-				title={title}
-				variant="h6"
-				padding="5px"
-			/>
+			<Title title={title} variant="h6" padding="5px" />
 			<Collapse in={user && gameInvites?.length > 0} timeout={400}>
 				<List dense className="list">
 					{gameInvites?.map(game => (

@@ -15,11 +15,11 @@ import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModalProps) => {
-	const [tai, setTai] = useState(HH?.maxPx || 0);
+	const [tai, setTai] = useState(Math.min(HH?.maxPx, game.gMaxPx) || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
-		game.declareHu([playerSeat, tai, Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
+		game.declareHu([playerSeat, Math.min(tai, game.gMaxPx), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
 		FBService.updateGame(game);
 		onClose(true);
@@ -82,7 +82,7 @@ const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModal
 						renderManualHuOptions()
 					) : (
 						<Title
-							title={`${HH?.maxPx} 台${HH?.self ? ` 自摸` : ``}`}
+							title={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
 							variant="subtitle1"
 							padding="3px 0px 6px"
 						/>
@@ -91,7 +91,7 @@ const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModal
 						label={`胡`}
 						size="large"
 						onClick={hu}
-						disabled={!tai || game?.hu.length === 3}
+						disabled={!tai || game?.hu.length > 2}
 						style={{ position: 'absolute', bottom: 5, right: 0 }}
 					/>
 				</DialogContent>

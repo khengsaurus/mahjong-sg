@@ -32,7 +32,8 @@ const Controls = () => {
 		declareHuModal,
 		announceHuModal,
 		showBottomControls,
-		showAnnounceHuModal
+		showAnnounceHuModal,
+		handleBotExec
 	} = useControls(handleHome);
 
 	/* ----------------------------------- Markup ----------------------------------- */
@@ -42,7 +43,7 @@ const Controls = () => {
 		player && (
 			<>
 				<TopRightControls {...topRight} />
-				<TopLeftControls {...topLeft} />
+				<TopLeftControls {...topLeft} handleBotExec={handleBotExec} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
 				<Fade in={payModal.show} timeout={300} unmountOnExit>

@@ -25,13 +25,6 @@ interface StyledButtonProps {
 	style?: any;
 }
 
-interface ControlButtonProps {
-	label: string;
-	callback: () => void;
-	disabled?: boolean;
-	style: any;
-}
-
 export const Title = ({ title, color, padding = '10px', variant = 'h6', style = {} }: TitleProps) => {
 	return (
 		<Typography style={{ color, padding, justifySelf: 'center', alignSelf: 'center', ...style }} variant={variant}>
@@ -67,20 +60,4 @@ export const StyledButton = ({
 			{label}
 		</Button>
 	);
-};
-
-export const ControlButton = ({ label, callback, disabled = false, style }: ControlButtonProps) => {
-	return (
-		<Button className="button" variant="text" onClick={callback} disabled={disabled} style={style} disableRipple>
-			{label}
-		</Button>
-	);
-};
-
-export const HomeButton = ({ style = {} }: IHasStyle) => {
-	return <StyledButton label="Home" navigate={Page.INDEX} style={{ ...style }} />;
-};
-
-export const JoinGameButton = ({ style = {} }: IHasStyle) => {
-	return <StyledButton label="Join Game" navigate={Page.JOINGAME} style={{ ...style }} />;
 };
