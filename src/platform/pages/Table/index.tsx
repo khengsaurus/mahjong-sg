@@ -55,7 +55,8 @@ const Table = () => {
 	useEffect(() => {
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
-				let currentGame: Game = objToGame(gameData, false);
+				const currentGame: Game = objToGame(gameData, false);
+				// console.log(JSON.stringify(currentGame));
 				if (!isEmpty(currentGame)) {
 					setStage(currentGame?.st);
 					setDealer(currentGame?.dealer);

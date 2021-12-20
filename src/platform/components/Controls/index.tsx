@@ -32,8 +32,7 @@ const Controls = () => {
 		declareHuModal,
 		announceHuModal,
 		showBottomControls,
-		showAnnounceHuModal,
-		handleBotExec
+		showAnnounceHuModal
 	} = useControls(handleHome);
 
 	const handleKeyListeners = useCallback(
@@ -76,7 +75,7 @@ const Controls = () => {
 		player && (
 			<>
 				<TopRightControls {...topRight} />
-				<TopLeftControls {...topLeft} handleBotExec={handleBotExec} />
+				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
 				<Fade in={payModal.show} timeout={Timeout.FAST} unmountOnExit>

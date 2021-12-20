@@ -87,7 +87,10 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					color: `${textColor}`,
 					'&:hover': {
 						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-					}
+					},
+					// '&:disabled': {
+					// 	color: `${textColor}`
+					// }
 				}
 			},
 			MuiButton: {
@@ -102,7 +105,10 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					'&:hover': {
 						backgroundColor: 'transparent !important',
 						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-					}
+					},
+					// '&:disabled': {
+					// 	color: `${textColor}`
+					// }
 				}
 				// label: {
 				// 	color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`

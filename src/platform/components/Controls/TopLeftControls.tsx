@@ -1,5 +1,4 @@
 import IconButton from '@material-ui/core/IconButton';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import EditIcon from '@mui/icons-material/Edit';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -33,8 +32,7 @@ const TopLeftControls = ({
 	handleAdmin,
 	showText,
 	isAdmin,
-	texts,
-	handleBotExec
+	texts
 }: ITopLeftControls) => {
 	const { controlsSize: size } = useContext(AppContext);
 
@@ -49,7 +47,6 @@ const TopLeftControls = ({
 					size={size}
 				/>
 				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={size} />}
-				{handleBotExec && <ControlsButton Icon={ArrowForwardIosIcon} onClick={handleBotExec} size={size} />}
 			</div>
 			{showText && (
 				<div className="text-container">

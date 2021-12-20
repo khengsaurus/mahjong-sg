@@ -221,6 +221,7 @@ const NewGame = () => {
 					onClick={() => {
 						setShowOptions(prev => !prev);
 					}}
+					disabled={startedGame}
 				/>
 				<Fade in={players.length === 4} timeout={Timeout.FAST}>
 					<div id="start-join-btn">
@@ -256,7 +257,7 @@ const NewGame = () => {
 							</Fragment>
 						))}
 					</List>
-					{renderRandomizeOption()}
+					{!startedGame && renderRandomizeOption()}
 				</div>
 			</div>
 			<Fade in={showOptions} timeout={Timeout.FAST} unmountOnExit>
