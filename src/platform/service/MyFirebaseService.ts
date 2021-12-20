@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { BackgroundColor, FBCollection, Size, TableColor, TileColor } from 'shared/enums';
+import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
 import { ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
@@ -182,9 +182,11 @@ export class FirebaseService {
 		user: User,
 		ps: User[],
 		random?: boolean,
+		gMinPx = 1,
 		gMaxPx = 5,
 		mHu = false,
-		sHs = [ScoringHand.ALL]
+		sHs = [ScoringHand.ALL],
+		pay = PaymentType.SHOOTER
 	): Promise<Game> {
 		let shuffledPlayers: User[];
 		shuffledPlayers = random ? shuffle(ps) : ps;
@@ -192,7 +194,7 @@ export class FirebaseService {
 		let pS: string = '';
 		shuffledPlayers.forEach(player => {
 			es.push(player.email);
-			pS += player.uN + ' ';
+			pS = pS === '' ? player.uN : pS + `, ${player.uN}`;
 		});
 		return new Promise((resolve, reject) => {
 			let crA = new Date();
@@ -227,9 +229,11 @@ export class FirebaseService {
 						draw: false,
 						logs: [],
 						preEnd: {},
+						gMinPx,
 						gMaxPx,
 						mHu,
-						sHs
+						sHs,
+						pay
 					})
 					.then(newGame => {
 						gameId = newGame.id;
@@ -261,9 +265,11 @@ export class FirebaseService {
 							false,
 							[],
 							{},
+							gMinPx,
 							gMaxPx,
 							mHu,
-							sHs
+							sHs,
+							pay
 						);
 						resolve(game);
 					});

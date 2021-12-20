@@ -5,7 +5,7 @@ import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import React, { useContext, useState } from 'react';
-import { Page } from 'shared/enums';
+import { Page, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import './home.scss';
 import HomePage from './HomePage';
@@ -30,7 +30,7 @@ const Home = () => {
 			{process.env.REACT_APP_DEV_FLAG === '1' && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			)}
-			<Fade in={showSettings} timeout={300} unmountOnExit>
+			<Fade in={showSettings} timeout={Timeout.FAST} unmountOnExit>
 				<SettingsWindow
 					show={showSettings}
 					onClose={() => {

@@ -44,6 +44,12 @@ const Table = () => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
 			});
 		}
+
+		return () => {
+			if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
+				ScreenOrientation?.unlock();
+			}
+		};
 	}, []);
 
 	useEffect(() => {

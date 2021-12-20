@@ -1,4 +1,3 @@
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import isEmpty from 'lodash.isempty';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader } from 'platform/components/Loader';
@@ -18,6 +17,7 @@ interface IHomePage {
 	fallbackTitle?: string;
 	skipVerification?: boolean;
 	offset?: string | number;
+	landscapeOnly?: boolean;
 }
 
 // Disabling keyboard offset
@@ -32,32 +32,19 @@ const HomePage = ({
 	const { user } = useContext(AppContext);
 	const { verifyingSession } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
-	// const [marginBottom, setMarginBottom] = useState(0);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
+	// const [marginBottom, setMarginBottom] = useState(0);
 	// const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
-
-	useEffect(() => {
-		if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
-			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
-				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
-			});
-		}
-	}, []);
+	const marginBottom = offset || process.env.REACT_APP_PLATFORM === Platform.MOBILE ? Offset.HOMEPAGE_MOBILE : null;
 
 	// useEffect(() => {
 	// 	if (keyboardAvail) {
 	// 		Keyboard.addListener('keyboardDidShow', info => {
 	// 			setMarginBottom(info?.keyboardHeight - offsetKeyboard);
 	// 		});
-	// 		Keyboard.addListener('keyboardDidHide', () => {
-	// 			setMarginBottom(0);
-	// 		});
+	// 		Keyboard.addListener('keyboardDidHide', () => { setMarginBottom(0); });
 	// 	}
-	// 	return () => {
-	// 		if (keyboardAvail) {
-	// 			Keyboard.removeAllListeners();
-	// 		}
-	// 	};
+	// 	return () => { if (keyboardAvail) { Keyboard.removeAllListeners(); }};
 	// }, [keyboardAvail, offsetKeyboard]);
 
 	const FallbackScreen = useMemo(
@@ -86,16 +73,7 @@ const HomePage = ({
 		<HomeTheme>
 			<Main>
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
-					<Centered
-						style={{
-							marginBottom:
-								offset || process.env.REACT_APP_PLATFORM === Platform.MOBILE
-									? Offset.HOMEPAGE_BOTTOM_MOBILE
-									: Offset.HOMEPAGE_BOTTOM_WEB
-						}}
-					>
-						{markup()}
-					</Centered>
+					<Centered style={{ marginBottom }}>{markup()}</Centered>
 				) : (
 					pendingScreen
 				)}

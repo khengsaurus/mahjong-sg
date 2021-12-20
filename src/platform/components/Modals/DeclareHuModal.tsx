@@ -1,10 +1,8 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import CloseIcon from '@material-ui/icons/Close';
 import CheckBox from 'platform/components/Form';
 import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
@@ -58,18 +56,11 @@ const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModal
 				onClose={() => onClose(false)}
 				PaperProps={{
 					style: {
-						...MuiStyles.small_dialog
+						...MuiStyles.medium_dialog
 					}
 				}}
 			>
 				<DialogContent>
-					<IconButton
-						style={{ position: 'absolute', top: -2, right: -2 }}
-						onClick={() => onClose(false)}
-						disableRipple
-					>
-						<CloseIcon />
-					</IconButton>
 					<Title
 						title={HH?.maxPx === game?.gMaxPx ? `Wow, nice hand!` : `Ready to hu?`}
 						variant="h6"

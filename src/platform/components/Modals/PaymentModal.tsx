@@ -3,10 +3,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import CloseIcon from '@material-ui/icons/Close';
 import FBService from 'platform/service/MyFirebaseService';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
@@ -61,9 +59,6 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 				}}
 			>
 				<DialogContent>
-					<IconButton style={{ position: 'absolute', top: -2, right: -2 }} onClick={onClose} disableRipple>
-						<CloseIcon />
-					</IconButton>
 					<Title title="Send chips" variant="subtitle1" padding="3px 0px" />
 					<Title title="To: " variant="subtitle1" padding="2px 0px" />
 					<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>

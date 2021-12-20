@@ -5,8 +5,8 @@ import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
-import { useCallback } from 'react';
-import { Page } from 'shared/enums';
+import { useCallback, useEffect } from 'react';
+import { Page, Timeout } from 'shared/enums';
 import { useControls } from 'shared/hooks';
 import AdminControls from '../AdminControls';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
@@ -36,6 +36,39 @@ const Controls = () => {
 		handleBotExec
 	} = useControls(handleHome);
 
+	const handleKeyListeners = useCallback(
+		e => {
+			switch (e.key) {
+				case 'a':
+					if (topLeft?.isAdmin) {
+						topLeft?.handleAdmin();
+					}
+					break;
+				case 'q':
+				case 'h':
+					handleHome();
+					break;
+				case 'p':
+					topRight?.handlePay();
+					break;
+				case 'v':
+					topLeft?.handleScreenText();
+					break;
+				default:
+					break;
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[handleHome, topLeft?.handleAdmin, topRight?.handlePay, topLeft?.handleScreenText]
+	);
+
+	useEffect(() => {
+		document.addEventListener('keydown', handleKeyListeners);
+		return () => {
+			document.removeEventListener('keydown', handleKeyListeners);
+		};
+	}, [handleKeyListeners]);
+
 	/* ----------------------------------- Markup ----------------------------------- */
 
 	return (
@@ -46,33 +79,33 @@ const Controls = () => {
 				<TopLeftControls {...topLeft} handleBotExec={handleBotExec} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
-				<Fade in={payModal.show} timeout={300} unmountOnExit>
+				<Fade in={payModal.show} timeout={Timeout.FAST} unmountOnExit>
 					<div>
 						<PaymentModal {...payModal} />
 					</div>
 				</Fade>
-				<Fade in={settingsModal.show} timeout={300} unmountOnExit>
+				<Fade in={settingsModal.show} timeout={Timeout.FAST} unmountOnExit>
 					<div>
 						<SettingsWindow {...settingsModal} />
 					</div>
 				</Fade>
-				<Fade in={declareHuModal.show && isEmpty(game?.hu)} timeout={300} unmountOnExit>
+				<Fade in={declareHuModal.show && isEmpty(game?.hu)} timeout={Timeout.FAST} unmountOnExit>
 					<div>
 						<DeclareHuModal {...declareHuModal} />
 					</div>
 				</Fade>
-				<Fade in={adminControlsModal.show} timeout={300} unmountOnExit>
+				<Fade in={adminControlsModal.show} timeout={Timeout.FAST} unmountOnExit>
 					<div>
 						<AdminControls {...adminControlsModal} />
 					</div>
 				</Fade>
-				<Fade in={showAnnounceHuModal} timeout={300} unmountOnExit>
+				<Fade in={showAnnounceHuModal} timeout={Timeout.FAST} unmountOnExit>
 					<div>
 						<AnnounceHuModal {...announceHuModal} />
 					</div>
 				</Fade>
 				{notif !== '' && (
-					<Fade in timeout={300} unmountOnExit>
+					<Fade in timeout={Timeout.FAST} unmountOnExit>
 						<TableNotif notif={notif} />
 					</Fade>
 				)}

@@ -5,7 +5,7 @@ import { history } from 'App';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Page, Status } from 'shared/enums';
+import { Page, Status, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { FBAuthLogin_EmailPass, FBAuthRegister_EmailPass, FBResolveUser_Email } from 'shared/service/fbUserFns';
 import HomePage from '../Home/HomePage';
@@ -155,7 +155,7 @@ const Login = () => {
 				}}
 				style={{ margin: '5px 0' }}
 			/>
-			<Collapse in={showRegister} timeout={300} unmountOnExit>
+			<Collapse in={showRegister} timeout={Timeout.FAST} unmountOnExit>
 				<TextField
 					key="confirmPassword"
 					label="Confirm password"
@@ -177,7 +177,7 @@ const Login = () => {
 				/>
 				{showRegister ? renderRegisterButton() : renderLoginButton()}
 			</Row>
-			<Collapse in={!!alert} timeout={300} unmountOnExit>
+			<Collapse in={!!alert} timeout={Timeout.FAST} unmountOnExit>
 				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>
 					{showRegister ? alert?.msg : 'Please try again'}
 				</Alert>

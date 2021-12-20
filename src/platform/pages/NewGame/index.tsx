@@ -1,34 +1,45 @@
 import Fade from '@material-ui/core/Fade';
+import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import ClearIcon from '@material-ui/icons/Clear';
 import MoodIcon from '@material-ui/icons/Mood';
-import AddIcon from '@mui/icons-material/Add';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
 import HomePage from 'platform/pages/Home/HomePage';
 import FBService from 'platform/service/MyFirebaseService';
+import { MuiStyles } from 'platform/style/MuiStyles';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useRef, useState } from 'react';
-import { BotIds, BotName, Page, TransitionSpeed } from 'shared/enums';
+import { Page, PaymentType, Timeout, TransitionSpeed } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
+import GameOptions from './GameOptions';
 import './newGame.scss';
 
 const NewGame = () => {
 	const { user, players, setPlayers, setGameId } = useContext(AppContext);
 	// const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
+	const [mHu, setMHu] = useState(false);
+	const [payment, setPayment] = useState(PaymentType.HALF_SHOOTER);
+	const [random, setRandom] = useState(false);
+	const [minTai, setMinTai] = useState(1);
+	const [maxTai, setMaxTai] = useState(5);
+	const [minTaiStr, setMinTaiStr] = useState('1');
+	const [maxTaiStr, setMaxTaiStr] = useState('5');
+	const [showOptions, setShowOptions] = useState(false);
 	const [startedGame, setStartedGame] = useState(false);
-	const [random, setRandom] = useState(true);
 	const playersRef = useRef<User[]>(players);
-	const fadeTimeout = 300;
 
 	// useEffect(() => {
 	// 	const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
@@ -44,7 +55,7 @@ const NewGame = () => {
 	}
 
 	async function startGame() {
-		await FBService.createGame(user, players, random).then(game => {
+		await FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
 			game.prepForNewRound(true);
 			game.initRound();
 			FBService.updateGame(game).then(() => {
@@ -87,16 +98,110 @@ const NewGame = () => {
 		</ListItem>
 	);
 
-	const startButton = () => (
-		<Fade in={players.length === 4} timeout={300}>
-			<div id="start-join-btn">
-				<StyledButton
-					label={startedGame ? 'Join' : 'Start'}
-					onClick={handleStartJoinClick}
-					disabled={players.length < 4}
-				/>
-			</div>
+	const renderManualHu = () => (
+		<ListItem className="user list-item">
+			<ListItemText secondary={`Manual Hu`} />
+			<IconButton
+				onClick={() => {
+					setMHu(!mHu);
+				}}
+				style={{ justifyContent: 'flex-end', marginRight: -12 }}
+				disableRipple
+			>
+				{mHu ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+			</IconButton>
+		</ListItem>
+	);
+
+	const renderPaymentType = () => (
+		<ListItem className="user list-item">
+			<ListItemText secondary={payment === PaymentType.SHOOTER ? `Shooter` : `Half Shooter`} />
+			<IconButton
+				onClick={() => {
+					setPayment(payment === PaymentType.SHOOTER ? PaymentType.HALF_SHOOTER : PaymentType.SHOOTER);
+				}}
+				style={{ justifyContent: 'flex-end', marginRight: -12 }}
+				disableRipple
+			>
+				<SwapHorizIcon />
+			</IconButton>
+		</ListItem>
+	);
+
+	const handleMinTai = (event: React.ChangeEvent<HTMLInputElement>) => {
+		let t = (event.target as HTMLInputElement).value;
+		if (Number(t) < maxTai) {
+			setMinTaiStr(t);
+			setMinTai(Number(t));
+		}
+	};
+
+	const handleMaxTai = (event: React.ChangeEvent<HTMLInputElement>) => {
+		let t = (event.target as HTMLInputElement).value;
+		if (Number(t) > minTai) {
+			setMaxTaiStr(t);
+			setMaxTai(Number(t));
+		}
+	};
+
+	const renderTaiSelect = (label: string, valueStr: string, handleChange: (e) => void) => {
+		const tai = [1, 2, 3, 4, 5].filter(t => (valueStr === minTaiStr ? t < maxTai : t > minTai));
+		return (
+			<ListItem className="user list-item">
+				<ListItemText secondary={label} />
+				<FormControl>
+					{tai.length > 1 ? (
+						<Select
+							style={{ justifyContent: 'flex-end', marginRight: -8 }}
+							value={valueStr}
+							onChange={handleChange}
+							IconComponent={() => null}
+							disableUnderline
+						>
+							{tai.map(t => (
+								<MenuItem
+									key={`${label}-tai-${t}`}
+									style={{ ...MuiStyles.small_dropdown_item }}
+									value={t}
+								>
+									{t}
+								</MenuItem>
+							))}
+						</Select>
+					) : (
+						<IconButton style={{ justifyContent: 'flex-end', marginRight: -5, fontSize: 16 }}>
+							{valueStr}
+						</IconButton>
+					)}
+				</FormControl>
+			</ListItem>
+		);
+	};
+
+	const renderRandomizeOption = () => (
+		<Fade in={players.length === 4} timeout={{ enter: Timeout.SLOW }} unmountOnExit>
+			<ListItem className="user list-item">
+				<ListItemText secondary={`Randomize`} />
+				<IconButton
+					onClick={() => {
+						setRandom(!random);
+					}}
+					style={{ justifyContent: 'flex-end', marginRight: -12 }}
+					disableRipple
+				>
+					{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+				</IconButton>
+			</ListItem>
 		</Fade>
+	);
+
+	const Options = () => (
+		<List className="list">
+			{renderManualHu()}
+			{renderPaymentType()}
+			{renderTaiSelect('Min Tai', minTaiStr, handleMinTai)}
+			{renderTaiSelect('Max Tai', maxTaiStr, handleMaxTai)}
+		</List>
 	);
 
 	const renderBottomButtons = () => (
@@ -111,50 +216,22 @@ const NewGame = () => {
 						transition: TransitionSpeed.MEDIUM
 					}}
 				/>
-				{startButton()}
+				<StyledButton
+					label={'Options'}
+					onClick={() => {
+						setShowOptions(prev => !prev);
+					}}
+				/>
+				<Fade in={players.length === 4} timeout={Timeout.FAST}>
+					<div id="start-join-btn">
+						<StyledButton
+							label={startedGame ? 'Join' : 'Start'}
+							onClick={handleStartJoinClick}
+							disabled={players.length < 4}
+						/>
+					</div>
+				</Fade>
 			</Row>
-		</Fade>
-	);
-
-	const generateBot = () => {
-		const pIds = players.map(p => p.id);
-		const availBots = BotIds.filter(b => !pIds.includes(b));
-		const botIndex = Math.floor(Math.random() * (availBots.length - 0.01));
-		const botId = availBots[botIndex];
-		return new User(botId, BotName[botId] || 'Bot', '', '');
-	};
-
-	const renderAddBotButton = () => (
-		<Fade in={players.length < 4} timeout={{ enter: 2 * fadeTimeout }} unmountOnExit>
-			<ListItem className="user list-item">
-				<ListItemText secondary={`Add bot`} />
-				<IconButton
-					onClick={() => {
-						setPlayers([...players, generateBot()]);
-					}}
-					style={{ justifyContent: 'flex-end', marginRight: -12 }}
-					disableRipple
-				>
-					<AddIcon />
-				</IconButton>
-			</ListItem>
-		</Fade>
-	);
-
-	const renderRandomizeOption = () => (
-		<Fade in={players.length === 4} timeout={{ enter: 2 * fadeTimeout }} unmountOnExit>
-			<ListItem className="user list-item">
-				<ListItemText secondary={`Randomize?`} />
-				<IconButton
-					onClick={() => {
-						setRandom(!random);
-					}}
-					style={{ justifyContent: 'flex-end', marginRight: -12 }}
-					disableRipple
-				>
-					{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-				</IconButton>
-			</ListItem>
 		</Fade>
 	);
 
@@ -165,7 +242,6 @@ const NewGame = () => {
 				<div className="panel-segment">
 					<UserSearchForm />
 				</div>
-				{/* <VerticalDivider /> */}
 				<div className="panel-segment padding-top">
 					<List className="list">
 						{players.map((player, index) => (
@@ -173,17 +249,25 @@ const NewGame = () => {
 								{playersRef.current?.find(p => p?.uN === player?.uN) ? (
 									renderUserOption(player)
 								) : (
-									<Fade in timeout={fadeTimeout}>
+									<Fade in timeout={Timeout.FAST}>
 										{renderUserOption(player)}
 									</Fade>
 								)}
 							</Fragment>
 						))}
-						{renderAddBotButton()}
-						{renderRandomizeOption()}
 					</List>
+					{renderRandomizeOption()}
 				</div>
 			</div>
+			<Fade in={showOptions} timeout={Timeout.FAST} unmountOnExit>
+				<GameOptions
+					show={showOptions}
+					onClose={() => {
+						setShowOptions(false);
+					}}
+					Content={Options}
+				/>
+			</Fade>
 			{renderBottomButtons()}
 		</>
 	);

@@ -33,21 +33,21 @@ const PaymentModalInline = (props: IPaymentModalInline) => {
 			<Title variant="subtitle1" title={`Send chips:`} padding="2px" />
 			<FormControl>
 				<Select
-					style={{ ...MuiStyles.dropdown_select }}
+					style={{ ...MuiStyles.small_dropdown_select, marginLeft: '5px' }}
 					value={amountStr}
 					onChange={handleSelectAmount}
 					label="Chips"
 					IconComponent={() => null}
 				>
 					{Amounts.map(amount => (
-						<MenuItem key={`amount-${amount}`} style={{ ...MuiStyles.dropdown_item }} value={amount}>
+						<MenuItem key={`amount-${amount}`} style={{ ...MuiStyles.small_dropdown_item }} value={amount}>
 							{amount}
 						</MenuItem>
 					))}
 				</Select>
 			</FormControl>
 			<IconButton
-				style={{ marginLeft: '10px' }}
+				style={{ marginLeft: '5px' }}
 				onClick={() => {
 					sendChips(game, playerSeat, winner, amount, () => {
 						setAmountStr('');

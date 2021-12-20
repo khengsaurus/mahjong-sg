@@ -1,4 +1,6 @@
 import { StyledButton } from 'platform/style/StyledMui';
+import sample_user3_hu from 'shared/__mock__/sample_user3_hu.json';
+import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
 
 interface IDevControls {
 	set: (obj?: any) => void;
@@ -11,7 +13,8 @@ interface IGameStateOption {
 
 const Scenarios = ({ set }: IDevControls) => {
 	const gameStateOptions: IGameStateOption[] = [
-		// { label: 'Multi user hu', obj: multi_user_hu },
+		{ label: 'User3 Hu', obj: sample_user3_hu },
+		{ label: 'Multi Hu', obj: sample_multi_hu }
 	];
 
 	return (

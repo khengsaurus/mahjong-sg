@@ -223,6 +223,10 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					paddingRight: '12px !important',
 					'&:focus': {
 						backgroundColor: 'transparent !important'
+					},
+					'&:hover': {
+						backgroundColor: 'transparent !important',
+						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 					}
 				}
 			},
@@ -244,10 +248,15 @@ export const MuiStyles = {
 		minWidth: '385px',
 		maxHeight: '340px'
 	},
-	small_dialog: {
+	medium_dialog: {
 		minHeight: '120px',
 		minWidth: '240px',
 		maxWidth: '360px'
+	},
+	small_dialog: {
+		minHeight: '80px',
+		minWidth: '200px',
+		maxWidth: '320px'
 	},
 	topRight5: {
 		position: 'absolute',
@@ -293,12 +302,12 @@ export const MuiStyles = {
 		fontSize: 26,
 		fontWeight: 800
 	},
-	dropdown_select: {
-		width: '50px',
+	small_dropdown_select: {
+		width: '52px',
 		maxHeight: '28px'
 	},
-	dropdown_item: {
-		width: '50px',
+	small_dropdown_item: {
+		width: '52px',
 		height: '20px',
 		minHeight: '20px',
 		maxHeight: '20px',

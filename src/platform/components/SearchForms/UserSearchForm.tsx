@@ -1,4 +1,5 @@
 import Collapse from '@material-ui/core/Collapse';
+import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import List from '@material-ui/core/List';
@@ -9,13 +10,15 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
+import AddIcon from '@mui/icons-material/Add';
+import FBService from 'platform/service/MyFirebaseService';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
+import { BotIds, BotName, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import FBService from 'platform/service/MyFirebaseService';
-import './searchForms.scss';
 import { ITheme } from 'shared/typesPlus';
+import './searchForms.scss';
 
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);
@@ -63,6 +66,31 @@ const UserSearchForm: React.FC = () => {
 		setShowOptions(false);
 	}
 
+	const generateBot = () => {
+		const pIds = players.map(p => p.id);
+		const availBots = BotIds.filter(b => !pIds.includes(b));
+		const botIndex = Math.floor(Math.random() * (availBots.length - 0.01));
+		const botId = availBots[botIndex];
+		return new User(botId, BotName[botId] || 'Bot', '', '');
+	};
+
+	const renderAddBotButton = () => (
+		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Timeout.SLOW }} unmountOnExit>
+			<ListItem className="user list-item" style={{ marginTop: '10px !important' }}>
+				<ListItemText secondary={`Add bot`} />
+				<IconButton
+					onClick={() => {
+						setPlayers([...players, generateBot()]);
+					}}
+					style={{ justifyContent: 'flex-end', marginRight: -12 }}
+					disableRipple
+				>
+					<AddIcon />
+				</IconButton>
+			</ListItem>
+		</Fade>
+	);
+
 	const useStyles = makeStyles((theme: ITheme) =>
 		createStyles({
 			text: {
@@ -84,7 +112,7 @@ const UserSearchForm: React.FC = () => {
 			<List>
 				<ListItem className="search-box list-item">
 					<TextField
-						label={players.length < 4 ? 'Find user' : 'Players selected'}
+						label={players.length < 4 ? 'Find user' : 'Players chosen'}
 						onChange={e => {
 							handleFormChange(e.target.value);
 						}}
@@ -123,7 +151,7 @@ const UserSearchForm: React.FC = () => {
 				<Collapse
 					in={showOptions && foundUsers.length > 0}
 					className="search-box list-item"
-					timeout={300}
+					timeout={Timeout.FAST}
 					unmountOnExit
 				>
 					{foundUsers.map(foundUser =>
@@ -152,6 +180,7 @@ const UserSearchForm: React.FC = () => {
 					)}
 				</Collapse>
 			</List>
+			{renderAddBotButton()}
 		</Centered>
 	);
 };

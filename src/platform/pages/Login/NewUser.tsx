@@ -7,7 +7,7 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
-import { Page, Status } from 'shared/enums';
+import { Page, Status, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { FBDeleteCurrentFBUser, FBNewUser_EmailUser, FBResolveUser_Email } from 'shared/service/fbUserFns';
@@ -77,7 +77,7 @@ const NewUser = () => {
 						}}
 					/>
 				</Row>
-				<Collapse in={!!alert} timeout={300} unmountOnExit>
+				<Collapse in={!!alert} timeout={Timeout.FAST} unmountOnExit>
 					<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
 				</Collapse>
 			</Main>

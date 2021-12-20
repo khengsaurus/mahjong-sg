@@ -35,7 +35,7 @@ const AnnounceHuModal = ({
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
 				style: {
-					...MuiStyles.small_dialog
+					...MuiStyles.medium_dialog
 				}
 			}}
 		>
