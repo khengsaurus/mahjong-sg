@@ -34,7 +34,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = Number(lTa?.r) ? (lTa?.x === 0 ? revealTile(lTa, tileHashKey) : lTa) : null;
+		let revLTT: IShownTile = Number(lTa?.r) ? (!!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="htss">
 				{hTs.map((tile: IHiddenTile) => {

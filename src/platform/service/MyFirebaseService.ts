@@ -5,7 +5,7 @@ import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
-import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
+import { gameToObj, playerToObj, shuffle } from 'shared/util';
 
 export class FirebaseService {
 	private user: firebase.User;
@@ -198,7 +198,6 @@ export class FirebaseService {
 		});
 		return new Promise((resolve, reject) => {
 			let cA = new Date();
-			let delayed = addSecondsToDate(cA, -10);
 			let gameId = '';
 			try {
 				this.gameRef
@@ -209,7 +208,7 @@ export class FirebaseService {
 						es,
 						on: true,
 						up: cA,
-						dF: delayed,
+						dF: null,
 						st: 1,
 						pr: 0,
 						dealer: 0,
@@ -243,7 +242,7 @@ export class FirebaseService {
 							es,
 							true,
 							cA,
-							delayed,
+							null,
 							1,
 							0,
 							0,
