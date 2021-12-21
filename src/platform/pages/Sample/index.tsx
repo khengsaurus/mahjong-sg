@@ -29,8 +29,8 @@ const Sample = () => {
 	const { execute, status, value, error } = useAsync(asynFn, false);
 	const [wanTile, setWanTile] = useLocalStorage<IShownTile>('randomWanTile', null);
 	const [size, setSize] = useLocalStorage<Size>('testSize', Size.MEDIUM);
-	const [dFr, setDelayFrom] = useState<Date>(null);
-	const { delayOn, delayLeft } = useCountdown(dFr, 6);
+	const [dF, setDelayFrom] = useState<Date>(null);
+	const { delayOn, delayLeft } = useCountdown(dF, 6);
 	const { verifyingSession } = useLocalSession();
 	const showHooks = false;
 	const showSizes = false;

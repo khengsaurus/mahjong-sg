@@ -56,11 +56,11 @@ const Table = () => {
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				const currentGame: Game = objToGame(gameData, false);
-				const { st = 0, dealer = 0, fr = [0, 0], ps = [] } = currentGame;
+				const { st = 0, _d = 0, fr = [0, 0], ps = [] } = currentGame;
 				// console.log(JSON.stringify(currentGame));
 				if (!isEmpty(currentGame)) {
 					setStage(st);
-					setDealer(dealer);
+					setDealer(_d);
 					setFront(fr[0]);
 					setBack(fr[1]);
 					let player: User;
@@ -131,7 +131,7 @@ const Table = () => {
 										hasBack={back === TopPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.tBy === TopPlayerIndex || game.wM === TopPlayerIndex ? game.lTh : null
+											game.thB === TopPlayerIndex || game.wM === TopPlayerIndex ? game.lTh : null
 										}
 									/>
 								)}
@@ -145,7 +145,7 @@ const Table = () => {
 										hasBack={back === RightPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.tBy === RightPlayerIndex || game.wM === RightPlayerIndex
+											game.thB === RightPlayerIndex || game.wM === RightPlayerIndex
 												? game.lTh
 												: null
 										}
@@ -160,7 +160,7 @@ const Table = () => {
 										hasFront={front === BottomPlayerIndex}
 										hasBack={back === BottomPlayerIndex}
 										lastThrown={
-											game.tBy === BottomPlayerIndex || game.wM === BottomPlayerIndex
+											game.thB === BottomPlayerIndex || game.wM === BottomPlayerIndex
 												? game.lTh
 												: null
 										}
@@ -176,7 +176,7 @@ const Table = () => {
 										hasBack={back === LeftPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.tBy === LeftPlayerIndex || game.wM === LeftPlayerIndex
+											game.thB === LeftPlayerIndex || game.wM === LeftPlayerIndex
 												? game.lTh
 												: null
 										}

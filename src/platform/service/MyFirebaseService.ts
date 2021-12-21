@@ -143,7 +143,7 @@ export class FirebaseService {
 				this.gameRef
 					.where('es', 'array-contains', user.email)
 					.where('on', '==', true)
-					// .orderBy('crA', 'desc')
+					// .orderBy('cA', 'desc')
 					.limit(5)
 					.get()
 			);
@@ -158,7 +158,7 @@ export class FirebaseService {
 				this.gameRef
 					.where('es', 'array-contains', user.email)
 					.where('on', '==', true)
-					// .orderBy('crA', 'desc')
+					// .orderBy('cA', 'desc')
 					// .limit(5)
 					.onSnapshot(observer)
 			);
@@ -197,21 +197,21 @@ export class FirebaseService {
 			pS = pS === '' ? player.uN : pS + `, ${player.uN}`;
 		});
 		return new Promise((resolve, reject) => {
-			let crA = new Date();
-			let delayed = addSecondsToDate(crA, -10);
+			let cA = new Date();
+			let delayed = addSecondsToDate(cA, -10);
 			let gameId = '';
 			try {
 				this.gameRef
 					.add({
-						cro: user.uN,
-						crA,
+						cO: user.uN,
+						cA,
 						pS,
 						es,
 						on: true,
-						up: crA,
-						dFr: delayed,
+						up: cA,
+						dF: delayed,
 						st: 1,
-						prev: 0,
+						pr: 0,
 						dealer: 0,
 						mid: false,
 						fN: false,
@@ -219,15 +219,15 @@ export class FirebaseService {
 						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
 						fr: [0, 0],
+						th: false,
+						thB: 0,
 						lastT: {},
-						tBy: 0,
-						thrown: false,
-						taken: true,
-						takenB: 0,
+						ta: true,
+						taB: 0,
 						hu: [],
 						draw: false,
 						logs: [],
-						preEnd: {},
+						prE: {},
 						px: [gMinPx, gMaxPx],
 						mHu,
 						sHs,
@@ -238,11 +238,11 @@ export class FirebaseService {
 						const game: Game = new Game(
 							gameId,
 							user.uN,
-							crA,
+							cA,
 							pS,
 							es,
 							true,
-							crA,
+							cA,
 							delayed,
 							1,
 							0,
@@ -253,9 +253,9 @@ export class FirebaseService {
 							shuffledPlayers,
 							[],
 							[],
-							{},
-							0,
 							false,
+							0,
+							{},
 							true,
 							0,
 							[],

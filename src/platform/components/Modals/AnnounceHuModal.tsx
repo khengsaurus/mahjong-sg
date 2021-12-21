@@ -21,11 +21,11 @@ const AnnounceHuModal = ({
 	nextRound,
 	showNextRound
 }: IAnnounceHuModalProps) => {
-	const { hu = [], tBy = 0, draw = false, on = true, dealer = 0 } = game || {};
+	const { hu = [], thB = 0, draw = false, on = true, _d = 0 } = game || {};
 
 	const canHuFirst = useMemo((): boolean => {
 		const whoHu = Number(hu[0]);
-		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, tBy) && !!HH?.maxPx;
+		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, thB) && !!HH?.maxPx;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [playerSeat, hu[0] || 0, game?.mHu, HH?.maxPx]);
 
@@ -55,7 +55,7 @@ const AnnounceHuModal = ({
 				) : (
 					<Centered>
 						{draw && <Title title={`Draw!`} variant="h6" />}
-						{(!on || dealer === 10) && <Title title={`The game has ended!`} variant="h6" />}
+						{(!on || _d === 9) && <Title title={`The game has ended!`} variant="h6" />}
 					</Centered>
 				)}
 			</DialogContent>

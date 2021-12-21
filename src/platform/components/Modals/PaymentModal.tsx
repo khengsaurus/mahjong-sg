@@ -96,7 +96,7 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 							onClick={() => {
 								sendChips(game, playerSeat, recipientIndex, amount, sendCallback);
 							}}
-							disabled={recipientIndex === 10 || !amount || amount <= 0}
+							disabled={recipientIndex === 9 || !amount || amount <= 0}
 							disableRipple
 						>
 							{`Send`}

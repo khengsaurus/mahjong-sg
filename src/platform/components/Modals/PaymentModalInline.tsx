@@ -20,7 +20,7 @@ const PaymentModalInline = (props: IPaymentModalInline) => {
 	const { game, playerSeat } = props;
 	const winner = game.hu[0];
 	const [amountStr, setAmountStr] = useState<string>('');
-	const [amount, setAmount] = useState<number>(2 ** game.hu[1] * (game.tBy === playerSeat ? 2 : 1) || 0);
+	const [amount, setAmount] = useState<number>(2 ** game.hu[1] * (game.thB === playerSeat ? 2 : 1) || 0);
 
 	const handleSelectAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
 		let selectedAmountStr = (event.target as HTMLInputElement).value;

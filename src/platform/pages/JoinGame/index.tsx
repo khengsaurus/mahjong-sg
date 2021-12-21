@@ -82,7 +82,7 @@ const JoinGame = () => {
 							disableRipple
 						>
 							<ListItemText
-								primary={<Typography variant="body2">{formatDate(game.crA)}</Typography>}
+								primary={<Typography variant="body2">{formatDate(game.cA)}</Typography>}
 								secondary={<Typography variant="body2">{game.pS}</Typography>}
 							/>
 							<ArrowForwardIcon />
