@@ -103,11 +103,12 @@ const Controls = () => {
 						<AnnounceHuModal {...announceHuModal} />
 					</div>
 				</Fade>
-				{notif !== '' && (
-					<Fade in timeout={Timeout.FAST} unmountOnExit>
-						<TableNotif notif={notif} />
-					</Fade>
-				)}
+				{/* <Fade in={Number(notif?.timeout) > 0} timeout={Timeout.FAST} unmountOnExit> */}
+				<Fade in timeout={Timeout.FAST} unmountOnExit>
+					<div>
+						<TableNotif {...notif} />
+					</div>
+				</Fade>
 			</>
 		)
 	);

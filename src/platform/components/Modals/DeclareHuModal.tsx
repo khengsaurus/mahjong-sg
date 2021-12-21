@@ -13,12 +13,13 @@ import { HandPoint } from 'shared/handEnums';
 import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModalProps) => {
+const DeclareHuModal = ({ show, game, playerSeat, HH, onClose, callback }: IDeclareHuModalProps) => {
 	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
 	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
+		callback();
 		game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
 		FBService.updateGame(game);

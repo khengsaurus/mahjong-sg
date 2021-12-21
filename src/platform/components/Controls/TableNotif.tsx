@@ -1,24 +1,44 @@
-import Fade from '@material-ui/core/Fade';
-import { Notification, TableText } from 'platform/style/StyledComponents';
-import { useContext } from 'react';
-import { Timeout } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import { MuiStyles } from 'platform/style/MuiStyles';
+import { Centered } from 'platform/style/StyledComponents';
+import { StyledButton, Title } from 'platform/style/StyledMui';
+import { ITableNotif } from 'shared/typesPlus';
 
-interface ITableNotif {
-	notif: string;
-}
-
-const TableNotif = ({ notif }: ITableNotif) => {
-	const { mainTextColor } = useContext(AppContext);
-
+const TableNotif = ({ msg, timeout, pong, kang, hu }: ITableNotif) => {
 	return (
-		<Fade in timeout={Timeout.FAST}>
-			<Notification className="notif">
-				<TableText className="text" style={{ color: mainTextColor }}>
-					{notif}
-				</TableText>
-			</Notification>
-		</Fade>
+		<div>
+			<Dialog
+				open={timeout > 0}
+				BackdropProps={{ invisible: true }}
+				PaperProps={{
+					style: {
+						...MuiStyles.small_dialog
+					}
+				}}
+			>
+				<DialogContent style={{ paddingBottom: 0 }}>
+					<Centered>
+						<Title title={msg} variant="subtitle1" padding="3px 0px" />
+						<Title title={`${timeout}`} variant="subtitle1" padding="0px" />
+					</Centered>
+				</DialogContent>
+				<DialogActions
+					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						padding: '0px 8px',
+						minHeight: '14px'
+					}}
+				>
+					{hu && <StyledButton label={'Hu'} onClick={hu} />}
+					{kang && <StyledButton label={'Kang'} onClick={kang} />}
+					{pong && <StyledButton label={'Pong'} onClick={pong} />}
+				</DialogActions>
+			</Dialog>
+		</div>
 	);
 };
 
