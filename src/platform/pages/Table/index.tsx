@@ -56,40 +56,41 @@ const Table = () => {
 		const unsubscribe = FBService.listenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				const currentGame: Game = objToGame(gameData, false);
+				const { st = 0, dealer = 0, fr = [0, 0], ps = [] } = currentGame;
 				// console.log(JSON.stringify(currentGame));
 				if (!isEmpty(currentGame)) {
-					setStage(currentGame?.st);
-					setDealer(currentGame?.dealer);
-					setFront(currentGame?.front);
-					setBack(currentGame?.back);
+					setStage(st);
+					setDealer(dealer);
+					setFront(fr[0]);
+					setBack(fr[1]);
 					let player: User;
 					switch (user.uN) {
-						case currentGame?.ps[0]?.uN:
-							player = currentGame?.ps[0];
+						case ps[0]?.uN:
+							player = ps[0];
 							setBottomPlayerIndex(0);
 							setPlayerSeat(0);
 							setLeftPlayerIndex(3);
 							setTopPlayerIndex(2);
 							setRightPlayerIndex(1);
 							break;
-						case currentGame?.ps[1]?.uN:
-							player = currentGame?.ps[1];
+						case ps[1]?.uN:
+							player = ps[1];
 							setBottomPlayerIndex(1);
 							setPlayerSeat(1);
 							setLeftPlayerIndex(0);
 							setTopPlayerIndex(3);
 							setRightPlayerIndex(2);
 							break;
-						case currentGame?.ps[2]?.uN:
-							player = currentGame?.ps[2];
+						case ps[2]?.uN:
+							player = ps[2];
 							setBottomPlayerIndex(2);
 							setPlayerSeat(2);
 							setLeftPlayerIndex(1);
 							setTopPlayerIndex(0);
 							setRightPlayerIndex(3);
 							break;
-						case currentGame?.ps[3]?.uN:
-							player = currentGame?.ps[3];
+						case ps[3]?.uN:
+							player = ps[3];
 							setBottomPlayerIndex(3);
 							setPlayerSeat(3);
 							setLeftPlayerIndex(2);
