@@ -9,15 +9,17 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
+import { HandPoint } from 'shared/handEnums';
 import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModalProps) => {
-	const [tai, setTai] = useState(Math.min(HH?.maxPx, game.gMaxPx) || 0);
+	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
+	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
-		game.declareHu([playerSeat, Math.min(tai, game.gMaxPx), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
+		game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
 		FBService.updateGame(game);
 		onClose(true);
@@ -32,7 +34,7 @@ const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModal
 			<FormRow>
 				<Title title="台: " variant="subtitle1" padding="0px 15px 0px 0px" />
 				<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
-					{generateNumberArray(game?.gMaxPx || 5).map((tai: number) => (
+					{generateNumberArray(px[1] || 5).map((tai: number) => (
 						<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
 					))}
 				</RadioGroup>
@@ -62,7 +64,7 @@ const DeclareHuModal = ({ show, game, playerSeat, onClose, HH }: IDeclareHuModal
 			>
 				<DialogContent>
 					<Title
-						title={HH?.maxPx === game?.gMaxPx ? `Wow, nice hand!` : `Ready to hu?`}
+						title={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
 						variant="h6"
 						padding="3px 0px"
 					/>

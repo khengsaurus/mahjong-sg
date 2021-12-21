@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
-import { ScoringHand } from 'shared/handEnums';
+import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { addSecondsToDate, gameToObj, playerToObj, shuffle } from 'shared/util';
@@ -182,8 +182,8 @@ export class FirebaseService {
 		user: User,
 		ps: User[],
 		random?: boolean,
-		gMinPx = 1,
-		gMaxPx = 5,
+		gMinPx = HandPoint.MIN,
+		gMaxPx = HandPoint.MAX,
 		mHu = false,
 		sHs = [ScoringHand.ALL],
 		pay = PaymentType.SHOOTER
@@ -229,8 +229,7 @@ export class FirebaseService {
 						draw: false,
 						logs: [],
 						preEnd: {},
-						gMinPx,
-						gMaxPx,
+						px: [gMinPx, gMaxPx],
 						mHu,
 						sHs,
 						pay
@@ -265,8 +264,7 @@ export class FirebaseService {
 							false,
 							[],
 							{},
-							gMinPx,
-							gMaxPx,
+							[gMinPx, gMaxPx],
 							mHu,
 							sHs,
 							pay
