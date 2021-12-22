@@ -5,7 +5,8 @@ import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
-import { gameToObj, playerToObj, shuffle } from 'shared/util';
+import { shuffle } from 'shared/util';
+import { gameToObj, playerToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
 	private user: firebase.User;
@@ -22,6 +23,7 @@ export class FirebaseService {
 			this.userRepr = this.db.collection(FBCollection.USERREPR);
 			this.gameRef = this.db.collection(FBCollection.GAMES);
 			this.auth.onAuthStateChanged(user => {
+				console.info(user ? 'Firebase user signed in 😊' : 'No Firebase user 🥲');
 				this.user = user;
 			});
 		});
@@ -33,6 +35,7 @@ export class FirebaseService {
 		} else {
 			this.app = firebase.app();
 		}
+		console.info('Firebase App initialized 🔥');
 	}
 
 	userAuthenticated() {
@@ -68,6 +71,7 @@ export class FirebaseService {
 	}
 
 	authLogout() {
+		this.user = null;
 		this.auth.signOut();
 	}
 

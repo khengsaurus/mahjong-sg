@@ -17,7 +17,8 @@ import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { setGame, setPlayer } from 'shared/store/actions';
-import { formatDate, objToGame } from 'shared/util';
+import { formatDate } from 'shared/util';
+import { objToGame } from 'shared/util/parsers';
 import './joinGame.scss';
 
 const JoinGame = () => {

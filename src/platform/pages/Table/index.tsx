@@ -21,7 +21,7 @@ import { AppContext } from 'shared/hooks';
 import { Game, User } from 'shared/models';
 import { setGame, setPlayer } from 'shared/store/actions';
 import { IStore } from 'shared/typesPlus';
-import { objToGame } from 'shared/util';
+import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {

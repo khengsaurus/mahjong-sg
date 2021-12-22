@@ -1,6 +1,6 @@
 import FBService from 'platform/service/MyFirebaseService';
 import { Game, User } from 'shared/models';
-import { objToUser } from 'shared/util';
+import { objToUser } from 'shared/util/parsers';
 
 export function FBAuthenticated() {
 	return FBService.userAuthenticated();

@@ -19,7 +19,8 @@ function useLocalObj<T>(
 			try {
 				resolve(localObj ? parser(localObj, key) : null);
 			} catch (err) {
-				reject(new Error(`Token not found for key '${storageKey}': ` + err.msg));
+				console.error(`Token not found for key '${storageKey}': 🥞`);
+				console.error(err);
 			}
 		});
 	}, [localObj, parser, storageKey]);
@@ -35,7 +36,7 @@ function useLocalObj<T>(
 				for (var i = 0; i < cookies.length; i++) {
 					var cookie = cookies[i];
 					var eqPos = cookie.indexOf('=');
-					var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+					var name = eqPos > -1 ? cookie.slice(0, eqPos) : cookie;
 					document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
 				}
 				setLocalObj(null);

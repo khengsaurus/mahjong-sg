@@ -10,7 +10,7 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { IModalProps } from 'shared/typesPlus';
-import { objToGame } from 'shared/util';
+import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
 import sample_user1_close_hu from 'shared/__mock__/sample_user1_close_hu.json';
 import sample_user2_pong_then_kang from 'shared/__mock__/sample_user2_pong_then_kang.json';
