@@ -16,7 +16,7 @@ import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
 import HomePage from 'platform/pages/Home/HomePage';
-import FBService from 'platform/service/MyFirebaseService';
+import { FBInitGame } from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
@@ -55,13 +55,11 @@ const NewGame = () => {
 	}
 
 	async function startGame() {
-		await FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
-			game.prepForNewRound(true);
-			game.initRound();
-			FBService.updateGame(game).then(() => {
+		await FBInitGame(user, players, random, minTai, maxTai, mHu).then(game => {
+			if (game) {
 				setGameId(game.id);
-			});
-			setStartedGame(true);
+				setStartedGame(true);
+			}
 		});
 	}
 

@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import isEqual from 'lodash.isequal';
-import FBService from 'platform/service/MyFirebaseService';
+import { FBUpdateGame } from 'platform/service/ServiceLayer';
 import { TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
@@ -46,7 +46,7 @@ const AdminControls = ({ game, show, onClose }: IModalProps) => {
 	const [manualHu, setManualHu] = useState<boolean>(game?.mHu || false);
 
 	const setFirebaseDoc = useCallback((obj: any) => {
-		FBService.updateGame(objToGame(obj));
+		FBUpdateGame(objToGame(obj));
 	}, []);
 
 	const closeAndUpdate = useCallback(() => {

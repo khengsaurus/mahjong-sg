@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import { history } from 'App';
 import 'App.scss';
+import { FBDeleteCurrentFBUser, FBNewUser_EmailUser, FBResolveUser_Email } from 'platform/service/ServiceLayer';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
@@ -10,7 +11,6 @@ import { useContext, useState } from 'react';
 import { Page, Status, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import { FBDeleteCurrentFBUser, FBNewUser_EmailUser, FBResolveUser_Email } from 'shared/service/fbUserFns';
 
 const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);

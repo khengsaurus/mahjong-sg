@@ -8,7 +8,7 @@ import { history } from 'App';
 import firebase from 'firebase/app';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
-import FBService from 'platform/service/MyFirebaseService';
+import { FBListenInvites } from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ const JoinGame = () => {
 		dispatch(setGame(null));
 		dispatch(setPlayer(null));
 
-		const unsubscribe = FBService.listenInvitesSnapshot(user, {
+		const unsubscribe = FBListenInvites(user, {
 			next: (snapshot: any) => {
 				let games: Game[] = [];
 				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {

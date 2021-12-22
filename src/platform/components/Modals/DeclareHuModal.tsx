@@ -4,7 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CheckBox from 'platform/components/Form';
-import FBService from 'platform/service/MyFirebaseService';
+import { FBUpdateGame } from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
@@ -22,7 +22,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, onClose, callback }: IDecl
 		callback();
 		game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
-		FBService.updateGame(game);
+		FBUpdateGame(game);
 		onClose(true);
 	}
 
