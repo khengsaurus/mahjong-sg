@@ -1,17 +1,17 @@
 import Fade from '@material-ui/core/Fade';
 import { history } from 'App';
 import isEmpty from 'lodash.isempty';
+import AdminControls from 'platform/components/Modals/AdminControls';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
+import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useCallback, useEffect } from 'react';
 import { Page, Timeout } from 'shared/enums';
 import { useControls } from 'shared/hooks';
-import AdminControls from '../AdminControls';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
-import TableNotif from './TableNotif';
 
 const Controls = () => {
 	const handleHome = useCallback(() => {

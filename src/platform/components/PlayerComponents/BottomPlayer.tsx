@@ -34,11 +34,11 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const shownHiddenHand = useMemo(() => {
-		let revLTT: IShownTile = Number(lTa?.r) ? (!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
+		const revLTT: IShownTile = Number(lTa?.r) ? (!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
 		return (
 			<div className="htss">
 				{hTs.map((tile: IHiddenTile) => {
-					let revC = getCardFromHashId(tile.i, tileHashKey);
+					const revC = getCardFromHashId(tile.i, tileHashKey);
 					return <ShownTile key={tile.i} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
 				})}
 				{revLTT && (
@@ -57,12 +57,12 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	}, [lTa?.r, lTa?.x, tileHashKey, htsRefs]);
 
 	const renderHiddenHand = () => {
-		let selectedTilesRef = selectedTiles.map(tile => tile.r);
-		let revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
+		const selectedTilesRef = selectedTiles.map(tile => tile.r);
+		const revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
 		return (
 			<div className={`self-hidden-tiles-${handSize || Size.MEDIUM}`}>
 				{hTs.map((tile: IHiddenTile) => {
-					let revealedTile = revealTile(tile, tileHashKey);
+					const revealedTile = revealTile(tile, tileHashKey);
 					return (
 						<HandTile
 							key={revealedTile.i}
