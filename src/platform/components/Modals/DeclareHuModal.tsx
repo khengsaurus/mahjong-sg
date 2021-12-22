@@ -4,7 +4,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CheckBox from 'platform/components/Form';
-import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
@@ -13,7 +12,7 @@ import { HandPoint } from 'shared/handEnums';
 import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumberArray, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ show, game, playerSeat, HH, onClose, callback }: IDeclareHuModalProps) => {
+const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose, callback }: IDeclareHuModalProps) => {
 	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
 	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
@@ -22,7 +21,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, onClose, callback }: IDecl
 		callback();
 		game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
 		game.endRound();
-		ServiceInstance.updateGame(game);
+		updateGame(game);
 		onClose(true);
 	}
 

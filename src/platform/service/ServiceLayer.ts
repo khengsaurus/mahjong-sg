@@ -1,15 +1,14 @@
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
 import { Game, User } from 'shared/models';
-import store from 'shared/store';
-import { ActionTypes } from 'shared/store/actions';
-import { IStore } from 'shared/typesPlus';
+import { store } from 'shared/store';
+import { setLocalGame } from 'shared/store/actions';
+import { createLocalGame } from 'shared/util';
 import { objToUser } from 'shared/util/parsers';
 
 export class Service {
 	private fbService: FirebaseService = FBService;
-	private reduxStore: Store<IStore, ActionTypes>;
-	private localGameFlag: boolean;
+	private store: Store;
 
 	constructor() {
 		this.init();
@@ -22,10 +21,7 @@ export class Service {
 			this.fbService = FBService;
 			console.info('Initializing service instance 🍦');
 		}
-		this.reduxStore = store;
-		this.reduxStore.subscribe(() => {
-			this.localGameFlag = store.getState().localGameFlag;
-		});
+		this.store = store;
 	}
 
 	FBAuthenticated() {
@@ -111,25 +107,37 @@ export class Service {
 		return FBService.listenInvitesSnapshot(user, observer);
 	}
 
-	FBInitGame(
+	initGame(
 		user: User,
 		players: User[],
 		random: boolean,
 		minTai: number,
 		maxTai: number,
-		mHu: boolean
+		mHu: boolean,
+		isLocalGame = false
 	): Promise<Game> {
 		return new Promise(resolve => {
 			try {
-				FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
-					game.prepForNewRound(true);
-					game.initRound();
-					this.updateGame(game).then(() => {
+				if (isLocalGame) {
+					createLocalGame(user, players, random, minTai, maxTai, mHu).then(game => {
+						game.prepForNewRound(true);
+						game.initRound();
+						this.store.dispatch(setLocalGame(game));
 						resolve(game);
 					});
-				});
+				} else {
+					FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
+						game.prepForNewRound(true);
+						game.initRound();
+						return FBService.updateGame(game);
+					});
+				}
 			} catch (err) {
-				console.error(`ServiceLayer failed to execute FBService.createGame -> FBService.updateGame: 🥞`);
+				console.error(
+					`ServiceLayer failed to ${
+						isLocalGame ? `create a local game` : `execute FBService.createGame -> FBService.updateGame`
+					}: 🥞`
+				);
 				console.error(err);
 				resolve(null);
 			}
@@ -137,12 +145,14 @@ export class Service {
 	}
 
 	FBListenToGame(id: string, observer: any) {
-		return FBService.listenToGame(id, observer);
+		if (id !== 'local') {
+			return FBService.listenToGame(id, observer);
+		}
 	}
 
-	updateGame(game: Game): Promise<Game> {
-		if (this.localGameFlag) {
-			// TODO:
+	updateGame(game: Game, isLocalGame = false): Promise<Game> {
+		if (isLocalGame) {
+			this.store.dispatch(setLocalGame(game));
 		} else {
 			return FBService.updateGame(game);
 		}

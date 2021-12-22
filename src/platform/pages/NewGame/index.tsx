@@ -28,8 +28,7 @@ import GameOptions from './GameOptions';
 import './newGame.scss';
 
 const NewGame = () => {
-	const { user, players, setPlayers, setGameId } = useContext(AppContext);
-	// const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
+	const { user, players, setPlayers, setGameId, isLocalGame } = useContext(AppContext);
 	const [mHu, setMHu] = useState(false);
 	const [payment, setPayment] = useState(PaymentType.HALF_SHOOTER);
 	const [random, setRandom] = useState(false);
@@ -41,11 +40,6 @@ const NewGame = () => {
 	const [startedGame, setStartedGame] = useState(false);
 	const playersRef = useRef<User[]>(players);
 
-	// useEffect(() => {
-	// 	const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
-	// 	setOffsetKeyboard(buttonsHeight);
-	// }, []);
-
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
 			return player.uN !== userToRemove.uN;
@@ -55,7 +49,7 @@ const NewGame = () => {
 	}
 
 	async function startGame() {
-		await ServiceInstance.FBInitGame(user, players, random, minTai, maxTai, mHu).then(game => {
+		await ServiceInstance.initGame(user, players, random, minTai, maxTai, mHu, isLocalGame).then(game => {
 			if (game) {
 				setGameId(game.id);
 				setStartedGame(true);
@@ -66,7 +60,6 @@ const NewGame = () => {
 	function handleStartJoinClick() {
 		if (startedGame) {
 			history.push(Page.TABLE);
-			setPlayers([user]);
 		} else {
 			startGame();
 		}
@@ -271,7 +264,7 @@ const NewGame = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} />; // offsetKeyboard={offsetKeyboard + 18}
+	return <HomePage markup={markup} />;
 };
 
 export default NewGame;

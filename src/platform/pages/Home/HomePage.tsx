@@ -5,9 +5,11 @@ import { useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Offset, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
+import { setGame, setLocalGame, setPlayer } from 'shared/store/actions';
 import './home.scss';
 
 interface IHomePage {
@@ -20,7 +22,6 @@ interface IHomePage {
 	landscapeOnly?: boolean;
 }
 
-// Disabling keyboard offset
 const HomePage = ({
 	markup,
 	ready = true,
@@ -29,45 +30,39 @@ const HomePage = ({
 	skipVerification = false,
 	offset = 0
 }: IHomePage) => {
-	const { user } = useContext(AppContext);
+	const { user, setPlayers, setGameId } = useContext(AppContext);
 	const { verifyingSession } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
-	// const [marginBottom, setMarginBottom] = useState(0);
-	// const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
 	const marginBottom = offset || process.env.REACT_APP_PLATFORM === Platform.MOBILE ? Offset.HOMEPAGE_MOBILE : null;
+	const dispatch = useDispatch();
 
-	// useEffect(() => {
-	// 	if (keyboardAvail) {
-	// 		Keyboard.addListener('keyboardDidShow', info => {
-	// 			setMarginBottom(info?.keyboardHeight - offsetKeyboard);
-	// 		});
-	// 		Keyboard.addListener('keyboardDidHide', () => { setMarginBottom(0); });
-	// 	}
-	// 	return () => { if (keyboardAvail) { Keyboard.removeAllListeners(); }};
-	// }, [keyboardAvail, offsetKeyboard]);
-
-	const FallbackScreen = useMemo(
-		() => (
-			<Centered>
-				<Title title={fallbackTitle} variant="subtitle1" />
-				<HomeButton />
-			</Centered>
-		),
-		[fallbackTitle]
-	);
+	// Reset store/AppContext on leaving game since Table useEffect cleanup is used for subscription...
+	useEffect(() => {
+		setPlayers([user]);
+		setGameId('');
+		dispatch(setPlayer(null));
+		dispatch(setGame(null));
+		dispatch(setLocalGame(null));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, setGameId, setPlayers, user?.id]);
 
 	useEffect(() => {
 		if (!ready) {
 			timeoutRef.current = setTimeout(() => {
-				setPendingScreen(FallbackScreen);
+				setPendingScreen(
+					<Centered>
+						<Title title={fallbackTitle} variant="subtitle1" />
+						<HomeButton />
+					</Centered>
+				);
 			}, timeout);
 		}
 
 		return () => {
 			clearTimeout(timeoutRef.current);
 		};
-	}, [ready, FallbackScreen, timeout]);
+	}, [ready, fallbackTitle, timeout]);
 
 	return (
 		<HomeTheme>

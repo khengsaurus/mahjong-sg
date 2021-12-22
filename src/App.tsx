@@ -8,8 +8,10 @@ import Table from 'platform/pages/Table';
 import { Styled } from 'platform/style/StyledComponents';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from 'shared/store';
 import { AppContextProvider } from 'shared/hooks';
-import store from 'shared/store';
+
 import './App.scss';
 
 export const history = createBrowserHistory();
@@ -17,22 +19,24 @@ export const history = createBrowserHistory();
 function App() {
 	return (
 		<Provider store={store}>
-			<AppContextProvider>
-				<Router history={history}>
-					<Styled>
-						<Switch>
-							<Route exact path="/" component={Home} />
-							<Route exact path="/Home" component={Home} />
-							<Route exact path="/Login" component={Login} />
-							<Route exact path="/NewUser" component={NewUser} />
-							<Route exact path="/NewGame" component={NewGame} />
-							<Route exact path="/JoinGame" component={JoinGame} />
-							<Route exact path="/Table" component={Table} />
-							{/* <Route exact path="/Sample" component={Sample} /> */}
-						</Switch>
-					</Styled>
-				</Router>
-			</AppContextProvider>
+			<PersistGate loading={null} persistor={persistor}>
+				<AppContextProvider>
+					<Router history={history}>
+						<Styled>
+							<Switch>
+								<Route exact path="/" component={Home} />
+								<Route exact path="/Home" component={Home} />
+								<Route exact path="/Login" component={Login} />
+								<Route exact path="/NewUser" component={NewUser} />
+								<Route exact path="/NewGame" component={NewGame} />
+								<Route exact path="/JoinGame" component={JoinGame} />
+								<Route exact path="/Table" component={Table} />
+								{/* <Route exact path="/Sample" component={Sample} /> */}
+							</Switch>
+						</Styled>
+					</Router>
+				</AppContextProvider>
+			</PersistGate>
 		</Provider>
 	);
 }

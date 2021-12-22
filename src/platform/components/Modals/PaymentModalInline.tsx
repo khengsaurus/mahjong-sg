@@ -14,10 +14,10 @@ import { sendChips } from './PaymentModal';
 interface IPaymentModalInline {
 	game: Game;
 	playerSeat: number;
+	updateGame: (game: Game) => void;
 }
 
-const PaymentModalInline = (props: IPaymentModalInline) => {
-	const { game, playerSeat } = props;
+const PaymentModalInline = ({ game, playerSeat, updateGame }: IPaymentModalInline) => {
 	const winner = game.hu[0];
 	const [amountStr, setAmountStr] = useState<string>('');
 	const [amount, setAmount] = useState<number>(2 ** game.hu[1] * (game.thB === playerSeat ? 2 : 1) || 0);
@@ -49,7 +49,7 @@ const PaymentModalInline = (props: IPaymentModalInline) => {
 			<IconButton
 				style={{ marginLeft: '5px' }}
 				onClick={() => {
-					sendChips(game, playerSeat, winner, amount, () => {
+					sendChips(game, playerSeat, winner, amount, updateGame, () => {
 						setAmountStr('');
 					});
 				}}

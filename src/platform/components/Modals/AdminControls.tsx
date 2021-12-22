@@ -4,7 +4,6 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import isEqual from 'lodash.isequal';
-import ServiceInstance from 'platform/service/ServiceLayer';
 import { TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
@@ -42,12 +41,15 @@ const Scenarios = ({ set }: IDevControls) => {
 	);
 };
 
-const AdminControls = ({ game, show, onClose }: IModalProps) => {
+const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 	const [manualHu, setManualHu] = useState<boolean>(game?.mHu || false);
 
-	const setFirebaseDoc = useCallback((obj: any) => {
-		ServiceInstance.updateGame(objToGame(obj));
-	}, []);
+	const setFirebaseDoc = useCallback(
+		(obj: any) => {
+			updateGame(objToGame(obj));
+		},
+		[updateGame]
+	);
 
 	const closeAndUpdate = useCallback(() => {
 		const updatedGame = { ...game, mHu: manualHu };

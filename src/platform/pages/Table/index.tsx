@@ -26,8 +26,8 @@ import './table.scss';
 
 const Table = () => {
 	const { verifyingSession } = useLocalSession();
-	const { user, gameId, tilesSize, setStage, setPlayerSeat } = useContext(AppContext);
-	const game: Game = useSelector((state: IStore) => state.game);
+	const { user, gameId, isLocalGame, tilesSize, setStage, setPlayers, setPlayerSeat } = useContext(AppContext);
+	const { game, localGame } = useSelector((state: IStore) => state);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
@@ -52,71 +52,83 @@ const Table = () => {
 		};
 	}, []);
 
+	function hydrateGame(game: Game) {
+		// console.log(JSON.stringify(game));
+		const { st = 0, _d = 0, fr = [0, 0], ps = [] } = game;
+		setStage(st);
+		setDealer(_d);
+		setPlayers(ps);
+		setFront(fr[0]);
+		setBack(fr[1]);
+		let player: User;
+		switch (user.uN) {
+			case ps[0]?.uN:
+				player = ps[0];
+				setBottomPlayerIndex(0);
+				setPlayerSeat(0);
+				setLeftPlayerIndex(3);
+				setTopPlayerIndex(2);
+				setRightPlayerIndex(1);
+				break;
+			case ps[1]?.uN:
+				player = ps[1];
+				setBottomPlayerIndex(1);
+				setPlayerSeat(1);
+				setLeftPlayerIndex(0);
+				setTopPlayerIndex(3);
+				setRightPlayerIndex(2);
+				break;
+			case ps[2]?.uN:
+				player = ps[2];
+				setBottomPlayerIndex(2);
+				setPlayerSeat(2);
+				setLeftPlayerIndex(1);
+				setTopPlayerIndex(0);
+				setRightPlayerIndex(3);
+				break;
+			case ps[3]?.uN:
+				player = ps[3];
+				setBottomPlayerIndex(3);
+				setPlayerSeat(3);
+				setLeftPlayerIndex(2);
+				setTopPlayerIndex(1);
+				setRightPlayerIndex(0);
+				break;
+			default:
+				break;
+		}
+		dispatch(setPlayer(player));
+	}
+
+	function handleLocalGame() {
+		if (!isEmpty(localGame)) {
+			hydrateGame(localGame);
+		}
+	}
+
 	useEffect(() => {
-		const unsubscribe = ServiceInstance.FBListenToGame(gameId, {
+		const handleOnlineGame = ServiceInstance.FBListenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				const currentGame: Game = objToGame(gameData, false);
-				const { st = 0, _d = 0, fr = [0, 0], ps = [] } = currentGame;
-				// console.log(JSON.stringify(currentGame));
 				if (!isEmpty(currentGame)) {
-					setStage(st);
-					setDealer(_d);
-					setFront(fr[0]);
-					setBack(fr[1]);
-					let player: User;
-					switch (user.uN) {
-						case ps[0]?.uN:
-							player = ps[0];
-							setBottomPlayerIndex(0);
-							setPlayerSeat(0);
-							setLeftPlayerIndex(3);
-							setTopPlayerIndex(2);
-							setRightPlayerIndex(1);
-							break;
-						case ps[1]?.uN:
-							player = ps[1];
-							setBottomPlayerIndex(1);
-							setPlayerSeat(1);
-							setLeftPlayerIndex(0);
-							setTopPlayerIndex(3);
-							setRightPlayerIndex(2);
-							break;
-						case ps[2]?.uN:
-							player = ps[2];
-							setBottomPlayerIndex(2);
-							setPlayerSeat(2);
-							setLeftPlayerIndex(1);
-							setTopPlayerIndex(0);
-							setRightPlayerIndex(3);
-							break;
-						case ps[3]?.uN:
-							player = ps[3];
-							setBottomPlayerIndex(3);
-							setPlayerSeat(3);
-							setLeftPlayerIndex(2);
-							setTopPlayerIndex(1);
-							setRightPlayerIndex(0);
-							break;
-						default:
-							break;
-					}
-					dispatch(setPlayer(player));
+					hydrateGame(currentGame);
 					dispatch(setGame(currentGame));
 				}
 			}
 		});
 
-		return unsubscribe;
+		return gameId === 'local' || isLocalGame ? handleLocalGame() : handleOnlineGame;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [gameId, isLocalGame]);
 
 	const getMarkup = () => {
-		if (game && game.st !== 0) {
-			let currentWind = game.repr()[0];
-			let topPlayer = game.ps[TopPlayerIndex];
-			let rightPlayer = game.ps[RightPlayerIndex];
-			let bottomPlayer = game.ps[BottomPlayerIndex];
-			let leftPlayer = game.ps[LeftPlayerIndex];
+		const currGame = isLocalGame ? localGame : game;
+		if (currGame && currGame?.st !== 0) {
+			let currentWind = currGame?.repr()[0];
+			let topPlayer = currGame?.ps[TopPlayerIndex];
+			let rightPlayer = currGame?.ps[RightPlayerIndex];
+			let bottomPlayer = currGame?.ps[BottomPlayerIndex];
+			let leftPlayer = currGame?.ps[LeftPlayerIndex];
 			return (
 				<TableTheme>
 					<Main>
@@ -131,7 +143,9 @@ const Table = () => {
 										hasBack={back === TopPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.thB === TopPlayerIndex || game.wM === TopPlayerIndex ? game.lTh : null
+											currGame.thB === TopPlayerIndex || currGame?.wM === TopPlayerIndex
+												? currGame?.lTh
+												: null
 										}
 									/>
 								)}
@@ -145,8 +159,8 @@ const Table = () => {
 										hasBack={back === RightPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.thB === RightPlayerIndex || game.wM === RightPlayerIndex
-												? game.lTh
+											currGame.thB === RightPlayerIndex || currGame?.wM === RightPlayerIndex
+												? currGame?.lTh
 												: null
 										}
 									/>
@@ -160,8 +174,8 @@ const Table = () => {
 										hasFront={front === BottomPlayerIndex}
 										hasBack={back === BottomPlayerIndex}
 										lastThrown={
-											game.thB === BottomPlayerIndex || game.wM === BottomPlayerIndex
-												? game.lTh
+											currGame.thB === BottomPlayerIndex || currGame?.wM === BottomPlayerIndex
+												? currGame?.lTh
 												: null
 										}
 									/>
@@ -176,8 +190,8 @@ const Table = () => {
 										hasBack={back === LeftPlayerIndex}
 										tilesSize={tilesSize}
 										lastThrown={
-											game.thB === LeftPlayerIndex || game.wM === LeftPlayerIndex
-												? game.lTh
+											currGame.thB === LeftPlayerIndex || currGame.wM === LeftPlayerIndex
+												? currGame.lTh
 												: null
 										}
 									/>
@@ -202,7 +216,7 @@ const Table = () => {
 	};
 
 	const getPending = () => {
-		if (!game) {
+		if (isLocalGame ? !localGame : !game) {
 			setTimeout(function () {
 				setPendingScreen(
 					<Centered>
@@ -216,7 +230,7 @@ const Table = () => {
 		return pendingScreen;
 	};
 
-	return game && verifyingSession !== Status.PENDING ? (
+	return (isLocalGame ? localGame : game) && verifyingSession !== Status.PENDING ? (
 		getMarkup()
 	) : (
 		<HomeTheme>

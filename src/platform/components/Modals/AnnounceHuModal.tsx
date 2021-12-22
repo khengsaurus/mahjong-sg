@@ -19,7 +19,8 @@ const AnnounceHuModal = ({
 	HH,
 	huFirst,
 	nextRound,
-	showNextRound
+	showNextRound,
+	updateGame
 }: IAnnounceHuModalProps) => {
 	const { hu = [], thB = 0, draw = false, on = true, _d = 0 } = game || {};
 
@@ -50,7 +51,9 @@ const AnnounceHuModal = ({
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
 							return <Title title={getHandDesc(p)} variant="subtitle2" padding="2px" key={ix} />;
 						})}
-						{hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
+						{hu[0] !== playerSeat && (
+							<PaymentModalInline game={game} playerSeat={playerSeat} updateGame={updateGame} />
+						)}
 					</>
 				) : (
 					<Centered>

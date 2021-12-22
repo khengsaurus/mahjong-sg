@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
@@ -19,19 +18,21 @@ export async function sendChips(
 	sender: number,
 	recipient: number,
 	amount: number,
+	updateGame: (game: Game) => void,
 	sendCallback?: () => void
 ) {
 	game.ps[sender].bal = Math.round(game.ps[sender].bal - amount);
 	game.ps[recipient].bal = Math.round(game.ps[recipient].bal + amount);
 	game.newLog(`${game.ps[sender].uN} sent ${game.ps[recipient].uN} ${amount} chips`);
-	ServiceInstance.updateGame(game);
+	updateGame(game);
 	sendCallback && sendCallback();
 }
 
-const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
+const PaymentModal = ({ game, playerSeat, show, updateGame, onClose }: IModalProps) => {
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
-	let playerUsername = game.ps[playerSeat].uN;
+	const playerUsername = game.ps[playerSeat].uN;
+
 	function sendCallback() {
 		setRecipientIndex(10);
 		setAmount(0);
@@ -94,7 +95,7 @@ const PaymentModal = ({ game, playerSeat, show, onClose }: IModalProps) => {
 							variant="text"
 							size="large"
 							onClick={() => {
-								sendChips(game, playerSeat, recipientIndex, amount, sendCallback);
+								sendChips(game, playerSeat, recipientIndex, amount, updateGame, sendCallback);
 							}}
 							disabled={recipientIndex === 9 || !amount || amount <= 0}
 							disableRipple
