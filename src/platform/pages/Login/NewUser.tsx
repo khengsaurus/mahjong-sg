@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import { history } from 'App';
 import 'App.scss';
-import { FBDeleteCurrentFBUser, FBNewUser_EmailUser, FBResolveUser_Email } from 'platform/service/ServiceLayer';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
@@ -18,13 +18,13 @@ const NewUser = () => {
 
 	function handleCancel() {
 		setAlert(null);
-		FBDeleteCurrentFBUser();
+		ServiceInstance.FBDeleteCurrentFBUser();
 		logout();
 		history.push(Page.LOGIN);
 	}
 
 	function handleSubmit(values: IEmailUser, callback: () => void) {
-		FBNewUser_EmailUser(values)
+		ServiceInstance.FBNewUsername(values)
 			.then(res => {
 				if (res) {
 					setAlert({ status: Status.SUCCESS, msg: 'Registered successfully' });
@@ -37,7 +37,7 @@ const NewUser = () => {
 	}
 
 	function successCallback() {
-		FBResolveUser_Email(userEmail)
+		ServiceInstance.FBResolveUser(userEmail)
 			.then((user: User) => {
 				login(user, true);
 				setTimeout(function () {

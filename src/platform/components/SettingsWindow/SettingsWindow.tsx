@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import { extend, isEqual } from 'lodash';
-import { FBUpdateUser } from 'platform/service/ServiceLayer';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useRef } from 'react';
@@ -83,7 +83,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 				tC: tableColor,
 				tBC: tileBackColor
 			};
-			FBUpdateUser(user.id, keyVal)
+			ServiceInstance.FBUpdateUser(user.id, keyVal)
 				.then(res => {
 					if (res) {
 						let updatedUser = extend(user, keyVal);

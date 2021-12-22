@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { FBUpdateGame } from 'platform/service/ServiceLayer';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
@@ -24,7 +24,7 @@ export async function sendChips(
 	game.ps[sender].bal = Math.round(game.ps[sender].bal - amount);
 	game.ps[recipient].bal = Math.round(game.ps[recipient].bal + amount);
 	game.newLog(`${game.ps[sender].uN} sent ${game.ps[recipient].uN} ${amount} chips`);
-	FBUpdateGame(game);
+	ServiceInstance.updateGame(game);
 	sendCallback && sendCallback();
 }
 

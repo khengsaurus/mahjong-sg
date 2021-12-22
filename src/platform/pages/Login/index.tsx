@@ -2,7 +2,7 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import { history } from 'App';
-import { FBAuthLogin_EmailPass, FBAuthRegister_EmailPass, FBResolveUser_Email } from 'platform/service/ServiceLayer';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -46,11 +46,11 @@ const Login = () => {
 	const handleLogin = useCallback(
 		(values: IEmailPass, callback?: () => void) => {
 			setReady(false);
-			FBAuthLogin_EmailPass(values)
+			ServiceInstance.FBAuthLogin(values)
 				.then(email => {
 					if (email === values.email) {
 						setUserEmail(email);
-						FBResolveUser_Email(email)
+						ServiceInstance.FBResolveUser(email)
 							.then(user => {
 								setReady(true);
 								setAlert(null);
@@ -82,7 +82,7 @@ const Login = () => {
 		(values: IEmailPass, callback?: () => void) => {
 			if (values.password === confirmPassword) {
 				setReady(false);
-				FBAuthRegister_EmailPass(values)
+				ServiceInstance.FBAuthRegister(values)
 					.then(res => {
 						if (res) {
 							setReady(true);

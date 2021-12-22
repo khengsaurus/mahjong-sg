@@ -10,7 +10,7 @@ import LeftPlayer from 'platform/components/PlayerComponents/LeftPlayer';
 import RightPlayer from 'platform/components/PlayerComponents/RightPlayer';
 import TopPlayer from 'platform/components/PlayerComponents/TopPlayer';
 import { useLocalSession } from 'platform/hooks';
-import { FBListenToGame } from 'platform/service/ServiceLayer';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { HomeTheme, TableTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
@@ -53,7 +53,7 @@ const Table = () => {
 	}, []);
 
 	useEffect(() => {
-		const unsubscribe = FBListenToGame(gameId, {
+		const unsubscribe = ServiceInstance.FBListenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				const currentGame: Game = objToGame(gameData, false);
 				const { st = 0, _d = 0, fr = [0, 0], ps = [] } = currentGame;

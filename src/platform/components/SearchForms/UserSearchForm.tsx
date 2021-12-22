@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FaceIcon from '@material-ui/icons/Face';
 import AddIcon from '@mui/icons-material/Add';
-import { FBSearchUser } from 'platform/service/ServiceLayer';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
 import { BotIds, BotName, Timeout } from 'shared/enums';
@@ -28,7 +28,7 @@ const UserSearchForm: React.FC = () => {
 
 	async function searchForUser(uN: string) {
 		let foundUsers: Array<User> = [];
-		await FBSearchUser(uN, user.uN).then(data => {
+		await ServiceInstance.FBSearchUser(uN, user.uN).then(data => {
 			if (!data.empty) {
 				data.docs.forEach(doc => {
 					let data = doc.data();
