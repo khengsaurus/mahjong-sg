@@ -1271,7 +1271,7 @@
   dependencies:
     "tslib" "^2.1.0"
 
-"@capacitor/haptics@1.0.3":
+"@capacitor/haptics@^1.0.3":
   "integrity" "sha512-RPV8kd4bY7sdmssXMkrg9v0HrjJZoCkbVk5ygbTByM+Yxl/1qqQUkEnBzCsA48tJHQz4ddTMjtpBEblS+GWUsw=="
   "resolved" "https://registry.npmjs.org/@capacitor/haptics/-/haptics-1.0.3.tgz"
   "version" "1.0.3"

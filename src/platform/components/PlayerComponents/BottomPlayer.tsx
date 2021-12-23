@@ -6,7 +6,7 @@ import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
-import { getCardFromHashId, revealTile } from 'shared/util';
+import { getCardFromHashId, revealTile, triggerHaptic } from 'shared/util';
 import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentProps) => {
@@ -30,6 +30,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	const selectTile = useCallback(
 		tile => {
+			triggerHaptic();
 			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
 				setSelectedTiles([...selectedTiles, tile]);
 			} else {
