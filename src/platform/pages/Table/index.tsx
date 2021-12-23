@@ -16,7 +16,7 @@ import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents'
 import { Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Platform, Status } from 'shared/enums';
+import { LocalFlag, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { IStore, setGame } from 'shared/store';
@@ -106,7 +106,7 @@ const Table = () => {
 			}
 		});
 
-		return user?.uN ? (gameId === 'local' || isLocalGame ? handleLocalGame() : handleOnlineGame) : null;
+		return user?.uN ? (gameId === LocalFlag || isLocalGame ? handleLocalGame() : handleOnlineGame) : null;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gameId, isLocalGame, user?.uN]);
 

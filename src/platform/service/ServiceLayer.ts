@@ -1,5 +1,6 @@
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
+import { LocalFlag } from 'shared/enums';
 import { Game, User } from 'shared/models';
 import { setLocalGame, store } from 'shared/store';
 import { createLocalGame } from 'shared/util';
@@ -146,7 +147,7 @@ export class Service {
 	}
 
 	FBListenToGame(id: string, observer: any) {
-		if (id !== 'local') {
+		if (id !== LocalFlag) {
 			return FBService.listenToGame(id, observer);
 		}
 	}

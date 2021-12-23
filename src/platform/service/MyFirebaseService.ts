@@ -331,7 +331,7 @@ export class FirebaseService {
 
 	listenToGame(gameId: string, observer: any) {
 		if (gameId) {
-			return this.gameRef.doc(gameId).onSnapshot(observer);
+			return this.gameRef.doc(gameId as string).onSnapshot(observer);
 		}
 	}
 }

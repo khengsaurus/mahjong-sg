@@ -1,6 +1,6 @@
 import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HandTile, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
@@ -24,6 +24,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		ms,
 		toRotate: false
 	});
+	const selectedTilesRef = selectedTiles.map(tile => tile.r);
 
 	const selectTile = useCallback(
 		tile => {
@@ -36,58 +37,63 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		[selectedTiles, setSelectedTiles]
 	);
 
-	const shownHiddenHand = useMemo(() => {
-		const revLTT: IShownTile = Number(lTa?.r) ? (!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
-		return (
-			<div className="htss">
-				{hTs.map((tile: IHiddenTile) => {
-					const revC = getCardFromHashId(tile.i, tileHashKey);
-					return <ShownTile key={tile.i} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
-				})}
-				{revLTT && (
-					<ShownTile
-						key={revLTT.i}
-						tileRef={revLTT.r}
-						tileCard={revLTT.c}
-						segment={Segment.BOTTOM}
-						highlight
-						classSuffix="margin-left"
-					/>
-				)}
-			</div>
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [lTa?.r, lTa?.x, tileHashKey, player?.handIds().toString() as string]);
-
-	const renderHiddenHand = () => {
-		const selectedTilesRef = selectedTiles.map(tile => tile.r);
-		const revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
-		return (
-			<div className={`self-hidden-tiles-${handSize || Size.MEDIUM}`}>
-				{hTs.map((tile: IHiddenTile) => {
-					const revealedTile = revealTile(tile, tileHashKey);
-					return (
-						<HandTile
-							key={revealedTile.i}
-							card={revealedTile.c}
-							selected={selectedTilesRef.includes(revealedTile.r)}
-							last={false}
-							callback={() => selectTile(revealedTile)}
+	const shownHiddenHand = useCallback(
+		(hTs: IHiddenTile[], lTa: IShownTile | IHiddenTile) => {
+			const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
+			return (
+				<div className="htss">
+					{hTs.map((tile: IHiddenTile) => {
+						const revC = getCardFromHashId(tile.i, tileHashKey);
+						return <ShownTile key={tile.i} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
+					})}
+					{revLTT && (
+						<ShownTile
+							key={revLTT.i}
+							tileRef={revLTT.r}
+							tileCard={revLTT.c}
+							segment={Segment.BOTTOM}
+							highlight
+							classSuffix="margin-left"
 						/>
-					);
-				})}
-				{revLTT && (
-					<HandTile
-						key={revLTT.i}
-						card={revLTT.c}
-						selected={selectedTilesRef.includes(revLTT.r)}
-						last={true}
-						callback={() => selectTile(revLTT)}
-					/>
-				)}
-			</div>
-		);
-	};
+					)}
+				</div>
+			);
+		},
+		[tileHashKey]
+	);
+
+	const hiddenHand = useCallback(
+		(hTs: IHiddenTile[], lTa: IHiddenTile) => {
+			const revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
+			return (
+				<div className={`self-hidden-tiles-${handSize || Size.MEDIUM}`}>
+					{hTs.map((tile: IHiddenTile) => {
+						const revealedTile = revealTile(tile, tileHashKey);
+						return (
+							<HandTile
+								key={revealedTile.i}
+								card={revealedTile.c}
+								selected={selectedTilesRef.includes(revealedTile.r)}
+								last={false}
+								callback={() => selectTile(revealedTile)}
+							/>
+						);
+					})}
+					{revLTT && (
+						<HandTile
+							key={revLTT.i}
+							card={revLTT.c}
+							selected={selectedTilesRef.includes(revLTT.r)}
+							last={true}
+							callback={() => selectTile(revLTT)}
+						/>
+					)}
+				</div>
+			);
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[JSON.stringify(selectedTilesRef), handSize, tileHashKey]
+	);
 
 	const renderShownTiles = () => (
 		<ShownTiles
@@ -116,7 +122,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM} bottom`}>
-			{sT ? shownHiddenHand : renderHiddenHand()}
+			{sT ? shownHiddenHand(hTs, lTa) : hiddenHand(hTs, lTa)}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.BOTTOM} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}
