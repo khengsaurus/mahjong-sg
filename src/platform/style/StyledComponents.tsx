@@ -13,6 +13,7 @@ export const Styled = (props: any) => {
 		tableTextColor,
 		mainTextColor
 	};
+
 	return <ThemeProvider theme={colorTheme} {...props} />;
 };
 

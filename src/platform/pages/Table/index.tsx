@@ -112,12 +112,12 @@ const Table = () => {
 
 	const getMarkup = () => {
 		const currGame = isLocalGame ? localGame : game;
-		if (!isEmpty(currGame) && currGame?.st !== 0) {
-			let currentWind = currGame?.repr()[0];
-			let topPlayer = currGame?.ps[TopPlayerIndex];
-			let rightPlayer = currGame?.ps[RightPlayerIndex];
-			let bottomPlayer = currGame?.ps[playerSeat];
-			let leftPlayer = currGame?.ps[LeftPlayerIndex];
+		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {
+			const currentWind = currGame?.repr()[0];
+			const topPlayer = currGame?.ps[TopPlayerIndex];
+			const rightPlayer = currGame?.ps[RightPlayerIndex];
+			const bottomPlayer = currGame?.ps[playerSeat];
+			const leftPlayer = currGame?.ps[LeftPlayerIndex];
 			return (
 				<TableTheme>
 					<Main>
