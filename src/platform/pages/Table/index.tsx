@@ -25,8 +25,8 @@ import './table.scss';
 
 const Table = () => {
 	const { verifyingSession } = useLocalSession();
-	const { user, setCurrGame, isLocalGame, setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
-	const { gameId, game, localGame, sizes } = useSelector((state: IStore) => state);
+	const { setCurrGame, isLocalGame, setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
+	const { user, gameId, game, localGame, sizes } = useSelector((state: IStore) => state);
 	const { tileSize } = sizes;
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
@@ -106,7 +106,7 @@ const Table = () => {
 			}
 		});
 
-		return user?.uN ? (gameId === LocalFlag || isLocalGame ? handleLocalGame() : handleOnlineGame) : null;
+		return gameId === LocalFlag || isLocalGame ? handleLocalGame() : handleOnlineGame;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gameId, isLocalGame, user?.uN]);
 

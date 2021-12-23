@@ -15,13 +15,16 @@ import {
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { BotIds, BotName, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
+import { IStore } from 'shared/store';
 import './searchForms.scss';
 
 const UserSearchForm: React.FC = () => {
-	const { user, players, setPlayers } = useContext(AppContext);
+	const { user } = useSelector((state: IStore) => state);
+	const { players, setPlayers } = useContext(AppContext);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');

@@ -6,10 +6,10 @@ import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Offset, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { setGame, setGameId, setLocalGame } from 'shared/store';
+import { IStore, setGame, setGameId, setLocalGame } from 'shared/store';
 import './home.scss';
 
 interface IHomePage {
@@ -30,7 +30,8 @@ const HomePage = ({
 	skipVerification = false,
 	offset = 0
 }: IHomePage) => {
-	const { user, setPlayers } = useContext(AppContext);
+	const { user } = useSelector((state: IStore) => state);
+	const { setPlayers } = useContext(AppContext);
 	const { verifyingSession } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);

@@ -7,18 +7,17 @@ import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Page } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
-import { setGameId } from 'shared/store';
+import { IStore, setGameId } from 'shared/store';
 import { formatDate } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './joinGame.scss';
 
 const JoinGame = () => {
-	const { user } = useContext(AppContext);
+	const { user } = useSelector((state: IStore) => state);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 	const [title, setTitle] = useState('Loading...');
 	const dispatch = useDispatch();

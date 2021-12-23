@@ -22,8 +22,8 @@ interface IPreference {
 }
 
 const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
-	const { user, handleLocalUO } = useContext(AppContext);
-	const { theme, sizes } = useSelector((state: IStore) => state);
+	const { handleLocalUO } = useContext(AppContext);
+	const { user, theme, sizes } = useSelector((state: IStore) => state);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);
 	const [tableColor, setTableColor] = useState(theme?.tableColor);
 	const [tileColor, setTileColor] = useState(theme?.tileColor);

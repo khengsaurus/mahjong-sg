@@ -120,6 +120,7 @@ export class Service {
 			try {
 				if (isLocalGame) {
 					createLocalGame(user, players, random, minTai, maxTai, mHu).then(game => {
+						console.log(game);
 						game.prepForNewRound(true);
 						game.initRound();
 						this.store.dispatch(setLocalGame(game));

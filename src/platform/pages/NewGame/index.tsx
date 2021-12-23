@@ -23,16 +23,17 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Page, PaymentType, Timeout, TransitionSpeed } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import { setGameId } from 'shared/store';
+import { IStore, setGameId } from 'shared/store';
 import GameOptions from './GameOptions';
 import './newGame.scss';
 
 const NewGame = () => {
-	const { user, players, setPlayers, isLocalGame } = useContext(AppContext);
+	const { user } = useSelector((state: IStore) => state);
+	const { players, setPlayers, isLocalGame } = useContext(AppContext);
 	const [mHu, setMHu] = useState(false);
 	const [payment, setPayment] = useState(PaymentType.HALF_SHOOTER);
 	const [random, setRandom] = useState(false);
