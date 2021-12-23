@@ -20,21 +20,22 @@ import { LocalFlag, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { IStore, setGame } from 'shared/store';
+import { setTHK } from 'shared/store/actions';
+import { findLeft, findOpp, findRight, getTileHashKey } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {
 	const { verifyingSession } = useLocalSession();
+	const {
+		user,
+		gameId,
+		game,
+		localGame,
+		sizes: { tileSize }
+	} = useSelector((state: IStore) => state);
 	const { setCurrGame, isLocalGame, setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
-	const { user, gameId, game, localGame, sizes } = useSelector((state: IStore) => state);
-	const { tileSize } = sizes;
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
-	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
-	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
-	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);
-	const [back, setBack] = useState(null);
-	const [front, setFront] = useState(null);
-	const [dealer, setDealer] = useState(null);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -52,35 +53,20 @@ const Table = () => {
 	}, []);
 
 	function hydrateGame(game: Game, currUsername: string) {
-		const { _d = 0, fr = [0, 0], ps = [] } = game;
-		setDealer(_d);
+		const { ps = [] } = game;
 		setPlayers(ps);
-		setFront(fr[0]);
-		setBack(fr[1]);
 		switch (currUsername) {
 			case ps[0]?.uN:
 				setPlayerSeat(0);
-				setTopPlayerIndex(2);
-				setRightPlayerIndex(1);
-				setLeftPlayerIndex(3);
 				break;
 			case ps[1]?.uN:
 				setPlayerSeat(1);
-				setTopPlayerIndex(3);
-				setRightPlayerIndex(2);
-				setLeftPlayerIndex(0);
 				break;
 			case ps[2]?.uN:
 				setPlayerSeat(2);
-				setTopPlayerIndex(0);
-				setRightPlayerIndex(3);
-				setLeftPlayerIndex(1);
 				break;
 			case ps[3]?.uN:
 				setPlayerSeat(3);
-				setTopPlayerIndex(1);
-				setRightPlayerIndex(0);
-				setLeftPlayerIndex(2);
 				break;
 			default:
 				break;
@@ -89,6 +75,7 @@ const Table = () => {
 
 	function handleLocalGame() {
 		if (!isEmpty(localGame) && user?.uN) {
+			dispatch(setTHK(111));
 			setCurrGame(localGame);
 			hydrateGame(localGame, user.uN);
 		}
@@ -99,6 +86,7 @@ const Table = () => {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				const currentGame: Game = objToGame(gameData, false);
 				if (!isEmpty(currentGame) && user?.uN) {
+					dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
 					setCurrGame(currentGame);
 					hydrateGame(currentGame, user.uN);
 					dispatch(setGame(currentGame));
@@ -113,26 +101,26 @@ const Table = () => {
 	const getMarkup = () => {
 		const currGame = isLocalGame ? localGame : game;
 		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {
+			const { _d = 0, fr = [0, 0], ps = [] } = currGame;
 			const currentWind = currGame?.repr()[0];
-			const topPlayer = currGame?.ps[TopPlayerIndex];
-			const rightPlayer = currGame?.ps[RightPlayerIndex];
-			const bottomPlayer = currGame?.ps[playerSeat];
-			const leftPlayer = currGame?.ps[LeftPlayerIndex];
+			const topPlayerX = findOpp(playerSeat);
+			const rightPlayerX = findRight(playerSeat);
+			const leftPlayerX = findLeft(playerSeat);
 			return (
 				<TableTheme>
 					<Main>
 						<TableDiv className="table">
 							<Wind className="wind-background">{currentWind}</Wind>
 							<div className="top-player-container">
-								{topPlayer && (
+								{ps[topPlayerX] && (
 									<TopPlayer
-										player={topPlayer}
-										dealer={dealer === TopPlayerIndex}
-										hasFront={front === TopPlayerIndex}
-										hasBack={back === TopPlayerIndex}
+										player={ps[topPlayerX]}
+										dealer={_d === topPlayerX}
+										hasFront={fr[0] === topPlayerX}
+										hasBack={fr[1] === topPlayerX}
 										tileSize={tileSize}
 										lastThrown={
-											currGame.thB === TopPlayerIndex || currGame?.wM === TopPlayerIndex
+											currGame.thB === topPlayerX || currGame?.wM === topPlayerX
 												? currGame?.lTh
 												: null
 										}
@@ -140,15 +128,15 @@ const Table = () => {
 								)}
 							</div>
 							<div className="right-player-container">
-								{rightPlayer && (
+								{ps[rightPlayerX] && (
 									<RightPlayer
-										player={rightPlayer}
-										dealer={dealer === RightPlayerIndex}
-										hasFront={front === RightPlayerIndex}
-										hasBack={back === RightPlayerIndex}
+										player={ps[rightPlayerX]}
+										dealer={_d === rightPlayerX}
+										hasFront={fr[0] === rightPlayerX}
+										hasBack={fr[1] === rightPlayerX}
 										tileSize={tileSize}
 										lastThrown={
-											currGame.thB === RightPlayerIndex || currGame?.wM === RightPlayerIndex
+											currGame.thB === rightPlayerX || currGame?.wM === rightPlayerX
 												? currGame?.lTh
 												: null
 										}
@@ -156,12 +144,12 @@ const Table = () => {
 								)}
 							</div>
 							<div className="bottom-player-container">
-								{bottomPlayer && (
+								{ps[playerSeat] && (
 									<BottomPlayer
-										player={bottomPlayer}
-										dealer={dealer === playerSeat}
-										hasFront={front === playerSeat}
-										hasBack={back === playerSeat}
+										player={ps[playerSeat]}
+										dealer={_d === playerSeat}
+										hasFront={fr[0] === playerSeat}
+										hasBack={fr[1] === playerSeat}
 										lastThrown={
 											currGame.thB === playerSeat || currGame?.wM === playerSeat
 												? currGame?.lTh
@@ -171,15 +159,15 @@ const Table = () => {
 								)}
 							</div>
 							<div className="left-player-container">
-								{leftPlayer && (
+								{ps[leftPlayerX] && (
 									<LeftPlayer
-										player={leftPlayer}
-										dealer={dealer === LeftPlayerIndex}
-										hasFront={front === LeftPlayerIndex}
-										hasBack={back === LeftPlayerIndex}
+										player={ps[leftPlayerX]}
+										dealer={_d === leftPlayerX}
+										hasFront={fr[0] === leftPlayerX}
+										hasBack={fr[1] === leftPlayerX}
 										tileSize={tileSize}
 										lastThrown={
-											currGame.thB === LeftPlayerIndex || currGame.wM === LeftPlayerIndex
+											currGame.thB === leftPlayerX || currGame.wM === leftPlayerX
 												? currGame.lTh
 												: null
 										}

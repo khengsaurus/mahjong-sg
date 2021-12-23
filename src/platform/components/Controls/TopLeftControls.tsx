@@ -34,8 +34,9 @@ const TopLeftControls = ({
 	isAdmin,
 	texts
 }: ITopLeftControls) => {
-	const { sizes } = useSelector((state: IStore) => state);
-	const { controlsSize } = sizes;
+	const {
+		sizes: { controlsSize = Size.MEDIUM }
+	} = useSelector((state: IStore) => state);
 
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>

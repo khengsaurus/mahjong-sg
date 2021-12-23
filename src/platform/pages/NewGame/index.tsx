@@ -28,6 +28,8 @@ import { Page, PaymentType, Timeout, TransitionSpeed } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore, setGameId } from 'shared/store';
+import { setTHK } from 'shared/store/actions';
+import { getTileHashKey } from 'shared/util';
 import GameOptions from './GameOptions';
 import './newGame.scss';
 
@@ -57,6 +59,7 @@ const NewGame = () => {
 	async function startGame() {
 		await ServiceInstance.initGame(user, players, random, minTai, maxTai, mHu, isLocalGame).then(game => {
 			if (game?.id) {
+				dispatch(setTHK(isLocalGame ? 111 : getTileHashKey(game.id, game.st)));
 				dispatch(setGameId(game.id));
 				setStartedGame(true);
 			}

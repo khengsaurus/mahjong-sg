@@ -22,22 +22,24 @@ function getHighlightColor(color: TableColor | BackgroundColor) {
 }
 
 export const HomeTheme = (props: any) => {
-	const { theme } = useSelector((state: IStore) => state);
-	const { backgroundColor, mainTextColor } = theme;
+	const {
+		theme: { backgroundColor = BackgroundColor.BLUE, mainTextColor = TextColor.LIGHT }
+	} = useSelector((state: IStore) => state);
 	const _theme = useMemo(() => {
-		const highlightColor = getHighlightColor(backgroundColor || BackgroundColor.BLUE);
-		return newMuiTheme(backgroundColor, mainTextColor || TextColor.LIGHT, highlightColor);
+		const highlightColor = getHighlightColor(backgroundColor);
+		return newMuiTheme(backgroundColor, mainTextColor, highlightColor);
 	}, [backgroundColor, mainTextColor]);
 
 	return <ThemeProvider theme={_theme} {...props} />;
 };
 
 export const TableTheme = (props: any) => {
-	const { theme } = useSelector((state: IStore) => state);
-	const { tableColor, tableTextColor } = theme;
+	const {
+		theme: { tableColor = BackgroundColor.GREEN, tableTextColor = TextColor.DARK }
+	} = useSelector((state: IStore) => state);
 	const _theme = useMemo(() => {
-		const highlightColor = getHighlightColor(tableColor || BackgroundColor.GREEN);
-		return newMuiTheme(tableColor, tableTextColor || TextColor.DARK, highlightColor);
+		const highlightColor = getHighlightColor(tableColor);
+		return newMuiTheme(tableColor, tableTextColor, highlightColor);
 	}, [tableColor, tableTextColor]);
 
 	return <ThemeProvider theme={_theme} {...props} />;

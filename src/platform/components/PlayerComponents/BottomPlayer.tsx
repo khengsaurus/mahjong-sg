@@ -15,9 +15,11 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
-	const { selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
-	const { sizes } = useSelector((state: IStore) => state);
-	const { tileSize, handSize } = sizes;
+	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
+	const {
+		sizes: { tileSize, handSize },
+		tHK
+	} = useSelector((state: IStore) => state);
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
 		sTs,
 		allHiddenTiles,
@@ -39,11 +41,11 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 
 	const shownHiddenHand = useCallback(
 		(hTs: IHiddenTile[], lTa: IShownTile | IHiddenTile) => {
-			const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
+			const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
 			return (
 				<div className="htss">
 					{hTs.map((tile: IHiddenTile) => {
-						const revC = getCardFromHashId(tile.i, tileHashKey);
+						const revC = getCardFromHashId(tile.i, tHK);
 						return <ShownTile key={tile.i} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
 					})}
 					{revLTT && (
@@ -59,16 +61,16 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 				</div>
 			);
 		},
-		[tileHashKey]
+		[tHK]
 	);
 
 	const hiddenHand = useCallback(
 		(hTs: IHiddenTile[], lTa: IHiddenTile) => {
-			const revLTT = !isEmpty(lTa) ? revealTile(lTa, tileHashKey) : null;
+			const revLTT = !isEmpty(lTa) ? revealTile(lTa, tHK) : null;
 			return (
 				<div className={`self-hidden-tiles-${handSize || Size.MEDIUM}`}>
 					{hTs.map((tile: IHiddenTile) => {
-						const revealedTile = revealTile(tile, tileHashKey);
+						const revealedTile = revealTile(tile, tHK);
 						return (
 							<HandTile
 								key={revealedTile.i}
@@ -92,7 +94,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[JSON.stringify(selectedTilesRef), handSize, tileHashKey]
+		[JSON.stringify(selectedTilesRef), handSize, tHK]
 	);
 
 	const renderShownTiles = () => (

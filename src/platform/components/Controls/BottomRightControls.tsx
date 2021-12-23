@@ -1,6 +1,7 @@
 import { ControlButton } from 'platform/components/Buttons/ControlButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
+import { Size } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
@@ -16,8 +17,9 @@ const BottomRightControls = (props: IBottomRightControls) => {
 		showDeclareHu,
 		HHStr
 	} = props;
-	const { sizes } = useSelector((state: IStore) => state);
-	const { controlsSize } = sizes;
+	const {
+		sizes: { controlsSize = Size.MEDIUM }
+	} = useSelector((state: IStore) => state);
 
 	return (
 		<div className={`bottom-right-controls-${controlsSize}`}>

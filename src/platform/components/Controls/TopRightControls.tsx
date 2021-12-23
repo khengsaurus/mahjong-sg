@@ -1,11 +1,11 @@
-import { IconButton } from '@mui/material';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SubjectIcon from '@mui/icons-material/Subject';
+import { IconButton } from '@mui/material';
 import isEmpty from 'lodash.isempty';
 import LogModal from 'platform/components/Modals/LogModal';
 import { useContext, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { Size } from 'shared/enums';
+import { Size, TableColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import './controls.scss';
@@ -13,9 +13,10 @@ import './controls.scss';
 const TopRightControls = (props: ITopRightControls) => {
 	const { handlePay, handleLogs, showLogs, showText } = props;
 	const { currGame } = useContext(AppContext);
-	const { theme, sizes } = useSelector((state: IStore) => state);
-	const { tableColor } = theme;
-	const { controlsSize } = sizes;
+	const {
+		theme: { tableColor = TableColor.GREEN },
+		sizes: { controlsSize = Size.MEDIUM }
+	} = useSelector((state: IStore) => state);
 	const logRef = useRef(null);
 
 	return (

@@ -1,9 +1,9 @@
 import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HiddenHand, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
-import { AppContext, useTiles } from 'shared/hooks';
+import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
 import { revealTile } from 'shared/util';
@@ -14,9 +14,10 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-	const { tileHashKey } = useContext(AppContext);
-	const { sizes } = useSelector((state: IStore) => state);
-	const { tileSize } = sizes;
+	const {
+		sizes: { tileSize = Size.MEDIUM },
+		tHK
+	} = useSelector((state: IStore) => state);
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs, hiddenTileIds } = useTiles({
 		sTs,
 		ms,
@@ -24,11 +25,11 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 	});
 
 	const shownHiddenHand = useMemo(() => {
-		const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tileHashKey) : lTa) : null;
+		const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
 		return (
 			<div className="htss top">
 				{hTs.map((tile: IHiddenTile) => {
-					const revT = revealTile(tile, tileHashKey);
+					const revT = revealTile(tile, tHK);
 					return <ShownTile key={revT.i} tileRef={tile.r} tileCard={revT.c} segment={Segment.TOP} />;
 				})}
 				{revLTT && (
@@ -44,7 +45,7 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [tileHashKey, hiddenTileIds]);
+	}, [tHK, hiddenTileIds]);
 
 	const renderShownTiles = () => (
 		<ShownTiles
@@ -74,6 +75,7 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM}`}>
 			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />}
+			{/* {shownHiddenHand} */}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.TOP} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}

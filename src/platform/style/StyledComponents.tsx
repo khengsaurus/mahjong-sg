@@ -4,8 +4,9 @@ import { IStore } from 'shared/store';
 import styled, { ThemeProvider } from 'styled-components';
 
 export const Styled = (props: any) => {
-	const { theme } = useSelector((state: IStore) => state);
-	const { backgroundColor, tableColor, tileColor, tableTextColor, mainTextColor } = theme;
+	const {
+		theme: { backgroundColor, tableColor, tileColor, tableTextColor, mainTextColor }
+	} = useSelector((state: IStore) => state);
 	const colorTheme = {
 		backgroundColor,
 		tableColor,

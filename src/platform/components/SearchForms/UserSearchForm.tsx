@@ -84,7 +84,9 @@ const UserSearchForm: React.FC = () => {
 					<ListItemText secondary={`Add bot`} />
 					<IconButton
 						onClick={() => {
-							setPlayers([...players, generateBot()]);
+							if (players.length < 4) {
+								setPlayers([...players, generateBot()]);
+							}
 						}}
 						style={{ justifyContent: 'flex-end', marginRight: -12 }}
 						disableRipple

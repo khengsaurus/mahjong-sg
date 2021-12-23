@@ -1,5 +1,4 @@
 import { Dialog, DialogContent, FormControl, FormControlLabel, Switch } from '@mui/material';
-import isEqual from 'lodash.isequal';
 import { TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
@@ -38,23 +37,16 @@ const Scenarios = ({ set }: IDevControls) => {
 };
 
 const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
-	const [manualHu, setManualHu] = useState<boolean>(game?.mHu || false);
-
-	const setFirebaseDoc = useCallback(
-		(obj: any) => {
-			updateGame(objToGame(obj));
-		},
-		[updateGame]
-	);
+	const [manualHu, setManualHu] = useState<boolean>(game?.mHu);
 
 	const closeAndUpdate = useCallback(() => {
 		const updatedGame = { ...game, mHu: manualHu };
-		if (!isEqual(updatedGame, game)) {
-			setFirebaseDoc(updatedGame);
+		if (game?.mHu !== manualHu) {
+			updateGame(objToGame(updatedGame));
 		}
 		onClose();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [game?.mHu, manualHu, setFirebaseDoc, onClose]);
+	}, [game?.mHu, manualHu, updateGame, onClose]);
 
 	return (
 		<TableTheme>
@@ -67,7 +59,7 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 								label="Manual Hu:"
 								labelPlacement="start"
 							/>
-							{process.env.REACT_APP_DEV_FLAG === '1' && <Scenarios set={setFirebaseDoc} />}
+							{process.env.REACT_APP_DEV_FLAG === '1' && <Scenarios set={updateGame} />}
 						</FormControl>
 					</DialogContent>
 				</Dialog>
