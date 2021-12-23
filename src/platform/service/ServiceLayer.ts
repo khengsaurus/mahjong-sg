@@ -1,8 +1,7 @@
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
 import { Game, User } from 'shared/models';
-import { store } from 'shared/store';
-import { setLocalGame } from 'shared/store/actions';
+import { setLocalGame, store } from 'shared/store';
 import { createLocalGame } from 'shared/util';
 import { objToUser } from 'shared/util/parsers';
 

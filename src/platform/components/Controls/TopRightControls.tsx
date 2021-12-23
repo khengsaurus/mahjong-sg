@@ -1,6 +1,7 @@
 import IconButton from '@material-ui/core/IconButton';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SubjectIcon from '@material-ui/icons/Subject';
+import isEmpty from 'lodash.isempty';
 import LogModal from 'platform/components/Modals/LogModal';
 import { useContext, useRef } from 'react';
 import { Size } from 'shared/enums';
@@ -8,8 +9,8 @@ import { AppContext } from 'shared/hooks';
 import './controls.scss';
 
 const TopRightControls = (props: ITopRightControls) => {
-	const { handlePay, handleLogs, showLogs, logs, showText } = props;
-	const { controlsSize, tableColor } = useContext(AppContext);
+	const { handlePay, handleLogs, showLogs, showText } = props;
+	const { currGame, controlsSize, tableColor } = useContext(AppContext);
 	const logRef = useRef(null);
 
 	return (
@@ -22,12 +23,12 @@ const TopRightControls = (props: ITopRightControls) => {
 					<SubjectIcon fontSize={controlsSize} />
 				</IconButton>
 			)}
-			{showText && (
+			{showText && !isEmpty(currGame?.logs) && (
 				<LogModal
 					expanded={showLogs}
 					onClose={handleLogs}
 					externalRef={logRef}
-					logs={logs}
+					logs={currGame.logs}
 					size={controlsSize || Size.MEDIUM}
 					tableColor={tableColor}
 				/>

@@ -19,16 +19,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
-import { setGame } from 'shared/store/actions';
-import { IStore } from 'shared/typesPlus';
+import { IStore, setGame } from 'shared/store';
 import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {
 	const { verifyingSession } = useLocalSession();
-	const { user, gameId, isLocalGame, tilesSize, setStage, setPlayers, playerSeat, setPlayerSeat } =
+	const { user, setCurrGame, isLocalGame, tilesSize, setPlayers, playerSeat, setPlayerSeat } =
 		useContext(AppContext);
-	const { game, localGame } = useSelector((state: IStore) => state);
+	const { gameId, game, localGame } = useSelector((state: IStore) => state);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
@@ -52,15 +51,14 @@ const Table = () => {
 		};
 	}, []);
 
-	function hydrateGame(game: Game) {
+	function hydrateGame(game: Game, currUsername: string) {
 		// console.log(JSON.stringify(game));
-		const { st = 0, _d = 0, fr = [0, 0], ps = [] } = game;
-		setStage(st);
+		const { _d = 0, fr = [0, 0], ps = [] } = game;
 		setDealer(_d);
 		setPlayers(ps);
 		setFront(fr[0]);
 		setBack(fr[1]);
-		switch (user.uN) {
+		switch (currUsername) {
 			case ps[0]?.uN:
 				setPlayerSeat(0);
 				setTopPlayerIndex(2);
@@ -91,25 +89,28 @@ const Table = () => {
 	}
 
 	function handleLocalGame() {
-		if (!isEmpty(localGame)) {
-			hydrateGame(localGame);
+		if (!isEmpty(localGame) && user?.uN) {
+			setCurrGame(localGame);
+			hydrateGame(localGame, user.uN);
 		}
 	}
 
 	useEffect(() => {
 		const handleOnlineGame = ServiceInstance.FBListenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
+				console.log('handleOnlineGame called');
 				const currentGame: Game = objToGame(gameData, false);
-				if (!isEmpty(currentGame)) {
-					hydrateGame(currentGame);
+				if (!isEmpty(currentGame) && user?.uN) {
+					setCurrGame(currentGame);
+					hydrateGame(currentGame, user.uN);
 					dispatch(setGame(currentGame));
 				}
 			}
 		});
 
-		return gameId === 'local' || isLocalGame ? handleLocalGame() : handleOnlineGame;
+		return user?.uN ? (gameId === 'local' || isLocalGame ? handleLocalGame() : handleOnlineGame) : null;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [gameId, isLocalGame]);
+	}, [gameId, isLocalGame, user?.uN]);
 
 	const getMarkup = () => {
 		const currGame = isLocalGame ? localGame : game;

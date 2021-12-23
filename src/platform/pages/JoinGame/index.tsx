@@ -12,17 +12,20 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
+import { setGameId } from 'shared/store';
 import { formatDate } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './joinGame.scss';
 
 const JoinGame = () => {
-	const { user, setGameId } = useContext(AppContext);
+	const { user } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 	const [title, setTitle] = useState('Loading...');
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const unsubscribe = ServiceInstance.FBListenInvites(user, {
@@ -43,8 +46,8 @@ const JoinGame = () => {
 	const handleKeyListeners = useCallback(
 		e => {
 			let n = Number(e.key);
-			if (gameInvites[n]) {
-				handleJoinGame(gameInvites[n]);
+			if (gameInvites[n]?.id) {
+				handleJoinGame(gameInvites[n].id);
 			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,8 +61,8 @@ const JoinGame = () => {
 		};
 	}, [handleKeyListeners]);
 
-	function handleJoinGame(game: Game) {
-		setGameId(game.id);
+	function handleJoinGame(gameId: string) {
+		dispatch(setGameId(gameId));
 		history.push(Page.TABLE);
 	}
 
@@ -73,7 +76,7 @@ const JoinGame = () => {
 							button
 							style={{ padding: 0, margin: 0 }}
 							key={game.id}
-							onClick={() => handleJoinGame(game)}
+							onClick={() => handleJoinGame(game.id)}
 							disableRipple
 						>
 							<ListItemText

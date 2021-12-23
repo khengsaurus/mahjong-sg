@@ -9,7 +9,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Offset, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { setGame, setLocalGame } from 'shared/store/actions';
+import { setGame, setGameId, setLocalGame } from 'shared/store';
 import './home.scss';
 
 interface IHomePage {
@@ -30,7 +30,7 @@ const HomePage = ({
 	skipVerification = false,
 	offset = 0
 }: IHomePage) => {
-	const { user, setPlayers, setGameId } = useContext(AppContext);
+	const { user, setPlayers } = useContext(AppContext);
 	const { verifyingSession } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
@@ -40,11 +40,11 @@ const HomePage = ({
 	// Reset store/AppContext on leaving game since Table useEffect cleanup is used for subscription...
 	useEffect(() => {
 		setPlayers([user]);
-		setGameId('');
+		dispatch(setGameId(''));
 		dispatch(setGame(null));
 		dispatch(setLocalGame(null));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, setGameId, setPlayers, user?.id]);
+	}, [dispatch, setPlayers, user?.id]);
 
 	useEffect(() => {
 		if (!ready) {
