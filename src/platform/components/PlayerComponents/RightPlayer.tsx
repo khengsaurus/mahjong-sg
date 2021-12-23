@@ -2,8 +2,10 @@ import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HiddenHand, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useDynamicWidth } from 'platform/hooks';
 import { useContext, useMemo, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
+import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
 import { revealTile } from 'shared/util';
 import './playerComponents.scss';
@@ -13,7 +15,9 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-	const { tilesSize, tileHashKey } = useContext(AppContext);
+	const { tileHashKey } = useContext(AppContext);
+	const { sizes } = useSelector((state: IStore) => state);
+	const { tileSize } = sizes;
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs, hiddenTileIds } = useTiles({
 		sTs,
 		ms,
@@ -25,14 +29,14 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	useDynamicWidth({
 		ref: shownTilesRef,
 		tiles: nonFlowers.length + flowers.length,
-		tilesSize: tilesSize,
+		tileSize: tileSize,
 		dealer
 	});
 
 	useDynamicWidth({
 		ref: shownHiddenHandRef,
 		tiles: player.allHiddenTiles().length,
-		tilesSize: tilesSize
+		tileSize: tileSize
 		// addHalfTile: !isEmpty(lTa)
 	});
 
@@ -69,7 +73,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			nonFlowerRefs={nonFlowerRefs}
 			segment={Segment.RIGHT}
 			dealer={dealer}
-			tilesSize={tilesSize}
+			tileSize={tileSize}
 			lastThrownRef={lastThrown?.r}
 			ref={shownTilesRef}
 		/>
@@ -86,7 +90,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	return (
-		<div className={`column-section-${tilesSize || Size.MEDIUM} right`}>
+		<div className={`column-section-${tileSize || Size.MEDIUM} right`}>
 			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.RIGHT} />}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.RIGHT} tag={frontBackTag} />}

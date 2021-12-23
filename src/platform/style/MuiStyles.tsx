@@ -1,8 +1,9 @@
 import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { BackgroundColor, TableColor, TextColor } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
+import { IStore } from 'shared/store';
 
 function getHighlightColor(color: TableColor | BackgroundColor) {
 	if ([TableColor.DARK, BackgroundColor.DARK].includes(color)) {
@@ -21,23 +22,24 @@ function getHighlightColor(color: TableColor | BackgroundColor) {
 }
 
 export const HomeTheme = (props: any) => {
-	const { backgroundColor, mainTextColor } = useContext(AppContext);
-	const theme = useMemo(() => {
-		const highlightColor = getHighlightColor(backgroundColor);
-		return newMuiTheme(backgroundColor, mainTextColor, highlightColor);
+	const { theme } = useSelector((state: IStore) => state);
+	const { backgroundColor, mainTextColor } = theme;
+	const _theme = useMemo(() => {
+		const highlightColor = getHighlightColor(backgroundColor || BackgroundColor.BLUE);
+		return newMuiTheme(backgroundColor, mainTextColor || TextColor.LIGHT, highlightColor);
 	}, [backgroundColor, mainTextColor]);
-
-	return <ThemeProvider theme={theme} {...props} />;
+	return <ThemeProvider theme={_theme} {...props} />;
 };
 
 export const TableTheme = (props: any) => {
-	const { tableColor, tableTextColor } = useContext(AppContext);
-	const theme = useMemo(() => {
-		const highlightColor = getHighlightColor(tableColor);
-		return newMuiTheme(tableColor, tableTextColor, highlightColor);
+	const { theme } = useSelector((state: IStore) => state);
+	const { tableColor, tableTextColor } = theme;
+	const _theme = useMemo(() => {
+		const highlightColor = getHighlightColor(tableColor || BackgroundColor.GREEN);
+		return newMuiTheme(tableColor, tableTextColor || TextColor.DARK, highlightColor);
 	}, [tableColor, tableTextColor]);
 
-	return <ThemeProvider theme={theme} {...props} />;
+	return <ThemeProvider theme={_theme} {...props} />;
 };
 
 function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: TextColor, highlightColor: string) {
@@ -87,7 +89,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					color: `${textColor}`,
 					'&:hover': {
 						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-					},
+					}
 					// '&:disabled': {
 					// 	color: `${textColor}`
 					// }
@@ -105,7 +107,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					'&:hover': {
 						backgroundColor: 'transparent !important',
 						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-					},
+					}
 					// '&:disabled': {
 					// 	color: `${textColor}`
 					// }

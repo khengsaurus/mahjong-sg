@@ -4,13 +4,18 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import isEmpty from 'lodash.isempty';
 import LogModal from 'platform/components/Modals/LogModal';
 import { useContext, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Size } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
+import { IStore } from 'shared/store';
 import './controls.scss';
 
 const TopRightControls = (props: ITopRightControls) => {
 	const { handlePay, handleLogs, showLogs, showText } = props;
-	const { currGame, controlsSize, tableColor } = useContext(AppContext);
+	const { currGame } = useContext(AppContext);
+	const { theme, sizes } = useSelector((state: IStore) => state);
+	const { tableColor } = theme;
+	const { controlsSize } = sizes;
 	const logRef = useRef(null);
 
 	return (

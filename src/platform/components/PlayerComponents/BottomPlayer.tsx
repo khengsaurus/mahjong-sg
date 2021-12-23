@@ -1,8 +1,10 @@
 import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HandTile, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useCallback, useContext, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
+import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
 import { getCardFromHashId, revealTile } from 'shared/util';
 import './playerComponents.scss';
@@ -13,7 +15,9 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 
-	const { tilesSize, handSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
+	const { selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
+	const { sizes } = useSelector((state: IStore) => state);
+	const { tileSize, handSize } = sizes;
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
 		sTs,
 		allHiddenTiles,
@@ -95,7 +99,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			nonFlowerRefs={nonFlowerRefs}
 			segment={Segment.BOTTOM}
 			dealer={dealer}
-			tilesSize={tilesSize}
+			tileSize={tileSize}
 			lastThrownRef={lastThrown?.r}
 		/>
 	);
@@ -111,7 +115,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	return (
-		<div className={`row-section-${tilesSize || Size.MEDIUM} bottom`}>
+		<div className={`row-section-${tileSize || Size.MEDIUM} bottom`}>
 			{sT ? shownHiddenHand : renderHiddenHand()}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.BOTTOM} tag={frontBackTag} />}

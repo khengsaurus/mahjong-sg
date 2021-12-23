@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { Centered } from 'platform/style/StyledComponents';
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import BarLoader from 'react-spinners/BarLoader';
-import { AppContext } from 'shared/hooks';
+import { IStore } from 'shared/store';
 
 interface LoaderProps {
 	color?: string;
@@ -17,7 +17,8 @@ const override = css`
 `;
 
 export const Loader = (props: LoaderProps) => {
-	const { mainTextColor } = useContext(AppContext);
+	const { theme } = useSelector((state: IStore) => state);
+	const { mainTextColor } = theme;
 	const { color = mainTextColor || 'white', css = override, height = 2, width = 80 } = props;
 	return (
 		<Centered>

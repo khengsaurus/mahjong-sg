@@ -5,9 +5,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { TableText } from 'platform/style/StyledComponents';
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { Size } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
+import { IStore } from 'shared/store';
 import './controls.scss';
 
 interface IHasFontSize {
@@ -34,19 +34,20 @@ const TopLeftControls = ({
 	isAdmin,
 	texts
 }: ITopLeftControls) => {
-	const { controlsSize: size } = useContext(AppContext);
+	const { sizes } = useSelector((state: IStore) => state);
+	const { controlsSize } = sizes;
 
 	return (
-		<div className={`top-left-controls-${size}`}>
+		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
-				<ControlsButton Icon={HomeIcon} onClick={handleHome} size={size} />
-				<ControlsButton Icon={SettingsIcon} onClick={handleSettings} size={size} />
+				<ControlsButton Icon={HomeIcon} onClick={handleHome} size={controlsSize} />
+				<ControlsButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
 				<ControlsButton
 					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}
-					size={size}
+					size={controlsSize}
 				/>
-				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={size} />}
+				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
 			</div>
 			{showText && (
 				<div className="text-container">

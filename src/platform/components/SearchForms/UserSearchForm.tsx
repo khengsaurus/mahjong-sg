@@ -14,14 +14,17 @@ import AddIcon from '@mui/icons-material/Add';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { BotIds, BotName, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import { ITheme } from 'shared/typesPlus';
+import { IStore } from 'shared/store';
 import './searchForms.scss';
 
 const UserSearchForm: React.FC = () => {
-	const { user, players, setPlayers, mainTextColor } = useContext(AppContext);
+	const { user, players, setPlayers } = useContext(AppContext);
+	const { theme } = useSelector((state: IStore) => state);
+	const { mainTextColor } = theme;
 	const [showOptions, setShowOptions] = useState<boolean>(false);
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
@@ -91,7 +94,7 @@ const UserSearchForm: React.FC = () => {
 		</Fade>
 	);
 
-	const useStyles = makeStyles((theme: ITheme) =>
+	const useStyles = makeStyles(() =>
 		createStyles({
 			text: {
 				color: mainTextColor

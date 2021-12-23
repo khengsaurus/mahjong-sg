@@ -25,9 +25,9 @@ import './table.scss';
 
 const Table = () => {
 	const { verifyingSession } = useLocalSession();
-	const { user, setCurrGame, isLocalGame, tilesSize, setPlayers, playerSeat, setPlayerSeat } =
-		useContext(AppContext);
-	const { gameId, game, localGame } = useSelector((state: IStore) => state);
+	const { user, setCurrGame, isLocalGame, setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
+	const { gameId, game, localGame, sizes } = useSelector((state: IStore) => state);
+	const { tileSize } = sizes;
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
@@ -52,7 +52,6 @@ const Table = () => {
 	}, []);
 
 	function hydrateGame(game: Game, currUsername: string) {
-		// console.log(JSON.stringify(game));
 		const { _d = 0, fr = [0, 0], ps = [] } = game;
 		setDealer(_d);
 		setPlayers(ps);
@@ -98,7 +97,6 @@ const Table = () => {
 	useEffect(() => {
 		const handleOnlineGame = ServiceInstance.FBListenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
-				console.log('handleOnlineGame called');
 				const currentGame: Game = objToGame(gameData, false);
 				if (!isEmpty(currentGame) && user?.uN) {
 					setCurrGame(currentGame);
@@ -132,7 +130,7 @@ const Table = () => {
 										dealer={dealer === TopPlayerIndex}
 										hasFront={front === TopPlayerIndex}
 										hasBack={back === TopPlayerIndex}
-										tilesSize={tilesSize}
+										tileSize={tileSize}
 										lastThrown={
 											currGame.thB === TopPlayerIndex || currGame?.wM === TopPlayerIndex
 												? currGame?.lTh
@@ -148,7 +146,7 @@ const Table = () => {
 										dealer={dealer === RightPlayerIndex}
 										hasFront={front === RightPlayerIndex}
 										hasBack={back === RightPlayerIndex}
-										tilesSize={tilesSize}
+										tileSize={tileSize}
 										lastThrown={
 											currGame.thB === RightPlayerIndex || currGame?.wM === RightPlayerIndex
 												? currGame?.lTh
@@ -179,7 +177,7 @@ const Table = () => {
 										dealer={dealer === LeftPlayerIndex}
 										hasFront={front === LeftPlayerIndex}
 										hasBack={back === LeftPlayerIndex}
-										tilesSize={tilesSize}
+										tileSize={tileSize}
 										lastThrown={
 											currGame.thB === LeftPlayerIndex || currGame.wM === LeftPlayerIndex
 												? currGame.lTh

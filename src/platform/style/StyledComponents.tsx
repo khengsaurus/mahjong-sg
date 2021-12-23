@@ -1,14 +1,15 @@
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { TextColor } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
+import { IStore } from 'shared/store';
 import styled, { ThemeProvider } from 'styled-components';
 
 export const Styled = (props: any) => {
-	const { backgroundColor, tableColor, tileBackColor, tableTextColor, mainTextColor } = useContext(AppContext);
+	const { theme } = useSelector((state: IStore) => state);
+	const { backgroundColor, tableColor, tileColor, tableTextColor, mainTextColor } = theme;
 	const colorTheme = {
 		backgroundColor,
 		tableColor,
-		tileBackColor,
+		tileColor,
 		tableTextColor,
 		mainTextColor
 	};
@@ -104,7 +105,7 @@ export const GreenTableText = styled.p`
 `;
 
 export const HiddenTile = styled.div`
-	background-color: ${props => props.theme.tileBackColor || 'teal'};
+	background-color: ${props => props.theme.tileColor || 'teal'};
 `;
 
 export const VerticalDivider = styled.div`
