@@ -12,7 +12,6 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-	const htsRefs = JSON.stringify(hTs.map(t => t.r));
 
 	const { tilesSize, handSize, selectedTiles, setSelectedTiles, tileHashKey } = useContext(AppContext);
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
@@ -54,7 +53,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [lTa?.r, lTa?.x, tileHashKey, htsRefs]);
+	}, [lTa?.r, lTa?.x, tileHashKey, player?.handIds().toString() as string]);
 
 	const renderHiddenHand = () => {
 		const selectedTilesRef = selectedTiles.map(tile => tile.r);

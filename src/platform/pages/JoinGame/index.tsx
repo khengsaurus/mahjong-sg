@@ -12,11 +12,9 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
-import { setGame, setPlayer } from 'shared/store/actions';
 import { formatDate } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './joinGame.scss';
@@ -25,12 +23,8 @@ const JoinGame = () => {
 	const { user, setGameId } = useContext(AppContext);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 	const [title, setTitle] = useState('Loading...');
-	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(setGame(null));
-		dispatch(setPlayer(null));
-
 		const unsubscribe = ServiceInstance.FBListenInvites(user, {
 			next: (snapshot: any) => {
 				let games: Game[] = [];

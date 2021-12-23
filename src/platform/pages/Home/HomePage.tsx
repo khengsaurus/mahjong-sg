@@ -9,7 +9,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Offset, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { setGame, setLocalGame, setPlayer } from 'shared/store/actions';
+import { setGame, setLocalGame } from 'shared/store/actions';
 import './home.scss';
 
 interface IHomePage {
@@ -41,7 +41,6 @@ const HomePage = ({
 	useEffect(() => {
 		setPlayers([user]);
 		setGameId('');
-		dispatch(setPlayer(null));
 		dispatch(setGame(null));
 		dispatch(setLocalGame(null));
 		// eslint-disable-next-line react-hooks/exhaustive-deps

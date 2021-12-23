@@ -120,15 +120,23 @@ export class Service {
 			try {
 				if (isLocalGame) {
 					createLocalGame(user, players, random, minTai, maxTai, mHu).then(game => {
-						game.prepForNewRound(true);
-						game.initRound();
+						game.prepForNewRound(true).then(updatedGame => {
+							if (updatedGame) {
+								game = updatedGame;
+								game.initRound();
+							}
+						});
 						this.store.dispatch(setLocalGame(game));
 						resolve(game);
 					});
 				} else {
 					FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
-						game.prepForNewRound(true);
-						game.initRound();
+						game.prepForNewRound(true).then(updatedGame => {
+							if (updatedGame) {
+								game = updatedGame;
+								game.initRound();
+							}
+						});
 						return FBService.updateGame(game);
 					});
 				}

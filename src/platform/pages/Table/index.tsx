@@ -18,20 +18,20 @@ import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { Game, User } from 'shared/models';
-import { setGame, setPlayer } from 'shared/store/actions';
+import { Game } from 'shared/models';
+import { setGame } from 'shared/store/actions';
 import { IStore } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {
 	const { verifyingSession } = useLocalSession();
-	const { user, gameId, isLocalGame, tilesSize, setStage, setPlayers, setPlayerSeat } = useContext(AppContext);
+	const { user, gameId, isLocalGame, tilesSize, setStage, setPlayers, playerSeat, setPlayerSeat } =
+		useContext(AppContext);
 	const { game, localGame } = useSelector((state: IStore) => state);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const [TopPlayerIndex, setTopPlayerIndex] = useState(null);
 	const [RightPlayerIndex, setRightPlayerIndex] = useState(null);
-	const [BottomPlayerIndex, setBottomPlayerIndex] = useState(null);
 	const [LeftPlayerIndex, setLeftPlayerIndex] = useState(null);
 	const [back, setBack] = useState(null);
 	const [front, setFront] = useState(null);
@@ -60,44 +60,34 @@ const Table = () => {
 		setPlayers(ps);
 		setFront(fr[0]);
 		setBack(fr[1]);
-		let player: User;
 		switch (user.uN) {
 			case ps[0]?.uN:
-				player = ps[0];
-				setBottomPlayerIndex(0);
 				setPlayerSeat(0);
-				setLeftPlayerIndex(3);
 				setTopPlayerIndex(2);
 				setRightPlayerIndex(1);
+				setLeftPlayerIndex(3);
 				break;
 			case ps[1]?.uN:
-				player = ps[1];
-				setBottomPlayerIndex(1);
 				setPlayerSeat(1);
-				setLeftPlayerIndex(0);
 				setTopPlayerIndex(3);
 				setRightPlayerIndex(2);
+				setLeftPlayerIndex(0);
 				break;
 			case ps[2]?.uN:
-				player = ps[2];
-				setBottomPlayerIndex(2);
 				setPlayerSeat(2);
-				setLeftPlayerIndex(1);
 				setTopPlayerIndex(0);
 				setRightPlayerIndex(3);
+				setLeftPlayerIndex(1);
 				break;
 			case ps[3]?.uN:
-				player = ps[3];
-				setBottomPlayerIndex(3);
 				setPlayerSeat(3);
-				setLeftPlayerIndex(2);
 				setTopPlayerIndex(1);
 				setRightPlayerIndex(0);
+				setLeftPlayerIndex(2);
 				break;
 			default:
 				break;
 		}
-		dispatch(setPlayer(player));
 	}
 
 	function handleLocalGame() {
@@ -123,11 +113,11 @@ const Table = () => {
 
 	const getMarkup = () => {
 		const currGame = isLocalGame ? localGame : game;
-		if (currGame && currGame?.st !== 0) {
+		if (!isEmpty(currGame) && currGame?.st !== 0) {
 			let currentWind = currGame?.repr()[0];
 			let topPlayer = currGame?.ps[TopPlayerIndex];
 			let rightPlayer = currGame?.ps[RightPlayerIndex];
-			let bottomPlayer = currGame?.ps[BottomPlayerIndex];
+			let bottomPlayer = currGame?.ps[playerSeat];
 			let leftPlayer = currGame?.ps[LeftPlayerIndex];
 			return (
 				<TableTheme>
@@ -170,11 +160,11 @@ const Table = () => {
 								{bottomPlayer && (
 									<BottomPlayer
 										player={bottomPlayer}
-										dealer={dealer === BottomPlayerIndex}
-										hasFront={front === BottomPlayerIndex}
-										hasBack={back === BottomPlayerIndex}
+										dealer={dealer === playerSeat}
+										hasFront={front === playerSeat}
+										hasBack={back === playerSeat}
 										lastThrown={
-											currGame.thB === BottomPlayerIndex || currGame?.wM === BottomPlayerIndex
+											currGame.thB === playerSeat || currGame?.wM === playerSeat
 												? currGame?.lTh
 												: null
 										}
