@@ -1,5 +1,5 @@
-import { amber, blue, indigo, red, teal, yellow } from '@material-ui/core/colors';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { amber, blue, indigo, red, teal, yellow } from '@mui/material/colors';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { BackgroundColor, TableColor, TextColor } from 'shared/enums';
@@ -28,6 +28,7 @@ export const HomeTheme = (props: any) => {
 		const highlightColor = getHighlightColor(backgroundColor || BackgroundColor.BLUE);
 		return newMuiTheme(backgroundColor, mainTextColor || TextColor.LIGHT, highlightColor);
 	}, [backgroundColor, mainTextColor]);
+
 	return <ThemeProvider theme={_theme} {...props} />;
 };
 
@@ -45,205 +46,205 @@ export const TableTheme = (props: any) => {
 function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: TextColor, highlightColor: string) {
 	return createTheme({
 		palette: {
-			primary: {
-				main: textColor
-			},
-			secondary: {
-				main: highlightColor
-			},
-			text: {
-				primary: textColor
-			},
-			action: {
-				active: textColor,
-				hover: highlightColor,
-				disabled: 'grey'
-			}
+			primary: { main: textColor },
+			secondary: { main: highlightColor },
+			text: { primary: textColor },
+			action: { active: textColor, hover: highlightColor, disabled: 'grey' }
 		},
 		typography: {
-			h6: {
-				color: textColor
-			},
-			subtitle1: {
-				color: textColor
-			}
+			body1: { color: textColor },
+			body2: { color: textColor },
+			h6: { color: textColor },
+			subtitle1: { color: textColor },
+			subtitle2: { color: textColor }
 		},
-		overrides: {
+
+		components: {
 			MuiFormLabel: {
-				root: {
-					color: textColor
+				styleOverrides: {
+					root: { color: textColor }
 				}
 			},
 			MuiRadio: {
-				root: {
-					color: textColor
+				styleOverrides: {
+					root: { color: textColor }
 				}
 			},
 			MuiCheckbox: {
-				root: {
-					color: textColor
+				styleOverrides: {
+					root: { color: textColor }
 				}
 			},
 			MuiButtonBase: {
-				root: {
-					color: `${textColor}`,
-					'&:hover': {
-						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				styleOverrides: {
+					root: {
+						color: `${textColor}`,
+						'&:hover': {
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
+						// '&:disabled': { color: `${textColor}` }
 					}
-					// '&:disabled': {
-					// 	color: `${textColor}`
-					// }
 				}
 			},
 			MuiButton: {
-				root: {
-					color: `${textColor}`,
-					'&:active': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:focus': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				styleOverrides: {
+					root: {
+						color: `${textColor}`,
+						'&:active': { backgroundColor: 'transparent !important' },
+						'&:focus': { backgroundColor: 'transparent !important' },
+						'&:hover': {
+							backgroundColor: 'transparent !important',
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
+						// '&:disabled': {
+						//  color: `${textColor}`
+						// }
 					}
-					// '&:disabled': {
-					// 	color: `${textColor}`
-					// }
 				}
 				// label: {
-				// 	color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				//  color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 				// }
 			},
+			MuiTab: {
+				styleOverrides: {
+					root: { color: `${textColor}` }
+				}
+			},
 			MuiIconButton: {
-				colorInherit: {
-					color: `${textColor}`
-				},
-				root: {
-					color: `${textColor}`,
-					'&:active': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:focus': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				styleOverrides: {
+					colorInherit: { color: `${textColor}` },
+					root: {
+						color: `${textColor}`,
+						'&:active': { backgroundColor: 'transparent !important' },
+						'&:focus': { backgroundColor: 'transparent !important' },
+						'&:hover': {
+							backgroundColor: 'transparent !important',
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
 					}
 				}
 			},
 			MuiDialog: {
-				paper: {
-					overflow: 'hidden',
-					overflowX: 'hidden',
-					overflowY: 'hidden',
-					userSelect: 'none',
-					backgroundColor
+				styleOverrides: {
+					paper: {
+						overflow: 'hidden',
+						overflowX: 'hidden',
+						overflowY: 'hidden',
+						userSelect: 'none',
+						backgroundColor
+					}
 				}
 			},
 			MuiDialogContent: {
-				root: {
-					padding: '14px 18px',
-					userSelect: 'none',
-					'&:first-child': {
-						paddingTop: null
+				styleOverrides: {
+					root: {
+						padding: '14px 18px',
+						userSelect: 'none',
+						'&:first-child': { paddingTop: null }
 					}
 				}
 			},
 			MuiPopover: {
-				paper: {
-					backgroundColor
+				styleOverrides: {
+					paper: { backgroundColor }
 				}
 			},
 			MuiInput: {
-				underline: {
-					'&&::before': {
-						borderColor: textColor
-					},
-					'&&::after': {
-						borderColor: highlightColor
-					},
-					'&&:hover::before': {
-						borderColor: highlightColor
+				styleOverrides: {
+					underline: {
+						'&&::before': { borderColor: textColor },
+						'&&::after': { borderColor: highlightColor },
+						'&&:hover::before': { borderColor: highlightColor }
 					}
 				}
 			},
 			MuiInputLabel: {
-				shrink: {
-					'&.MuiInputLabel-animated': {
-						color: `${textColor}`
+				styleOverrides: {
+					shrink: {
+						'&.MuiInputLabel-animated': { color: `${textColor}` }
 					}
 				}
 			},
 			MuiList: {
-				root: {
-					backgroundColor
-				},
-				padding: {
-					paddingTop: '0px',
-					paddingBottom: '0px'
+				styleOverrides: {
+					root: { backgroundColor },
+					padding: {
+						paddingTop: '0px',
+						paddingBottom: '0px'
+					}
 				}
 			},
 			MuiTypography: {
-				root: {
-					color: textColor
-				},
-				colorTextPrimary: {
-					color: `${textColor}`
-				},
-				colorTextSecondary: {
-					color: `${textColor}`
+				styleOverrides: {
+					root: {
+						color: textColor
+					}
+					// colorTextPrimary: {
+					//  color: `${textColor}`
+					// },
+					// colorTextSecondary: {
+					//  color: `${textColor}`
+					// }
 				}
 			},
 			MuiListItem: {
-				root: {
-					color: textColor,
-					'&:hover': {
-						backgroundColor: 'transparent !important'
-						// color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-					}
-				},
-				button: {
-					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: `${highlightColor}`
+				styleOverrides: {
+					root: {
+						color: textColor,
+						'&:hover': {
+							backgroundColor: 'transparent !important'
+							// color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
+					},
+					button: {
+						'&:hover': {
+							backgroundColor: 'transparent !important',
+							color: `${highlightColor}`
+						}
 					}
 				}
 			},
+			MuiListItemText: {
+				styleOverrides: {
+					root: { color: textColor },
+					primary: { color: textColor },
+					secondary: { color: textColor }
+				}
+			},
 			MuiMenuItem: {
-				root: {
-					justifyContent: 'center',
-					'&$selected': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				styleOverrides: {
+					root: {
+						justifyContent: 'center',
+						'&$selected': {
+							backgroundColor: 'transparent !important'
+						},
+						'&:hover': {
+							backgroundColor: 'transparent !important',
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
 					}
 				}
 			},
 			MuiSelect: {
-				select: {
-					textAlign: 'center',
-					paddingLeft: '12px !important',
-					paddingRight: '12px !important',
-					'&:focus': {
-						backgroundColor: 'transparent !important'
-					},
-					'&:hover': {
-						backgroundColor: 'transparent !important',
-						color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+				styleOverrides: {
+					select: {
+						textAlign: 'center',
+						paddingLeft: '12px !important',
+						paddingRight: '12px !important',
+						'&:focus': {
+							backgroundColor: 'transparent !important'
+						},
+						'&:hover': {
+							backgroundColor: 'transparent !important',
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
 					}
 				}
 			},
 			MuiFormControlLabel: {
-				root: {
-					margin: '0px'
-				},
-				labelPlacementStart: {
-					marginLeft: '0px'
+				styleOverrides: {
+					root: { margin: '0px' },
+					labelPlacementStart: { marginLeft: '0px' }
 				}
 			}
 		}

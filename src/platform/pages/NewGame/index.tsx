@@ -1,17 +1,19 @@
-import Fade from '@material-ui/core/Fade';
-import FormControl from '@material-ui/core/FormControl';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import ClearIcon from '@material-ui/icons/Clear';
-import MoodIcon from '@material-ui/icons/Mood';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import ClearIcon from '@mui/icons-material/Clear';
+import MoodIcon from '@mui/icons-material/Mood';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import {
+	Fade,
+	FormControl,
+	IconButton,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	MenuItem,
+	Select
+} from '@mui/material';
 import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
@@ -149,8 +151,9 @@ const NewGame = () => {
 							style={{ justifyContent: 'flex-end', marginRight: -8 }}
 							value={valueStr}
 							onChange={handleChange}
-							IconComponent={() => null}
 							disableUnderline
+							variant="standard"
+							IconComponent={() => null}
 						>
 							{tai.map(t => (
 								<MenuItem
@@ -174,18 +177,20 @@ const NewGame = () => {
 
 	const renderRandomizeOption = () => (
 		<Fade in={players.length === 4} timeout={{ enter: Timeout.SLOW }} unmountOnExit>
-			<ListItem className="user list-item">
-				<ListItemText secondary={`Randomize`} />
-				<IconButton
-					onClick={() => {
-						setRandom(!random);
-					}}
-					style={{ justifyContent: 'flex-end', marginRight: -12 }}
-					disableRipple
-				>
-					{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-				</IconButton>
-			</ListItem>
+			<div>
+				<ListItem className="user list-item">
+					<ListItemText secondary={`Randomize`} />
+					<IconButton
+						onClick={() => {
+							setRandom(!random);
+						}}
+						style={{ justifyContent: 'flex-end', marginRight: -12 }}
+						disableRipple
+					>
+						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+					</IconButton>
+				</ListItem>
+			</div>
 		</Fade>
 	);
 
@@ -200,33 +205,35 @@ const NewGame = () => {
 
 	const renderBottomButtons = () => (
 		<Fade in timeout={20}>
-			<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
-				<HomeButton
-					style={{
-						marginLeft:
-							players?.length < 4
-								? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
-								: 0,
-						transition: TransitionSpeed.MEDIUM
-					}}
-				/>
-				<StyledButton
-					label={'Options'}
-					onClick={() => {
-						setShowOptions(prev => !prev);
-					}}
-					disabled={startedGame}
-				/>
-				<Fade in={players.length === 4} timeout={Timeout.FAST}>
-					<div id="start-join-btn">
-						<StyledButton
-							label={startedGame ? 'Join' : 'Start'}
-							onClick={handleStartJoinClick}
-							disabled={players.length < 4}
-						/>
-					</div>
-				</Fade>
-			</Row>
+			<div>
+				<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
+					<HomeButton
+						style={{
+							marginLeft:
+								players?.length < 4
+									? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
+									: 0,
+							transition: TransitionSpeed.MEDIUM
+						}}
+					/>
+					<StyledButton
+						label={'Options'}
+						onClick={() => {
+							setShowOptions(prev => !prev);
+						}}
+						disabled={startedGame}
+					/>
+					<Fade in={players.length === 4} timeout={Timeout.FAST}>
+						<div id="start-join-btn">
+							<StyledButton
+								label={startedGame ? 'Join' : 'Start'}
+								onClick={handleStartJoinClick}
+								disabled={players.length < 4}
+							/>
+						</div>
+					</Fade>
+				</Row>
+			</div>
 		</Fade>
 	);
 
@@ -245,7 +252,7 @@ const NewGame = () => {
 									renderUserOption(player)
 								) : (
 									<Fade in timeout={Timeout.FAST}>
-										{renderUserOption(player)}
+										<div>{renderUserOption(player)}</div>
 									</Fade>
 								)}
 							</Fragment>
@@ -255,13 +262,15 @@ const NewGame = () => {
 				</div>
 			</div>
 			<Fade in={showOptions} timeout={Timeout.FAST} unmountOnExit>
-				<GameOptions
-					show={showOptions}
-					onClose={() => {
-						setShowOptions(false);
-					}}
-					Content={Options}
-				/>
+				<div>
+					<GameOptions
+						show={showOptions}
+						onClose={() => {
+							setShowOptions(false);
+						}}
+						Content={Options}
+					/>
+				</div>
 			</Fade>
 			{renderBottomButtons()}
 		</>

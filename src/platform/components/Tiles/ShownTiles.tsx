@@ -1,4 +1,4 @@
-import CasinoIcon from '@material-ui/icons/Casino';
+import CasinoIcon from '@mui/icons-material/Casino';
 import React, { MutableRefObject } from 'react';
 import { Segment, Size, Suit } from 'shared/enums';
 import ShownTile from './ShownTile';

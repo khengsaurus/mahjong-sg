@@ -1,4 +1,4 @@
-import Fade from '@material-ui/core/Fade';
+import { Fade } from '@mui/material';
 import { history } from 'App';
 import isEmpty from 'lodash.isempty';
 import AdminControls from 'platform/components/Modals/AdminControls';

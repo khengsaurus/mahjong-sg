@@ -1,4 +1,4 @@
-import Checkbox from '@material-ui/core/Checkbox';
+import { Checkbox } from '@mui/material';
 import { FormRow } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 

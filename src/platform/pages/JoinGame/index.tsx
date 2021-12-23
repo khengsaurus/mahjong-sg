@@ -1,9 +1,5 @@
-import Collapse from '@material-ui/core/Collapse';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Collapse, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { history } from 'App';
 import firebase from 'firebase/app';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';

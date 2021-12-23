@@ -1,10 +1,4 @@
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import FormControl from '@material-ui/core/FormControl';
-import Paper from '@material-ui/core/Paper';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Typography from '@material-ui/core/Typography';
+import { Dialog, DialogContent, FormControl, Paper, Tab, Tabs, Typography } from '@mui/material';
 import { extend, isEqual } from 'lodash';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
@@ -170,7 +164,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 														style={{
 															...MuiStyles.tabOptions
 														}}
-														fullWidth={false}
+														// fullWidth={false}
 														key={size}
 														value={size}
 														label={size}

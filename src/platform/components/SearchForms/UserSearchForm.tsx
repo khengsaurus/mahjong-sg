@@ -1,30 +1,27 @@
-import Collapse from '@material-ui/core/Collapse';
-import Fade from '@material-ui/core/Fade';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import FaceIcon from '@material-ui/icons/Face';
 import AddIcon from '@mui/icons-material/Add';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import FaceIcon from '@mui/icons-material/Face';
+import {
+	Collapse,
+	Fade,
+	IconButton,
+	InputAdornment,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	TextField
+} from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { BotIds, BotName, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import { IStore } from 'shared/store';
 import './searchForms.scss';
 
 const UserSearchForm: React.FC = () => {
 	const { user, players, setPlayers } = useContext(AppContext);
-	const { theme } = useSelector((state: IStore) => state);
-	const { mainTextColor } = theme;
 	const [showOptions, setShowOptions] = useState<boolean>(false);
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
@@ -79,50 +76,34 @@ const UserSearchForm: React.FC = () => {
 
 	const renderAddBotButton = () => (
 		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Timeout.SLOW }} unmountOnExit>
-			<ListItem className="user list-item" style={{ marginTop: '10px !important' }}>
-				<ListItemText secondary={`Add bot`} />
-				<IconButton
-					onClick={() => {
-						setPlayers([...players, generateBot()]);
-					}}
-					style={{ justifyContent: 'flex-end', marginRight: -12 }}
-					disableRipple
-				>
-					<AddIcon />
-				</IconButton>
-			</ListItem>
+			<div>
+				<ListItem className="user list-item">
+					<ListItemText secondary={`Add bot`} />
+					<IconButton
+						onClick={() => {
+							setPlayers([...players, generateBot()]);
+						}}
+						style={{ justifyContent: 'flex-end', marginRight: -12 }}
+						disableRipple
+					>
+						<AddIcon />
+					</IconButton>
+				</ListItem>
+			</div>
 		</Fade>
 	);
-
-	const useStyles = makeStyles(() =>
-		createStyles({
-			text: {
-				color: mainTextColor
-			},
-			rightChevron: {
-				transition: '200ms'
-			},
-			downChevron: {
-				transition: '200ms',
-				transform: 'rotate(90deg)'
-			}
-		})
-	);
-	const classes = useStyles();
 
 	return (
 		<Centered className="search-form-container">
 			<List>
-				<ListItem className="search-box list-item">
+				<ListItem className="search-box list-item" style={{ marginBottom: '10px' }}>
 					<TextField
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}
 						onChange={e => {
 							handleFormChange(e.target.value);
 						}}
 						value={searchFor}
-						InputLabelProps={{
-							className: classes.text
-						}}
+						variant="standard"
 						InputProps={{
 							color: 'secondary',
 							disabled: players.length >= 4,
@@ -137,8 +118,12 @@ const UserSearchForm: React.FC = () => {
 										disableRipple
 									>
 										<ChevronRightIcon
-											className={showOptions ? classes.downChevron : classes.rightChevron}
 											color={showOptions ? 'secondary' : 'primary'}
+											style={
+												showOptions
+													? { transition: '200ms', transform: 'rotate(90deg)' }
+													: { transition: '200ms' }
+											}
 										/>
 									</IconButton>
 								</InputAdornment>
@@ -170,7 +155,7 @@ const UserSearchForm: React.FC = () => {
 									handleSelect(foundUser);
 								}}
 							>
-								<ListItemText primary={foundUser.uN} className={classes.text} />
+								<ListItemText primary={foundUser.uN} />
 								<ListItemIcon
 									style={{
 										justifyContent: 'flex-end'
@@ -182,8 +167,8 @@ const UserSearchForm: React.FC = () => {
 						) : null
 					)}
 				</Collapse>
+				{renderAddBotButton()}
 			</List>
-			{renderAddBotButton()}
 		</Centered>
 	);
 };

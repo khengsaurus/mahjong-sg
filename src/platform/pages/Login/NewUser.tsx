@@ -1,6 +1,5 @@
-import Collapse from '@material-ui/core/Collapse';
-import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
+import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import 'App.scss';
 import ServiceInstance from 'platform/service/ServiceLayer';
@@ -63,6 +62,7 @@ const NewUser = () => {
 						setUsername(e.target.value);
 					}}
 					inputProps={{ maxLength: 10 }}
+					variant="standard"
 					style={{ margin: '-3px 0 5px' }}
 				/>
 				<Row>

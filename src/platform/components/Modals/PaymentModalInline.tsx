@@ -1,8 +1,5 @@
-import FormControl from '@material-ui/core/FormControl';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@mui/icons-material/Send';
+import { FormControl, IconButton, MenuItem, Select } from '@mui/material';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
@@ -37,6 +34,7 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: IPaymentModalInlin
 					value={amountStr}
 					onChange={handleSelectAmount}
 					label="Chips"
+					variant="standard"
 					IconComponent={() => null}
 				>
 					{Amounts.map(amount => (

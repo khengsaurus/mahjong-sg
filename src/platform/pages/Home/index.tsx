@@ -1,4 +1,4 @@
-import Fade from '@material-ui/core/Fade';
+import { Fade } from '@mui/material';
 import { history } from 'App';
 import { JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
@@ -31,12 +31,14 @@ const Home = () => {
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			)}
 			<Fade in={showSettings} timeout={Timeout.FAST} unmountOnExit>
-				<SettingsWindow
-					show={showSettings}
-					onClose={() => {
-						setShowSettings(false);
-					}}
-				/>
+				<div>
+					<SettingsWindow
+						show={showSettings}
+						onClose={() => {
+							setShowSettings(false);
+						}}
+					/>
+				</div>
 			</Fade>
 		</>
 	);

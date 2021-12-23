@@ -1,6 +1,5 @@
-import Collapse from '@material-ui/core/Collapse';
-import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
+import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
@@ -24,11 +23,6 @@ const Login = () => {
 		setConfirmPassword('');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showRegister]);
-
-	// useEffect(() => {
-	// 	const buttonsHeight = document.getElementById('bottom-btns')?.getBoundingClientRect()?.height;
-	// 	setOffsetKeyboard(buttonsHeight);
-	// }, []);
 
 	const loginDisabled = useMemo(() => email.trim() === '' || password.trim() === '', [email, password]);
 
@@ -143,6 +137,7 @@ const Login = () => {
 				onChange={e => {
 					setEmail(e.target.value);
 				}}
+				variant="standard"
 				style={{ margin: '5px 0' }}
 			/>
 			<TextField
@@ -153,6 +148,7 @@ const Login = () => {
 				onChange={e => {
 					setPassword(e.target.value);
 				}}
+				variant="standard"
 				style={{ margin: '5px 0' }}
 			/>
 			<Collapse in={showRegister} timeout={Timeout.FAST} unmountOnExit>
@@ -164,6 +160,7 @@ const Login = () => {
 					onChange={e => {
 						setConfirmPassword(e.target.value);
 					}}
+					variant="standard"
 					style={{ margin: '5px 0' }}
 				/>
 			</Collapse>
@@ -185,9 +182,7 @@ const Login = () => {
 		</>
 	);
 
-	return (
-		<HomePage markup={markup} timeout={2500} ready={ready} skipVerification /> // offset={offsetKeyboard + 10}
-	);
+	return <HomePage markup={markup} timeout={2500} ready={ready} skipVerification />;
 };
 
 export default Login;

@@ -1,9 +1,9 @@
-import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { IconButton } from '@mui/material';
 import { TableText } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
 import { Size } from 'shared/enums';

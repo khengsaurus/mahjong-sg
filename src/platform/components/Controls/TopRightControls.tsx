@@ -1,6 +1,6 @@
-import IconButton from '@material-ui/core/IconButton';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import SubjectIcon from '@material-ui/icons/Subject';
+import { IconButton } from '@mui/material';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import SubjectIcon from '@mui/icons-material/Subject';
 import isEmpty from 'lodash.isempty';
 import LogModal from 'platform/components/Modals/LogModal';
 import { useContext, useRef } from 'react';
