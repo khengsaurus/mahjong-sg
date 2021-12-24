@@ -3,13 +3,13 @@ import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import 'App.scss';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { HomeTheme } from 'platform/style/MuiStyles';
-import { Main, Row } from 'platform/style/StyledComponents';
+import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
 import { Page, Status, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
+import HomePage from '../Home/HomePage';
 
 const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
@@ -51,38 +51,38 @@ const NewUser = () => {
 			});
 	}
 
-	return (
-		<HomeTheme>
-			<Main>
-				<Title title={`Welcome! Choose a username`} />
-				<TextField
-					name="username"
-					label="Username"
-					onChange={e => {
-						setUsername(e.target.value);
+	const markup = () => (
+		<>
+			<Title title={`Welcome! Choose a username`} />
+			<TextField
+				name="username"
+				label="Username"
+				onChange={e => {
+					setUsername(e.target.value);
+				}}
+				inputProps={{ maxLength: 10 }}
+				variant="standard"
+				style={{ margin: '-3px 0 5px' }}
+			/>
+			<Row style={{ width: '80%', justifyContent: 'space-evenly' }}>
+				{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={handleCancel} /> : null}
+				<StyledButton
+					label={`Submit`}
+					autoFocus
+					type="submit"
+					disabled={username.trim() === ''}
+					onClick={() => {
+						handleSubmit({ email: userEmail, uN: username }, successCallback);
 					}}
-					inputProps={{ maxLength: 10 }}
-					variant="standard"
-					style={{ margin: '-3px 0 5px' }}
 				/>
-				<Row>
-					{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={handleCancel} /> : null}
-					<StyledButton
-						label={`Submit`}
-						autoFocus
-						type="submit"
-						disabled={username.trim() === ''}
-						onClick={() => {
-							handleSubmit({ email: userEmail, uN: username }, successCallback);
-						}}
-					/>
-				</Row>
-				<Collapse in={!!alert} timeout={Timeout.FAST} unmountOnExit>
-					<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
-				</Collapse>
-			</Main>
-		</HomeTheme>
+			</Row>
+			<Collapse in={!!alert} timeout={Timeout.FAST} unmountOnExit>
+				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
+			</Collapse>
+		</>
 	);
+
+	return <HomePage markup={markup} timeout={2500} skipVerification />;
 };
 
 export default NewUser;

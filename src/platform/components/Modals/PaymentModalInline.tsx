@@ -30,12 +30,12 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: IPaymentModalInlin
 			<Title variant="subtitle1" title={`Send chips:`} padding="2px" />
 			<FormControl>
 				<Select
-					style={{ ...MuiStyles.small_dropdown_select, marginLeft: '5px' }}
 					value={amountStr}
 					onChange={handleSelectAmount}
 					label="Chips"
 					variant="standard"
 					IconComponent={() => null}
+					style={{ ...MuiStyles.small_dropdown_select, marginLeft: '5px' }}
 				>
 					{Amounts.map(amount => (
 						<MenuItem key={`amount-${amount}`} style={{ ...MuiStyles.small_dropdown_item }} value={amount}>

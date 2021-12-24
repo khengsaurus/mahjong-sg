@@ -167,7 +167,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 														// fullWidth={false}
 														key={size}
 														value={size}
-														label={size}
+														label={size[0]}
 														onClick={() => {
 															preference.handleSelect(size);
 														}}

@@ -5,7 +5,7 @@
 		.row-section-#{$size} {
 			@include flex-dir(column);
 			@include alignI-justifyC(center, center);
-			transition: 200ms;
+			transition: $transition-fast;
 			&.bottom {
 				flex-direction: column-reverse;
 			}
@@ -96,7 +96,7 @@
 		.column-section-#{$size} {
 			@include flow(row wrap);
 			@include alignI-justifyC(center, center);
-			transition: 200ms;
+			transition: $transition-fast;
 			&.right {
 				flex-direction: row-reverse;
 			}
@@ -201,7 +201,7 @@
 				height: getSelfHiddenTileHeight($size);
 				width: getSelfHiddenTileWidth($size);
 				border-radius: $default-tile-border-radius;
-				transition: 200ms;
+				transition: $transition-fast;
 				&.unselected {
 					background: $color-tile-front;
 				}

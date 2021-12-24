@@ -7,7 +7,7 @@
 			@include flow(column);
 			align-items: flex-start;
 			z-index: 10;
-			transition: 200ms;
+			transition: $transition-fast;
 			.buttons {
 				@include flex-dir(row);
 			}
@@ -40,7 +40,7 @@
 			width: 2 * getButtonWidth($size);
 			z-index: 10;
 			// margin-bottom: 2 * $main-padding;
-			transition: 200ms;
+			transition: $transition-fast;
 			.button {
 				max-width: getButtonWidth($size);
 				max-height: getButtonHeight($size);
@@ -57,7 +57,7 @@
 			width: 2 * getButtonWidth($size);
 			// margin-bottom: 2 * $main-padding;
 			z-index: 10;
-			transition: 200ms;
+			transition: $transition-fast;
 			.button {
 				max-width: getButtonWidth($size);
 				max-height: getButtonHeight($size);
@@ -71,7 +71,7 @@
 			@include flex-dir(row-reverse);
 			@include alignI-justifyC(flex-start, flex-start);
 			z-index: 10;
-			transition: 200ms;
+			transition: $transition-fast;
 			.icon-button {
 				width: getIconButtonSize($size);
 				height: getIconButtonSize($size);
@@ -88,7 +88,7 @@
 			max-width: getLogLineWidth($size);
 			font-size: getTextFontSize($size);
 			line-height: getTextLineHeight($size);
-			transition: 200ms;
+			transition: $transition-fast;
 			&.expanded {
 				@include align-items-text(flex-start, start);
 				height: 4 * getIconButtonSize($size);

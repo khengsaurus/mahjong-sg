@@ -85,10 +85,11 @@ const UserSearchForm: React.FC = () => {
 					<IconButton
 						onClick={() => {
 							if (players.length < 4) {
+								setSearchFor('');
 								setPlayers([...players, generateBot()]);
 							}
 						}}
-						style={{ justifyContent: 'flex-end', marginRight: -12 }}
+						style={{ justifyContent: 'flex-end', marginRight: -8 }}
 						disableRipple
 					>
 						<AddIcon />
@@ -113,7 +114,7 @@ const UserSearchForm: React.FC = () => {
 							color: 'secondary',
 							disabled: players.length >= 4,
 							endAdornment: (
-								<InputAdornment position="end" style={{ marginRight: -11 }}>
+								<InputAdornment position="end" style={{ marginRight: -8 }}>
 									<IconButton
 										component="span"
 										onClick={() => {
@@ -126,8 +127,8 @@ const UserSearchForm: React.FC = () => {
 											color={showOptions ? 'secondary' : 'primary'}
 											style={
 												showOptions
-													? { transition: '200ms', transform: 'rotate(90deg)' }
-													: { transition: '200ms' }
+													? { transition: '300ms', transform: 'rotate(90deg)' }
+													: { transition: '300ms' }
 											}
 										/>
 									</IconButton>

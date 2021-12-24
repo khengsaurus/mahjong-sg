@@ -123,14 +123,14 @@ export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	transition: 300;
+	transition: 300ms;
 `;
 
 export const Row = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	transition: 300;
+	transition: 300ms;
 `;
 
 export const FormRow = styled(Row)`

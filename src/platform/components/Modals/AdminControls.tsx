@@ -1,9 +1,9 @@
-import { Dialog, DialogContent, FormControl, FormControlLabel, Switch } from '@mui/material';
-import { TableTheme } from 'platform/style/MuiStyles';
+import { Dialog, DialogContent, FormControl, ListItem, ListItemText, MenuItem, Select, Switch } from '@mui/material';
+import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
-import { AppFlag } from 'shared/enums';
+import { AppFlag, Timeout } from 'shared/enums';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
@@ -38,16 +38,79 @@ const Scenarios = ({ set }: IDevControls) => {
 };
 
 const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
-	const [manualHu, setManualHu] = useState<boolean>(game?.mHu);
+	const [mHu, setMHu] = useState<boolean>(game?.mHu);
+	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
+	const [bt, setBt] = useState<number>(game?.bt);
+
+	function getSpeedLabel(timeout: number) {
+		switch (timeout) {
+			case Timeout.FAST:
+				return 'Fast';
+			case Timeout.MEDIUM:
+				return 'Medium';
+			case Timeout.SLOW:
+				return 'Slow';
+			default:
+				return '';
+		}
+	}
 
 	const closeAndUpdate = useCallback(() => {
-		const updatedGame = { ...game, mHu: manualHu };
-		if (game?.mHu !== updatedGame.mHu) {
+		const updatedGame = { ...game, mHu, bt };
+		if (game?.mHu !== mHu || game?.bt !== bt) {
 			updateGame(objToGame(updatedGame));
 		}
 		onClose();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [game?.mHu, manualHu, updateGame, onClose]);
+	}, [game, mHu, bt, updateGame, onClose]);
+
+	const renderManualHuSelect = () => (
+		<ListItem style={{ padding: 0, justifyContent: 'space-between', display: 'flex', flexDirection: 'row' }}>
+			<div style={{ width: '100px' }}>
+				<ListItemText primary={'Manual Hu:'} />
+			</div>
+			<div style={{ width: '80px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+				<Switch checked={mHu} onChange={() => setMHu(prev => !prev)} />
+			</div>
+		</ListItem>
+	);
+
+	const renderBotTimeSelect = () => {
+		function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+			const speed = (event.target as HTMLInputElement).value;
+			setBtLabel(speed);
+			setBt(Timeout[speed.toUpperCase()]);
+		}
+
+		return (
+			<ListItem style={{ padding: 0, justifyContent: 'space-between' }}>
+				<div style={{ width: '100px' }}>
+					<ListItemText primary={'Bot speed:'} style={{ textAlign: 'left' }} />
+				</div>
+				<div style={{ width: '80px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+					<Select
+						value={btLabel}
+						onChange={handleChange}
+						disableUnderline
+						variant="standard"
+						IconComponent={() => null}
+						// style={{ justifyContent: 'flex-end', marginRight: -8, backgroundColor: 'orange' }}
+						style={{ width: '100px' }}
+					>
+						{['Slow', 'Medium', 'Fast'].map(t => (
+							<MenuItem
+								key={`bt-${t}`}
+								style={{ ...MuiStyles.small_dropdown_item, width: '70px' }}
+								value={t}
+							>
+								{t}
+							</MenuItem>
+						))}
+					</Select>
+				</div>
+			</ListItem>
+		);
+	};
 
 	return (
 		<TableTheme>
@@ -55,11 +118,8 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
 					<DialogContent>
 						<FormControl component="fieldset">
-							<FormControlLabel
-								control={<Switch checked={manualHu} onChange={() => setManualHu(prev => !prev)} />}
-								label="Manual Hu:"
-								labelPlacement="start"
-							/>
+							{renderManualHuSelect()}
+							{renderBotTimeSelect()}
 							{process.env.REACT_APP_FLAG === AppFlag.DEV && <Scenarios set={updateGame} />}
 						</FormControl>
 					</DialogContent>

@@ -89,7 +89,7 @@ const NewGame = () => {
 			) : (
 				<IconButton
 					onClick={() => handleRemovePlayer(player)}
-					style={{ justifyContent: 'flex-end', marginRight: -12 }}
+					style={{ justifyContent: 'flex-end', marginRight: -8 }}
 					disableRipple
 				>
 					<ClearIcon />
@@ -105,7 +105,7 @@ const NewGame = () => {
 				onClick={() => {
 					setMHu(!mHu);
 				}}
-				style={{ justifyContent: 'flex-end', marginRight: -12 }}
+				style={{ justifyContent: 'flex-end', marginRight: -8 }}
 				disableRipple
 			>
 				{mHu ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
@@ -120,7 +120,7 @@ const NewGame = () => {
 				onClick={() => {
 					setPayment(payment === PaymentType.SHOOTER ? PaymentType.HALF_SHOOTER : PaymentType.SHOOTER);
 				}}
-				style={{ justifyContent: 'flex-end', marginRight: -12 }}
+				style={{ justifyContent: 'flex-end', marginRight: -8 }}
 				disableRipple
 			>
 				<SwapHorizIcon />
@@ -188,7 +188,7 @@ const NewGame = () => {
 						onClick={() => {
 							setRandom(!random);
 						}}
-						style={{ justifyContent: 'flex-end', marginRight: -12 }}
+						style={{ justifyContent: 'flex-end', marginRight: -8 }}
 						disableRipple
 					>
 						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
