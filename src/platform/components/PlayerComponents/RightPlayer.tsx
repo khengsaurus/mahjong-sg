@@ -92,8 +92,8 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`column-section-${tileSize || Size.MEDIUM} right`}>
-			{/* {sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.RIGHT} />} */}
-			{shownHiddenHand}
+			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.RIGHT} />}
+			{/* {shownHiddenHand} */}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.RIGHT} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}

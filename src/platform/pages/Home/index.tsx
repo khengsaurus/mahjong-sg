@@ -6,7 +6,7 @@ import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Page, Timeout } from 'shared/enums';
+import { AppFlag, Page, Timeout } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import './home.scss';
@@ -28,9 +28,9 @@ const Home = () => {
 			<NewGameButton />
 			<JoinGameButton />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
-			{/* {process.env.REACT_APP_DEV_FLAG === '1' && <StyledButton label={'Sample'} navigate={Page.SAMPLE} />} */}
+			{/* {process.env.REACT_APP_FLAG === AppFlag.DEV && <StyledButton label={'Sample'} navigate={Page.SAMPLE} />} */}
 			<StyledButton label={'Logout'} onClick={handleLogout} />
-			{process.env.REACT_APP_DEV_FLAG === '1' && (
+			{process.env.REACT_APP_FLAG === AppFlag.DEV && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			)}
 			<Fade in={showSettings} timeout={Timeout.FAST} unmountOnExit>

@@ -3,6 +3,7 @@ import { TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
+import { AppFlag } from 'shared/enums';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
@@ -41,7 +42,7 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 
 	const closeAndUpdate = useCallback(() => {
 		const updatedGame = { ...game, mHu: manualHu };
-		if (game?.mHu !== manualHu) {
+		if (game?.mHu !== updatedGame.mHu) {
 			updateGame(objToGame(updatedGame));
 		}
 		onClose();
@@ -59,7 +60,7 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 								label="Manual Hu:"
 								labelPlacement="start"
 							/>
-							{process.env.REACT_APP_DEV_FLAG === '1' && <Scenarios set={updateGame} />}
+							{process.env.REACT_APP_FLAG === AppFlag.DEV && <Scenarios set={updateGame} />}
 						</FormControl>
 					</DialogContent>
 				</Dialog>

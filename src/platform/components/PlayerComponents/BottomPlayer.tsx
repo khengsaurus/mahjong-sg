@@ -32,9 +32,11 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		tile => {
 			triggerHaptic();
 			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
-				setSelectedTiles([...selectedTiles, tile]);
+				const selected = [...selectedTiles, tile];
+				setSelectedTiles(selected);
 			} else {
-				setSelectedTiles(selectedTiles.filter(selectedTile => selectedTile.r !== tile.r));
+				const selected = selectedTiles.filter(selectedTile => selectedTile.r !== tile.r);
+				setSelectedTiles(selected);
 			}
 		},
 		[selectedTiles, setSelectedTiles]

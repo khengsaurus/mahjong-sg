@@ -74,8 +74,8 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM}`}>
-			{/* {sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />} */}
-			{shownHiddenHand}
+			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />}
+			{/* {shownHiddenHand} */}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.TOP} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}

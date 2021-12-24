@@ -7,17 +7,31 @@ import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
 import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
-import { useCallback, useEffect } from 'react';
+import ServiceInstance from 'platform/service/ServiceLayer';
+import { useCallback, useContext, useEffect } from 'react';
 import { Page, Timeout } from 'shared/enums';
-import { useControls } from 'shared/hooks';
+import { AppContext, useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
 
 const Controls = () => {
+	const { isLocalGame } = useContext(AppContext);
+	const { lThAvail, lThAvailHu } = useTAvail();
+	const { delayOn, delayLeft } = useGameCountdown();
+	const { isHuLocked } = useHuLocked();
+
+	const updateGame = useCallback(
+		game => {
+			ServiceInstance.updateGame(game, isLocalGame);
+		},
+		[isLocalGame]
+	);
+
 	const handleHome = useCallback(() => {
 		history.push(Page.INDEX);
 	}, []);
 
+	const { HH, HHStr } = useHand();
 	const {
 		game,
 		notif,
@@ -32,8 +46,10 @@ const Controls = () => {
 		declareHuModal,
 		announceHuModal,
 		showBottomControls,
-		showAnnounceHuModal
-	} = useControls(handleHome);
+		showAnnounceHuModal,
+		setExec
+	} = useControls(lThAvail, lThAvailHu, delayOn, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome);
+	useBot(lThAvail, setExec);
 
 	const handleKeyListeners = useCallback(
 		e => {
