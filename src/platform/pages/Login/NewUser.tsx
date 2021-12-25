@@ -15,14 +15,14 @@ const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
 	const [username, setUsername] = useState('');
 
-	function handleCancel() {
+	function cancelRegister() {
 		setAlert(null);
 		ServiceInstance.FBDeleteCurrentFBUser();
 		logout();
 		history.push(Page.LOGIN);
 	}
 
-	function handleSubmit(values: IEmailUser, callback: () => void) {
+	function registerNewUsername(values: IEmailUser, callback: () => void) {
 		ServiceInstance.FBNewUsername(values)
 			.then(res => {
 				if (res) {
@@ -32,10 +32,11 @@ const NewUser = () => {
 			})
 			.catch(err => {
 				setAlert({ status: Status.ERROR, msg: err.toString() });
+				ServiceInstance.FBDeleteCurrentFBUser();
 			});
 	}
 
-	function successCallback() {
+	function registerSuccessCallback() {
 		ServiceInstance.FBResolveUser(userEmail)
 			.then((user: User) => {
 				login(user, true);
@@ -65,14 +66,14 @@ const NewUser = () => {
 				style={{ margin: '-3px 0 5px' }}
 			/>
 			<Row style={{ width: '80%', justifyContent: 'space-evenly' }}>
-				{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={handleCancel} /> : null}
+				{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={cancelRegister} /> : null}
 				<StyledButton
 					label={`Submit`}
 					autoFocus
 					type="submit"
 					disabled={username.trim() === ''}
 					onClick={() => {
-						handleSubmit({ email: userEmail, uN: username }, successCallback);
+						registerNewUsername({ email: userEmail, uN: username }, registerSuccessCallback);
 					}}
 				/>
 			</Row>

@@ -1,7 +1,6 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Collapse, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { history } from 'App';
-import firebase from 'firebase/app';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
@@ -23,18 +22,27 @@ const JoinGame = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const unsubscribe = ServiceInstance.FBListenInvites(user, {
-			next: (snapshot: any) => {
-				let games: Game[] = [];
-				snapshot.docs.forEach(function (doc: firebase.firestore.DocumentData) {
-					games.push(objToGame(doc, true));
-				});
-				setGameInvites(games || []);
-				setTitle(games.length === 0 ? 'No available games' : 'Available games:');
-			}
-		});
+		let didUnmount = false;
 
-		return unsubscribe;
+		async function unsub() {
+			if (!didUnmount) {
+				ServiceInstance.FBListenInvites(user, {
+					next: (snapshot: any) => {
+						let games: Game[] = [];
+						snapshot.docs.forEach(function (doc: any) {
+							games.push(objToGame(doc, true));
+						});
+						setGameInvites(games || []);
+						setTitle(games.length === 0 ? 'No available games' : 'Available games:');
+					}
+				});
+			}
+		}
+
+		unsub();
+		return () => {
+			didUnmount = true;
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

@@ -1,6 +1,5 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
-import firebase from 'firebase/app';
 import isEmpty from 'lodash.isempty';
 import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
 import Controls from 'platform/components/Controls';
@@ -20,7 +19,7 @@ import { LocalFlag, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { IStore, setGame } from 'shared/store';
-import { setTHK } from 'shared/store/actions';
+import { setLocalGame, setTHK } from 'shared/store/actions';
 import { findLeft, findOpp, findRight, getTileHashKey } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './table.scss';
@@ -73,28 +72,39 @@ const Table = () => {
 		}
 	}
 
-	function handleLocalGame() {
-		if (!isEmpty(localGame) && user?.uN) {
-			dispatch(setTHK(111));
-			setCurrGame(localGame);
-			hydrateGame(localGame, user.uN);
-		}
-	}
-
 	useEffect(() => {
-		const handleOnlineGame = ServiceInstance.FBListenToGame(gameId, {
-			next: (gameData: firebase.firestore.DocumentData) => {
-				const currentGame: Game = objToGame(gameData, false);
-				if (!isEmpty(currentGame) && user?.uN) {
-					dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
-					setCurrGame(currentGame);
-					hydrateGame(currentGame, user.uN);
-					dispatch(setGame(currentGame));
+		let didUnmount = false;
+
+		async function unsub() {
+			if (!didUnmount) {
+				if (gameId === LocalFlag || isLocalGame) {
+					if (!isEmpty(localGame) && user?.uN) {
+						dispatch(setTHK(111));
+						setCurrGame(localGame);
+						hydrateGame(localGame, user.uN);
+						dispatch(setLocalGame(localGame));
+					}
+				} else {
+					ServiceInstance.FBListenToGame(gameId, {
+						next: (gameData: any) => {
+							const currentGame: Game = objToGame(gameData, false);
+							if (!isEmpty(currentGame) && user?.uN) {
+								dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
+								setCurrGame(currentGame);
+								hydrateGame(currentGame, user.uN);
+								dispatch(setGame(currentGame));
+							}
+						}
+					});
 				}
 			}
-		});
+		}
 
-		return gameId === LocalFlag || isLocalGame ? handleLocalGame() : handleOnlineGame;
+		unsub();
+		return () => {
+			didUnmount = true;
+		};
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gameId, isLocalGame, user?.uN]);
 

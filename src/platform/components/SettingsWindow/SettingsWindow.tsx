@@ -3,7 +3,7 @@ import { extend, isEqual } from 'lodash';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BackgroundColor, Offset, Size, TableColor, TileColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -30,15 +30,25 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	const [controlsSize, setControlsSize] = useState(sizes?.controlsSize);
 	const [handSize, setHandSize] = useState(sizes?.handSize);
 	const [tileSize, setTileSize] = useState(sizes?.tileSize);
-	const initTheme = useRef([backgroundColor, tableColor, tileColor]);
-	const initSizes = useRef([controlsSize, handSize, tileSize]);
 	const transform =
 		offset && process.env.REACT_APP_PLATFORM === 'mobile' ? `translateY(-${Offset.HALF_MOBILE})` : null;
 	const dispatch = useDispatch();
 
+	const flagThemeDiff = useMemo(
+		() =>
+			!isEqual(
+				[backgroundColor, tableColor, tileColor],
+				[theme.backgroundColor, theme.tableColor, theme.tileColor]
+			),
+		[backgroundColor, tableColor, theme.backgroundColor, theme.tableColor, theme.tileColor, tileColor]
+	);
+
+	const flagSizesDiff = useMemo(
+		() => !isEqual([controlsSize, handSize, tileSize], [sizes.controlsSize, sizes.handSize, sizes.tileSize]),
+		[controlsSize, handSize, sizes.controlsSize, sizes.handSize, sizes.tileSize, tileSize]
+	);
+
 	useEffect(() => {
-		const flagThemeDiff = !isEqual([backgroundColor, tableColor, tileColor], initTheme.current);
-		const flagSizesDiff = !isEqual([controlsSize, handSize, tileSize], initSizes.current);
 		if (flagThemeDiff) {
 			dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor)));
 		}
@@ -51,7 +61,17 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 				})
 			);
 		}
-	}, [backgroundColor, tableColor, tileColor, controlsSize, handSize, tileSize, dispatch]);
+	}, [
+		backgroundColor,
+		controlsSize,
+		dispatch,
+		flagSizesDiff,
+		flagThemeDiff,
+		handSize,
+		tableColor,
+		tileColor,
+		tileSize
+	]);
 
 	const preferences: IPreference[] = [
 		{
@@ -102,8 +122,6 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	];
 
 	function handleClose() {
-		const flagThemeDiff = !isEqual([backgroundColor, tableColor, tileColor], initTheme.current);
-		const flagSizesDiff = !isEqual([controlsSize, handSize, tileSize], initSizes.current);
 		if (flagSizesDiff || flagThemeDiff) {
 			let keyVal = {
 				cSz: controlsSize,
@@ -114,11 +132,9 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 				tBC: tileColor
 			};
 			ServiceInstance.FBUpdateUser(user.id, keyVal)
-				.then(res => {
-					if (res) {
-						let updatedUser = extend(user, keyVal);
-						handleLocalUO(updatedUser);
-					}
+				.then(_ => {
+					let updatedUser = extend(user, keyVal);
+					handleLocalUO(updatedUser);
 				})
 				.catch(err => {
 					console.error(err);

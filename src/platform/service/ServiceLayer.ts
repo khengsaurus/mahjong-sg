@@ -31,9 +31,7 @@ export class Service {
 	async FBAuthRegister(props: IEmailPass): Promise<string> {
 		return new Promise((resolve, reject) => {
 			FBService.authRegisterEmailPass(props.email, props.password)
-				.then(email => {
-					resolve(email);
-				})
+				.then(email => resolve(email))
 				.catch(err => {
 					reject(err);
 				});
@@ -56,11 +54,7 @@ export class Service {
 		return new Promise((resolve, reject) => {
 			try {
 				FBService.getUserReprByEmail(email).then((userData: any) => {
-					if (userData.docs.length === 0) {
-						resolve(null);
-					} else {
-						resolve(objToUser(userData));
-					}
+					resolve(objToUser(userData));
 				});
 			} catch (err) {
 				reject(new Error('Email or password incorrect'));
@@ -71,7 +65,7 @@ export class Service {
 	async FBNewUsername(values: IEmailUser): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			FBService.getUserReprByUsername(values.uN).then(data => {
-				if (!data.empty) {
+				if (data) {
 					reject(new Error('Username already taken'));
 				} else {
 					FBService.registerUserEmail(values.uN, values.email)
@@ -129,8 +123,8 @@ export class Service {
 					FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
-						FBService.updateGame(game).then(updatedGame => {
-							resolve(updatedGame);
+						FBService.updateGame(game).then(_ => {
+							resolve(game);
 						});
 					});
 				}
@@ -152,16 +146,12 @@ export class Service {
 		}
 	}
 
-	updateGame(game: Game, isLocalGame = false): Promise<Game> {
+	updateGame(game: Game, isLocalGame = false): Promise<void> {
 		if (isLocalGame) {
 			this.store.dispatch(setLocalGame(game));
 		} else {
 			return FBService.updateGame(game);
 		}
-	}
-
-	FBDeclareHuTransaction(hu: boolean, playerSeat: number, player: User, game: Game): Promise<Boolean> {
-		return FBService.handleDeclareHu(hu, playerSeat, player.uN, game.id);
 	}
 }
 

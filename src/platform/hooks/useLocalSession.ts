@@ -3,7 +3,8 @@ import { useContext, useEffect } from 'react';
 import { Page, Status } from 'shared/enums';
 import { AppContext, useSession } from 'shared/hooks';
 
-function useLocalSession(skipVerification = false) {
+// default skipVerification to true to call validation only when parent component specifies false
+function useLocalSession(skipVerification = true) {
 	const { logout } = useContext(AppContext);
 	const { verifyingSession, sessionVerified } = useSession();
 

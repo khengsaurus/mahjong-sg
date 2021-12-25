@@ -53,8 +53,7 @@ const Login = () => {
 									login(user, false);
 									history.push(Page.INDEX);
 								} else {
-									// User not registered, redirect to NewUser
-									history.push(Page.NEWUSER);
+									throw new Error('Unable to log user in');
 								}
 							})
 							.catch(err => {
@@ -82,7 +81,8 @@ const Login = () => {
 							setReady(true);
 							setAlert(null);
 							callback();
-							handleLogin(values);
+							// User not registered, redirect to NewUser
+							history.push(Page.NEWUSER);
 						}
 					})
 					.catch(err => {
@@ -93,7 +93,7 @@ const Login = () => {
 				setAlert({ status: Status.ERROR, msg: 'Passwords do not match' });
 			}
 		},
-		[confirmPassword, handleLogin, setAlert]
+		[confirmPassword, setAlert]
 	);
 
 	const handleSubmit = useCallback(() => {
