@@ -25,7 +25,7 @@ import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {
-	const { verifyingSession } = useLocalSession();
+	const { verifyingSession } = useLocalSession(false);
 	const {
 		user,
 		gameId,

@@ -8,7 +8,7 @@
 		"@capacitor/app": "1.0.3",
 		"@capacitor/core": "^3.2.3",
 		"@capacitor/haptics": "^1.0.3",
-		"@capacitor/ios": "3.3.2",
+		"@capacitor/ios": "3.3.3",
 		"@capacitor/keyboard": "^1.0.3",
 		"@capacitor/status-bar": "1.0.3",
 		"@emotion/react": "^11.7.1",
@@ -51,7 +51,8 @@
 		"web-vitals": "^1.0.1"
 	},
 	"scripts": {
-		"start": "REACT_APP_PLATFORM=web REACT_APP_FLAG=dev react-scripts start",
+		"start": "REACT_APP_PLATFORM=web react-scripts start",
+		"startdev": "REACT_APP_PLATFORM=web REACT_APP_FLAG=dev react-scripts start",
 		"startbot": "REACT_APP_PLATFORM=web REACT_APP_FLAG=bot react-scripts start",
 		"build": "REACT_APP_PLATFORM=web react-scripts build",
 		"buildapp": "react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",

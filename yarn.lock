@@ -1276,10 +1276,10 @@
   "resolved" "https://registry.npmjs.org/@capacitor/haptics/-/haptics-1.0.3.tgz"
   "version" "1.0.3"
 
-"@capacitor/ios@3.3.2":
-  "integrity" "sha512-qXbWo9zTtinIYDxKsLdkXXuZD8H+wlJII3+ZF9QzH+38IYyd+sohOG3NLC8EaX7GRtwCymd+mGotoN420SfQ4Q=="
-  "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-3.3.2.tgz"
-  "version" "3.3.2"
+"@capacitor/ios@3.3.3":
+  "integrity" "sha512-SQ35AaHUIJjjEX22wwdoN1sUZ3uMwG0HrZ0izMeBJBDE+vmNI78SP9wMqJxKuCaaX4oFKrxCtf/fQZGVTSxpCQ=="
+  "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-3.3.3.tgz"
+  "version" "3.3.3"
 
 "@capacitor/keyboard@^1.0.3":
   "integrity" "sha512-s963GqVAvhdqxwtASjev/Az6gm164GbAxZGXP29VK8J+j363y++F9uDVUNfud9z7msdXaoV4btyk7cc7rmxydg=="

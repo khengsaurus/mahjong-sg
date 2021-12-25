@@ -43,12 +43,12 @@ const TopLeftControls = ({
 			<div className="buttons">
 				<ControlsButton Icon={HomeIcon} onClick={handleHome} size={controlsSize} />
 				<ControlsButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
+				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
 				<ControlsButton
 					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}
 					size={controlsSize}
 				/>
-				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
 			</div>
 			{showText && (
 				<div className="text-container">
