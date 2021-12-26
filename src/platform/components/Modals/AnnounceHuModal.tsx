@@ -42,12 +42,14 @@ const AnnounceHuModal = ({
 				{hu.length > 2 ? (
 					<>
 						<Title
-							title={`${game.ps[hu[0]]?.uN} hu, ${hu[1]}台${hu[2] === 1 ? ` 自摸` : ``}`}
-							variant="h6"
+							title={`${hu[0] === playerSeat ? 'You' : game.ps[hu[0]]?.uN} won, with ${hu[1]}台${
+								hu[2] === 1 ? ` 自摸` : ``
+							}`}
+							variant="subtitle1"
 							padding="3px 0px"
 						/>
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
-							return <Title title={getHandDesc(p)} variant="subtitle2" padding="2px" key={ix} />;
+							return <Title title={`• ${getHandDesc(p)}`} variant="subtitle2" padding="2px" key={ix} />;
 						})}
 						{hu[0] !== playerSeat && (
 							<PaymentModalInline game={game} playerSeat={playerSeat} updateGame={updateGame} />

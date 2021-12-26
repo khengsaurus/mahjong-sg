@@ -17,15 +17,9 @@ import './controls.scss';
 const Controls = () => {
 	const { isLocalGame } = useContext(AppContext);
 	const { lThAvail, lThAvailHu } = useTAvail();
-	const { delayOn, delayLeft } = useGameCountdown();
 	const { isHuLocked } = useHuLocked();
-
-	const updateGame = useCallback(
-		game => {
-			ServiceInstance.updateGame(game, isLocalGame);
-		},
-		[isLocalGame]
-	);
+	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
+	const { delayOn, delayLeft } = useGameCountdown(updateGame);
 
 	const handleHome = useCallback(() => {
 		history.push(Page.INDEX);
@@ -47,10 +41,9 @@ const Controls = () => {
 		announceHuModal,
 		showBottomControls,
 		showAnnounceHuModal,
-		exec,
 		setExec
 	} = useControls(lThAvail, lThAvailHu, delayOn, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome);
-	useBot(lThAvail, exec, setExec);
+	useBot(lThAvail, setExec);
 
 	const handleKeyListeners = useCallback(
 		e => {

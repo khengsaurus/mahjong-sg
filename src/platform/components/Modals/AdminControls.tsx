@@ -7,7 +7,7 @@ import { AppFlag, Timeout } from 'shared/enums';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
-import sample_user1_close_hu from 'shared/__mock__/sample_user1_close_hu.json';
+import sample_pong_hu from 'shared/__mock__/sample_pong_hu.json';
 import sample_user2_pong_then_kang from 'shared/__mock__/sample_user2_pong_then_kang.json';
 import sample_user3_hu from 'shared/__mock__/sample_user3_hu.json';
 
@@ -25,7 +25,7 @@ const Scenarios = ({ set }: IDevControls) => {
 		{ label: 'User3 Hu', obj: sample_user3_hu },
 		{ label: 'Multi Hu', obj: sample_multi_hu },
 		{ label: 'User2 pong/kang', obj: sample_user2_pong_then_kang },
-		{ label: 'User1 close to hu', obj: sample_user1_close_hu }
+		{ label: 'Pong vs hu', obj: sample_pong_hu }
 	];
 
 	return (

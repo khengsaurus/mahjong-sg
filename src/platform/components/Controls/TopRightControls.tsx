@@ -11,7 +11,7 @@ import { IStore } from 'shared/store';
 import './controls.scss';
 
 const TopRightControls = (props: ITopRightControls) => {
-	const { handlePay, handleLogs, showLogs } = props;
+	const { handlePay, handleLogs, showLogs, showText } = props;
 	const { currGame } = useContext(AppContext);
 	const {
 		theme: { tableColor = TableColor.GREEN },
@@ -27,7 +27,7 @@ const TopRightControls = (props: ITopRightControls) => {
 			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
 				<SubjectIcon fontSize={controlsSize} />
 			</IconButton>
-			{showLogs && !isEmpty(currGame?.logs) && (
+			{showText && !isEmpty(currGame?.logs) && (
 				<LogModal
 					expanded={showLogs}
 					onClose={handleLogs}
