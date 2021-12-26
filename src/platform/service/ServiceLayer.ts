@@ -31,9 +31,7 @@ export class Service {
 	async FBAuthRegister(props: IEmailPass): Promise<string> {
 		return new Promise((resolve, reject) => {
 			FBService.authRegisterEmailPass(props.email, props.password)
-				.then(email => {
-					resolve(email);
-				})
+				.then(email => resolve(email))
 				.catch(err => {
 					reject(err);
 				});
@@ -158,10 +156,6 @@ export class Service {
 		} else {
 			return FBService.updateGame(game);
 		}
-	}
-
-	FBDeclareHuTransaction(hu: boolean, playerSeat: number, player: User, game: Game): Promise<Boolean> {
-		return FBService.handleDeclareHu(hu, playerSeat, player.uN, game.id);
 	}
 }
 

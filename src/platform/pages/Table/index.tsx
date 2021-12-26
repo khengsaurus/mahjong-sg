@@ -20,13 +20,13 @@ import { LocalFlag, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { IStore, setGame } from 'shared/store';
-import { setTHK } from 'shared/store/actions';
+import { setLocalGame, setTHK } from 'shared/store/actions';
 import { findLeft, findOpp, findRight, getTileHashKey } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {
-	const { verifyingSession } = useLocalSession();
+	const { verifyingSession } = useLocalSession(false);
 	const {
 		user,
 		gameId,
@@ -76,6 +76,7 @@ const Table = () => {
 	function handleLocalGame() {
 		if (!isEmpty(localGame) && user?.uN) {
 			dispatch(setTHK(111));
+			dispatch(setLocalGame(localGame));
 			setCurrGame(localGame);
 			hydrateGame(localGame, user.uN);
 		}
