@@ -1,3 +1,13 @@
+import { Capacitor } from '@capacitor/core';
+import {
+	Auth,
+	createUserWithEmailAndPassword,
+	indexedDBLocalPersistence,
+	initializeAuth,
+	signInWithEmailAndPassword,
+	User as FBUser,
+	UserCredential
+} from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -9,33 +19,44 @@ import { shuffle } from 'shared/util';
 import { gameToObj, playerToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
-	private user: firebase.User;
+	private user: FBUser;
 	private db: firebase.firestore.Firestore;
 	private userRepr: firebase.firestore.CollectionReference;
 	private gameRef: firebase.firestore.CollectionReference;
 	private app: firebase.app.App;
-	private auth: firebase.auth.Auth;
+	private auth: Auth;
 
 	constructor() {
-		this.init().then(() => {
-			this.auth = firebase.auth();
+		this.initApp().then(() => {
+			this.initAuth();
 			this.db = firebase.firestore();
 			this.userRepr = this.db.collection(FBCollection.USERREPR);
 			this.gameRef = this.db.collection(FBCollection.GAMES);
-			this.auth.onAuthStateChanged(user => {
-				console.info(user ? 'Firebase user signed in 😊' : 'No Firebase user 🥲');
-				this.user = user;
-			});
 		});
 	}
 
-	async init() {
+	async initApp() {
 		if (!firebase.apps.length) {
 			this.app = firebase.initializeApp(FirebaseConfig);
 		} else {
 			this.app = firebase.app();
 		}
 		console.info('Firebase App initialized 🔥');
+	}
+
+	/**
+	 * @see https://github.com/firebase/firebase-js-sdk/issues/5552
+	 */
+	async initAuth() {
+		if (Capacitor.isNativePlatform) {
+			this.auth = initializeAuth(this.app, {
+				persistence: indexedDBLocalPersistence
+			});
+		}
+		this.auth.onAuthStateChanged(user => {
+			console.info(user ? 'Firebase user signed in 😊' : 'No Firebase user 🥲');
+			this.user = user;
+		});
 	}
 
 	userAuthenticated() {
@@ -46,9 +67,8 @@ export class FirebaseService {
 
 	async authRegisterEmailPass(email: string, password: string): Promise<string> {
 		return new Promise((resolve, reject) => {
-			this.auth
-				.createUserWithEmailAndPassword(email, password)
-				.then((values: firebase.auth.UserCredential) => {
+			createUserWithEmailAndPassword(this.auth, email, password)
+				.then((values: UserCredential) => {
 					resolve(values.user.email);
 				})
 				.catch(err => {
@@ -59,9 +79,8 @@ export class FirebaseService {
 
 	async authLoginEmailPass(email: string, password: string): Promise<string> {
 		return new Promise((resolve, reject) => {
-			this.auth
-				.signInWithEmailAndPassword(email, password)
-				.then((values: firebase.auth.UserCredential) => {
+			signInWithEmailAndPassword(this.auth, email, password)
+				.then((values: UserCredential) => {
 					resolve(values.user.email);
 				})
 				.catch(err => {

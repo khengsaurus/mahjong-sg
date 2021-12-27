@@ -319,9 +319,9 @@ export const MuiStyles = {
 	},
 	small_dropdown_item: {
 		width: '52px',
-		height: '20px',
-		minHeight: '20px',
-		maxHeight: '20px',
+		height: '28px',
+		minHeight: '28px',
+		maxHeight: '28px',
 		margin: '4px',
 		justifyContent: 'center'
 	}
