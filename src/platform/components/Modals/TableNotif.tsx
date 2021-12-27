@@ -4,7 +4,7 @@ import { Centered } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { ITableNotif } from 'shared/typesPlus';
 
-const TableNotif = ({ msg, timeout, pong, kang, hu }: ITableNotif) => {
+const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: ITableNotif) => {
 	return (
 		<div>
 			<Dialog
@@ -18,8 +18,9 @@ const TableNotif = ({ msg, timeout, pong, kang, hu }: ITableNotif) => {
 			>
 				<DialogContent style={{ paddingBottom: 0 }}>
 					<Centered>
-						<Title title={msg} variant="subtitle1" padding="3px 0px" />
+						{notifs[0] && <Title title={notifs[0]} variant="subtitle1" padding="3px 0px" />}
 						<Title title={`${timeout}`} variant="subtitle1" padding="0px" />
+						{notifs[1] && <Title title={notifs[1]} variant="subtitle2" padding="1px 0px" />}
 					</Centered>
 				</DialogContent>
 				<DialogActions

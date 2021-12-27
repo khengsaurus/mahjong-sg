@@ -35,17 +35,13 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	const dispatch = useDispatch();
 
 	const flagThemeDiff = useMemo(
-		() =>
-			!isEqual(
-				[backgroundColor, tableColor, tileColor],
-				[theme.backgroundColor, theme.tableColor, theme.tileColor]
-			),
-		[backgroundColor, tableColor, theme.backgroundColor, theme.tableColor, theme.tileColor, tileColor]
+		() => !isEqual([backgroundColor, tableColor, tileColor], [user.bgC, user.tC, user.tBC]),
+		[backgroundColor, tableColor, user.bgC, user.tC, user.tBC, tileColor]
 	);
 
 	const flagSizesDiff = useMemo(
-		() => !isEqual([controlsSize, handSize, tileSize], [sizes.controlsSize, sizes.handSize, sizes.tileSize]),
-		[controlsSize, handSize, sizes.controlsSize, sizes.handSize, sizes.tileSize, tileSize]
+		() => !isEqual([controlsSize, handSize, tileSize], [user.cSz, user.hSz, user.tSz]),
+		[controlsSize, handSize, user.cSz, user.hSz, user.tSz, tileSize]
 	);
 
 	useEffect(() => {

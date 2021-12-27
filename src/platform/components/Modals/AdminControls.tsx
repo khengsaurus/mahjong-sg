@@ -58,8 +58,8 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 	}
 
 	const closeAndUpdate = useCallback(() => {
-		const updatedGame = { ...game, mHu, bt };
 		if (game?.mHu !== mHu || game?.bt !== bt) {
+			const updatedGame = { ...game, mHu, bt };
 			updateGame(objToGame(updatedGame));
 		}
 		onClose();

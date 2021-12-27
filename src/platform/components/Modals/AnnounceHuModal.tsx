@@ -75,7 +75,7 @@ const AnnounceHuModal = ({
 					(canHuFirst ? (
 						<StyledButton label={'Hu'} onClick={huFirst} />
 					) : (
-						<StyledButton label={show ? 'Hide' : 'Show'} onClick={handleShow} />
+						!show && <StyledButton label={'Show'} onClick={handleShow} />
 					))}
 				{showNextRound && <StyledButton label={`Next Round`} onClick={nextRound} />}
 			</DialogActions>
