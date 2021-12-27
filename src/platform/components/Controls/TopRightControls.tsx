@@ -24,7 +24,7 @@ const TopRightControls = (props: ITopRightControls) => {
 			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
 				<SubjectIcon fontSize={controlsSize} />
 			</IconButton>
-			{showText && (
+			{(showText || showLogs) && (
 				<LogModal
 					expanded={showLogs}
 					onClose={handleLogs}

@@ -10,7 +10,7 @@ import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { LocalFlag, Page, Timeout } from 'shared/enums';
+import { LocalFlag, Page, Shortcut, Timeout } from 'shared/enums';
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
@@ -50,19 +50,24 @@ const Controls = () => {
 	const handleKeyListeners = useCallback(
 		e => {
 			switch (e.key) {
-				case 'a':
+				case Shortcut.ADMIN:
 					if (topLeft?.isAdmin) {
 						topLeft?.handleAdmin();
 					}
 					break;
-				case 'q':
-				case 'h':
+				case Shortcut.HOME:
 					handleHome();
 					break;
-				case 'p':
+				case Shortcut.PAY:
 					topRight?.handlePay();
 					break;
-				case 'v':
+				case Shortcut.SETTINGS:
+					topLeft?.handleSettings();
+					break;
+				case Shortcut.TEXT:
+					topRight?.handleLogs();
+					break;
+				case Shortcut.VIEW:
 					topLeft?.handleScreenText();
 					break;
 				default:

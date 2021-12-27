@@ -45,29 +45,18 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	);
 
 	useEffect(() => {
-		if (flagThemeDiff) {
-			dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor)));
-		}
-		if (flagSizesDiff) {
-			dispatch(
-				setSizes({
-					handSize,
-					tileSize,
-					controlsSize
-				})
-			);
-		}
-	}, [
-		backgroundColor,
-		controlsSize,
-		dispatch,
-		flagSizesDiff,
-		flagThemeDiff,
-		handSize,
-		tableColor,
-		tileColor,
-		tileSize
-	]);
+		dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor)));
+	}, [dispatch, backgroundColor, tableColor, tileColor]);
+
+	useEffect(() => {
+		dispatch(
+			setSizes({
+				handSize,
+				tileSize,
+				controlsSize
+			})
+		);
+	}, [dispatch, controlsSize, handSize, tileSize]);
 
 	const preferences: IPreference[] = [
 		{
