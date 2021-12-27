@@ -2,8 +2,9 @@ import { Dialog, DialogContent, FormControl, ListItem, ListItemText, MenuItem, S
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { AppFlag, Timeout } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
@@ -38,6 +39,7 @@ const Scenarios = ({ set }: IDevControls) => {
 };
 
 const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
+	const { isLocalGame } = useContext(AppContext);
 	const [mHu, setMHu] = useState<boolean>(game?.mHu);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
 	const [bt, setBt] = useState<number>(game?.bt);
@@ -120,7 +122,9 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 						<FormControl component="fieldset">
 							{renderManualHuSelect()}
 							{renderBotTimeSelect()}
-							{process.env.REACT_APP_FLAG === AppFlag.DEV && <Scenarios set={updateGame} />}
+							{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && !isLocalGame && (
+								<Scenarios set={updateGame} />
+							)}
 						</FormControl>
 					</DialogContent>
 				</Dialog>

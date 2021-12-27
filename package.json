@@ -53,7 +53,7 @@
 	"scripts": {
 		"start": "REACT_APP_PLATFORM=web react-scripts start",
 		"startdev": "REACT_APP_PLATFORM=web REACT_APP_FLAG=dev react-scripts start",
-		"startbot": "REACT_APP_PLATFORM=web REACT_APP_FLAG=bot react-scripts start",
+		"startdevbot": "REACT_APP_PLATFORM=web REACT_APP_FLAG=devbot react-scripts start",
 		"build": "REACT_APP_PLATFORM=web react-scripts build",
 		"buildapp": "react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
 		"test": "jest",

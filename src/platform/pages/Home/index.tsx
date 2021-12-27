@@ -22,7 +22,7 @@ const Home = () => {
 			<JoinGameButton />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			<LogoutButton />
-			{process.env.REACT_APP_FLAG === AppFlag.DEV && (
+			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			)}
 			<Fade in={showSettings} timeout={Timeout.FAST} unmountOnExit>

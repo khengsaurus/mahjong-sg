@@ -5,7 +5,7 @@ import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BackgroundColor, Offset, Size, TableColor, TileColor } from 'shared/enums';
+import { BackgroundColor, Offset, Platform, Size, TableColor, TileColor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { setSizes, setTheme } from 'shared/store/actions';
@@ -31,7 +31,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	const [handSize, setHandSize] = useState(sizes?.handSize);
 	const [tileSize, setTileSize] = useState(sizes?.tileSize);
 	const transform =
-		offset && process.env.REACT_APP_PLATFORM === 'mobile' ? `translateY(-${Offset.HALF_MOBILE})` : null;
+		offset && process.env.REACT_APP_PLATFORM === Platform.MOBILE ? `translateY(-${Offset.HALF_MOBILE})` : null;
 	const dispatch = useDispatch();
 
 	const flagThemeDiff = useMemo(

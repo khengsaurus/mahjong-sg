@@ -2,7 +2,7 @@ import isEmpty from 'lodash.isempty';
 import { DiscardedTiles, HiddenHand, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { FrontBackTag, Segment, Size } from 'shared/enums';
+import { AppFlag, FrontBackTag, Segment, Size } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
@@ -74,8 +74,14 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM}`}>
-			{sT ? shownHiddenHand : <HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />}
 			{/* {shownHiddenHand} */}
+			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) ? (
+				shownHiddenHand
+			) : sT ? (
+				shownHiddenHand
+			) : (
+				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />
+			)}
 			{sTs?.length > 0 && renderShownTiles()}
 			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.TOP} tag={frontBackTag} />}
 			{dTs?.length > 0 && renderDiscardedTiles()}
