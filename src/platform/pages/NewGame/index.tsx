@@ -22,9 +22,9 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
-import { Fragment, useContext, useRef, useState } from 'react';
+import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Page, PaymentType, Timeout, TransitionSpeed } from 'shared/enums';
+import { BotIds, LocalFlag, Page, PaymentType, Timeout, TransitionSpeed } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore, setGameId } from 'shared/store';
@@ -35,7 +35,7 @@ import './newGame.scss';
 
 const NewGame = () => {
 	const { user } = useSelector((state: IStore) => state);
-	const { players, setPlayers, isLocalGame } = useContext(AppContext);
+	const { players, setPlayers } = useContext(AppContext);
 	const [mHu, setMHu] = useState(false);
 	const [payment, setPayment] = useState(PaymentType.HALF_SHOOTER);
 	const [random, setRandom] = useState(false);
@@ -47,6 +47,10 @@ const NewGame = () => {
 	const [startedGame, setStartedGame] = useState(false);
 	const playersRef = useRef<User[]>(players);
 	const dispatch = useDispatch();
+	const isLocalGame: boolean = useMemo(
+		() => players.every(p => p.id === user.id || BotIds.includes(p.id)),
+		[players, user]
+	);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
@@ -59,7 +63,7 @@ const NewGame = () => {
 	async function startGame() {
 		await ServiceInstance.initGame(user, players, random, minTai, maxTai, mHu, isLocalGame).then(game => {
 			if (game?.id) {
-				dispatch(setTHK(isLocalGame ? 111 : getTileHashKey(game.id, game.st)));
+				dispatch(setTHK(game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.st)));
 				dispatch(setGameId(game.id));
 				setStartedGame(true);
 			}

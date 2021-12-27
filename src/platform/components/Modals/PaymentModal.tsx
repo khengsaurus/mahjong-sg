@@ -3,8 +3,10 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
-import { Amounts } from 'shared/enums';
+import { useSelector } from 'react-redux';
+import { Amounts, LocalFlag } from 'shared/enums';
 import { Game, User } from 'shared/models';
+import { IStore } from 'shared/store';
 import { IModalProps } from 'shared/typesPlus';
 
 export async function sendChips(
@@ -22,10 +24,13 @@ export async function sendChips(
 	sendCallback && sendCallback();
 }
 
-const PaymentModal = ({ game, playerSeat, show, updateGame, onClose }: IModalProps) => {
+const PaymentModal = ({ playerSeat, show, updateGame, onClose }: IModalProps) => {
+	const { game, gameId, localGame } = useSelector((store: IStore) => store);
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);
-	const playerUsername = game.ps[playerSeat].uN;
+	const isLocalGame = gameId === LocalFlag;
+	const currGame = isLocalGame ? localGame : game;
+	const playerUsername = currGame.ps[playerSeat].uN;
 
 	function sendCallback() {
 		setRecipientIndex(10);
@@ -57,7 +62,7 @@ const PaymentModal = ({ game, playerSeat, show, updateGame, onClose }: IModalPro
 					<Title title="Send chips" variant="subtitle1" padding="3px 0px" />
 					<Title title="To: " variant="subtitle1" padding="2px 0px" />
 					<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
-						{game.ps.map((otherPlayer: User, index: number) =>
+						{currGame.ps.map((otherPlayer: User, index: number) =>
 							otherPlayer.uN !== playerUsername ? (
 								<FormControlLabel
 									key={otherPlayer.uN}
@@ -89,7 +94,7 @@ const PaymentModal = ({ game, playerSeat, show, updateGame, onClose }: IModalPro
 							variant="text"
 							size="large"
 							onClick={() => {
-								sendChips(game, playerSeat, recipientIndex, amount, updateGame, sendCallback);
+								sendChips(currGame, playerSeat, recipientIndex, amount, updateGame, sendCallback);
 							}}
 							disabled={recipientIndex === 9 || !amount || amount <= 0}
 							disableRipple

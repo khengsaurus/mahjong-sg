@@ -1,10 +1,12 @@
 import { Dialog, DialogContent, FormControl, ListItem, ListItemText, MenuItem, Select, Switch } from '@mui/material';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
-import { useCallback, useContext, useState } from 'react';
-import { AppFlag, Timeout } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
+import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { AppFlag, LocalFlag, Timeout } from 'shared/enums';
+import { IStore } from 'shared/store';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
@@ -38,11 +40,14 @@ const Scenarios = ({ set }: IDevControls) => {
 	);
 };
 
-const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
-	const { isLocalGame } = useContext(AppContext);
-	const [mHu, setMHu] = useState<boolean>(game?.mHu);
-	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
-	const [bt, setBt] = useState<number>(game?.bt);
+const AdminControls = ({ show, onClose }: IModalProps) => {
+	const { game, gameId, localGame } = useSelector((store: IStore) => store);
+	const isLocalGame = gameId === LocalFlag;
+	const currGame = isLocalGame ? localGame : game;
+	const [mHu, setMHu] = useState<boolean>(currGame?.mHu);
+	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(currGame?.bt));
+	const [bt, setBt] = useState<number>(currGame?.bt);
+	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -58,13 +63,13 @@ const AdminControls = ({ game, show, updateGame, onClose }: IModalProps) => {
 	}
 
 	const closeAndUpdate = useCallback(() => {
-		if (game?.mHu !== mHu || game?.bt !== bt) {
-			const updatedGame = { ...game, mHu, bt };
+		if (currGame?.mHu !== mHu || currGame?.bt !== bt) {
+			const updatedGame = { ...currGame, mHu, bt };
 			updateGame(objToGame(updatedGame));
 		}
 		onClose();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [game, mHu, bt, updateGame, onClose]);
+	}, [currGame, mHu, bt, updateGame, onClose]);
 
 	const renderManualHuSelect = () => (
 		<ListItem style={{ padding: 0, justifyContent: 'space-between', display: 'flex', flexDirection: 'row' }}>

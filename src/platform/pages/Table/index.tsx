@@ -34,8 +34,9 @@ const Table = () => {
 		localGame,
 		sizes: { tileSize }
 	} = useSelector((state: IStore) => state);
-	const { setCurrGame, isLocalGame, setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
+	const { setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
+	const isLocalGame = gameId === LocalFlag;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -77,7 +78,6 @@ const Table = () => {
 		if (!isEmpty(localGame) && user?.uN) {
 			dispatch(setTHK(111));
 			dispatch(setLocalGame(localGame));
-			setCurrGame(localGame);
 			hydrateGame(localGame, user.uN);
 		}
 	}
@@ -88,7 +88,6 @@ const Table = () => {
 				const currentGame: Game = objToGame(gameData, false);
 				if (!isEmpty(currentGame) && user?.uN) {
 					dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
-					setCurrGame(currentGame);
 					hydrateGame(currentGame, user.uN);
 					dispatch(setGame(currentGame));
 				}

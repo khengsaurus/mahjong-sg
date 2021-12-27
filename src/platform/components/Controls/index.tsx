@@ -8,14 +8,16 @@ import PaymentModal from 'platform/components/Modals/PaymentModal';
 import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { useCallback, useContext, useEffect } from 'react';
-import { Page, Timeout } from 'shared/enums';
-import { AppContext, useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
+import { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { LocalFlag, Page, Timeout } from 'shared/enums';
+import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
+import { IStore } from 'shared/store';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
 
 const Controls = () => {
-	const { isLocalGame } = useContext(AppContext);
+	const isLocalGame = LocalFlag === useSelector((store: IStore) => store.gameId);
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
