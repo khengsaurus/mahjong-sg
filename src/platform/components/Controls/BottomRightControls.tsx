@@ -18,6 +18,7 @@ const BottomRightControls = (props: IBottomRightControls) => {
 		HHStr
 	} = props;
 	const {
+		game,
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
 
@@ -38,7 +39,10 @@ const BottomRightControls = (props: IBottomRightControls) => {
 			{!confirmHu && !showDeclareHu && HHStr !== '' && (
 				<ControlButton
 					label={`开?`}
-					callback={handleOpen}
+					callback={() => {
+						console.log(game);
+						handleOpen();
+					}}
 					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 				/>
 			)}

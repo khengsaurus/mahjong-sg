@@ -76,7 +76,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose }: IDe
 						/>
 					)}
 					<StyledButton
-						label={`胡`}
+						label={`Hu`}
 						size="large"
 						onClick={hu}
 						disabled={!tai || game?.hu.length > 2}
