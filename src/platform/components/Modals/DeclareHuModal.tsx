@@ -6,7 +6,7 @@ import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { HandPoint } from 'shared/handEnums';
 import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
-import { generateNumberArray, getHandDesc } from 'shared/util';
+import { generateNumbers, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose }: IDeclareHuModalProps) => {
 	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
@@ -25,23 +25,26 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose }: IDe
 	};
 
 	const renderManualHuOptions = () => (
-		<div style={{ padding: '5px 0px' }}>
+		<div>
 			<FormRow>
-				<Title title="台: " variant="subtitle1" padding="0px 15px 0px 0px" />
+				<Title title="台: " variant="subtitle2" padding="0px" />
 				<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
-					{generateNumberArray(px[1] || 5).map((tai: number) => (
+					{generateNumbers(px[0], px[1]).map((tai: number) => (
 						<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
 					))}
 				</RadioGroup>
 			</FormRow>
-			<CheckBox
-				title="自摸: "
-				value={zimo}
-				onChange={() => {
-					setZimo(prev => !prev);
-				}}
-				defaultChecked={!!HH?.self}
-			/>
+			<FormRow>
+				<Title title="自摸: " variant="subtitle2" padding="0px" />
+				<CheckBox
+					title=""
+					value={zimo}
+					onChange={() => {
+						setZimo(prev => !prev);
+					}}
+					defaultChecked={!!HH?.self}
+				/>
+			</FormRow>
 		</div>
 	);
 
@@ -60,7 +63,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose }: IDe
 				<DialogContent>
 					<Title
 						title={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
-						variant="h6"
+						variant="subtitle1"
 						padding="3px 0px"
 					/>
 					{HH?.pxs?.map((p: IPoint, ix: number) => {
@@ -69,18 +72,14 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose }: IDe
 					{game?.mHu ? (
 						renderManualHuOptions()
 					) : (
-						<Title
-							title={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
-							variant="subtitle1"
-							padding="3px 0px 6px"
-						/>
+						<Title title={`${tai} 台${HH?.self ? ` 自摸` : ``}`} variant="subtitle2" padding="3px 0px" />
 					)}
 					<StyledButton
 						label={`Hu`}
 						size="large"
 						onClick={hu}
-						disabled={!tai || game?.hu.length > 2}
-						style={{ position: 'absolute', bottom: 5, right: 0 }}
+						disabled={!tai || tai < game?.px[0] || game?.hu.length > 2}
+						style={{ position: 'absolute', bottom: 10, right: 0 }}
 					/>
 				</DialogContent>
 			</Dialog>

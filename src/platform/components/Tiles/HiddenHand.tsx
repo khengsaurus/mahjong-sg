@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { HiddenTile } from 'platform/style/StyledComponents';
 import { useMemo } from 'react';
 import { Segment } from 'shared/enums';
-import { generateNumberArray } from 'shared/util';
+import { generateNumbers } from 'shared/util';
 
 interface IHiddenHand {
 	tiles: number;
@@ -10,7 +10,7 @@ interface IHiddenHand {
 }
 
 const HiddenHand = ({ tiles, segment }: IHiddenHand) => {
-	const tilesArray = useMemo(() => generateNumberArray(tiles), [tiles]);
+	const tilesArray = useMemo(() => generateNumbers(1, tiles), [tiles]);
 
 	return segment === Segment.TOP ? (
 		<div className="htsh">

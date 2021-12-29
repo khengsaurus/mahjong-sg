@@ -27,6 +27,9 @@ function getClass(segment: Segment) {
 	}
 }
 
+/**
+ * @description Renders a ShownTile for IShownTile | IHiddenTile, hence tileCard needs to be unhashed and passed as a prop
+ */
 const ShownTile = (props: ShownTileProps) => {
 	const { tileRef, tileCard, segment, lastRef, highlight, classSuffix, onClick } = props;
 	let divClass = getClass(segment);

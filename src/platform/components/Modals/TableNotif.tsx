@@ -19,8 +19,13 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: ITableNotif) => {
 				<DialogContent style={{ paddingBottom: 0 }}>
 					<Centered>
 						{notifs[0] && <Title title={notifs[0]} variant="subtitle1" padding="3px 0px" />}
-						<Title title={`${timeout}`} variant="subtitle1" padding="0px" />
-						{notifs[1] && <Title title={notifs[1]} variant="subtitle2" padding="1px 0px" />}
+						<Title title={`${timeout}`} variant="subtitle1" padding="0px 0px 6px" />
+						{notifs.length > 1 &&
+							notifs
+								.slice(1, 10)
+								.map((n: string, ix: number) => (
+									<Title key={ix} title={n} variant="subtitle2" padding="0px" />
+								))}
 					</Centered>
 				</DialogContent>
 				<DialogActions
@@ -32,9 +37,9 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: ITableNotif) => {
 						minHeight: '14px'
 					}}
 				>
-					{hu && <StyledButton label={'Hu'} onClick={hu} />}
-					{kang && <StyledButton label={'Kang'} onClick={kang} />}
 					{pong && <StyledButton label={'Pong'} onClick={pong} />}
+					{kang && <StyledButton label={'Kang'} onClick={kang} />}
+					{hu && <StyledButton label={'Hu'} onClick={hu} />}
 				</DialogActions>
 			</Dialog>
 		</div>

@@ -1,7 +1,7 @@
 import { HiddenTile } from 'platform/style/StyledComponents';
 import { memo, useMemo } from 'react';
 import { FrontBackTag, Segment } from 'shared/enums';
-import { generateNumberArray } from 'shared/util';
+import { generateNumbers } from 'shared/util';
 
 interface IUnusedTiles {
 	tiles: number;
@@ -10,7 +10,7 @@ interface IUnusedTiles {
 }
 
 const UnusedTiles = ({ tiles, segment, tag }: IUnusedTiles) => {
-	const tilesArray = useMemo(() => generateNumberArray(tiles), [tiles]);
+	const tilesArray = useMemo(() => generateNumbers(1, tiles), [tiles]);
 
 	return segment === Segment.TOP || segment === Segment.BOTTOM ? (
 		<div className={`htsh unused ${segment === Segment.BOTTOM ? `bottom ` : ``}${tag || ``}`}>

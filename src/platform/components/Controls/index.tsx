@@ -45,7 +45,7 @@ const Controls = () => {
 		showAnnounceHuModal,
 		setExec
 	} = useControls(lThAvail, lThAvailHu, delayOn, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome);
-	useBot(lThAvail, setExec);
+	useBot(isHuLocked, lThAvail, setExec);
 
 	const handleKeyListeners = useCallback(
 		e => {

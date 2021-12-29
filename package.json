@@ -51,9 +51,9 @@
 		"web-vitals": "^1.0.1"
 	},
 	"scripts": {
+		"dev": "REACT_APP_PLATFORM=web REACT_APP_FLAG=dev react-scripts start",
+		"devbot": "REACT_APP_PLATFORM=web REACT_APP_FLAG=devbot react-scripts start",
 		"start": "REACT_APP_PLATFORM=web react-scripts start",
-		"startdev": "REACT_APP_PLATFORM=web REACT_APP_FLAG=dev react-scripts start",
-		"startdevbot": "REACT_APP_PLATFORM=web REACT_APP_FLAG=devbot react-scripts start",
 		"build": "REACT_APP_PLATFORM=web react-scripts build",
 		"buildapp": "react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
 		"test": "jest",
