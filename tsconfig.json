@@ -18,5 +18,5 @@
 		"jsx": "react-jsx",
 		"strictNullChecks": false
 	},
-	"include": ["src"]
+	"include": ["src", "shared", "platform"]
 }

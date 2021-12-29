@@ -1,6 +1,6 @@
 import { Fade } from '@mui/material';
 import { history } from 'App';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import AdminControls from 'platform/components/Modals/AdminControls';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';

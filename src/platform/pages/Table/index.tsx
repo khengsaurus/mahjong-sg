@@ -1,7 +1,7 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
 import firebase from 'firebase/compat/app';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
 import Controls from 'platform/components/Controls';
 import { Loader } from 'platform/components/Loader';

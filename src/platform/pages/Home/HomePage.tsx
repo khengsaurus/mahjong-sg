@@ -1,4 +1,4 @@
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader } from 'platform/components/Loader';
 import { useLocalSession } from 'platform/hooks';
