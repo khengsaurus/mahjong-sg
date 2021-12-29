@@ -11,6 +11,8 @@ import {
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
+import moment from 'moment';
 import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
@@ -160,33 +162,32 @@ export class FirebaseService {
 
 	/* ------------------------- User-game related ------------------------- */
 
-	getInvites(user: User) {
+	listenInvitesSnapshot(user: User, observer: any) {
 		if (user) {
 			return (
 				this.gameRef
 					.where('es', 'array-contains', user.email)
-					.where('on', '==', true)
-					// .orderBy('cA', 'desc')
-					.limit(5)
-					.get()
+					// .where('on', '==', true)
+					.orderBy('cA', 'desc')
+					// .limit(5)
+					.onSnapshot(observer)
 			);
 		} else {
 			return null;
 		}
 	}
 
-	listenInvitesSnapshot(user: User, observer: any) {
-		if (user) {
-			return (
-				this.gameRef
-					.where('es', 'array-contains', user.email)
-					.where('on', '==', true)
-					// .orderBy('cA', 'desc')
-					// .limit(5)
-					.onSnapshot(observer)
-			);
-		} else {
-			return null;
+	async cleanupFinishedGames(userEmail: string) {
+		if (userEmail) {
+			const games = await this.gameRef.where('es', 'array-contains', userEmail).get();
+			games.forEach(g => {
+				const updated: Date = g.data()?.up?.toDate();
+				if (moment.duration(moment(moment()).diff(updated)).asHours() > 24) {
+					deleteDoc(doc(this.gameRef, g.id)).catch(err => {
+						console.error(err);
+					});
+				}
+			});
 		}
 	}
 

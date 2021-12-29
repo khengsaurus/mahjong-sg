@@ -157,6 +157,10 @@ export class Service {
 			return FBService.updateGame(game);
 		}
 	}
+
+	cleanupGames(userEmail: string) {
+		FBService.cleanupFinishedGames(userEmail);
+	}
 }
 
 const ServiceInstance = new Service();

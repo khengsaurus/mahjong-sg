@@ -1,5 +1,6 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
+import { history } from 'App';
 import firebase from 'firebase/compat/app';
 import { isEmpty } from 'lodash';
 import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
@@ -16,7 +17,7 @@ import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents'
 import { Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LocalFlag, Platform, Status } from 'shared/enums';
+import { LocalFlag, Page, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { IStore, setGame } from 'shared/store';
@@ -86,7 +87,9 @@ const Table = () => {
 		const handleOnlineGame = ServiceInstance.FBListenToGame(gameId, {
 			next: (gameData: firebase.firestore.DocumentData) => {
 				const currentGame: Game = objToGame(gameData, false);
-				if (!isEmpty(currentGame) && user?.uN) {
+				if (isEmpty(currentGame) || !user?.uN) {
+					history.push(Page.HOME);
+				} else {
 					dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
 					hydrateGame(currentGame, user.uN);
 					dispatch(setGame(currentGame));
