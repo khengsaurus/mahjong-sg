@@ -39,7 +39,7 @@ const AnnounceHuModal = ({
 			}}
 		>
 			<DialogContent style={{ paddingBottom: 0 }}>
-				{hu.length > 2 ? (
+				{hu.length > 2 && (
 					<>
 						<Title
 							title={`${hu[0] === playerSeat ? 'You' : game.ps[hu[0]]?.uN} won, with ${hu[1]}台${
@@ -55,12 +55,16 @@ const AnnounceHuModal = ({
 							<PaymentModalInline game={game} playerSeat={playerSeat} updateGame={updateGame} />
 						)}
 					</>
-				) : (
-					<Centered>
-						{draw && <Title title={`Draw!`} variant="h6" />}
-						{(!on || _d === 9) && <Title title={`The game has ended!`} variant="h6" />}
-					</Centered>
 				)}
+				{(draw || !on || _d === 9) &&
+					(draw ? (
+						<Centered>
+							<Title title={`Draw!`} variant="h6" padding="6px" />
+							<Title title={`15 tiles left`} variant="subtitle1" padding="0px" />
+						</Centered>
+					) : (
+						<Title title={`The game has ended!`} variant="subtitle1" padding="6px 0px 0px" />
+					))}
 			</DialogContent>
 			<DialogActions
 				style={{

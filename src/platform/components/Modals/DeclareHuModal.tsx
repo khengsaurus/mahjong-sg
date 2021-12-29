@@ -8,15 +8,19 @@ import { HandPoint } from 'shared/handEnums';
 import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ show, game, playerSeat, HH, updateGame, onClose }: IDeclareHuModalProps) => {
+const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: IDeclareHuModalProps) => {
 	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
 	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
-		game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
-		game.endRound();
-		updateGame(game);
+		handleHu(game, playerSeat, HH, tai, zimo);
+		// game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
+		// game.sk = [];
+		// game.dF = null;
+		// game.endRound();
+		// triggerHaptic(ImpactStyle.Heavy);
+		// updateGame(game);
 		onClose(true);
 	}
 

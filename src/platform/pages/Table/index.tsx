@@ -102,7 +102,7 @@ const Table = () => {
 		const currGame = isLocalGame ? localGame : game;
 		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {
 			const { _d = 0, fr = [0, 0], ps = [] } = currGame;
-			const currentWind = currGame?.repr()[0];
+			const currentWind = currGame?.repr() && currGame?.repr()[0];
 			const topPlayerX = findOpp(playerSeat);
 			const rightPlayerX = findRight(playerSeat);
 			const leftPlayerX = findLeft(playerSeat);

@@ -62,7 +62,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			</div>
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hiddenTileIds, tHK]);
+	}, [tHK, JSON.stringify(hiddenTileIds)]);
 
 	const renderShownTiles = () => (
 		<ShownTiles
