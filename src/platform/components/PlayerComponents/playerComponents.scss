@@ -22,6 +22,7 @@
 					transition: $transition-fast;
 					z-index: -1;
 					&.hidden {
+						margin: 0px;
 						min-height: 0px;
 						height: 0px;
 					}
@@ -119,6 +120,7 @@
 					transition: $transition-fast;
 					width: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
 					&.hidden {
+						margin: 0px;
 						min-width: 0px;
 						width: 0px;
 					}

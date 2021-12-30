@@ -50,12 +50,12 @@ export function useWindowHeight() {
 export function useDynamicWidth({ ref, tiles, tileSize, dealer = false, addHalfTile = false }: useDynamicWidthProps) {
 	const windowHeight = useWindowHeight();
 	useEffect(() => {
-		let length = tiles + Number(dealer) + (addHalfTile ? 0.5 : 0);
-		let shownTilesHeight = ref.current?.offsetHeight || 0;
+		const length = tiles + Number(dealer) + (addHalfTile ? 0.5 : 0);
+		const shownTilesHeight = ref.current?.offsetHeight || 0;
 		if (!!Number(length) && !!Number(shownTilesHeight) && ref.current) {
-			let reqHeight = length * ShownTileWidth[tileSize.toUpperCase()] + 1;
-			let cols = Math.ceil(reqHeight / shownTilesHeight);
-			let toSet = `${cols * ShownTileHeight[tileSize.toUpperCase()]}px`;
+			const reqHeight = length * ShownTileWidth[tileSize.toUpperCase()] + 1;
+			const cols = Math.ceil(reqHeight / shownTilesHeight);
+			const toSet = `${cols * ShownTileHeight[tileSize.toUpperCase()]}px`;
 			ref.current.style.width = toSet;
 		}
 	}, [windowHeight, ref, tiles, tileSize, dealer, addHalfTile]);

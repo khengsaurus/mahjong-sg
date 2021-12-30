@@ -14,7 +14,10 @@ const UnusedTiles = ({ tiles, segment, tag }: IUnusedTiles) => {
 
 	return segment === Segment.TOP || segment === Segment.BOTTOM ? (
 		<div
-			className={`htsh unused ${segment === Segment.BOTTOM && `bottom `}${tag || ``} ${tiles === 0 && 'hidden'}`}
+			className={`htsh unused ${segment === Segment.BOTTOM ? `bottom` : ``} ${tag || ``} ${
+				tiles === 0 ? `hidden` : ``
+			}
+			`}
 		>
 			{tilesArray.map(i => (
 				<HiddenTile key={`${segment}-unused-${i}`} className="hth" />
@@ -22,9 +25,10 @@ const UnusedTiles = ({ tiles, segment, tag }: IUnusedTiles) => {
 		</div>
 	) : (
 		<div
-			className={`vtsh unused ${segment === Segment.RIGHT && `right `}${tag || ``} ${
-				tiles === 0 ? 'hidden' : ''
-			}`}
+			className={`vtsh unused ${segment === Segment.RIGHT ? `right` : ``} ${tag || ``} ${
+				tiles === 0 ? `hidden` : ``
+			}
+			`}
 		>
 			{tiles > 0 && tilesArray.map(i => <HiddenTile key={`${segment}-unused-${i}`} className="vth" />)}
 		</div>

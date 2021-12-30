@@ -56,7 +56,6 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 		<ShownTiles
 			className="htss"
 			nonFlowers={nonFlowers}
-			// nonFlowers={[...hTs, ...nonFlowers]}
 			flowers={flowers}
 			flowerRefs={flowerRefs}
 			nonFlowerRefs={nonFlowerRefs}
@@ -68,19 +67,13 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const renderDiscardedTiles = () => (
-		<DiscardedTiles
-			className="htss discarded"
-			tiles={dTs}
-			// tiles={[...hTs, ...dTs]}
-			segment={Segment.BOTTOM}
-			lastThrownRef={lastThrown?.r}
-		/>
+		<DiscardedTiles className="htss discarded" tiles={dTs} segment={Segment.BOTTOM} lastThrownRef={lastThrown?.r} />
 	);
 
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM} bottom`}>
 			{sT ? shownHiddenHand(hTs, lTa) : <BottomHiddenHand hTs={hTs} lTa={lTa} />}
-			{sTs?.length > 0 && renderShownTiles()}
+			{(dealer || sTs?.length > 0) && renderShownTiles()}
 			<UnusedTiles tiles={uTs} segment={Segment.BOTTOM} tag={frontBackTag} />
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>

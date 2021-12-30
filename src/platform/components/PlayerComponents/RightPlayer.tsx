@@ -38,7 +38,6 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		tiles: player.allHiddenTiles().length,
 		tileSize: tileSize
-		// addHalfTile: !isEmpty(lTa)
 	});
 
 	const shownHiddenHand = useMemo(() => {
@@ -68,7 +67,6 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 		<ShownTiles
 			className="vtss"
 			nonFlowers={nonFlowers}
-			// nonFlowers={[...hTs, ...nonFlowers]}
 			flowers={flowers}
 			flowerRefs={flowerRefs}
 			nonFlowerRefs={nonFlowerRefs}
@@ -81,26 +79,17 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 	);
 
 	const renderDiscardedTiles = () => (
-		<DiscardedTiles
-			className="vtss discarded"
-			tiles={dTs}
-			// tiles={[...hTs, ...dTs]}
-			segment={Segment.RIGHT}
-			lastThrownRef={lastThrown?.r}
-		/>
+		<DiscardedTiles className="vtss discarded" tiles={dTs} segment={Segment.RIGHT} lastThrownRef={lastThrown?.r} />
 	);
 
 	return (
 		<div className={`column-section-${tileSize || Size.MEDIUM} right`}>
-			{/* {shownHiddenHand} */}
-			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) ? (
-				shownHiddenHand
-			) : sT ? (
+			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) || sT ? (
 				shownHiddenHand
 			) : (
 				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.RIGHT} />
 			)}
-			{sTs?.length > 0 && renderShownTiles()}
+			{(dealer || sTs?.length > 0) && renderShownTiles()}
 			<UnusedTiles tiles={uTs} segment={Segment.RIGHT} tag={frontBackTag} />
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>

@@ -51,7 +51,6 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 		<ShownTiles
 			className="htss top"
 			nonFlowers={nonFlowers}
-			// nonFlowers={[...hTs, ...nonFlowers]}
 			flowers={flowers}
 			flowerRefs={flowerRefs}
 			nonFlowerRefs={nonFlowerRefs}
@@ -66,7 +65,6 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 		<DiscardedTiles
 			className="htss top discarded"
 			tiles={dTs}
-			// tiles={[...hTs, ...dTs]}
 			segment={Segment.TOP}
 			lastThrownRef={lastThrown?.r}
 		/>
@@ -74,15 +72,12 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM}`}>
-			{/* {shownHiddenHand} */}
-			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) ? (
-				shownHiddenHand
-			) : sT ? (
+			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) || sT ? (
 				shownHiddenHand
 			) : (
 				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />
 			)}
-			{sTs?.length > 0 && renderShownTiles()}
+			{(dealer || sTs?.length > 0) && renderShownTiles()}
 			<UnusedTiles tiles={uTs} segment={Segment.TOP} tag={frontBackTag} />
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>
