@@ -62,21 +62,6 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 		},
 
 		components: {
-			MuiFormLabel: {
-				styleOverrides: {
-					root: { color: textColor }
-				}
-			},
-			MuiRadio: {
-				styleOverrides: {
-					root: { color: textColor }
-				}
-			},
-			MuiCheckbox: {
-				styleOverrides: {
-					root: { color: textColor }
-				}
-			},
 			MuiButtonBase: {
 				styleOverrides: {
 					root: {
@@ -84,7 +69,6 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						'&:hover': {
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 						}
-						// '&:disabled': { color: `${textColor}` }
 					}
 				}
 			},
@@ -92,37 +76,18 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 				styleOverrides: {
 					root: {
 						color: `${textColor}`,
-						'&:active': { backgroundColor: 'transparent !important' },
-						'&:focus': { backgroundColor: 'transparent !important' },
+						backgroundColor: 'transparent !important',
 						'&:hover': {
-							backgroundColor: 'transparent !important',
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 						}
-						// '&:disabled': {
-						//  color: `${textColor}`
-						// }
 					}
 				}
-				// label: {
-				//  color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-				// }
 			},
-			MuiTab: {
+			MuiCheckbox: {
 				styleOverrides: {
-					root: { color: `${textColor}` }
-				}
-			},
-			MuiIconButton: {
-				styleOverrides: {
-					colorInherit: { color: `${textColor}` },
 					root: {
-						color: `${textColor}`,
-						'&:active': { backgroundColor: 'transparent !important' },
-						'&:focus': { backgroundColor: 'transparent !important' },
-						'&:hover': {
-							backgroundColor: 'transparent !important',
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-						}
+						color: textColor,
+						backgroundColor: 'transparent !important'
 					}
 				}
 			},
@@ -146,9 +111,27 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					}
 				}
 			},
-			MuiPopover: {
+			MuiFormLabel: {
 				styleOverrides: {
-					paper: { backgroundColor }
+					root: { color: textColor }
+				}
+			},
+			MuiFormControlLabel: {
+				styleOverrides: {
+					root: { margin: '0px' },
+					labelPlacementStart: { marginLeft: '0px' }
+				}
+			},
+			MuiIconButton: {
+				styleOverrides: {
+					colorInherit: { color: `${textColor}` },
+					root: {
+						color: `${textColor}`,
+						backgroundColor: 'transparent !important',
+						'&:hover': {
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						}
+					}
 				}
 			},
 			MuiInput: {
@@ -176,32 +159,15 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					}
 				}
 			},
-			MuiTypography: {
-				styleOverrides: {
-					root: {
-						color: textColor
-					}
-					// colorTextPrimary: {
-					//  color: `${textColor}`
-					// },
-					// colorTextSecondary: {
-					//  color: `${textColor}`
-					// }
-				}
-			},
 			MuiListItem: {
 				styleOverrides: {
 					root: {
 						color: textColor,
-						'&:hover': {
-							backgroundColor: 'transparent !important'
-							// color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
-						}
+						backgroundColor: 'transparent !important'
 					},
 					button: {
 						'&:hover': {
-							backgroundColor: 'transparent !important',
-							color: `${highlightColor}`
+							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 						}
 					}
 				}
@@ -213,17 +179,34 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					secondary: { color: textColor }
 				}
 			},
+			MuiTypography: {
+				styleOverrides: {
+					root: {
+						color: textColor
+					}
+				}
+			},
 			MuiMenuItem: {
 				styleOverrides: {
 					root: {
 						justifyContent: 'center',
-						'&$selected': {
-							backgroundColor: 'transparent !important'
-						},
+						backgroundColor: 'transparent !important',
 						'&:hover': {
-							backgroundColor: 'transparent !important',
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 						}
+					}
+				}
+			},
+			MuiPopover: {
+				styleOverrides: {
+					paper: { backgroundColor }
+				}
+			},
+			MuiRadio: {
+				styleOverrides: {
+					root: {
+						color: textColor,
+						backgroundColor: 'transparent !important'
 					}
 				}
 			},
@@ -233,20 +216,16 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						textAlign: 'center',
 						paddingLeft: '12px !important',
 						paddingRight: '12px !important',
-						'&:focus': {
-							backgroundColor: 'transparent !important'
-						},
+						backgroundColor: 'transparent !important',
 						'&:hover': {
-							backgroundColor: 'transparent !important',
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
 						}
 					}
 				}
 			},
-			MuiFormControlLabel: {
+			MuiTab: {
 				styleOverrides: {
-					root: { margin: '0px' },
-					labelPlacementStart: { marginLeft: '0px' }
+					root: { color: `${textColor}` }
 				}
 			}
 		}
@@ -318,7 +297,7 @@ export const MuiStyles = {
 		maxHeight: '28px'
 	},
 	small_dropdown_item: {
-		width: '52px',
+		// width: '52px',
 		height: '28px',
 		minHeight: '28px',
 		maxHeight: '28px',

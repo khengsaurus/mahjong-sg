@@ -67,7 +67,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: IModalProps) =>
 								<FormControlLabel
 									key={otherPlayer.uN}
 									value={index}
-									control={<Radio />}
+									control={<Radio disableRipple/>}
 									label={otherPlayer.uN}
 								/>
 							) : null

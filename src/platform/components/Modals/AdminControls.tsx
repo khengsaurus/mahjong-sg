@@ -107,7 +107,7 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 						{['Slow', 'Medium', 'Fast'].map(t => (
 							<MenuItem
 								key={`bt-${t}`}
-								style={{ ...MuiStyles.small_dropdown_item, width: '70px' }}
+								style={{ ...MuiStyles.small_dropdown_item}}
 								value={t}
 							>
 								{t}
