@@ -24,7 +24,7 @@ import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BotIds, LocalFlag, Page, PaymentType, Timeout, TransitionSpeed } from 'shared/enums';
+import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore, setGameId } from 'shared/store';
@@ -184,7 +184,7 @@ const NewGame = () => {
 	};
 
 	const renderRandomizeOption = () => (
-		<Fade in={players.length === 4} timeout={{ enter: Timeout.SLOW }} unmountOnExit>
+		<Fade in={players.length === 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
 			<div>
 				<ListItem className="user list-item">
 					<ListItemText secondary={`Randomize`} />
@@ -231,7 +231,7 @@ const NewGame = () => {
 						}}
 						disabled={startedGame}
 					/>
-					<Fade in={players.length === 4} timeout={Timeout.FAST}>
+					<Fade in={players.length === 4} timeout={Transition.FAST}>
 						<div id="start-join-btn">
 							<StyledButton
 								label={startedGame ? 'Join' : 'Start'}
@@ -259,7 +259,7 @@ const NewGame = () => {
 								{playersRef.current?.find(p => p?.uN === player?.uN) ? (
 									renderUserOption(player)
 								) : (
-									<Fade in timeout={Timeout.FAST}>
+									<Fade in timeout={Transition.FAST}>
 										<div>{renderUserOption(player)}</div>
 									</Fade>
 								)}
@@ -269,7 +269,7 @@ const NewGame = () => {
 					{!startedGame && renderRandomizeOption()}
 				</div>
 			</div>
-			<Fade in={showOptions} timeout={Timeout.FAST} unmountOnExit>
+			<Fade in={showOptions} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<GameOptions
 						show={showOptions}

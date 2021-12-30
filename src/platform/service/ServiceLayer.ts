@@ -38,23 +38,17 @@ export class Service {
 		});
 	}
 
-	async FBAuthLogin(props: IEmailPass): Promise<string> {
-		return new Promise((resolve, reject) => {
-			FBService.authLoginEmailPass(props.email, props.password)
-				.then(email => {
-					resolve(email);
-				})
-				.catch(err => {
-					reject(err);
-				});
-		});
+	async FBAuthLogin(props: IEmailPass): Promise<boolean> {
+		if (props.email && props.password) {
+			return FBService.authLoginEmailPass(props.email, props.password);
+		}
 	}
 
 	FBResolveUser(email: string): Promise<User | null> {
 		return new Promise((resolve, reject) => {
 			try {
 				FBService.getUserReprByEmail(email).then((userData: any) => {
-					resolve(objToUser(userData));
+					resolve(userData ? objToUser(userData) : null);
 				});
 			} catch (err) {
 				reject(new Error('Email or password incorrect'));
@@ -65,20 +59,28 @@ export class Service {
 	async FBNewUsername(values: IEmailUser): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			FBService.getUserReprByUsername(values.uN).then(data => {
-				if (!data.empty) {
+				if (data && !data.empty) {
 					reject(new Error('Username already taken'));
 				} else {
 					FBService.registerUserEmail(values.uN, values.email)
 						.then(res => {
-							resolve(res);
+							if (res) {
+								FBService.pairEmailToUsername(values.uN, values.email).then(res => {
+									resolve(res);
+								});
+							}
 						})
 						.catch(err => {
-							console.error('Unable to register user');
-							reject(err);
+							console.error(err);
+							reject(new Error('Unable to register user'));
 						});
 				}
 			});
 		});
+	}
+
+	async getEmailFromUsername(username: string): Promise<string> {
+		return FBService.getEmailFromUsername(username);
 	}
 
 	FBUpdateUser(id: string, keyVal: object) {

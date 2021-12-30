@@ -16,7 +16,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BotIds, BotName, Timeout } from 'shared/enums';
+import { BotIds, BotName, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore } from 'shared/store';
@@ -77,7 +77,7 @@ const UserSearchForm: React.FC = () => {
 	};
 
 	const renderAddBotButton = () => (
-		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Timeout.SLOW }} unmountOnExit>
+		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
 			<div>
 				<ListItem className="user list-item">
 					<ListItemText secondary={`Add bot`} />
@@ -144,7 +144,7 @@ const UserSearchForm: React.FC = () => {
 				<Collapse
 					in={showOptions && foundUsers.length > 0}
 					className="search-box list-item"
-					timeout={Timeout.FAST}
+					timeout={Transition.FAST}
 					unmountOnExit
 				>
 					{foundUsers.map(foundUser =>

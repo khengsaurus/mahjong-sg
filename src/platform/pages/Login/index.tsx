@@ -5,7 +5,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Page, Status, Timeout } from 'shared/enums';
+import { Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import HomePage from '../Home/HomePage';
 import './login.scss';
@@ -14,17 +14,17 @@ const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [showRegister, setShowRegister] = useState(false);
-	// const [offsetKeyboard, setOffsetKeyboard] = useState(44.5);
 
 	useEffect(() => {
 		setConfirmPassword('');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showRegister]);
 
-	const loginDisabled = useMemo(() => email.trim() === '' || password.trim() === '', [email, password]);
+	const loginDisabled = useMemo(() => username.trim() === '' || password.trim() === '', [username, password]);
 
 	const registerDisabled = useMemo(
 		() => email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '',
@@ -37,53 +37,64 @@ const Login = () => {
 		setConfirmPassword('');
 	}
 
-	const handleLogin = useCallback(
-		(values: IEmailPass, callback?: () => void) => {
-			setReady(false);
-			ServiceInstance.FBAuthLogin(values)
-				.then(email => {
-					if (email === values.email) {
-						setUserEmail(email);
-						ServiceInstance.FBResolveUser(email)
-							.then(user => {
-								setReady(true);
-								setAlert(null);
-								if (user) {
-									callback();
-									login(user, false);
-									user?.email && ServiceInstance.cleanupGames(user.email);
-									history.push(Page.INDEX);
-								} else {
-									// User not registered, redirect to NewUser
-									history.push(Page.NEWUSER);
-								}
-							})
-							.catch(err => {
-								setReady(true);
-								setAlert({ status: Status.ERROR, msg: err.msg });
-							});
-					} else {
-						// Auth login failed
-					}
-				})
-				.catch(err => {
-					setAlert({ status: Status.ERROR, msg: err.msg });
-				});
+	const handleError = useCallback(
+		(err: Error) => {
+			console.error(err);
+			setReady(true);
+			setAlert({ status: Status.ERROR, msg: err.message });
 		},
-		[login, setAlert, setUserEmail]
+		[setReady, setAlert]
 	);
 
-	const handleRegister = useCallback(
-		(values: IEmailPass, callback?: () => void) => {
-			if (values.password === confirmPassword) {
+	const handleLogin = useCallback(() => {
+		if (!showRegister && username.trim() !== '' && password.trim() !== '') {
+			setReady(false);
+			ServiceInstance.getEmailFromUsername(username) // Get from RTDB
+				.then(email => {
+					ServiceInstance.FBAuthLogin({ email, password })
+						.then(res => {
+							if (res) {
+								ServiceInstance.FBResolveUser(email)
+									.then(user => {
+										setReady(true);
+										setAlert(null);
+										if (user) {
+											clearForm();
+											login(user, false);
+											user?.email && ServiceInstance.cleanupGames(user.email);
+											setReady(true);
+											history.push(Page.INDEX);
+										} else {
+											console.error('User may not be registered correctly');
+										}
+									})
+									.catch(err => {
+										handleError(err);
+									});
+							}
+						})
+						.catch(err => {
+							handleError(err);
+						});
+				})
+				.catch(err => {
+					handleError(err);
+				});
+		}
+	}, [showRegister, username, password, login, setAlert, handleError]);
+
+	const submitRegister = useCallback(() => {
+		if (showRegister && email.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '') {
+			if (password === confirmPassword) {
 				setReady(false);
-				ServiceInstance.FBAuthRegister(values)
+				ServiceInstance.FBAuthRegister({ email, password })
 					.then(res => {
 						if (res) {
-							setReady(true);
+							setUserEmail(email);
+							clearForm();
 							setAlert(null);
-							callback();
-							handleLogin(values);
+							setReady(true);
+							history.push(Page.NEWUSER);
 						}
 					})
 					.catch(err => {
@@ -93,23 +104,16 @@ const Login = () => {
 			} else {
 				setAlert({ status: Status.ERROR, msg: 'Passwords do not match' });
 			}
-		},
-		[confirmPassword, handleLogin, setAlert]
-	);
-
-	const handleSubmit = useCallback(() => {
-		if (email.trim() !== '' && password.trim() !== '') {
-			showRegister ? handleRegister({ email, password }, clearForm) : handleLogin({ email, password }, clearForm);
 		}
-	}, [email, handleLogin, handleRegister, password, showRegister]);
+	}, [confirmPassword, email, password, setAlert, setUserEmail, showRegister]);
 
 	const enterListener = useCallback(
 		e => {
 			if (e.key === 'Enter') {
-				handleSubmit();
+				showRegister ? submitRegister() : handleLogin();
 			}
 		},
-		[handleSubmit]
+		[showRegister, submitRegister, handleLogin]
 	);
 
 	useEffect(() => {
@@ -120,23 +124,23 @@ const Login = () => {
 	}, [enterListener]);
 
 	const renderLoginButton = () => (
-		<StyledButton label={`Login`} type="submit" autoFocus disabled={loginDisabled} onClick={handleSubmit} />
+		<StyledButton label={`Login`} type="submit" autoFocus disabled={loginDisabled} onClick={handleLogin} />
 	);
 
 	const renderRegisterButton = () => (
-		<StyledButton label={`Register`} type="submit" autoFocus disabled={registerDisabled} onClick={handleSubmit} />
+		<StyledButton label={`Register`} type="submit" autoFocus disabled={registerDisabled} onClick={submitRegister} />
 	);
 
 	const markup = () => (
 		<>
 			<Title title={`Welcome to Mahjong SG!`} />
 			<TextField
-				key="email"
-				label="Email"
+				key="usernameEmail"
+				label={showRegister ? `Email` : `Username`}
 				type="text"
-				value={email}
+				value={showRegister ? email : username}
 				onChange={e => {
-					setEmail(e.target.value);
+					showRegister ? setEmail(e.target.value) : setUsername(e.target.value);
 				}}
 				variant="standard"
 				style={{ margin: '5px 0' }}
@@ -152,7 +156,7 @@ const Login = () => {
 				variant="standard"
 				style={{ margin: '5px 0' }}
 			/>
-			<Collapse in={showRegister} timeout={Timeout.FAST} unmountOnExit>
+			<Collapse in={showRegister} timeout={Transition.FAST} unmountOnExit>
 				<TextField
 					key="confirmPassword"
 					label="Confirm password"
@@ -175,9 +179,9 @@ const Login = () => {
 				/>
 				{showRegister ? renderRegisterButton() : renderLoginButton()}
 			</Row>
-			<Collapse in={!!alert} timeout={Timeout.FAST} unmountOnExit>
+			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>
-					{showRegister ? alert?.msg : 'Please try again'}
+					{alert?.msg || 'Please try again'}
 				</Alert>
 			</Collapse>
 		</>

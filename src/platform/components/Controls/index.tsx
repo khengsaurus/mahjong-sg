@@ -10,7 +10,7 @@ import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { LocalFlag, Page, Shortcut, Timeout } from 'shared/enums';
+import { LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
@@ -95,33 +95,33 @@ const Controls = () => {
 				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
-				<Fade in={payModal.show} timeout={Timeout.FAST} unmountOnExit>
+				<Fade in={payModal.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<PaymentModal {...payModal} />
 					</div>
 				</Fade>
-				<Fade in={settingsModal.show} timeout={Timeout.FAST} unmountOnExit>
+				<Fade in={settingsModal.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<SettingsWindow {...settingsModal} />
 					</div>
 				</Fade>
-				<Fade in={declareHuModal.show && isEmpty(game?.hu)} timeout={Timeout.FAST} unmountOnExit>
+				<Fade in={declareHuModal.show && isEmpty(game?.hu)} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<DeclareHuModal {...declareHuModal} />
 					</div>
 				</Fade>
-				<Fade in={adminControlsModal.show} timeout={Timeout.FAST} unmountOnExit>
+				<Fade in={adminControlsModal.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<AdminControls {...adminControlsModal} />
 					</div>
 				</Fade>
-				<Fade in={showAnnounceHuModal} timeout={Timeout.FAST} unmountOnExit>
+				<Fade in={showAnnounceHuModal} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<AnnounceHuModal {...announceHuModal} />
 					</div>
 				</Fade>
-				{/* <Fade in={Number(notif?.timeout) > 0} timeout={Timeout.FAST} unmountOnExit> */}
-				<Fade in timeout={Timeout.FAST} unmountOnExit>
+				{/* <Fade in={Number(notif?.timeout) > 0} timeout={Transition.FAST} unmountOnExit> */}
+				<Fade in timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<TableNotif {...notif} />
 					</div>

@@ -5,7 +5,7 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, LocalFlag, Timeout } from 'shared/enums';
+import { AppFlag, LocalFlag, BotTimeout } from 'shared/enums';
 import { IStore } from 'shared/store';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
@@ -51,11 +51,11 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
-			case Timeout.FAST:
+			case BotTimeout.FAST:
 				return 'Fast';
-			case Timeout.MEDIUM:
+			case BotTimeout.MEDIUM:
 				return 'Medium';
-			case Timeout.SLOW:
+			case BotTimeout.SLOW:
 				return 'Slow';
 			default:
 				return '';
@@ -86,7 +86,7 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 		function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
 			const speed = (event.target as HTMLInputElement).value;
 			setBtLabel(speed);
-			setBt(Timeout[speed.toUpperCase()]);
+			setBt(BotTimeout[speed.toUpperCase()]);
 		}
 
 		return (

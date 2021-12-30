@@ -14,12 +14,13 @@
 				justify-content: center;
 				min-height: getHiddenTileHeight($size);
 				margin: getTilePadding($size);
+				max-width: 70vw;
 				&.unused {
 					align-self: center;
 					flex-flow: column-reverse wrap-reverse;
 					@include alignC-justifyC(center, flex-end);
 					height: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
-					transition: $transition-fast;
+					// transition: $transition-fast;
 					z-index: -1;
 					&.hidden {
 						margin: 0px;
@@ -112,12 +113,13 @@
 				justify-content: flex-start;
 				min-width: getHiddenTileHeight($size);
 				margin: getTilePadding($size);
+				max-height: 70vh;
 				&.unused {
 					align-self: center;
 					align-content: flex-start;
 					flex-flow: row wrap;
 					z-index: -1;
-					transition: $transition-fast;
+					// transition: $transition-fast;
 					width: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
 					&.hidden {
 						margin: 0px;

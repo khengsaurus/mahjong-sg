@@ -6,7 +6,7 @@ import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, Timeout } from 'shared/enums';
+import { AppFlag, Transition } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './home.scss';
 import HomePage from './HomePage';
@@ -25,7 +25,7 @@ const Home = () => {
 			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
 			)}
-			<Fade in={showSettings} timeout={Timeout.FAST} unmountOnExit>
+			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<SettingsWindow
 						show={showSettings}

@@ -10,6 +10,7 @@ import { Styled } from 'platform/style/StyledComponents';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
+import { AppFlag } from 'shared/enums';
 import { AppContextProvider } from 'shared/hooks';
 import { persistor, store } from 'shared/store';
 import './App.scss';
@@ -31,8 +32,9 @@ function App() {
 								<Route exact path="/NewGame" component={NewGame} />
 								<Route exact path="/JoinGame" component={JoinGame} />
 								<Route exact path="/Table" component={Table} />
-								<Route exact path="/Sample" component={Sample} />
-								{/* <Route exact path="/Sample" component={Sample} /> */}
+								{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
+									<Route exact path="/Sample" component={Sample} />
+								)}
 							</Switch>
 						</Styled>
 					</Router>

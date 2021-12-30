@@ -27,8 +27,9 @@ import {
 	updateDoc,
 	where
 } from 'firebase/firestore';
+import { child, Database, get, getDatabase, ref, set } from 'firebase/database';
 import moment from 'moment';
-import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
+import { BackgroundColor, FBCollection, FBDatabase, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
@@ -37,24 +38,36 @@ import { gameToObj, playerToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
 	private user: FirebaseUser;
-	private db: Firestore;
+	private db: Database;
+	private fs: Firestore;
 	private usersRef: CollectionReference;
 	private gamesRef: CollectionReference;
 	private app: FirebaseApp;
 	private auth: Auth;
 
 	constructor() {
-		this.initApp().then(() => {
-			this.initAuth();
-			this.db = getFirestore(this.app);
-			this.usersRef = collection(this.db, FBCollection.USERREPR);
-			this.gamesRef = collection(this.db, FBCollection.GAMES);
+		this.initApp().then(res => {
+			if (res) {
+				this.initAuth();
+				this.db = getDatabase(this.app, FirebaseConfig.databaseUrl);
+				this.fs = getFirestore(this.app);
+				this.usersRef = collection(this.fs, FBCollection.USERREPR);
+				this.gamesRef = collection(this.fs, FBCollection.GAMES);
+			}
 		});
 	}
 
-	async initApp() {
-		this.app = initializeApp(FirebaseConfig);
-		console.info('Firebase App initialized 🔥');
+	async initApp(): Promise<boolean> {
+		return new Promise(resolve => {
+			try {
+				this.app = initializeApp(FirebaseConfig);
+				console.info('Firebase App initialized 🔥');
+				resolve(true);
+			} catch (err) {
+				console.error('Firebase App failed to initialize');
+				resolve(false);
+			}
+		});
 	}
 
 	/**
@@ -90,13 +103,16 @@ export class FirebaseService {
 		});
 	}
 
-	async authLoginEmailPass(email: string, password: string): Promise<string> {
+	async authLoginEmailPass(email: string, password: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			signInWithEmailAndPassword(this.auth, email, password)
 				.then((values: UserCredential) => {
-					resolve(values.user.email);
+					if (email === values.user.email) {
+						resolve(true);
+					}
 				})
 				.catch(err => {
+					console.error(`FirebaseService.authLoginEmailPass failed with err: ${err.message}`);
 					reject(err);
 				});
 		});
@@ -112,6 +128,35 @@ export class FirebaseService {
 	}
 
 	/* ------------------------- User related ------------------------- */
+
+	pairEmailToUsername(username: string, email: string): Promise<boolean> {
+		return new Promise(resolve => {
+			try {
+				set(ref(this.db, `${FBDatabase.USERS}/${username}`), email);
+				resolve(true);
+			} catch (err) {
+				console.error(err);
+				resolve(false);
+			}
+		});
+	}
+
+	getEmailFromUsername(username: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			try {
+				get(child(ref(this.db), `users/${username}`)).then(snapshot => {
+					if (snapshot.exists()) {
+						resolve(snapshot.val());
+					} else {
+						reject(new Error('Please try again'));
+					}
+				});
+			} catch (err) {
+				console.error(err);
+				reject(new Error('Please try again'));
+			}
+		});
+	}
 
 	async registerUserEmail(uN: string, email: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {

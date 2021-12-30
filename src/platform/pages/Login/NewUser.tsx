@@ -6,7 +6,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
-import { Page, Status, Timeout } from 'shared/enums';
+import { Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import HomePage from '../Home/HomePage';
@@ -66,19 +66,26 @@ const NewUser = () => {
 				style={{ margin: '-3px 0 5px' }}
 			/>
 			<Row style={{ width: '80%', justifyContent: 'space-evenly' }}>
-				{alert?.status !== Status.SUCCESS ? <StyledButton label="Cancel" onClick={cancelRegister} /> : null}
-				<StyledButton
-					label={`Submit`}
-					autoFocus
-					type="submit"
-					disabled={username.trim() === ''}
-					onClick={() => {
-						registerNewUsername({ email: userEmail, uN: username }, registerSuccessCallback);
-					}}
-				/>
+				{alert?.status !== Status.SUCCESS && (
+					<>
+						<StyledButton label="Cancel" onClick={cancelRegister} />
+						<StyledButton
+							label={`Submit`}
+							autoFocus
+							type="submit"
+							disabled={username.trim() === ''}
+							onClick={() => {
+								registerNewUsername({ email: userEmail, uN: username }, registerSuccessCallback);
+							}}
+						/>
+					</>
+				)}
 			</Row>
-			<Collapse in={!!alert} timeout={Timeout.FAST} unmountOnExit>
-				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
+			<Collapse in={!!alert} timeout={Transition.FAST} unmountOnExit>
+				<>
+					<br />
+					<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
+				</>
 			</Collapse>
 		</>
 	);
