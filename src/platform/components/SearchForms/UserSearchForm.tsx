@@ -32,10 +32,9 @@ const UserSearchForm: React.FC = () => {
 	async function searchForUser(uN: string) {
 		let foundUsers: Array<User> = [];
 		await ServiceInstance.FBSearchUser(uN, user.uN).then(data => {
-			if (!data.empty) {
-				data.docs.forEach(doc => {
-					let data = doc.data();
-					foundUsers.push(new User(doc.id, data.uN, data.pUrl, data.email));
+			if (data.length > 0) {
+				data.forEach(u => {
+					foundUsers.push(new User(u.id, u.uN, u.pUrl, u.email));
 				});
 				if (foundUsers.length > 0) {
 					setFoundUsers(foundUsers);

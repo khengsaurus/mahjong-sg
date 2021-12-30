@@ -1,7 +1,6 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
 import { history } from 'App';
-import firebase from 'firebase/compat/app';
 import { isEmpty } from 'lodash';
 import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
 import Controls from 'platform/components/Controls';
@@ -84,20 +83,30 @@ const Table = () => {
 	}
 
 	useEffect(() => {
-		const handleOnlineGame = ServiceInstance.FBListenToGame(gameId, {
-			next: (gameData: firebase.firestore.DocumentData) => {
-				const currentGame: Game = objToGame(gameData, false);
-				if (isEmpty(currentGame) || !user?.uN) {
-					history.push(Page.HOME);
-				} else {
-					dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
-					hydrateGame(currentGame, user.uN);
-					dispatch(setGame(currentGame));
-				}
-			}
-		});
+		let didUnmount = false;
 
-		return gameId === LocalFlag || isLocalGame ? handleLocalGame() : handleOnlineGame;
+		async function unsubscribe() {
+			if (!didUnmount) {
+				ServiceInstance.FBListenToGame(gameId, {
+					next: (gameData: any) => {
+						const currentGame: Game = objToGame(gameData, false);
+						if (isEmpty(currentGame) || !user?.uN) {
+							history.push(Page.HOME);
+						} else {
+							dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
+							hydrateGame(currentGame, user.uN);
+							dispatch(setGame(currentGame));
+						}
+					}
+				});
+			}
+		}
+
+		gameId === LocalFlag || isLocalGame ? handleLocalGame() : unsubscribe();
+
+		return () => {
+			didUnmount = true;
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gameId, isLocalGame, user?.uN]);
 

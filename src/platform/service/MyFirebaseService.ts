@@ -1,17 +1,32 @@
 import { Capacitor } from '@capacitor/core';
+import { FirebaseApp, initializeApp } from 'firebase/app';
 import {
 	Auth,
 	createUserWithEmailAndPassword,
 	indexedDBLocalPersistence,
 	initializeAuth,
 	signInWithEmailAndPassword,
-	User as FBUser,
+	User as FirebaseUser,
 	UserCredential
 } from 'firebase/auth';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import { deleteDoc, doc } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	CollectionReference,
+	deleteDoc,
+	doc,
+	DocumentData,
+	Firestore,
+	getDoc,
+	getDocs,
+	getFirestore,
+	limit,
+	onSnapshot,
+	query,
+	Unsubscribe,
+	updateDoc,
+	where
+} from 'firebase/firestore';
 import moment from 'moment';
 import { BackgroundColor, FBCollection, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
 import { HandPoint, ScoringHand } from 'shared/handEnums';
@@ -21,28 +36,24 @@ import { shuffle } from 'shared/util';
 import { gameToObj, playerToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
-	private user: FBUser;
-	private db: firebase.firestore.Firestore;
-	private userRepr: firebase.firestore.CollectionReference;
-	private gameRef: firebase.firestore.CollectionReference;
-	private app: firebase.app.App;
+	private user: FirebaseUser;
+	private db: Firestore;
+	private usersRef: CollectionReference;
+	private gamesRef: CollectionReference;
+	private app: FirebaseApp;
 	private auth: Auth;
 
 	constructor() {
 		this.initApp().then(() => {
 			this.initAuth();
-			this.db = firebase.firestore();
-			this.userRepr = this.db.collection(FBCollection.USERREPR);
-			this.gameRef = this.db.collection(FBCollection.GAMES);
+			this.db = getFirestore(this.app);
+			this.usersRef = collection(this.db, FBCollection.USERREPR);
+			this.gamesRef = collection(this.db, FBCollection.GAMES);
 		});
 	}
 
 	async initApp() {
-		if (!firebase.apps.length) {
-			this.app = firebase.initializeApp(FirebaseConfig);
-		} else {
-			this.app = firebase.app();
-		}
+		this.app = initializeApp(FirebaseConfig);
 		console.info('Firebase App initialized 🔥');
 	}
 
@@ -105,7 +116,7 @@ export class FirebaseService {
 	async registerUserEmail(uN: string, email: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			try {
-				this.userRepr.add({
+				addDoc(this.usersRef, {
 					uN,
 					email,
 					pUrl: '',
@@ -127,63 +138,92 @@ export class FirebaseService {
 		});
 	}
 
-	getUserReprByUsername(uN: string) {
-		return this.userRepr.where('uN', '==', uN).get();
+	async getUserReprByUsername(uN: string): Promise<DocumentData> {
+		try {
+			const q = query(this.usersRef, where('uN', '==', uN));
+			const querySnapshot = await getDocs(q);
+			querySnapshot.forEach(doc => {
+				return { id: doc.id, ...doc.data() };
+			});
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
 	}
 
-	getUserReprByEmail(email: string) {
-		return this.userRepr.where('email', '==', email).get();
+	async getUserReprByEmail(email: string) {
+		const res = [];
+		try {
+			const q = query(this.usersRef, where('email', '==', email), limit(1));
+			const querySnapshot = await getDocs(q);
+			querySnapshot.forEach(doc => {
+				res.push({ id: doc.id, ...doc.data() });
+			});
+		} catch (err) {
+			console.error(err);
+		}
+		if (res.length > 0) {
+			return res[0];
+		}
 	}
 
-	getUserReprById(id: string) {
-		return this.userRepr.doc(id).get();
+	async searchUser(partUsername: string, exclude: string): Promise<DocumentData[]> {
+		try {
+			const users: DocumentData[] = [];
+			const q = query(
+				this.usersRef,
+				where('uN', '!=', exclude),
+				where('uN', '>=', partUsername),
+				where('uN', '<=', partUsername + '\uf8ff'),
+				limit(3)
+			);
+			const querySnapshot = await getDocs(q);
+			querySnapshot.forEach(doc => {
+				users.push({ id: doc.id, ...doc.data() });
+			});
+			return users;
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
 	}
 
-	searchUser(partUsername: string, exclude: string) {
-		return this.userRepr
-			.where('uN', '!=', exclude)
-			.where('uN', '>=', partUsername)
-			.where('uN', '<=', partUsername + '\uf8ff')
-			.limit(3)
-			.get();
-	}
-
-	updateUser(userId: string, keyVals: object): Promise<boolean> {
-		return new Promise((resolve, reject) => {
-			try {
-				const userRef = this.userRepr.doc(userId);
-				userRef.update({ ...keyVals });
-				resolve(true);
-			} catch (err) {
-				reject(new Error('FirebaseService - user doc was not updated: ' + err.msg));
-			}
-		});
+	async updateUser(userId: string, keyVals: object): Promise<void> {
+		try {
+			const userRef = doc(this.usersRef, userId);
+			await updateDoc(userRef, { ...keyVals });
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	/* ------------------------- User-game related ------------------------- */
 
-	listenInvitesSnapshot(user: User, observer: any) {
+	async listenInvitesSnapshot(user: User, observer: any): Promise<Unsubscribe> {
 		if (user) {
-			return (
-				this.gameRef
-					.where('es', 'array-contains', user.email)
-					// .where('on', '==', true)
-					.orderBy('cA', 'desc')
-					// .limit(5)
-					.onSnapshot(observer)
-			);
-		} else {
-			return null;
+			try {
+				const q = query(
+					this.gamesRef,
+					where('es', 'array-contains', user.email),
+					where('on', '==', true),
+					limit(5)
+				);
+				return onSnapshot(q, observer);
+			} catch (err) {
+				console.error(err);
+				return null;
+			}
 		}
 	}
 
 	async cleanupFinishedGames(userEmail: string) {
 		if (userEmail) {
-			const games = await this.gameRef.where('es', 'array-contains', userEmail).get();
+			const q = query(this.gamesRef, where('es', 'array-contains', userEmail));
+			const games = await getDocs(q);
 			games.forEach(g => {
 				const updated: Date = g.data()?.up?.toDate();
 				if (moment.duration(moment(moment()).diff(updated)).asHours() > 24) {
-					deleteDoc(doc(this.gameRef, g.id)).catch(err => {
+					deleteDoc(doc(this.gamesRef, g.id)).catch(err => {
 						console.error(err);
 					});
 				}
@@ -193,12 +233,14 @@ export class FirebaseService {
 
 	/* ------------------------- Game related ------------------------- */
 
-	async getGameById(game?: Game, gameId?: string) {
-		if (!game && !gameId) {
-			return null;
-		} else {
-			let game_id = game ? game.id : gameId;
-			return this.gameRef.doc(game_id).get();
+	async getGameById(gameId?: string) {
+		try {
+			const gameRef = doc(this.gamesRef, gameId);
+			await getDoc(gameRef).then(doc => {
+				return { id: doc.id, ...doc.data() };
+			});
+		} catch (err) {
+			console.error(err);
 		}
 	}
 
@@ -224,76 +266,74 @@ export class FirebaseService {
 			let cA = new Date();
 			let gameId = '';
 			try {
-				this.gameRef
-					.add({
-						cO: user.uN,
+				addDoc(this.gamesRef, {
+					cO: user.uN,
+					cA,
+					pS,
+					es,
+					on: true,
+					up: cA,
+					dF: null,
+					st: 1,
+					pr: 0,
+					dealer: 0,
+					mid: false,
+					fN: false,
+					wM: 0,
+					ps: shuffledPlayers.map((player: User) => playerToObj(player)),
+					ts: [],
+					fr: [0, 0],
+					th: false,
+					thB: 0,
+					lastT: {},
+					ta: true,
+					taB: 0,
+					hu: [],
+					draw: false,
+					logs: [],
+					sk: [],
+					prE: {},
+					px: [gMinPx, gMaxPx],
+					mHu,
+					sHs,
+					pay
+				}).then(newGame => {
+					gameId = newGame.id;
+					const game: Game = new Game(
+						gameId,
+						user.uN,
 						cA,
 						pS,
 						es,
-						on: true,
-						up: cA,
-						dF: null,
-						st: 1,
-						pr: 0,
-						dealer: 0,
-						mid: false,
-						fN: false,
-						wM: 0,
-						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
-						ts: [],
-						fr: [0, 0],
-						th: false,
-						thB: 0,
-						lastT: {},
-						ta: true,
-						taB: 0,
-						hu: [],
-						draw: false,
-						logs: [],
-						sk: [],
-						prE: {},
-						px: [gMinPx, gMaxPx],
+						true,
+						cA,
+						null,
+						1,
+						0,
+						0,
+						false,
+						false,
+						0,
+						shuffledPlayers,
+						[],
+						[],
+						false,
+						0,
+						{},
+						true,
+						0,
+						[],
+						false,
+						[],
+						[],
+						{},
+						[gMinPx, gMaxPx],
 						mHu,
 						sHs,
 						pay
-					})
-					.then(newGame => {
-						gameId = newGame.id;
-						const game: Game = new Game(
-							gameId,
-							user.uN,
-							cA,
-							pS,
-							es,
-							true,
-							cA,
-							null,
-							1,
-							0,
-							0,
-							false,
-							false,
-							0,
-							shuffledPlayers,
-							[],
-							[],
-							false,
-							0,
-							{},
-							true,
-							0,
-							[],
-							false,
-							[],
-							[],
-							{},
-							[gMinPx, gMaxPx],
-							mHu,
-							sHs,
-							pay
-						);
-						resolve(game);
-					});
+					);
+					resolve(game);
+				});
 			} catch (err) {
 				console.error('FirebaseService - game was not created');
 				reject(err);
@@ -301,57 +341,24 @@ export class FirebaseService {
 		});
 	}
 
-	updateGame(game: Game): Promise<Game> {
-		return new Promise(async (resolve, reject) => {
-			try {
-				let gameObj = gameToObj(game);
-				const currentGameRef = this.gameRef.doc(game.id);
-				await currentGameRef.set({ ...gameObj }).then(() => {
-					resolve(game);
-				});
-			} catch (err) {
-				console.error(err);
-				reject(new Error('FirebaseService - game doc was not updated'));
-			}
-		});
+	async updateGame(game: Game) {
+		try {
+			let gameObj = gameToObj(game);
+			const gameRef = doc(this.gamesRef, game.id);
+			await updateDoc(gameRef, { ...gameObj });
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
-	/**
-	 * Using 1 more read to make sure there's no duplicate declareHu actions
-	 * Using set as transaction.update is failing... unsure why
-	 * @see https://firebase.google.com/docs/firestore/manage-data/transactions#node.js
-	 */
-	handleDeclareHu(hu: boolean, playerSeat: number, uN: string, gameId: string): Promise<boolean> {
-		return new Promise(async resolve => {
-			try {
-				const specificGameRef = this.gameRef.doc(gameId);
-				const res: boolean = await this.db.runTransaction(async t => {
-					const game = await t.get(specificGameRef);
-					if (game?.exists && !game?.data()?.ps?.find((p: any) => p.uN !== uN && p.sT)) {
-						let gameData = game.data();
-						let ps = gameData.ps;
-						let toUpdate = ps.filter((p: any) => p.uN !== uN);
-						let _p = { ...ps[playerSeat], sT: hu, confirmHu: hu };
-						toUpdate.splice(playerSeat, 0, _p);
-						// t.update(specificGameRef, { ps: toUpdate });
-						await specificGameRef.set({ ...gameData, ps: toUpdate });
-						return true;
-					} else {
-						console.info('Unable to declare hu');
-						return false;
-					}
-				});
-				resolve(res);
-			} catch (err) {
-				console.error(err);
-				resolve(false);
-			}
-		});
-	}
-
-	listenToGame(gameId: string, observer: any) {
+	async listenToGame(gameId: string, observer: any): Promise<Unsubscribe> {
 		if (gameId) {
-			return this.gameRef.doc(gameId as string).onSnapshot(observer);
+			try {
+				return onSnapshot(doc(this.gamesRef, gameId), observer);
+			} catch (err) {
+				console.error(err);
+				return null;
+			}
 		}
 	}
 }

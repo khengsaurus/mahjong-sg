@@ -54,11 +54,7 @@ export class Service {
 		return new Promise((resolve, reject) => {
 			try {
 				FBService.getUserReprByEmail(email).then((userData: any) => {
-					if (userData.docs.length === 0) {
-						resolve(null);
-					} else {
-						resolve(objToUser(userData));
-					}
+					resolve(objToUser(userData));
 				});
 			} catch (err) {
 				reject(new Error('Email or password incorrect'));
@@ -127,8 +123,8 @@ export class Service {
 					FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
-						FBService.updateGame(game).then(updatedGame => {
-							resolve(updatedGame);
+						FBService.updateGame(game).then(() => {
+							resolve(game);
 						});
 					});
 				}
@@ -150,7 +146,7 @@ export class Service {
 		}
 	}
 
-	updateGame(game: Game, isLocalGame = false): Promise<Game> {
+	updateGame(game: Game, isLocalGame = false): Promise<void> {
 		if (isLocalGame) {
 			this.store.dispatch(setLocalGame(game));
 		} else {

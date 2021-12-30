@@ -108,7 +108,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 
 	function handleClose() {
 		if (flagSizesDiff || flagThemeDiff) {
-			let keyVal = {
+			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,
 				tSz: tileSize,
@@ -117,11 +117,9 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 				tBC: tileColor
 			};
 			ServiceInstance.FBUpdateUser(user.id, keyVal)
-				.then(res => {
-					if (res) {
-						let updatedUser = extend(user, keyVal);
-						handleLocalUO(updatedUser);
-					}
+				.then(() => {
+					const updatedUser = extend(user, keyVal);
+					handleLocalUO(updatedUser);
 				})
 				.catch(err => {
 					console.error(err);
@@ -161,7 +159,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 											indicatorColor="secondary"
 										>
 											{Object.keys(Size).map(key => {
-												let size = Size[key.toUpperCase()];
+												const size = Size[key.toUpperCase()];
 												return (
 													<Tab
 														style={{

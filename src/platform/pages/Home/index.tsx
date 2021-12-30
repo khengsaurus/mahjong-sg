@@ -2,10 +2,9 @@ import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
 import { JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
-import ServiceInstance from 'platform/service/ServiceLayer';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AppFlag, Timeout } from 'shared/enums';
 import { IStore } from 'shared/store';
@@ -15,12 +14,6 @@ import HomePage from './HomePage';
 const Home = () => {
 	const { user } = useSelector((state: IStore) => state);
 	const [showSettings, setShowSettings] = useState(false);
-
-	useEffect(() => {
-		if (user?.email) {
-			ServiceInstance.cleanupGames(user?.email);
-		}
-	}, [user?.email]);
 
 	const markup = () => (
 		<>

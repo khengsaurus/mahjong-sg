@@ -51,6 +51,7 @@ const Login = () => {
 								if (user) {
 									callback();
 									login(user, false);
+									user?.email && ServiceInstance.cleanupGames(user.email);
 									history.push(Page.INDEX);
 								} else {
 									// User not registered, redirect to NewUser
