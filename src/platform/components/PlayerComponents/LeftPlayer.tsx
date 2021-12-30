@@ -101,7 +101,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.LEFT} />
 			)}
 			{sTs?.length > 0 && renderShownTiles()}
-			{uTs > 0 && <UnusedTiles tiles={uTs} segment={Segment.LEFT} tag={frontBackTag} />}
+			<UnusedTiles tiles={uTs} segment={Segment.LEFT} tag={frontBackTag} />
 			{dTs?.length > 0 && renderDiscardedTiles()}
 		</div>
 	);

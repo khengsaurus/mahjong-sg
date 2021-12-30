@@ -16,20 +16,25 @@
 				margin: getTilePadding($size);
 				&.unused {
 					align-self: center;
-					flex-flow: column wrap;
+					flex-flow: column-reverse wrap-reverse;
 					@include alignC-justifyC(center, flex-end);
-					max-height: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
+					height: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
+					transition: $transition-fast;
 					z-index: -1;
+					&.hidden {
+						min-height: 0px;
+						height: 0px;
+					}
 					&.front {
-						flex-flow: column wrap-reverse;
+						flex-flow: column-reverse wrap-reverse;
 						&.bottom {
-							flex-flow: column-reverse wrap;
+							flex-flow: column wrap;
 						}
 					}
 					&.back {
-						flex-flow: column wrap;
+						flex-flow: column-reverse wrap;
 						&.bottom {
-							flex-flow: column-reverse wrap-reverse;
+							flex-flow: column wrap-reverse;
 						}
 					}
 				}
@@ -109,9 +114,14 @@
 				&.unused {
 					align-self: center;
 					align-content: flex-start;
-					flex-flow: row-reverse wrap-reverse;
-					max-width: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
+					flex-flow: row wrap;
 					z-index: -1;
+					transition: $transition-fast;
+					width: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
+					&.hidden {
+						min-width: 0px;
+						width: 0px;
+					}
 					&.front {
 						flex-flow: row wrap;
 						&.right {
@@ -197,6 +207,7 @@
 			@include flex-dir(row);
 			margin: getTilePadding($size);
 			z-index: 20;
+			transition: $transition-fast;
 			.self-hidden-tile {
 				height: getSelfHiddenTileHeight($size);
 				width: getSelfHiddenTileWidth($size);
@@ -210,7 +221,9 @@
 				}
 				@include selected;
 			}
-
+			&.transform-right {
+				margin-right: -1 * getSelfHiddenTileWidth($size) - getHiddenTileHeight($size);
+			}
 			.self-hidden-tile-bg {
 				height: getSelfHiddenTileHeight($size);
 			}
