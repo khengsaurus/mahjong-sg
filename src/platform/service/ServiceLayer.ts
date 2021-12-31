@@ -39,9 +39,7 @@ export class Service {
 	}
 
 	async FBAuthLogin(props: IEmailPass): Promise<boolean> {
-		if (props.email && props.password) {
-			return FBService.authLoginEmailPass(props.email, props.password);
-		}
+		return FBService.authLoginEmailPass(props.email, props.password);
 	}
 
 	FBResolveUser(email: string): Promise<User | null> {
@@ -143,12 +141,10 @@ export class Service {
 	}
 
 	FBListenToGame(id: string, observer: any) {
-		if (id !== LocalFlag) {
-			return FBService.listenToGame(id, observer);
-		}
+		return id === LocalFlag ? null : FBService.listenToGame(id, observer);
 	}
 
-	updateGame(game: Game, isLocalGame = false): Promise<void> {
+	updateGame(game: Game, isLocalGame = false): void | Promise<void> {
 		if (isLocalGame) {
 			this.store.dispatch(setLocalGame(game));
 		} else {

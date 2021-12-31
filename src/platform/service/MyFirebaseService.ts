@@ -35,6 +35,7 @@ import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { shuffle } from 'shared/util';
 import { gameToObj, playerToObj } from 'shared/util/parsers';
+import { isEmpty } from 'lodash';
 
 export class FirebaseService {
 	private user: FirebaseUser;
@@ -184,16 +185,19 @@ export class FirebaseService {
 	}
 
 	async getUserReprByUsername(uN: string): Promise<DocumentData> {
-		try {
+		return new Promise(async (resolve, reject) => {
+			const res = [];
 			const q = query(this.usersRef, where('uN', '==', uN));
 			const querySnapshot = await getDocs(q);
 			querySnapshot.forEach(doc => {
-				return { id: doc.id, ...doc.data() };
+				res.push({ id: doc.id, ...doc.data() });
 			});
-		} catch (err) {
-			console.error(err);
-			return null;
-		}
+			if (!isEmpty(res)) {
+				resolve(res[0]);
+			} else {
+				reject(new Error('Could not find a user with that username'));
+			}
+		});
 	}
 
 	async getUserReprByEmail(email: string) {
@@ -245,7 +249,7 @@ export class FirebaseService {
 	/* ------------------------- User-game related ------------------------- */
 
 	async listenInvitesSnapshot(user: User, observer: any): Promise<Unsubscribe> {
-		if (user) {
+		return new Promise((resolve, reject) => {
 			try {
 				const q = query(
 					this.gamesRef,
@@ -253,12 +257,11 @@ export class FirebaseService {
 					where('on', '==', true),
 					limit(5)
 				);
-				return onSnapshot(q, observer);
+				resolve(onSnapshot(q, observer));
 			} catch (err) {
-				console.error(err);
-				return null;
+				reject(err);
 			}
-		}
+		});
 	}
 
 	async cleanupFinishedGames(userEmail: string) {
@@ -397,14 +400,13 @@ export class FirebaseService {
 	}
 
 	async listenToGame(gameId: string, observer: any): Promise<Unsubscribe> {
-		if (gameId) {
+		return new Promise((resolve, reject) => {
 			try {
-				return onSnapshot(doc(this.gamesRef, gameId), observer);
+				resolve(onSnapshot(doc(this.gamesRef, gameId), observer));
 			} catch (err) {
-				console.error(err);
-				return null;
+				reject(err);
 			}
-		}
+		});
 	}
 }
 

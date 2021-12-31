@@ -18,6 +18,8 @@ function getHighlightColor(color: TableColor | BackgroundColor) {
 		return amber[600];
 	} else if ([TableColor.BLUE, BackgroundColor.BLUE].includes(color)) {
 		return yellow[700];
+	} else {
+		return yellow[700];
 	}
 }
 
