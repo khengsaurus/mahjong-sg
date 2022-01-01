@@ -401,5 +401,7 @@ $log-margin-left-medium: 5px;
 .list-item {
 	align-self: center;
 	height: 30px;
-}$transform-percent: 22%;
+}
+
+$transform-percent: 22%;
 $transform-rotate: rotate(90deg) translateX(-1 * $transform-percent);

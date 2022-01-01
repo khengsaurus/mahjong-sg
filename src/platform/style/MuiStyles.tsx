@@ -25,7 +25,7 @@ function getHighlightColor(color: TableColor | BackgroundColor) {
 
 export const HomeTheme = (props: any) => {
 	const {
-		theme: { backgroundColor = BackgroundColor.BLUE, mainTextColor = TextColor.LIGHT }
+		theme: { backgroundColor = BackgroundColor.BROWN, mainTextColor = TextColor.DARK }
 	} = useSelector((state: IStore) => state);
 	const _theme = useMemo(() => {
 		const highlightColor = getHighlightColor(backgroundColor);
@@ -70,6 +70,9 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						color: `${textColor}`,
 						'&:hover': {
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						},
+						'&:disabled': {
+							color: 'rgb(75, 75, 75)'
 						}
 					}
 				}
@@ -81,6 +84,9 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						backgroundColor: 'transparent !important',
 						'&:hover': {
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+						},
+						'&:disabled': {
+							color: 'rgb(75, 75, 75)'
 						}
 					}
 				}

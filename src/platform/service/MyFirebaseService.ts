@@ -150,7 +150,7 @@ export class FirebaseService {
 					if (snapshot.exists()) {
 						resolve(snapshot.val());
 					} else {
-						reject(new Error(ErrorMessage.TRY_AGAIN));
+						reject(new Error(ErrorMessage.LOGIN_ERROR));
 					}
 				});
 			} catch (err) {
@@ -170,12 +170,11 @@ export class FirebaseService {
 					hSz: Size.MEDIUM,
 					tSz: Size.MEDIUM,
 					cSz: Size.MEDIUM,
-					bgC: BackgroundColor.BLUE,
+					bgC: BackgroundColor.BROWN,
 					tC: TableColor.GREEN,
 					tBC: TileColor.GREEN
 					// tileFrontColor: TileColor.LIGHT,
 					// decoration: Decoration.DEFAULT,
-					// groups: []
 				});
 				resolve(true);
 			} catch (err) {
