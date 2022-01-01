@@ -9,6 +9,7 @@ import { Title } from 'platform/style/StyledMui';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Page } from 'shared/enums';
+import { HomeScreenText } from 'shared/screenTexts';
 import { Game } from 'shared/models';
 import { IStore, setGameId } from 'shared/store';
 import { formatDate } from 'shared/util';
@@ -33,7 +34,7 @@ const JoinGame = () => {
 							games.push(objToGame(doc, true));
 						});
 						setGameInvites(games || []);
-						setTitle(games.length === 0 ? 'No available games' : 'Available games:');
+						setTitle(games.length === 0 ? HomeScreenText.NO_AVAIL_GAMES : HomeScreenText.AVAIL_GAMES);
 					}
 				});
 			}

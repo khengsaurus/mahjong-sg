@@ -1,13 +1,15 @@
 import Alert from '@material-ui/lab/Alert';
 import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
+import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
+import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
-import HomePage from '../Home/HomePage';
+import { ErrorMessage } from 'shared/messages';
 import './login.scss';
 
 const Login = () => {
@@ -65,7 +67,7 @@ const Login = () => {
 											setReady(true);
 											history.push(Page.INDEX);
 										} else {
-											console.error('User may not be registered correctly');
+											console.error(ErrorMessage.REGISTER_ISSUE);
 										}
 									})
 									.catch(err => {
@@ -74,7 +76,9 @@ const Login = () => {
 							}
 						})
 						.catch(err => {
-							handleError(err);
+							if (err.message.toUpperCase().includes(ErrorMessage.FIREBASE_WRONG_PW)) {
+								handleError(new Error(ErrorMessage.LOGIN_ERROR));
+							}
 						});
 				})
 				.catch(err => {
@@ -102,7 +106,7 @@ const Login = () => {
 						setAlert({ status: Status.ERROR, msg: err.toString() });
 					});
 			} else {
-				setAlert({ status: Status.ERROR, msg: 'Passwords do not match' });
+				setAlert({ status: Status.ERROR, msg: ErrorMessage.PW_NOT_MATCHING });
 			}
 		}
 	}, [confirmPassword, email, password, setAlert, setUserEmail, showRegister]);
@@ -124,19 +128,25 @@ const Login = () => {
 	}, [enterListener]);
 
 	const renderLoginButton = () => (
-		<StyledButton label={`Login`} type="submit" autoFocus disabled={loginDisabled} onClick={handleLogin} />
+		<StyledButton label={ButtonText.LOGIN} type="submit" autoFocus disabled={loginDisabled} onClick={handleLogin} />
 	);
 
 	const renderRegisterButton = () => (
-		<StyledButton label={`Register`} type="submit" autoFocus disabled={registerDisabled} onClick={submitRegister} />
+		<StyledButton
+			label={ButtonText.REGISTER}
+			type="submit"
+			autoFocus
+			disabled={registerDisabled}
+			onClick={submitRegister}
+		/>
 	);
 
 	const markup = () => (
 		<>
-			<Title title={`Welcome to Mahjong SG!`} />
+			<Title title={HomeScreenText.HOME_TITLE} />
 			<TextField
 				key="usernameEmail"
-				label={showRegister ? `Email` : `Username`}
+				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
 				type="text"
 				value={showRegister ? email : username}
 				onChange={e => {
@@ -147,7 +157,7 @@ const Login = () => {
 			/>
 			<TextField
 				key="password"
-				label="Password"
+				label={HomeScreenText.PW}
 				type="password"
 				value={password}
 				onChange={e => {
@@ -159,7 +169,7 @@ const Login = () => {
 			<Collapse in={showRegister} timeout={Transition.FAST} unmountOnExit>
 				<TextField
 					key="confirmPassword"
-					label="Confirm password"
+					label={HomeScreenText.C_PW}
 					type="password"
 					value={confirmPassword}
 					onChange={e => {
@@ -171,7 +181,7 @@ const Login = () => {
 			</Collapse>
 			<Row style={{ paddingTop: 10, width: '100%', justifyContent: 'space-evenly' }} id="bottom-btns">
 				<StyledButton
-					label={showRegister ? `Back` : `Register`}
+					label={showRegister ? HomeScreenText.BACK : HomeScreenText.REGISTER}
 					onClick={() => {
 						setAlert(null);
 						setShowRegister(!showRegister);
@@ -181,7 +191,7 @@ const Login = () => {
 			</Row>
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>
-					{alert?.msg || 'Please try again'}
+					{alert?.msg || ErrorMessage.TRY_AGAIN}
 				</Alert>
 			</Collapse>
 		</>

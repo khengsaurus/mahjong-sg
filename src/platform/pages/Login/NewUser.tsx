@@ -7,7 +7,9 @@ import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
+import { HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
+import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
 import HomePage from '../Home/HomePage';
 
@@ -26,7 +28,7 @@ const NewUser = () => {
 		ServiceInstance.FBNewUsername(values)
 			.then(res => {
 				if (res) {
-					setAlert({ status: Status.SUCCESS, msg: 'Registered successfully' });
+					setAlert({ status: Status.SUCCESS, msg: InfoMessage.REGISTER_SUCCESS });
 					callback();
 				}
 			})
@@ -46,7 +48,7 @@ const NewUser = () => {
 				}, 1000);
 			})
 			.catch(err => {
-				if (err.message === 'Username already taken') {
+				if (err.message === ErrorMessage.USERNAME_TAKEN) {
 					setAlert({ status: Status.ERROR, msg: err.message });
 				}
 			});
@@ -54,10 +56,10 @@ const NewUser = () => {
 
 	const markup = () => (
 		<>
-			<Title title={`Welcome! Choose a username`} />
+			<Title title={HomeScreenText.NEW_USER_TITLE} />
 			<TextField
 				name="username"
-				label="Username"
+				label={HomeScreenText.USERNAME}
 				onChange={e => {
 					setUsername(e.target.value);
 				}}
@@ -70,7 +72,7 @@ const NewUser = () => {
 					<>
 						<StyledButton label="Cancel" onClick={cancelRegister} />
 						<StyledButton
-							label={`Submit`}
+							label={HomeScreenText.SUBMIT}
 							autoFocus
 							type="submit"
 							disabled={username.trim() === ''}

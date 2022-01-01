@@ -17,6 +17,7 @@ import { Title } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LocalFlag, Page, Platform, Status } from 'shared/enums';
+import { HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { IStore, setGame } from 'shared/store';
@@ -195,7 +196,7 @@ const Table = () => {
 			return (
 				<HomeTheme>
 					<Main>
-						<Typography variant="h6">{`Game has not started`}</Typography>
+						<Typography variant="h6">{HomeScreenText.GAME_NOT_STARTED}</Typography>
 						<br></br>
 						<HomeButton />
 					</Main>
@@ -209,7 +210,7 @@ const Table = () => {
 			setTimeout(function () {
 				setPendingScreen(
 					<Centered>
-						<Title title={`No ongoing game`} />
+						<Title title={HomeScreenText.NO_ONGOING_GAME} />
 						<JoinGameButton />
 						<HomeButton />
 					</Centered>

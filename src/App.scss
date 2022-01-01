@@ -9,7 +9,7 @@ $wind-font-size: 60px;
 
 $transition-fast: 300ms;
 
-/*-------------------- Colors --------------------*/
+/* -------------------- Colors -------------------- */
 $color-tile-front: gainsboro;
 $color-border: rgb(40, 40, 40);
 
@@ -19,7 +19,7 @@ $radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $c
 $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 
-/*-------------------- Tiles --------------------*/
+/* -------------------- Tiles -------------------- */
 $enlarge: 1.2;
 
 $border-px: 1px;
@@ -61,7 +61,7 @@ $shown-tile-width-medium: 28px;
 $self-hidden-tile-height-medium: 48px;
 $self-hidden-tile-width-medium: 32px;
 
-/*-------------------- Controls & logs --------------------*/
+/* -------------------- Controls & logs -------------------- */
 // Small
 $icon-button-size-small: 32px;
 $button-height-small: 40px;
@@ -95,7 +95,7 @@ $text-font-size-medium: 16px;
 $log-line-width-medium: 270px;
 $log-margin-left-medium: 5px;
 
-/*-------------------- Functions --------------------*/
+/* -------------------- Functions -------------------- */
 
 @function in_list($value, $list) {
 	@return (false != index($list, $value));
@@ -241,7 +241,7 @@ $log-margin-left-medium: 5px;
 	}
 }
 
-/*-------------------- Safe area --------------------*/
+/* -------------------- Safe area -------------------- */
 
 @mixin safeAreaHeight {
 	@supports ((top: const(safe-area-inset-top)) and (bottom: const(safe-area-inset-bottom))) {
@@ -282,7 +282,7 @@ $log-margin-left-medium: 5px;
 		@return $saib;
 	}
 }
-/*-------------------- Mixins --------------------*/
+/* -------------------- Mixins -------------------- */
 
 @mixin alignI-justifyC($i, $c) {
 	align-items: #{$i};
@@ -387,7 +387,7 @@ $log-margin-left-medium: 5px;
 	}
 }
 
-/*-------------------- . --------------------*/
+/* -------------------- . -------------------- */
 
 .noselect {
 	-webkit-touch-callout: none; /* iOS Safari */

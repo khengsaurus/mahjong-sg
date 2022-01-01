@@ -8,6 +8,7 @@ import { Title } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Offset, Platform, Status } from 'shared/enums';
+import { HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { IStore, setGame, setGameId, setLocalGame } from 'shared/store';
 import { setTHK } from 'shared/store/actions';
@@ -27,7 +28,7 @@ const HomePage = ({
 	markup,
 	ready = true,
 	timeout = 1500,
-	fallbackTitle = `Whoops, something went wrong...`,
+	fallbackTitle = HomeScreenText.SOMETHING_WENT_WRONG,
 	skipVerification = false,
 	offset = 0
 }: IHomePage) => {

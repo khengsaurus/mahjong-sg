@@ -36,6 +36,7 @@ import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { shuffle } from 'shared/util';
 import { gameToObj, playerToObj } from 'shared/util/parsers';
 import { isEmpty } from 'lodash';
+import { ErrorMessage, InfoMessage } from 'shared/messages';
 
 export class FirebaseService {
 	private user: FirebaseUser;
@@ -62,10 +63,10 @@ export class FirebaseService {
 		return new Promise(resolve => {
 			try {
 				this.app = initializeApp(FirebaseConfig);
-				console.info('Firebase App initialized 🔥');
+				console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
 				resolve(true);
 			} catch (err) {
-				console.error('Firebase App failed to initialize');
+				console.error(InfoMessage.FIREBASE_INIT_ERROR);
 				resolve(false);
 			}
 		});
@@ -81,7 +82,7 @@ export class FirebaseService {
 			});
 		}
 		this.auth.onAuthStateChanged(user => {
-			console.info(user ? 'Firebase user signed in 😊' : 'No Firebase user 🥲');
+			console.info(user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO);
 			this.user = user;
 		});
 	}
@@ -149,18 +150,18 @@ export class FirebaseService {
 					if (snapshot.exists()) {
 						resolve(snapshot.val());
 					} else {
-						reject(new Error('Please try again'));
+						reject(new Error(ErrorMessage.TRY_AGAIN));
 					}
 				});
 			} catch (err) {
 				console.error(err);
-				reject(new Error('Please try again'));
+				reject(new Error(ErrorMessage.TRY_AGAIN));
 			}
 		});
 	}
 
 	async registerUserEmail(uN: string, email: string): Promise<boolean> {
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			try {
 				addDoc(this.usersRef, {
 					uN,
@@ -195,7 +196,7 @@ export class FirebaseService {
 			if (!isEmpty(res)) {
 				resolve(res[0]);
 			} else {
-				reject(new Error('Could not find a user with that username'));
+				reject(new Error(ErrorMessage.NO_USER_BY_USERNAME));
 			}
 		});
 	}
@@ -302,8 +303,7 @@ export class FirebaseService {
 		sHs = [ScoringHand.ALL],
 		pay = PaymentType.SHOOTER
 	): Promise<Game> {
-		let shuffledPlayers: User[];
-		shuffledPlayers = random ? shuffle(ps) : ps;
+		const shuffledPlayers: User[] = random ? shuffle(ps) : ps;
 		let es: string[] = [];
 		let pS: string = '';
 		shuffledPlayers.forEach(player => {

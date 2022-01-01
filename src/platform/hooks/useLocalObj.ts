@@ -20,7 +20,7 @@ function useLocalObj<T>(
 				resolve(localObj ? parser(localObj, key) : null);
 			} catch (err) {
 				console.error(`Token not found for key '${storageKey}': 🥞`);
-				console.error(err);
+				reject(err);
 			}
 		});
 	}, [localObj, parser, storageKey]);

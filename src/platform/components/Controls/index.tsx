@@ -21,7 +21,7 @@ const Controls = () => {
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
-	const { delayOn, delayLeft } = useGameCountdown(updateGame);
+	const { delayOn, delayLeft } = useGameCountdown();
 
 	const handleHome = useCallback(() => {
 		history.push(Page.INDEX);

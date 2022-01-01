@@ -1,6 +1,7 @@
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
 import { LocalFlag } from 'shared/enums';
+import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import { setLocalGame, store } from 'shared/store';
 import { createLocalGame } from 'shared/util';
@@ -16,10 +17,10 @@ export class Service {
 
 	async init() {
 		if (this.fbService) {
-			console.info('Service instance ready 🍦');
+			console.info(InfoMessage.SERVER_READY);
 		} else {
 			this.fbService = FBService;
-			console.info('Initializing service instance 🍦');
+			console.info(InfoMessage.SERVER_INIT);
 		}
 		this.store = store;
 	}
@@ -49,7 +50,7 @@ export class Service {
 					resolve(userData ? objToUser(userData) : null);
 				});
 			} catch (err) {
-				reject(new Error('Email or password incorrect'));
+				reject(new Error(ErrorMessage.LOGIN_ERROR));
 			}
 		});
 	}
@@ -58,7 +59,7 @@ export class Service {
 		return new Promise((resolve, reject) => {
 			FBService.getUserReprByUsername(values.uN).then(data => {
 				if (data && !data.empty) {
-					reject(new Error('Username already taken'));
+					reject(new Error(ErrorMessage.USERNAME_TAKEN));
 				} else {
 					FBService.registerUserEmail(values.uN, values.email)
 						.then(res => {
@@ -70,7 +71,7 @@ export class Service {
 						})
 						.catch(err => {
 							console.error(err);
-							reject(new Error('Unable to register user'));
+							reject(new Error(ErrorMessage.REGISTER_ERROR));
 						});
 				}
 			});
@@ -129,11 +130,7 @@ export class Service {
 					});
 				}
 			} catch (err) {
-				console.error(
-					`ServiceLayer failed to ${
-						isLocalGame ? `create a local game` : `execute FBService.createGame -> FBService.updateGame`
-					}: 🥞`
-				);
+				console.error(`${isLocalGame ? ErrorMessage.INIT_LOCAL_GAME : ErrorMessage.INIT_ONLINE_GAME}: 🥞`);
 				console.error(err);
 				resolve(null);
 			}

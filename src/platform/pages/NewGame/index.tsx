@@ -25,6 +25,7 @@ import { StyledButton, Title } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } from 'shared/enums';
+import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore, setGameId } from 'shared/store';
@@ -225,7 +226,7 @@ const NewGame = () => {
 						}}
 					/>
 					<StyledButton
-						label={'Options'}
+						label={ButtonText.OPTIONS}
 						onClick={() => {
 							setShowOptions(prev => !prev);
 						}}
@@ -234,7 +235,7 @@ const NewGame = () => {
 					<Fade in={players.length === 4} timeout={Transition.FAST}>
 						<div id="start-join-btn">
 							<StyledButton
-								label={startedGame ? 'Join' : 'Start'}
+								label={startedGame ? ButtonText.JOIN : ButtonText.START}
 								onClick={handleStartJoinClick}
 								disabled={players.length < 4}
 							/>
@@ -247,7 +248,7 @@ const NewGame = () => {
 
 	const markup = () => (
 		<>
-			<Title title="Create a new game" padding="5px" />
+			<Title title={HomeScreenText.NEW_GAME_TITLE} padding="5px" />
 			<div className="panels">
 				<div className="panel-segment">
 					<UserSearchForm />
