@@ -11,6 +11,7 @@ import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import './login.scss';
+import { AboutButton } from 'platform/components/Buttons/TextNavButton';
 
 const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
@@ -181,7 +182,7 @@ const Login = () => {
 			</Collapse>
 			<Row style={{ paddingTop: 10, width: '100%', justifyContent: 'space-evenly' }} id="bottom-btns">
 				<StyledButton
-					label={showRegister ? HomeScreenText.BACK : HomeScreenText.REGISTER}
+					label={showRegister ? ButtonText.BACK : ButtonText.REGISTER}
 					onClick={() => {
 						setAlert(null);
 						setShowRegister(!showRegister);
@@ -194,6 +195,9 @@ const Login = () => {
 					{alert?.msg || ErrorMessage.TRY_AGAIN}
 				</Alert>
 			</Collapse>
+			<div className="about-container">
+				<AboutButton />
+			</div>
 		</>
 	);
 

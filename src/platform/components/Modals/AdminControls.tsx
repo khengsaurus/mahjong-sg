@@ -48,6 +48,8 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(currGame?.bt));
 	const [bt, setBt] = useState<number>(currGame?.bt);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
+	// For dev
+	// const updateGame = useCallback(game => ServiceInstance.setGame(game), []);
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -105,11 +107,7 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 						style={{ width: '100px' }}
 					>
 						{['Slow', 'Medium', 'Fast'].map(t => (
-							<MenuItem
-								key={`bt-${t}`}
-								style={{ ...MuiStyles.small_dropdown_item}}
-								value={t}
-							>
+							<MenuItem key={`bt-${t}`} style={{ ...MuiStyles.small_dropdown_item }} value={t}>
 								{t}
 							</MenuItem>
 						))}

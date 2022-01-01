@@ -103,7 +103,11 @@ const Table = () => {
 			}
 		}
 
-		gameId === LocalFlag || isLocalGame ? handleLocalGame() : unsubscribe();
+		if (!gameId) {
+			history.push(Page.INDEX);
+		} else {
+			gameId === LocalFlag || isLocalGame ? handleLocalGame() : unsubscribe();
+		}
 
 		return () => {
 			didUnmount = true;

@@ -2,9 +2,10 @@ import { useCallback, useEffect } from 'react';
 import { Page, PageName, Shortcut } from 'shared/enums';
 import { history } from 'App';
 import { StyledButton } from 'platform/style/StyledMui';
+import { ButtonText } from 'shared/screenTexts';
 
 interface ITextNavButton extends IHasStyle {
-	label: PageName;
+	label: PageName | ButtonText;
 	route: Page;
 	shortcut: Shortcut;
 }
@@ -29,8 +30,8 @@ const TextNavButton = ({ label, shortcut, route, style = {} }: ITextNavButton) =
 	return <StyledButton label={label} navigate={route} style={{ ...style }} />;
 };
 
-const HomeButton = ({ style = {} }: IHasStyle) => {
-	return <TextNavButton label={PageName.HOME} route={Page.INDEX} shortcut={Shortcut.HOME} style={style} />;
+const HomeButton = ({ style = {}, label = PageName.HOME }: IHomeButton) => {
+	return <TextNavButton label={label} route={Page.INDEX} shortcut={Shortcut.HOME} style={style} />;
 };
 
 const NewGameButton = ({ style = {} }: IHasStyle) => {
@@ -41,4 +42,8 @@ const JoinGameButton = ({ style = {} }: IHasStyle) => {
 	return <TextNavButton label={PageName.JOINGAME} route={Page.JOINGAME} shortcut={Shortcut.JOINGAME} style={style} />;
 };
 
-export { HomeButton, NewGameButton, JoinGameButton };
+const AboutButton = ({ style = {} }: IHasStyle) => {
+	return <TextNavButton label={PageName.ABOUT} route={Page.ABOUT} shortcut={null} style={style} />;
+};
+
+export { HomeButton, NewGameButton, JoinGameButton, AboutButton };

@@ -152,6 +152,11 @@ export class Service {
 	cleanupGames(userEmail: string) {
 		FBService.cleanupFinishedGames(userEmail);
 	}
+
+	// For dev
+	setGame(game: Game) {
+		FBService.setGame(game);
+	}
 }
 
 const ServiceInstance = new Service();

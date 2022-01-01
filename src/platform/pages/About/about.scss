@@ -1,0 +1,28 @@
+@import '../../../App.scss';
+
+.content {
+	@include flow(column wrap);
+
+	h3 {
+		margin: 0px 0px 20px;
+	}
+
+	h4 {
+		margin: 10px 0px;
+	}
+
+	p {
+		font-size: 0.95rem;
+		display: block;
+		margin: 0px !important;
+	}
+
+	ul {
+		margin: 5px 0px;
+		padding-inline-start: 12px;
+		li {
+      font-size: 0.9rem;
+			margin: 10px;
+		}
+	}
+}

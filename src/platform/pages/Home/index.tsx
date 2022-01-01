@@ -1,19 +1,40 @@
 import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
-import { JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
+import { AboutButton, JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
+import HomePage from 'platform/pages/Home/HomePage';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, Transition } from 'shared/enums';
+import { AppFlag, Shortcut, Transition } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './home.scss';
-import HomePage from './HomePage';
 
 const Home = () => {
 	const { user } = useSelector((state: IStore) => state);
 	const [showSettings, setShowSettings] = useState(false);
+
+	const handleKeyListeners = useCallback(
+		e => {
+			switch (e.key) {
+				case Shortcut.SETTINGS:
+					setShowSettings(show => !show);
+					break;
+				default:
+					break;
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[setShowSettings]
+	);
+
+	useEffect(() => {
+		document.addEventListener('keydown', handleKeyListeners);
+		return () => {
+			document.removeEventListener('keydown', handleKeyListeners);
+		};
+	}, [handleKeyListeners]);
 
 	const markup = () => (
 		<>
@@ -21,6 +42,7 @@ const Home = () => {
 			<NewGameButton />
 			<JoinGameButton />
 			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
+			<AboutButton />
 			<LogoutButton />
 			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>

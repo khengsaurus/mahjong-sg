@@ -2,16 +2,16 @@ import Alert from '@material-ui/lab/Alert';
 import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import 'App.scss';
+import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
-import { HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
-import HomePage from '../Home/HomePage';
+import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
@@ -72,7 +72,7 @@ const NewUser = () => {
 					<>
 						<StyledButton label="Cancel" onClick={cancelRegister} />
 						<StyledButton
-							label={HomeScreenText.SUBMIT}
+							label={ButtonText.SUBMIT}
 							autoFocus
 							type="submit"
 							disabled={username.trim() === ''}

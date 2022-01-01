@@ -31,6 +31,7 @@ export const Centered = styled.div`
 	align-self: center;
 	text-align: center;
 	transition: 300ms;
+	color: ${props => props.theme.textColor};
 `;
 
 export const CenteredColored = styled(Centered)`
@@ -39,6 +40,17 @@ export const CenteredColored = styled(Centered)`
 
 export const CenteredTableColored = styled(Centered)`
 	background-color: ${props => props.theme.tableColor};
+`;
+
+export const Scrollable = styled.div`
+	width: 95vw;
+	max-height: 85vh;
+	text-align: left;
+	overflow-y: scroll;
+	::-webkit-scrollbar {
+		display: none;
+	}
+	color: ${props => props.theme.mainTextColor};
 `;
 
 export const Notification = styled.div`

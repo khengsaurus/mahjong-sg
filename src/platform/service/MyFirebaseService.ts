@@ -23,6 +23,7 @@ import {
 	limit,
 	onSnapshot,
 	query,
+	setDoc,
 	Unsubscribe,
 	updateDoc,
 	where
@@ -269,11 +270,14 @@ export class FirebaseService {
 			const q = query(this.gamesRef, where('es', 'array-contains', userEmail));
 			const games = await getDocs(q);
 			games.forEach(g => {
-				const updated: Date = g.data()?.up?.toDate();
-				if (moment.duration(moment(moment()).diff(updated)).asHours() > 24) {
-					deleteDoc(doc(this.gamesRef, g.id)).catch(err => {
-						console.error(err);
-					});
+				let lastUpdated = g.data()?.up;
+				if (lastUpdated && lastUpdated?.toDate) {
+					lastUpdated = lastUpdated?.toDate() as Date;
+					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 24) {
+						deleteDoc(doc(this.gamesRef, g.id)).catch(err => {
+							console.error(err);
+						});
+					}
 				}
 			});
 		}
@@ -405,6 +409,13 @@ export class FirebaseService {
 			} catch (err) {
 				reject(err);
 			}
+		});
+	}
+
+	// For dev
+	async setGame(game) {
+		await setDoc(doc(this.gamesRef, game.id), {
+			...game
 		});
 	}
 }

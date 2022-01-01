@@ -1,4 +1,5 @@
 import { createBrowserHistory } from 'history';
+import About from 'platform/pages/About';
 import Home from 'platform/pages/Home';
 import JoinGame from 'platform/pages/JoinGame';
 import Login from 'platform/pages/Login';
@@ -10,7 +11,7 @@ import { Styled } from 'platform/style/StyledComponents';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-import { AppFlag } from 'shared/enums';
+import { AppFlag, Page } from 'shared/enums';
 import { AppContextProvider } from 'shared/hooks';
 import { persistor, store } from 'shared/store';
 import './App.scss';
@@ -25,15 +26,16 @@ function App() {
 					<Router history={history}>
 						<Styled>
 							<Switch>
-								<Route exact path="/" component={Home} />
-								<Route exact path="/Home" component={Home} />
-								<Route exact path="/Login" component={Login} />
-								<Route exact path="/NewUser" component={NewUser} />
-								<Route exact path="/NewGame" component={NewGame} />
-								<Route exact path="/JoinGame" component={JoinGame} />
-								<Route exact path="/Table" component={Table} />
+								<Route exact path={Page.INDEX} component={Home} />
+								<Route exact path={Page.HOME} component={Home} />
+								<Route exact path={Page.LOGIN} component={Login} />
+								<Route exact path={Page.NEWUSER} component={NewUser} />
+								<Route exact path={Page.NEWGAME} component={NewGame} />
+								<Route exact path={Page.JOINGAME} component={JoinGame} />
+								<Route exact path={Page.TABLE} component={Table} />
+								<Route exact path={Page.ABOUT} component={About} />
 								{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
-									<Route exact path="/Sample" component={Sample} />
+									<Route exact path={Page.SAMPLE} component={Sample} />
 								)}
 							</Switch>
 						</Styled>
