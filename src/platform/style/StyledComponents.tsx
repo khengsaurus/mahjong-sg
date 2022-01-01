@@ -43,13 +43,15 @@ export const CenteredTableColored = styled(Centered)`
 `;
 
 export const Scrollable = styled.div`
-	width: 95vw;
-	max-height: 85vh;
+	width: 92vw;
 	text-align: left;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none;
 	}
+	padding: 40px 0px 0px;
+	margin-top: const(safe-area-inset-top);
+	margin-top: env(safe-area-inset-top);
 	color: ${props => props.theme.mainTextColor};
 `;
 

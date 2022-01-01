@@ -41,8 +41,8 @@ const Home = () => {
 			<Title title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
 			<NewGameButton />
 			<JoinGameButton />
-			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			<AboutButton />
+			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			<LogoutButton />
 			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
