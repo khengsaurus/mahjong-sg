@@ -1,6 +1,6 @@
 @import '../../../App.scss';
 
 .about-container {
-	position: absolute;
-	bottom: 10vh;
+	@include flex-dir(column);
+	padding-top: 50px;
 }

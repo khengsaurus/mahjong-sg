@@ -8,6 +8,7 @@ import { StyledButton, Title } from 'platform/style/StyledMui';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AppFlag, Shortcut, Transition } from 'shared/enums';
+import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './home.scss';
 
@@ -41,8 +42,8 @@ const Home = () => {
 			<Title title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
 			<NewGameButton />
 			<JoinGameButton />
+			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
 			<AboutButton />
-			<StyledButton label={'Settings'} onClick={() => setShowSettings(true)} />
 			<LogoutButton />
 			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>

@@ -12,6 +12,7 @@ import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import './login.scss';
 import { AboutButton } from 'platform/components/Buttons/TextNavButton';
+import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
 
 const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
@@ -196,6 +197,7 @@ const Login = () => {
 				</Alert>
 			</Collapse>
 			<div className="about-container">
+				<PlayAIButton />
 				<AboutButton />
 			</div>
 		</>

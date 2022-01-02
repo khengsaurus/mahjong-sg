@@ -16,7 +16,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BotIds, BotName, Transition } from 'shared/enums';
+import { Bot, BotIds, BotName, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore } from 'shared/store';
@@ -73,7 +73,7 @@ const UserSearchForm: React.FC = () => {
 		const availBots = BotIds.filter(b => !pIds.includes(b));
 		const botIndex = Math.floor(Math.random() * (availBots.length - 0.01));
 		const botId = availBots[botIndex];
-		return new User(botId, BotName[botId] || 'Bot', '', '');
+		return new User(botId, BotName[botId] || Bot, '', '');
 	};
 
 	const renderAddBotButton = () => (

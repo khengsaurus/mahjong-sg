@@ -5,7 +5,7 @@ import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BackgroundColor, Offset, Platform, Size, TableColor, TileColor } from 'shared/enums';
+import { BackgroundColor, Offset, Platform, Size, TableColor, TileColor, Visitor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { setSizes, setTheme } from 'shared/store/actions';
@@ -107,7 +107,7 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	];
 
 	function handleClose() {
-		if (flagSizesDiff || flagThemeDiff) {
+		if (user?.id !== Visitor && (flagSizesDiff || flagThemeDiff)) {
 			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,

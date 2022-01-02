@@ -43,28 +43,33 @@ const About = () => {
 			<h4>Controls</h4>
 			<ul>
 				<li>
-					To Chi a tile (e.g. 2万) select the other two (e.g. 1万, 3万) in your hand and the Chi button (吃)
-					will light up.
+					To Chi a tile thrown by the previous player (e.g. 2万), select the other two (e.g. 1万, 3万) in your
+					hand and the Chi button (吃) will light up. Press on it to chi.
 				</li>
 				<li>
 					If you can Pong or Kang a discarded tile, a popup will appear offering you the options. Optionally,
-					you can select the tiles in your hand you want to Pong/Kang along with the last discarded tile, and
-					the Pong button (碰) will light up. This button will read '杠' instead if you can Kang. <br />
+					you can select the tiles in your hand you want to Pong/Kang with the last discarded tile, and the
+					Pong button (碰) will light up. This button will read '杠' instead if you can Kang. Press on it to
+					Pong or Kang
+					<br />
 					You can also Kang if you select 4 of the same tile in your hand, or 1 tile when you've already
-					Pong'd it.
+					Pong'd it. You can only do this after you've drawn or taken a tile, during your turn. The game will
+					automatically draw replacement tiles (補花) for you.
 				</li>
 				<li>
 					Draw (摸) and Discard (丢) buttons on the right will light up only when it's your turn. Note that
 					you can only discard when it is your turn, after you've drawn or taken a tile.
 				</li>
 				<li>
-					If 15 tiles are left, the Draw button will read '完' instead. If anyone tries to bu hua (draw
-					flowers) and there are 15 tiles left, the game will also end in a draw.
+					If 15 tiles are left, the Draw button will read '完' instead. The next player to draw has to press
+					on it to end the round. If anyone tries to draw replacement tiles (補花) and there are 15 tiles
+					left, the game will also end in a draw.
 				</li>
 				<p style={{ fontStyle: 'italic' }}>
 					Paiseh ah, the buttons are in Chinese for now because using English leads to some big buttons and
 					meh UI. Still thinking about this though.
 				</p>
+				<br />
 			</ul>
 
 			<h4>Gameplay</h4>
@@ -111,7 +116,7 @@ const About = () => {
 			<h4>How to Hu</h4>
 			<ul>
 				<li>
-					When you can Hu, a show option (开?) will appear in the bottom right. After you press that, a second
+					When you can Hu, a show button (开?) will appear in the bottom right. After you press that, a second
 					one will appear on the left (开!). Press that to show your tiles. <br />
 					After pressing the second button, note that your tiles are shown to everyone, and no one can perform
 					any actions. If you close the popup, you will hide your hand and the game will resume. (Warning ah -
@@ -150,7 +155,12 @@ const About = () => {
 			<ul>
 				<li>
 					Most of the scoring logic follows this{' '}
-					<a href="https://en.wikipedia.org/wiki/Singaporean_Mahjong_scoring_rules">SG Mahjong Wiki page</a>
+					<a
+						href="https://en.wikipedia.org/wiki/Singaporean_Mahjong_scoring_rules"
+						style={{ color: '#005eff' }}
+					>
+						SG Mahjong Wiki page
+					</a>
 				</li>
 				<li>
 					The logic for Ping Hu hand follows standard rules: players cannot be waiting for a unique tile, and
@@ -187,6 +197,12 @@ const About = () => {
 					not.
 				</li>
 			</ul>
+			<br />
+			<p>
+				This app does not collect any of your data, and for now you cannot reset your account or change your
+				username. An email address can only be used to register one account. If you have any feedback or would
+				like to get in touch, do drop us an email at mahjongsgapp@gmail.com.
+			</p>
 			<br />
 			<h3>Thank you for reading. Have fun!</h3>
 		</div>

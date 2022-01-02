@@ -27,7 +27,6 @@ import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
 const Table = () => {
-	const { verifyingSession } = useLocalSession(false);
 	const {
 		user,
 		gameId,
@@ -38,6 +37,7 @@ const Table = () => {
 	const { setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const isLocalGame = gameId === LocalFlag;
+	const { verifyingSession } = useLocalSession(isLocalGame);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
