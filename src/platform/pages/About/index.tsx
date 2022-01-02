@@ -2,23 +2,24 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Scrollable } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
-import { PageName } from 'shared/enums';
+import { PageName, Platform } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './about.scss';
 
 const About = () => {
 	const { user } = useSelector((store: IStore) => store);
+	const platform = process.env.REACT_APP_PLATFORM === Platform.MOBILE ? 'app' : 'website';
 
 	const renderLocalContent = () => (
 		<div className="content">
 			<h3>
 				Hello! <br />
-				Thank you for using this app :)
+				Big thanks for using this {platform} :)
 			</h3>
 			<p>
 				We tried to cover all the rules of Singapore Mahjong here, but it still has some limitations. Do read
-				through the following to understand the app better.
+				through the following to understand the {platform} better.
 			</p>
 			<br />
 			<h4>Creating a new game</h4>
@@ -36,7 +37,8 @@ const About = () => {
 					for now).
 				</li>
 				<li>
-					The game will not let you Hu if you do not meet the minimum Tai. Currently the Maximum Tai is 5.
+					The {platform} will not let you Hu if you do not meet the minimum Tai. Currently the Maximum Tai is
+					5.
 				</li>
 			</ul>
 
@@ -53,12 +55,15 @@ const About = () => {
 					Pong or Kang.
 					<br />
 					You can also Kang if you select 4 of the same tile in your hand, or 1 tile when you've already
-					Pong'd it. You can only do this after you've drawn or taken a tile, during your turn. The game will
-					automatically draw replacement tiles (補花) for you.
+					Pong'ed it. You can only do this after you've drawn or taken a tile, during your turn.
 				</li>
 				<li>
 					Draw (摸) and Discard (丢) buttons on the right will light up only when it's your turn. Note that
 					you can only discard when it is your turn, after you've drawn or taken a tile.
+				</li>
+				<li>
+					The {platform} will automatically draw replacement tiles (補花) for you when you Kang or draw flower
+					tiles.
 				</li>
 				<li>
 					If 15 tiles are left, the Draw button will read '完' instead. The next player to draw has to press
@@ -67,7 +72,7 @@ const About = () => {
 				</li>
 				<p style={{ fontStyle: 'italic' }}>
 					Paiseh ah, the buttons are in Chinese for now because using English leads to some big buttons and
-					meh UI. Still thinking about this though.
+					meh UI. We're still thinking about this though.
 				</p>
 				<br />
 			</ul>
@@ -99,8 +104,8 @@ const About = () => {
 					chips are sent, it will be logged in the top right, and player balances will be updated.
 				</li>
 				<li>
-					The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a tile discarded (irl we can
-					shout but over an app things are different). The default timeout is 6s.
+					The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a tile discarded. The default
+					timeout is 6s.
 				</li>
 				<li>
 					If more than one person can take the last throw tile (for Hu, Pong, etc) the timeout will be 12s.
@@ -123,16 +128,16 @@ const About = () => {
 					if a bot is next, it will play immediately).
 				</li>
 				<li>
-					When you Hu, the game will automatically put the last discarded tile next to your hand if you
-					haven't drawn a tile, provided it is available. If you cancel the Hu, it will be returned it to
-					whoever discarded it. There is no zha-hu (詐胡) functionality.
+					When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you
+					haven't drawn a tile, provided it is available. If you cancel the Hu, it will be returned to whoever
+					discarded it. There is no fake-hu (詐胡) functionality.
 				</li>
 				<li>
 					The creator of the game has access to Admin controls, where they can turn on or off 'Manual Hu'. If
 					Manual Hu is on, anyone can Hu at any time (click the right, then left 开 buttons).
 				</li>
 				<li>
-					The app will try to calculate how many points your hand is worth when you Hu. Note that not
+					The {platform} will try to calculate how many points your hand is worth when you Hu. Note that not
 					everything is accounted for, e.g. if you and your friends want to consider a certain hand 2 Tai
 					instead of 4, be sure to use the Tai/Self Drawn options presented after pressing the second 开.
 				</li>
@@ -146,15 +151,15 @@ const About = () => {
 					announcement. A can use that to cancel B's Hu and take the last discarded tile instead.
 				</li>
 				<li>
-					Note that if two players try to Hu at the same time, the game will only allow the first player to
-					(if the second person has priority they will see the Hu option on the announcement popup).
+					Note that if two players try to Hu at the same time, the {platform} will only allow the first player
+					to (if the second person has priority they will see the Hu option on the announcement popup).
 				</li>
 			</ul>
 
 			<h4>Scoring</h4>
 			<ul>
 				<li>
-					Most of the scoring logic follows this{' '}
+					The scoring logic follows this{' '}
 					<a
 						href="https://en.wikipedia.org/wiki/Singaporean_Mahjong_scoring_rules"
 						style={{ color: '#005eff' }}
@@ -163,8 +168,8 @@ const About = () => {
 					</a>
 				</li>
 				<li>
-					The logic for Ping Hu hand follows standard rules: players cannot be waiting for a unique tile, and
-					the pairs, if Pong'ed, cannot be worth Tai.
+					The logic for a Ping Hu hand follows standard rules: players cannot be waiting for a unique tile,
+					and the pairs, if Pong'ed, cannot be worth Tai.
 				</li>
 				<li>
 					Note that the following scenarios have not been accounted for:
@@ -173,7 +178,7 @@ const About = () => {
 						<li>8 Flower Tile-set (花胡)</li>
 						<li>Winning on Replacement Tile (花上, 杠上)</li>
 						<li>Robbing the Kang (抢杠)</li>
-						<li>Heavenly & Earthly Hand (天胡, 地胡)</li>
+						<li>Heavenly and Earthly Hand (天胡, 地胡)</li>
 					</ul>
 				</li>
 				<li>Note that All Green (綠一色) scores Man Tai</li>
@@ -183,9 +188,9 @@ const About = () => {
 			<h4>When the round/game ends</h4>
 			<ul>
 				<li>
-					In the case of draw (15 tiles left), the game will progress onto the next round and dealer if there
-					was a Kang or someone drew matching flower tiles (animal pairs or their own flowers). If not, the
-					round will be repeated.
+					In the case of draw (15 tiles left), the game will progress onto the next round if there was a Kang
+					or someone drew matching flower tiles (animal pairs or their own flower tiles). If not, the round
+					will be repeated.
 				</li>
 				<li>
 					In online games (with than 1 person playing), after the round ends, only the next dealer will see
@@ -199,12 +204,15 @@ const About = () => {
 			</ul>
 			<br />
 			<p>
-				This app does not collect any of your data, and for now you cannot reset your account or change your
-				username. An email address can only be used to register one account. If you have any feedback or would
-				like to get in touch, do drop us an email at mahjongsgapp@gmail.com.
+				This {platform} does not collect any of your data, and currently does not support username change or
+				password reset. An email address can only be used to register one account.{' '}
+				{process.env.REACT_APP_PLATFORM === Platform.MOBILE
+					? 'We are also hosted on mahjongsg.netlify.app. '
+					: ''}
+				If you have any feedback or would like to get in touch, do drop us an email at mahjongsgapp@gmail.com.
 			</p>
 			<br />
-			<h3>Thank you for reading. Have fun!</h3>
+			<h3>Thank you for reading, and have fun!</h3>
 		</div>
 	);
 
@@ -216,8 +224,6 @@ const About = () => {
 			</Main>
 		</HomeTheme>
 	);
-
-	// return <HomePage markup={markup} skipVerification={true} />;
 };
 
 export default About;
