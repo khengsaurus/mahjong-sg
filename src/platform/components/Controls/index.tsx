@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
 import { IStore } from 'shared/store';
+import LeaveAlert from '../Modals/LeaveAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
 
@@ -41,6 +42,7 @@ const Controls = () => {
 		adminControlsModal,
 		declareHuModal,
 		announceHuModal,
+		showLeaveAlert,
 		showBottomControls,
 		showAnnounceHuModal,
 		setExec
@@ -56,7 +58,11 @@ const Controls = () => {
 					}
 					break;
 				case Shortcut.HOME:
-					handleHome();
+					if (isLocalGame) {
+						topLeft?.setShowLeaveAlert(true);
+					} else {
+						handleHome();
+					}
 					break;
 				case Shortcut.PAY:
 					topRight?.handlePay();
@@ -120,10 +126,14 @@ const Controls = () => {
 						<AnnounceHuModal {...announceHuModal} />
 					</div>
 				</Fade>
-				{/* <Fade in={Number(notif?.timeout) > 0} timeout={Transition.FAST} unmountOnExit> */}
-				<Fade in timeout={Transition.FAST} unmountOnExit>
+				<Fade in={Number(notif?.timeout) > 0} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<TableNotif {...notif} />
+					</div>
+				</Fade>
+				<Fade in={showLeaveAlert} timeout={Transition.FAST} unmountOnExit>
+					<div>
+						<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />
 					</div>
 				</Fade>
 			</>

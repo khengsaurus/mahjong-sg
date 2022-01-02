@@ -1,18 +1,18 @@
 import Alert from '@material-ui/lab/Alert';
 import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
+import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
+import { AboutButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, Title } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
-import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
+import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import './login.scss';
-import { AboutButton } from 'platform/components/Buttons/TextNavButton';
-import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
 
 const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
@@ -197,8 +197,8 @@ const Login = () => {
 				</Alert>
 			</Collapse>
 			<div className="about-container">
-				<PlayAIButton />
 				<AboutButton />
+				<PlayAIButton />
 			</div>
 		</>
 	);

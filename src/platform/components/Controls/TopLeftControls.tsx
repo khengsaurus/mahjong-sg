@@ -6,7 +6,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconButton } from '@mui/material';
 import { TableText } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
-import { Size } from 'shared/enums';
+import { LocalFlag, Size } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
@@ -30,18 +30,28 @@ const TopLeftControls = ({
 	handleSettings,
 	handleScreenText,
 	handleAdmin,
+	setShowLeaveAlert,
 	showText,
 	isAdmin,
 	texts
 }: ITopLeftControls) => {
 	const {
+		gameId,
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
+
+	function goHome() {
+		if (gameId === LocalFlag) {
+			setShowLeaveAlert(true);
+		} else {
+			handleHome();
+		}
+	}
 
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
-				<ControlsButton Icon={HomeIcon} onClick={handleHome} size={controlsSize} />
+				<ControlsButton Icon={HomeIcon} onClick={goHome} size={controlsSize} />
 				<ControlsButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
 				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
 				<ControlsButton

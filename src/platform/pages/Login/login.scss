@@ -1,6 +1,5 @@
 @import '../../../App.scss';
 
 .about-container {
-	@include flex-dir(column);
-	padding-top: 50px;
+	@include flex-dir(row);
 }
