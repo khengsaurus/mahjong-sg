@@ -2,7 +2,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { FormControl, IconButton, MenuItem, Select } from '@mui/material';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { Amounts } from 'shared/enums';
 import { Game } from 'shared/models';
@@ -27,7 +27,7 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: IPaymentModalInlin
 
 	return (
 		<FormRow style={{ paddingTop: '2px' }}>
-			<Title variant="subtitle1" title={`Send chips:`} padding="2px" />
+			<StyledText variant="subtitle1" title={`Send chips:`} padding="2px" />
 			<FormControl>
 				<Select
 					value={amountStr}

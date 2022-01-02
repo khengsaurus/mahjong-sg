@@ -1,6 +1,6 @@
 import { Checkbox } from '@mui/material';
 import { FormRow } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 
 interface CheckBoxProps {
 	title: string;
@@ -21,7 +21,7 @@ const CheckBox = ({
 }: CheckBoxProps) => {
 	return (
 		<FormRow>
-			<Title title={title} variant={titleVariant} padding={titlePadding} />
+			<StyledText title={title} variant={titleVariant} padding={titlePadding} />
 			<Checkbox value={value} onChange={onChange} defaultChecked={defaultChecked} />
 		</FormRow>
 	);

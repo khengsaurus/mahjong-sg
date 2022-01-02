@@ -2,11 +2,11 @@ import { Button, Typography } from '@mui/material';
 import { history } from 'App';
 import { Page } from 'shared/enums';
 
-interface TitleProps {
+interface TextProps {
 	title: string;
 	color?: string;
 	padding?: string;
-	variant?: 'h6' | 'subtitle1' | 'subtitle2';
+	variant?: 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2';
 	style?: any;
 }
 
@@ -24,7 +24,13 @@ interface StyledButtonProps {
 	style?: any;
 }
 
-export const Title = ({ title, color, padding = '10px', variant = 'h6', style = {} }: TitleProps) => {
+export const StyledText = ({
+	title,
+	color,
+	variant = 'h6',
+	padding = variant.startsWith('body') ? '0px' : '10px',
+	style = {}
+}: TextProps) => {
 	return (
 		<Typography style={{ color, padding, justifySelf: 'center', alignSelf: 'center', ...style }} variant={variant}>
 			{title}

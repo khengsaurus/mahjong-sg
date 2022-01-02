@@ -5,7 +5,7 @@ import 'App.scss';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useContext, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -56,7 +56,7 @@ const NewUser = () => {
 
 	const markup = () => (
 		<>
-			<Title title={HomeScreenText.NEW_USER_TITLE} />
+			<StyledText title={HomeScreenText.NEW_USER_TITLE} />
 			<TextField
 				name="username"
 				label={HomeScreenText.USERNAME}

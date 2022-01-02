@@ -34,3 +34,9 @@
 		}
 	}
 }
+
+.scrollable {
+	padding: 40px 0px 0px;
+	margin-top: const(safe-area-inset-top);
+	margin-top: env(safe-area-inset-top);
+}

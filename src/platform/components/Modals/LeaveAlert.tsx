@@ -2,7 +2,7 @@ import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 import { ILeaveAlert } from 'shared/typesPlus';
 
 const LeaveAlert = ({ show, onClose }: ILeaveAlert) => {
@@ -19,8 +19,8 @@ const LeaveAlert = ({ show, onClose }: ILeaveAlert) => {
 		>
 			<DialogContent style={{ paddingBottom: 0 }}>
 				<Centered>
-					<Title variant="subtitle1" title="Are you sure you want to leave?" padding="2px" />
-					<Title variant="subtitle2" title="This is a local game and won't be saved" padding="2px" />
+					<StyledText variant="subtitle1" title="Are you sure you want to leave?" padding="2px" />
+					<StyledText variant="subtitle2" title="This is a local game and won't be saved" padding="2px" />
 				</Centered>
 			</DialogContent>
 			<DialogActions

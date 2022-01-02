@@ -2,7 +2,7 @@ import { useEventListener } from 'platform/hooks';
 import { GreenTableText, TableText } from 'platform/style/StyledComponents';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { LocalFlag, Size, TableColor } from 'shared/enums';
+import { LocalFlag, Size, TableColor, Transition } from 'shared/enums';
 import { IStore } from 'shared/store';
 
 interface LogModalProps {
@@ -23,7 +23,8 @@ const LogModal = (props: LogModalProps) => {
 	const isLocalGame = gameId === LocalFlag;
 	const currGame = isLocalGame ? localGame : game;
 	const modalRef = useRef(null);
-	const id = 'logBox';
+	const id = 'log-box';
+	useEventListener(expanded, onClose, modalRef, externalRef);
 
 	const scroll = useCallback(() => {
 		const logsList = document.getElementById(id);
@@ -32,11 +33,16 @@ const LogModal = (props: LogModalProps) => {
 		}
 	}, [id]);
 
-	useEventListener(expanded, onClose, modalRef, externalRef);
-
+	// Seems to be more consistent when these are in diff UE's
 	useEffect(() => {
 		scroll();
-	}, [currGame?.logs?.length, expanded, scroll]);
+	}, [currGame?.logs?.length, scroll]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			scroll();
+		}, Transition.FAST);
+	}, [expanded, scroll]);
 
 	return (
 		<div

@@ -5,7 +5,7 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Page } from 'shared/enums';
@@ -72,7 +72,7 @@ const JoinGame = () => {
 
 	const markup = () => (
 		<Centered className="join-game-panel">
-			<Title title={title} variant="h6" padding="5px" />
+			<StyledText title={title} variant="h6" padding="5px" />
 			<Collapse in={user && gameInvites?.length > 0} timeout={400}>
 				<List dense className="list">
 					{gameInvites?.map(game => (

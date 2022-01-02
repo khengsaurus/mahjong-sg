@@ -1,7 +1,7 @@
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import './sample.scss';
 
@@ -17,8 +17,8 @@ const Sample = () => {
 	return (
 		<HomeTheme>
 			<Main>
-				<Title title={`Count: ${obj.count}`} />
-				<Title title={`Count2: ${count2}`} />
+				<StyledText title={`Count: ${obj.count}`} />
+				<StyledText title={`Count2: ${count2}`} />
 				<StyledButton
 					label="Add"
 					onClick={() => {

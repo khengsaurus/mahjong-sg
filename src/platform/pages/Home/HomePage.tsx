@@ -4,7 +4,7 @@ import { Loader } from 'platform/components/Loader';
 import { useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Offset, Platform, Status } from 'shared/enums';
@@ -55,7 +55,7 @@ const HomePage = ({
 			timeoutRef.current = setTimeout(() => {
 				setPendingScreen(
 					<Centered>
-						<Title title={fallbackTitle} variant="subtitle1" />
+						<StyledText title={fallbackTitle} variant="subtitle1" />
 						<HomeButton />
 					</Centered>
 				);

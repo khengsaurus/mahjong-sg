@@ -43,16 +43,14 @@ export const CenteredTableColored = styled(Centered)`
 `;
 
 export const Scrollable = styled.div`
-	width: 92vw;
+	width: 90%;
 	text-align: left;
 	overflow-y: scroll;
+	scroll-behavior: smooth;
+	color: ${props => props.theme.mainTextColor};
 	::-webkit-scrollbar {
 		display: none;
 	}
-	padding: 40px 0px 0px;
-	margin-top: const(safe-area-inset-top);
-	margin-top: env(safe-area-inset-top);
-	color: ${props => props.theme.mainTextColor};
 `;
 
 export const Notification = styled.div`
@@ -118,6 +116,7 @@ export const TableText = styled.p`
 export const GreenTableText = styled.p`
 	color: ${TextColor.GREEN};
 	margin: 0px 5px;
+	font: inherit;
 `;
 
 export const HiddenTile = styled.div`

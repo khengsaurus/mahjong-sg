@@ -33,7 +33,7 @@ const About = () => {
 				</li>
 				<li>
 					Note the 'Options' available (choosing Shooter or Half-Shooter doesn't have any effect on gameplay
-					for now)
+					for now).
 				</li>
 				<li>
 					The game will not let you Hu if you do not meet the minimum Tai. Currently the Maximum Tai is 5.
@@ -50,7 +50,7 @@ const About = () => {
 					If you can Pong or Kang a discarded tile, a popup will appear offering you the options. Optionally,
 					you can select the tiles in your hand you want to Pong/Kang with the last discarded tile, and the
 					Pong button (碰) will light up. This button will read '杠' instead if you can Kang. Press on it to
-					Pong or Kang
+					Pong or Kang.
 					<br />
 					You can also Kang if you select 4 of the same tile in your hand, or 1 tile when you've already
 					Pong'd it. You can only do this after you've drawn or taken a tile, during your turn. The game will
@@ -95,7 +95,7 @@ const About = () => {
 				</li>
 				<li>
 					There is also no automatic sending of chips on player Hu. To send another player chips, you can open
-					the 'Send Money' panel (top right), or after somebody wins, an option will appear on the popup. When
+					the 'Send Chips' panel (top right), or after somebody wins, an option will appear on the popup. When
 					chips are sent, it will be logged in the top right, and player balances will be updated.
 				</li>
 				<li>
@@ -119,8 +119,8 @@ const About = () => {
 					When you can Hu, a show button (开?) will appear in the bottom right. After you press that, a second
 					one will appear on the left (开!). Press that to show your tiles. <br />
 					After pressing the second button, note that your tiles are shown to everyone, and no one can perform
-					any actions. If you close the popup, you will hide your hand and the game will resume. (Warning ah -
-					if a bot is next, it will play immediately)
+					any actions. If you close the popup, you will hide your hand and the game will resume (careful ah -
+					if a bot is next, it will play immediately).
 				</li>
 				<li>
 					When you Hu, the game will automatically put the last discarded tile next to your hand if you
@@ -139,7 +139,7 @@ const About = () => {
 				<li>
 					Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will
 					not see any options. In the next 6s, bot A and B will see the Hu option, and A will NOT see the pong
-					option. (Because it's not fair for A to pong when B can Hu right? Also, can Hu then just Hu lah)
+					option (Because it's not fair for A to pong when B can Hu right? Also, can Hu then just Hu lah).
 				</li>
 				<li>
 					If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the
@@ -211,7 +211,7 @@ const About = () => {
 	return (
 		<HomeTheme>
 			<Main>
-				<Scrollable>{renderLocalContent()}</Scrollable>
+				<Scrollable className="scrollable">{renderLocalContent()}</Scrollable>
 				<HomeButton label={!!user ? PageName.HOME : ButtonText.BACK} />
 			</Main>
 		</HomeTheme>

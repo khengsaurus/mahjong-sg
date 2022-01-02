@@ -32,7 +32,7 @@ const PlayAIButton = () => {
 		history.push(Page.TABLE);
 	}
 
-	return <StyledButton label={ButtonText.PLAYVSAI} onClick={playVsAI} />;
+	return <StyledButton label={ButtonText.BOTGAME} onClick={playVsAI} />;
 };
 
 export default PlayAIButton;

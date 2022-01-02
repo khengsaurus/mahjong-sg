@@ -4,29 +4,41 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import PaymentModalInline from 'platform/components/Modals/PaymentModalInline';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { ButtonText } from 'shared/screenTexts';
+import { IStore } from 'shared/store';
 import { IAnnounceHuModalProps } from 'shared/typesPlus';
 import { getHandDesc, isBefore } from 'shared/util';
+import SentLogs from './SentLogs';
 
 const AnnounceHuModal = ({
 	game,
 	playerSeat,
 	show,
-	onClose: handleShow,
 	HH,
 	huFirst,
 	nextRound,
 	showNextRound,
-	updateGame
+	updateGame,
+	onClose: handleShow
 }: IAnnounceHuModalProps) => {
-	const { hu = [], thB = 0, draw = false, on = true, _d = 0 } = game || {};
+	const user = useSelector((store: IStore) => store.user);
+	const { hu = [], thB = 0, draw = false, on = true, _d = 0, logs } = game || {};
 
 	const canHuFirst = useMemo((): boolean => {
 		const whoHu = Number(hu[0]);
 		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, thB) && !!HH?.maxPx;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [playerSeat, hu[0] || 0, game?.mHu, HH?.maxPx]);
+
+	const sentLogs = useMemo(() => {
+		const huLogIndex = logs?.findIndex(l => l.includes('hu with'));
+		const sent = logs?.slice(huLogIndex)?.filter(log => log.includes('sent')) || [];
+		return sent.map(log => log.replace(user?.uN, 'you'));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [logs?.length]);
 
 	return (
 		<Dialog
@@ -41,7 +53,7 @@ const AnnounceHuModal = ({
 			<DialogContent style={{ paddingBottom: 0 }}>
 				{hu.length > 2 && (
 					<>
-						<Title
+						<StyledText
 							title={`${hu[0] === playerSeat ? 'You' : game.ps[hu[0]]?.uN} won, with ${hu[1]}台${
 								hu[2] === 1 ? ` 自摸` : ``
 							}`}
@@ -49,8 +61,11 @@ const AnnounceHuModal = ({
 							padding="3px 0px"
 						/>
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
-							return <Title title={`• ${getHandDesc(p)}`} variant="subtitle2" padding="2px" key={ix} />;
+							return (
+								<StyledText title={`• ${getHandDesc(p)}`} variant="subtitle2" padding="2px" key={ix} />
+							);
 						})}
+						<SentLogs logs={sentLogs} />
 						{hu[0] !== playerSeat && (
 							<PaymentModalInline game={game} playerSeat={playerSeat} updateGame={updateGame} />
 						)}
@@ -59,11 +74,11 @@ const AnnounceHuModal = ({
 				{(draw || !on || _d === 9) &&
 					(draw ? (
 						<Centered>
-							<Title title={`Draw!`} variant="h6" padding="6px" />
-							<Title title={`15 tiles left`} variant="subtitle1" padding="0px" />
+							<StyledText title={`Draw!`} variant="h6" padding="6px" />
+							<StyledText title={`15 tiles left`} variant="subtitle1" padding="0px" />
 						</Centered>
 					) : (
-						<Title title={`The game has ended!`} variant="subtitle1" padding="6px 0px 0px" />
+						<StyledText title={`The game has ended!`} variant="subtitle1" padding="6px 0px 0px" />
 					))}
 			</DialogContent>
 			<DialogActions
@@ -77,11 +92,12 @@ const AnnounceHuModal = ({
 				<HomeButton />
 				{hu[0] !== playerSeat &&
 					(canHuFirst ? (
-						<StyledButton label={'Hu'} onClick={huFirst} />
+						<StyledButton label={ButtonText.HU} onClick={huFirst} />
 					) : (
-						!show && <StyledButton label={'Show'} onClick={handleShow} />
+						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} />
 					))}
-				{showNextRound && <StyledButton label={`Next Round`} onClick={nextRound} />}
+				{/* <StyledButton label={ButtonText.LOGS} onClick={handleLogs} /> */}
+				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} />}
 			</DialogActions>
 		</Dialog>
 	);

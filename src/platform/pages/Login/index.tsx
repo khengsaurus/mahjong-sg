@@ -6,13 +6,12 @@ import { AboutButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
-import './login.scss';
 
 const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
@@ -145,7 +144,7 @@ const Login = () => {
 
 	const markup = () => (
 		<>
-			<Title title={HomeScreenText.HOME_TITLE} />
+			<StyledText title={HomeScreenText.HOME_TITLE} />
 			<TextField
 				key="usernameEmail"
 				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
@@ -196,10 +195,10 @@ const Login = () => {
 					{alert?.msg || ErrorMessage.TRY_AGAIN}
 				</Alert>
 			</Collapse>
-			<div className="about-container">
+			<Row>
 				<AboutButton />
 				<PlayAIButton />
-			</div>
+			</Row>
 		</>
 	);
 

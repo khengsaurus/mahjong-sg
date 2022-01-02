@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Amounts, LocalFlag } from 'shared/enums';
@@ -59,8 +59,8 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: IModalProps) =>
 				}}
 			>
 				<DialogContent>
-					<Title title="Send chips" variant="subtitle1" padding="3px 0px" />
-					<Title title="To: " variant="subtitle1" padding="2px 0px" />
+					<StyledText title="Send chips" variant="subtitle1" padding="3px 0px" />
+					<StyledText title="To: " variant="subtitle1" padding="2px 0px" />
 					<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
 						{currGame.ps.map((otherPlayer: User, index: number) =>
 							otherPlayer.uN !== playerUsername ? (
@@ -74,7 +74,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: IModalProps) =>
 						)}
 					</RadioGroup>
 
-					<Title title="Amount: " variant="subtitle1" padding="2px 0px" />
+					<StyledText title="Amount: " variant="subtitle1" padding="2px 0px" />
 					<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
 						{Amounts.map((amount: number, index: number) => (
 							<FormControlLabel

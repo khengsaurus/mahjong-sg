@@ -13,7 +13,7 @@ import { useLocalSession } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { HomeTheme, TableTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents';
-import { Title } from 'platform/style/StyledMui';
+import { StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LocalFlag, Page, Platform, Status } from 'shared/enums';
@@ -214,7 +214,7 @@ const Table = () => {
 			setTimeout(function () {
 				setPendingScreen(
 					<Centered>
-						<Title title={HomeScreenText.NO_ONGOING_GAME} />
+						<StyledText title={HomeScreenText.NO_ONGOING_GAME} />
 						<JoinGameButton />
 						<HomeButton />
 					</Centered>

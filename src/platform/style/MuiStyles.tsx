@@ -247,7 +247,7 @@ export const MuiStyles = {
 		maxHeight: '340px'
 	},
 	medium_dialog: {
-		minHeight: '120px',
+		minHeight: '80px',
 		minWidth: '240px',
 		maxWidth: '360px'
 	},

@@ -2,7 +2,7 @@ import { Dialog, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui
 import CheckBox from 'platform/components/Form';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { HandPoint } from 'shared/handEnums';
 import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
@@ -31,7 +31,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: IDecl
 	const renderManualHuOptions = () => (
 		<div>
 			<FormRow>
-				<Title title="台: " variant="subtitle2" padding="0px" />
+				<StyledText title="台: " variant="subtitle2" padding="0px" />
 				<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
 					{generateNumbers(px[0], px[1]).map((tai: number) => (
 						<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
@@ -39,7 +39,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: IDecl
 				</RadioGroup>
 			</FormRow>
 			<FormRow>
-				<Title title="自摸: " variant="subtitle2" padding="0px" />
+				<StyledText title="自摸: " variant="subtitle2" padding="0px" />
 				<CheckBox
 					title=""
 					value={zimo}
@@ -65,18 +65,18 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: IDecl
 				}}
 			>
 				<DialogContent>
-					<Title
+					<StyledText
 						title={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
 						variant="subtitle1"
 						padding="3px 0px"
 					/>
 					{HH?.pxs?.map((p: IPoint, ix: number) => {
-						return <Title title={getHandDesc(p.hD)} variant="subtitle2" padding="2px" key={ix} />;
+						return <StyledText title={getHandDesc(p.hD)} variant="subtitle2" padding="2px" key={ix} />;
 					})}
 					{game?.mHu ? (
 						renderManualHuOptions()
 					) : (
-						<Title title={`${tai} 台${HH?.self ? ` 自摸` : ``}`} variant="subtitle2" padding="3px 0px" />
+						<StyledText title={`${tai} 台${HH?.self ? ` 自摸` : ``}`} variant="subtitle2" padding="3px 0px" />
 					)}
 					<StyledButton
 						label={`Hu`}

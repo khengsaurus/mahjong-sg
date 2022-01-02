@@ -21,7 +21,7 @@ import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Row } from 'platform/style/StyledComponents';
-import { StyledButton, Title } from 'platform/style/StyledMui';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } from 'shared/enums';
@@ -248,7 +248,7 @@ const NewGame = () => {
 
 	const markup = () => (
 		<>
-			<Title title={HomeScreenText.NEW_GAME_TITLE} padding="5px" />
+			<StyledText title={HomeScreenText.NEW_GAME_TITLE} padding="5px" />
 			<div className="panels">
 				<div className="panel-segment">
 					<UserSearchForm />
