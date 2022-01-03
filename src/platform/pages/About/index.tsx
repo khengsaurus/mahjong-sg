@@ -159,12 +159,12 @@ const About = () => {
 			<h4>Scoring</h4>
 			<ul>
 				<li>
-					The scoring logic follows this{' '}
+					The scoring logic largely follows{' '}
 					<a
-						href="https://en.wikipedia.org/wiki/Singaporean_Mahjong_scoring_rules"
+						href="http://gambiter.com/mahjong/Singaporean_mahjong_scoring_rules.html"
 						style={{ color: '#005eff' }}
 					>
-						SG Mahjong Wiki page
+						this mahjong guide
 					</a>
 				</li>
 				<li>
@@ -178,7 +178,7 @@ const About = () => {
 						<li>8 Flower Tile-set (花胡)</li>
 						<li>Winning on Replacement Tile (花上, 杠上)</li>
 						<li>Robbing the Kang (抢杠)</li>
-						<li>Heavenly and Earthly Hand (天胡, 地胡)</li>
+						<li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li>
 					</ul>
 				</li>
 				<li>Note that All Green (綠一色) scores Man Tai</li>

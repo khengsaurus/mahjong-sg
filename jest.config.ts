@@ -3,7 +3,7 @@ const config = {
 		'**/__tests__/**/*.[jt]s?(x)',
 		'**/?(*.)+(spec|test).[jt]s?(x)'
 		// '**/__tests__/**getHands_chi.test.tsx',
-		// '**/__tests__/**getHands_others.test.tsx',
+		// '**/__tests__/**getHands_others.test.tsx'
 		// '**/__tests__/**getDiscardCategories.test.tsx',
 		// '**/__tests__/**getHandObjectives.test.tsx',
 		// '**/__tests__/**getDiscards.test.tsx'
