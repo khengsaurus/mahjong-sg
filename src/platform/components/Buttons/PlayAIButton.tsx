@@ -32,7 +32,9 @@ const PlayAIButton = () => {
 		history.push(Page.TABLE);
 	}
 
-	return <StyledButton label={ButtonText.BOTGAME} onClick={playVsAI} />;
+	return (
+		<StyledButton label={ButtonText.BOTGAME} style={{ fontSize: '20px', height: '44.5px' }} onClick={playVsAI} />
+	);
 };
 
 export default PlayAIButton;

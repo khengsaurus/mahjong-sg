@@ -9,7 +9,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { EEvent, Page, Status, Transition } from 'shared/enums';
+import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
@@ -138,7 +138,7 @@ const Login = () => {
 					showRegister ? setEmail(e.target.value) : setUsername(e.target.value);
 				}}
 				variant="standard"
-				style={{ margin: '5px 0' }}
+				style={{ margin: '5px 0', width: '160px' }}
 			/>
 			<TextField
 				key="password"
@@ -149,7 +149,7 @@ const Login = () => {
 					setPassword(e.target.value);
 				}}
 				variant="standard"
-				style={{ margin: '5px 0' }}
+				style={{ margin: '5px 0', width: '160px' }}
 			/>
 			<Collapse in={showRegister} timeout={Transition.FAST} unmountOnExit>
 				<TextField
@@ -161,10 +161,10 @@ const Login = () => {
 						setConfirmPassword(e.target.value);
 					}}
 					variant="standard"
-					style={{ margin: '5px 0' }}
+					style={{ margin: '5px 0', width: '160px' }}
 				/>
 			</Collapse>
-			<Row style={{ paddingTop: 10, width: '100%', justifyContent: 'space-evenly' }} id="bottom-btns">
+			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '180px' }}>
 				<StyledButton
 					label={showRegister ? ButtonText.BACK : ButtonText.REGISTER}
 					onClick={() => {
@@ -174,15 +174,16 @@ const Login = () => {
 				/>
 				{showRegister ? renderRegisterButton() : renderLoginButton()}
 			</Row>
-			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
-				<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>
-					{alert?.msg || ErrorMessage.TRY_AGAIN}
-				</Alert>
-			</Collapse>
-			<Row>
+			<Row style={{ justifyContent: 'space-between', width: '180px' }}>
 				<AboutButton />
 				<PlayAIButton />
 			</Row>
+			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
+				<>
+					<br />
+					<Alert severity={alert?.status as AlertStatus}>{alert?.msg || ErrorMessage.TRY_AGAIN}</Alert>
+				</>
+			</Collapse>
 		</>
 	);
 

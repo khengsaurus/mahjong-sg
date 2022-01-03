@@ -7,7 +7,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
-import { Page, Status, Transition } from 'shared/enums';
+import { AlertStatus, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
@@ -103,7 +103,7 @@ const NewUser = () => {
 			<Collapse in={!!alert} timeout={Transition.FAST} unmountOnExit>
 				<>
 					<br />
-					<Alert severity={alert?.status as 'success' | 'info' | 'warning' | 'error'}>{alert?.msg}</Alert>
+					<Alert severity={alert?.status as AlertStatus}>{alert?.msg}</Alert>
 				</>
 			</Collapse>
 		</>
