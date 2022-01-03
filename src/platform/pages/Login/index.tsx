@@ -42,9 +42,12 @@ const Login = () => {
 
 	const handleError = useCallback(
 		(err: Error) => {
-			console.error(err);
 			setReady(true);
-			setAlert({ status: Status.ERROR, msg: err.message });
+			if (err.message?.toUpperCase().includes(ErrorMessage.FIREBASE_WRONG_PW)) {
+				setAlert({ status: Status.ERROR, msg: ErrorMessage.LOGIN_ERROR });
+			} else {
+				setAlert({ status: Status.ERROR, msg: err.message });
+			}
 		},
 		[setReady, setAlert]
 	);
@@ -52,35 +55,21 @@ const Login = () => {
 	const handleLogin = useCallback(() => {
 		if (!showRegister && username.trim() !== '' && password.trim() !== '') {
 			setReady(false);
-			ServiceInstance.getEmailFromUsername(username) // Get from RTDB
-				.then(email => {
-					ServiceInstance.FBAuthLogin({ email, password })
-						.then(res => {
-							if (res) {
-								ServiceInstance.FBResolveUser(email)
-									.then(user => {
-										setReady(true);
-										setAlert(null);
-										if (user) {
-											clearForm();
-											login(user, false);
-											user?.email && ServiceInstance.cleanupGames(user.email);
-											setReady(true);
-											history.push(Page.INDEX);
-										} else {
-											console.error(ErrorMessage.REGISTER_ISSUE);
-										}
-									})
-									.catch(err => {
-										handleError(err);
-									});
-							}
-						})
-						.catch(err => {
-							if (err.message.toUpperCase().includes(ErrorMessage.FIREBASE_WRONG_PW)) {
-								handleError(new Error(ErrorMessage.LOGIN_ERROR));
-							}
-						});
+			ServiceInstance.getEmailFromUsername(username)
+				.then(email => ServiceInstance.FBAuthLogin({ email, password }))
+				.then(_email => ServiceInstance.FBResolveUser(_email))
+				.then(user => {
+					setReady(true);
+					setAlert(null);
+					if (user) {
+						clearForm();
+						login(user, false);
+						user?.email && ServiceInstance.cleanupGames(user.email);
+						setReady(true);
+						history.push(Page.INDEX);
+					} else {
+						throw new Error(ErrorMessage.REGISTER_ISSUE);
+					}
 				})
 				.catch(err => {
 					handleError(err);
@@ -88,7 +77,7 @@ const Login = () => {
 		}
 	}, [showRegister, username, password, login, setAlert, handleError]);
 
-	const submitRegister = useCallback(() => {
+	const handleRegister = useCallback(() => {
 		if (showRegister && email.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '') {
 			if (password === confirmPassword) {
 				setReady(false);
@@ -104,7 +93,7 @@ const Login = () => {
 					})
 					.catch(err => {
 						setReady(true);
-						setAlert({ status: Status.ERROR, msg: err.toString() });
+						setAlert({ status: Status.ERROR, msg: err.message });
 					});
 			} else {
 				setAlert({ status: Status.ERROR, msg: ErrorMessage.PW_NOT_MATCHING });
@@ -115,10 +104,10 @@ const Login = () => {
 	const enterListener = useCallback(
 		e => {
 			if (e.key === 'Enter') {
-				showRegister ? submitRegister() : handleLogin();
+				showRegister ? handleRegister() : handleLogin();
 			}
 		},
-		[showRegister, submitRegister, handleLogin]
+		[showRegister, handleRegister, handleLogin]
 	);
 
 	useEffect(() => {
@@ -138,7 +127,7 @@ const Login = () => {
 			type="submit"
 			autoFocus
 			disabled={registerDisabled}
-			onClick={submitRegister}
+			onClick={handleRegister}
 		/>
 	);
 

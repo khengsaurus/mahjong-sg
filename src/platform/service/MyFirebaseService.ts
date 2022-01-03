@@ -3,12 +3,14 @@ import { FirebaseApp, initializeApp } from 'firebase/app';
 import {
 	Auth,
 	createUserWithEmailAndPassword,
+	deleteUser,
 	indexedDBLocalPersistence,
 	initializeAuth,
 	signInWithEmailAndPassword,
 	User as FirebaseUser,
 	UserCredential
 } from 'firebase/auth';
+import { child, Database, get, getDatabase, ref, set } from 'firebase/database';
 import {
 	addDoc,
 	collection,
@@ -28,16 +30,14 @@ import {
 	updateDoc,
 	where
 } from 'firebase/firestore';
-import { child, Database, get, getDatabase, ref, set } from 'firebase/database';
 import moment from 'moment';
 import { BackgroundColor, FBCollection, FBDatabase, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
 import { HandPoint, ScoringHand } from 'shared/handEnums';
+import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { shuffle } from 'shared/util';
 import { gameToObj, playerToObj } from 'shared/util/parsers';
-import { isEmpty } from 'lodash';
-import { ErrorMessage, InfoMessage } from 'shared/messages';
 
 export class FirebaseService {
 	private user: FirebaseUser;
@@ -89,7 +89,7 @@ export class FirebaseService {
 	}
 
 	userAuthenticated() {
-		return this.user !== null;
+		return !!this.auth.currentUser;
 	}
 
 	/* ------------------------- Auth related ------------------------- */
@@ -106,17 +106,20 @@ export class FirebaseService {
 		});
 	}
 
-	async authLoginEmailPass(email: string, password: string): Promise<boolean> {
+	/**
+	 * @throws ErrorMessage.LOGIN_ERROR
+	 */
+	async authLoginEmailPass(email: string, password: string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			signInWithEmailAndPassword(this.auth, email, password)
 				.then((values: UserCredential) => {
 					if (email === values.user.email) {
-						resolve(true);
+						resolve(email);
 					}
 				})
 				.catch(err => {
 					console.error(`FirebaseService.authLoginEmailPass failed with err: ${err.message}`);
-					reject(err);
+					reject(ErrorMessage.LOGIN_ERROR);
 				});
 		});
 	}
@@ -127,7 +130,9 @@ export class FirebaseService {
 	}
 
 	authDeleteCurrentUser() {
-		this.auth.currentUser.delete();
+		if (!!this.auth.currentUser) {
+			deleteUser(this.auth.currentUser);
+		}
 	}
 
 	/* ------------------------- User related ------------------------- */
@@ -144,6 +149,9 @@ export class FirebaseService {
 		});
 	}
 
+	/**
+	 * @throws if no userEmail, ErrorMessage.LOGIN_ERROR, else ErrorMessage.TRY_AGAIN
+	 */
 	getEmailFromUsername(username: string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			try {
@@ -185,36 +193,38 @@ export class FirebaseService {
 		});
 	}
 
-	async getUserReprByUsername(uN: string): Promise<DocumentData> {
+	async isUsernameAvail(uN: string): Promise<boolean> {
 		return new Promise(async (resolve, reject) => {
-			const res = [];
-			const q = query(this.usersRef, where('uN', '==', uN));
-			const querySnapshot = await getDocs(q);
-			querySnapshot.forEach(doc => {
-				res.push({ id: doc.id, ...doc.data() });
-			});
-			if (!isEmpty(res)) {
-				resolve(res[0]);
-			} else {
-				reject(new Error(ErrorMessage.NO_USER_BY_USERNAME));
+			try {
+				const q = query(this.usersRef, where('uN', '==', uN));
+				const querySnapshot = await getDocs(q);
+				if (querySnapshot?.empty) {
+					resolve(true);
+				} else {
+					resolve(false);
+				}
+			} catch (err) {
+				console.error(err);
+				reject(new Error(ErrorMessage.UNABLE_TO_CONNET));
 			}
 		});
 	}
 
-	async getUserReprByEmail(email: string) {
-		const res = [];
-		try {
-			const q = query(this.usersRef, where('email', '==', email), limit(1));
-			const querySnapshot = await getDocs(q);
-			querySnapshot.forEach(doc => {
-				res.push({ id: doc.id, ...doc.data() });
-			});
-		} catch (err) {
-			console.error(err);
-		}
-		if (res.length > 0) {
-			return res[0];
-		}
+	async getUserReprByEmail(email: string): Promise<Object> {
+		return new Promise(async (resolve, reject) => {
+			const res = [];
+			try {
+				const q = query(this.usersRef, where('email', '==', email), limit(1));
+				const querySnapshot = await getDocs(q);
+				querySnapshot.forEach(doc => {
+					res.push({ id: doc.id, ...doc.data() });
+				});
+				resolve(res[0] || null);
+			} catch (err) {
+				console.error(err);
+				reject(err);
+			}
+		});
 	}
 
 	async searchUser(partUsername: string, exclude: string): Promise<DocumentData[]> {

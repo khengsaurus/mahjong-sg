@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
 import { LocalFlag } from 'shared/enums';
@@ -34,21 +35,35 @@ export class Service {
 			FBService.authRegisterEmailPass(props.email, props.password)
 				.then(email => resolve(email))
 				.catch(err => {
-					reject(err);
+					if (err.message.includes('email-already-in-use')) {
+						reject(new Error(ErrorMessage.EMAIL_USED));
+					} else if (err.message.includes('invalid-email')) {
+						reject(new Error(ErrorMessage.INVALID_EMAIL));
+					} else {
+						console.error(err);
+						reject(new Error(ErrorMessage.REGISTER_ERROR));
+					}
 				});
 		});
 	}
 
-	async FBAuthLogin(props: IEmailPass): Promise<boolean> {
+	async FBAuthLogin(props: IEmailPass): Promise<string> {
 		return FBService.authLoginEmailPass(props.email, props.password);
 	}
 
+	/**
+	 * @throws ErrorMessage.LOGIN_ERROR
+	 */
 	FBResolveUser(email: string): Promise<User | null> {
 		return new Promise((resolve, reject) => {
 			try {
-				FBService.getUserReprByEmail(email).then((userData: any) => {
-					resolve(userData ? objToUser(userData) : null);
-				});
+				if (email) {
+					FBService.getUserReprByEmail(email).then((userData: Object) =>
+						resolve(!isEmpty(userData) ? objToUser(userData) : null)
+					);
+				} else {
+					reject(new Error(ErrorMessage.LOGIN_ERROR));
+				}
 			} catch (err) {
 				reject(new Error(ErrorMessage.LOGIN_ERROR));
 			}
@@ -57,24 +72,20 @@ export class Service {
 
 	async FBNewUsername(values: IEmailUser): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			FBService.getUserReprByUsername(values.uN).then(data => {
-				if (data && !data.empty) {
-					reject(new Error(ErrorMessage.USERNAME_TAKEN));
-				} else {
-					FBService.registerUserEmail(values.uN, values.email)
-						.then(res => {
-							if (res) {
-								FBService.pairEmailToUsername(values.uN, values.email).then(res => {
-									resolve(res);
-								});
-							}
-						})
-						.catch(err => {
-							console.error(err);
-							reject(new Error(ErrorMessage.REGISTER_ERROR));
-						});
-				}
-			});
+			FBService.isUsernameAvail(values.uN)
+				.then(res => {
+					if (res) {
+						FBService.registerUserEmail(values.uN, values.email).then(() =>
+							FBService.pairEmailToUsername(values.uN, values.email).then(res => resolve(res))
+						);
+					} else {
+						reject(new Error(ErrorMessage.USERNAME_TAKEN));
+					}
+				})
+				.catch(err => {
+					console.error(err);
+					reject(new Error(ErrorMessage.REGISTER_ERROR));
+				});
 		});
 	}
 

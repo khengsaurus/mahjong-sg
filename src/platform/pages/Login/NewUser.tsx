@@ -6,16 +6,35 @@ import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { ErrorMessage, InfoMessage } from 'shared/messages';
+import { InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
+	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
+
+	useEffect(() => {
+		if (!ServiceInstance.FBAuthenticated()) {
+			history.push(Page.LOGIN);
+		}
+	}, []);
+
+	useEffect(() => {
+		window.onbeforeunload = () => {
+			if (toDeleteIfUnload) {
+				ServiceInstance.FBDeleteCurrentFBUser();
+			}
+		};
+
+		return () => {
+			window.onbeforeunload = null;
+		};
+	}, [toDeleteIfUnload]);
 
 	function cancelRegister() {
 		setAlert(null);
@@ -33,12 +52,12 @@ const NewUser = () => {
 				}
 			})
 			.catch(err => {
-				setAlert({ status: Status.ERROR, msg: err.toString() });
-				ServiceInstance.FBDeleteCurrentFBUser();
+				setAlert({ status: Status.ERROR, msg: err.message });
 			});
 	}
 
 	function registerSuccessCallback() {
+		setToDeleteIfUnload(false);
 		ServiceInstance.FBResolveUser(userEmail)
 			.then((user: User) => {
 				login(user, true);
@@ -48,9 +67,7 @@ const NewUser = () => {
 				}, 1000);
 			})
 			.catch(err => {
-				if (err.message === ErrorMessage.USERNAME_TAKEN) {
-					setAlert({ status: Status.ERROR, msg: err.message });
-				}
+				setAlert({ status: Status.ERROR, msg: err.message });
 			});
 	}
 
