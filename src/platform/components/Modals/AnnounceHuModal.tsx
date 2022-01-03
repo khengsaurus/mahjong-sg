@@ -25,7 +25,7 @@ const AnnounceHuModal = ({
 	onClose: handleShow
 }: IAnnounceHuModalProps) => {
 	const user = useSelector((store: IStore) => store.user);
-	const { hu = [], thB = 0, draw = false, on = true, _d = 0, logs } = game || {};
+	const { hu = [], thB = 0, draw = false, on = true, _d = 0, ps, logs } = game || {};
 
 	const canHuFirst = useMemo((): boolean => {
 		const whoHu = Number(hu[0]);
@@ -54,12 +54,19 @@ const AnnounceHuModal = ({
 				{hu.length > 2 && (
 					<>
 						<StyledText
-							title={`${hu[0] === playerSeat ? 'You' : game.ps[hu[0]]?.uN} won, with ${hu[1]}台${
+							title={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} won with ${hu[1]}台${
 								hu[2] === 1 ? ` 自摸` : ``
 							}`}
 							variant="subtitle1"
-							padding="3px 0px"
+							padding="3px 0px 0px"
 						/>
+						{hu[2] === 0 && (
+							<StyledText
+								title={`Last tile thrown by ${ps[thB]?.uN}`}
+								variant="subtitle2"
+								padding="0px"
+							/>
+						)}
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
 							return (
 								<StyledText title={`• ${getHandDesc(p)}`} variant="subtitle2" padding="2px" key={ix} />
