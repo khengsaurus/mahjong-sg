@@ -3,12 +3,13 @@ import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
 import { AboutButton } from 'platform/components/Buttons/TextNavButton';
+import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Page, Status, Transition } from 'shared/enums';
+import { EEvent, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
@@ -109,13 +110,7 @@ const Login = () => {
 		},
 		[showRegister, handleRegister, handleLogin]
 	);
-
-	useEffect(() => {
-		window.addEventListener('keypress', enterListener);
-		return () => {
-			window.removeEventListener('keypress', enterListener);
-		};
-	}, [enterListener]);
+	useWindowListener(EEvent.KEYPRESS, enterListener);
 
 	const renderLoginButton = () => (
 		<StyledButton label={ButtonText.LOGIN} type="submit" autoFocus disabled={loginDisabled} onClick={handleLogin} />

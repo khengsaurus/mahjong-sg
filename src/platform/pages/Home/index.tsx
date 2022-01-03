@@ -2,12 +2,13 @@ import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
 import { AboutButton, JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
+import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import { PlatformSpecs } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, Shortcut, Transition } from 'shared/enums';
+import { AppFlag, EEvent, Shortcut, Transition } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './home.scss';
@@ -29,13 +30,7 @@ const Home = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[setShowSettings]
 	);
-
-	useEffect(() => {
-		document.addEventListener('keydown', handleKeyListeners);
-		return () => {
-			document.removeEventListener('keydown', handleKeyListeners);
-		};
-	}, [handleKeyListeners]);
+	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
 
 	const markup = () => (
 		<>

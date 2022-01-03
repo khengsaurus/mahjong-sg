@@ -2,15 +2,16 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Collapse, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
+import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Page } from 'shared/enums';
-import { HomeScreenText } from 'shared/screenTexts';
+import { EEvent, Page } from 'shared/enums';
 import { Game } from 'shared/models';
+import { HomeScreenText } from 'shared/screenTexts';
 import { IStore, setGameId } from 'shared/store';
 import { formatDate } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
@@ -57,13 +58,7 @@ const JoinGame = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[JSON.stringify(gameInvites?.map(g => g.id))]
 	);
-
-	useEffect(() => {
-		document.addEventListener('keydown', handleKeyListeners);
-		return () => {
-			document.removeEventListener('keydown', handleKeyListeners);
-		};
-	}, [handleKeyListeners]);
+	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
 
 	function handleJoinGame(gameId: string) {
 		dispatch(setGameId(gameId));

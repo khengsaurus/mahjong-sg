@@ -1,15 +1,16 @@
+import { history } from 'App';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader } from 'platform/components/Loader';
-import { useLocalSession } from 'platform/hooks';
+import { useAndroidBack, useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Offset, Platform, Status } from 'shared/enums';
-import { HomeScreenText } from 'shared/screenTexts';
+import { Offset, Page, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
+import { HomeScreenText } from 'shared/screenTexts';
 import { IStore, setGame, setGameId, setLocalGame } from 'shared/store';
 import { setTHK } from 'shared/store/actions';
 import './home.scss';
@@ -40,7 +41,7 @@ const HomePage = ({
 	const marginBottom = offset || process.env.REACT_APP_PLATFORM === Platform.MOBILE ? Offset.HOMEPAGE_MOBILE : null;
 	const dispatch = useDispatch();
 
-	// Reset store/AppContext on leaving game since Table useEffect cleanup is used for subscription...
+	// Reset store/AppContext on leaving game since Table useEffect cleanup is used for subscription
 	useEffect(() => {
 		setPlayers([user]);
 		dispatch(setGameId(''));
@@ -49,6 +50,11 @@ const HomePage = ({
 		dispatch(setLocalGame(null));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, setPlayers, user?.id]);
+
+	// Listener for Android back button
+	useAndroidBack(() => {
+		history.push(Page.HOME);
+	});
 
 	useEffect(() => {
 		if (!ready) {

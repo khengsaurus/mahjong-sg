@@ -7,10 +7,11 @@ import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
 import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
+import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
+import { EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import LeaveAlert from '../Modals/LeaveAlert';
@@ -49,6 +50,15 @@ const Controls = () => {
 	} = useControls(lThAvail, lThAvailHu, delayOn, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome);
 	useBot(isHuLocked, lThAvail, setExec);
 
+	const _handleHome = useCallback(() => {
+		if (isLocalGame) {
+			topLeft?.setShowLeaveAlert(true);
+		} else {
+			handleHome();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isLocalGame, topLeft?.setShowLeaveAlert, handleHome]);
+
 	const handleKeyListeners = useCallback(
 		e => {
 			switch (e.key) {
@@ -58,11 +68,7 @@ const Controls = () => {
 					}
 					break;
 				case Shortcut.HOME:
-					if (isLocalGame) {
-						topLeft?.setShowLeaveAlert(true);
-					} else {
-						handleHome();
-					}
+					_handleHome();
 					break;
 				case Shortcut.PAY:
 					topRight?.handlePay();
@@ -83,13 +89,8 @@ const Controls = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[handleHome, topLeft?.handleAdmin, topRight?.handlePay, topLeft?.handleScreenText]
 	);
-
-	useEffect(() => {
-		document.addEventListener('keydown', handleKeyListeners);
-		return () => {
-			document.removeEventListener('keydown', handleKeyListeners);
-		};
-	}, [handleKeyListeners]);
+	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
+	useAndroidBack(_handleHome);
 
 	/* ----------------------------------- Markup ----------------------------------- */
 

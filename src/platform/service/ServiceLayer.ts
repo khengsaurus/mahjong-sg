@@ -165,7 +165,7 @@ export class Service {
 	}
 
 	// For dev
-	setGame(game: Game) {
+	setGame(game: any) {
 		FBService.setGame(game);
 	}
 }

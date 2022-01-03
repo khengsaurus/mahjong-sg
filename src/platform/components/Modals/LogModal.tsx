@@ -1,4 +1,4 @@
-import { useEventListener } from 'platform/hooks';
+import { useCloseListener } from 'platform/hooks';
 import { GreenTableText, TableText } from 'platform/style/StyledComponents';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ const LogModal = (props: LogModalProps) => {
 	const currGame = isLocalGame ? localGame : game;
 	const modalRef = useRef(null);
 	const id = 'log-box';
-	useEventListener(expanded, onClose, modalRef, externalRef);
+	useCloseListener(expanded, onClose, modalRef, externalRef);
 
 	const scroll = useCallback(() => {
 		const logsList = document.getElementById(id);

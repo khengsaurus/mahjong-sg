@@ -5,7 +5,7 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, LocalFlag, BotTimeout } from 'shared/enums';
+import { AppFlag, BotTimeout, LocalFlag } from 'shared/enums';
 import { IStore } from 'shared/store';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
@@ -14,16 +14,12 @@ import sample_pong_hu from 'shared/__mock__/sample_pong_hu.json';
 import sample_user2_pong_then_kang from 'shared/__mock__/sample_user2_pong_then_kang.json';
 import sample_user3_hu from 'shared/__mock__/sample_user3_hu.json';
 
-interface IDevControls {
-	set: (obj?: any) => void;
-}
-
 interface IGameStateOption {
 	label: string;
 	obj: Object;
 }
 
-const Scenarios = ({ set }: IDevControls) => {
+const Scenarios = () => {
 	const gameStateOptions: IGameStateOption[] = [
 		{ label: 'User3 Hu', obj: sample_user3_hu },
 		{ label: 'Multi Hu', obj: sample_multi_hu },
@@ -34,7 +30,7 @@ const Scenarios = ({ set }: IDevControls) => {
 	return (
 		<>
 			{gameStateOptions.map((o, ix) => (
-				<StyledButton key={ix} label={o.label} onClick={() => set(o.obj)} />
+				<StyledButton key={ix} label={o.label} onClick={() => ServiceInstance.setGame(objToGame(o.obj))} />
 			))}
 		</>
 	);
@@ -48,8 +44,6 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(currGame?.bt));
 	const [bt, setBt] = useState<number>(currGame?.bt);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
-	// For dev
-	// const updateGame = useCallback(game => ServiceInstance.setGame(game), []);
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -125,9 +119,7 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 						<FormControl component="fieldset">
 							{renderManualHuSelect()}
 							{renderBotTimeSelect()}
-							{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && !isLocalGame && (
-								<Scenarios set={updateGame} />
-							)}
+							{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && !isLocalGame && <Scenarios />}
 						</FormControl>
 					</DialogContent>
 				</Dialog>

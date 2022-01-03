@@ -1,7 +1,18 @@
-import useEventListener from './useEventListener';
+import { useAndroidBack, useCloseListener, useDocumentListener, useWindowListener } from './listeners';
+import useLocalObj from './useLocalObj';
 import useLocalSession from './useLocalSession';
 import useLocalStorage from './useLocalStorage';
-import useLocalObj from './useLocalObj';
 import { useDynamicWidth, useWindowHeight, useWindowSize } from './useWindowSize';
 
-export { useEventListener, useLocalSession, useLocalStorage, useLocalObj, useDynamicWidth, useWindowHeight, useWindowSize };
+export {
+	useAndroidBack,
+	useCloseListener,
+	useDocumentListener,
+	useLocalSession,
+	useLocalStorage,
+	useLocalObj,
+	useDynamicWidth,
+	useWindowHeight,
+	useWindowListener,
+	useWindowSize
+};

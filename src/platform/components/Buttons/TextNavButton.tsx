@@ -1,7 +1,8 @@
-import { useCallback, useEffect } from 'react';
-import { Page, PageName, Shortcut } from 'shared/enums';
 import { history } from 'App';
+import { useDocumentListener } from 'platform/hooks';
 import { StyledButton } from 'platform/style/StyledMui';
+import { useCallback } from 'react';
+import { EEvent, Page, PageName, Shortcut } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 
 interface ITextNavButton extends IHasStyle {
@@ -19,13 +20,7 @@ const TextNavButton = ({ label, shortcut, route, style = {} }: ITextNavButton) =
 		},
 		[shortcut, route]
 	);
-
-	useEffect(() => {
-		document.addEventListener('keydown', handleShortcut);
-		return () => {
-			document.removeEventListener('keydown', handleShortcut);
-		};
-	}, [handleShortcut]);
+	useDocumentListener(EEvent.KEYDOWN, handleShortcut);
 
 	return <StyledButton label={label} navigate={route} style={{ ...style }} />;
 };

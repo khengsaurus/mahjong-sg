@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { ShownTileHeight, ShownTileWidth, Size } from 'shared/enums';
+import { useCallback, useEffect, useState } from 'react';
+import { EEvent, ShownTileHeight, ShownTileWidth, Size } from 'shared/enums';
+import { useWindowListener } from '.';
 
 interface useDynamicWidthProps {
 	ref: React.MutableRefObject<any>;
@@ -13,16 +14,11 @@ export function useWindowSize() {
 	const [windowHeight, setWindowHeight] = useState(undefined);
 	const [windowWidth, setWindowWidth] = useState(undefined);
 
-	function handleResize() {
+	const handleResize = useCallback(() => {
 		setWindowHeight(window.innerHeight);
 		setWindowWidth(window.innerWidth);
-	}
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-		handleResize();
-		return () => window.removeEventListener('resize', handleResize);
 	}, []);
+	useWindowListener(EEvent.RESIZE, handleResize);
 
 	return { height: windowHeight, width: windowWidth };
 }
@@ -30,15 +26,10 @@ export function useWindowSize() {
 export function useWindowHeight() {
 	const [windowHeight, setWindowHeight] = useState(undefined);
 
-	function handleResize() {
+	const handleResize = useCallback(() => {
 		setWindowHeight(window.innerHeight);
-	}
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-		handleResize();
-		return () => window.removeEventListener('resize', handleResize);
 	}, []);
+	useWindowListener(EEvent.RESIZE, handleResize);
 
 	return windowHeight;
 }

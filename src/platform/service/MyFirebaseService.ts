@@ -423,10 +423,8 @@ export class FirebaseService {
 	}
 
 	// For dev
-	async setGame(game) {
-		await setDoc(doc(this.gamesRef, game.id), {
-			...game
-		});
+	async setGame(game: any) {
+		await setDoc(doc(this.gamesRef, game.id), JSON.parse(JSON.stringify(game)));
 	}
 }
 
