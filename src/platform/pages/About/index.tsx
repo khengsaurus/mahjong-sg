@@ -220,7 +220,9 @@ const About = () => {
 		<HomeTheme>
 			<Main>
 				<Scrollable className="scrollable">{renderLocalContent()}</Scrollable>
-				<HomeButton label={!!user ? PageName.HOME : ButtonText.BACK} />
+				<div className="home-button">
+					<HomeButton label={!!user ? PageName.HOME : ButtonText.BACK} />
+				</div>
 			</Main>
 		</HomeTheme>
 	);

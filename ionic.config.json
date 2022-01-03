@@ -1,7 +1,7 @@
 {
-  "name": "Mahjong",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
+	"name": "Mahjong SG",
+	"integrations": {
+		"capacitor": {}
+	},
+	"type": "react"
 }

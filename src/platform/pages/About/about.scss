@@ -1,11 +1,5 @@
 @import '../../../App.scss';
 
-.about {
-	padding: 20px 0px 100px;
-	margin-bottom: const(safe-area-inset-bottom);
-	margin-bottom: env(safe-area-inset-bottom);
-}
-
 .content {
 	@include flow(column wrap);
 
@@ -20,7 +14,7 @@
 	}
 
 	p {
-		font-size: 0.95rem;
+		font-size: 1rem;
 		display: block;
 		margin: 0px !important;
 	}
@@ -29,7 +23,7 @@
 		margin: 5px 0px;
 		padding-inline-start: 12px;
 		li {
-			font-size: 0.9rem;
+			font-size: 0.95rem;
 			margin: 10px;
 		}
 	}
@@ -39,4 +33,9 @@
 	padding: 40px 0px 0px;
 	margin-top: const(safe-area-inset-top);
 	margin-top: env(safe-area-inset-top);
+}
+
+.home-button {
+	margin-bottom: const(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
 }
