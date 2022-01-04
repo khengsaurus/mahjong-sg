@@ -1,12 +1,10 @@
-import { isEmpty } from 'lodash';
-import { DiscardedTiles, ShownTile, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
-import { useCallback } from 'react';
+import { DiscardedTiles, ShownHiddenHand, ShownTiles, SuspenseTiles, UnusedTiles } from 'platform/components/Tiles';
+import { Suspense } from 'react';
 import { useSelector } from 'react-redux';
-import { FrontBackTag, Segment, Size } from 'shared/enums';
+import { FrontBackTag, Segment, Size, _ShownTileHeight, _ShownTileWidth } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
-import { getCardFromHashId, revealTile } from 'shared/util';
 import BottomHiddenHand from '../Tiles/BottomHiddenHand';
 import './playerComponents.scss';
 
@@ -15,67 +13,69 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
-
 	const {
+		theme: { tileColor },
 		sizes: { tileSize },
 		tHK
 	} = useSelector((state: IStore) => state);
 	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
 		sTs,
-		allHiddenTiles,
 		ms,
 		toRotate: false
 	});
 
-	const shownHiddenHand = useCallback(
-		(hTs: IHiddenTile[], lTa: IShownTile | IHiddenTile) => {
-			const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
-			return (
-				<div className="htss">
-					{hTs.map((tile: IHiddenTile) => {
-						const revC = getCardFromHashId(tile.i, tHK);
-						return <ShownTile key={tile.i} tileRef={tile.r} tileCard={revC} segment={Segment.BOTTOM} />;
-					})}
-					{revLTT && (
-						<ShownTile
-							key={revLTT.i}
-							tileRef={revLTT.r}
-							tileCard={revLTT.c}
-							segment={Segment.BOTTOM}
-							highlight
-							classSuffix="margin-left"
-						/>
-					)}
-				</div>
-			);
-		},
-		[tHK]
-	);
-
-	const renderShownTiles = () => (
-		<ShownTiles
-			className="htss"
-			nonFlowers={nonFlowers}
-			flowers={flowers}
-			flowerRefs={flowerRefs}
-			nonFlowerRefs={nonFlowerRefs}
-			segment={Segment.BOTTOM}
-			dealer={dealer}
-			tileSize={tileSize}
-			lastThrownRef={lastThrown?.r}
-		/>
-	);
-
-	const renderDiscardedTiles = () => (
-		<DiscardedTiles className="htss discarded" tiles={dTs} segment={Segment.BOTTOM} lastThrownRef={lastThrown?.r} />
-	);
-
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM} bottom`}>
-			{sT ? shownHiddenHand(hTs, lTa) : <BottomHiddenHand hTs={hTs} lTa={lTa} />}
-			{(dealer || sTs?.length > 0) && renderShownTiles()}
+			{/* Hidden or shown hand */}
+			{sT ? (
+				<Suspense
+					fallback={
+						<SuspenseTiles
+							height={_ShownTileHeight[tileSize]}
+							width={allHiddenTiles.length * _ShownTileWidth[tileSize]}
+							color={tileColor}
+							segment={Segment.BOTTOM}
+						/>
+					}
+				>
+					<ShownHiddenHand
+						className="htss"
+						{...{ hTs, lTa, tHK }}
+						segment={Segment.BOTTOM}
+						lastSuffix="margin-left"
+					/>
+				</Suspense>
+			) : (
+				<BottomHiddenHand hTs={hTs} lTa={lTa} />
+			)}
+
+			{/* Shown tiles */}
+			{(dealer || sTs?.length > 0) && (
+				<ShownTiles
+					className="htss"
+					nonFlowers={nonFlowers}
+					flowers={flowers}
+					flowerRefs={flowerRefs}
+					nonFlowerRefs={nonFlowerRefs}
+					segment={Segment.BOTTOM}
+					dealer={dealer}
+					tileSize={tileSize}
+					lastThrownRef={lastThrown?.r}
+				/>
+			)}
+
+			{/* Unused tiles */}
 			<UnusedTiles tiles={uTs} segment={Segment.BOTTOM} tag={frontBackTag} />
-			{dTs?.length > 0 && renderDiscardedTiles()}
+
+			{/* Discarded tiles */}
+			{dTs?.length > 0 && (
+				<DiscardedTiles
+					className="htss discarded"
+					tiles={dTs}
+					segment={Segment.BOTTOM}
+					lastThrownRef={lastThrown?.r}
+				/>
+			)}
 		</div>
 	);
 };

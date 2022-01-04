@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { EEvent, ShownTileHeight, ShownTileWidth, Size } from 'shared/enums';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { EEvent, Size, _ShownTileHeight, _ShownTileWidth } from 'shared/enums';
 import { useWindowListener } from '.';
 
 interface useDynamicWidthProps {
@@ -7,12 +7,12 @@ interface useDynamicWidthProps {
 	tiles: number;
 	tileSize: Size;
 	dealer?: boolean;
-	addHalfTile?: boolean;
+	add?: number;
 }
 
 export function useWindowSize() {
-	const [windowHeight, setWindowHeight] = useState(undefined);
-	const [windowWidth, setWindowWidth] = useState(undefined);
+	const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
 	const handleResize = useCallback(() => {
 		setWindowHeight(window.innerHeight);
@@ -24,7 +24,7 @@ export function useWindowSize() {
 }
 
 export function useWindowHeight() {
-	const [windowHeight, setWindowHeight] = useState(undefined);
+	const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
 	const handleResize = useCallback(() => {
 		setWindowHeight(window.innerHeight);
@@ -38,16 +38,22 @@ export function useWindowHeight() {
  * Workaround for column-wrap div's not having dynamic width
  * https://stackoverflow.com/questions/33891709/when-flexbox-items-wrap-in-column-mode-container-does-not-grow-its-width
  */
-export function useDynamicWidth({ ref, tiles, tileSize, dealer = false, addHalfTile = false }: useDynamicWidthProps) {
+export function useDynamicWidth({ ref, tiles, tileSize, dealer = false, add = 0 }: useDynamicWidthProps) {
 	const windowHeight = useWindowHeight();
-	useEffect(() => {
-		const length = tiles + Number(dealer) + (addHalfTile ? 0.5 : 0);
-		const shownTilesHeight = ref.current?.offsetHeight || 0;
-		if (!!Number(length) && !!Number(shownTilesHeight) && ref.current) {
-			const reqHeight = length * ShownTileWidth[tileSize.toUpperCase()] + 1;
-			const cols = Math.ceil(reqHeight / shownTilesHeight);
-			const toSet = `${cols * ShownTileHeight[tileSize.toUpperCase()]}px`;
-			ref.current.style.width = toSet;
+
+	const colsReq = useMemo(() => {
+		const length = tiles + Number(dealer);
+		const maxColHeight = 0.85 * windowHeight; // Referenced in playerComponents.scss
+		const reqHeight = length * _ShownTileWidth[tileSize] + add;
+		const cols = maxColHeight >= reqHeight ? 1 : Number(maxColHeight) ? Math.ceil(reqHeight / maxColHeight) : 1;
+		return cols;
+	}, [add, dealer, tileSize, tiles, windowHeight]);
+
+	return useEffect(() => {
+		if (ref.current) {
+			requestAnimationFrame(() => {
+				ref.current.style.width = `${colsReq * _ShownTileHeight[tileSize]}px`;
+			});
 		}
-	}, [windowHeight, ref, tiles, tileSize, dealer, addHalfTile]);
+	}, [colsReq, ref, tileSize]);
 }

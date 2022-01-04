@@ -51,7 +51,7 @@
 			.htss {
 				@include flow(row wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
-				width: floor(85vw);
+				width: floor(85vw); // value used in useWindowSize
 				margin: getTilePadding($size);
 				&.top {
 					flex-flow: row-reverse wrap;
@@ -150,7 +150,7 @@
 			.vtss {
 				@include flow(column-reverse wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
-				height: floor(85vh);
+				height: floor(85vh); // value used in useWindowSize
 				margin: getTilePadding($size);
 				&.left {
 					transform: rotate(180deg);

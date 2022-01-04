@@ -352,13 +352,13 @@ $log-margin-left-medium: 5px;
 	background: $linear-gradient-multi;
 	background-size: 400% 400%;
 	border-radius: $default-tile-border-radius;
-	animation: linear-gradient 4s ease infinite;
+	animation: linear-gradient-sway 4s ease infinite;
 }
 
 @mixin highlight {
 	background: $radial-gradient-gold;
 	background-size: 400% 400%;
-	animation: linear-gradient 6s ease infinite;
+	animation: linear-gradient-sway 6s ease infinite;
 	border-radius: $default-tile-border-radius;
 }
 
@@ -375,7 +375,7 @@ $log-margin-left-medium: 5px;
 	}
 }
 
-@keyframes linear-gradient {
+@keyframes linear-gradient-sway {
 	0% {
 		background-position: 0% 50%;
 	}
@@ -384,6 +384,18 @@ $log-margin-left-medium: 5px;
 	}
 	100% {
 		background-position: 0% 50%;
+	}
+}
+
+@keyframes linear-gradient-unidir {
+	0% {
+		background-position: 0% 0%;
+	}
+	50% {
+		background-position: 50% 0%;
+	}
+	100% {
+		background-position: 100% 0%;
 	}
 }
 
