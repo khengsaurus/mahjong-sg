@@ -102,6 +102,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiDialog: {
 				styleOverrides: {
 					paper: {
+						margin: '18px',
+						maxHeight: 'calc(100% - 36px)',
 						overflow: 'hidden',
 						overflowX: 'hidden',
 						overflowY: 'hidden',

@@ -12,7 +12,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
-import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useTAvail } from 'shared/hooks';
+import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useNotifs, useTAvail } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import LeaveAlert from '../Modals/LeaveAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
@@ -23,7 +23,8 @@ const Controls = () => {
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
-	const { delayOn, delayLeft } = useGameCountdown();
+	const { delayLeft } = useGameCountdown();
+	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
 
 	const handleHome = useCallback(() => {
 		history.push(Page.INDEX);
@@ -47,7 +48,7 @@ const Controls = () => {
 		showBottomControls,
 		showAnnounceHuModal,
 		setExec
-	} = useControls(lThAvail, lThAvailHu, delayOn, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome);
+	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome, notifOutput);
 	useBot(isHuLocked, lThAvail, setExec);
 
 	const _handleHome = useCallback(() => {
