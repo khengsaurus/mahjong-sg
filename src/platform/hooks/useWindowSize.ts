@@ -50,10 +50,8 @@ export function useDynamicWidth({ ref, tiles, tileSize, dealer = false, add = 0 
 	}, [add, dealer, tileSize, tiles, windowHeight]);
 
 	return useEffect(() => {
-		if (ref.current) {
-			requestAnimationFrame(() => {
-				ref.current.style.width = `${colsReq * _ShownTileHeight[tileSize]}px`;
-			});
+		if (ref.current?.style) {
+			ref.current.style.width = `${colsReq * _ShownTileHeight[tileSize]}px`;
 		}
 	}, [colsReq, ref, tileSize]);
 }
