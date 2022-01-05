@@ -24,14 +24,8 @@ const About = () => {
 			<br />
 			<h4>Creating a new game</h4>
 			<ul>
-				<li>
-					When searching for a user, you have to spell out their username exactly as it is, i.e. capitals and
-					all.
-				</li>
-				<li>
-					There is no rolling of dice to decide on player seats (hence the 'Randomize' option on the New Game
-					page).
-				</li>
+				<li>When searching for a user, you have to spell out their username exactly as it is.</li>
+				<li>There is no rolling of dice to decide on player seats (hence the 'Randomize' option).</li>
 				<li>
 					Note the 'Options' available (choosing Shooter or Half-Shooter doesn't have any effect on gameplay
 					for now).
@@ -45,8 +39,8 @@ const About = () => {
 			<h4>Controls</h4>
 			<ul>
 				<li>
-					To Chi a tile thrown by the previous player (e.g. 2万), select the other two (e.g. 1万, 3万) in your
-					hand and the Chi button (吃) will light up. Press on it to chi.
+					To Chi a tile thrown by the previous player, select the other two in your hand and the Chi button
+					(吃) will light up. Press on it to chi.
 				</li>
 				<li>
 					If you can Pong or Kang a discarded tile, a popup will appear offering you the options. Optionally,
@@ -58,8 +52,8 @@ const About = () => {
 					Pong'ed it. You can only do this after you've drawn or taken a tile, during your turn.
 				</li>
 				<li>
-					Draw (摸) and Discard (丢) buttons on the right will light up only when it's your turn. Note that
-					you can only discard when it is your turn, after you've drawn or taken a tile.
+					The Draw (摸) and Discard (丢) buttons on the right will light up only when it's your turn. Note
+					that you can only discard when it is your turn, after you've drawn or taken a tile.
 				</li>
 				<li>
 					The {platform} will automatically draw replacement tiles (補花) for you when you Kang or draw flower
@@ -82,8 +76,8 @@ const About = () => {
 				<li>A glowing flower tile means that it is that player's flower tile, i.e. + 1 Tai.</li>
 				<li>
 					No instant payout (yet)! <br />
-					After the game starts, if someone has matching flower tiles, check the logs (top right) to see if
-					they had them in the initial hand. If so, the logs will be like: <br />
+					After the game starts, if someone has matching flower tiles, check the logs to see if they had them
+					in the initial hand. If so, the logs will be like: <br />
 					"Player received 13 tiles, including 猫, 老鼠" <br />
 					... <br />
 					"Player buhua, received 2 tiles"
@@ -98,6 +92,7 @@ const About = () => {
 					...
 					<br /> "Player buhua, received 1 tile"
 				</li>
+				<li>If a player gets both his flower tiles or bites (咬到) it will be shown in the logs.</li>
 				<li>
 					There is also no automatic sending of chips on player Hu. To send another player chips, you can open
 					the 'Send Chips' panel (top right), or after somebody wins, an option will appear on the popup. When
@@ -143,8 +138,9 @@ const About = () => {
 				</li>
 				<li>
 					Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will
-					not see any options. In the next 6s, bot A and B will see the Hu option, and A will NOT see the pong
-					option (Because it's not fair for A to pong when B can Hu right? Also, can Hu then just Hu lah).
+					not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the
+					pong option (Because it's not fair for A to pong when B can Hu right? Also, can Hu then just Hu
+					lah).
 				</li>
 				<li>
 					If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the

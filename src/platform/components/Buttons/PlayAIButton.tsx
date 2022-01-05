@@ -33,7 +33,7 @@ const PlayAIButton = () => {
 	}
 
 	return (
-		<StyledButton label={ButtonText.BOTGAME} style={{ fontSize: '20px', height: '44.5px' }} onClick={playVsAI} />
+		<StyledButton label={ButtonText.BOT_GAME} style={{ fontSize: '20px', height: '44.5px' }} onClick={playVsAI} />
 	);
 };
 

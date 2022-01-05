@@ -1,17 +1,35 @@
-import { Dialog, DialogContent, FormControl, Paper, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, Collapse, Dialog, DialogContent, FormControl, Paper, Tab, Tabs } from '@mui/material';
+import { history } from 'App';
 import { extend, isEqual } from 'lodash';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
-import { MainTransparent } from 'platform/style/StyledComponents';
+import { MainTransparent, Row } from 'platform/style/StyledComponents';
+import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BackgroundColor, Offset, Platform, Size, TableColor, TileColor, Visitor } from 'shared/enums';
+import {
+	AlertStatus,
+	BackgroundColor,
+	Page,
+	Size,
+	Status,
+	TableColor,
+	TileColor,
+	Transition,
+	Visitor
+} from 'shared/enums';
 import { AppContext } from 'shared/hooks';
+import { ErrorMessage } from 'shared/messages';
+import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setSizes, setTheme } from 'shared/store/actions';
 import { IModalProps } from 'shared/typesPlus';
 import { getTheme } from 'shared/util';
 import './settingsWindow.scss';
+
+interface ISettingsWindow extends IModalProps {
+	accActions?: boolean;
+}
 
 interface IPreference {
 	label: string;
@@ -21,8 +39,8 @@ interface IPreference {
 	handleSelect: (value: Size | BackgroundColor | TableColor | TileColor) => void;
 }
 
-const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
-	const { handleLocalUO } = useContext(AppContext);
+const SettingsWindow = ({ offset, onClose, show, accActions = false }: ISettingsWindow) => {
+	const { alert, handleLocalUO, setAlert, logout } = useContext(AppContext);
 	const { user, theme, sizes } = useSelector((state: IStore) => state);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);
 	const [tableColor, setTableColor] = useState(theme?.tableColor);
@@ -30,9 +48,11 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 	const [controlsSize, setControlsSize] = useState(sizes?.controlsSize);
 	const [handSize, setHandSize] = useState(sizes?.handSize);
 	const [tileSize, setTileSize] = useState(sizes?.tileSize);
-	const transform =
-		offset && process.env.REACT_APP_PLATFORM === Platform.MOBILE ? `translateY(-${Offset.HALF_MOBILE})` : null;
+	const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 	const dispatch = useDispatch();
+
+	// const transform =
+	// 	offset && process.env.REACT_APP_PLATFORM === Platform.MOBILE ? `translateY(-${Offset.HALF_MOBILE})` : null;
 
 	const flagThemeDiff = useMemo(
 		() => !isEqual([backgroundColor, tableColor, tileColor], [user.bgC, user.tC, user.tBC]),
@@ -128,93 +148,159 @@ const SettingsWindow = ({ offset, onClose, show }: IModalProps) => {
 		onClose();
 	}
 
+	async function handleDeleteAccount() {
+		setAlert(null);
+		await ServiceInstance.FBDeleteUser(user).then(res => {
+			if (res) {
+				logout();
+				history.push(Page.LOGIN);
+			} else {
+				setAlert({ status: Status.ERROR, msg: ErrorMessage.DELETE_ERROR });
+			}
+		});
+	}
+
+	const DeleteAlert: React.FC = () => {
+		function handleClose() {
+			setShowDeleteAlert(false);
+			setAlert(null);
+		}
+
+		return (
+			<Dialog open={showDeleteAlert} BackdropProps={{ invisible: true }} onClose={handleClose}>
+				<DialogContent style={{ paddingBottom: 0 }}>
+					<StyledText
+						title="Are you sure you wish to delete your account?"
+						variant="subtitle1"
+						textAlign="center"
+						padding="0px"
+					/>
+					<StyledText
+						title="There's no undoing this action!"
+						variant="subtitle2"
+						textAlign="center"
+						padding="2px"
+					/>
+					<Row>
+						<StyledButton label={ButtonText.CANCEL} onClick={handleClose} />
+						<StyledButton label={ButtonText.DELETE} onClick={handleDeleteAccount} />
+					</Row>
+					<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
+						<>
+							<Alert severity={alert?.status as AlertStatus}>
+								{alert?.msg || ErrorMessage.TRY_AGAIN}
+							</Alert>
+							<br />
+						</>
+					</Collapse>
+				</DialogContent>
+			</Dialog>
+		);
+	};
+
+	const Label = ({ label }: IHasLabel) => (
+		<StyledText title={label} variant="subtitle1" padding="0px" style={{ height: 30, marginTop: 2 }} />
+	);
+
 	return (
 		<TableTheme>
 			<MainTransparent>
-				<Dialog
-					open={show}
-					BackdropProps={{ invisible: true }}
-					onClose={handleClose}
-					PaperProps={{
-						style: {
-							...MuiStyles.large_dialog
-						}
-					}}
-					style={{ transform }}
-				>
-					<DialogContent>
-						<FormControl component="fieldset">
-							{preferences.map(preference =>
-								preference.size ? (
-									<div className="preference" key={`preference-${preference.label}`}>
-										<Typography variant="subtitle1" display="inline">
-											{`${preference.label}:`}
-										</Typography>
-										<Tabs
-											style={{
-												...MuiStyles.tabs,
-												display: 'inline-block'
-											}}
-											value={preference.size}
-											indicatorColor="secondary"
-										>
-											{Object.keys(Size).map(key => {
-												const size = Size[key.toUpperCase()];
-												return (
-													<Tab
-														style={{
-															...MuiStyles.tabOptions
-														}}
-														// fullWidth={false}
-														key={size}
-														value={size}
-														label={size[0]}
-														onClick={() => {
-															preference.handleSelect(size);
-														}}
-													/>
-												);
-											})}
-										</Tabs>
-									</div>
-								) : null
-							)}
-							{preferences.map(preference =>
-								preference.colors ? (
-									<div className="preference" key={`preference-${preference.label}`}>
-										<Typography variant="subtitle1" display="inline">
-											{`${preference.label}:`}
-										</Typography>
-										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
+				{showDeleteAlert ? (
+					<DeleteAlert />
+				) : (
+					<Dialog
+						open={show}
+						BackdropProps={{ invisible: true }}
+						onClose={handleClose}
+						PaperProps={{
+							style: {
+								...MuiStyles.large_dialog
+							}
+						}}
+						// style={{ transform }}
+					>
+						<DialogContent>
+							<FormControl component="fieldset">
+								{preferences.map(preference =>
+									preference.size ? (
+										<div className="preference" key={`preference-${preference.label}`}>
+											<Label label={preference.label} />
 											<Tabs
 												style={{
 													...MuiStyles.tabs,
 													display: 'inline-block'
 												}}
-												value={preference.selectedColor}
+												value={preference.size}
 												indicatorColor="secondary"
 											>
-												{preference.colors.map(rgb => (
-													<Tab
-														style={{
-															...MuiStyles.tabColorOptions,
-															backgroundColor: rgb
-														}}
-														key={rgb}
-														value={rgb}
-														onClick={() => {
-															preference.handleSelect(rgb);
-														}}
-													/>
-												))}
+												{Object.keys(Size).map(key => {
+													const size = Size[key.toUpperCase()];
+													return (
+														<Tab
+															style={{
+																...MuiStyles.tabOptions
+															}}
+															// fullWidth={false}
+															key={size}
+															value={size}
+															label={size[0]}
+															onClick={() => {
+																preference.handleSelect(size);
+															}}
+														/>
+													);
+												})}
 											</Tabs>
-										</Paper>
-									</div>
-								) : null
+										</div>
+									) : null
+								)}
+								{preferences.map(preference =>
+									preference.colors ? (
+										<div className="preference" key={`preference-${preference.label}`}>
+											<Label label={preference.label} />
+											{/* <Typography variant="subtitle1" display="inline">
+												{`${preference.label}:`}
+											</Typography> */}
+											<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
+												<Tabs
+													style={{
+														...MuiStyles.tabs,
+														display: 'inline-block'
+													}}
+													value={preference.selectedColor}
+													indicatorColor="secondary"
+												>
+													{preference.colors.map(rgb => (
+														<Tab
+															style={{
+																...MuiStyles.tabColorOptions,
+																backgroundColor: rgb
+															}}
+															key={rgb}
+															value={rgb}
+															onClick={() => {
+																preference.handleSelect(rgb);
+															}}
+														/>
+													))}
+												</Tabs>
+											</Paper>
+										</div>
+									) : null
+								)}
+							</FormControl>
+							{accActions && (
+								<Row style={{ alignItems: 'center', marginTop: 15 }}>
+									<StyledButton
+										label={ButtonText.DELETE_ACCOUNT}
+										onClick={() => setShowDeleteAlert(true)}
+										padding={'0'}
+									/>
+								</Row>
 							)}
-						</FormControl>
-					</DialogContent>
-				</Dialog>
+						</DialogContent>
+					</Dialog>
+				)}
 			</MainTransparent>
 		</TableTheme>
 	);

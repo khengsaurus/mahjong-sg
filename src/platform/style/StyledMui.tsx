@@ -2,11 +2,12 @@ import { Button, Typography } from '@mui/material';
 import { history } from 'App';
 import { Page } from 'shared/enums';
 
-interface TextProps {
+interface StyledTextProps {
 	title: string;
 	color?: string;
 	padding?: string;
 	variant?: 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2';
+	textAlign?: 'left' | 'center' | 'right';
 	style?: any;
 }
 
@@ -18,10 +19,10 @@ interface StyledButtonProps {
 	size?: 'small' | 'medium' | 'large';
 	variant?: 'text' | 'outlined' | 'contained';
 	autoFocus?: boolean;
-	onClick?: () => void;
 	type?: 'button' | 'submit' | 'reset';
 	disabled?: boolean;
 	style?: any;
+	onClick?: () => void;
 }
 
 export const StyledText = ({
@@ -29,10 +30,14 @@ export const StyledText = ({
 	color,
 	variant = 'h6',
 	padding = variant.startsWith('body') ? '0px' : '10px',
+	textAlign = 'left',
 	style = {}
-}: TextProps) => {
+}: StyledTextProps) => {
 	return (
-		<Typography style={{ color, padding, justifySelf: 'center', alignSelf: 'center', ...style }} variant={variant}>
+		<Typography
+			style={{ color, padding, justifySelf: 'center', alignSelf: 'center', textAlign, ...style }}
+			variant={variant}
+		>
 			{title}
 		</Typography>
 	);

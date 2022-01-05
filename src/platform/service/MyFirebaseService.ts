@@ -37,7 +37,7 @@ import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { shuffle } from 'shared/util';
-import { gameToObj, playerToObj } from 'shared/util/parsers';
+import { gameToObj, playerToObj, userToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
 	private user: FirebaseUser;
@@ -45,6 +45,7 @@ export class FirebaseService {
 	private fs: Firestore;
 	private usersRef: CollectionReference;
 	private gamesRef: CollectionReference;
+	private logsRef: CollectionReference;
 	private app: FirebaseApp;
 	private auth: Auth;
 
@@ -56,6 +57,7 @@ export class FirebaseService {
 				this.fs = getFirestore(this.app);
 				this.usersRef = collection(this.fs, FBCollection.USERREPR);
 				this.gamesRef = collection(this.fs, FBCollection.GAMES);
+				this.logsRef = collection(this.fs, FBCollection.LOGS);
 			}
 		});
 	}
@@ -129,10 +131,18 @@ export class FirebaseService {
 		this.auth.signOut();
 	}
 
-	authDeleteCurrentUser() {
-		if (!!this.auth.currentUser) {
-			deleteUser(this.auth.currentUser);
-		}
+	authDeleteCurrentUser(): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			if (!!this.auth.currentUser) {
+				try {
+					deleteUser(this.auth.currentUser).then(() => resolve(true));
+				} catch (err) {
+					reject(err);
+				}
+			} else {
+				resolve(false);
+			}
+		});
 	}
 
 	/* ------------------------- User related ------------------------- */
@@ -140,8 +150,7 @@ export class FirebaseService {
 	pairEmailToUsername(username: string, email: string): Promise<boolean> {
 		return new Promise(resolve => {
 			try {
-				set(ref(this.db, `${FBDatabase.USERS}/${username}`), email);
-				resolve(true);
+				set(ref(this.db, `${FBDatabase.USERS}/${username}`), email).then(() => resolve(true));
 			} catch (err) {
 				console.error(err);
 				resolve(false);
@@ -255,6 +264,20 @@ export class FirebaseService {
 		} catch (err) {
 			console.error(err);
 		}
+	}
+
+	async restoreUser(user: User) {
+		this.pairEmailToUsername(user.uN, user.email);
+		setDoc(doc(this.usersRef, user.id), userToObj(user));
+	}
+
+	async deleteUserAccount(user): Promise<boolean> {
+		const { id, uN } = user;
+		return new Promise((resolve, reject) =>
+			this.pairEmailToUsername(uN, '-')
+				.then(() => deleteDoc(doc(this.usersRef, id)).then(() => resolve(true)))
+				.catch(err => reject(err))
+		);
 	}
 
 	/* ------------------------- User-game related ------------------------- */
@@ -422,9 +445,14 @@ export class FirebaseService {
 		});
 	}
 
-	// For dev
-	async setGame(game: any) {
-		await setDoc(doc(this.gamesRef, game.id), JSON.parse(JSON.stringify(game)));
+	/* ------------------------- Dev / maintenance ------------------------- */
+
+	newLog(log: IFBLog) {
+		addDoc(this.logsRef, log);
+	}
+
+	setGame(game: any) {
+		setDoc(doc(this.gamesRef, game.id), JSON.parse(JSON.stringify(game)));
 	}
 }
 

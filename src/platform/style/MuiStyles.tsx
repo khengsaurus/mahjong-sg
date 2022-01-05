@@ -235,7 +235,12 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiTab: {
 				styleOverrides: {
-					root: { color: `${textColor}` }
+					root: {
+						color: `${textColor}`,
+						minHeight: '32px !important',
+						justifyContent: 'baseline',
+						fontSize: '1rem'
+					}
 				}
 			}
 		}
@@ -245,8 +250,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 export const MuiStyles = {
 	large_dialog: {
 		maxWidth: '385px',
-		minWidth: '385px',
-		maxHeight: '340px'
+		minWidth: '385px'
+		// maxHeight: '340px'
 	},
 	medium_dialog: {
 		minHeight: '80px',
@@ -271,19 +276,19 @@ export const MuiStyles = {
 	tabs: {
 		borderRadius: 0,
 		maxWidth: '240px',
-		height: '30px'
+		height: '32px'
 	},
 	tabOptions: {
 		minWidth: '80px',
 		maxWidth: '80px',
-		minHeight: '30px',
-		maxHeight: '30px'
+		minHeight: '32px',
+		maxHeight: '32px'
 	},
 	tabColorOptions: {
 		minWidth: '40px',
 		maxWidth: '40px',
-		minHeight: '30px',
-		maxHeight: '30px'
+		minHeight: '32px',
+		maxHeight: '32px'
 	},
 	icon_button_top_right: {
 		position: 'absolute',

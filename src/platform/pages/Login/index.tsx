@@ -36,6 +36,7 @@ const Login = () => {
 	);
 
 	function clearForm() {
+		setUsername('');
 		setEmail('');
 		setPassword('');
 		setConfirmPassword('');
@@ -169,6 +170,7 @@ const Login = () => {
 					label={showRegister ? ButtonText.BACK : ButtonText.REGISTER}
 					onClick={() => {
 						setAlert(null);
+						clearForm();
 						setShowRegister(!showRegister);
 					}}
 				/>

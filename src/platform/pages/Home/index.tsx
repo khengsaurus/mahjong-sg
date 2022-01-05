@@ -47,6 +47,7 @@ const Home = () => {
 				<div>
 					<SettingsWindow
 						show={showSettings}
+						accActions={true}
 						onClose={() => {
 							setShowSettings(false);
 						}}

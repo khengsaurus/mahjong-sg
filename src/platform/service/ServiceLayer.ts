@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
-import { LocalFlag } from 'shared/enums';
+import { LocalFlag, UserActivity } from 'shared/enums';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import { setLocalGame, store } from 'shared/store';
@@ -107,6 +107,46 @@ export class Service {
 
 	FBSearchUser(uN: string, currUN: string) {
 		return FBService.searchUser(uN, currUN);
+	}
+
+	// This is a mess... can't find a way to chain the promises,
+	// + unsure when FB will throw client offline or 'requires-recent-login' error...
+	async FBDeleteUser(user: User): Promise<boolean> {
+		function handleError(error: Error) {
+			console.error(error);
+			FBService.restoreUser(user);
+			FBService.newLog({
+				userId: user?.id,
+				username: user?.uN,
+				timestamp: new Date(),
+				event: UserActivity.ACCOUNT_DELETE,
+				message: error.message
+			});
+		}
+
+		return new Promise(async resolve => {
+			const timeout = new Promise<Error>(reject =>
+				setTimeout(() => reject(new Error(ErrorMessage.ACC_DELETE_TIMEOUT)), 3000)
+			);
+			await Promise.race([FBService.deleteUserAccount(user), timeout])
+				.then(_success => {
+					if (_success) {
+						FBService.authDeleteCurrentUser()
+							.then(success => {
+								if (!success) {
+									handleError(new Error(ErrorMessage.AUTH_DELETE_ERROR));
+								}
+								resolve(success);
+							})
+							.catch(err => handleError(err));
+					}
+				})
+				.catch(err => {
+					console.error(err);
+					handleError(err.message);
+					resolve(false);
+				});
+		});
 	}
 
 	FBListenInvites(user: User, observer: any) {
