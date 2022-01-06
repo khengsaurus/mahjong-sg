@@ -24,6 +24,7 @@ import {
 	getFirestore,
 	limit,
 	onSnapshot,
+	orderBy,
 	query,
 	setDoc,
 	Unsubscribe,
@@ -288,8 +289,9 @@ export class FirebaseService {
 				const q = query(
 					this.gamesRef,
 					where('es', 'array-contains', user.email),
-					where('on', '==', true),
-					limit(5)
+					// where('on', '==', true),
+					orderBy('cA', 'desc')
+					// limit(5)
 				);
 				resolve(onSnapshot(q, observer));
 			} catch (err) {

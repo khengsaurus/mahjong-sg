@@ -11,7 +11,6 @@ import './playerComponents.scss';
 const BottomPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
-	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const {
 		theme: { tileColor },
@@ -65,7 +64,11 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			)}
 
 			{/* Unused tiles */}
-			<UnusedTiles tiles={uTs} segment={Segment.BOTTOM} tag={frontBackTag} />
+			<UnusedTiles
+				tiles={uTs}
+				segment={Segment.BOTTOM}
+				tag={hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null}
+			/>
 
 			{/* Discarded tiles */}
 			{dTs?.length > 0 && (

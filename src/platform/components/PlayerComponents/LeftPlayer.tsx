@@ -2,7 +2,15 @@ import { DiscardedTiles, HiddenHand, ShownTiles, SuspenseTiles, UnusedTiles } fr
 import { useDynamicWidth } from 'platform/hooks';
 import { lazy, Suspense, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, FrontBackTag, Segment, Size, _ShownTileHeight, _ShownTileWidth } from 'shared/enums';
+import {
+	AppFlag,
+	FrontBackTag,
+	Segment,
+	Size,
+	_HiddenTileWidth,
+	_ShownTileHeight,
+	_ShownTileWidth
+} from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentProps } from 'shared/typesPlus';
@@ -13,8 +21,7 @@ const ShownHiddenHand = lazy(() => import('platform/components/Tiles/ShownHidden
 const LeftPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
-	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
-	const allHiddenTiles = player?.allHiddenTiles() || [];
+	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
 	const {
 		theme: { tileColor },
 		sizes: { tileSize = Size.MEDIUM },
@@ -27,16 +34,16 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 	const shownTilesRef = useRef(null);
 	useDynamicWidth({
 		ref: shownTilesRef,
-		tiles: nonFlowers.length + flowers.length,
+		countTs: nonFlowers.length + flowers.length,
 		tileSize,
-		dealer
+		add: dealer ? 1 : 0
 	});
 	const shownHiddenHandRef = useRef(null);
 	useDynamicWidth({
 		ref: shownHiddenHandRef,
-		tiles: player.allHiddenTiles().length,
+		countTs: player.allHiddenTiles().length,
 		tileSize,
-		add: 6
+		addPx: _HiddenTileWidth[tileSize]
 	});
 
 	return (
@@ -47,7 +54,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 					fallback={
 						<SuspenseTiles
 							height={_ShownTileHeight[tileSize]}
-							width={allHiddenTiles.length * _ShownTileWidth[tileSize]}
+							width={countHandTiles * _ShownTileWidth[tileSize]}
 							color={tileColor}
 							segment={Segment.LEFT}
 						/>
@@ -62,7 +69,7 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 					/>
 				</Suspense>
 			) : (
-				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.LEFT} />
+				<HiddenHand tiles={countHandTiles} segment={Segment.LEFT} />
 			)}
 
 			{/* Shown tiles */}
@@ -82,7 +89,11 @@ const LeftPlayer = (props: IPlayerComponentProps) => {
 			)}
 
 			{/* Unused tiles */}
-			<UnusedTiles tiles={uTs} segment={Segment.LEFT} tag={frontBackTag} />
+			<UnusedTiles
+				tiles={uTs}
+				segment={Segment.LEFT}
+				tag={hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null}
+			/>
 
 			{/* Discarded tiles */}
 			{dTs?.length > 0 && (

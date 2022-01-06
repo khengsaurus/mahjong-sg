@@ -12,7 +12,6 @@ const ShownHiddenHand = lazy(() => import('platform/components/Tiles/ShownHidden
 const TopPlayer = (props: IPlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
-	const frontBackTag = hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const {
 		theme: { tileColor },
@@ -65,7 +64,11 @@ const TopPlayer = (props: IPlayerComponentProps) => {
 			)}
 
 			{/* Unused tiles */}
-			<UnusedTiles tiles={uTs} segment={Segment.TOP} tag={frontBackTag} />
+			<UnusedTiles
+				tiles={uTs}
+				segment={Segment.TOP}
+				tag={hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null}
+			/>
 
 			{/* Discarded tiles */}
 			{dTs?.length > 0 && (
