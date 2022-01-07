@@ -26,6 +26,7 @@ import {
 	onSnapshot,
 	orderBy,
 	query,
+	runTransaction,
 	setDoc,
 	Unsubscribe,
 	updateDoc,
@@ -444,6 +445,22 @@ export class FirebaseService {
 			} catch (err) {
 				reject(err);
 			}
+		});
+	}
+
+	async runTransactionUpdate(gameId: string, values: any): Promise<void> {
+		return new Promise((resolve, reject) => {
+			runTransaction(this.fs, async transaction => {
+				const gameDocRef = doc(this.gamesRef, gameId);
+				await transaction.get(gameDocRef).then(gameDoc => {
+					if (!gameDoc.exists()) {
+						reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
+					} else {
+						transaction.update(gameDocRef, { ...values });
+						resolve();
+					}
+				});
+			});
 		});
 	}
 

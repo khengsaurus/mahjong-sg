@@ -36,7 +36,7 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHand) => {
 		[selectedTiles, setSelectedTiles]
 	);
 
-	const hiddenHand = useCallback(
+	const renderHiddenHand = useCallback(
 		(hTs: IHiddenTile[], lTa: IHiddenTile) => {
 			const revLTT = !isEmpty(lTa) ? revealTile(lTa, tHK) : null;
 			return (
@@ -75,7 +75,7 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHand) => {
 		[JSON.stringify(selectedTsRef), handSize, tHK]
 	);
 
-	return hiddenHand(hTs, lTa);
+	return renderHiddenHand(hTs, lTa);
 };
 
 export default BottomHiddenHand;

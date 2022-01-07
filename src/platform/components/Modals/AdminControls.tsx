@@ -4,9 +4,7 @@ import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { AppFlag, BotTimeout, LocalFlag } from 'shared/enums';
-import { IStore } from 'shared/store';
 import { IModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
@@ -36,14 +34,10 @@ const Scenarios = () => {
 	);
 };
 
-const AdminControls = ({ show, onClose }: IModalProps) => {
-	const { game, gameId, localGame } = useSelector((store: IStore) => store);
-	const isLocalGame = gameId === LocalFlag;
-	const currGame = isLocalGame ? localGame : game;
-	const [mHu, setMHu] = useState<boolean>(currGame?.mHu);
-	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(currGame?.bt));
-	const [bt, setBt] = useState<number>(currGame?.bt);
-	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
+const AdminControls = ({ game, show, onClose }: IModalProps) => {
+	const [mHu, setMHu] = useState<boolean>(game?.mHu);
+	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
+	const [bt, setBt] = useState<number>(game?.bt);
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -59,13 +53,11 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 	}
 
 	const closeAndUpdate = useCallback(() => {
-		if (currGame?.mHu !== mHu || currGame?.bt !== bt) {
-			const updatedGame = { ...currGame, mHu, bt };
-			updateGame(objToGame(updatedGame));
+		if (game?.mHu !== mHu || game?.bt !== bt) {
+			ServiceInstance.adminUpdateGame(game, game.id === LocalFlag, mHu, bt);
 		}
 		onClose();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currGame, mHu, bt, updateGame, onClose]);
+	}, [game, mHu, bt, onClose]);
 
 	const renderManualHuSelect = () => (
 		<ListItem style={{ padding: 0, justifyContent: 'space-between', display: 'flex', flexDirection: 'row' }}>
@@ -119,7 +111,9 @@ const AdminControls = ({ show, onClose }: IModalProps) => {
 						<FormControl component="fieldset">
 							{renderManualHuSelect()}
 							{renderBotTimeSelect()}
-							{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && !isLocalGame && <Scenarios />}
+							{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && game.id !== LocalFlag && (
+								<Scenarios />
+							)}
 						</FormControl>
 					</DialogContent>
 				</Dialog>

@@ -200,6 +200,20 @@ export class Service {
 		}
 	}
 
+	adminUpdateGame(game: Game, isLocalGame: boolean, mHu: boolean, bt: number) {
+		if (isLocalGame) {
+			game.mHu = mHu;
+			game.bt = bt;
+			this.updateGame(game, true);
+		} else {
+			try {
+				FBService.runTransactionUpdate(game.id, { mHu, bt });
+			} catch (err) {
+				console.error(err);
+			}
+		}
+	}
+
 	cleanupGames(userEmail: string) {
 		FBService.cleanupFinishedGames(userEmail);
 	}
