@@ -42,7 +42,7 @@ const ShownTiles = forwardRef<MutableRefObject<any>, IShownTiles>((props: IShown
 					tileRef={tile?.r}
 					tileCard={tile?.c}
 					segment={segment}
-					lastRef={lastThrownRef}
+					highlight={tile?.r === lastThrownRef}
 				/>
 			))}
 			{flowers.map(tile => (

@@ -1,6 +1,7 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
 import { history } from 'App';
+import $ from 'jquery';
 import { isEmpty } from 'lodash';
 import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
 import Controls from 'platform/components/Controls';
@@ -17,9 +18,9 @@ import { StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LocalFlag, Page, Platform, Status } from 'shared/enums';
-import { HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
+import { HomeScreenText } from 'shared/screenTexts';
 import { IStore, setGame } from 'shared/store';
 import { setLocalGame, setTHK } from 'shared/store/actions';
 import { findLeft, findOpp, findRight, getTileHashKey } from 'shared/util';
@@ -115,8 +116,16 @@ const Table = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gameId, isLocalGame, user?.uN]);
 
+	const currGame = isLocalGame ? localGame : game;
+
+	useEffect(() => {
+		const lTh = document.getElementById(`shown-tile-${currGame?.lTh?.r}`);
+		$(lTh)?.addClass('last');
+
+		return () => $(lTh)?.removeClass('last');
+	}, [currGame?.lTh?.r]);
+
 	const getMarkup = () => {
-		const currGame = isLocalGame ? localGame : game;
 		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {
 			const { _d = 0, fr = [0, 0], ps = [] } = currGame;
 			const currentWind = currGame?.repr() && currGame?.repr()[0];

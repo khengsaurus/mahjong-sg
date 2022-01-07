@@ -6,7 +6,8 @@ const config = {
 		// '**/__tests__/**getHands_others.test.tsx'
 		// '**/__tests__/**getDiscardCategories.test.tsx',
 		// '**/__tests__/**getHandObjectives.test.tsx',
-		// '**/__tests__/**getDiscards.test.tsx'
+		// '**/__tests__/**getDiscards.test.tsx',
+		// '**/__tests__/**eval.test.tsx'
 	],
 	clearMocks: true,
 	collectCoverage: false,

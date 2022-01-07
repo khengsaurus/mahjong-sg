@@ -6,7 +6,6 @@ interface ShownTileProps {
 	tileRef: number;
 	tileCard: string;
 	segment: Segment;
-	lastRef?: number;
 	highlight?: boolean;
 	classSuffix?: string;
 	onClick?: (p: any) => void;
@@ -31,7 +30,7 @@ function getClass(segment: Segment) {
  * @description Renders a ShownTile for IShownTile | IHiddenTile, hence tileCard needs to be unhashed and passed as a prop
  */
 const ShownTile = (props: ShownTileProps) => {
-	const { tileRef, tileCard, segment, lastRef, highlight, classSuffix, onClick } = props;
+	const { tileRef, tileCard, segment, highlight, classSuffix, onClick } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -39,7 +38,8 @@ const ShownTile = (props: ShownTileProps) => {
 		case 'hts':
 			return (
 				<img
-					className={`${divClass} ${highlight || lastRef === tileRef ? `last` : ``} ${classSuffix || ``}`}
+					id={`shown-tile-${tileRef}`}
+					className={`${divClass} ${highlight ? `last` : ``} ${classSuffix || ``}`}
 					src={getTileSrc(tileCard)}
 					alt="tile"
 					onClick={onClick}
@@ -50,7 +50,8 @@ const ShownTile = (props: ShownTileProps) => {
 			return (
 				<div className={`${divClass} ${classSuffix || ``}`}>
 					<img
-						className={`${bgClass} ${highlight || lastRef === tileRef ? `last` : ``} ${classSuffix || ``}`}
+						id={`shown-tile-${tileRef}`}
+						className={`${bgClass} ${highlight ? `last` : ``} ${classSuffix || ``}`}
 						src={getTileSrc(tileCard)}
 						alt="tile"
 						onClick={onClick}

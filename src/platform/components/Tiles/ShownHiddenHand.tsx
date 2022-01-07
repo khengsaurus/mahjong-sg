@@ -39,8 +39,8 @@ const ShownHiddenHand = forwardRef<MutableRefObject<any>, IShownHH>((props: ISho
 					tileRef={lTa.r}
 					tileCard={revLTT.c}
 					segment={segment}
-					highlight
 					classSuffix={lastSuffix}
+					highlight
 				/>
 			)}
 		</div>

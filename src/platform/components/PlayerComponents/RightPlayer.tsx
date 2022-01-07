@@ -96,14 +96,7 @@ const RightPlayer = (props: IPlayerComponentProps) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs?.length > 0 && (
-				<DiscardedTiles
-					className="vtss discarded"
-					tiles={dTs}
-					segment={Segment.RIGHT}
-					lastThrownRef={lastThrown?.r}
-				/>
-			)}
+			{dTs?.length > 0 && <DiscardedTiles className="vtss discarded" tiles={dTs} segment={Segment.RIGHT} />}
 		</div>
 	);
 };

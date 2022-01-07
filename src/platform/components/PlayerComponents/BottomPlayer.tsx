@@ -71,14 +71,7 @@ const BottomPlayer = (props: IPlayerComponentProps) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs?.length > 0 && (
-				<DiscardedTiles
-					className="htss discarded"
-					tiles={dTs}
-					segment={Segment.BOTTOM}
-					lastThrownRef={lastThrown?.r}
-				/>
-			)}
+			{dTs?.length > 0 && <DiscardedTiles className="htss discarded" tiles={dTs} segment={Segment.BOTTOM} />}
 		</div>
 	);
 };
