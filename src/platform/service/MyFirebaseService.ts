@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import { Network } from '@capacitor/network';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import {
 	Auth,
@@ -10,7 +11,7 @@ import {
 	User as FirebaseUser,
 	UserCredential
 } from 'firebase/auth';
-import { child, Database, get, getDatabase, ref, set } from 'firebase/database';
+import { child, Database, get, getDatabase, onValue, ref, set } from 'firebase/database';
 import {
 	addDoc,
 	collection,
@@ -19,8 +20,8 @@ import {
 	doc,
 	DocumentData,
 	Firestore,
-	getDoc,
-	getDocs,
+	getDocFromServer,
+	getDocsFromServer,
 	getFirestore,
 	limit,
 	onSnapshot,
@@ -33,7 +34,18 @@ import {
 	where
 } from 'firebase/firestore';
 import moment from 'moment';
-import { BackgroundColor, FBCollection, FBDatabase, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
+import { env } from 'process';
+import {
+	BackgroundColor,
+	EEvent,
+	FBCollection,
+	FBDatabase,
+	PaymentType,
+	Platform,
+	Size,
+	TableColor,
+	TileColor
+} from 'shared/enums';
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
@@ -43,23 +55,29 @@ import { gameToObj, playerToObj, userToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
 	private user: FirebaseUser;
+	private app: FirebaseApp;
+	private auth: Auth;
 	private db: Database;
 	private fs: Firestore;
 	private usersRef: CollectionReference;
 	private gamesRef: CollectionReference;
 	private logsRef: CollectionReference;
-	private app: FirebaseApp;
-	private auth: Auth;
+	private isMobileConnected: boolean; // This will only be true on mobile
+	public isServiceConnected: boolean;
 
 	constructor() {
 		this.initApp().then(res => {
 			if (res) {
 				this.initAuth();
-				this.db = getDatabase(this.app, FirebaseConfig.databaseUrl);
 				this.fs = getFirestore(this.app);
+				this.db = getDatabase(this.app, FirebaseConfig.databaseUrl);
 				this.usersRef = collection(this.fs, FBCollection.USERREPR);
 				this.gamesRef = collection(this.fs, FBCollection.GAMES);
 				this.logsRef = collection(this.fs, FBCollection.LOGS);
+				this.initFBConnectionWatcher();
+				if (env.REACT_APP_PLATFORM === Platform.MOBILE) {
+					this.initDeviceNetworkWatcher();
+				}
 			}
 		});
 	}
@@ -77,6 +95,31 @@ export class FirebaseService {
 		});
 	}
 
+	initDeviceNetworkWatcher() {
+		if (Capacitor.isPluginAvailable('Network')) {
+			Network.addListener(EEvent.NETWORK_CHANGE, status => {
+				this.isMobileConnected = status.connected || false;
+			});
+		}
+	}
+
+	// https://firebase.google.com/docs/database/web/offline-capabilities
+	initFBConnectionWatcher() {
+		let timeoutRef: NodeJS.Timeout = null;
+		const connectedRef = ref(this.db, '.info/connected');
+
+		onValue(connectedRef, snap => {
+			clearTimeout(timeoutRef);
+			timeoutRef = setTimeout(() => {
+				if (snap.val() === true && this.isMobileConnected) {
+					this.isServiceConnected = true;
+				} else {
+					this.isServiceConnected = false;
+				}
+			}, 300);
+		});
+	}
+
 	/**
 	 * @see https://github.com/firebase/firebase-js-sdk/issues/5552
 	 */
@@ -85,6 +128,8 @@ export class FirebaseService {
 			this.auth = initializeAuth(this.app, {
 				persistence: indexedDBLocalPersistence
 			});
+		} else {
+			this.auth = initializeAuth(this.app);
 		}
 		this.auth.onAuthStateChanged(user => {
 			console.info(user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO);
@@ -208,7 +253,7 @@ export class FirebaseService {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const q = query(this.usersRef, where('uN', '==', uN));
-				const querySnapshot = await getDocs(q);
+				const querySnapshot = await getDocsFromServer(q);
 				if (querySnapshot?.empty) {
 					resolve(true);
 				} else {
@@ -226,7 +271,7 @@ export class FirebaseService {
 			const res = [];
 			try {
 				const q = query(this.usersRef, where('email', '==', email), limit(1));
-				const querySnapshot = await getDocs(q);
+				const querySnapshot = await getDocsFromServer(q);
 				querySnapshot.forEach(doc => {
 					res.push({ id: doc.id, ...doc.data() });
 				});
@@ -248,7 +293,7 @@ export class FirebaseService {
 				where('uN', '<=', partUsername + '\uf8ff'),
 				limit(3)
 			);
-			const querySnapshot = await getDocs(q);
+			const querySnapshot = await getDocsFromServer(q);
 			querySnapshot.forEach(doc => {
 				users.push({ id: doc.id, ...doc.data() });
 			});
@@ -304,7 +349,7 @@ export class FirebaseService {
 	async cleanupFinishedGames(userEmail: string) {
 		if (userEmail) {
 			const q = query(this.gamesRef, where('es', 'array-contains', userEmail));
-			const games = await getDocs(q);
+			const games = await getDocsFromServer(q);
 			games.forEach(g => {
 				let lastUpdated = g.data()?.up;
 				if (lastUpdated && lastUpdated?.toDate) {
@@ -324,7 +369,7 @@ export class FirebaseService {
 	async getGameById(gameId?: string) {
 		try {
 			const gameRef = doc(this.gamesRef, gameId);
-			await getDoc(gameRef).then(doc => {
+			await getDocFromServer(gameRef).then(doc => {
 				return { id: doc.id, ...doc.data() };
 			});
 		} catch (err) {

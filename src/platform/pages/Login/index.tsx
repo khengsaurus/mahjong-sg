@@ -1,5 +1,5 @@
 import Alert from '@material-ui/lab/Alert';
-import { Collapse, TextField } from '@mui/material';
+import { Collapse, Dialog, DialogContent, Fade, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
 import { AboutButton } from 'platform/components/Buttons/TextNavButton';
@@ -15,7 +15,8 @@ import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const Login = () => {
-	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
+	const { login, setUserEmail, alert, setAlert, showDisconnectedAlert, setShowDisconnectedAlert } =
+		useContext(AppContext);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -127,6 +128,33 @@ const Login = () => {
 		/>
 	);
 
+	const DisconnectedAlert = () => (
+		<Fade in={showDisconnectedAlert} timeout={Transition.FAST} unmountOnExit>
+			<div>
+				<Dialog
+					open={showDisconnectedAlert}
+					BackdropProps={{ invisible: true }}
+					onClose={() => {
+						setShowDisconnectedAlert(false);
+					}}
+				>
+					<DialogContent>
+						<StyledText title="Your connection has been interrupted" variant="subtitle1" />
+						<Row style={{ alignItems: 'center' }}>
+							<StyledButton
+								label="Dismiss"
+								onClick={() => {
+									setShowDisconnectedAlert(false);
+								}}
+								padding="0"
+							/>
+						</Row>
+					</DialogContent>
+				</Dialog>
+			</div>
+		</Fade>
+	);
+
 	const markup = () => (
 		<>
 			<StyledText title={HomeScreenText.HOME_TITLE} />
@@ -180,6 +208,7 @@ const Login = () => {
 				<AboutButton />
 				<PlayAIButton />
 			</Row>
+			<DisconnectedAlert />
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<>
 					<br />

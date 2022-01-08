@@ -13,10 +13,6 @@ export class Service {
 	private store: Store;
 
 	constructor() {
-		this.init();
-	}
-
-	async init() {
 		if (this.fbService) {
 			console.info(InfoMessage.SERVER_READY);
 		} else {
