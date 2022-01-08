@@ -224,6 +224,7 @@ const NewGame = () => {
 									: 0,
 							transition: TransitionSpeed.MEDIUM
 						}}
+						disableShortcut
 					/>
 					<StyledButton
 						label={ButtonText.OPTIONS}

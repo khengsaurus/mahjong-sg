@@ -9,9 +9,10 @@ interface ITextNavButton extends IHasStyle {
 	label: PageName | ButtonText;
 	route: Page;
 	shortcut: Shortcut;
+	disableShortcut?: boolean;
 }
 
-const TextNavButton = ({ label, shortcut, route, style = {} }: ITextNavButton) => {
+const TextNavButton = ({ label, shortcut, route, style = {}, disableShortcut = false }: ITextNavButton) => {
 	const handleShortcut = useCallback(
 		e => {
 			if (e.key === shortcut) {
@@ -20,13 +21,21 @@ const TextNavButton = ({ label, shortcut, route, style = {} }: ITextNavButton) =
 		},
 		[shortcut, route]
 	);
-	useDocumentListener(EEvent.KEYDOWN, handleShortcut);
+	useDocumentListener(EEvent.KEYDOWN, disableShortcut ? null : handleShortcut);
 
 	return <StyledButton label={label} navigate={route} style={{ ...style }} />;
 };
 
-const HomeButton = ({ style = {}, label = PageName.HOME }: IHomeButton) => {
-	return <TextNavButton label={label} route={Page.INDEX} shortcut={Shortcut.HOME} style={style} />;
+const HomeButton = ({ style = {}, label = PageName.HOME, disableShortcut = false }: IHomeButton) => {
+	return (
+		<TextNavButton
+			label={label}
+			route={Page.INDEX}
+			shortcut={Shortcut.HOME}
+			style={style}
+			disableShortcut={disableShortcut}
+		/>
+	);
 };
 
 const NewGameButton = ({ style = {} }: IHasStyle) => {

@@ -4,12 +4,12 @@ import { EEvent } from 'shared/enums';
 
 function useDocumentListener(event: EEvent, callback: (p?: any) => any, apply = true) {
 	useEffect(() => {
-		if (apply) {
+		if (apply && callback) {
 			document.addEventListener(event, callback);
 		}
 
 		return () => {
-			if (apply) {
+			if (apply && callback) {
 				document.removeEventListener(event, callback);
 			}
 		};
@@ -18,12 +18,12 @@ function useDocumentListener(event: EEvent, callback: (p?: any) => any, apply = 
 
 function useWindowListener(event: EEvent, callback: (p?: any) => any, apply = true) {
 	useEffect(() => {
-		if (apply) {
+		if (apply && callback) {
 			window.addEventListener(event, callback);
 		}
 
 		return () => {
-			if (apply) {
+			if (apply && callback) {
 				window.removeEventListener(event, callback);
 			}
 		};
