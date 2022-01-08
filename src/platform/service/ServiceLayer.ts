@@ -22,8 +22,11 @@ export class Service {
 		this.store = store;
 	}
 
-	FBAuthenticated() {
-		return FBService.userAuthenticated();
+	/**
+	 * @params timeout, default 500ms
+	 */
+	FBAuthenticated(timeout = 500) {
+		return FBService.userAuthenticated(timeout);
 	}
 
 	async FBAuthRegister(props: IEmailPass): Promise<string> {

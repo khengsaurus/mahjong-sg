@@ -1,10 +1,11 @@
+import { Fade } from '@material-ui/core';
 import { history } from 'App';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
-import { Loader } from 'platform/components/Loader';
+import { Loader, NetworkLoader } from 'platform/components/Loader';
 import { useAndroidBack, useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
-import { Centered, Main } from 'platform/style/StyledComponents';
+import { Centered, Main, Row } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,7 +36,7 @@ const HomePage = ({
 }: IHomePage) => {
 	const { user } = useSelector((state: IStore) => state);
 	const { setPlayers } = useContext(AppContext);
-	const { verifyingSession } = useLocalSession(skipVerification);
+	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
 	const marginBottom = offset || process.env.REACT_APP_PLATFORM === Platform.MOBILE ? Offset.HOMEPAGE_MOBILE : null;
@@ -73,11 +74,25 @@ const HomePage = ({
 		};
 	}, [ready, fallbackTitle, timeout]);
 
+	const DisconnectedAlert = () => (
+		<div className="top-alert">
+			<Row>
+				<NetworkLoader />
+				<StyledText title="Waiting for network..." variant="subtitle2" padding="0px 0px 0px 10px" />
+			</Row>
+		</div>
+	);
+
 	return (
 		<HomeTheme>
 			<Main>
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
-					<Centered style={{ marginBottom }}>{markup()}</Centered>
+					<>
+						<Fade in={!skipVerification && !isAppConnected} unmountOnExit>
+							<DisconnectedAlert />
+						</Fade>
+						<Centered style={{ marginBottom }}>{markup()}</Centered>
+					</>
 				) : (
 					pendingScreen
 				)}

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { Centered } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
+import { ScaleLoader } from 'react-spinners';
 import BarLoader from 'react-spinners/BarLoader';
 import { TextColor } from 'shared/enums';
 import { IStore } from 'shared/store';
@@ -21,10 +22,18 @@ export const Loader = (props: LoaderProps) => {
 	const {
 		theme: { mainTextColor = TextColor.DARK }
 	} = useSelector((state: IStore) => state);
-	const { color = mainTextColor || 'white', css = override, height = 2, width = 80 } = props;
+	const { color = mainTextColor || 'black', css = override, height = 2, width = 80 } = props;
 	return (
 		<Centered>
 			<BarLoader loading={true} color={color} css={css} height={height} width={width} />
 		</Centered>
 	);
+};
+
+export const NetworkLoader = (props: LoaderProps) => {
+	const {
+		theme: { mainTextColor = TextColor.DARK }
+	} = useSelector((state: IStore) => state);
+	const { color = mainTextColor || 'black', css = override, height = 14, width = 2 } = props;
+	return <ScaleLoader loading={true} color={color} css={css} height={height} width={width} margin={2} />;
 };

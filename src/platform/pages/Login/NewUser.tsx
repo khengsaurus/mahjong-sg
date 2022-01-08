@@ -6,7 +6,7 @@ import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { AlertStatus, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { InfoMessage } from 'shared/messages';
@@ -17,11 +17,15 @@ const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
 	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
+	const checkAuthTimeoutRef = useRef<NodeJS.Timeout>(null);
 
 	useEffect(() => {
-		if (!ServiceInstance.FBAuthenticated()) {
-			history.push(Page.LOGIN);
-		}
+		clearTimeout(checkAuthTimeoutRef.current);
+		checkAuthTimeoutRef.current = setTimeout(async () => {
+			if (await !ServiceInstance.FBAuthenticated()) {
+				history.push(Page.LOGIN);
+			}
+		}, 500);
 	}, []);
 
 	useEffect(() => {
