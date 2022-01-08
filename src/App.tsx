@@ -1,5 +1,6 @@
 import { createBrowserHistory } from 'history';
 import About from 'platform/pages/About';
+import DataPolicy from 'platform/pages/DataPolicy';
 import Home from 'platform/pages/Home';
 import JoinGame from 'platform/pages/JoinGame';
 import Login from 'platform/pages/Login';
@@ -34,6 +35,7 @@ function App() {
 								<Route exact path={Page.JOINGAME} component={JoinGame} />
 								<Route exact path={Page.TABLE} component={Table} />
 								<Route exact path={Page.ABOUT} component={About} />
+								<Route exact path={Page.DATAPOLICY} component={DataPolicy} />
 								{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 									<Route exact path={Page.SAMPLE} component={Sample} />
 								)}

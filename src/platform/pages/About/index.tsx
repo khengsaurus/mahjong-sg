@@ -13,10 +13,7 @@ const About = () => {
 
 	const renderLocalContent = () => (
 		<div className="content">
-			<h3>
-				Hello! <br />
-				Big thanks for using this {platform} :)
-			</h3>
+			<h3>Hello! Big thanks for using this {platform} :)</h3>
 			<p>
 				We tried to cover all the rules of Singapore Mahjong here, but it still has some limitations. Do read
 				through the following to understand the {platform} better.
@@ -200,15 +197,19 @@ const About = () => {
 			</ul>
 			<br />
 			<p>
-				This {platform} does not collect any of your data, and currently does not support username change or
-				password reset. An email address can only be used to register one account.{' '}
+				This {platform} currently does not support username change or password reset. An email address can only
+				be used to register one account. If you have any feedback or would like to get in touch, do drop us an
+				email at mahjongsgapp@gmail.com.{' '}
+			</p>
+			<br />
+			<p>
 				{process.env.REACT_APP_PLATFORM === Platform.MOBILE
-					? 'We are also hosted on mahjongsg.netlify.app. '
-					: ''}
-				If you have any feedback or would like to get in touch, do drop us an email at mahjongsgapp@gmail.com.
+					? 'Find us online at mahjongsg.netlify.app!'
+					: 'Find Mahjong SG in the app store today!'}
 			</p>
 			<br />
 			<h3>Thank you for reading, and have fun!</h3>
+			<br />
 		</div>
 	);
 

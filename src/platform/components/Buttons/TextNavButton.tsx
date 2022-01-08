@@ -8,11 +8,11 @@ import { ButtonText } from 'shared/screenTexts';
 interface ITextNavButton extends IHasStyle {
 	label: PageName | ButtonText;
 	route: Page;
-	shortcut: Shortcut;
+	shortcut?: Shortcut;
 	disableShortcut?: boolean;
 }
 
-const TextNavButton = ({ label, shortcut, route, style = {}, disableShortcut = false }: ITextNavButton) => {
+const TextNavButton = ({ label, route, shortcut, disableShortcut = false, style = {} }: ITextNavButton) => {
 	const handleShortcut = useCallback(
 		e => {
 			if (e.key === shortcut) {
@@ -47,7 +47,21 @@ const JoinGameButton = ({ style = {} }: IHasStyle) => {
 };
 
 const AboutButton = ({ style = {} }: IHasStyle) => {
-	return <TextNavButton label={PageName.ABOUT} route={Page.ABOUT} shortcut={null} style={style} />;
+	return (
+		<TextNavButton label={PageName.ABOUT} route={Page.ABOUT} shortcut={null} disableShortcut={true} style={style} />
+	);
 };
 
-export { HomeButton, NewGameButton, JoinGameButton, AboutButton };
+const DataButton = () => {
+	return (
+		<TextNavButton
+			label={ButtonText.DATA}
+			route={Page.DATAPOLICY}
+			shortcut={null}
+			disableShortcut={true}
+			style={{ fontSize: 12, padding: 0 }}
+		/>
+	);
+};
+
+export { AboutButton, DataButton, HomeButton, JoinGameButton, NewGameButton, TextNavButton };

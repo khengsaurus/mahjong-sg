@@ -82,14 +82,23 @@ export const MainTransparent = styled(Main)`
 	background-color: transparent;
 `;
 
-export const PlatformSpecs = styled.div`
+export const Spec = styled.div`
 	position: absolute;
 	display: flex;
 	flex-direction: column;
-	bottom: 5px;
-	right: 5px;
-	font-size: 10px;
+	bottom: 10px;
+	font-size: 12px;
+	margin-bottom: const(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
 	color: ${props => props.theme.mainTextColor};
+`;
+
+export const BottomLeft = styled(Spec)`
+	left: 10px;
+`;
+
+export const BottomRight = styled(Spec)`
+	right: 10px;
 `;
 
 export const TableDiv = styled.div`

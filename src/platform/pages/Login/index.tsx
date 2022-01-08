@@ -2,11 +2,11 @@ import Alert from '@material-ui/lab/Alert';
 import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
-import { AboutButton } from 'platform/components/Buttons/TextNavButton';
+import { AboutButton, DataButton } from 'platform/components/Buttons/TextNavButton';
 import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { Row } from 'platform/style/StyledComponents';
+import { Spec, Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
@@ -180,6 +180,9 @@ const Login = () => {
 				<AboutButton />
 				<PlayAIButton />
 			</Row>
+			<Spec>
+				<DataButton />
+			</Spec>
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<>
 					<br />

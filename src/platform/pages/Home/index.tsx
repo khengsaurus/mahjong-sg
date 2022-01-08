@@ -1,14 +1,14 @@
 import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
-import { AboutButton, JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
+import { AboutButton, DataButton, JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
-import { PlatformSpecs } from 'platform/style/StyledComponents';
+import { Spec } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, EEvent, Shortcut, Transition } from 'shared/enums';
+import { EEvent, Shortcut, Transition } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './home.scss';
@@ -40,9 +40,9 @@ const Home = () => {
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
 			<AboutButton />
 			<LogoutButton />
-			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
-				<PlatformSpecs>{`Platform: ${process.env.REACT_APP_PLATFORM}`}</PlatformSpecs>
-			)}
+			<Spec>
+				<DataButton />
+			</Spec>
 			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<SettingsWindow
