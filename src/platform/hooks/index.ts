@@ -1,3 +1,4 @@
+import useAndroidKeyboardListener from './useAndroidKeyboardListener';
 import { useAndroidBack, useCloseListener, useDocumentListener, useWindowListener } from './listeners';
 import useLocalObj from './useLocalObj';
 import useLocalSession from './useLocalSession';
@@ -6,6 +7,7 @@ import { useDynamicWidth, useWindowHeight, useWindowSize } from './useWindowSize
 
 export {
 	useAndroidBack,
+	useAndroidKeyboardListener,
 	useCloseListener,
 	useDocumentListener,
 	useLocalSession,
