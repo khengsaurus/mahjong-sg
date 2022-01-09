@@ -112,22 +112,22 @@ const HomePage = ({
 		};
 	}, [ready, fallbackTitle, timeout]);
 
-	const DisconnectedAlert = () => (
-		<div className="top-alert">
-			<Row>
-				<NetworkLoader />
-				<StyledText title="Waiting for network..." variant="subtitle2" padding="0px 0px 0px 10px" />
-			</Row>
-		</div>
-	);
-
 	return (
 		<HomeTheme>
 			<Main>
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
 					<>
 						<Fade in={!skipVerification && !isAppConnected} unmountOnExit>
-							<DisconnectedAlert />
+							<div className="top-alert">
+								<Row>
+									<NetworkLoader />
+									<StyledText
+										title="Waiting for network..."
+										variant="subtitle2"
+										padding="0px 0px 0px 10px"
+									/>
+								</Row>
+							</div>
 						</Fade>
 						<Centered style={{ marginBottom }}>{markup()}</Centered>
 					</>
