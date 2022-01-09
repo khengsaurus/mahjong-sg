@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 import { AppFlag, FrontBackTag, Segment, Size, _ShownTileHeight, _ShownTileWidth } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
-import { IPlayerComponentProps } from 'shared/typesPlus';
+import { PlayerComponentProps } from 'shared/typesPlus';
 import './playerComponents.scss';
 
 const ShownHiddenHand = lazy(() => import('platform/components/Tiles/ShownHiddenHand'));
 
-const TopPlayer = (props: IPlayerComponentProps) => {
+const TopPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const allHiddenTiles = player?.allHiddenTiles() || [];

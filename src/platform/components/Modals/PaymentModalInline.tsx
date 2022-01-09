@@ -8,13 +8,13 @@ import { Amounts } from 'shared/enums';
 import { Game } from 'shared/models';
 import { sendChips } from './PaymentModal';
 
-interface IPaymentModalInline {
+interface PaymentModalInlineProps {
 	game: Game;
 	playerSeat: number;
 	updateGame: (game: Game) => void;
 }
 
-const PaymentModalInline = ({ game, playerSeat, updateGame }: IPaymentModalInline) => {
+const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInlineProps) => {
 	const winner = game.hu[0];
 	const [amountStr, setAmountStr] = useState<string>('');
 	const [amount, setAmount] = useState<number>(2 ** game.hu[1] * (game.thB === playerSeat ? 2 : 1) || 0);

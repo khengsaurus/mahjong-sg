@@ -3,9 +3,9 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
-import { ILeaveAlert } from 'shared/typesPlus';
+import { LeaveAlertProps } from 'shared/typesPlus';
 
-const LeaveAlert = ({ show, onClose }: ILeaveAlert) => {
+const LeaveAlert = ({ show, onClose }: LeaveAlertProps) => {
 	return (
 		<Dialog
 			open={show}

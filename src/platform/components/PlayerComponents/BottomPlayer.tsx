@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size, _ShownTileHeight, _ShownTileWidth } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
-import { IPlayerComponentProps } from 'shared/typesPlus';
+import { PlayerComponentProps } from 'shared/typesPlus';
 import BottomHiddenHand from '../Tiles/BottomHiddenHand';
 import './playerComponents.scss';
 
-const BottomPlayer = (props: IPlayerComponentProps) => {
+const BottomPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const allHiddenTiles = player?.allHiddenTiles() || [];

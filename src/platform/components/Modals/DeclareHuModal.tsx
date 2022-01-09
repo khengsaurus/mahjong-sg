@@ -5,10 +5,10 @@ import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { HandPoint } from 'shared/handEnums';
-import { IDeclareHuModalProps, IPoint } from 'shared/typesPlus';
+import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: IDeclareHuModalProps) => {
+const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: DeclareHuModalProps) => {
 	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
 	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
 	const [zimo, setZimo] = useState(!!HH?.self);

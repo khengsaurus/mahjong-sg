@@ -1,9 +1,9 @@
 import { Dialog, DialogContent } from '@mui/material';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { MainTransparent } from 'platform/style/StyledComponents';
-import { IModalProps } from 'shared/typesPlus';
+import { ModalProps } from 'shared/typesPlus';
 
-const GameOptions = ({ onClose, show, Content }: IModalProps) => {
+const GameOptions = ({ onClose, show, Content }: ModalProps) => {
 	// const transform = process.env.REACT_APP_PLATFORM === 'mobile' ? `translateY(-${Offset.HALF_MOBILE})` : null;
 
 	return (

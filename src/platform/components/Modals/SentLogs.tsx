@@ -2,11 +2,11 @@ import { Scrollable } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import React, { useCallback, useEffect } from 'react';
 
-interface ISentLogs {
+interface SentLogsProps {
 	logs?: string[];
 }
 
-const SentLogs = ({ logs }: ISentLogs) => {
+const SentLogs = ({ logs }: SentLogsProps) => {
 	const sentLogsId = 'sent-logs';
 
 	const scrollSentLogs = useCallback(() => {

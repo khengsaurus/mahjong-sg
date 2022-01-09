@@ -5,14 +5,14 @@ import { useCallback } from 'react';
 import { EEvent, Page, PageName, Shortcut } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 
-interface ITextNavButton extends IHasStyle {
+interface TextNavButtonProps extends IHasStyle {
 	label: PageName | ButtonText;
 	route: Page;
 	shortcut?: Shortcut;
 	disableShortcut?: boolean;
 }
 
-const TextNavButton = ({ label, route, shortcut, disableShortcut = false, style = {} }: ITextNavButton) => {
+const TextNavButton = ({ label, route, shortcut, disableShortcut = false, style = {} }: TextNavButtonProps) => {
 	const handleShortcut = useCallback(
 		e => {
 			if (e.key === shortcut) {

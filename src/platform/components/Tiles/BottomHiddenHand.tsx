@@ -9,12 +9,12 @@ import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { revealTile, triggerHaptic } from 'shared/util';
 
-interface IBottomHiddenHand {
+interface BottomHiddenHandProps {
 	hTs: IHiddenTile[];
 	lTa?: IHiddenTile | IShownTile;
 }
 
-const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHand) => {
+const BottomHiddenHand = ({ hTs, lTa }: BottomHiddenHandProps) => {
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const {
 		sizes: { handSize },

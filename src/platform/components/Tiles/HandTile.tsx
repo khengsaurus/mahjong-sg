@@ -1,14 +1,14 @@
 import React from 'react';
 import getTileSrc from 'shared/images';
 
-interface IHandTile {
+interface HandTileProps {
 	card: string;
 	selected: boolean;
 	last: boolean;
 	callback: () => void;
 }
 
-const HandTile: React.FC<IHandTile> = (props: IHandTile) => {
+const HandTile: React.FC<HandTileProps> = (props: HandTileProps) => {
 	const { card, selected, last, callback } = props;
 	return (
 		<div

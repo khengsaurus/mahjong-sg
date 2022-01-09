@@ -2,9 +2,9 @@ import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
-import { ITableNotif } from 'shared/typesPlus';
+import { TableNotifProps } from 'shared/typesPlus';
 
-const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: ITableNotif) => {
+const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: TableNotifProps) => {
 	return (
 		<Dialog
 			open={timeout > 0}

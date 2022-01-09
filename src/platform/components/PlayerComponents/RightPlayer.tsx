@@ -13,12 +13,12 @@ import {
 } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
-import { IPlayerComponentProps } from 'shared/typesPlus';
+import { PlayerComponentProps } from 'shared/typesPlus';
 import './playerComponents.scss';
 
 const ShownHiddenHand = lazy(() => import('platform/components/Tiles/ShownHiddenHand'));
 
-const RightPlayer = (props: IPlayerComponentProps) => {
+const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);

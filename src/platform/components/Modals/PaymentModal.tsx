@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { Amounts, LocalFlag } from 'shared/enums';
 import { Game, User } from 'shared/models';
 import { IStore } from 'shared/store';
-import { IModalProps } from 'shared/typesPlus';
+import { ModalProps } from 'shared/typesPlus';
 
 export async function sendChips(
 	game: Game,
@@ -24,7 +24,7 @@ export async function sendChips(
 	sendCallback && sendCallback();
 }
 
-const PaymentModal = ({ playerSeat, show, updateGame, onClose }: IModalProps) => {
+const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => {
 	const { game, gameId, localGame } = useSelector((store: IStore) => store);
 	const [recipientIndex, setRecipientIndex] = useState(10);
 	const [amount, setAmount] = useState(0);

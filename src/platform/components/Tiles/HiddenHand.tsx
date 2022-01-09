@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import { Segment } from 'shared/enums';
 import { generateNumbers } from 'shared/util';
 
-interface IHiddenHand {
+interface HiddenHandProps {
 	tiles: number;
 	segment: Segment;
 }
 
-const HiddenHand = ({ tiles, segment }: IHiddenHand) => {
+const HiddenHand = ({ tiles, segment }: HiddenHandProps) => {
 	const tilesArray = useMemo(() => generateNumbers(1, tiles), [tiles]);
 
 	return segment === Segment.TOP ? (

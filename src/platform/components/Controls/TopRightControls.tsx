@@ -8,7 +8,7 @@ import { Size, TableColor } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
-const TopRightControls = (props: ITopRightControls) => {
+const TopRightControls = (props: TRControlsProps) => {
 	const { handlePay, handleLogs, showLogs, showText } = props;
 	const {
 		theme: { tableColor = TableColor.GREEN },

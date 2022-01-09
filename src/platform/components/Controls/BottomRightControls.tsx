@@ -5,7 +5,7 @@ import { Size } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
-const BottomRightControls = (props: IBottomRightControls) => {
+const BottomRightControls = (props: BRControlsProps) => {
 	const {
 		handleThrow,
 		handleDraw,

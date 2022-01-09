@@ -23,13 +23,9 @@ import { ErrorMessage } from 'shared/messages';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setSizes, setTheme } from 'shared/store/actions';
-import { IModalProps } from 'shared/typesPlus';
+import { ModalProps } from 'shared/typesPlus';
 import { getTheme } from 'shared/util';
 import './settingsWindow.scss';
-
-interface ISettingsWindow extends IModalProps {
-	accActions?: boolean;
-}
 
 interface IPreference {
 	label: string;
@@ -39,7 +35,11 @@ interface IPreference {
 	handleSelect: (value: Size | BackgroundColor | TableColor | TileColor) => void;
 }
 
-const SettingsWindow = ({ offset, onClose, show, accActions = false }: ISettingsWindow) => {
+interface SettingsWindowProps extends ModalProps {
+	accActions?: boolean;
+}
+
+const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsWindowProps) => {
 	const { alert, handleLocalUO, setAlert, logout } = useContext(AppContext);
 	const { user, theme, sizes } = useSelector((state: IStore) => state);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);

@@ -5,7 +5,7 @@ import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { AppFlag, BotTimeout, LocalFlag } from 'shared/enums';
-import { IModalProps } from 'shared/typesPlus';
+import { ModalProps } from 'shared/typesPlus';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
 import sample_pong_hu from 'shared/__mock__/sample_pong_hu.json';
@@ -34,7 +34,7 @@ const Scenarios = () => {
 	);
 };
 
-const AdminControls = ({ game, show, onClose }: IModalProps) => {
+const AdminControls = ({ game, show, onClose }: ModalProps) => {
 	const [mHu, setMHu] = useState<boolean>(game?.mHu);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
 	const [bt, setBt] = useState<number>(game?.bt);

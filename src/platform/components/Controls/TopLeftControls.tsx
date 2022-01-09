@@ -13,13 +13,13 @@ import './controls.scss';
 interface IHasFontSize {
 	fontSize: Size;
 }
-interface IControlsButton {
+interface ControlsButtonProps {
+	size: Size;
 	Icon: React.FC<IHasFontSize>;
 	onClick: () => void;
-	size: Size;
 }
 
-const ControlsButton = ({ Icon, onClick, size }: IControlsButton) => (
+const ControlsButton = ({ Icon, onClick, size }: ControlsButtonProps) => (
 	<IconButton className="icon-button" onClick={onClick} disableRipple>
 		<Icon fontSize={size} />
 	</IconButton>
@@ -34,7 +34,7 @@ const TopLeftControls = ({
 	showText,
 	isAdmin,
 	texts
-}: ITopLeftControls) => {
+}: TLControlsProps) => {
 	const {
 		gameId,
 		sizes: { controlsSize = Size.MEDIUM }

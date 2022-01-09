@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { IAnnounceHuModalProps } from 'shared/typesPlus';
+import { AnnounceHuModalProps } from 'shared/typesPlus';
 import { getHandDesc, isBefore } from 'shared/util';
 import SentLogs from './SentLogs';
 
@@ -23,7 +23,7 @@ const AnnounceHuModal = ({
 	showNextRound,
 	updateGame,
 	onClose: handleShow
-}: IAnnounceHuModalProps) => {
+}: AnnounceHuModalProps) => {
 	const user = useSelector((store: IStore) => store.user);
 	const { hu = [], thB = 0, draw = false, on = true, _d = 0, ps, logs } = game || {};
 

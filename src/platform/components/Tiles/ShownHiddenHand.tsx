@@ -4,7 +4,7 @@ import { Segment } from 'shared/enums';
 import { revealTile } from 'shared/util';
 import ShownTile from './ShownTile';
 
-interface IShownHH {
+interface ShownHHProps {
 	className?: string;
 	hTs?: IHiddenTile[];
 	lTa?: IShownTile | IHiddenTile;
@@ -13,7 +13,7 @@ interface IShownHH {
 	lastSuffix?: string;
 }
 
-function compare(prev: IShownHH, next: IShownHH) {
+function compare(prev: ShownHHProps, next: ShownHHProps) {
 	return (
 		prev.className === next.className &&
 		prev.tHK === next.tHK &&
@@ -24,27 +24,29 @@ function compare(prev: IShownHH, next: IShownHH) {
 	);
 }
 
-const ShownHiddenHand = forwardRef<MutableRefObject<any>, IShownHH>((props: IShownHH, ref?: MutableRefObject<any>) => {
-	const { className, hTs, lTa, tHK, segment, lastSuffix } = props;
-	const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
-	return (
-		<div className={className} ref={ref}>
-			{hTs.map((tile: IHiddenTile) => {
-				const revT = revealTile(tile, tHK);
-				return <ShownTile key={revT.i} tileRef={tile.r} tileCard={revT.c} segment={segment} />;
-			})}
-			{revLTT && (
-				<ShownTile
-					key={revLTT.i}
-					tileRef={lTa.r}
-					tileCard={revLTT.c}
-					segment={segment}
-					classSuffix={lastSuffix}
-					highlight
-				/>
-			)}
-		</div>
-	);
-});
+const ShownHiddenHand = forwardRef<MutableRefObject<any>, ShownHHProps>(
+	(props: ShownHHProps, ref?: MutableRefObject<any>) => {
+		const { className, hTs, lTa, tHK, segment, lastSuffix } = props;
+		const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
+		return (
+			<div className={className} ref={ref}>
+				{hTs.map((tile: IHiddenTile) => {
+					const revT = revealTile(tile, tHK);
+					return <ShownTile key={revT.i} tileRef={tile.r} tileCard={revT.c} segment={segment} />;
+				})}
+				{revLTT && (
+					<ShownTile
+						key={revLTT.i}
+						tileRef={lTa.r}
+						tileCard={revLTT.c}
+						segment={segment}
+						classSuffix={lastSuffix}
+						highlight
+					/>
+				)}
+			</div>
+		);
+	}
+);
 
 export default memo(ShownHiddenHand, compare);
