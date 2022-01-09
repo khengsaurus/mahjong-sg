@@ -202,11 +202,16 @@ const About = () => {
 				email at mahjongsgapp@gmail.com.{' '}
 			</p>
 			<br />
-			<p>
-				{process.env.REACT_APP_PLATFORM === Platform.MOBILE
-					? 'Find us online at mahjongsg.netlify.app'
-					: 'Find Mahjong SG in the app store today'}
-			</p>
+			{process.env.REACT_APP_PLATFORM !== Platform.MOBILE ? (
+				<p>
+					Find us online at{' '}
+					<a href="wwww.mahjong-sg.com" style={{ color: '#005eff' }}>
+						wwww.mahjong-sg.com
+					</a>
+				</p>
+			) : (
+				<p>Find Mahjong SG in the app store today</p>
+			)}
 			<br />
 			<h3>Thank you for reading, and have fun</h3>
 			<br />
