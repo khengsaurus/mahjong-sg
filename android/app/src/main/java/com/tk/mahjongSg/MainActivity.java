@@ -1,4 +1,4 @@
-package com.tk.mahjongApp;
+package com.tk.mahjongSg;
 
 import android.view.View;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tk.mahjongApp">
+    package="com.tk.mahjongSg">
 
     <application
         android:allowBackup="true"
@@ -12,11 +12,13 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="com.tk.mahjongApp.MainActivity"
+            android:name="com.tk.mahjongSg.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.Default"
             android:launchMode="singleTask"
-            android:screenOrientation="sensor">
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan">
+
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
