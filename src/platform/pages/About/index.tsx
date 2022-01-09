@@ -13,7 +13,7 @@ const About = () => {
 
 	const renderLocalContent = () => (
 		<div className="content">
-			<h3>Hello! Big thanks for using this {platform} :)</h3>
+			<h3>Hello, thank you for using this {platform}</h3>
 			<p>
 				We tried to cover all the rules of Singapore Mahjong here, but it still has some limitations. Do read
 				through the following to understand the {platform} better.
@@ -72,7 +72,7 @@ const About = () => {
 			<ul>
 				<li>A glowing flower tile means that it is that player's flower tile, i.e. + 1 Tai.</li>
 				<li>
-					No instant payout (yet)! <br />
+					No instant payout (yet). <br />
 					After the game starts, if someone has matching flower tiles, check the logs to see if they had them
 					in the initial hand. If so, the logs will be like: <br />
 					"Player received 13 tiles, including 猫, 老鼠" <br />
@@ -105,7 +105,7 @@ const About = () => {
 					the tile after the first 6s are up. So act quickly, until we come up with another solution :,)
 				</li>
 				<li>
-					Playing accross different timezones is not recommended! This is because of how the delay system
+					Playing accross different timezones is not recommended. This is because of how the delay system
 					works... We're working on it.
 				</li>
 			</ul>
@@ -204,11 +204,11 @@ const About = () => {
 			<br />
 			<p>
 				{process.env.REACT_APP_PLATFORM === Platform.MOBILE
-					? 'Find us online at mahjongsg.netlify.app!'
-					: 'Find Mahjong SG in the app store today!'}
+					? 'Find us online at mahjongsg.netlify.app'
+					: 'Find Mahjong SG in the app store today'}
 			</p>
 			<br />
-			<h3>Thank you for reading, and have fun!</h3>
+			<h3>Thank you for reading, and have fun</h3>
 			<br />
 		</div>
 	);

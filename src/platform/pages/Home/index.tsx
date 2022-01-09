@@ -4,7 +4,7 @@ import { AboutButton, DataButton, JoinGameButton, NewGameButton } from 'platform
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
-import { Spec } from 'platform/style/StyledComponents';
+import { BottomLeft, BottomRight } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -38,11 +38,13 @@ const Home = () => {
 			<NewGameButton />
 			<JoinGameButton />
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
-			<AboutButton />
 			<LogoutButton />
-			<Spec>
+			<BottomLeft>
 				<DataButton />
-			</Spec>
+			</BottomLeft>
+			<BottomRight>
+				<AboutButton />
+			</BottomRight>
 			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<SettingsWindow

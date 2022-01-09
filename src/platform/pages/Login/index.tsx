@@ -6,7 +6,7 @@ import { AboutButton, DataButton } from 'platform/components/Buttons/TextNavButt
 import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { Spec, Row } from 'platform/style/StyledComponents';
+import { BottomLeft, BottomRight, Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
@@ -176,13 +176,15 @@ const Login = () => {
 				/>
 				{showRegister ? renderRegisterButton() : renderLoginButton()}
 			</Row>
-			<Row style={{ justifyContent: 'space-between', width: '180px' }}>
-				<AboutButton />
+			<Row style={{ justifyContent: 'center', width: '180px' }}>
 				<PlayAIButton />
 			</Row>
-			<Spec>
+			<BottomLeft>
 				<DataButton />
-			</Spec>
+			</BottomLeft>
+			<BottomRight>
+				<AboutButton />
+			</BottomRight>
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<>
 					<br />

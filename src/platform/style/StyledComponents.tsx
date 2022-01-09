@@ -82,7 +82,7 @@ export const MainTransparent = styled(Main)`
 	background-color: transparent;
 `;
 
-export const Spec = styled.div`
+export const BottomSpec = styled.div`
 	position: absolute;
 	display: flex;
 	flex-direction: column;
@@ -93,11 +93,11 @@ export const Spec = styled.div`
 	color: ${props => props.theme.mainTextColor};
 `;
 
-export const BottomLeft = styled(Spec)`
+export const BottomLeft = styled(BottomSpec)`
 	left: 10px;
 `;
 
-export const BottomRight = styled(Spec)`
+export const BottomRight = styled(BottomSpec)`
 	right: 10px;
 `;
 

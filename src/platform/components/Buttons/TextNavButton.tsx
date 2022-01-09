@@ -48,7 +48,13 @@ const JoinGameButton = ({ style = {} }: IHasStyle) => {
 
 const AboutButton = ({ style = {} }: IHasStyle) => {
 	return (
-		<TextNavButton label={PageName.ABOUT} route={Page.ABOUT} shortcut={null} disableShortcut={true} style={style} />
+		<TextNavButton
+			label={PageName.ABOUT}
+			route={Page.ABOUT}
+			shortcut={null}
+			disableShortcut={true}
+			style={{ ...style, fontSize: 12, padding: 0 }}
+		/>
 	);
 };
 
