@@ -13,7 +13,7 @@ const DataPolicy = () => {
 		<div className="content">
 			<h3>Data Policy</h3>
 			<p>
-				Mahjong SG does not collect any of your personal data, aside from your email, which is used solely for
+				We do not collect any of your personal data, aside from your email. Your email is used solely for
 				account and game management. We will not distribute your email, and you can remove it from our records
 				any time by deleting your account.
 			</p>

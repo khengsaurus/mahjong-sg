@@ -1,10 +1,10 @@
 import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
-import { AboutButton, DataButton, JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
+import { AboutButton, JoinGameButton, NewGameButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
-import { BottomLeft, BottomRight } from 'platform/style/StyledComponents';
+import { BottomSpec } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -39,12 +39,10 @@ const Home = () => {
 			<JoinGameButton />
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
 			<LogoutButton />
-			<BottomLeft>
-				<DataButton />
-			</BottomLeft>
-			<BottomRight>
+			<BottomSpec style={{ marginRight: -5 }}>
+				<PrivacyButton />
 				<AboutButton />
-			</BottomRight>
+			</BottomSpec>
 			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<SettingsWindow

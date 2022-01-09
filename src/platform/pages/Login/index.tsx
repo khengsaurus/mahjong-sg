@@ -2,11 +2,11 @@ import Alert from '@material-ui/lab/Alert';
 import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
-import { AboutButton, DataButton } from 'platform/components/Buttons/TextNavButton';
-import { useWindowListener } from 'platform/hooks';
+import { AboutButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
+import { useAndroidKeyboardListener, useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { BottomLeft, BottomRight, Row } from 'platform/style/StyledComponents';
+import { BottomSpec, Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
@@ -16,6 +16,7 @@ import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const Login = () => {
 	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
+	const { showBottom } = useAndroidKeyboardListener();
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -129,7 +130,7 @@ const Login = () => {
 
 	const markup = () => (
 		<>
-			<StyledText title={HomeScreenText.HOME_TITLE} />
+			<StyledText title={HomeScreenText.HOME_TITLE} padding="0" />
 			<TextField
 				key="usernameEmail"
 				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
@@ -176,15 +177,15 @@ const Login = () => {
 				/>
 				{showRegister ? renderRegisterButton() : renderLoginButton()}
 			</Row>
-			<Row style={{ justifyContent: 'center', width: '180px' }}>
+			<Row style={{ justifyContent: 'center', marginTop: -5 }}>
 				<PlayAIButton />
 			</Row>
-			<BottomLeft>
-				<DataButton />
-			</BottomLeft>
-			<BottomRight>
-				<AboutButton />
-			</BottomRight>
+			{showBottom && (
+				<BottomSpec style={{ marginRight: -5 }}>
+					<PrivacyButton />
+					<AboutButton />
+				</BottomSpec>
+			)}
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<>
 					<br />

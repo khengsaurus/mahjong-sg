@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { TextColor } from 'shared/enums';
+import { TextColor, TransitionSpeed } from 'shared/enums';
 import { IStore } from 'shared/store';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -30,7 +30,7 @@ export const Centered = styled.div`
 	align-items: center;
 	align-self: center;
 	text-align: center;
-	transition: 300ms;
+	transition: ${TransitionSpeed.FAST};
 	color: ${props => props.theme.textColor};
 `;
 
@@ -85,8 +85,8 @@ export const MainTransparent = styled(Main)`
 export const BottomSpec = styled.div`
 	position: absolute;
 	display: flex;
-	flex-direction: column;
-	bottom: 10px;
+	flex-direction: row;
+	bottom: 4px;
 	font-size: 12px;
 	margin-bottom: const(safe-area-inset-bottom);
 	margin-bottom: env(safe-area-inset-bottom);
@@ -98,7 +98,7 @@ export const BottomLeft = styled(BottomSpec)`
 `;
 
 export const BottomRight = styled(BottomSpec)`
-	right: 10px;
+	right: 2px;
 `;
 
 export const TableDiv = styled.div`
@@ -145,14 +145,14 @@ export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	transition: 300ms;
+	transition: ${TransitionSpeed.FAST};
 `;
 
 export const Row = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	transition: 300ms;
+	transition: ${TransitionSpeed.FAST};
 `;
 
 export const FormRow = styled(Row)`

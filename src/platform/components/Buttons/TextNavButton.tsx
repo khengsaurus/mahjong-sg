@@ -58,16 +58,16 @@ const AboutButton = ({ style = {} }: IHasStyle) => {
 	);
 };
 
-const DataButton = () => {
+const PrivacyButton = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
-			label={ButtonText.DATA}
-			route={Page.DATAPOLICY}
+			label={ButtonText.PRIVACY}
+			route={Page.PRIVACY}
 			shortcut={null}
 			disableShortcut={true}
-			style={{ fontSize: 12, padding: 0 }}
+			style={{ ...style, fontSize: 12, padding: 0 }}
 		/>
 	);
 };
 
-export { AboutButton, DataButton, HomeButton, JoinGameButton, NewGameButton, TextNavButton };
+export { AboutButton, HomeButton, JoinGameButton, NewGameButton, PrivacyButton, TextNavButton };

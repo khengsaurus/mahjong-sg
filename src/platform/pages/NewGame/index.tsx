@@ -17,6 +17,7 @@ import {
 import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
+import { useAndroidKeyboardListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
@@ -25,9 +26,9 @@ import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } from 'shared/enums';
-import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
+import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { IStore, setGameId } from 'shared/store';
 import { setTHK } from 'shared/store/actions';
 import { getTileHashKey } from 'shared/util';
@@ -37,6 +38,7 @@ import './newGame.scss';
 const NewGame = () => {
 	const { user } = useSelector((state: IStore) => state);
 	const { players, setPlayers } = useContext(AppContext);
+	const { showBottom } = useAndroidKeyboardListener(true);
 	const [mHu, setMHu] = useState(false);
 	const [payment, setPayment] = useState(PaymentType.HALF_SHOOTER);
 	const [random, setRandom] = useState(false);
@@ -48,6 +50,8 @@ const NewGame = () => {
 	const [startedGame, setStartedGame] = useState(false);
 	const playersRef = useRef<User[]>(players);
 	const dispatch = useDispatch();
+	/*---------------------------- End Android bottom buttons  ----------------------------*/
+
 	const isLocalGame: boolean = useMemo(
 		() => players.every(p => p.id === user.id || BotIds.includes(p.id)),
 		[players, user]
@@ -213,7 +217,7 @@ const NewGame = () => {
 	);
 
 	const renderBottomButtons = () => (
-		<Fade in timeout={20}>
+		<Fade in={showBottom} timeout={20} unmountOnExit>
 			<div>
 				<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
 					<HomeButton
@@ -271,7 +275,7 @@ const NewGame = () => {
 					{!startedGame && renderRandomizeOption()}
 				</div>
 			</div>
-			<Fade in={showOptions} timeout={Transition.FAST} unmountOnExit>
+			<Fade in={showOptions && showBottom} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<GameOptions
 						show={showOptions}

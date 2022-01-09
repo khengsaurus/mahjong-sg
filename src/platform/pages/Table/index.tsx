@@ -41,6 +41,8 @@ const Table = () => {
 	const { verifyingSession } = useLocalSession(isLocalGame);
 	const dispatch = useDispatch();
 
+	/*----------------------------------- Screen orientation -----------------------------------*/
+
 	useEffect(() => {
 		if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
@@ -54,6 +56,8 @@ const Table = () => {
 			}
 		};
 	}, []);
+
+	/*--------------------------------- End screen orientation ---------------------------------*/
 
 	function hydrateGame(game: Game, currUsername: string) {
 		const { ps = [] } = game;

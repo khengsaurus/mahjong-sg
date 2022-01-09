@@ -35,7 +35,7 @@ function App() {
 								<Route exact path={Page.JOINGAME} component={JoinGame} />
 								<Route exact path={Page.TABLE} component={Table} />
 								<Route exact path={Page.ABOUT} component={About} />
-								<Route exact path={Page.DATAPOLICY} component={DataPolicy} />
+								<Route exact path={Page.PRIVACY} component={DataPolicy} />
 								{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && (
 									<Route exact path={Page.SAMPLE} component={Sample} />
 								)}
