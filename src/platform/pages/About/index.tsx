@@ -202,11 +202,11 @@ const About = () => {
 				email at mahjongsgapp@gmail.com.{' '}
 			</p>
 			<br />
-			{process.env.REACT_APP_PLATFORM !== Platform.MOBILE ? (
+			{process.env.REACT_APP_PLATFORM === Platform.MOBILE ? (
 				<p>
 					Find us online at{' '}
 					<a href="wwww.mahjong-sg.com" style={{ color: '#005eff' }}>
-						wwww.mahjong-sg.com
+						www.mahjong-sg.com
 					</a>
 				</p>
 			) : (
