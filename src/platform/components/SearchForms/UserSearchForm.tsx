@@ -98,11 +98,16 @@ const UserSearchForm: React.FC = () => {
 		</Fade>
 	);
 
+	function refocusInput() {
+		document.getElementById('search-input')?.focus();
+	}
+
 	return (
 		<Centered className="search-form-container">
 			<List>
 				<ListItem className="search-box list-item" style={{ marginBottom: '10px' }}>
 					<TextField
+						id="search-input"
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}
 						onChange={e => {
 							handleFormChange(e.target.value);
@@ -117,6 +122,9 @@ const UserSearchForm: React.FC = () => {
 									<IconButton
 										component="span"
 										onClick={() => {
+											if (players?.length < 4) {
+												refocusInput();
+											}
 											showOptions ? setShowOptions(false) : searchForUser(searchFor);
 										}}
 										disabled={searchFor.trim() === ''}
@@ -157,6 +165,9 @@ const UserSearchForm: React.FC = () => {
 									borderRadius: '5px'
 								}}
 								onClick={() => {
+									if (players?.length < 3) {
+										refocusInput();
+									}
 									handleSelect(foundUser);
 								}}
 							>
