@@ -1,29 +1,19 @@
-import { DiscardedTiles, HiddenHand, ShownTiles, SuspenseTiles, UnusedTiles } from 'platform/components/Tiles';
+import { DiscardedTiles, HiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
+import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
 import { useDynamicWidth } from 'platform/hooks';
-import { lazy, Suspense, useRef } from 'react';
+import { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import {
-	AppFlag,
-	FrontBackTag,
-	Segment,
-	Size,
-	_HiddenTileWidth,
-	_ShownTileHeight,
-	_ShownTileWidth
-} from 'shared/enums';
+import { AppFlag, FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { PlayerComponentProps } from 'shared/typesPlus';
 import './playerComponents.scss';
-
-const ShownHiddenHand = lazy(() => import('platform/components/Tiles/ShownHiddenHand'));
 
 const RightPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
 	const {
-		theme: { tileColor },
 		sizes: { tileSize = Size.MEDIUM },
 		tHK
 	} = useSelector((state: IStore) => state);
@@ -43,6 +33,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		countTs: countHandTiles,
 		tileSize,
+		flag: sT,
 		addPx: _HiddenTileWidth[tileSize]
 	});
 
@@ -50,24 +41,13 @@ const RightPlayer = (props: PlayerComponentProps) => {
 		<div className={`column-section-${tileSize || Size.MEDIUM} right`}>
 			{/* Hidden or shown hand */}
 			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) || sT ? (
-				<Suspense
-					fallback={
-						<SuspenseTiles
-							height={_ShownTileHeight[tileSize]}
-							width={countHandTiles * _ShownTileWidth[tileSize]}
-							color={tileColor}
-							segment={Segment.TOP}
-						/>
-					}
-				>
-					<ShownHiddenHand
-						className="vtss col-r"
-						{...{ hTs, lTa, tHK }}
-						segment={Segment.RIGHT}
-						lastSuffix="margin-bottom"
-						ref={shownHiddenHandRef}
-					/>
-				</Suspense>
+				<ShownHiddenHand
+					className="vtss col-r"
+					segment={Segment.RIGHT}
+					lastSuffix="margin-bottom"
+					ref={shownHiddenHandRef}
+					{...{ hTs, lTa, tHK }}
+				/>
 			) : (
 				<HiddenHand tiles={countHandTiles} segment={Segment.RIGHT} />
 			)}
@@ -76,14 +56,10 @@ const RightPlayer = (props: PlayerComponentProps) => {
 			{(dealer || sTs?.length > 0) && (
 				<ShownTiles
 					className="vtss"
-					nonFlowers={nonFlowers}
-					flowers={flowers}
 					segment={Segment.RIGHT}
-					dealer={dealer}
-					tileSize={tileSize}
 					lastThrownId={lastThrown?.i}
 					ref={shownTilesRef}
-					sT
+					{...{ dealer, flowers, nonFlowers, sT, tileSize }}
 				/>
 			)}
 

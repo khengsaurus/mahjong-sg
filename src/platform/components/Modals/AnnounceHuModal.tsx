@@ -60,7 +60,7 @@ const AnnounceHuModal = ({
 							variant="subtitle1"
 							padding="3px 0px 0px"
 						/>
-						{hu[2] === 0 && (
+						{hu[2] === 0 && thB !== Number(hu[0]) && (
 							<StyledText
 								title={`Last tile thrown by ${ps[thB]?.uN}`}
 								variant="subtitle2"
