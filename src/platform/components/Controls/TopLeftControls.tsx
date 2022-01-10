@@ -3,27 +3,12 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { IconButton } from '@mui/material';
+import IconControlButton from 'platform/components/Buttons/IconControlButton';
 import { TableText } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
 import { LocalFlag, Size } from 'shared/enums';
 import { IStore } from 'shared/store';
 import './controls.scss';
-
-interface IHasFontSize {
-	fontSize: Size;
-}
-interface ControlsButtonProps {
-	size: Size;
-	Icon: React.FC<IHasFontSize>;
-	onClick: () => void;
-}
-
-const ControlsButton = ({ Icon, onClick, size }: ControlsButtonProps) => (
-	<IconButton className="icon-button" onClick={onClick} disableRipple>
-		<Icon fontSize={size} />
-	</IconButton>
-);
 
 const TopLeftControls = ({
 	handleHome,
@@ -51,10 +36,10 @@ const TopLeftControls = ({
 	return (
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
-				<ControlsButton Icon={HomeIcon} onClick={goHome} size={controlsSize} />
-				<ControlsButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
-				{isAdmin && <ControlsButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
-				<ControlsButton
+				<IconControlButton Icon={HomeIcon} onClick={goHome} size={controlsSize} />
+				<IconControlButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
+				{isAdmin && <IconControlButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
+				<IconControlButton
 					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}
 					size={controlsSize}

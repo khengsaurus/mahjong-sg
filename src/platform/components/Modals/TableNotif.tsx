@@ -1,10 +1,11 @@
-import { Dialog, DialogActions, DialogContent } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Dialog, DialogActions, DialogContent, IconButton } from '@mui/material';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { TableNotifProps } from 'shared/typesPlus';
 
-const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: TableNotifProps) => {
+const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifProps) => {
 	return (
 		<Dialog
 			open={timeout > 0}
@@ -15,6 +16,16 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu }: TableNotifProps) =
 				}
 			}}
 		>
+			{skip && (
+				<IconButton
+					className="icon-button"
+					onClick={skip}
+					style={{ position: 'absolute', top: -5, right: -5 }}
+					disableRipple
+				>
+					<CloseIcon fontSize={'medium'} />
+				</IconButton>
+			)}
 			<DialogContent style={{ paddingBottom: 0 }}>
 				<Centered>
 					{notifs[0] && <StyledText title={notifs[0]} variant="subtitle1" padding="3px 0px" />}

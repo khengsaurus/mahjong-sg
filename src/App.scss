@@ -104,9 +104,9 @@ $log-margin-left-medium: 5px;
 	@if $size == 'small' {
 		@return 1.5px;
 	} @else if $size == 'large' {
-		@return 2.5px;
-	} @else {
 		@return 2px;
+	} @else {
+		@return 1.8px;
 	}
 }
 
@@ -359,7 +359,7 @@ $log-margin-left-medium: 5px;
 
 @mixin default-flower {
 	background: $linear-gradient-multi;
-	background-size: 400% 400%;
+	background-size: 300% 300%;
 	border-radius: $default-tile-border-radius;
 	animation: linear-gradient-sway 4s ease infinite;
 }
