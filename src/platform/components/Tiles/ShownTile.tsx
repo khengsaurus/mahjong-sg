@@ -8,7 +8,6 @@ interface ShownTileProps {
 	segment: Segment;
 	highlight?: boolean;
 	classSuffix?: string;
-	onClick?: (p: any) => void;
 }
 
 function getClass(segment: Segment) {
@@ -17,12 +16,8 @@ function getClass(segment: Segment) {
 			return 'hts';
 		case Segment.BOTTOM:
 			return 'hts';
-		case Segment.LEFT:
-			return 'vts';
-		case Segment.RIGHT:
-			return 'vts';
 		default:
-			return '';
+			return 'vts';
 	}
 }
 
@@ -30,7 +25,7 @@ function getClass(segment: Segment) {
  * @description Renders a ShownTile for IShownTile | IHiddenTile, hence tileCard needs to be unhashed and passed as a prop
  */
 const ShownTile = (props: ShownTileProps) => {
-	const { tileRef, tileCard, segment, highlight, classSuffix, onClick } = props;
+	const { tileRef, tileCard, segment, highlight, classSuffix } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -42,7 +37,6 @@ const ShownTile = (props: ShownTileProps) => {
 					className={`${divClass} ${highlight ? `last` : ``} ${classSuffix || ``}`}
 					src={getTileSrc(tileCard)}
 					alt="tile"
-					onClick={onClick}
 					draggable="false"
 				/>
 			);
@@ -54,7 +48,6 @@ const ShownTile = (props: ShownTileProps) => {
 						className={`${bgClass} ${highlight ? `last` : ``} ${classSuffix || ``}`}
 						src={getTileSrc(tileCard)}
 						alt="tile"
-						onClick={onClick}
 						draggable="false"
 					/>
 				</div>

@@ -17,7 +17,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 		sizes: { tileSize },
 		tHK
 	} = useSelector((state: IStore) => state);
-	const { flowers, nonFlowers, nonFlowerRefs, flowerRefs } = useTiles({
+	const { flowers, nonFlowers } = useTiles({
 		sTs,
 		ms,
 		toRotate: false
@@ -54,12 +54,11 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 					className="htss"
 					nonFlowers={nonFlowers}
 					flowers={flowers}
-					flowerRefs={flowerRefs}
-					nonFlowerRefs={nonFlowerRefs}
 					segment={Segment.BOTTOM}
 					dealer={dealer}
 					tileSize={tileSize}
-					lastThrownRef={lastThrown?.r}
+					lastThrownId={lastThrown?.i}
+					sT
 				/>
 			)}
 

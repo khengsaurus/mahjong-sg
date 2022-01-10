@@ -3,7 +3,7 @@ import { history } from 'App';
 import { extend, isEqual } from 'lodash';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
-import { MainTransparent, Row } from 'platform/style/StyledComponents';
+import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -204,104 +204,102 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 
 	return (
 		<TableTheme>
-			<MainTransparent>
-				{showDeleteAlert ? (
-					<DeleteAlert />
-				) : (
-					<Dialog
-						open={show}
-						BackdropProps={{ invisible: true }}
-						onClose={handleClose}
-						PaperProps={{
-							style: {
-								...MuiStyles.large_dialog
-							}
-						}}
-						// style={{ transform }}
-					>
-						<DialogContent>
-							<FormControl component="fieldset">
-								{preferences.map(preference =>
-									preference.size ? (
-										<div className="preference" key={`preference-${preference.label}`}>
-											<Label label={preference.label} />
+			{showDeleteAlert ? (
+				<DeleteAlert />
+			) : (
+				<Dialog
+					open={show}
+					BackdropProps={{ invisible: true }}
+					onClose={handleClose}
+					PaperProps={{
+						style: {
+							...MuiStyles.large_dialog
+						}
+					}}
+					// style={{ transform }}
+				>
+					<DialogContent>
+						<FormControl component="fieldset">
+							{preferences.map(preference =>
+								preference.size ? (
+									<div className="preference" key={`preference-${preference.label}`}>
+										<Label label={preference.label} />
+										<Tabs
+											style={{
+												...MuiStyles.tabs,
+												display: 'inline-block'
+											}}
+											value={preference.size}
+											indicatorColor="secondary"
+										>
+											{Object.keys(Size).map(key => {
+												const size = Size[key.toUpperCase()];
+												return (
+													<Tab
+														style={{
+															...MuiStyles.tabOptions
+														}}
+														// fullWidth={false}
+														key={size}
+														value={size}
+														label={size[0]}
+														onClick={() => {
+															preference.handleSelect(size);
+														}}
+													/>
+												);
+											})}
+										</Tabs>
+									</div>
+								) : null
+							)}
+							{preferences.map(preference =>
+								preference.colors ? (
+									<div className="preference" key={`preference-${preference.label}`}>
+										<Label label={preference.label} />
+										{/* <Typography variant="subtitle1" display="inline">
+												{`${preference.label}:`}
+											</Typography> */}
+										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
 											<Tabs
 												style={{
 													...MuiStyles.tabs,
 													display: 'inline-block'
 												}}
-												value={preference.size}
+												value={preference.selectedColor}
 												indicatorColor="secondary"
 											>
-												{Object.keys(Size).map(key => {
-													const size = Size[key.toUpperCase()];
-													return (
-														<Tab
-															style={{
-																...MuiStyles.tabOptions
-															}}
-															// fullWidth={false}
-															key={size}
-															value={size}
-															label={size[0]}
-															onClick={() => {
-																preference.handleSelect(size);
-															}}
-														/>
-													);
-												})}
+												{preference.colors.map(rgb => (
+													<Tab
+														style={{
+															...MuiStyles.tabColorOptions,
+															backgroundColor: rgb
+														}}
+														key={rgb}
+														value={rgb}
+														onClick={() => {
+															preference.handleSelect(rgb);
+														}}
+													/>
+												))}
 											</Tabs>
-										</div>
-									) : null
-								)}
-								{preferences.map(preference =>
-									preference.colors ? (
-										<div className="preference" key={`preference-${preference.label}`}>
-											<Label label={preference.label} />
-											{/* <Typography variant="subtitle1" display="inline">
-												{`${preference.label}:`}
-											</Typography> */}
-											<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
-												<Tabs
-													style={{
-														...MuiStyles.tabs,
-														display: 'inline-block'
-													}}
-													value={preference.selectedColor}
-													indicatorColor="secondary"
-												>
-													{preference.colors.map(rgb => (
-														<Tab
-															style={{
-																...MuiStyles.tabColorOptions,
-																backgroundColor: rgb
-															}}
-															key={rgb}
-															value={rgb}
-															onClick={() => {
-																preference.handleSelect(rgb);
-															}}
-														/>
-													))}
-												</Tabs>
-											</Paper>
-										</div>
-									) : null
-								)}
-							</FormControl>
-							{accActions && (
-								<Row style={{ alignItems: 'center', marginTop: 15 }}>
-									<StyledButton
-										label={ButtonText.DELETE_ACCOUNT}
-										onClick={() => setShowDeleteAlert(true)}
-										padding={'0'}
-									/>
-								</Row>
+										</Paper>
+									</div>
+								) : null
 							)}
-						</DialogContent>
-					</Dialog>
-				)}
-			</MainTransparent>
+						</FormControl>
+						{accActions && (
+							<Row style={{ alignItems: 'center', marginTop: 15 }}>
+								<StyledButton
+									label={ButtonText.DELETE_ACCOUNT}
+									onClick={() => setShowDeleteAlert(true)}
+									padding={'0'}
+								/>
+							</Row>
+						)}
+					</DialogContent>
+				</Dialog>
+			)}
 		</TableTheme>
 	);
 };

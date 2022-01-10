@@ -1,6 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { MuiStyles } from 'platform/style/MuiStyles';
-import { MainTransparent } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -47,64 +46,62 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 	};
 
 	return (
-		<MainTransparent>
-			<Dialog
-				open={show}
-				BackdropProps={{ invisible: true }}
-				onClose={onClose}
-				PaperProps={{
-					style: {
-						...MuiStyles.large_dialog
-					}
-				}}
-			>
-				<DialogContent>
-					<StyledText title="Send chips" variant="subtitle1" padding="3px 0px" />
-					<StyledText title="To: " variant="subtitle1" padding="2px 0px" />
-					<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
-						{currGame.ps.map((otherPlayer: User, index: number) =>
-							otherPlayer.uN !== playerUsername ? (
-								<FormControlLabel
-									key={otherPlayer.uN}
-									value={index}
-									control={<Radio disableRipple/>}
-									label={otherPlayer.uN}
-								/>
-							) : null
-						)}
-					</RadioGroup>
-
-					<StyledText title="Amount: " variant="subtitle1" padding="2px 0px" />
-					<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
-						{Amounts.map((amount: number, index: number) => (
+		<Dialog
+			open={show}
+			BackdropProps={{ invisible: true }}
+			onClose={onClose}
+			PaperProps={{
+				style: {
+					...MuiStyles.large_dialog
+				}
+			}}
+		>
+			<DialogContent>
+				<StyledText title="Send chips" variant="subtitle1" padding="3px 0px" />
+				<StyledText title="To: " variant="subtitle1" padding="2px 0px" />
+				<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
+					{currGame.ps.map((otherPlayer: User, index: number) =>
+						otherPlayer.uN !== playerUsername ? (
 							<FormControlLabel
-								key={index}
-								value={amount}
-								control={<Radio />}
-								label={`${amount}`}
-								labelPlacement="end"
-								style={{ width: '60px' }}
+								key={otherPlayer.uN}
+								value={index}
+								control={<Radio disableRipple />}
+								label={otherPlayer.uN}
 							/>
-						))}
-					</RadioGroup>
+						) : null
+					)}
+				</RadioGroup>
 
-					<DialogActions>
-						<Button
-							style={{ position: 'absolute', bottom: 15, right: 15 }}
-							variant="text"
-							size="large"
-							onClick={() => {
-								sendChips(currGame, playerSeat, recipientIndex, amount, updateGame, sendCallback);
-							}}
-							disabled={recipientIndex === 9 || !amount || amount <= 0}
-							disableRipple
-						>
-							{`Send`}
-						</Button>
-					</DialogActions>
-				</DialogContent>
-			</Dialog>
-		</MainTransparent>
+				<StyledText title="Amount: " variant="subtitle1" padding="2px 0px" />
+				<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
+					{Amounts.map((amount: number, index: number) => (
+						<FormControlLabel
+							key={index}
+							value={amount}
+							control={<Radio />}
+							label={`${amount}`}
+							labelPlacement="end"
+							style={{ width: '60px' }}
+						/>
+					))}
+				</RadioGroup>
+
+				<DialogActions>
+					<Button
+						style={{ position: 'absolute', bottom: 15, right: 15 }}
+						variant="text"
+						size="large"
+						onClick={() => {
+							sendChips(currGame, playerSeat, recipientIndex, amount, updateGame, sendCallback);
+						}}
+						disabled={recipientIndex === 9 || !amount || amount <= 0}
+						disableRipple
+					>
+						{`Send`}
+					</Button>
+				</DialogActions>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

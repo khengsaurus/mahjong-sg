@@ -1,7 +1,6 @@
 import { Dialog, DialogContent, FormControl, ListItem, ListItemText, MenuItem, Select, Switch } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
-import { MainTransparent } from 'platform/style/StyledComponents';
+import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { AppFlag, BotTimeout, LocalFlag } from 'shared/enums';
@@ -104,21 +103,15 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 	};
 
 	return (
-		<TableTheme>
-			<MainTransparent>
-				<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
-					<DialogContent>
-						<FormControl component="fieldset">
-							{renderManualHuSelect()}
-							{renderBotTimeSelect()}
-							{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && game.id !== LocalFlag && (
-								<Scenarios />
-							)}
-						</FormControl>
-					</DialogContent>
-				</Dialog>
-			</MainTransparent>
-		</TableTheme>
+		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
+			<DialogContent>
+				<FormControl component="fieldset">
+					{renderManualHuSelect()}
+					{renderBotTimeSelect()}
+					{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && game.id !== LocalFlag && <Scenarios />}
+				</FormControl>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

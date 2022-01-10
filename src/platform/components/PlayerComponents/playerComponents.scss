@@ -86,16 +86,12 @@
 					@include default-flower;
 				}
 				&.animal {
-					height: getShownTileHeight($size) - (2 * $tile-border-px);
-					width: getShownTileWidth($size) - (2 * $tile-border-px);
-					@include default-tile-border;
+					height: getShownTileHeight($size) - (2 * getTileBorder($size));
+					width: getShownTileWidth($size) - (2 * getTileBorder($size));
+					border: getTileBorder($size) solid rgb(28, 28, 28);
 				}
 				&.last {
 					@include highlight;
-				}
-				&.enlarge {
-					height: $enlarge * getShownTileHeight($size);
-					width: $enlarge * getShownTileWidth($size);
 				}
 			}
 		}
@@ -179,10 +175,6 @@
 				&.margin-bottom {
 					margin-bottom: getHiddenTileWidth($size);
 				}
-				&.enlarge {
-					height: $enlarge * getShownTileHeight($size);
-					width: $enlarge * getShownTileWidth($size);
-				}
 			}
 
 			.vts-bg {
@@ -196,9 +188,9 @@
 					@include default-flower;
 				}
 				&.animal {
-					height: getShownTileHeight($size) - (3 * $tile-border-px);
-					width: getShownTileWidth($size) - (2.5 * $tile-border-px);
-					@include default-tile-border;
+					height: getShownTileHeight($size) - (2 * getTileBorder($size));
+					width: getShownTileWidth($size) - (2 * getTileBorder($size));
+					border: getTileBorder($size) solid rgb(28, 28, 28);
 				}
 				&.last {
 					@include highlight;

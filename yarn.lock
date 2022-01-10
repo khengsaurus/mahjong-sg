@@ -6771,9 +6771,9 @@
   dependencies:
     "bser" "2.1.1"
 
-"fd-slicer@~1.1.0":
+"sd-slicer@~1.1.0":
   "integrity" "sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4="
-  "resolved" "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.1.0.tgz"
+  "resolved" "https://registry.npmjs.org/sd-slicer/-/sd-slicer-1.1.0.tgz"
   "version" "1.1.0"
   dependencies:
     "pend" "~1.2.0"
@@ -15300,7 +15300,7 @@
   "version" "2.10.0"
   dependencies:
     "buffer-crc32" "~0.2.3"
-    "fd-slicer" "~1.1.0"
+    "sd-slicer" "~1.1.0"
 
 "yn@3.1.1":
   "integrity" "sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q=="
