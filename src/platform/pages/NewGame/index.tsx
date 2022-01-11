@@ -41,7 +41,7 @@ const NewGame = () => {
 	const { players, setPlayers } = useContext(AppContext);
 	const { showBottom } = useAndroidKeyboardListener(true);
 	const [mHu, setMHu] = useState(false);
-	const [payment, setPayment] = useState(PaymentType.HALF_SHOOTER);
+	const [payment, setPayment] = useState(PaymentType.SHOOTER);
 	const [random, setRandom] = useState(false);
 	const [minTai, setMinTai] = useState(1);
 	const [maxTai, setMaxTai] = useState(5);
@@ -66,7 +66,7 @@ const NewGame = () => {
 	}
 
 	async function startGame() {
-		await ServiceInstance.initGame(user, players, random, minTai, maxTai, mHu, isLocalGame).then(game => {
+		await ServiceInstance.initGame(user, players, random, minTai, maxTai, mHu, payment, isLocalGame).then(game => {
 			if (game?.id) {
 				dispatch(setTHK(game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.st)));
 				dispatch(setGameId(game.id));
@@ -133,7 +133,7 @@ const NewGame = () => {
 		</Fade>
 	);
 
-	/*-------------------------------- Game Options --------------------------------*/
+	/* -------------------------------- Game Options -------------------------------- */
 
 	const renderUserOption = (player: User) => (
 		<ListItem className="user list-item">
@@ -171,13 +171,25 @@ const NewGame = () => {
 		</ListItem>
 	);
 
+	function rotatePaymentType() {
+		setPayment(
+			payment === PaymentType.SHOOTER
+				? PaymentType.HALF_SHOOTER
+				: payment === PaymentType.HALF_SHOOTER
+				? PaymentType.NONE
+				: PaymentType.SHOOTER
+		);
+	}
+
 	const renderPaymentType = () => (
 		<ListItem className="user list-item">
-			<ListItemText secondary={payment === PaymentType.SHOOTER ? `Shooter` : `Half Shooter`} />
-			<IconButton
-				onClick={() =>
-					setPayment(payment === PaymentType.SHOOTER ? PaymentType.HALF_SHOOTER : PaymentType.SHOOTER)
+			<ListItemText
+				secondary={
+					payment === PaymentType.NONE ? `None` : payment === PaymentType.SHOOTER ? `Shooter` : `Half Shooter`
 				}
+			/>
+			<IconButton
+				onClick={rotatePaymentType}
 				style={{ justifyContent: 'flex-end', marginRight: -8 }}
 				disableRipple
 			>
@@ -261,7 +273,7 @@ const NewGame = () => {
 			</Fade>
 		);
 	};
-	/*------------------------------ End Game Options ------------------------------*/
+	/* ------------------------------ End Game Options ------------------------------ */
 
 	const markup = () => (
 		<>

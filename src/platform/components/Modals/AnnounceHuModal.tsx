@@ -25,7 +25,7 @@ const AnnounceHuModal = ({
 	onClose: handleShow
 }: AnnounceHuModalProps) => {
 	const user = useSelector((store: IStore) => store.user);
-	const { hu = [], thB = 0, draw = false, on = true, _d = 0, ps, logs } = game || {};
+	const { hu = [], thB = 0, draw = false, on = true, _d = 0, ps, logs, lTh } = game || {};
 
 	const canHuFirst = useMemo((): boolean => {
 		const whoHu = Number(hu[0]);
@@ -60,18 +60,18 @@ const AnnounceHuModal = ({
 							variant="subtitle1"
 							padding="3px 0px 0px"
 						/>
-						{hu[2] === 0 && thB !== Number(hu[0]) && (
-							<StyledText
-								title={`Last tile thrown by ${ps[thB]?.uN}`}
-								variant="subtitle2"
-								padding="0px"
-							/>
-						)}
 						{hu.slice(3, hu.length).map((p: string, ix: number) => {
 							return (
 								<StyledText title={`• ${getHandDesc(p)}`} variant="subtitle2" padding="2px" key={ix} />
 							);
 						})}
+						{Number(hu[2]) === 0 && thB !== Number(hu[0]) && !isEmpty(lTh) && (
+							<StyledText
+								title={`Last tile thrown by ${thB === playerSeat ? 'you' : ps[thB]?.uN}`}
+								variant="subtitle2"
+								padding="0px"
+							/>
+						)}
 						<SentLogs logs={sentLogs} />
 						{hu[0] !== playerSeat && (
 							<PaymentModalInline game={game} playerSeat={playerSeat} updateGame={updateGame} />

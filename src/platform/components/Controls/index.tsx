@@ -103,22 +103,22 @@ const Controls = () => {
 				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
 				{showBottomControls && <BottomRightControls {...bottomRight} />}
-				<Fade in={payModal.show} timeout={Transition.FAST} unmountOnExit>
+				<Fade in={payModal?.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<PaymentModal {...payModal} />
 					</div>
 				</Fade>
-				<Fade in={settingsModal.show} timeout={Transition.FAST} unmountOnExit>
+				<Fade in={settingsModal?.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<SettingsWindow {...settingsModal} />
 					</div>
 				</Fade>
-				<Fade in={declareHuModal.show && isEmpty(game?.hu)} timeout={Transition.FAST} unmountOnExit>
+				<Fade in={declareHuModal?.show && isEmpty(game?.hu)} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<DeclareHuModal {...declareHuModal} />
 					</div>
 				</Fade>
-				<Fade in={adminControlsModal.show} timeout={Transition.FAST} unmountOnExit>
+				<Fade in={adminControlsModal?.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<AdminControls {...adminControlsModal} />
 					</div>

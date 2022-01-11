@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { isEmpty } from 'lodash';
 import CheckBox from 'platform/components/Form';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
@@ -10,17 +11,12 @@ import { generateNumbers, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: DeclareHuModalProps) => {
 	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
+	const defaultZimo = !!HH?.self || (game?.ta && game?.wM === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
+	const [zimo, setZimo] = useState(defaultZimo);
 	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
-	const [zimo, setZimo] = useState(!!HH?.self);
 
 	async function hu() {
 		handleHu(game, playerSeat, HH, tai, zimo);
-		// game.declareHu([playerSeat, Math.min(tai, px[1]), Number(zimo), ...(HH?.pxs || []).map(p => p.hD)]);
-		// game.sk = [];
-		// game.dF = null;
-		// game.endRound();
-		// triggerHaptic(ImpactStyle.Heavy);
-		// updateGame(game);
 		onClose(true);
 	}
 
@@ -46,7 +42,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					onChange={() => {
 						setZimo(prev => !prev);
 					}}
-					defaultChecked={!!HH?.self}
+					defaultChecked={defaultZimo}
 				/>
 			</FormRow>
 		</div>
@@ -76,7 +72,11 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					{game?.mHu ? (
 						renderManualHuOptions()
 					) : (
-						<StyledText title={`${tai} 台${HH?.self ? ` 自摸` : ``}`} variant="subtitle2" padding="3px 0px" />
+						<StyledText
+							title={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
+							variant="subtitle2"
+							padding="3px 0px"
+						/>
 					)}
 					<StyledButton
 						label={`Hu`}

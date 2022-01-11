@@ -1,11 +1,13 @@
 import SendIcon from '@mui/icons-material/Send';
 import { FormControl, IconButton, MenuItem, Select } from '@mui/material';
+import { isEmpty } from 'lodash';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Amounts } from 'shared/enums';
 import { Game } from 'shared/models';
+import { getDefaultAmt } from 'shared/util';
 import { sendChips } from './PaymentModal';
 
 interface PaymentModalInlineProps {
@@ -15,18 +17,27 @@ interface PaymentModalInlineProps {
 }
 
 const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInlineProps) => {
-	const winner = game.hu[0];
-	const [amountStr, setAmountStr] = useState<string>('');
-	const [amount, setAmount] = useState<number>(2 ** game.hu[1] * (game.thB === playerSeat ? 2 : 1) || 0);
+	const { hu, pay, thB } = game;
 
-	const handleSelectAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const { winner, defaultAmt } = useMemo(() => {
+		return {
+			winner: isEmpty(hu) ? null : Number(hu[0]),
+			defaultAmt: getDefaultAmt(hu, pay, playerSeat, thB)
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [JSON.stringify(hu), pay, playerSeat, thB]);
+
+	const [amountStr, setAmountStr] = useState<string>(`${defaultAmt}`);
+	const [amount, setAmount] = useState(defaultAmt);
+
+	function handleSelectAmount(event: React.ChangeEvent<HTMLInputElement>) {
 		let selectedAmountStr = (event.target as HTMLInputElement).value;
 		setAmountStr(selectedAmountStr);
 		setAmount(Number(selectedAmountStr) || 0);
-	};
+	}
 
 	return (
-		<FormRow style={{ paddingTop: '2px' }}>
+		<FormRow style={{ padding: '6px 0px 2px' }}>
 			<StyledText variant="subtitle1" title={`Send chips:`} padding="2px" />
 			<FormControl>
 				<Select
@@ -48,6 +59,7 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInline
 				style={{ marginLeft: '5px' }}
 				onClick={() => {
 					sendChips(game, playerSeat, winner, amount, updateGame, () => {
+						setAmount(0);
 						setAmountStr('');
 					});
 				}}

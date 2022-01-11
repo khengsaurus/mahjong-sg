@@ -15,7 +15,7 @@ $color-border: rgb(40, 40, 40);
 $radial-gradient-gold: radial-gradient($color-tile-front, #d8ba85, #ffffff, $color-tile-front);
 $radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
 
-$linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #73c0ae);
+$linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #7389c0);
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
 
 /* -------------------- Tiles -------------------- */
@@ -386,13 +386,19 @@ $log-margin-left-medium: 5px;
 
 @keyframes linear-gradient-sway {
 	0% {
-		background-position: 0% 50%;
+		background-position: 8% 98%;
+	}
+	25% {
+		background-position: 50% 50%;
 	}
 	50% {
-		background-position: 100% 50%;
+		background-position: 98% 8%;
+	}
+	75% {
+		background-position: 50% 50%;
 	}
 	100% {
-		background-position: 0% 50%;
+		background-position: 8% 98%;
 	}
 }
 

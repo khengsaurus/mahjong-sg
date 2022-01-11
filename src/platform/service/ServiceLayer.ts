@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import FBService, { FirebaseService } from 'platform/service/MyFirebaseService';
 import { Store } from 'redux';
-import { LocalFlag, UserActivity } from 'shared/enums';
+import { LocalFlag, PaymentType, UserActivity } from 'shared/enums';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import { setLocalGame, store } from 'shared/store';
@@ -159,19 +159,20 @@ export class Service {
 		minTai: number,
 		maxTai: number,
 		mHu: boolean,
+		pay: PaymentType,
 		isLocalGame = false
 	): Promise<Game> {
 		return new Promise(resolve => {
 			try {
 				if (isLocalGame) {
-					createLocalGame(user, players, random, minTai, maxTai, mHu).then(game => {
+					createLocalGame(user, players, random, minTai, maxTai, mHu, pay).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
 						this.store.dispatch(setLocalGame(game));
 						resolve(game);
 					});
 				} else {
-					FBService.createGame(user, players, random, minTai, maxTai, mHu).then(game => {
+					FBService.createGame(user, players, random, minTai, maxTai, mHu, pay).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
 						FBService.updateGame(game).then(() => {

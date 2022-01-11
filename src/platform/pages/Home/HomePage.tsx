@@ -44,7 +44,7 @@ const HomePage = ({
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
 	const dispatch = useDispatch();
 
-	/*-------------------- Keyboard offset for iOS + Android back button handling --------------------*/
+	/* -------------------- Keyboard offset for iOS + Android back button handling -------------------- */
 	const [marginBottom, setMarginBottom] = useState(0);
 	const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
 	const isIOS = Capacitor.getPlatform() === Platform.IOS;
@@ -83,7 +83,7 @@ const HomePage = ({
 		history.push(Page.HOME);
 	});
 
-	/*------------------ End keyboard offset for iOS + Android back button handling ------------------*/
+	/* ------------------ End keyboard offset for iOS + Android back button handling ------------------ */
 
 	// Reset store/AppContext on leaving game since Table useEffect cleanup is used for subscription
 	useEffect(() => {

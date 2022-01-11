@@ -185,7 +185,7 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 						<StyledButton label={ButtonText.CANCEL} onClick={handleClose} />
 						<StyledButton label={ButtonText.DELETE} onClick={handleDeleteAccount} />
 					</Row>
-					<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
+					<Collapse in={!!alert} timeout={{ enter: Transition.FAST }} unmountOnExit>
 						<>
 							<Alert severity={alert?.status as AlertStatus}>
 								{alert?.msg || ErrorMessage.TRY_AGAIN}

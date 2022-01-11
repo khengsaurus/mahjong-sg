@@ -3,7 +3,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { StyledButton } from 'platform/style/StyledMui';
 import React, { useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import { Bot, BotIds, BotName, LocalFlag, Page, Visitor } from 'shared/enums';
+import { Bot, BotIds, BotName, LocalFlag, Page, PaymentType, Visitor } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { ButtonText } from 'shared/screenTexts';
@@ -24,11 +24,13 @@ const PlayAIButton = () => {
 			new User(BotIds[2], BotName.bot3 || Bot, '', '')
 		];
 
-		await ServiceInstance.initGame(tempUser, tempPlayers, false, 1, 5, false, true).then(game => {
-			dispatch(setTHK(111));
-			dispatch(setLocalGame(game));
-			dispatch(setGameId(LocalFlag));
-		});
+		await ServiceInstance.initGame(tempUser, tempPlayers, false, 1, 5, false, PaymentType.HALF_SHOOTER, true).then(
+			game => {
+				dispatch(setTHK(111));
+				dispatch(setLocalGame(game));
+				dispatch(setGameId(LocalFlag));
+			}
+		);
 		history.push(Page.TABLE);
 	}
 
