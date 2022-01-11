@@ -4,6 +4,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import MoodIcon from '@mui/icons-material/Mood';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import {
+	Dialog,
+	DialogContent,
 	Fade,
 	FormControl,
 	IconButton,
@@ -32,7 +34,6 @@ import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { IStore, setGameId } from 'shared/store';
 import { setTHK } from 'shared/store/actions';
 import { getTileHashKey } from 'shared/util';
-import GameOptions from './GameOptions';
 import './newGame.scss';
 
 const NewGame = () => {
@@ -50,7 +51,6 @@ const NewGame = () => {
 	const [startedGame, setStartedGame] = useState(false);
 	const playersRef = useRef<User[]>(players);
 	const dispatch = useDispatch();
-	/*---------------------------- End Android bottom buttons  ----------------------------*/
 
 	const isLocalGame: boolean = useMemo(
 		() => players.every(p => p.id === user.id || BotIds.includes(p.id)),
@@ -83,7 +83,58 @@ const NewGame = () => {
 		}
 	}
 
-	// Note: to effect the animation, this cannot be returned as a FC
+	const renderRandomizeOption = () => (
+		<Fade in={players.length === 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
+			<div>
+				<ListItem className="user list-item">
+					<ListItemText secondary={`Randomize`} />
+					<IconButton
+						onClick={() => setRandom(!random)}
+						style={{ justifyContent: 'flex-end', marginRight: -8 }}
+						disableRipple
+					>
+						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+					</IconButton>
+				</ListItem>
+			</div>
+		</Fade>
+	);
+
+	const renderBottomButtons = () => (
+		<Fade in={showBottom} timeout={20} unmountOnExit>
+			<div>
+				<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
+					<HomeButton
+						style={{
+							marginLeft:
+								players?.length < 4
+									? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
+									: 0,
+							transition: TransitionSpeed.MEDIUM
+						}}
+						disableShortcut
+					/>
+					<StyledButton
+						label={ButtonText.OPTIONS}
+						onClick={() => setShowOptions(prev => !prev)}
+						disabled={startedGame}
+					/>
+					<Fade in={players.length === 4} timeout={Transition.FAST}>
+						<div id="start-join-btn">
+							<StyledButton
+								label={startedGame ? ButtonText.JOIN : ButtonText.START}
+								onClick={handleStartJoinClick}
+								disabled={players.length < 4}
+							/>
+						</div>
+					</Fade>
+				</Row>
+			</div>
+		</Fade>
+	);
+
+	/*-------------------------------- Game Options --------------------------------*/
+
 	const renderUserOption = (player: User) => (
 		<ListItem className="user list-item">
 			<ListItemText primary={player?.uN} />
@@ -111,9 +162,7 @@ const NewGame = () => {
 		<ListItem className="user list-item">
 			<ListItemText secondary={`Manual Hu`} />
 			<IconButton
-				onClick={() => {
-					setMHu(!mHu);
-				}}
+				onClick={() => setMHu(!mHu)}
 				style={{ justifyContent: 'flex-end', marginRight: -8 }}
 				disableRipple
 			>
@@ -126,9 +175,9 @@ const NewGame = () => {
 		<ListItem className="user list-item">
 			<ListItemText secondary={payment === PaymentType.SHOOTER ? `Shooter` : `Half Shooter`} />
 			<IconButton
-				onClick={() => {
-					setPayment(payment === PaymentType.SHOOTER ? PaymentType.HALF_SHOOTER : PaymentType.SHOOTER);
-				}}
+				onClick={() =>
+					setPayment(payment === PaymentType.SHOOTER ? PaymentType.HALF_SHOOTER : PaymentType.SHOOTER)
+				}
 				style={{ justifyContent: 'flex-end', marginRight: -8 }}
 				disableRipple
 			>
@@ -188,68 +237,31 @@ const NewGame = () => {
 		);
 	};
 
-	const renderRandomizeOption = () => (
-		<Fade in={players.length === 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
-			<div>
-				<ListItem className="user list-item">
-					<ListItemText secondary={`Randomize`} />
-					<IconButton
-						onClick={() => {
-							setRandom(!random);
+	const renderGameOptions = () => {
+		return (
+			<Fade in={showOptions && showBottom} timeout={Transition.FAST} unmountOnExit>
+				<div>
+					<Dialog
+						open={showOptions}
+						BackdropProps={{ invisible: true }}
+						onClose={() => {
+							setShowOptions(false);
 						}}
-						style={{ justifyContent: 'flex-end', marginRight: -8 }}
-						disableRipple
 					>
-						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-					</IconButton>
-				</ListItem>
-			</div>
-		</Fade>
-	);
-
-	const Options = () => (
-		<List className="list">
-			{renderManualHu()}
-			{renderPaymentType()}
-			{renderTaiSelect('Min Tai', minTaiStr, handleMinTai)}
-			{renderTaiSelect('Max Tai', maxTaiStr, handleMaxTai)}
-		</List>
-	);
-
-	const renderBottomButtons = () => (
-		<Fade in={showBottom} timeout={20} unmountOnExit>
-			<div>
-				<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
-					<HomeButton
-						style={{
-							marginLeft:
-								players?.length < 4
-									? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
-									: 0,
-							transition: TransitionSpeed.MEDIUM
-						}}
-						disableShortcut
-					/>
-					<StyledButton
-						label={ButtonText.OPTIONS}
-						onClick={() => {
-							setShowOptions(prev => !prev);
-						}}
-						disabled={startedGame}
-					/>
-					<Fade in={players.length === 4} timeout={Transition.FAST}>
-						<div id="start-join-btn">
-							<StyledButton
-								label={startedGame ? ButtonText.JOIN : ButtonText.START}
-								onClick={handleStartJoinClick}
-								disabled={players.length < 4}
-							/>
-						</div>
-					</Fade>
-				</Row>
-			</div>
-		</Fade>
-	);
+						<DialogContent>
+							<List className="list">
+								{renderManualHu()}
+								{renderPaymentType()}
+								{renderTaiSelect('Min Tai', minTaiStr, handleMinTai)}
+								{renderTaiSelect('Max Tai', maxTaiStr, handleMaxTai)}
+							</List>
+						</DialogContent>
+					</Dialog>
+				</div>
+			</Fade>
+		);
+	};
+	/*------------------------------ End Game Options ------------------------------*/
 
 	const markup = () => (
 		<>
@@ -275,17 +287,7 @@ const NewGame = () => {
 					{!startedGame && renderRandomizeOption()}
 				</div>
 			</div>
-			<Fade in={showOptions && showBottom} timeout={Transition.FAST} unmountOnExit>
-				<div>
-					<GameOptions
-						show={showOptions}
-						onClose={() => {
-							setShowOptions(false);
-						}}
-						Content={Options}
-					/>
-				</div>
-			</Fade>
+			{renderGameOptions()}
 			{renderBottomButtons()}
 		</>
 	);
