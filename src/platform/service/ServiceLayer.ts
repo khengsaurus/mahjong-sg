@@ -200,6 +200,9 @@ export class Service {
 		}
 	}
 
+	/**
+	 * Note that this runs a transaction -> 1 read + 1 write
+	 */
 	adminUpdateGame(game: Game, isLocalGame: boolean, mHu: boolean, bt: number) {
 		if (isLocalGame) {
 			game.mHu = mHu;
@@ -208,6 +211,21 @@ export class Service {
 		} else {
 			try {
 				FBService.runTransactionUpdate(game.id, { mHu, bt });
+			} catch (err) {
+				console.error(err);
+			}
+		}
+	}
+
+	sendPayment(game: Game, isLocalGame: boolean, from: number, to: number, chips: number) {
+		if (isLocalGame) {
+			game.ps[from].bal = Math.round(game.ps[from].bal - chips);
+			game.ps[to].bal = Math.round(game.ps[to].bal + chips);
+			game.logs.push(`${game.ps[from].uN} sent ${game.ps[to].uN} ${chips} chips`);
+			this.updateGame(game, true);
+		} else {
+			try {
+				FBService.runTransactionPay(game.id, from, to, chips);
 			} catch (err) {
 				console.error(err);
 			}

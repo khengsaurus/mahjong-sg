@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
@@ -8,41 +9,31 @@ import { Game, User } from 'shared/models';
 import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
 
-export async function sendChips(
-	game: Game,
-	sender: number,
-	recipient: number,
-	amount: number,
-	updateGame: (game: Game) => void,
-	sendCallback?: () => void
-) {
-	game.ps[sender].bal = Math.round(game.ps[sender].bal - amount);
-	game.ps[recipient].bal = Math.round(game.ps[recipient].bal + amount);
-	game.newLog(`${game.ps[sender].uN} sent ${game.ps[recipient].uN} ${amount} chips`);
-	updateGame(game);
+export async function sendChips(game: Game, from: number, to: number, chips: number, sendCallback?: () => void) {
+	ServiceInstance.sendPayment(game, game.id === LocalFlag, from, to, chips);
 	sendCallback && sendCallback();
 }
 
 const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => {
 	const { game, gameId, localGame } = useSelector((store: IStore) => store);
-	const [recipientIndex, setRecipientIndex] = useState(10);
-	const [amount, setAmount] = useState(0);
+	const [toWho, setToWho] = useState(10);
+	const [chips, setChips] = useState(0);
 	const isLocalGame = gameId === LocalFlag;
 	const currGame = isLocalGame ? localGame : game;
 	const playerUsername = currGame.ps[playerSeat].uN;
 
 	function sendCallback() {
-		setRecipientIndex(10);
-		setAmount(0);
+		setToWho(10);
+		setChips(0);
 		onClose();
 	}
 
 	const handleSelectRecipient = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setRecipientIndex(parseInt((event.target as HTMLInputElement).value));
+		setToWho(parseInt((event.target as HTMLInputElement).value));
 	};
 
 	const handleSelectAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setAmount(Number((event.target as HTMLInputElement).value));
+		setChips(Number((event.target as HTMLInputElement).value));
 	};
 
 	return (
@@ -59,7 +50,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 			<DialogContent>
 				<StyledText title="Send chips" variant="subtitle1" padding="3px 0px" />
 				<StyledText title="To: " variant="subtitle1" padding="2px 0px" />
-				<RadioGroup row value={recipientIndex} onChange={handleSelectRecipient}>
+				<RadioGroup row value={toWho} onChange={handleSelectRecipient}>
 					{currGame.ps.map((otherPlayer: User, index: number) =>
 						otherPlayer.uN !== playerUsername ? (
 							<FormControlLabel
@@ -73,13 +64,13 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 				</RadioGroup>
 
 				<StyledText title="Amount: " variant="subtitle1" padding="2px 0px" />
-				<RadioGroup row style={{ width: '90%' }} value={amount} onChange={handleSelectAmount}>
-					{Amounts.map((amount: number, index: number) => (
+				<RadioGroup row style={{ width: '90%' }} value={chips} onChange={handleSelectAmount}>
+					{Amounts.map((chips: number, index: number) => (
 						<FormControlLabel
 							key={index}
-							value={amount}
+							value={chips}
 							control={<Radio />}
-							label={`${amount}`}
+							label={`${chips}`}
 							labelPlacement="end"
 							style={{ width: '60px' }}
 						/>
@@ -92,9 +83,9 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 						variant="text"
 						size="large"
 						onClick={() => {
-							sendChips(currGame, playerSeat, recipientIndex, amount, updateGame, sendCallback);
+							sendChips(currGame, playerSeat, toWho, chips, sendCallback);
 						}}
-						disabled={recipientIndex === 9 || !amount || amount <= 0}
+						disabled={toWho === 9 || !chips || chips <= 0}
 						disableRipple
 					>
 						{`Send`}

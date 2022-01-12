@@ -560,6 +560,34 @@ export class FirebaseService {
 		});
 	}
 
+	async runTransactionPay(gameId: string, from: number, to: number, chips: number): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (this.isFBConnected) {
+				runTransaction(this.fs, async transaction => {
+					const gameDocRef = doc(this.gamesRef, gameId);
+					await transaction.get(gameDocRef).then(gameDoc => {
+						if (!gameDoc.exists()) {
+							reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
+						} else {
+							const { ps, logs } = gameDoc.data();
+							if (ps) {
+								ps[from].bal = Math.round(ps[from].bal - chips);
+								ps[to].bal = Math.round(ps[to].bal + chips);
+							}
+							if (logs) {
+								logs.push(`${ps[from].uN} sent ${ps[to].uN} ${chips} chips`);
+							}
+							transaction.update(gameDocRef, { ps, logs });
+							resolve();
+						}
+					});
+				});
+			} else {
+				reject(ErrorMessage.SERVICE_OFFLINE);
+			}
+		});
+	}
+
 	/* ------------------------- Dev / maintenance ------------------------- */
 
 	newLog(log: IFBLog) {

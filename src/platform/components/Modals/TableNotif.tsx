@@ -25,16 +25,6 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 				}
 			}}
 		>
-			{skip && (
-				<IconButton
-					className="icon-button"
-					onClick={skip}
-					style={{ position: 'absolute', top: -5, right: -5 }}
-					disableRipple
-				>
-					<CloseIcon fontSize={'medium'} />
-				</IconButton>
-			)}
 			<DialogContent style={{ paddingBottom: 0 }}>
 				<Centered>
 					{notifs[0] && <StyledText title={notifs[0]} variant="subtitle1" padding="3px 0px" />}
@@ -59,6 +49,16 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 				{pong && <StyledButton label={'Pong'} onClick={pong} />}
 				{kang && <StyledButton label={'Kang'} onClick={kang} />}
 				{hu && <StyledButton label={'Hu'} onClick={hu} />}
+				{skip && (
+					<IconButton
+						className="icon-button"
+						onClick={skip}
+						style={{ position: 'absolute', top: -4, right: -4 }}
+						disableRipple
+					>
+						<CloseIcon fontSize={'medium'} />
+					</IconButton>
+				)}
 			</DialogActions>
 		</Dialog>
 	);

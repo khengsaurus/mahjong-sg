@@ -58,7 +58,7 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInline
 			<IconButton
 				style={{ marginLeft: '5px' }}
 				onClick={() => {
-					sendChips(game, playerSeat, winner, amount, updateGame, () => {
+					sendChips(game, playerSeat, winner, amount, () => {
 						setAmount(0);
 						setAmountStr('');
 					});

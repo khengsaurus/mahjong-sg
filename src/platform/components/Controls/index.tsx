@@ -22,8 +22,8 @@ const Controls = () => {
 	const isLocalGame = LocalFlag === useSelector((store: IStore) => store.gameId);
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
-	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 	const { delayLeft } = useGameCountdown();
+	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
 
 	const handleHome = useCallback(() => {
