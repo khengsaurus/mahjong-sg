@@ -2,21 +2,25 @@
 
 .content {
 	@include flow(column wrap);
+	-webkit-text-size-adjust: 100%;
+	&.centered {
+		text-align: center;
+	}
 
 	h3 {
 		font-weight: bold;
-		font-size: 19px;
+		font-size: 1.2rem;
 		margin: 0px 0px 20px;
 	}
 
 	h4 {
 		font-weight: bold;
-		font-size: 17px;
+		font-size: 1.1rem;
 		margin: 10px 0px;
 	}
 
 	p {
-		font-size: 14px;
+		font-size: 1rem;
 		display: block;
 		margin: 0px !important;
 	}
@@ -29,12 +33,30 @@
 			margin: 10px;
 		}
 	}
+
+	.stack {
+		@include flex-dir(row);
+		align-self: center;
+		align-items: center;
+		padding-bottom: 12px;
+		.logos {
+			padding: 0px 4px;
+			img {
+				max-height: 1rem;
+				max-width: 1rem;
+				padding: 0 2px;
+			}
+		}
+	}
 }
 
 .scrollable {
 	padding: 40px 0px 0px;
 	margin-top: const(safe-area-inset-top);
 	margin-top: env(safe-area-inset-top);
+	&.centered {
+		width: 80%;
+	}
 }
 
 .home-button {

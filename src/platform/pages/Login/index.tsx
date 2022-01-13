@@ -2,7 +2,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
-import { AboutButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
+import { AboutButton, HelpButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
 import { useAndroidKeyboardListener, useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
@@ -181,9 +181,10 @@ const Login = () => {
 				<PlayAIButton />
 			</Row>
 			{showBottom && (
-				<BottomSpec style={{ marginRight: -5 }}>
+				<BottomSpec>
 					<PrivacyButton />
 					<AboutButton />
+					<HelpButton />
 				</BottomSpec>
 			)}
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>

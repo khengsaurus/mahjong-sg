@@ -1,6 +1,12 @@
 import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
-import { AboutButton, JoinGameButton, NewGameButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
+import {
+	AboutButton,
+	HelpButton,
+	JoinGameButton,
+	NewGameButton,
+	PrivacyButton
+} from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
@@ -39,9 +45,10 @@ const Home = () => {
 			<JoinGameButton />
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
 			<LogoutButton />
-			<BottomSpec style={{ marginRight: -5 }}>
+			<BottomSpec>
 				<PrivacyButton />
 				<AboutButton />
+				<HelpButton />
 			</BottomSpec>
 			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>

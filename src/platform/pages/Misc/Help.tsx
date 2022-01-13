@@ -5,20 +5,14 @@ import { useSelector } from 'react-redux';
 import { PageName, Platform } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import './about.scss';
+import './misc.scss';
 
-const About = () => {
+const Help = () => {
 	const { user } = useSelector((store: IStore) => store);
 	const platform = process.env.REACT_APP_PLATFORM === Platform.MOBILE ? 'app' : 'website';
 
 	const renderLocalContent = () => (
 		<div className="content">
-			<h3>Hello, thank you for using this {platform}</h3>
-			<p>
-				We tried to cover all the rules of Singapore Mahjong here, but it still has some limitations. Do read
-				through the following to understand the {platform} better.
-			</p>
-			<br />
 			<h4>Creating a new game</h4>
 			<ul>
 				<li>When searching for a user, you have to spell out their username exactly as it is.</li>
@@ -198,22 +192,10 @@ const About = () => {
 			<br />
 			<p>
 				This {platform} currently does not support username change or password reset. An email address can only
-				be used to register one account. If you have any feedback or would like to get in touch, do drop us an
-				email at mahjongsgapp@gmail.com.{' '}
+				be used to register one account.
 			</p>
 			<br />
-			{process.env.REACT_APP_PLATFORM === Platform.MOBILE ? (
-				<p>
-					Find us online at{' '}
-					<a href="wwww.mahjong-sg.com" style={{ color: '#005eff' }}>
-						www.mahjong-sg.com
-					</a>
-				</p>
-			) : (
-				<p>Find Mahjong SG in the app store today</p>
-			)}
-			<br />
-			<h3>Thank you for reading, and have fun</h3>
+			<h4>Thank you for reading, and have fun</h4>
 			<br />
 		</div>
 	);
@@ -230,4 +212,4 @@ const About = () => {
 	);
 };
 
-export default About;
+export default Help;

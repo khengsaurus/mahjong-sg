@@ -6,7 +6,7 @@ android {
         applicationId "com.tk.mahjongSg"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19 // not built yet, 11 Jan 2AM
+        versionCode 20 // not built yet, 13 Jan 1AM
         versionName "1.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

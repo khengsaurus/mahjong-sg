@@ -43,7 +43,7 @@ export const CenteredTableColored = styled(Centered)`
 `;
 
 export const Scrollable = styled.div`
-	width: 90%;
+	width: clamp(200px, 90%, 600px) !important;
 	text-align: left;
 	overflow-y: scroll;
 	scroll-behavior: smooth;

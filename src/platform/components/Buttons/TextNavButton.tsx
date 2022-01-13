@@ -46,22 +46,10 @@ const JoinGameButton = ({ style = {} }: IHasStyle) => {
 	return <TextNavButton label={PageName.JOINGAME} route={Page.JOINGAME} shortcut={Shortcut.JOINGAME} style={style} />;
 };
 
-const AboutButton = ({ style = {} }: IHasStyle) => {
-	return (
-		<TextNavButton
-			label={PageName.ABOUT}
-			route={Page.ABOUT}
-			shortcut={null}
-			disableShortcut={true}
-			style={{ ...style, fontSize: 12, padding: 0 }}
-		/>
-	);
-};
-
 const PrivacyButton = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
-			label={ButtonText.PRIVACY}
+			label={ButtonText.DATA}
 			route={Page.PRIVACY}
 			shortcut={null}
 			disableShortcut={true}
@@ -70,4 +58,28 @@ const PrivacyButton = ({ style = {} }: IHasStyle) => {
 	);
 };
 
-export { AboutButton, HomeButton, JoinGameButton, NewGameButton, PrivacyButton, TextNavButton };
+const AboutButton = ({ style = {} }: IHasStyle) => {
+	return (
+		<TextNavButton
+			label={ButtonText.ABOUT}
+			route={Page.ABOUT}
+			shortcut={null}
+			disableShortcut={true}
+			style={{ ...style, fontSize: 12, padding: 0 }}
+		/>
+	);
+};
+
+const HelpButton = ({ style = {} }: IHasStyle) => {
+	return (
+		<TextNavButton
+			label={ButtonText.HELP}
+			route={Page.HELP}
+			shortcut={null}
+			disableShortcut={true}
+			style={{ ...style, fontSize: 12, padding: 0 }}
+		/>
+	);
+};
+
+export { AboutButton, HelpButton, HomeButton, JoinGameButton, NewGameButton, PrivacyButton, TextNavButton };
