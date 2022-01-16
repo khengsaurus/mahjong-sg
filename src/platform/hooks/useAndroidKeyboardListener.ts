@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { EEvent, Platform } from 'shared/enums';
 
 /**
@@ -20,7 +20,7 @@ const useAndroidKeyboardListener = (landscapeOnly = false) => {
 		ScreenOrientation.ORIENTATIONS.LANDSCAPE_SECONDARY
 	].includes(ScreenOrientation.type);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (keyboardAvail && isAndroid && (landscapeOnly ? isLandscape : true)) {
 			Keyboard.addListener(EEvent.KEYBOARDWILLSHOW, () => {
 				setShowBottom(false);

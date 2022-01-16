@@ -15,7 +15,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { getHighlightColor, HomeTheme, TableTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LocalFlag, Page, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -44,7 +44,7 @@ const Table = () => {
 
 	/* ----------------------------------- Screen orientation ----------------------------------- */
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
@@ -123,7 +123,7 @@ const Table = () => {
 
 	const currGame = isLocalGame ? localGame : game;
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const lTh = document.getElementById(`shown-tile-${currGame?.lTh?.r}`);
 		$(lTh)?.addClass('last');
 

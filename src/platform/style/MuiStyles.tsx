@@ -80,7 +80,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiButton: {
 				styleOverrides: {
 					root: {
-						color: `${textColor}`,
+						primary: `${textColor}`,
+						secondary: `${highlightColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
 							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`

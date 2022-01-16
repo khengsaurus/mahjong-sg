@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { DiscardedTiles, HiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
 import { useDynamicWidth } from 'platform/hooks';
@@ -34,7 +35,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 		countTs: player.allHiddenTiles().length,
 		tileSize,
 		flag: sT,
-		addPx: _HiddenTileWidth[tileSize]
+		addPx: isEmpty(lTa) ? 0 : _HiddenTileWidth[tileSize]
 	});
 
 	return (

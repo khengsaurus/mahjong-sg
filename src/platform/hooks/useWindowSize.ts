@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { EEvent, Size, _ShownTileHeight, _ShownTileWidth } from 'shared/enums';
 import { useWindowListener } from '.';
 
@@ -41,14 +41,13 @@ export function useWindowHeight() {
 export function useDynamicWidth({ ref, countTs, tileSize, flag, add = 0, addPx = 0 }: useDynamicWidthProps) {
 	const windowHeight = useWindowHeight();
 
-	return useEffect(() => {
+	return useLayoutEffect(() => {
 		if (ref.current?.style) {
 			const length = countTs + add;
 			const maxColHeight = 0.85 * windowHeight; // Referenced in playerComponents.scss
 			const reqHeight = length * _ShownTileWidth[tileSize] + addPx;
 			const colsReq =
 				maxColHeight >= reqHeight ? 1 : Number(maxColHeight) ? Math.ceil(reqHeight / maxColHeight) : 1;
-
 			ref.current.style.width = `${colsReq * _ShownTileHeight[tileSize]}px`;
 		}
 	}, [add, addPx, countTs, flag, ref, tileSize, windowHeight]);
