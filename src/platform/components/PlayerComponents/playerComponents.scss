@@ -10,7 +10,8 @@
 				flex-direction: column-reverse;
 			}
 			.htsh {
-				margin: getTilePadding($size);
+				border: getTilePadding($size) solid transparent;
+				// border-radius: $default-border-radius;
 				&.unused {
 					z-index: -1;
 					&.bottom {
@@ -111,7 +112,8 @@
 			}
 
 			.vtsh {
-				margin: getTilePadding($size);
+				border: getTilePadding($size) solid transparent;
+				// border-radius: $default-border-radius;
 				transition: $transition-fast;
 				&.unused {
 					z-index: -1;
@@ -206,11 +208,10 @@
 		}
 
 		.self-hidden-tiles-#{$size} {
-			align-self: center;
 			@include flex-dir(row);
 			margin: getTilePadding($size);
-			z-index: 20;
 			transition: $transition-fast;
+			z-index: 20;
 			.self-hidden-tile {
 				height: getSelfHiddenTileHeight($size);
 				width: getSelfHiddenTileWidth($size);

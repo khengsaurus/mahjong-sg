@@ -8,7 +8,7 @@ import { PlayerComponentProps } from 'shared/typesPlus';
 import './playerComponents.scss';
 
 const TopPlayer = (props: PlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown } = props;
+	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const {
@@ -31,7 +31,12 @@ const TopPlayer = (props: PlayerComponentProps) => {
 					{...{ hTs, lTa, tHK }}
 				/>
 			) : (
-				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} tileSize={tileSize} />
+				<HiddenHand
+					tiles={allHiddenTiles.length}
+					segment={Segment.TOP}
+					tileSize={tileSize}
+					highlight={highlight}
+				/>
 			)}
 
 			{/* Shown tiles */}

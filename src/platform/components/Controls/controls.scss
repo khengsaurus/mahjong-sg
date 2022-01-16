@@ -33,9 +33,10 @@
 		}
 
 		.bottom-left-controls-#{$size} {
-			@include absolute-padding(0, 0, $main-padding, $main-padding);
+			@include absolute-padding(0, 0, $main-padding - 3px, $main-padding);
 			@include flow(row wrap-reverse);
 			@include alignI-justifyC(flex-start, flex-start);
+			border-bottom: 3px solid transparent;
 			height: 2 * getButtonHeight($size);
 			width: 2 * getButtonWidth($size);
 			z-index: 10;
@@ -50,8 +51,9 @@
 		}
 
 		.bottom-right-controls-#{$size} {
-			@include absolute-padding(0, $main-padding, $main-padding, 0);
+			@include absolute-padding(0, $main-padding, $main-padding - 3px, 0);
 			@include flow(row-reverse wrap-reverse);
+			border-bottom: 3px solid transparent;
 			align-items: flex-start;
 			height: 2 * getButtonHeight($size);
 			width: 2 * getButtonWidth($size);

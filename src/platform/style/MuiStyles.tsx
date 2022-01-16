@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { BackgroundColor, TableColor, TextColor } from 'shared/enums';
 import { IStore } from 'shared/store';
 
-function getHighlightColor(color: TableColor | BackgroundColor) {
+export function getHighlightColor(color: TableColor | BackgroundColor) {
 	if ([TableColor.DARK, BackgroundColor.DARK].includes(color)) {
 		return blue[700];
 	} else if ([TableColor.BROWN, BackgroundColor.BROWN].includes(color)) {

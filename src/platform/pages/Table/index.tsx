@@ -12,7 +12,7 @@ import RightPlayer from 'platform/components/PlayerComponents/RightPlayer';
 import TopPlayer from 'platform/components/PlayerComponents/TopPlayer';
 import { useLocalSession } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { HomeTheme, TableTheme } from 'platform/style/MuiStyles';
+import { getHighlightColor, HomeTheme, TableTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useState } from 'react';
@@ -33,7 +33,8 @@ const Table = () => {
 		gameId,
 		game,
 		localGame,
-		sizes: { tileSize }
+		sizes: { tileSize },
+		theme: { tableColor }
 	} = useSelector((state: IStore) => state);
 	const { setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
@@ -131,11 +132,12 @@ const Table = () => {
 
 	const getMarkup = () => {
 		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {
-			const { _d = 0, fr = [0, 0], ps = [] } = currGame;
+			const { _d = 0, fr = [0, 0], lTh = {}, ps = [], thB = 0, wM = 0 } = currGame;
 			const currentWind = currGame?.repr() && currGame?.repr()[0];
 			const topPlayerX = findOpp(playerSeat);
 			const rightPlayerX = findRight(playerSeat);
 			const leftPlayerX = findLeft(playerSeat);
+			const highlightColor = getHighlightColor(tableColor);
 			return (
 				<TableTheme>
 					<Main>
@@ -149,11 +151,8 @@ const Table = () => {
 										hasFront={fr[0] === topPlayerX}
 										hasBack={fr[1] === topPlayerX}
 										tileSize={tileSize}
-										lastThrown={
-											currGame.thB === topPlayerX || currGame?.wM === topPlayerX
-												? currGame?.lTh
-												: null
-										}
+										lastThrown={thB === topPlayerX || wM === topPlayerX ? lTh : null}
+										highlight={topPlayerX === wM ? highlightColor : ''}
 									/>
 								)}
 							</div>
@@ -165,11 +164,8 @@ const Table = () => {
 										hasFront={fr[0] === rightPlayerX}
 										hasBack={fr[1] === rightPlayerX}
 										tileSize={tileSize}
-										lastThrown={
-											currGame.thB === rightPlayerX || currGame?.wM === rightPlayerX
-												? currGame?.lTh
-												: null
-										}
+										lastThrown={thB === rightPlayerX || wM === rightPlayerX ? lTh : null}
+										highlight={rightPlayerX === wM ? highlightColor : ''}
 									/>
 								)}
 							</div>
@@ -180,11 +176,8 @@ const Table = () => {
 										dealer={_d === playerSeat}
 										hasFront={fr[0] === playerSeat}
 										hasBack={fr[1] === playerSeat}
-										lastThrown={
-											currGame.thB === playerSeat || currGame?.wM === playerSeat
-												? currGame?.lTh
-												: null
-										}
+										lastThrown={thB === playerSeat || wM === playerSeat ? lTh : null}
+										highlight={playerSeat === wM ? highlightColor : ''}
 									/>
 								)}
 							</div>
@@ -197,10 +190,9 @@ const Table = () => {
 										hasBack={fr[1] === leftPlayerX}
 										tileSize={tileSize}
 										lastThrown={
-											currGame.thB === leftPlayerX || currGame.wM === leftPlayerX
-												? currGame.lTh
-												: null
+											thB === leftPlayerX || currGame.wM === leftPlayerX ? currGame.lTh : null
 										}
+										highlight={leftPlayerX === wM ? highlightColor : ''}
 									/>
 								)}
 							</div>

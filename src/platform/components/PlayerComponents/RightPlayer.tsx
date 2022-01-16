@@ -10,7 +10,7 @@ import { PlayerComponentProps } from 'shared/typesPlus';
 import './playerComponents.scss';
 
 const RightPlayer = (props: PlayerComponentProps) => {
-	const { player, dealer, hasFront, hasBack, lastThrown } = props;
+	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
 	const {
@@ -49,7 +49,7 @@ const RightPlayer = (props: PlayerComponentProps) => {
 					{...{ hTs, lTa, tHK }}
 				/>
 			) : (
-				<HiddenHand tiles={countHandTiles} segment={Segment.RIGHT} tileSize={tileSize} />
+				<HiddenHand tiles={countHandTiles} segment={Segment.RIGHT} tileSize={tileSize} highlight={highlight} />
 			)}
 
 			{/* Shown tiles */}

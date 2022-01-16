@@ -15,14 +15,15 @@ const BottomRightControls = (props: BRControlsProps) => {
 		drawText,
 		confirmHu,
 		showDeclareHu,
-		HHStr
+		HHStr,
+		highlight
 	} = props;
 	const {
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
 
 	return (
-		<div className={`bottom-right-controls-${controlsSize}`}>
+		<div className={`bottom-right-controls-${controlsSize}`} style={{ borderColor: highlight || null }}>
 			<ControlButton
 				label={`丢`}
 				callback={handleThrow}

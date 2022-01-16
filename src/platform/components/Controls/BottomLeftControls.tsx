@@ -16,14 +16,15 @@ const BottomLeftControls = (props: BLControlsProps) => {
 		pongText,
 		confirmHu,
 		showDeclareHu,
-		HHStr
+		HHStr,
+		highlight
 	} = props;
 	const {
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
 
 	return (
-		<div className={`bottom-left-controls-${controlsSize}`}>
+		<div className={`bottom-left-controls-${controlsSize}`} style={{ borderColor: highlight || null }}>
 			<ControlButton
 				label={pongText}
 				callback={handlePong}

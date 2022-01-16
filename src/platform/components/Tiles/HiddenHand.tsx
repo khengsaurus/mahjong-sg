@@ -6,15 +6,16 @@ interface HiddenHandProps {
 	tiles: number;
 	segment: Segment;
 	tileSize?: Size;
+	highlight?: string;
 }
 
-const HiddenHand = ({ tiles, segment, tileSize = Size.MEDIUM }: HiddenHandProps) => {
+const HiddenHand = ({ tiles, segment, tileSize = Size.MEDIUM, highlight = '' }: HiddenHandProps) => {
 	return segment === Segment.TOP ? (
-		<div className="htsh">
+		<div className="htsh" style={{ borderColor: highlight || null }}>
 			<TileBack className="horizontal-hidden" style={{ width: tiles * _HiddenTileWidth[tileSize] }} />
 		</div>
 	) : (
-		<div className="vtsh">
+		<div className="vtsh" style={{ borderColor: highlight || null }}>
 			<TileBack className="vertical-hidden" style={{ height: tiles * _HiddenTileWidth[tileSize] }} />
 		</div>
 	);
