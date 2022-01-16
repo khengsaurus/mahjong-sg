@@ -117,7 +117,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					root: {
 						padding: '14px 18px',
 						userSelect: 'none',
-						'&:first-child': { paddingTop: null }
+						'&:first-of-type': { paddingTop: null }
 					}
 				}
 			},

@@ -7,9 +7,9 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { AlertStatus, Page, Status, Transition } from 'shared/enums';
+import { AlertStatus, AppFlag, DisallowedUsernames, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { InfoMessage } from 'shared/messages';
+import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
@@ -48,16 +48,21 @@ const NewUser = () => {
 	}
 
 	function registerNewUsername(values: IEmailUser, callback: () => void) {
-		ServiceInstance.FBNewUsername(values)
-			.then(res => {
-				if (res) {
-					setAlert({ status: Status.SUCCESS, msg: InfoMessage.REGISTER_SUCCESS });
-					callback();
-				}
-			})
-			.catch(err => {
-				setAlert({ status: Status.ERROR, msg: err.message });
-			});
+		const disallowed = DisallowedUsernames.find(u => username.toLowerCase().startsWith(u));
+		if (!!disallowed && !process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV)) {
+			setAlert({ status: Status.ERROR, msg: `${ErrorMessage.USERNAME_NOT_ALLOWED} '${disallowed}'` });
+		} else {
+			ServiceInstance.FBNewUsername(values)
+				.then(res => {
+					if (res) {
+						setAlert({ status: Status.SUCCESS, msg: InfoMessage.REGISTER_SUCCESS });
+						callback();
+					}
+				})
+				.catch(err => {
+					setAlert({ status: Status.ERROR, msg: err.message });
+				});
+		}
 	}
 
 	function registerSuccessCallback() {

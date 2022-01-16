@@ -18,10 +18,6 @@ const Help = () => {
 				<li>When searching for a user, you have to spell out their username exactly as it is.</li>
 				<li>There is no rolling of dice to decide on player seats (hence the 'Randomize' option).</li>
 				<li>
-					Note the 'Options' available (choosing Shooter or Half-Shooter doesn't have any effect on gameplay
-					for now).
-				</li>
-				<li>
 					The {platform} will not let you Hu if you do not meet the minimum Tai. Currently the Maximum Tai is
 					5.
 				</li>
