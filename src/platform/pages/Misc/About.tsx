@@ -16,8 +16,21 @@ const About = () => {
 		<div className="content centered">
 			<h3>About</h3>
 			<p>
-				Thank you for using this {platform}. There is still much work in progress, but we hope you like it so
-				far.
+				<span>
+					Thank you for using this {platform}. There is still much work in progress, but we hope you like it
+					so far.{' '}
+				</span>
+				{process.env.REACT_APP_PLATFORM === Platform.MOBILE ? (
+					<span>
+						You can also find us online at{' '}
+						<a href="https://www.mahjong-sg.com/" style={{ color: '#005eff' }}>
+							www.mahjong-sg.com
+						</a>
+						.
+					</span>
+				) : (
+					<span>You can also find us on the App Stores as Mahjong SG.</span>
+				)}
 			</p>
 			<br />
 			<p>
@@ -27,24 +40,10 @@ const About = () => {
 					href="https://www.linkedin.com/in/tzi-kheng-sim-4a561616b/"
 					style={{ color: '#005eff', textDecoration: 'none' }}
 				>
-					LinkedIn.
+					LinkedIn
 				</a>
+				.
 			</p>
-			{
-				process.env.REACT_APP_PLATFORM === Platform.MOBILE ? (
-					<>
-						<br />
-						<p>
-							Find us online at{' '}
-							<a href="https://www.mahjong-sg.com/" style={{ color: '#005eff' }}>
-								www.mahjong-sg.com
-							</a>
-						</p>
-					</>
-				) : null
-				// <p>Find Mahjong SG in the app store today.</p>
-				// https://www.linkedin.com/in/tzi-kheng-sim-4a561616b/
-			}
 			<br />
 			<div className="stack">
 				<p>Created with </p>

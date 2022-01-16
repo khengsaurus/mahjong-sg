@@ -137,7 +137,7 @@ const Login = () => {
 				type="text"
 				value={showRegister ? email : username}
 				onChange={e => {
-					showRegister ? setEmail(e.target.value) : setUsername(e.target.value);
+					showRegister ? setEmail(e.target.value) : setUsername(e.target.value?.toLowerCase());
 				}}
 				variant="standard"
 				style={{ margin: '5px 0', width: '160px' }}

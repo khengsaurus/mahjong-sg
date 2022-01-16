@@ -87,7 +87,7 @@ const NewUser = () => {
 				name="username"
 				label={HomeScreenText.USERNAME}
 				onChange={e => {
-					setUsername(e.target.value);
+					setUsername(e.target.value?.toLowerCase());
 				}}
 				inputProps={{ maxLength: 10 }}
 				variant="standard"

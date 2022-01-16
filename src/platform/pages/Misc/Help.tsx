@@ -13,16 +13,6 @@ const Help = () => {
 
 	const renderLocalContent = () => (
 		<div className="content">
-			<h4>Creating a new game</h4>
-			<ul>
-				<li>When searching for a user, you have to spell out their username exactly as it is.</li>
-				<li>There is no rolling of dice to decide on player seats (hence the 'Randomize' option).</li>
-				<li>
-					The {platform} will not let you Hu if you do not meet the minimum Tai. Currently the Maximum Tai is
-					5.
-				</li>
-			</ul>
-
 			<h4>Controls</h4>
 			<ul>
 				<li>
@@ -103,6 +93,10 @@ const Help = () => {
 			<h4>How to Hu</h4>
 			<ul>
 				<li>
+					The {platform} will not let you Hu if you do not meet the minimum Tai. Currently the Maximum Tai you
+					can set is 5.
+				</li>
+				<li>
 					When you can Hu, a show button (开?) will appear in the bottom right. After you press that, a second
 					one will appear on the left (开!). Press that to show your tiles. <br />
 					After pressing the second button, note that your tiles are shown to everyone, and no one can perform
@@ -168,7 +162,7 @@ const Help = () => {
 				<li>There is no bao (包) functionality yet</li>
 			</ul>
 
-			<h4>When the round/game ends</h4>
+			<h4>End of the round/game</h4>
 			<ul>
 				<li>
 					In the case of draw (15 tiles left), the game will progress onto the next round if there was a Kang

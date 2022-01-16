@@ -47,7 +47,7 @@ const UserSearchForm: React.FC = () => {
 	function handleFormChange(str: string): void {
 		setSearchFor(str);
 		if (str.length > 3) {
-			searchForUser(str);
+			searchForUser(str.toLowerCase());
 		} else {
 			setShowOptions(false);
 		}
@@ -110,7 +110,7 @@ const UserSearchForm: React.FC = () => {
 						id="search-input"
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}
 						onChange={e => {
-							handleFormChange(e.target.value);
+							handleFormChange(e.target.value?.toLowerCase());
 						}}
 						value={searchFor}
 						variant="standard"
