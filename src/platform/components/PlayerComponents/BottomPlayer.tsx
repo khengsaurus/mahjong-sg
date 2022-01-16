@@ -50,6 +50,7 @@ const BottomPlayer = (props: PlayerComponentProps) => {
 				tiles={uTs}
 				segment={Segment.BOTTOM}
 				tag={hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null}
+				tileSize={tileSize}
 			/>
 
 			{/* Discarded tiles */}

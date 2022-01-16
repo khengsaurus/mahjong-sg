@@ -31,7 +31,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 					{...{ hTs, lTa, tHK }}
 				/>
 			) : (
-				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} />
+				<HiddenHand tiles={allHiddenTiles.length} segment={Segment.TOP} tileSize={tileSize} />
 			)}
 
 			{/* Shown tiles */}
@@ -49,6 +49,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 				tiles={uTs}
 				segment={Segment.TOP}
 				tag={hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null}
+				tileSize={tileSize}
 			/>
 
 			{/* Discarded tiles */}

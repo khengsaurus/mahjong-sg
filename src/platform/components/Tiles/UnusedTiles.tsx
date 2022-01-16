@@ -1,36 +1,47 @@
-import { HiddenTile } from 'platform/style/StyledComponents';
-import { memo, useMemo } from 'react';
-import { FrontBackTag, Segment } from 'shared/enums';
-import { generateNumbers } from 'shared/util';
+import { TileBack } from 'platform/style/StyledComponents';
+import { memo } from 'react';
+import { FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
 
 interface IUnusedTiles {
 	tiles: number;
 	segment: Segment;
 	tag?: FrontBackTag;
+	tileSize?: Size;
 }
 
-const UnusedTiles = ({ tiles, segment, tag }: IUnusedTiles) => {
-	const tilesArray = useMemo(() => generateNumbers(1, tiles), [tiles]);
+const UnusedTiles = ({ tiles, segment, tag, tileSize = Size.MEDIUM }: IUnusedTiles) => {
+	const bottomStackLength = Math.ceil(tiles / 2);
+	const topStackLength = Math.floor(tiles / 2);
+	const bottomStack = bottomStackLength * _HiddenTileWidth[tileSize];
+	const topStack = topStackLength * _HiddenTileWidth[tileSize];
 
 	return segment === Segment.TOP || segment === Segment.BOTTOM ? (
-		<div
-			className={`htsh unused ${segment === Segment.BOTTOM ? `bottom` : ``} ${tag || ``} ${
-				tiles === 0 ? `hidden` : ``
-			}
-			`}
-		>
-			{tilesArray.map(i => (
-				<HiddenTile key={`${segment}-unused-${i}`} className="hth" />
-			))}
+		<div className={`htsh unused ${segment === Segment.BOTTOM ? `bottom` : `top`} ${tag || ``}`}>
+			{bottomStackLength > 0 && <TileBack className="horizontal-hidden" style={{ width: bottomStack }} />}
+			{topStackLength > 0 && (
+				<TileBack
+					className="horizontal-hidden"
+					style={{
+						width: topStack,
+						borderTop: segment === Segment.TOP ? '0' : null,
+						borderBottom: segment === Segment.BOTTOM ? '0' : null
+					}}
+				/>
+			)}
 		</div>
 	) : (
-		<div
-			className={`vtsh unused ${segment === Segment.RIGHT ? `right` : ``} ${tag || ``} ${
-				tiles === 0 ? `hidden` : ``
-			}
-			`}
-		>
-			{tiles > 0 && tilesArray.map(i => <HiddenTile key={`${segment}-unused-${i}`} className="vth" />)}
+		<div className={`vtsh unused ${segment === Segment.RIGHT ? `right` : `left`} ${tag || ``}`}>
+			{bottomStackLength > 0 && <TileBack className="vertical-hidden" style={{ height: bottomStack }} />}
+			{topStackLength > 0 && (
+				<TileBack
+					className="vertical-hidden"
+					style={{
+						height: topStack,
+						borderLeft: segment === Segment.LEFT ? '0' : null,
+						borderRight: segment === Segment.RIGHT ? '0' : null
+					}}
+				/>
+			)}
 		</div>
 	);
 };

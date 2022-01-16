@@ -106,7 +106,7 @@ $log-margin-left-medium: 5px;
 	} @else if $size == 'large' {
 		@return 2px;
 	} @else {
-		@return 1.8px;
+		@return 1.5px;
 	}
 }
 

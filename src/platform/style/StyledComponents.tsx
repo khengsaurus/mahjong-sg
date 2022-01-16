@@ -128,7 +128,7 @@ export const GreenTableText = styled.p`
 	font: inherit;
 `;
 
-export const HiddenTile = styled.div`
+export const TileBack = styled.div`
 	background-color: ${props => props.theme.tileColor || 'teal'};
 `;
 

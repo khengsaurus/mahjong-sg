@@ -49,7 +49,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 					{...{ hTs, lTa, tHK }}
 				/>
 			) : (
-				<HiddenHand tiles={countHandTiles} segment={Segment.LEFT} />
+				<HiddenHand tiles={countHandTiles} segment={Segment.LEFT} tileSize={tileSize} />
 			)}
 
 			{/* Shown tiles */}
@@ -68,6 +68,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 				tiles={uTs}
 				segment={Segment.LEFT}
 				tag={hasFront ? FrontBackTag.FRONT : hasBack ? FrontBackTag.BACK : null}
+				tileSize={tileSize}
 			/>
 
 			{/* Discarded tiles */}

@@ -10,36 +10,42 @@
 				flex-direction: column-reverse;
 			}
 			.htsh {
-				@include flex-dir(row);
-				justify-content: center;
-				min-height: getHiddenTileHeight($size);
 				margin: getTilePadding($size);
-				max-width: 70vw;
 				&.unused {
-					align-self: center;
-					flex-flow: column-reverse wrap-reverse;
-					@include alignC-justifyC(center, flex-end);
-					height: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
-					// transition: $transition-fast;
 					z-index: -1;
-					&.hidden {
-						margin: 0px;
-						min-height: 0px;
-						height: 0px;
-					}
-					&.front {
-						flex-flow: column-reverse wrap-reverse;
-						&.bottom {
-							flex-flow: column wrap;
+					&.bottom {
+						@include flex-dir(column-reverse);
+						&.front {
+							align-items: flex-start;
+						}
+						&.back {
+							align-items: flex-end;
 						}
 					}
-					&.back {
-						flex-flow: column-reverse wrap;
-						&.bottom {
-							flex-flow: column wrap-reverse;
+					&.top {
+						@include flex-dir(column);
+						&.front {
+							align-items: flex-end;
+						}
+						&.back {
+							align-items: flex-start;
 						}
 					}
 				}
+			}
+
+			.horizontal-hidden {
+				height: getHiddenTileHeight($size);
+				border-top: 1px solid $color-border;
+				border-right: 1px solid $color-border;
+				border-bottom: 1px solid $color-border;
+				background-image: repeating-linear-gradient(
+					90deg,
+					$color-border 0,
+					$color-border 1px,
+					transparent 1px,
+					transparent getHiddenTileWidth($size)
+				);
 			}
 
 			.hth {
@@ -105,42 +111,43 @@
 			}
 
 			.vtsh {
-				@include flex-dir(column);
-				justify-content: flex-start;
-				min-width: getHiddenTileHeight($size);
 				margin: getTilePadding($size);
-				max-height: 70vh;
+				transition: $transition-fast;
 				&.unused {
-					align-self: center;
-					align-content: flex-start;
-					flex-flow: row wrap;
 					z-index: -1;
-					// transition: $transition-fast;
-					width: (2 * getHiddenTileHeight($size)) + (4 * $tile-border-px);
-					&.hidden {
-						margin: 0px;
-						min-width: 0px;
-						width: 0px;
-					}
-					&.front {
-						flex-flow: row wrap;
-						&.right {
-							flex-flow: row-reverse wrap-reverse;
+					&.right {
+						@include flex-dir(row-reverse);
+						&.front {
+							align-items: flex-end;
+						}
+						&.back {
+							align-items: flex-start;
 						}
 					}
-					&.back {
-						flex-flow: row wrap-reverse;
-						&.right {
-							flex-flow: row-reverse wrap;
+					&.left {
+						@include flex-dir(row);
+						&.front {
+							align-items: flex-start;
+						}
+						&.back {
+							align-items: flex-end;
 						}
 					}
 				}
 			}
 
-			.vth {
-				height: getHiddenTileWidth($size);
+			.vertical-hidden {
 				width: getHiddenTileHeight($size);
-				@include default-tile-border;
+				border-left: 1px solid $color-border;
+				border-right: 1px solid $color-border;
+				border-top: 1px solid $color-border;
+				background-image: repeating-linear-gradient(
+					0deg,
+					$color-border 0,
+					$color-border 1px,
+					transparent 1px,
+					transparent getHiddenTileWidth($size)
+				);
 			}
 
 			.vtss {
