@@ -560,7 +560,7 @@ export class FirebaseService {
 		});
 	}
 
-	async runTransactionPay(gameId: string, from: number, to: number, chips: number): Promise<void> {
+	async runTransactionPay(gameId: string, from: number, to: number, amt: number): Promise<void> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				runTransaction(this.fs, async transaction => {
@@ -570,12 +570,14 @@ export class FirebaseService {
 							reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
 						} else {
 							const { ps, logs } = gameDoc.data();
+							const _from = ps[from];
+							const _to = ps[to];
 							if (ps) {
-								ps[from].bal = Math.round(ps[from].bal - chips);
-								ps[to].bal = Math.round(ps[to].bal + chips);
+								_from.bal = Math.round(_from.bal - amt);
+								_to.bal = Math.round(_to.bal + amt);
 							}
 							if (logs) {
-								logs.push(`${ps[from].uN} sent ${ps[to].uN} ${chips} chips`);
+								logs.push(`${_from.uN} sent ${_to.uN} ${amt} chip${amt > 1 ? 's' : ''}`);
 							}
 							transaction.update(gameDocRef, { ps, logs });
 							resolve();

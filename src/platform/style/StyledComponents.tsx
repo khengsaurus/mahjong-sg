@@ -42,15 +42,18 @@ export const CenteredTableColored = styled(Centered)`
 	background-color: ${props => props.theme.tableColor};
 `;
 
-export const Scrollable = styled.div`
-	width: clamp(200px, 90%, 600px) !important;
-	text-align: left;
+export const ScrollableBase = styled.div`
 	overflow-y: scroll;
 	scroll-behavior: smooth;
 	color: ${props => props.theme.mainTextColor};
 	::-webkit-scrollbar {
 		display: none;
 	}
+`;
+
+export const Scrollable = styled(ScrollableBase)`
+	width: clamp(200px, 90%, 600px) !important;
+	text-align: left;
 `;
 
 export const Notification = styled.div`

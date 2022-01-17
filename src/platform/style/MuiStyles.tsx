@@ -265,6 +265,10 @@ export const MuiStyles = {
 		minWidth: '200px',
 		maxWidth: '320px'
 	},
+	annouce_hu_dialog: {
+		minHeight: '80px',
+		minWidth: '180px'
+	},
 	topRight5: {
 		position: 'absolute',
 		top: 5,

@@ -90,7 +90,7 @@ const NewUser = () => {
 				onChange={e => {
 					setUsername(e.target.value?.toLowerCase());
 				}}
-				inputProps={{ maxLength: 10 }}
+				inputProps={{ maxLength: 8 }}
 				variant="standard"
 				style={{ margin: '-3px 0 5px' }}
 			/>

@@ -72,9 +72,8 @@ const Help = () => {
 				</li>
 				<li>If a player gets both his flower tiles or bites (咬到) it will be shown in the logs.</li>
 				<li>
-					There is also no automatic sending of chips on player Hu. To send another player chips, you can open
-					the 'Send Chips' panel (top right), or after somebody wins, an option will appear on the popup. When
-					chips are sent, it will be logged in the top right, and player balances will be updated.
+					There is no instant payout. To send another player chips, you can open the 'Send Chips' panel (top
+					right).
 				</li>
 				<li>
 					The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a tile discarded. The default

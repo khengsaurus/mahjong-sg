@@ -13,10 +13,10 @@ import { sendChips } from './PaymentModal';
 interface PaymentModalInlineProps {
 	game: Game;
 	playerSeat: number;
-	updateGame: (game: Game) => void;
+	alignPayModal: 'start' | 'end';
 }
 
-const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInlineProps) => {
+const PaymentModalInline = ({ game, playerSeat, alignPayModal }: PaymentModalInlineProps) => {
 	const { hu, pay, thB } = game;
 
 	const { winner, defaultAmt } = useMemo(() => {
@@ -37,8 +37,8 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInline
 	}
 
 	return (
-		<FormRow style={{ padding: '6px 0px 2px' }}>
-			<StyledText variant="subtitle1" title={`Send chips:`} padding="2px" />
+		<FormRow style={{ alignSelf: `flex-${alignPayModal}`, marginTop: 6 }}>
+			<StyledText variant="body1" title={`Send:`} style={{ marginTop: 5 }} />
 			<FormControl>
 				<Select
 					value={amountStr}
@@ -56,7 +56,7 @@ const PaymentModalInline = ({ game, playerSeat, updateGame }: PaymentModalInline
 				</Select>
 			</FormControl>
 			<IconButton
-				style={{ marginLeft: '5px' }}
+				style={{ marginLeft: 5 }}
 				onClick={() => {
 					sendChips(game, playerSeat, winner, amount, () => {
 						setAmount(0);

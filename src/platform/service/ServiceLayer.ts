@@ -217,15 +217,17 @@ export class Service {
 		}
 	}
 
-	sendPayment(game: Game, isLocalGame: boolean, from: number, to: number, chips: number) {
+	sendPayment(game: Game, isLocalGame: boolean, from: number, to: number, amt: number) {
 		if (isLocalGame) {
-			game.ps[from].bal = Math.round(game.ps[from].bal - chips);
-			game.ps[to].bal = Math.round(game.ps[to].bal + chips);
-			game.logs.push(`${game.ps[from].uN} sent ${game.ps[to].uN} ${chips} chips`);
+			const _from = game.ps[from];
+			const _to = game.ps[to];
+			_from.bal = Math.round(_from.bal - amt);
+			_to.bal = Math.round(_to.bal + amt);
+			game.logs.push(`${_from.uN} sent ${_to.uN} ${amt} chip${amt > 1 ? 's' : ''}`);
 			this.updateGame(game, true);
 		} else {
 			try {
-				FBService.runTransactionPay(game.id, from, to, chips);
+				FBService.runTransactionPay(game.id, from, to, amt);
 			} catch (err) {
 				console.error(err);
 			}

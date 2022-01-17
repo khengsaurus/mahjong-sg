@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import PaymentModalInline from 'platform/components/Modals/PaymentModalInline';
 import { MuiStyles } from 'platform/style/MuiStyles';
-import { Centered } from 'platform/style/StyledComponents';
+import { Centered, Column, Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -18,27 +18,42 @@ const AnnounceHuModal = ({
 	playerSeat,
 	show,
 	HH,
+	showNextRound,
 	huFirst,
 	nextRound,
-	showNextRound,
-	updateGame,
 	onClose: handleShow
 }: AnnounceHuModalProps) => {
 	const user = useSelector((store: IStore) => store.user);
 	const { hu = [], thB = 0, draw = false, on = true, _d = 0, ps, logs, lTh } = game || {};
+	const whoHu = Number(hu[0]);
+	const hasHandDescs = hu.length > 3;
 
 	const canHuFirst = useMemo((): boolean => {
-		const whoHu = Number(hu[0]);
 		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, thB) && !!HH?.maxPx;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [playerSeat, hu[0] || 0, game?.mHu, HH?.maxPx]);
+	}, [playerSeat, whoHu, game?.mHu, HH?.maxPx]);
 
 	const sentLogs = useMemo(() => {
 		const huLogIndex = logs?.findIndex(l => l.includes('hu with'));
 		const sent = logs?.slice(huLogIndex)?.filter(log => log.includes('sent')) || [];
-		return sent.map(log => log.replace(user?.uN, 'you'));
+		return sent.map(log => {
+			return log.replace(user?.uN, log.startsWith(user?.uN) ? 'You' : 'you');
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [logs?.length]);
+
+	function renderHandDesc() {
+		return hu
+			.slice(3, hu.length)
+			.map((p: string, ix: number) => (
+				<StyledText
+					key={ix}
+					title={`• ${getHandDesc(p)}`}
+					style={{ placeSelf: 'flex-start' }}
+					variant="body2"
+				/>
+			));
+	}
 
 	return (
 		<Dialog
@@ -46,11 +61,11 @@ const AnnounceHuModal = ({
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
 				style: {
-					...MuiStyles.medium_dialog
+					...MuiStyles.annouce_hu_dialog
 				}
 			}}
 		>
-			<DialogContent style={{ paddingBottom: 0 }}>
+			<DialogContent style={{ padding: '10px 15px 0 15px' }}>
 				{hu.length > 2 && (
 					<>
 						<StyledText
@@ -58,24 +73,44 @@ const AnnounceHuModal = ({
 								hu[2] === 1 ? ` 自摸` : ``
 							}`}
 							variant="subtitle1"
-							padding="3px 0px 0px"
+							padding="2px"
 						/>
-						{hu.slice(3, hu.length).map((p: string, ix: number) => {
-							return (
-								<StyledText title={`• ${getHandDesc(p)}`} variant="subtitle2" padding="2px" key={ix} />
-							);
-						})}
 						{Number(hu[2]) === 0 && thB !== Number(hu[0]) && !isEmpty(lTh) && (
 							<StyledText
 								title={`Last tile thrown by ${thB === playerSeat ? 'you' : ps[thB]?.uN}`}
-								variant="subtitle2"
-								padding="0px"
+								variant="body2"
+								padding="0px 0px 3px"
 							/>
 						)}
-						<SentLogs logs={sentLogs} />
-						{hu[0] !== playerSeat && (
-							<PaymentModalInline game={game} playerSeat={playerSeat} updateGame={updateGame} />
-						)}
+						<Row style={{ justifyContent: 'flex-start' }}>
+							{hasHandDescs && (
+								<Column
+									style={{
+										justifyContent: 'flex-start',
+										paddingRight: 20,
+										maxWidth: '200px !important'
+									}}
+								>
+									{renderHandDesc()}
+								</Column>
+							)}
+							<Column
+								style={{
+									alignItems: 'flex-end',
+									justifyContent: 'flex-start',
+									maxWidth: '200px !important'
+								}}
+							>
+								<SentLogs logs={sentLogs} align={hasHandDescs ? 'right' : 'left'} />
+								{hu[0] !== playerSeat && (
+									<PaymentModalInline
+										game={game}
+										playerSeat={playerSeat}
+										alignPayModal={hasHandDescs ? 'end' : 'start'}
+									/>
+								)}
+							</Column>
+						</Row>
 					</>
 				)}
 				{(draw || !on || _d === 9) &&
@@ -93,18 +128,18 @@ const AnnounceHuModal = ({
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'space-between',
-					padding: '0px 8px'
+					padding: '0px 6px'
 				}}
 			>
-				<HomeButton />
+				<HomeButton style={{ padding: '8px' }} />
 				{hu[0] !== playerSeat &&
 					(canHuFirst ? (
-						<StyledButton label={ButtonText.HU} onClick={huFirst} />
+						<StyledButton label={ButtonText.HU} onClick={huFirst} padding="8px" />
 					) : (
-						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} />
+						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} padding="8px" />
 					))}
 				{/* <StyledButton label={ButtonText.LOGS} onClick={handleLogs} /> */}
-				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} />}
+				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} padding="8px" />}
 			</DialogActions>
 		</Dialog>
 	);

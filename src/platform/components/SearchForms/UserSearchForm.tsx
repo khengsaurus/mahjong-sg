@@ -20,7 +20,7 @@ import { Bot, BotIds, BotName, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { IStore } from 'shared/store';
-import './searchForms.scss';
+import './searchForm.scss';
 
 const UserSearchForm: React.FC = () => {
 	const { user } = useSelector((state: IStore) => state);
@@ -79,8 +79,8 @@ const UserSearchForm: React.FC = () => {
 	const renderAddBotButton = () => (
 		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
 			<div>
-				<ListItem className="user list-item">
-					<ListItemText secondary={`Add bot`} />
+				<ListItem className="list-item" style={{ paddingTop: 6 }}>
+					<ListItemText primary={`Add bot`} />
 					<IconButton
 						onClick={() => {
 							if (players.length < 4) {
@@ -105,7 +105,7 @@ const UserSearchForm: React.FC = () => {
 	return (
 		<Centered className="search-form-container">
 			<List>
-				<ListItem className="search-box list-item" style={{ marginBottom: '10px' }}>
+				<ListItem className="search-box list-item" style={{ marginBottom: '8px' }}>
 					<TextField
 						id="search-input"
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}
@@ -158,7 +158,7 @@ const UserSearchForm: React.FC = () => {
 					{foundUsers.map(foundUser =>
 						user && user.id !== foundUser.id && notSelected(foundUser) ? (
 							<ListItem
-								className="user list-item"
+								className="list-item"
 								button
 								key={foundUser.id}
 								style={{

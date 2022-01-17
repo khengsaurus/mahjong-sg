@@ -52,7 +52,7 @@ const LogModal = (props: LogModalProps) => {
 			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 		>
 			{currGame?.logs.map((log: string, index) =>
-				log.includes('sent ') && log.includes('chips') ? (
+				log.includes('sent ') && log.includes('chip') ? (
 					<GreenTableText key={index}>{log}</GreenTableText>
 				) : (
 					<TableText key={index} style={{ marginLeft: 5, marginRight: 5 }}>

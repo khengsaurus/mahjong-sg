@@ -9,22 +9,22 @@ import { Game, User } from 'shared/models';
 import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
 
-export async function sendChips(game: Game, from: number, to: number, chips: number, sendCallback?: () => void) {
-	ServiceInstance.sendPayment(game, game.id === LocalFlag, from, to, chips);
+export async function sendChips(game: Game, from: number, to: number, amt: number, sendCallback?: () => void) {
+	ServiceInstance.sendPayment(game, game.id === LocalFlag, from, to, amt);
 	sendCallback && sendCallback();
 }
 
 const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => {
 	const { game, gameId, localGame } = useSelector((store: IStore) => store);
 	const [toWho, setToWho] = useState(10);
-	const [chips, setChips] = useState(0);
+	const [amt, setAmt] = useState(0);
 	const isLocalGame = gameId === LocalFlag;
 	const currGame = isLocalGame ? localGame : game;
 	const playerUsername = currGame.ps[playerSeat].uN;
 
 	function sendCallback() {
 		setToWho(10);
-		setChips(0);
+		setAmt(0);
 		onClose();
 	}
 
@@ -33,7 +33,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 	};
 
 	const handleSelectAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setChips(Number((event.target as HTMLInputElement).value));
+		setAmt(Number((event.target as HTMLInputElement).value));
 	};
 
 	return (
@@ -64,13 +64,13 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 				</RadioGroup>
 
 				<StyledText title="Amount: " variant="subtitle1" padding="2px 0px" />
-				<RadioGroup row style={{ width: '90%' }} value={chips} onChange={handleSelectAmount}>
-					{Amounts.map((chips: number, index: number) => (
+				<RadioGroup row style={{ width: '90%' }} value={amt} onChange={handleSelectAmount}>
+					{Amounts.map((amt: number, index: number) => (
 						<FormControlLabel
 							key={index}
-							value={chips}
+							value={amt}
 							control={<Radio />}
-							label={`${chips}`}
+							label={`${amt}`}
 							labelPlacement="end"
 							style={{ width: '60px' }}
 						/>
@@ -83,9 +83,9 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 						variant="text"
 						size="large"
 						onClick={() => {
-							sendChips(currGame, playerSeat, toWho, chips, sendCallback);
+							sendChips(currGame, playerSeat, toWho, amt, sendCallback);
 						}}
-						disabled={toWho === 9 || !chips || chips <= 0}
+						disabled={toWho === 9 || !amt || amt <= 0}
 						disableRipple
 					>
 						{`Send`}

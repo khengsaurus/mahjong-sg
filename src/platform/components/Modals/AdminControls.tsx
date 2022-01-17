@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, FormControl, ListItem, ListItemText, MenuItem, Select, Switch } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
+import { Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { BotTimeout, LocalFlag } from 'shared/enums';
@@ -60,13 +61,13 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 	}, [game, mHu, bt, onClose]);
 
 	const renderManualHuSelect = () => (
-		<ListItem style={{ padding: 0, justifyContent: 'space-between', display: 'flex', flexDirection: 'row' }}>
+		<ListItem style={{ padding: 0, height: 40 }}>
 			<div style={{ width: '100px' }}>
 				<ListItemText primary={'Manual Hu:'} />
 			</div>
-			<div style={{ width: '80px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+			<Row style={{ width: '80px' }}>
 				<Switch checked={mHu} onChange={() => setMHu(prev => !prev)} />
-			</div>
+			</Row>
 		</ListItem>
 	);
 
@@ -78,11 +79,11 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 		}
 
 		return (
-			<ListItem style={{ padding: 0, justifyContent: 'space-between' }}>
+			<ListItem style={{ padding: 0, justifyContent: 'space-between', height: 40 }}>
 				<div style={{ width: '100px' }}>
 					<ListItemText primary={'Bot speed:'} style={{ textAlign: 'left' }} />
 				</div>
-				<div style={{ width: '80px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+				<Row style={{ width: '80px' }}>
 					<Select
 						value={btLabel}
 						onChange={handleChange}
@@ -98,7 +99,7 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 							</MenuItem>
 						))}
 					</Select>
-				</div>
+				</Row>
 			</ListItem>
 		);
 	};

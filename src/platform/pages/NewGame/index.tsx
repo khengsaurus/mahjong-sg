@@ -86,7 +86,7 @@ const NewGame = () => {
 	const renderRandomizeOption = () => (
 		<Fade in={players.length === 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
 			<div>
-				<ListItem className="user list-item">
+				<ListItem className="list-item">
 					<ListItemText secondary={`Randomize`} />
 					<IconButton
 						onClick={() => setRandom(!random)}
@@ -136,7 +136,7 @@ const NewGame = () => {
 	/* -------------------------------- Game Options -------------------------------- */
 
 	const renderUserOption = (player: User) => (
-		<ListItem className="user list-item">
+		<ListItem className="list-item">
 			<ListItemText primary={player?.uN} />
 			{player?.uN === user?.uN ? (
 				<ListItemIcon
@@ -159,7 +159,7 @@ const NewGame = () => {
 	);
 
 	const renderManualHu = () => (
-		<ListItem className="user list-item">
+		<ListItem className="list-item">
 			<ListItemText secondary={`Manual Hu`} />
 			<IconButton
 				onClick={() => setMHu(!mHu)}
@@ -182,7 +182,7 @@ const NewGame = () => {
 	}
 
 	const renderPaymentType = () => (
-		<ListItem className="user list-item">
+		<ListItem className="list-item">
 			<ListItemText
 				secondary={
 					payment === PaymentType.NONE ? `None` : payment === PaymentType.SHOOTER ? `Shooter` : `Half Shooter`
@@ -217,7 +217,7 @@ const NewGame = () => {
 	const renderTaiSelect = (label: string, valueStr: string, handleChange: (e) => void) => {
 		const tai = [1, 2, 3, 4, 5].filter(t => (valueStr === minTaiStr ? t < maxTai : t > minTai));
 		return (
-			<ListItem className="user list-item">
+			<ListItem className="list-item">
 				<ListItemText secondary={label} />
 				<FormControl>
 					{tai.length > 1 ? (
