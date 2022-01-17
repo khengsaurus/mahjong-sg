@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { BackgroundColor, TableColor, TextColor } from 'shared/enums';
 import { IStore } from 'shared/store';
+import { isMobile } from 'shared/util';
 
 export function getHighlightColor(color: TableColor | BackgroundColor) {
 	if ([TableColor.DARK, BackgroundColor.DARK].includes(color)) {
@@ -19,7 +20,7 @@ export function getHighlightColor(color: TableColor | BackgroundColor) {
 	} else if ([TableColor.BLUE, BackgroundColor.BLUE].includes(color)) {
 		return yellow[700];
 	} else {
-		return yellow[700];
+		return red[500];
 	}
 }
 
@@ -69,7 +70,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					root: {
 						color: `${textColor}`,
 						'&:hover': {
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
@@ -84,7 +85,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						secondary: `${highlightColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
@@ -140,7 +141,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						color: `${textColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						}
 					}
 				}
@@ -178,7 +179,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					},
 					button: {
 						'&:hover': {
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						}
 					}
 				}
@@ -203,7 +204,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						justifyContent: 'center',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						}
 					}
 				}
@@ -229,7 +230,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						paddingRight: '12px !important',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: process.env.REACT_APP_PLATFORM === 'web' ? `${highlightColor}` : `${textColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						}
 					}
 				}

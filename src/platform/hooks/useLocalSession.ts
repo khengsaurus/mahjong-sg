@@ -2,8 +2,9 @@ import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { history } from 'App';
 import { useContext, useEffect, useState } from 'react';
-import { EEvent, Page, Platform, Status } from 'shared/enums';
+import { EEvent, Page, Status } from 'shared/enums';
 import { AppContext, useSession } from 'shared/hooks';
+import { isMobile } from 'shared/util';
 
 function useLocalSession(skipVerification = true) {
 	const { logout } = useContext(AppContext);
@@ -11,10 +12,7 @@ function useLocalSession(skipVerification = true) {
 	const [isAppConnected, setIsAppConnected] = useState(true);
 
 	useEffect(() => {
-		const checkNetwork =
-			!skipVerification &&
-			process.env.REACT_APP_PLATFORM === Platform.MOBILE &&
-			Capacitor.isPluginAvailable('Network');
+		const checkNetwork = !skipVerification && isMobile() && Capacitor.isPluginAvailable('Network');
 
 		async function getNetworkStatus(): Promise<boolean> {
 			return new Promise(resolve => {

@@ -2,15 +2,16 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Scrollable } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
-import { PageName, Platform } from 'shared/enums';
-import { firebaseLogo, capacitorLogo, reactLogo } from 'shared/images/symbols';
+import { PageName } from 'shared/enums';
+import { capacitorLogo, firebaseLogo, reactLogo } from 'shared/images/symbols';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
+import { isMobile } from 'shared/util';
 import './misc.scss';
 
 const About = () => {
 	const { user } = useSelector((store: IStore) => store);
-	const platform = process.env.REACT_APP_PLATFORM === Platform.MOBILE ? 'app' : 'website';
+	const platform = isMobile() ? 'app' : 'website';
 
 	const renderLocalContent = () => (
 		<div className="content centered">
@@ -20,7 +21,7 @@ const About = () => {
 					Thank you for using this {platform}. There is still much work in progress, but we hope you like it
 					so far.{' '}
 				</span>
-				{process.env.REACT_APP_PLATFORM === Platform.MOBILE ? (
+				{isMobile() ? (
 					<span>
 						You can also find us online at{' '}
 						<a href="https://www.mahjong-sg.com/" style={{ color: '#005eff' }}>
@@ -50,7 +51,7 @@ const About = () => {
 				<div className="logos">
 					<img alt="react-logo" src={reactLogo} />
 					<img alt="firebase-logo" src={firebaseLogo} />
-					{process.env.REACT_APP_PLATFORM === Platform.MOBILE && <img alt="ionic-logo" src={capacitorLogo} />}
+					{isMobile() && <img alt="ionic-logo" src={capacitorLogo} />}
 				</div>
 			</div>
 		</div>

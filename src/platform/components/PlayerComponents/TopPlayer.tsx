@@ -1,10 +1,11 @@
 import { DiscardedTiles, HiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
 import { useSelector } from 'react-redux';
-import { AppFlag, FrontBackTag, Segment, Size } from 'shared/enums';
+import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { PlayerComponentProps } from 'shared/typesPlus';
+import { isDevBot } from 'shared/util';
 import './playerComponents.scss';
 
 const TopPlayer = (props: PlayerComponentProps) => {
@@ -23,7 +24,7 @@ const TopPlayer = (props: PlayerComponentProps) => {
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM}`}>
 			{/* Hidden or shown hand */}
-			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) || sT ? (
+			{isDevBot() || sT ? (
 				<ShownHiddenHand
 					className="htss top"
 					segment={Segment.TOP}

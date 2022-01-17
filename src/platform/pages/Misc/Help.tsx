@@ -2,14 +2,15 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Scrollable } from 'platform/style/StyledComponents';
 import { useSelector } from 'react-redux';
-import { PageName, Platform } from 'shared/enums';
+import { PageName } from 'shared/enums';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
+import { isMobile } from 'shared/util';
 import './misc.scss';
 
 const Help = () => {
 	const { user } = useSelector((store: IStore) => store);
-	const platform = process.env.REACT_APP_PLATFORM === Platform.MOBILE ? 'app' : 'website';
+	const platform = isMobile() ? 'app' : 'website';
 
 	const renderLocalContent = () => (
 		<div className="content">

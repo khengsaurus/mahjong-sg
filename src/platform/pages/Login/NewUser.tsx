@@ -7,11 +7,12 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { AlertStatus, AppFlag, DisallowedUsernames, Page, Status, Transition } from 'shared/enums';
+import { AlertStatus, DisallowedUsernames, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
+import { isDev } from 'shared/util';
 
 const NewUser = () => {
 	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
@@ -49,7 +50,7 @@ const NewUser = () => {
 
 	function registerNewUsername(values: IEmailUser, callback: () => void) {
 		const disallowed = DisallowedUsernames.find(u => username.toLowerCase().startsWith(u));
-		if (!!disallowed && !process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV)) {
+		if (!!disallowed && !isDev()) {
 			setAlert({ status: Status.ERROR, msg: `${ErrorMessage.USERNAME_NOT_ALLOWED} '${disallowed}'` });
 		} else {
 			ServiceInstance.FBNewUsername(values)

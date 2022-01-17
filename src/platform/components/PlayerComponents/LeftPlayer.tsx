@@ -4,10 +4,11 @@ import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
 import { useDynamicWidth } from 'platform/hooks';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { AppFlag, FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
+import { FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { PlayerComponentProps } from 'shared/typesPlus';
+import { isDevBot } from 'shared/util';
 import './playerComponents.scss';
 
 const LeftPlayer = (props: PlayerComponentProps) => {
@@ -41,7 +42,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 	return (
 		<div className={`column-section-${tileSize || Size.MEDIUM}`}>
 			{/* Hidden or shown hand */}
-			{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV_BOT) || sT ? (
+			{isDevBot() || sT ? (
 				<ShownHiddenHand
 					className="vtss left"
 					segment={Segment.LEFT}

@@ -17,13 +17,13 @@ import { Centered, Main, TableDiv, Wind } from 'platform/style/StyledComponents'
 import { StyledText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LocalFlag, Page, Platform, Status } from 'shared/enums';
+import { LocalFlag, Page, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { HomeScreenText } from 'shared/screenTexts';
 import { IStore, setGame } from 'shared/store';
 import { setLocalGame, setTHK } from 'shared/store/actions';
-import { findLeft, findOpp, findRight, getTileHashKey } from 'shared/util';
+import { findLeft, findOpp, findRight, getTileHashKey, isMobile } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import './table.scss';
 
@@ -45,14 +45,14 @@ const Table = () => {
 	/* ----------------------------------- Screen orientation ----------------------------------- */
 
 	useLayoutEffect(() => {
-		if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
+		if (isMobile()) {
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
 			});
 		}
 
 		return () => {
-			if (process.env.REACT_APP_PLATFORM === Platform.MOBILE) {
+			if (isMobile()) {
 				ScreenOrientation?.unlock();
 			}
 		};

@@ -3,8 +3,9 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
-import { AppFlag, BotTimeout, LocalFlag } from 'shared/enums';
+import { BotTimeout, LocalFlag } from 'shared/enums';
 import { ModalProps } from 'shared/typesPlus';
+import { isDev } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
 import sample_multi_hu from 'shared/__mock__/sample_multi_hu.json';
 import sample_pong_hu from 'shared/__mock__/sample_pong_hu.json';
@@ -108,7 +109,7 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 				<FormControl component="fieldset">
 					{renderManualHuSelect()}
 					{renderBotTimeSelect()}
-					{process.env.REACT_APP_FLAG.startsWith(AppFlag.DEV) && game.id !== LocalFlag && <Scenarios />}
+					{isDev() && game.id !== LocalFlag && <Scenarios />}
 				</FormControl>
 			</DialogContent>
 		</Dialog>
