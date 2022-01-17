@@ -141,7 +141,7 @@ export const VerticalDivider = styled.div`
 	height: 80%;
 	max-height: 180px;
 	width: 1px;
-	background-color: ${props => props.theme.mainTextColor};
+	background-color: ${props => props.theme.tableTextColor};
 `;
 
 export const Column = styled.div`

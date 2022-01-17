@@ -87,8 +87,11 @@ const AnnounceHuModal = ({
 								<Column
 									style={{
 										justifyContent: 'flex-start',
-										paddingRight: 20,
-										maxWidth: '200px !important'
+										paddingRight: 10,
+										marginRight: 10,
+										maxWidth: '200px !important',
+										borderRight:
+											whoHu !== playerSeat || sentLogs.length > 0 ? '1px solid white' : null
 									}}
 								>
 									{renderHandDesc()}
@@ -131,15 +134,15 @@ const AnnounceHuModal = ({
 					padding: '0px 6px'
 				}}
 			>
-				<HomeButton style={{ padding: '8px' }} />
+				<HomeButton style={{ padding: '10px' }} />
 				{hu[0] !== playerSeat &&
 					(canHuFirst ? (
-						<StyledButton label={ButtonText.HU} onClick={huFirst} padding="8px" />
+						<StyledButton label={ButtonText.HU} onClick={huFirst} padding="10px" />
 					) : (
-						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} padding="8px" />
+						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} padding="10px" />
 					))}
 				{/* <StyledButton label={ButtonText.LOGS} onClick={handleLogs} /> */}
-				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} padding="8px" />}
+				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} padding="10px" />}
 			</DialogActions>
 		</Dialog>
 	);

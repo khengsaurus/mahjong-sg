@@ -102,9 +102,9 @@ $log-margin-left-medium: 5px;
 
 @function getTileBorder($size) {
 	@if $size == 'small' {
-		@return 1.5px;
+		@return 1px;
 	} @else if $size == 'large' {
-		@return 2px;
+		@return 1.8px;
 	} @else {
 		@return 1.5px;
 	}
@@ -351,7 +351,7 @@ $log-margin-left-medium: 5px;
 	border: $border-px solid;
 	border-radius: $default-border-radius;
 }
-
+$c: rgb(37, 65, 101);
 @mixin default-tile-border {
 	border: $tile-border-px solid $color-border;
 	border-radius: $default-tile-border-radius;

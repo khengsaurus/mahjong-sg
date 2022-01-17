@@ -47,7 +47,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 				}
 			}}
 		>
-			<DialogContent>
+			<DialogContent style={{ padding: '10px 15px' }}>
 				<StyledText title="Send chips" variant="subtitle1" padding="3px 0px" />
 				<StyledText title="To: " variant="subtitle1" padding="2px 0px" />
 				<RadioGroup row value={toWho} onChange={handleSelectRecipient}>
@@ -79,7 +79,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 
 				<DialogActions>
 					<Button
-						style={{ position: 'absolute', bottom: 15, right: 15 }}
+						style={{ position: 'absolute', bottom: 2, right: 2 }}
 						variant="text"
 						size="large"
 						onClick={() => {
