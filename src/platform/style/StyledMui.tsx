@@ -8,6 +8,7 @@ interface StyledTextProps {
 	padding?: string;
 	variant?: 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2';
 	textAlign?: 'left' | 'center' | 'right';
+	placeSelf?: 'left' | 'center' | 'right';
 	style?: any;
 }
 
@@ -31,17 +32,25 @@ export const StyledText = ({
 	variant = 'h6',
 	padding = variant.startsWith('body') ? '0px' : '10px',
 	textAlign = 'left',
+	placeSelf = 'center',
 	style = {}
-}: StyledTextProps) => {
-	return (
-		<Typography
-			style={{ color, padding, justifySelf: 'center', alignSelf: 'center', textAlign, ...style }}
-			variant={variant}
-		>
-			{title}
-		</Typography>
-	);
-};
+}: StyledTextProps) => (
+	<Typography
+		style={{ justifySelf: 'center', alignSelf: 'center', color, padding, textAlign, placeSelf, ...style }}
+		variant={variant}
+	>
+		{title}
+	</Typography>
+);
+
+export const StyledCenterText = ({ title, padding, variant = 'body2' }: StyledTextProps) => (
+	<Typography
+		style={{ justifySelf: 'center', alignSelf: 'center', textAlign: 'center', placeSelf: 'center', padding }}
+		variant={variant}
+	>
+		{title}
+	</Typography>
+);
 
 export const StyledButton = ({
 	label,

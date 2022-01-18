@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Button, Dialog, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledText } from 'platform/style/StyledMui';
@@ -48,8 +48,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 			}}
 		>
 			<DialogContent style={{ padding: '10px 15px' }}>
-				<StyledText title="Send chips" variant="subtitle1" padding="3px 0px" />
-				<StyledText title="To: " variant="subtitle1" padding="2px 0px" />
+				<StyledText title="Send chips to: " variant="subtitle1" padding="3px 0px" />
 				<RadioGroup row value={toWho} onChange={handleSelectRecipient}>
 					{currGame.ps.map((otherPlayer: User, index: number) =>
 						otherPlayer.uN !== playerUsername ? (
@@ -63,7 +62,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 					)}
 				</RadioGroup>
 
-				<StyledText title="Amount: " variant="subtitle1" padding="2px 0px" />
+				<StyledText title="Amount: " variant="subtitle1" padding="3px 0px" />
 				<RadioGroup row style={{ width: '90%' }} value={amt} onChange={handleSelectAmount}>
 					{Amounts.map((amt: number, index: number) => (
 						<FormControlLabel
@@ -77,20 +76,18 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 					))}
 				</RadioGroup>
 
-				<DialogActions>
-					<Button
-						style={{ position: 'absolute', bottom: 2, right: 2 }}
-						variant="text"
-						size="large"
-						onClick={() => {
-							sendChips(currGame, playerSeat, toWho, amt, sendCallback);
-						}}
-						disabled={toWho === 9 || !amt || amt <= 0}
-						disableRipple
-					>
-						{`Send`}
-					</Button>
-				</DialogActions>
+				<Button
+					style={{ position: 'absolute', bottom: 9, right: 5 }}
+					variant="text"
+					size="large"
+					onClick={() => {
+						sendChips(currGame, playerSeat, toWho, amt, sendCallback);
+					}}
+					disabled={toWho === 9 || !amt || amt <= 0}
+					disableRipple
+				>
+					{`Send`}
+				</Button>
 			</DialogContent>
 		</Dialog>
 	);

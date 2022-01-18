@@ -5,7 +5,7 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import { useMemo, useState } from 'react';
-import { Amounts } from 'shared/enums';
+import { Amounts, Size } from 'shared/enums';
 import { Game } from 'shared/models';
 import { getDefaultAmt } from 'shared/util';
 import { sendChips } from './PaymentModal';
@@ -13,10 +13,9 @@ import { sendChips } from './PaymentModal';
 interface PaymentModalInlineProps {
 	game: Game;
 	playerSeat: number;
-	alignPayModal: 'start' | 'end';
 }
 
-const PaymentModalInline = ({ game, playerSeat, alignPayModal }: PaymentModalInlineProps) => {
+const PaymentModalInline = ({ game, playerSeat }: PaymentModalInlineProps) => {
 	const { hu, pay, thB } = game;
 
 	const { winner, defaultAmt } = useMemo(() => {
@@ -37,8 +36,8 @@ const PaymentModalInline = ({ game, playerSeat, alignPayModal }: PaymentModalInl
 	}
 
 	return (
-		<FormRow style={{ alignSelf: `flex-${alignPayModal}`, marginTop: 6 }}>
-			<StyledText variant="body1" title={`Send:`} style={{ marginTop: 5 }} />
+		<FormRow style={{ margin: '2px 0px 0px', placeSelf: 'center' }}>
+			<StyledText variant="body2" title={`Send:`} />
 			<FormControl>
 				<Select
 					value={amountStr}
@@ -56,7 +55,7 @@ const PaymentModalInline = ({ game, playerSeat, alignPayModal }: PaymentModalInl
 				</Select>
 			</FormControl>
 			<IconButton
-				style={{ marginLeft: 5 }}
+				style={{ margin: '0px -8px 0px 5px' }}
 				onClick={() => {
 					sendChips(game, playerSeat, winner, amount, () => {
 						setAmount(0);
@@ -67,7 +66,7 @@ const PaymentModalInline = ({ game, playerSeat, alignPayModal }: PaymentModalInl
 				size="small"
 				disableRipple
 			>
-				<SendIcon />
+				<SendIcon fontSize={Size.SMALL} />
 			</IconButton>
 		</FormRow>
 	);

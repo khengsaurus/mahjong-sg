@@ -1,13 +1,13 @@
 import { ScrollableBase } from 'platform/style/StyledComponents';
-import { StyledText } from 'platform/style/StyledMui';
+import { StyledCenterText } from 'platform/style/StyledMui';
 import React, { useCallback, useEffect } from 'react';
 
 interface SentLogsProps {
 	logs?: string[];
-	align?: 'left' | 'right';
+	align?: 'left' | 'center' | 'right';
 }
 
-const SentLogs = ({ logs, align = 'left' }: SentLogsProps) => {
+const SentLogs = ({ logs, align = 'center' }: SentLogsProps) => {
 	const sentLogsId = 'sent-logs';
 
 	const scrollSentLogs = useCallback(() => {
@@ -22,9 +22,9 @@ const SentLogs = ({ logs, align = 'left' }: SentLogsProps) => {
 	}, [scrollSentLogs, logs.length]);
 
 	return (
-		<ScrollableBase id={sentLogsId} style={{ maxHeight: '60px', width: '90% !important' }}>
+		<ScrollableBase id={sentLogsId} style={{ maxHeight: '60px', marginTop: 5 }}>
 			{logs.map((log, index) => (
-				<StyledText key={index} title={log} textAlign={align} variant="body2" />
+				<StyledCenterText key={index} title={log} />
 			))}
 		</ScrollableBase>
 	);

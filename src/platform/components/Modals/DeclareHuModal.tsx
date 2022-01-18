@@ -60,22 +60,22 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					}
 				}}
 			>
-				<DialogContent>
+				<DialogContent style={{ padding: '10px 15px' }}>
 					<StyledText
 						title={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
-						variant="subtitle1"
+						variant="body1"
 						padding="3px 0px"
 					/>
-					{HH?.pxs?.map((p: IPoint, ix: number) => {
-						return <StyledText title={getHandDesc(p.hD)} variant="subtitle2" padding="2px" key={ix} />;
-					})}
+					{HH?.pxs?.map((p: IPoint, ix: number) => (
+						<StyledText key={ix} title={getHandDesc(p.hD)} variant="subtitle2" padding="2px 0px" />
+					))}
 					{game?.mHu ? (
 						renderManualHuOptions()
 					) : (
 						<StyledText
 							title={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
 							variant="subtitle2"
-							padding="3px 0px"
+							padding="2px 0px"
 						/>
 					)}
 					<StyledButton
@@ -83,7 +83,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 						size="large"
 						onClick={hu}
 						disabled={!tai || tai < game?.px[0] || game?.hu.length > 2}
-						style={{ position: 'absolute', bottom: 2, right: 2 }}
+						style={{ position: 'absolute', bottom: game?.mHu ? 7 : 3, right: 5 }}
 					/>
 				</DialogContent>
 			</Dialog>

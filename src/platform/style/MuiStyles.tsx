@@ -253,21 +253,16 @@ export const MuiStyles = {
 	large_dialog: {
 		maxWidth: '385px',
 		minWidth: '385px'
-		// maxHeight: '340px'
 	},
 	medium_dialog: {
 		minHeight: '80px',
-		minWidth: '240px',
-		maxWidth: '360px'
+		minWidth: '200px',
+		maxWidth: '400px'
 	},
 	small_dialog: {
 		minHeight: '80px',
 		minWidth: '200px',
 		maxWidth: '320px'
-	},
-	annouce_hu_dialog: {
-		minHeight: '80px',
-		minWidth: '180px'
 	},
 	topRight5: {
 		position: 'absolute',
