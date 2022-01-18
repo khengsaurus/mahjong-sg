@@ -73,7 +73,7 @@ const AnnounceHuModal = ({
 
 	function getLastThrownText() {
 		return Number(hu[2]) === 0 && thB !== Number(hu[0]) && !isEmpty(lTh)
-			? `Last tile by ${thB === playerSeat ? 'you' : ps[thB]?.uN}.`
+			? `Last tile thrown by ${thB === playerSeat ? 'you' : ps[thB]?.uN}.`
 			: Number(hu[2] === 1)
 			? `Last tile self drawn.`
 			: ``;

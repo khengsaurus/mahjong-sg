@@ -15,11 +15,9 @@
 	.full-panel {
 		@include column;
 		align-items: center;
-		// justify-content: center;
 	}
 
 	.left-panel {
-		// justify-content: center;
 		padding: 5px 10px 5px 0px;
 		margin-right: 10px;
 		border-right: 1px solid transparent;
@@ -29,7 +27,6 @@
 	.right-panel {
 		@include column;
 		align-items: center;
-		// justify-content: center;
 		max-width: 175px;
 	}
 }
