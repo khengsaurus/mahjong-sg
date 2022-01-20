@@ -56,7 +56,7 @@ const Login = () => {
 	);
 
 	const handleLogin = useCallback(() => {
-		if (!showRegister && username.trim() !== '' && password.trim() !== '') {
+		if (!showRegister && username.trim() && password.trim()) {
 			setReady(false);
 			ServiceInstance.getEmailFromUsername(username)
 				.then(email => ServiceInstance.FBAuthLogin({ email, password }))
@@ -81,7 +81,7 @@ const Login = () => {
 	}, [showRegister, username, password, login, setAlert, handleError]);
 
 	const handleRegister = useCallback(() => {
-		if (showRegister && email.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '') {
+		if (showRegister && email.trim() && password.trim() && confirmPassword.trim()) {
 			if (password === confirmPassword) {
 				setReady(false);
 				ServiceInstance.FBAuthRegister({ email, password })

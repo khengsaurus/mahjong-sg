@@ -143,7 +143,7 @@ const UserSearchForm: React.FC = () => {
 							)
 						}}
 						onKeyPress={e => {
-							if (searchFor.trim() !== '' && e.key === 'Enter') {
+							if (searchFor.trim() && e.key === 'Enter') {
 								searchForUser(searchFor);
 							}
 						}}

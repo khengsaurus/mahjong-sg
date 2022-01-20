@@ -36,7 +36,7 @@ const BottomRightControls = (props: BRControlsProps) => {
 				disabled={disableDraw}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			{!confirmHu && !showDeclareHu && HHStr !== '' && (
+			{!confirmHu && !showDeclareHu && HHStr && (
 				<ControlButton
 					label={`开?`}
 					callback={handleOpen}
