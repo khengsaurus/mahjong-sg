@@ -85,14 +85,13 @@ const NewUser = () => {
 		<>
 			<StyledText title={HomeScreenText.NEW_USER_TITLE} />
 			<TextField
-				name="username"
-				label={HomeScreenText.USERNAME}
-				onChange={e => {
-					setUsername(e.target.value?.toLowerCase());
-				}}
 				inputProps={{ maxLength: 8 }}
-				variant="standard"
+				label={HomeScreenText.USERNAME}
+				onChange={e => setUsername(e.target.value.toLowerCase())}
 				style={{ margin: '-3px 0 5px' }}
+				type="text"
+				value={username}
+				variant="standard"
 			/>
 			<Row style={{ width: '80%', justifyContent: 'space-evenly' }}>
 				{alert?.status !== Status.SUCCESS && (

@@ -38,7 +38,7 @@ const Help = () => {
 					tiles.
 				</li>
 				<li>
-					If 15 tiles are left, the Draw button will read '完' instead. The next player to draw has to press
+					If 15 tiles are left, the Draw button will read '完' instead. The last player to draw has to press
 					on it to end the round. If anyone tries to draw replacement tiles (補花) and there are 15 tiles
 					left, the game will also end in a draw.
 				</li>
@@ -53,36 +53,18 @@ const Help = () => {
 			<ul>
 				<li>A glowing flower tile means that it is that player's flower tile, i.e. + 1 Tai.</li>
 				<li>
-					No instant payout (yet). <br />
-					After the game starts, if someone has matching flower tiles, check the logs to see if they had them
-					in the initial hand. If so, the logs will be like: <br />
-					"Player received 13 tiles, including 猫, 老鼠" <br />
-					... <br />
-					"Player buhua, received 2 tiles"
-					<br />
-					<br />
-					Compared to something like:
-					<br />
-					"Player received 13 tiles, including 猫"
-					<br />
-					...
-					<br /> "Player buhua, received 老鼠" <br />
-					...
-					<br /> "Player buhua, received 1 tile"
-				</li>
-				<li>If a player gets both his flower tiles or bites (咬到) it will be shown in the logs.</li>
-				<li>
-					There is no instant payout. To send another player chips, you can open the 'Send Chips' panel (top
-					right).
+					There will only be instant payouts in Shooter or Half Shooter games. When a user Kang's, draws
+					matching flowers, or collects a full flower set, the event will be logged in the top right, and so
+					will following instant payouts.
 				</li>
 				<li>
 					The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a tile discarded. The default
 					timeout is 6s.
 				</li>
 				<li>
-					If more than one person can take the last throw tile (for Hu, Pong, etc) the timeout will be 12s.
-					The first person with priority to Hu will see the option first. If they don't Hu, others can take
-					the tile after the first 6s are up. So act quickly, until we come up with another solution :,)
+					If more than one person can take the last throw tile, the timeout will be 12s. The first person with
+					priority will see the option first. If they don't take it, others can take the tile after the first
+					6s are up. Act quickly!
 				</li>
 				<li>
 					Playing accross different timezones is not recommended. This is because of how the delay system
@@ -109,8 +91,8 @@ const Help = () => {
 					discarded it. There is no fake-hu (詐胡) functionality.
 				</li>
 				<li>
-					The creator of the game has access to Admin controls, where they can turn on or off 'Manual Hu'. If
-					Manual Hu is on, anyone can Hu at any time (click the right, then left 开 buttons).
+					The creator of the game has access to Admin controls, where they can toggle on or off 'Manual Hu'.
+					If Manual Hu is on, players can Hu at any time.
 				</li>
 				<li>
 					The {platform} will try to calculate how many points your hand is worth when you Hu. Note that not
@@ -165,14 +147,12 @@ const Help = () => {
 			<h4>End of the round/game</h4>
 			<ul>
 				<li>
-					In the case of draw (15 tiles left), the game will progress onto the next round if there was a Kang
-					or someone drew matching flower tiles (animal pairs or their own flower tiles). If not, the round
-					will be repeated.
+					If the game draws, it will progress onto the next round if there was a Kang or someone drew matching
+					flower tiles. If not, the round will be repeated.
 				</li>
 				<li>
 					In online games (with than 1 person playing), after the round ends, only the next dealer will see
-					the 'Next Round' button in the popup. If you are playing a full bot game (with 3 bots), you will
-					always see it.
+					the 'Next Round' button in the popup.
 				</li>
 				<li>
 					Games will be deleted after 24 hours of inactivity, regardless of whether they are still ongoing or

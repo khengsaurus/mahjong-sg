@@ -134,36 +134,30 @@ const Login = () => {
 			<TextField
 				key="usernameEmail"
 				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
+				onChange={e => (showRegister ? setEmail(e.target.value) : setUsername(e.target.value?.toLowerCase()))}
+				style={{ margin: '5px 0', width: '160px' }}
 				type="text"
 				value={showRegister ? email : username}
-				onChange={e => {
-					showRegister ? setEmail(e.target.value) : setUsername(e.target.value?.toLowerCase());
-				}}
 				variant="standard"
-				style={{ margin: '5px 0', width: '160px' }}
 			/>
 			<TextField
 				key="password"
 				label={HomeScreenText.PW}
+				onChange={e => setPassword(e.target.value)}
+				style={{ margin: '5px 0', width: '160px' }}
 				type="password"
 				value={password}
-				onChange={e => {
-					setPassword(e.target.value);
-				}}
 				variant="standard"
-				style={{ margin: '5px 0', width: '160px' }}
 			/>
 			<Collapse in={showRegister} timeout={Transition.FAST} unmountOnExit>
 				<TextField
 					key="confirmPassword"
 					label={HomeScreenText.C_PW}
+					onChange={e => setConfirmPassword(e.target.value)}
+					style={{ margin: '5px 0', width: '160px' }}
 					type="password"
 					value={confirmPassword}
-					onChange={e => {
-						setConfirmPassword(e.target.value);
-					}}
 					variant="standard"
-					style={{ margin: '5px 0', width: '160px' }}
 				/>
 			</Collapse>
 			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '180px' }}>
