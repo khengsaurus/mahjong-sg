@@ -22,7 +22,7 @@ const SentLogs = ({ logs, align = 'center' }: SentLogsProps) => {
 	}, [scrollSentLogs, logs.length]);
 
 	return (
-		<ScrollableBase id={sentLogsId} style={{ maxHeight: '60px', marginTop: 5 }}>
+		<ScrollableBase id={sentLogsId} style={{ maxHeight: '60px' }}>
 			{logs.map((log, index) => (
 				<StyledCenterText key={index} title={log} />
 			))}

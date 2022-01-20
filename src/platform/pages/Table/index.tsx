@@ -128,7 +128,8 @@ const Table = () => {
 		$(lTh)?.addClass('last');
 
 		return () => $(lTh)?.removeClass('last');
-	}, [currGame?.lTh?.r]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currGame?.lTh?.i]);
 
 	const getMarkup = () => {
 		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {

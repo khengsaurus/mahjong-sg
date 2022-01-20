@@ -48,7 +48,7 @@ const Controls = () => {
 		showBottomControls,
 		showAnnounceHuModal,
 		setExec
-	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HH, HHStr, updateGame, handleHome, notifOutput);
+	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, updateGame, handleHome, notifOutput);
 	useBot(isHuLocked, lThAvail, setExec);
 
 	const _handleHome = useCallback(() => {
@@ -115,7 +115,7 @@ const Controls = () => {
 				</Fade>
 				<Fade in={declareHuModal?.show && isEmpty(game?.hu)} timeout={Transition.FAST} unmountOnExit>
 					<div>
-						<DeclareHuModal {...declareHuModal} />
+						<DeclareHuModal HH={HH} {...declareHuModal} />
 					</div>
 				</Fade>
 				<Fade in={adminControlsModal?.show} timeout={Transition.FAST} unmountOnExit>
@@ -125,7 +125,7 @@ const Controls = () => {
 				</Fade>
 				<Fade in={showAnnounceHuModal} timeout={Transition.FAST} unmountOnExit>
 					<div>
-						<AnnounceHuModal {...announceHuModal} />
+						<AnnounceHuModal HH={HH} {...announceHuModal} />
 					</div>
 				</Fade>
 				<Fade in={Number(notif?.timeout) > 0} timeout={Transition.FAST} unmountOnExit>

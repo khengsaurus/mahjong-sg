@@ -49,7 +49,7 @@ const AnnounceHuModal = ({
 		return (
 			hu
 				.slice(3, hu.length)
-				// ['Four Greater Blessings', 'Lots of stuff', '10 Flower Tiles']
+				// ['Four Greater Blessings', 'Lots of stuff', '3 Flower Tiles']
 				.map((p: string, ix: number) => (
 					<StyledCenterText
 						key={ix}

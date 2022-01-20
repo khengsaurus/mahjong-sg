@@ -11,6 +11,7 @@
 .ann-panels {
 	@include row;
 	justify-content: center;
+	margin-top: 3px;
 
 	.full-panel {
 		@include column;
@@ -18,15 +19,18 @@
 	}
 
 	.left-panel {
+		@include column;
+		justify-content: center;
 		padding: 5px 10px 5px 0px;
 		margin-right: 10px;
-		border-right: 1px solid transparent;
 		max-width: 195px;
+		border-right: 1px solid transparent;
 	}
 
 	.right-panel {
 		@include column;
 		align-items: center;
+		justify-content: center;
 		max-width: 175px;
 	}
 }
