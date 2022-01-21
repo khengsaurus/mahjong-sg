@@ -28,6 +28,7 @@ import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } from 'shared/enums';
+import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
@@ -49,6 +50,11 @@ const NewGame = () => {
 	const [maxTaiStr, setMaxTaiStr] = useState('5');
 	const [showOptions, setShowOptions] = useState(false);
 	const [startedGame, setStartedGame] = useState(false);
+	const [scoringHands, setScoringHands] = useState<IObj<ScoringHand, boolean>>({
+		[ScoringHand.CONCEALED]: true,
+		[ScoringHand.SEVEN]: true,
+		[ScoringHand.GREEN]: true
+	});
 	const playersRef = useRef<User[]>(players);
 	const dispatch = useDispatch();
 
@@ -66,7 +72,18 @@ const NewGame = () => {
 	}
 
 	async function startGame() {
-		await ServiceInstance.initGame(user, players, random, minTai, maxTai, mHu, payment, isLocalGame).then(game => {
+		const excludeShs = Object.keys(scoringHands).filter(s => scoringHands[s] === false) as ScoringHand[];
+		await ServiceInstance.initGame(
+			user,
+			players,
+			random,
+			minTai,
+			maxTai,
+			mHu,
+			payment,
+			excludeShs,
+			isLocalGame
+		).then(game => {
 			if (game?.id) {
 				dispatch(setTHK(game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.st)));
 				dispatch(setGameId(game.id));
@@ -249,6 +266,19 @@ const NewGame = () => {
 		);
 	};
 
+	const renderScoringHandOption = (s: ScoringHand) => (
+		<ListItem className="list-item">
+			<ListItemText secondary={HandDescEng[s]} />
+			<IconButton
+				onClick={() => setScoringHands({ ...scoringHands, [s]: !scoringHands[s] })}
+				style={{ justifyContent: 'flex-end', marginRight: -8 }}
+				disableRipple
+			>
+				{scoringHands[s] ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+			</IconButton>
+		</ListItem>
+	);
+
 	const renderGameOptions = () => {
 		return (
 			<Fade in={showOptions && showBottom} timeout={Transition.FAST} unmountOnExit>
@@ -266,6 +296,9 @@ const NewGame = () => {
 								{renderPaymentType()}
 								{renderTaiSelect('Min Tai', minTaiStr, handleMinTai)}
 								{renderTaiSelect('Max Tai', maxTaiStr, handleMaxTai)}
+								{renderScoringHandOption(ScoringHand.CONCEALED)}
+								{renderScoringHandOption(ScoringHand.SEVEN)}
+								{renderScoringHandOption(ScoringHand.GREEN)}
 							</List>
 						</DialogContent>
 					</Dialog>

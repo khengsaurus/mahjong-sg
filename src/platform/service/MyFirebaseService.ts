@@ -422,7 +422,7 @@ export class FirebaseService {
 		gMaxPx = HandPoint.MAX,
 		mHu = false,
 		pay = PaymentType.SHOOTER,
-		sHs = [ScoringHand.ALL]
+		sHs: ScoringHand[] = []
 	): Promise<Game> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
