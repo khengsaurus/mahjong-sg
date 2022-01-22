@@ -54,7 +54,7 @@ const AnnounceHuModal = ({
 					<StyledCenterText
 						key={ix}
 						// title={p}
-						title={getHandDesc(p)}
+						text={getHandDesc(p)}
 					/>
 				))
 		);
@@ -93,11 +93,11 @@ const AnnounceHuModal = ({
 				{hu.length > 2 && (
 					<>
 						<StyledCenterText
-							title={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} won with ${hu[1]}台`}
+							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} won with ${hu[1]}台`}
 							variant="subtitle1"
 							padding="3px 0px 0px"
 						/>
-						<StyledCenterText title={`${getPaymentText()} ${getLastThrownText()}`} />
+						<StyledCenterText text={`${getPaymentText()} ${getLastThrownText()}`} />
 						<div className="ann-panels">
 							{hasHandDescs && (
 								<div className={hasRightPanel ? 'left-panel' : 'full-panel'}>{renderHandDesc()}</div>
@@ -112,11 +112,11 @@ const AnnounceHuModal = ({
 				{(draw || !on || _d === 9) &&
 					(draw ? (
 						<>
-							<StyledCenterText title={`Draw!`} variant="h6" padding="6px" />
-							<StyledCenterText title={`15 tiles left`} variant="subtitle1" padding="0px" />
+							<StyledCenterText text={`Draw!`} variant="h6" padding="6px" />
+							<StyledCenterText text={`15 tiles left`} variant="subtitle1" padding="0px" />
 						</>
 					) : (
-						<StyledCenterText title={`The game has ended!`} variant="subtitle1" padding="6px 0px" />
+						<StyledCenterText text={`The game has ended!`} variant="subtitle1" padding="6px 0px" />
 					))}
 			</DialogContent>
 			<DialogActions

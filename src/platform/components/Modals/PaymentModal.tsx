@@ -48,7 +48,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 			}}
 		>
 			<DialogContent style={{ padding: '10px 15px' }}>
-				<StyledText title="Send chips to: " variant="subtitle1" padding="3px 0px" />
+				<StyledText text="Send chips to: " variant="subtitle1" padding="3px 0px" />
 				<RadioGroup row value={toWho} onChange={handleSelectRecipient}>
 					{currGame.ps.map((otherPlayer: User, index: number) =>
 						otherPlayer.uN !== playerUsername ? (
@@ -62,7 +62,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 					)}
 				</RadioGroup>
 
-				<StyledText title="Amount: " variant="subtitle1" padding="3px 0px" />
+				<StyledText text="Amount: " variant="subtitle1" padding="3px 0px" />
 				<RadioGroup row style={{ width: '90%' }} value={amt} onChange={handleSelectAmount}>
 					{Amounts.map((amt: number, index: number) => (
 						<FormControlLabel

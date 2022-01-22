@@ -21,7 +21,7 @@ const CheckBox = ({
 }: CheckBoxProps) => {
 	return (
 		<FormRow>
-			<StyledText title={title} variant={titleVariant} padding={titlePadding} />
+			<StyledText text={title} variant={titleVariant} padding={titlePadding} />
 			<Checkbox value={value} onChange={onChange} defaultChecked={defaultChecked} />
 		</FormRow>
 	);

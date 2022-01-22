@@ -294,8 +294,8 @@ const NewGame = () => {
 							<List className="list">
 								{renderManualHu()}
 								{renderPaymentType()}
-								{renderTaiSelect('Min Tai', minTaiStr, handleMinTai)}
-								{renderTaiSelect('Max Tai', maxTaiStr, handleMaxTai)}
+								{renderTaiSelect(ButtonText.MINTAI, minTaiStr, handleMinTai)}
+								{renderTaiSelect(ButtonText.MAXTAI, maxTaiStr, handleMaxTai)}
 								{renderScoringHandOption(ScoringHand.CONCEALED)}
 								{renderScoringHandOption(ScoringHand.SEVEN)}
 								{renderScoringHandOption(ScoringHand.GREEN)}
@@ -310,7 +310,7 @@ const NewGame = () => {
 
 	const markup = () => (
 		<>
-			<StyledText title={HomeScreenText.NEW_GAME_TITLE} padding="5px" />
+			<StyledText text={HomeScreenText.NEW_GAME_TITLE} padding="5px" />
 			<div className="panels">
 				<div className="panel-segment">
 					<UserSearchForm />

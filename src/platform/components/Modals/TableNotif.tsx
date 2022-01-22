@@ -27,13 +27,13 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 		>
 			<DialogContent style={{ paddingBottom: 0 }}>
 				<Centered>
-					{notifs[0] && <StyledText title={notifs[0]} variant="subtitle1" padding="3px 0px" />}
-					<StyledText title={`${timeout}`} variant="subtitle1" padding="0px 0px 6px" />
+					{notifs[0] && <StyledText text={notifs[0]} variant="subtitle1" padding="3px 0px" />}
+					<StyledText text={`${timeout}`} variant="subtitle1" padding="0px 0px 6px" />
 					{notifs.length > 1 &&
 						notifs
 							.slice(1, 10)
 							.map((n: string, ix: number) => (
-								<StyledText key={ix} title={n} variant="subtitle2" padding="0px" />
+								<StyledText key={ix} text={n} variant="subtitle2" padding="0px" />
 							))}
 				</Centered>
 			</DialogContent>

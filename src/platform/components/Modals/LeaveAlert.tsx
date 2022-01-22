@@ -19,8 +19,8 @@ const LeaveAlert = ({ show, onClose }: LeaveAlertProps) => {
 		>
 			<DialogContent style={{ paddingBottom: 0 }}>
 				<Centered>
-					<StyledText variant="subtitle1" title="Are you sure you want to leave?" padding="2px" />
-					<StyledText variant="subtitle2" title="This is a local game and won't be saved" padding="2px" />
+					<StyledText variant="subtitle1" text="Are you sure you want to leave?" padding="2px" />
+					<StyledText variant="subtitle2" text="This is a local game and won't be saved" padding="2px" />
 				</Centered>
 			</DialogContent>
 			<DialogActions

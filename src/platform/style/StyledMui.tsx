@@ -3,7 +3,7 @@ import { history } from 'App';
 import { Page } from 'shared/enums';
 
 interface StyledTextProps {
-	title: string;
+	text: string;
 	color?: string;
 	padding?: string;
 	variant?: 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2';
@@ -27,7 +27,7 @@ interface StyledButtonProps {
 }
 
 export const StyledText = ({
-	title,
+	text,
 	color,
 	variant = 'h6',
 	padding = variant.startsWith('body') ? '0px' : '10px',
@@ -39,16 +39,16 @@ export const StyledText = ({
 		style={{ justifySelf: 'center', alignSelf: 'center', color, padding, textAlign, placeSelf, ...style }}
 		variant={variant}
 	>
-		{title}
+		{text}
 	</Typography>
 );
 
-export const StyledCenterText = ({ title, padding, variant = 'body2' }: StyledTextProps) => (
+export const StyledCenterText = ({ text, padding, variant = 'body2' }: StyledTextProps) => (
 	<Typography
 		style={{ justifySelf: 'center', alignSelf: 'center', textAlign: 'center', placeSelf: 'center', padding }}
 		variant={variant}
 	>
-		{title}
+		{text}
 	</Typography>
 );
 

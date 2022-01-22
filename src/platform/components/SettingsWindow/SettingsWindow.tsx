@@ -169,13 +169,13 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 			<Dialog open={showDeleteAlert} BackdropProps={{ invisible: true }} onClose={handleClose}>
 				<DialogContent style={{ paddingBottom: 0 }}>
 					<StyledText
-						title="Are you sure you wish to delete your account?"
+						text="Are you sure you wish to delete your account?"
 						variant="subtitle1"
 						textAlign="center"
 						padding="0px"
 					/>
 					<StyledText
-						title="There's no undoing this action!"
+						text="There's no undoing this action!"
 						variant="subtitle2"
 						textAlign="center"
 						padding="2px"
@@ -198,7 +198,7 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 	};
 
 	const Label = ({ label }: IHasLabel) => (
-		<StyledText title={label} variant="subtitle1" padding="0px" style={{ height: 30, marginTop: 2 }} />
+		<StyledText text={label} variant="subtitle1" padding="0px" style={{ height: 30, marginTop: 2 }} />
 	);
 
 	return (

@@ -1,4 +1,4 @@
-import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -37,8 +37,8 @@ const TopLeftControls = ({
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
 				<IconControlButton Icon={HomeIcon} onClick={goHome} size={controlsSize} />
+				{isAdmin && <IconControlButton Icon={InfoIcon} onClick={handleAdmin} size={controlsSize} />}
 				<IconControlButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
-				{isAdmin && <IconControlButton Icon={EditIcon} onClick={handleAdmin} size={controlsSize} />}
 				<IconControlButton
 					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}

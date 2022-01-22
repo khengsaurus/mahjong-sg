@@ -220,7 +220,7 @@ const Table = () => {
 			setTimeout(function () {
 				setPendingScreen(
 					<Centered>
-						<StyledText title={HomeScreenText.NO_ONGOING_GAME} />
+						<StyledText text={HomeScreenText.NO_ONGOING_GAME} />
 						<JoinGameButton />
 						<HomeButton />
 					</Centered>

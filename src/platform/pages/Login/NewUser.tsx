@@ -83,7 +83,7 @@ const NewUser = () => {
 
 	const markup = () => (
 		<>
-			<StyledText title={HomeScreenText.NEW_USER_TITLE} />
+			<StyledText text={HomeScreenText.NEW_USER_TITLE} />
 			<TextField
 				inputProps={{ maxLength: 8 }}
 				label={HomeScreenText.USERNAME}

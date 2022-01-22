@@ -130,7 +130,7 @@ const Login = () => {
 
 	const markup = () => (
 		<>
-			<StyledText title={HomeScreenText.HOME_TITLE} padding="0" />
+			<StyledText text={HomeScreenText.HOME_TITLE} padding="0" />
 			<TextField
 				key="usernameEmail"
 				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}

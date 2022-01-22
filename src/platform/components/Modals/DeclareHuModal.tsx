@@ -27,7 +27,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 	const renderManualHuOptions = () => (
 		<div>
 			<FormRow>
-				<StyledText title="台: " variant="subtitle2" padding="0px" />
+				<StyledText text="台: " variant="subtitle2" padding="0px" />
 				<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
 					{generateNumbers(px[0], px[1]).map((tai: number) => (
 						<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
@@ -35,7 +35,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 				</RadioGroup>
 			</FormRow>
 			<FormRow>
-				<StyledText title="自摸: " variant="subtitle2" padding="0px" />
+				<StyledText text="自摸: " variant="subtitle2" padding="0px" />
 				<CheckBox
 					title=""
 					value={zimo}
@@ -62,18 +62,18 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 			>
 				<DialogContent style={{ padding: '10px 15px' }}>
 					<StyledText
-						title={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
+						text={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
 						variant="body1"
 						padding="3px 0px"
 					/>
 					{HH?.pxs?.map((p: IPoint, ix: number) => (
-						<StyledText key={ix} title={getHandDesc(p.hD)} variant="subtitle2" padding="2px 0px" />
+						<StyledText key={ix} text={getHandDesc(p.hD)} variant="subtitle2" padding="2px 0px" />
 					))}
 					{game?.mHu ? (
 						renderManualHuOptions()
 					) : (
 						<StyledText
-							title={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
+							text={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
 							variant="subtitle2"
 							padding="2px 0px"
 						/>

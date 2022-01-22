@@ -100,7 +100,7 @@ const HomePage = ({
 			timeoutRef.current = setTimeout(() => {
 				setPendingScreen(
 					<Centered>
-						<StyledText title={fallbackTitle} variant="subtitle1" />
+						<StyledText text={fallbackTitle} variant="subtitle1" />
 						<HomeButton />
 					</Centered>
 				);
@@ -122,7 +122,7 @@ const HomePage = ({
 								<Row>
 									<NetworkLoader />
 									<StyledText
-										title="Waiting for network..."
+										text="Waiting for network..."
 										variant="subtitle2"
 										padding="0px 0px 0px 10px"
 									/>

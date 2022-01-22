@@ -40,7 +40,7 @@ const Home = () => {
 
 	const markup = () => (
 		<>
-			<StyledText title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
+			<StyledText text={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
 			<NewGameButton />
 			<JoinGameButton />
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />

@@ -4,7 +4,9 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { BotTimeout, LocalFlag } from 'shared/enums';
+import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
 import { isDev } from 'shared/util';
 import { objToGame } from 'shared/util/parsers';
@@ -29,6 +31,7 @@ const Scenarios = () => {
 };
 
 const AdminControls = ({ game, show, onClose }: ModalProps) => {
+	const { user } = useSelector((store: IStore) => store);
 	const [mHu, setMHu] = useState<boolean>(game?.mHu);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
 	const [bt, setBt] = useState<number>(game?.bt);
@@ -100,11 +103,13 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 	return (
 		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
 			<DialogContent>
-				<FormControl component="fieldset">
-					{renderManualHuSelect()}
-					{renderBotTimeSelect()}
-					{isDev() && game.id !== LocalFlag && <Scenarios />}
-				</FormControl>
+				{user?.uN === game.cO && (
+					<FormControl component="fieldset">
+						{renderManualHuSelect()}
+						{renderBotTimeSelect()}
+						{isDev() && game.id !== LocalFlag && <Scenarios />}
+					</FormControl>
+				)}
 			</DialogContent>
 		</Dialog>
 	);
