@@ -63,10 +63,8 @@ const Controls = () => {
 	const handleKeyListeners = useCallback(
 		e => {
 			switch (e.key) {
-				case Shortcut.ADMIN:
-					if (topLeft?.isAdmin) {
-						topLeft?.handleAdmin();
-					}
+				case Shortcut.INFO:
+					topLeft?.handleAdmin();
 					break;
 				case Shortcut.HOME:
 					_handleHome();

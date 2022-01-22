@@ -117,7 +117,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiDialogContent: {
 				styleOverrides: {
 					root: {
-						padding: '14px 18px',
+						padding: '10px 15px',
 						userSelect: 'none',
 						'&:first-of-type': { paddingTop: null }
 					}

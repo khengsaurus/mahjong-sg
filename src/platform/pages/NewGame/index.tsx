@@ -31,7 +31,7 @@ import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } fro
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
-import { ButtonText, HomeScreenText } from 'shared/screenTexts';
+import { ButtonText, HomeScreenText, PaymentLabel } from 'shared/screenTexts';
 import { IStore, setGameId } from 'shared/store';
 import { setTHK } from 'shared/store/actions';
 import { getTileHashKey } from 'shared/util';
@@ -202,7 +202,11 @@ const NewGame = () => {
 		<ListItem className="list-item">
 			<ListItemText
 				secondary={
-					payment === PaymentType.NONE ? `None` : payment === PaymentType.SHOOTER ? `Shooter` : `Half Shooter`
+					payment === PaymentType.NONE
+						? PaymentLabel.n
+						: payment === PaymentType.SHOOTER
+						? PaymentLabel.s
+						: PaymentLabel.h
 				}
 			/>
 			<IconButton
@@ -257,7 +261,7 @@ const NewGame = () => {
 							))}
 						</Select>
 					) : (
-						<IconButton style={{ justifyContent: 'flex-end', marginRight: -5, fontSize: 16 }}>
+						<IconButton style={{ justifyContent: 'flex-end', marginRight: -1, fontSize: 16 }}>
 							{valueStr}
 						</IconButton>
 					)}

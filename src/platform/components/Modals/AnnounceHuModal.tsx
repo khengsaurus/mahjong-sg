@@ -7,7 +7,7 @@ import { StyledButton, StyledCenterText } from 'platform/style/StyledMui';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { PaymentType } from 'shared/enums';
-import { ButtonText } from 'shared/screenTexts';
+import { ButtonText, PaymentLabel } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { AnnounceHuModalProps } from 'shared/typesPlus';
 import { getHandDesc, isBefore } from 'shared/util';
@@ -63,11 +63,11 @@ const AnnounceHuModal = ({
 	function getPaymentText() {
 		switch (pay) {
 			case PaymentType.SHOOTER:
-				return 'Shooter.';
+				return `${PaymentLabel.s}.`;
 			case PaymentType.HALF_SHOOTER:
-				return 'Half shooter.';
+				return `${PaymentLabel.h}.`;
 			default:
-				return 'Half shooter.';
+				return ``;
 		}
 	}
 
