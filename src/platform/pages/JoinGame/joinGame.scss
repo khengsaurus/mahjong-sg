@@ -2,12 +2,15 @@
 
 .join-game-panel {
 	align-content: flex-start;
-	max-height: 90vh;
+	max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	max-height: calc(100vh - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+	margin-bottom: env(safe-area-inset-bottom);
+	margin-bottom: const(safe-area-inset-bottom);
 	.list {
 		display: flex;
 		flex-direction: column;
-		max-height: 65vh;
-		margin: 10px 0 30px 0;
+		max-height: 60vh;
+		margin: 5px 0;
 		width: 250px;
 		overflow: scroll;
 		// @include default-border;

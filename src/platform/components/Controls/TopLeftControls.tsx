@@ -17,7 +17,6 @@ const TopLeftControls = ({
 	handleAdmin,
 	setShowLeaveAlert,
 	showText,
-	isAdmin,
 	texts
 }: TLControlsProps) => {
 	const {
@@ -37,8 +36,8 @@ const TopLeftControls = ({
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
 				<IconControlButton Icon={HomeIcon} onClick={goHome} size={controlsSize} />
-				<IconControlButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
 				<IconControlButton Icon={InfoIcon} onClick={handleAdmin} size={controlsSize} />
+				<IconControlButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
 				<IconControlButton
 					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}

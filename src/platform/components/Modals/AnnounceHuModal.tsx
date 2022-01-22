@@ -94,8 +94,7 @@ const AnnounceHuModal = ({
 					<>
 						<StyledCenterText
 							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} won with ${hu[1]}台`}
-							variant="subtitle1"
-							padding="3px 0px 0px"
+							variant="h6"
 						/>
 						<StyledCenterText text={`${getPaymentText()} ${getLastThrownText()}`} />
 						<div className="ann-panels">

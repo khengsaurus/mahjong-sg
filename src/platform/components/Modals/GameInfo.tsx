@@ -12,7 +12,7 @@ import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { ButtonText, PaymentLabel } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
-import './adminControls.scss';
+import './gameInfo.scss';
 
 const padding0Height35 = {
 	padding: 0,
@@ -27,7 +27,7 @@ const renderSetting = (label: string, toggle: boolean) => (
 	</ListItem>
 );
 
-const AdminControls = ({ game, show, onClose }: ModalProps) => {
+const GameInfo = ({ game, show, onClose }: ModalProps) => {
 	const { user } = useSelector((store: IStore) => store);
 	const [mHu, setMHu] = useState<boolean>(game?.mHu);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
@@ -115,7 +115,7 @@ const AdminControls = ({ game, show, onClose }: ModalProps) => {
 	);
 };
 
-export default AdminControls;
+export default GameInfo;
 
 /* -------------------- {isDev() && game.id !== LocalFlag && <Scenarios />} -------------------- */
 

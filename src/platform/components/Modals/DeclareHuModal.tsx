@@ -6,6 +6,7 @@ import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { HandPoint } from 'shared/handEnums';
+import { ButtonText } from 'shared/screenTexts';
 import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
@@ -61,25 +62,14 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 				}}
 			>
 				<DialogContent style={{ padding: '10px 15px' }}>
-					<StyledText
-						text={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`}
-						variant="body1"
-						padding="3px 0px"
-					/>
+					<StyledText text={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`} variant="h6" />
 					{HH?.pxs?.map((p: IPoint, ix: number) => (
 						<StyledText key={ix} text={getHandDesc(p.hD)} variant="subtitle2" padding="2px 0px" />
 					))}
-					{game?.mHu ? (
-						renderManualHuOptions()
-					) : (
-						<StyledText
-							text={`${tai} 台${HH?.self ? ` 自摸` : ``}`}
-							variant="subtitle2"
-							padding="2px 0px"
-						/>
-					)}
+					<StyledText text={`${tai} 台${zimo ? ` 自摸` : ``}`} variant="subtitle2" padding="2px 0px" />
+					{renderManualHuOptions()}
 					<StyledButton
-						label={`Hu`}
+						label={ButtonText.HU}
 						size="large"
 						onClick={hu}
 						disabled={!tai || tai < game?.px[0] || game?.hu.length > 2}

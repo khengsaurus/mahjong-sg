@@ -25,6 +25,7 @@
 		"cordova-plugin-screen-orientation": "^3.0.2",
 		"es6-promise-plugin": "^4.2.2",
 		"firebase": "^9.6.1",
+		"html-react-parser": "^1.4.5",
 		"include-media": "^1.4.10",
 		"jquery": "^3.6.0",
 		"jsdom": "^18.0.1",

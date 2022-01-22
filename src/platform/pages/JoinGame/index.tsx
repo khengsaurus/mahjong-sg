@@ -67,7 +67,7 @@ const JoinGame = () => {
 
 	const markup = () => (
 		<Centered className="join-game-panel">
-			<StyledText text={title} variant="h6" padding="5px" />
+			<StyledText text={title} variant="h6" />
 			<Collapse in={user && gameInvites?.length > 0} timeout={400}>
 				<List dense className="list">
 					{gameInvites?.map(game => (

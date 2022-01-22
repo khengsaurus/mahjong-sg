@@ -1,7 +1,7 @@
 import { Fade } from '@mui/material';
 import { history } from 'App';
 import { isEmpty } from 'lodash';
-import AdminControls from 'platform/components/Modals/AdminControls';
+import GameInfo from 'platform/components/Modals/GameInfo';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
@@ -41,7 +41,7 @@ const Controls = () => {
 		bottomRight,
 		payModal,
 		settingsModal,
-		adminControlsModal,
+		gameInfoModal,
 		declareHuModal,
 		announceHuModal,
 		showLeaveAlert,
@@ -116,9 +116,9 @@ const Controls = () => {
 						<DeclareHuModal HH={HH} {...declareHuModal} />
 					</div>
 				</Fade>
-				<Fade in={adminControlsModal?.show} timeout={Transition.FAST} unmountOnExit>
+				<Fade in={gameInfoModal?.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
-						<AdminControls {...adminControlsModal} />
+						<GameInfo {...gameInfoModal} />
 					</div>
 				</Fade>
 				<Fade in={showAnnounceHuModal} timeout={Transition.FAST} unmountOnExit>

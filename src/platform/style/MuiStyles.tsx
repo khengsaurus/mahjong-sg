@@ -59,7 +59,10 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 		typography: {
 			body1: { color: textColor },
 			body2: { color: textColor },
-			h6: { color: textColor },
+			h6: {
+				fontSize: 18,
+				color: textColor
+			},
 			subtitle1: { color: textColor },
 			subtitle2: { color: textColor }
 		},

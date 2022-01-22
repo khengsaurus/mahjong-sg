@@ -30,7 +30,7 @@ export const StyledText = ({
 	text,
 	color,
 	variant = 'h6',
-	padding = variant.startsWith('body') ? '0px' : '10px',
+	padding = variant.startsWith('body') ? '0px' : '5px 0px',
 	textAlign = 'left',
 	placeSelf = 'center',
 	style = {}
@@ -45,7 +45,13 @@ export const StyledText = ({
 
 export const StyledCenterText = ({ text, padding, variant = 'body2' }: StyledTextProps) => (
 	<Typography
-		style={{ justifySelf: 'center', alignSelf: 'center', textAlign: 'center', placeSelf: 'center', padding }}
+		style={{
+			justifySelf: 'center',
+			alignSelf: 'center',
+			textAlign: 'center',
+			placeSelf: 'center',
+			padding: padding || variant === 'h6' ? '5px 0px' : '0px'
+		}}
 		variant={variant}
 	>
 		{text}

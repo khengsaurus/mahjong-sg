@@ -24,27 +24,17 @@ const PlayAIButton = () => {
 			new User(BotIds[2], BotName.bot3 || Bot, '', '')
 		];
 
-		await ServiceInstance.initGame(
-			tempUser,
-			tempPlayers,
-			false,
-			1,
-			5,
-			false,
-			PaymentType.HALF_SHOOTER,
-			[],
-			true
-		).then(game => {
-			dispatch(setTHK(111));
-			dispatch(setLocalGame(game));
-			dispatch(setGameId(LocalFlag));
-		});
+		await ServiceInstance.initGame(tempUser, tempPlayers, false, 1, 5, false, PaymentType.SHOOTER, [], true).then(
+			game => {
+				dispatch(setTHK(111));
+				dispatch(setLocalGame(game));
+				dispatch(setGameId(LocalFlag));
+			}
+		);
 		history.push(Page.TABLE);
 	}
 
-	return (
-		<StyledButton label={ButtonText.BOT_GAME} style={{ fontSize: '20px', height: '44.5px' }} onClick={playVsAI} />
-	);
+	return <StyledButton label={ButtonText.BOT_GAME} onClick={playVsAI} />;
 };
 
 export default PlayAIButton;

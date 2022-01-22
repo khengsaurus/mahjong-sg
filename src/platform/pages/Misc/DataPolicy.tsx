@@ -13,9 +13,14 @@ const DataPolicy = () => {
 		<div className="content centered">
 			<h3>Data Policy</h3>
 			<p>
-				We do not collect any of your personal data, aside from your email. Your email is used solely for
-				account and game management. We will not distribute your email, and you can remove it from our records
-				any time by deleting your account.
+				Mahjong SG does not collect any of your personal data, aside from your email. Your email is used solely
+				for account and game management. We will not distribute your email, and you can remove it from our
+				records any time by deleting your account.
+			</p>
+			<br />
+			<p>
+				Mahjong SG currently does not support username change or password reset. An email address can only be
+				used to register one account.
 			</p>
 			<br />
 		</div>

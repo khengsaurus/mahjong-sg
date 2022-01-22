@@ -1,3 +1,4 @@
+import parse from 'html-react-parser';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Main, Scrollable } from 'platform/style/StyledComponents';
@@ -7,10 +8,12 @@ import { capacitorLogo, firebaseLogo, reactLogo } from 'shared/images/symbols';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
+import initContent from './initContent.json';
 import './misc.scss';
 
 const About = () => {
-	const { user } = useSelector((store: IStore) => store);
+	const { user, aboutContent } = useSelector((store: IStore) => store);
+	const { descMobile = '', descWeb = '', reachOut = '' } = aboutContent || initContent.aboutContent;
 	const platform = isMobile() ? 'app' : 'website';
 
 	const renderLocalContent = () => (
@@ -21,30 +24,10 @@ const About = () => {
 					Thank you for using this {platform}. There is still much work in progress, but we hope you like it
 					so far.{' '}
 				</span>
-				{isMobile() ? (
-					<span>
-						You can also find us online at{' '}
-						<a href="https://www.mahjong-sg.com/" style={{ color: '#005eff' }}>
-							www.mahjong-sg.com
-						</a>
-						.
-					</span>
-				) : (
-					<span>You can also find us on the App Stores as Mahjong SG.</span>
-				)}
+				{isMobile() ? parse(descMobile) : parse(descWeb)}
 			</p>
 			<br />
-			<p>
-				If you have any feedback or would like to get in touch, do reach out to us at mahjongsgapp@gmail.com, or
-				on{' '}
-				<a
-					href="https://www.linkedin.com/in/tzi-kheng-sim-4a561616b/"
-					style={{ color: '#005eff', textDecoration: 'none' }}
-				>
-					LinkedIn
-				</a>
-				.
-			</p>
+			<p>{parse(reachOut)}</p>
 			<br />
 			<div className="stack">
 				<p>Created with </p>
