@@ -51,8 +51,6 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 	const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 	const dispatch = useDispatch();
 
-	// const transform = offset && isMobile() ? `translateY(-${Offset.HALF_MOBILE})` : null;
-
 	const flagThemeDiff = useMemo(
 		() => !isEqual([backgroundColor, tableColor, tileColor], [user.bgC, user.tC, user.tBC]),
 		[backgroundColor, tableColor, user.bgC, user.tC, user.tBC, tileColor]
