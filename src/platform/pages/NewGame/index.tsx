@@ -11,7 +11,6 @@ import {
 	IconButton,
 	List,
 	ListItem,
-	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	Select
@@ -23,7 +22,7 @@ import { useAndroidKeyboardListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
-import { Row } from 'platform/style/StyledComponents';
+import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -104,14 +103,12 @@ const NewGame = () => {
 		<Fade in={players.length === 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
 			<div>
 				<ListItem className="list-item">
-					<ListItemText secondary={`Randomize`} />
-					<IconButton
-						onClick={() => setRandom(!random)}
-						style={{ justifyContent: 'flex-end', marginRight: -8 }}
-						disableRipple
-					>
-						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-					</IconButton>
+					<ListItemText primary={`Randomize`} />
+					<Centered style={{ width: 20 }}>
+						<IconButton onClick={() => setRandom(!random)} disabled={players.length !== 4} disableRipple>
+							{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+						</IconButton>
+					</Centered>
 				</ListItem>
 			</div>
 		</Fade>
@@ -155,36 +152,26 @@ const NewGame = () => {
 	const renderUserOption = (player: User) => (
 		<ListItem className="list-item">
 			<ListItemText primary={player?.uN} />
-			{player?.uN === user?.uN ? (
-				<ListItemIcon
-					style={{
-						justifyContent: 'flex-end'
-					}}
-				>
+			<Centered style={{ width: 30 }}>
+				{player?.uN === user?.uN ? (
 					<MoodIcon color="primary" />
-				</ListItemIcon>
-			) : (
-				<IconButton
-					onClick={() => handleRemovePlayer(player)}
-					style={{ justifyContent: 'flex-end', marginRight: -8 }}
-					disableRipple
-				>
-					<ClearIcon />
-				</IconButton>
-			)}
+				) : (
+					<IconButton onClick={() => handleRemovePlayer(player)} disableRipple>
+						<ClearIcon />
+					</IconButton>
+				)}
+			</Centered>
 		</ListItem>
 	);
 
 	const renderManualHu = () => (
 		<ListItem className="list-item">
 			<ListItemText secondary={`Manual Hu`} />
-			<IconButton
-				onClick={() => setMHu(!mHu)}
-				style={{ justifyContent: 'flex-end', marginRight: -8 }}
-				disableRipple
-			>
-				{mHu ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-			</IconButton>
+			<Centered style={{ width: 20 }}>
+				<IconButton onClick={() => setMHu(!mHu)} disableRipple>
+					{mHu ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+				</IconButton>
+			</Centered>
 		</ListItem>
 	);
 
@@ -209,13 +196,11 @@ const NewGame = () => {
 						: PaymentLabel.h
 				}
 			/>
-			<IconButton
-				onClick={rotatePaymentType}
-				style={{ justifyContent: 'flex-end', marginRight: -8 }}
-				disableRipple
-			>
-				<SwapHorizIcon />
-			</IconButton>
+			<Centered style={{ width: 20 }}>
+				<IconButton onClick={rotatePaymentType} disableRipple>
+					<SwapHorizIcon />
+				</IconButton>
+			</Centered>
 		</ListItem>
 	);
 
@@ -241,30 +226,29 @@ const NewGame = () => {
 			<ListItem className="list-item">
 				<ListItemText secondary={label} />
 				<FormControl>
-					{tai.length > 1 ? (
-						<Select
-							style={{ justifyContent: 'flex-end', marginRight: -8 }}
-							value={valueStr}
-							onChange={handleChange}
-							disableUnderline
-							variant="standard"
-							IconComponent={() => null}
-						>
-							{tai.map(t => (
-								<MenuItem
-									key={`${label}-tai-${t}`}
-									style={{ ...MuiStyles.small_dropdown_item }}
-									value={t}
-								>
-									{t}
-								</MenuItem>
-							))}
-						</Select>
-					) : (
-						<IconButton style={{ justifyContent: 'flex-end', marginRight: -1, fontSize: 16 }}>
-							{valueStr}
-						</IconButton>
-					)}
+					<Centered style={{ width: 20 }}>
+						{tai.length > 1 ? (
+							<Select
+								value={valueStr}
+								onChange={handleChange}
+								disableUnderline
+								variant="standard"
+								IconComponent={() => null}
+							>
+								{tai.map(t => (
+									<MenuItem
+										key={`${label}-tai-${t}`}
+										style={{ ...MuiStyles.small_dropdown_item }}
+										value={t}
+									>
+										{t}
+									</MenuItem>
+								))}
+							</Select>
+						) : (
+							<IconButton style={{ fontSize: 16 }}>{valueStr}</IconButton>
+						)}
+					</Centered>
 				</FormControl>
 			</ListItem>
 		);
@@ -273,13 +257,11 @@ const NewGame = () => {
 	const renderScoringHandOption = (s: ScoringHand) => (
 		<ListItem className="list-item">
 			<ListItemText secondary={HandDescEng[s]} />
-			<IconButton
-				onClick={() => setScoringHands({ ...scoringHands, [s]: !scoringHands[s] })}
-				style={{ justifyContent: 'flex-end', marginRight: -8 }}
-				disableRipple
-			>
-				{scoringHands[s] ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-			</IconButton>
+			<Centered style={{ width: 20 }}>
+				<IconButton onClick={() => setScoringHands({ ...scoringHands, [s]: !scoringHands[s] })} disableRipple>
+					{scoringHands[s] ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+				</IconButton>
+			</Centered>
 		</ListItem>
 	);
 

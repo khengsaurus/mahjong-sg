@@ -286,7 +286,7 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 							)}
 						</FormControl>
 						{accActions && (
-							<Row style={{ alignItems: 'center', marginTop: 15 }}>
+							<Row style={{ alignItems: 'center', marginTop: 5 }}>
 								<StyledButton
 									label={ButtonText.DELETE_ACCOUNT}
 									onClick={() => setShowDeleteAlert(true)}

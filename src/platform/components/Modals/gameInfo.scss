@@ -1,28 +1,5 @@
-@mixin setting {
+.setting {
 	justify-content: space-between !important;
 	height: 35px;
 	padding: 0;
-}
-
-.tai {
-	@include setting;
-	margin-right: 12px;
-}
-
-.h {
-	// + 10
-	@include setting;
-	width: 190px;
-}
-
-.n {
-	// + -7
-	@include setting;
-	width: 173px;
-}
-
-.s {
-	// + 3
-	@include setting;
-	width: 183px;
 }

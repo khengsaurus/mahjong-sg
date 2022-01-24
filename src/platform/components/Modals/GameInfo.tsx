@@ -3,11 +3,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogContent, FormControl, ListItem, ListItemText, MenuItem, Select, Switch } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
-import { Row } from 'platform/style/StyledComponents';
+import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BotTimeout, LocalFlag } from 'shared/enums';
+import { BotTimeout, LocalFlag, PaymentType } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { ButtonText, PaymentLabel } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
@@ -17,21 +17,15 @@ import './gameInfo.scss';
 const padding0Height35 = {
 	padding: 0,
 	height: 35,
-	width: 180
+	width: 220
 };
-
-const renderSetting = (label: string, toggle: boolean) => (
-	<ListItem style={{ ...padding0Height35, width: 167 }}>
-		<ListItemText primary={label} />
-		{toggle ? <CheckIcon fontSize={'small'} /> : <CloseIcon fontSize={'small'} />}
-	</ListItem>
-);
 
 const GameInfo = ({ game, show, onClose }: ModalProps) => {
 	const { user } = useSelector((store: IStore) => store);
 	const [mHu, setMHu] = useState<boolean>(game?.mHu);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
 	const [bt, setBt] = useState<number>(game?.bt);
+	const widthRight = game.pay === PaymentType.HALF_SHOOTER ? 75 : 60;
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -56,9 +50,9 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 	const renderManualHuSelect = () => (
 		<ListItem style={{ ...padding0Height35 }}>
 			<ListItemText primary={ButtonText.MANUAL_HU} />
-			<Row style={{ marginRight: -5 }}>
+			<Centered style={{ width: widthRight }}>
 				<Switch checked={mHu} onChange={() => setMHu(prev => !prev)} />
-			</Row>
+			</Centered>
 		</ListItem>
 	);
 
@@ -72,23 +66,34 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 		return (
 			<ListItem style={{ ...padding0Height35, justifyContent: 'space-between' }}>
 				<ListItemText primary={ButtonText.BOT_SPEED} style={{ textAlign: 'left', width: 100 }} />
-				<Select
-					value={btLabel}
-					onChange={handleChange}
-					disableUnderline
-					variant="standard"
-					IconComponent={() => null}
-					style={{ position: 'absolute', right: -20, width: 90 }}
-				>
-					{['Slow', 'Medium', 'Fast'].map(t => (
-						<MenuItem key={`bt-${t}`} style={{ ...MuiStyles.small_dropdown_item }} value={t}>
-							{t}
-						</MenuItem>
-					))}
-				</Select>
+				<Centered style={{ width: widthRight }}>
+					<Select
+						value={btLabel}
+						onChange={handleChange}
+						disableUnderline
+						variant="standard"
+						IconComponent={() => null}
+						style={{ width: 100 }}
+					>
+						{['Slow', 'Medium', 'Fast'].map(t => (
+							<MenuItem key={`bt-${t}`} style={{ ...MuiStyles.small_dropdown_item }} value={t}>
+								{t}
+							</MenuItem>
+						))}
+					</Select>
+				</Centered>
 			</ListItem>
 		);
 	};
+
+	const renderSetting = (label: string, toggle: boolean) => (
+		<ListItem style={{ ...padding0Height35 }}>
+			<ListItemText primary={label} />
+			<Centered style={{ width: widthRight }}>
+				{toggle ? <CheckIcon fontSize={'small'} /> : <CloseIcon fontSize={'small'} />}
+			</Centered>
+		</ListItem>
+	);
 
 	return (
 		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
@@ -99,13 +104,17 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 						{renderBotTimeSelect()}
 					</FormControl>
 				)}
-				<Row className={`${game.pay}`}>
+				<Row className="setting">
 					<StyledText text={`${PaymentLabel.LABEL}`} variant="body1" />
-					<StyledText text={`${PaymentLabel[game.pay]}`} variant="body1" />
+					<Centered style={{ width: widthRight }}>
+						<StyledText text={`${PaymentLabel[game.pay]}`} variant="body1" />
+					</Centered>
 				</Row>
-				<Row className={`tai`}>
+				<Row className="setting">
 					<StyledText text={`${ButtonText.MINMAXTAI}`} variant="body1" />
-					<StyledText text={`${game.px.join(' / ')}`} variant="body1" />
+					<Centered style={{ width: widthRight }}>
+						<StyledText text={`${game.px.join(' / ')}`} variant="body1" />
+					</Centered>
 				</Row>
 				{renderSetting(HandDescEng.CONCEALED, game.sHs.includes(ScoringHand.CONCEALED) ? false : true)}
 				{renderSetting(HandDescEng.SEVEN, game.sHs.includes(ScoringHand.SEVEN) ? false : true)}

@@ -254,8 +254,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 
 export const MuiStyles = {
 	large_dialog: {
-		maxWidth: '385px',
-		minWidth: '385px'
+		maxWidth: '370px',
+		minWidth: '370px'
 	},
 	medium_dialog: {
 		minHeight: '80px',

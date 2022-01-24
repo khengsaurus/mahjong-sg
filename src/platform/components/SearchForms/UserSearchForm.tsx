@@ -1,17 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FaceIcon from '@mui/icons-material/Face';
-import {
-	Collapse,
-	Fade,
-	IconButton,
-	InputAdornment,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	TextField
-} from '@mui/material';
+import { Collapse, Fade, IconButton, InputAdornment, List, ListItem, ListItemText, TextField } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
 import { useContext, useState } from 'react';
@@ -81,18 +71,20 @@ const UserSearchForm: React.FC = () => {
 			<div>
 				<ListItem className="list-item" style={{ paddingTop: 6 }}>
 					<ListItemText primary={`Add bot`} />
-					<IconButton
-						onClick={() => {
-							if (players.length < 4) {
-								setSearchFor('');
-								setPlayers([...players, generateBot()]);
-							}
-						}}
-						style={{ justifyContent: 'flex-end', marginRight: -8 }}
-						disableRipple
-					>
-						<AddIcon />
-					</IconButton>
+					<Centered style={{ width: 30 }}>
+						<IconButton
+							onClick={() => {
+								if (players.length < 4) {
+									setSearchFor('');
+									setPlayers([...players, generateBot()]);
+								}
+							}}
+							disabled={showOptions}
+							disableRipple
+						>
+							<AddIcon />
+						</IconButton>
+					</Centered>
 				</ListItem>
 			</div>
 		</Fade>
@@ -118,27 +110,29 @@ const UserSearchForm: React.FC = () => {
 							color: 'secondary',
 							disabled: players.length >= 4,
 							endAdornment: (
-								<InputAdornment position="end" style={{ marginRight: -8 }}>
-									<IconButton
-										component="span"
-										onClick={() => {
-											if (players?.length < 4) {
-												refocusInput();
-											}
-											showOptions ? setShowOptions(false) : searchForUser(searchFor);
-										}}
-										disabled={searchFor.trim() === ''}
-										disableRipple
-									>
-										<ChevronRightIcon
-											color={showOptions ? 'secondary' : 'primary'}
-											style={
-												showOptions
-													? { transition: '300ms', transform: 'rotate(90deg)' }
-													: { transition: '300ms' }
-											}
-										/>
-									</IconButton>
+								<InputAdornment position="end">
+									<Centered style={{ width: 30 }}>
+										<IconButton
+											component="span"
+											onClick={() => {
+												if (players?.length < 4) {
+													refocusInput();
+												}
+												showOptions ? setShowOptions(false) : searchForUser(searchFor);
+											}}
+											disabled={searchFor.trim() === ''}
+											disableRipple
+										>
+											<ChevronRightIcon
+												color={showOptions ? 'secondary' : 'primary'}
+												style={
+													showOptions
+														? { transition: '300ms', transform: 'rotate(90deg)' }
+														: { transition: '300ms' }
+												}
+											/>
+										</IconButton>
+									</Centered>
 								</InputAdornment>
 							)
 						}}
@@ -172,13 +166,9 @@ const UserSearchForm: React.FC = () => {
 								}}
 							>
 								<ListItemText primary={foundUser.uN} />
-								<ListItemIcon
-									style={{
-										justifyContent: 'flex-end'
-									}}
-								>
+								<Centered style={{ width: 30 }}>
 									<FaceIcon color="primary" />
-								</ListItemIcon>
+								</Centered>
 							</ListItem>
 						) : null
 					)}
