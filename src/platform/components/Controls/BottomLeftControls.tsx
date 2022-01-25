@@ -10,6 +10,7 @@ const BottomLeftControls = (props: BLControlsProps) => {
 		handleChi,
 		handlePong,
 		openDeclareHuDialog,
+		setShowChiAlert,
 		disableChi,
 		disablePong,
 		disableHu,
@@ -33,7 +34,10 @@ const BottomLeftControls = (props: BLControlsProps) => {
 			/>
 			<ControlButton
 				label={`吃`}
-				callback={handleChi}
+				callback={() => {
+					setShowChiAlert(false);
+					handleChi();
+				}}
 				disabled={disableChi}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>

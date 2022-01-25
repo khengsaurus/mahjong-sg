@@ -10,6 +10,8 @@ const BottomRightControls = (props: BRControlsProps) => {
 		handleThrow,
 		handleDraw,
 		handleOpen,
+		setShowChiAlert,
+		showChiAlert,
 		disableThrow,
 		disableDraw,
 		drawText,
@@ -32,7 +34,7 @@ const BottomRightControls = (props: BRControlsProps) => {
 			/>
 			<ControlButton
 				label={drawText}
-				callback={handleDraw}
+				callback={() => (showChiAlert ? setShowChiAlert(false) : handleDraw())}
 				disabled={disableDraw}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>

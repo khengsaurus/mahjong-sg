@@ -1,30 +1,34 @@
 import { Fade } from '@mui/material';
 import { history } from 'App';
 import { isEmpty } from 'lodash';
-import GameInfo from 'platform/components/Modals/GameInfo';
 import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
 import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
+import GameInfo from 'platform/components/Modals/GameInfo';
 import PaymentModal from 'platform/components/Modals/PaymentModal';
 import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useNotifs, useTAvail } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import LeaveAlert from '../Modals/LeaveAlert';
+import ChiAlert from './ChiAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
 
 const Controls = () => {
-	const isLocalGame = LocalFlag === useSelector((store: IStore) => store.gameId);
+	const { gameId, sizes, theme } = useSelector((store: IStore) => store);
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const { delayLeft } = useGameCountdown();
+
+	const isLocalGame = useMemo(() => gameId === LocalFlag, [gameId]);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
+	const { showChiAlert, setShowChiAlert } = notifOutput;
 
 	const handleHome = useCallback(() => {
 		history.push(Page.INDEX);
@@ -99,8 +103,14 @@ const Controls = () => {
 			<>
 				<TopRightControls {...topRight} />
 				<TopLeftControls {...topLeft} />
-				{showBottomControls && <BottomLeftControls {...bottomLeft} />}
-				{showBottomControls && <BottomRightControls {...bottomRight} />}
+				{showBottomControls && <BottomLeftControls {...bottomLeft} setShowChiAlert={setShowChiAlert} />}
+				{showBottomControls && (
+					<BottomRightControls
+						{...bottomRight}
+						showChiAlert={showChiAlert}
+						setShowChiAlert={setShowChiAlert}
+					/>
+				)}
 				<Fade in={payModal?.show} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<PaymentModal {...payModal} />
@@ -134,6 +144,15 @@ const Controls = () => {
 				<Fade in={showLeaveAlert} timeout={Transition.FAST} unmountOnExit>
 					<div>
 						<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />
+					</div>
+				</Fade>
+				<Fade in={showChiAlert} timeout={Transition.FAST}>
+					<div className={`chi-alert-${sizes.controlsSize}`}>
+						<ChiAlert
+							show={showChiAlert}
+							hide={() => setShowChiAlert(false)}
+							backgroundColor={theme?.tableColor}
+						/>
 					</div>
 				</Fade>
 			</>
