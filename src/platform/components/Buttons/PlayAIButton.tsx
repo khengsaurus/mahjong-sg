@@ -3,11 +3,23 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { StyledButton } from 'platform/style/StyledMui';
 import React, { useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import { Bot, BotIds, BotName, LocalFlag, Page, PaymentType, Visitor } from 'shared/enums';
+import {
+	BackgroundColor,
+	Bot,
+	BotIds,
+	BotName,
+	LocalFlag,
+	Page,
+	PaymentType,
+	TableColor,
+	TextColor,
+	TileColor,
+	Visitor
+} from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
 import { ButtonText } from 'shared/screenTexts';
-import { setGameId, setLocalGame, setTHK } from 'shared/store/actions';
+import { setGameId, setLocalGame, setTheme, setTHK } from 'shared/store/actions';
 
 const PlayAIButton = () => {
 	const { login } = useContext(AppContext);
@@ -30,6 +42,15 @@ const PlayAIButton = () => {
 				dispatch(setLocalGame(game));
 				dispatch(setGameId(LocalFlag));
 			}
+		);
+		dispatch(
+			setTheme({
+				backgroundColor: BackgroundColor.BROWN,
+				tableColor: TableColor.GREEN,
+				tileColor: TileColor.DARK,
+				mainTextColor: TextColor.DARK,
+				tableTextColor: TextColor.LIGHT
+			})
 		);
 		history.push(Page.TABLE);
 	}
