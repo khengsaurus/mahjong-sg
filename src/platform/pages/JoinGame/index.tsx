@@ -6,7 +6,6 @@ import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
-import { StyledText } from 'platform/style/StyledMui';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EEvent, Page } from 'shared/enums';
@@ -67,9 +66,8 @@ const JoinGame = () => {
 
 	const markup = () => (
 		<Centered className="join-game-panel">
-			<StyledText text={title} variant="h6" />
 			<Collapse in={user && gameInvites?.length > 0} timeout={400}>
-				<List dense className="list">
+				<List dense className="list" style={{ marginBottom: 10 }}>
 					{gameInvites?.map(game => (
 						<ListItem
 							button
@@ -91,7 +89,7 @@ const JoinGame = () => {
 		</Centered>
 	);
 
-	return <HomePage markup={markup} timeout={2000} />;
+	return <HomePage markup={markup} title={title} timeout={2000} />;
 };
 
 export default JoinGame;

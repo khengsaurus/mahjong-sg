@@ -11,7 +11,7 @@ import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import { BottomSpec } from 'platform/style/StyledComponents';
-import { StyledButton, StyledText } from 'platform/style/StyledMui';
+import { StyledButton } from 'platform/style/StyledMui';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { EEvent, Shortcut, Transition } from 'shared/enums';
@@ -40,7 +40,6 @@ const Home = () => {
 
 	const markup = () => (
 		<>
-			<StyledText text={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
 			<NewGameButton />
 			<JoinGameButton />
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
@@ -64,7 +63,7 @@ const Home = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} />;
+	return <HomePage title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} markup={markup} />;
 };
 
 export default Home;

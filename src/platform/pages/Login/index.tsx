@@ -7,7 +7,7 @@ import { useAndroidKeyboardListener, useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { BottomSpec, Row } from 'platform/style/StyledComponents';
-import { StyledButton, StyledText } from 'platform/style/StyledMui';
+import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -130,12 +130,11 @@ const Login = () => {
 
 	const markup = () => (
 		<>
-			<StyledText text={HomeScreenText.HOME_TITLE} padding="0" />
 			<TextField
 				key="usernameEmail"
 				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
 				onChange={e => (showRegister ? setEmail(e.target.value) : setUsername(e.target.value?.toLowerCase()))}
-				style={{ margin: '5px 0', width: '160px' }}
+				style={{ width: '160px' }}
 				type="text"
 				value={showRegister ? email : username}
 				variant="standard"
@@ -190,7 +189,7 @@ const Login = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} timeout={2500} ready={ready} skipVerification />;
+	return <HomePage markup={markup} title={HomeScreenText.HOME_TITLE} timeout={2500} ready={ready} skipVerification />;
 };
 
 export default Login;

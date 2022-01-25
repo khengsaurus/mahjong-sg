@@ -50,7 +50,7 @@ export const StyledCenterText = ({ text, padding, variant = 'body2' }: StyledTex
 			alignSelf: 'center',
 			textAlign: 'center',
 			placeSelf: 'center',
-			padding: padding || variant === 'h6' ? '5px 0px' : '0px'
+			padding: padding ? padding : variant === 'h6' ? '5px 0px' : '0px'
 		}}
 		variant={variant}
 	>

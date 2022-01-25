@@ -9,7 +9,7 @@ import { Loader, NetworkLoader } from 'platform/components/Loader';
 import { useAndroidBack, useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, Row } from 'platform/style/StyledComponents';
-import { StyledText } from 'platform/style/StyledMui';
+import { StyledCenterText, StyledText } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EEvent, Page, Platform, Status } from 'shared/enums';
@@ -21,6 +21,7 @@ import './home.scss';
 
 interface HomePageProps {
 	markup: () => React.FC | JSX.Element;
+	title?: string;
 	ready?: boolean;
 	timeout?: number;
 	fallbackTitle?: string;
@@ -31,6 +32,7 @@ interface HomePageProps {
 
 const HomePage = ({
 	markup,
+	title,
 	ready = true,
 	timeout = 1500,
 	fallbackTitle = HomeScreenText.SOMETHING_WENT_WRONG,
@@ -129,6 +131,7 @@ const HomePage = ({
 								</Row>
 							</div>
 						</Fade>
+						{title && <StyledCenterText text={title} variant="h6" padding="10px" />}
 						<Centered style={{ marginBottom }}>{markup()}</Centered>
 					</>
 				) : (
