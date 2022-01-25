@@ -2,18 +2,18 @@ import { isEmpty } from 'lodash';
 import { DiscardedTiles, HiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
 import { useDynamicWidth } from 'platform/hooks';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
-import { useTiles } from 'shared/hooks';
+import { AppContext, useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { PlayerComponentProps } from 'shared/typesPlus';
-import { isDevBot } from 'shared/util';
 import './playerComponents.scss';
 
 const LeftPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
+	const { revealBot } = useContext(AppContext);
 	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
 	const {
 		sizes: { tileSize = Size.MEDIUM },
@@ -42,7 +42,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 	return (
 		<div className={`column-section-${tileSize || Size.MEDIUM}`}>
 			{/* Hidden or shown hand */}
-			{isDevBot() || sT ? (
+			{revealBot || sT ? (
 				<ShownHiddenHand
 					className="vtss left"
 					segment={Segment.LEFT}
