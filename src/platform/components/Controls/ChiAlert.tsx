@@ -2,20 +2,31 @@ import { IconButton } from '@mui/material';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { LocalFlag } from 'shared/enums';
 import { ScreenTextEng } from 'shared/screenTexts';
+import { IStore } from 'shared/store';
+import { getCardName } from 'shared/util';
 
 interface IChiAlertProps {
 	show: boolean;
-	backgroundColor?: string;
 	hide?: () => void;
 }
 
-const foodEmojis = ['🍜', '🥞', '🥘', '🍕', '🍟', '🍔', '🧁', '🍩', '🍢', '🍙'];
+const foodEmojis = ['🍜', '🥞', '🥘', '🍕', '🍣', '🥮', '🧁', '🍩', '🍢', '🍙', '🍫'];
 function getRandomFoodEmoji() {
 	return foodEmojis[Math.floor(Math.random() * 10)];
 }
 
-const ChiAlert = ({ backgroundColor, hide, show }: IChiAlertProps) => {
+const ChiAlert = ({ hide, show }: IChiAlertProps) => {
+	const {
+		theme: { tableColor },
+		game,
+		localGame,
+		gameId
+	} = useSelector((store: IStore) => store);
+	const currGame = gameId === LocalFlag ? localGame : game;
+	const cardName = currGame?.lTh?.c ? getCardName(currGame.lTh.c) : '';
 	const [foodEmoji, setFoodEmoji] = useState(getRandomFoodEmoji());
 
 	useEffect(() => {
@@ -23,8 +34,8 @@ const ChiAlert = ({ backgroundColor, hide, show }: IChiAlertProps) => {
 	}, [show]);
 
 	return (
-		<Row className={`chi-alert ${show ? '' : 'hide'}`} style={{ backgroundColor }}>
-			<StyledText text={`${ScreenTextEng.CHI_ALERT}`} variant="body1" />
+		<Row className={`chi-alert ${show ? '' : 'hide'}`} style={{ backgroundColor: tableColor }}>
+			<StyledText text={`${ScreenTextEng.CHI_ALERT} ${cardName}`} variant="body1" />
 			<IconButton className="icon-button" onClick={hide} disableRipple>
 				<StyledText text={`${foodEmoji}`} variant="body1" />
 			</IconButton>

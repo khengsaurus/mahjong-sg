@@ -35,7 +35,7 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		countTs: player.allHiddenTiles().length,
 		tileSize,
-		flag: sT,
+		flag: sT || revealBot,
 		addPx: isEmpty(lTa) ? 0 : _HiddenTileWidth[tileSize]
 	});
 

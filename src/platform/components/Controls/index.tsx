@@ -20,19 +20,16 @@ import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightContr
 import './controls.scss';
 
 const Controls = () => {
-	const { gameId, sizes, theme } = useSelector((store: IStore) => store);
+	const { gameId, sizes } = useSelector((store: IStore) => store);
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const { delayLeft } = useGameCountdown();
 
+	const handleHome = useCallback(() => history.push(Page.INDEX), []);
 	const isLocalGame = useMemo(() => gameId === LocalFlag, [gameId]);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
 	const { showChiAlert, setShowChiAlert } = notifOutput;
-
-	const handleHome = useCallback(() => {
-		history.push(Page.INDEX);
-	}, []);
 
 	const { HH, HHStr } = useHand();
 	const {
@@ -148,11 +145,7 @@ const Controls = () => {
 				</Fade>
 				<Fade in={showChiAlert} timeout={Transition.FAST}>
 					<div className={`chi-alert-${sizes.controlsSize}`}>
-						<ChiAlert
-							show={showChiAlert}
-							hide={() => setShowChiAlert(false)}
-							backgroundColor={theme?.tableColor}
-						/>
+						<ChiAlert show={showChiAlert} hide={() => setShowChiAlert(false)} />
 					</div>
 				</Fade>
 			</>
