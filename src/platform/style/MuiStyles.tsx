@@ -263,7 +263,7 @@ export const MuiStyles = {
 		maxWidth: '400px'
 	},
 	small_dialog: {
-		minHeight: '80px',
+		minHeight: '50px',
 		minWidth: '200px',
 		maxWidth: '320px'
 	},

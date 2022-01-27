@@ -6,7 +6,7 @@ import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { HandPoint } from 'shared/handEnums';
-import { ButtonText } from 'shared/screenTexts';
+import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
@@ -35,7 +35,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					))}
 				</RadioGroup>
 			</FormRow>
-			<FormRow>
+			<FormRow style={{ height: 30 }}>
 				<StyledText text="自摸: " variant="subtitle2" padding="0px" />
 				<CheckBox
 					title=""
@@ -62,7 +62,11 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 				}}
 			>
 				<DialogContent style={{ padding: '10px 15px' }}>
-					<StyledText text={HH?.maxPx === px[1] ? `Wow, nice hand!` : `Ready to hu?`} variant="h6" />
+					<StyledText
+						text={HH?.maxPx === px[1] ? ScreenTextEng.NICE_HAND : ScreenTextEng.READY_TO_HU}
+						variant="subtitle1"
+						padding="3px 0px"
+					/>
 					{HH?.pxs?.map((p: IPoint, ix: number) => (
 						<StyledText key={ix} text={getHandDesc(p.hD)} variant="subtitle2" padding="2px 0px" />
 					))}
@@ -73,7 +77,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 						size="large"
 						onClick={hu}
 						disabled={!tai || tai < game?.px[0] || game?.hu.length > 2}
-						style={{ position: 'absolute', bottom: game?.mHu ? 8 : 3, right: 5 }}
+						style={{ position: 'absolute', bottom: 0, right: 5 }}
 					/>
 				</DialogContent>
 			</Dialog>

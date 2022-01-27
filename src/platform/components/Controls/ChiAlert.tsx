@@ -13,7 +13,7 @@ interface IChiAlertProps {
 	hide?: () => void;
 }
 
-const foodEmojis = ['🍜', '🥞', '🥘', '🍕', '🍣', '🥮', '🧁', '🍩', '🍢', '🍙', '🍫'];
+const foodEmojis = ['🍜', '🥞', '🥘', '🍕', '🍣', '🥮', '🧁', '🍩', '🍢', '🍙', '🍫', '🥟'];
 function getRandomFoodEmoji() {
 	return foodEmojis[Math.floor(Math.random() * 10)];
 }

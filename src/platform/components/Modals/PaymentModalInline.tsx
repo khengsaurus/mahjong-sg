@@ -47,11 +47,18 @@ const PaymentModalInline = ({ game, playerSeat }: PaymentModalInlineProps) => {
 					IconComponent={() => null}
 					style={{ ...MuiStyles.small_dropdown_select, marginLeft: '5px' }}
 				>
-					{Amounts.map(amount => (
-						<MenuItem key={`amount-${amount}`} style={{ ...MuiStyles.small_dropdown_item }} value={amount}>
-							{amount}
-						</MenuItem>
-					))}
+					{Amounts.map(
+						amount =>
+							amount > 0 && (
+								<MenuItem
+									key={`amount-${amount}`}
+									style={{ ...MuiStyles.small_dropdown_item }}
+									value={amount}
+								>
+									{amount}
+								</MenuItem>
+							)
+					)}
 				</Select>
 			</FormControl>
 			<IconButton

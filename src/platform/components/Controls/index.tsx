@@ -9,18 +9,35 @@ import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
+import { BotIds, EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useNotifs, useTAvail } from 'shared/hooks';
+import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import LeaveAlert from '../Modals/LeaveAlert';
+import SingleActionModal from '../Modals/SingleActionModal';
 import ChiAlert from './ChiAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
 
+interface IFadeWrapperProps {
+	show: boolean;
+	Component: JSX.Element | React.FC;
+	unmountOnExit?: boolean;
+	wrapperClass?: string;
+}
+
+function FadeWrapper({ Component, show, unmountOnExit = true, wrapperClass = '' }: IFadeWrapperProps) {
+	return (
+		<Fade in={show} timeout={Transition.FAST} unmountOnExit={unmountOnExit}>
+			<div className={wrapperClass}>{Component}</div>
+		</Fade>
+	);
+}
+
 const Controls = () => {
-	const { gameId, sizes } = useSelector((store: IStore) => store);
+	const { gameId, sizes, user } = useSelector((store: IStore) => store);
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const { delayLeft } = useGameCountdown();
@@ -48,9 +65,32 @@ const Controls = () => {
 		showLeaveAlert,
 		showBottomControls,
 		showAnnounceHuModal,
-		setExec
+		setExec,
+		setGamePaused
 	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, updateGame, handleHome, notifOutput);
 	useBot(isHuLocked, lThAvail, setExec);
+
+	const [showStart, setShowStart] = useState(false);
+	const [startPrompt, setStartPrompt] = useState('');
+	const [startButtonText, setStartButtonText] = useState('');
+	useEffect(() => {
+		const first_p = game?.ps[game?.wM];
+		const botToGoFirst = BotIds.includes(first_p?.id);
+		if (game.p) {
+			setShowStart(game?.p && (botToGoFirst || first_p.uN !== user.uN));
+			setStartPrompt(
+				game?.cO === user?.uN && botToGoFirst
+					? ScreenTextEng.START_PROMPT
+					: `Waiting for ${game.cO} to start the game`
+			);
+			setStartButtonText(game?.cO === user?.uN && botToGoFirst ? ButtonText.START : '');
+		} else {
+			setShowStart(false);
+			setStartPrompt('');
+			setStartButtonText('');
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [game?.cO, game?.p, user?.uN, game?.ps[game?.wM]?.id]);
 
 	const _handleHome = useCallback(() => {
 		if (isLocalGame) {
@@ -108,46 +148,36 @@ const Controls = () => {
 						setShowChiAlert={setShowChiAlert}
 					/>
 				)}
-				<Fade in={payModal?.show} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<PaymentModal {...payModal} />
-					</div>
-				</Fade>
-				<Fade in={settingsModal?.show} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<SettingsWindow {...settingsModal} />
-					</div>
-				</Fade>
-				<Fade in={declareHuModal?.show && isEmpty(game?.hu)} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<DeclareHuModal HH={HH} {...declareHuModal} />
-					</div>
-				</Fade>
-				<Fade in={gameInfoModal?.show} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<GameInfo {...gameInfoModal} />
-					</div>
-				</Fade>
-				<Fade in={showAnnounceHuModal} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<AnnounceHuModal HH={HH} {...announceHuModal} />
-					</div>
-				</Fade>
-				<Fade in={Number(notif?.timeout) > 0} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<TableNotif {...notif} />
-					</div>
-				</Fade>
-				<Fade in={showLeaveAlert} timeout={Transition.FAST} unmountOnExit>
-					<div>
-						<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />
-					</div>
-				</Fade>
-				<Fade in={showChiAlert} timeout={Transition.FAST}>
-					<div className={`chi-alert-${sizes.controlsSize}`}>
-						<ChiAlert show={showChiAlert} hide={() => setShowChiAlert(false)} />
-					</div>
-				</Fade>
+				<FadeWrapper show={payModal?.show} Component={<PaymentModal {...payModal} />} />
+				<FadeWrapper show={settingsModal?.show} Component={<SettingsWindow {...settingsModal} />} />
+				<FadeWrapper
+					show={declareHuModal?.show && isEmpty(game?.hu)}
+					Component={<DeclareHuModal HH={HH} {...declareHuModal} />}
+				/>
+				<FadeWrapper show={gameInfoModal?.show} Component={<GameInfo {...gameInfoModal} />} />
+				<FadeWrapper show={showAnnounceHuModal} Component={<AnnounceHuModal HH={HH} {...announceHuModal} />} />
+				<FadeWrapper show={Number(notif?.timeout) > 0} Component={<TableNotif {...notif} />} />
+				<FadeWrapper
+					show={showLeaveAlert}
+					Component={<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />}
+				/>
+				<FadeWrapper
+					Component={<ChiAlert show={showChiAlert} hide={() => setShowChiAlert(false)} />}
+					show={showChiAlert}
+					wrapperClass={`chi-alert-${sizes.controlsSize}`}
+					unmountOnExit={false}
+				/>
+				<FadeWrapper
+					show={showStart}
+					Component={
+						<SingleActionModal
+							show={showStart}
+							text={startPrompt}
+							buttonText={startButtonText}
+							action={() => setGamePaused(false)}
+						/>
+					}
+				/>
 			</>
 		)
 	);

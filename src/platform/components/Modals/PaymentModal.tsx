@@ -64,16 +64,19 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 
 				<StyledText text="Amount: " variant="subtitle1" padding="3px 0px" />
 				<RadioGroup row style={{ width: '90%' }} value={amt} onChange={handleSelectAmount}>
-					{Amounts.map((amt: number, index: number) => (
-						<FormControlLabel
-							key={index}
-							value={amt}
-							control={<Radio />}
-							label={`${amt}`}
-							labelPlacement="end"
-							style={{ width: '60px' }}
-						/>
-					))}
+					{Amounts.map(
+						(amt: number, index: number) =>
+							amt > 0 && (
+								<FormControlLabel
+									key={index}
+									value={amt}
+									control={<Radio />}
+									label={`${amt}`}
+									labelPlacement="end"
+									style={{ width: '60px' }}
+								/>
+							)
+					)}
 				</RadioGroup>
 
 				<Button
