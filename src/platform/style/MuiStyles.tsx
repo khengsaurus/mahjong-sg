@@ -1,4 +1,4 @@
-import { amber, blue, indigo, red, teal, yellow } from '@mui/material/colors';
+import { amber, grey, blue, indigo, red, teal, yellow } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -12,11 +12,12 @@ export function getHighlightColor(color: TableColor | BackgroundColor) {
 	} else if ([TableColor.BROWN, BackgroundColor.BROWN].includes(color)) {
 		return indigo[500];
 	} else if ([TableColor.GREEN, BackgroundColor.GREEN].includes(color)) {
-		return red[500];
+		return amber[600];
+		// return red[500];
 	} else if ([TableColor.RED, BackgroundColor.RED].includes(color)) {
 		return teal[500];
-	} else if ([TableColor.PURPLE, BackgroundColor.PURPLE].includes(color)) {
-		return amber[600];
+	} else if ([TableColor.YELLOW, BackgroundColor.YELLOW].includes(color)) {
+		return grey[900];
 	} else if ([TableColor.BLUE, BackgroundColor.BLUE].includes(color)) {
 		return yellow[700];
 	} else {
