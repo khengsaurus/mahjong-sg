@@ -1,4 +1,4 @@
-import { Alert, Collapse, Dialog, DialogContent, FormControl, Paper, Tab, Tabs } from '@mui/material';
+import { Alert, Collapse, Dialog, DialogContent, FormControl, Paper, Switch, Tab, Tabs } from '@mui/material';
 import { history } from 'App';
 import { extend, isEqual } from 'lodash';
 import ServiceInstance from 'platform/service/ServiceLayer';
@@ -22,7 +22,7 @@ import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { setSizes, setTheme } from 'shared/store/actions';
+import { setHaptic, setSizes, setTheme } from 'shared/store/actions';
 import { ModalProps } from 'shared/typesPlus';
 import { getTheme } from 'shared/util';
 import './settingsWindow.scss';
@@ -39,9 +39,9 @@ interface SettingsWindowProps extends ModalProps {
 	accActions?: boolean;
 }
 
-const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsWindowProps) => {
+const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowProps) => {
 	const { alert, handleLocalUO, setAlert, logout } = useContext(AppContext);
-	const { user, theme, sizes } = useSelector((state: IStore) => state);
+	const { user, theme, sizes, haptic = true } = useSelector((state: IStore) => state);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);
 	const [tableColor, setTableColor] = useState(theme?.tableColor);
 	const [tileColor, setTileColor] = useState(theme?.tileColor);
@@ -49,6 +49,7 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 	const [handSize, setHandSize] = useState(sizes?.handSize);
 	const [tileSize, setTileSize] = useState(sizes?.tileSize);
 	const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+	const [hapticOn, setHapticOn] = useState<boolean>(haptic);
 	const dispatch = useDispatch();
 
 	const flagThemeDiff = useMemo(
@@ -63,7 +64,11 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 
 	useEffect(() => {
 		dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor)));
-	}, [dispatch, backgroundColor, tableColor, tileColor]);
+	}, [dispatch, backgroundColor, hapticOn, tableColor, tileColor]);
+
+	useEffect(() => {
+		dispatch(setHaptic(hapticOn));
+	}, [dispatch, hapticOn]);
 
 	useEffect(() => {
 		dispatch(
@@ -124,23 +129,19 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 	];
 
 	function handleClose() {
-		if (user?.id !== Visitor && (flagSizesDiff || flagThemeDiff)) {
+		if (user?.id !== Visitor && (flagSizesDiff || flagThemeDiff || user?.hp !== hapticOn)) {
 			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,
 				tSz: tileSize,
 				bgC: backgroundColor,
 				tC: tableColor,
-				tBC: tileColor
+				tBC: tileColor,
+				hp: hapticOn
 			};
 			ServiceInstance.FBUpdateUser(user.id, keyVal)
-				.then(() => {
-					const updatedUser = extend(user, keyVal);
-					handleLocalUO(updatedUser);
-				})
-				.catch(err => {
-					console.error(err);
-				});
+				.then(() => handleLocalUO(extend(user, keyVal)))
+				.catch(err => console.error(err));
 		}
 		onClose();
 	}
@@ -196,7 +197,7 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 	};
 
 	const Label = ({ label }: IHasLabel) => (
-		<StyledText text={label} variant="subtitle1" padding="0px" style={{ height: 30, marginTop: 2 }} />
+		<StyledText text={label} variant="body1" padding="0px" style={{ height: 30, marginTop: 6 }} />
 	);
 
 	return (
@@ -254,9 +255,6 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 								preference.colors ? (
 									<div className="preference" key={`preference-${preference.label}`}>
 										<Label label={preference.label} />
-										{/* <Typography variant="subtitle1" display="inline">
-												{`${preference.label}:`}
-											</Typography> */}
 										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
 											<Tabs
 												style={{
@@ -274,9 +272,7 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 														}}
 														key={rgb}
 														value={rgb}
-														onClick={() => {
-															preference.handleSelect(rgb);
-														}}
+														onClick={() => preference.handleSelect(rgb)}
 													/>
 												))}
 											</Tabs>
@@ -284,16 +280,21 @@ const SettingsWindow = ({ offset, onClose, show, accActions = false }: SettingsW
 									</div>
 								) : null
 							)}
+							{accActions ? (
+								<Row style={{ alignItems: 'center', marginTop: 5 }}>
+									<StyledButton
+										label={ButtonText.DELETE_ACCOUNT}
+										onClick={() => setShowDeleteAlert(true)}
+										padding={'0'}
+									/>
+								</Row>
+							) : (
+								<div className="preference no-margin">
+									<StyledText text={ButtonText.HAPTICS} variant="subtitle1" padding="0" />
+									<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
+								</div>
+							)}
 						</FormControl>
-						{accActions && (
-							<Row style={{ alignItems: 'center', marginTop: 5 }}>
-								<StyledButton
-									label={ButtonText.DELETE_ACCOUNT}
-									onClick={() => setShowDeleteAlert(true)}
-									padding={'0'}
-								/>
-							</Row>
-						)}
 					</DialogContent>
 				</Dialog>
 			)}

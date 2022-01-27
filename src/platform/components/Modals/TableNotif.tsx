@@ -5,16 +5,21 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { IStore } from 'shared/store';
 import { TableNotifProps } from 'shared/typesPlus';
 import { triggerHaptic } from 'shared/util';
 
 const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifProps) => {
+	const { haptic } = useSelector((store: IStore) => store);
+
 	useEffect(() => {
-		if (!!notifs.find(notif => notif.includes('You can'))) {
+		if (haptic && !!notifs.find(notif => notif.includes('You can'))) {
 			triggerHaptic(ImpactStyle.Heavy);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [JSON.stringify(notifs)]);
+	}, [haptic, JSON.stringify(notifs)]);
+
 	return (
 		<Dialog
 			open={timeout > 0}

@@ -17,6 +17,7 @@ interface BottomHiddenHandProps {
 const BottomHiddenHand = ({ hTs, lTa }: BottomHiddenHandProps) => {
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const {
+		haptic,
 		sizes: { handSize },
 		tHK
 	} = useSelector((state: IStore) => state);
@@ -24,7 +25,7 @@ const BottomHiddenHand = ({ hTs, lTa }: BottomHiddenHandProps) => {
 
 	const selectTile = useCallback(
 		tile => {
-			triggerHaptic();
+			haptic && triggerHaptic();
 			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
 				const selected = [...selectedTiles, tile];
 				setSelectedTiles(selected);
@@ -33,47 +34,43 @@ const BottomHiddenHand = ({ hTs, lTa }: BottomHiddenHandProps) => {
 				setSelectedTiles(selected);
 			}
 		},
-		[selectedTiles, setSelectedTiles]
+		[haptic, selectedTiles, setSelectedTiles]
 	);
 
-	const renderHiddenHand = useCallback(
-		(hTs: IHiddenTile[], lTa: IHiddenTile) => {
-			const revLTT = !isEmpty(lTa) ? revealTile(lTa, tHK) : null;
-			return (
-				<div className={`self-hidden-tiles-${handSize || Size.MEDIUM} ${!revLTT && 'transform-right'}`}>
-					<Row>
-						{hTs.map((tile: IHiddenTile) => {
-							const revealedTile = revealTile(tile, tHK);
-							return (
-								<HandTile
-									key={revealedTile.i}
-									card={revealedTile.c}
-									selected={selectedTsRef.includes(revealedTile.r)}
-									last={false}
-									callback={() => selectTile(revealedTile)}
-								/>
-							);
-						})}
-					</Row>
-					<div>
-						<Fade in={!!revLTT} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }}>
-							<div>
-								<HandTile
-									key={revLTT?.i}
-									card={revLTT?.c}
-									selected={selectedTsRef.includes(revLTT?.r)}
-									last={true}
-									callback={() => selectTile(revLTT)}
-								/>
-							</div>
-						</Fade>
-					</div>
+	const renderHiddenHand = (hTs: IHiddenTile[], lTa: IHiddenTile) => {
+		const revLTT = !isEmpty(lTa) ? revealTile(lTa, tHK) : null;
+		return (
+			<div className={`self-hidden-tiles-${handSize || Size.MEDIUM} ${!revLTT && 'transform-right'}`}>
+				<Row>
+					{hTs.map((tile: IHiddenTile) => {
+						const revealedTile = revealTile(tile, tHK);
+						return (
+							<HandTile
+								key={revealedTile.i}
+								card={revealedTile.c}
+								selected={selectedTsRef.includes(revealedTile.r)}
+								last={false}
+								callback={() => selectTile(revealedTile)}
+							/>
+						);
+					})}
+				</Row>
+				<div>
+					<Fade in={!!revLTT} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }}>
+						<div>
+							<HandTile
+								key={revLTT?.i}
+								card={revLTT?.c}
+								selected={selectedTsRef.includes(revLTT?.r)}
+								last={true}
+								callback={() => selectTile(revLTT)}
+							/>
+						</div>
+					</Fade>
 				</div>
-			);
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[JSON.stringify(selectedTsRef), handSize, tHK]
-	);
+			</div>
+		);
+	};
 
 	return renderHiddenHand(hTs, lTa);
 };
