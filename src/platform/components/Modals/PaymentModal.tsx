@@ -47,7 +47,7 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 				}
 			}}
 		>
-			<DialogContent style={{ padding: '10px 15px' }}>
+			<DialogContent>
 				<StyledText text="Send chips to: " variant="subtitle1" padding="3px 0px" />
 				<RadioGroup row value={toWho} onChange={handleSelectRecipient}>
 					{currGame.ps.map((otherPlayer: User, index: number) =>

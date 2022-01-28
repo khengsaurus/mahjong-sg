@@ -1,11 +1,11 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Dialog, DialogContent, ListItem, ListItemText, MenuItem, Select, Switch } from '@mui/material';
+import { Dialog, DialogContent, ListItem, MenuItem, Select, Switch } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
-import { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BotIds, BotTimeout, LocalFlag, PaymentType } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
@@ -18,7 +18,63 @@ import './gameInfo.scss';
 const padding0Height35 = {
 	padding: 0,
 	height: 32,
-	width: 200
+	width: 200,
+	justifyContent: 'space-between'
+};
+
+const renderSwitch = (label: string, checked: boolean, handleChange: () => void, rightWidth: number) => (
+	<ListItem style={{ ...padding0Height35 }}>
+		<StyledText text={label} variant="body2" />
+		<Centered style={{ width: rightWidth }}>
+			<Switch checked={checked} onChange={handleChange} />
+		</Centered>
+	</ListItem>
+);
+
+const renderSettingValue = (label: string, value: string, rightWidth: number) => (
+	<Row className="setting">
+		<StyledText text={label} variant="body2" />
+		<Centered style={{ width: rightWidth }}>
+			<StyledText text={value} variant="body2" />
+		</Centered>
+	</Row>
+);
+
+const renderSettingCheck = (label: string, toggle: boolean, rightWidth: number) => (
+	<ListItem style={{ ...padding0Height35, height: 32 }}>
+		<StyledText text={label} variant="body2" />
+		<Centered style={{ width: rightWidth }}>
+			{toggle ? <CheckIcon fontSize={'small'} /> : <CloseIcon fontSize={'small'} />}
+		</Centered>
+	</ListItem>
+);
+
+const renderBotTimeSelect = (
+	label: string,
+	handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+	rightWidth: number
+) => {
+	return (
+		<ListItem style={{ ...padding0Height35 }}>
+			<StyledText text={ButtonText.BOT_SPEED} variant="body2" />
+			<Centered style={{ width: rightWidth }}>
+				<Select
+					value={label}
+					onChange={handleChange}
+					disableUnderline
+					variant="standard"
+					IconComponent={() => null}
+					style={{ fontSize: 14 }}
+				>
+					{['Fast', 'Medium', 'Slow'].map(t => (
+						<MenuItem key={`bt-${t}`} style={{ ...MuiStyles.small_dropdown_item }} value={t}>
+							{t}
+						</MenuItem>
+					))}
+				</Select>
+			</Centered>
+		</ListItem>
+	);
 };
 
 const GameInfo = ({ game, show, onClose }: ModalProps) => {
@@ -27,8 +83,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 	const [mHu, setMHu] = useState<boolean>(game?.mHu);
 	const [bt, setBt] = useState<number>(game?.bt);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
-	// Width of right content container
-	const width = game.pay === PaymentType.HALF_SHOOTER ? 75 : 60;
+	const rightWidth = game.pay === PaymentType.HALF_SHOOTER ? 75 : 60;
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -50,88 +105,42 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 		onClose();
 	}, [game, mHu, bt, onClose]);
 
-	const renderManualHuSelect = () => (
-		<ListItem style={{ ...padding0Height35 }}>
-			<ListItemText secondary={ButtonText.MANUAL_HU} />
-			<Centered style={{ width }}>
-				<Switch checked={mHu} onChange={() => setMHu(prev => !prev)} />
-			</Centered>
-		</ListItem>
-	);
-
-	const renderRevealBot = () => (
-		<ListItem style={{ ...padding0Height35 }}>
-			<ListItemText secondary={ButtonText.REVEAL_BOT_HANDS} />
-			<Centered style={{ width }}>
-				<Switch checked={revealBot} onChange={() => setRevealBot(!revealBot)} />
-			</Centered>
-		</ListItem>
-	);
-
-	const renderBotTimeSelect = () => {
-		function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-			const speed = (event.target as HTMLInputElement).value;
-			setBtLabel(speed);
-			setBt(BotTimeout[speed.toUpperCase()]);
-		}
-
-		return (
-			<ListItem style={{ ...padding0Height35, justifyContent: 'space-between' }}>
-				<ListItemText secondary={ButtonText.BOT_SPEED} style={{ textAlign: 'left', width: 100 }} />
-				<Centered style={{ width }}>
-					<Select
-						value={btLabel}
-						onChange={handleChange}
-						disableUnderline
-						variant="standard"
-						IconComponent={() => null}
-						style={{ width: 100, fontSize: 14 }}
-					>
-						{['Fast', 'Medium', 'Slow'].map(t => (
-							<MenuItem key={`bt-${t}`} style={{ ...MuiStyles.small_dropdown_item }} value={t}>
-								{t}
-							</MenuItem>
-						))}
-					</Select>
-				</Centered>
-			</ListItem>
-		);
-	};
-
-	const renderSetting = (label: string, toggle: boolean) => (
-		<ListItem style={{ ...padding0Height35, height: 32 }}>
-			<ListItemText secondary={label} />
-			<Centered style={{ width }}>
-				{toggle ? <CheckIcon fontSize={'small'} /> : <CloseIcon fontSize={'small'} />}
-			</Centered>
-		</ListItem>
-	);
+	function handleBotTimeSelect(event: React.ChangeEvent<HTMLInputElement>) {
+		const speed = (event.target as HTMLInputElement).value;
+		setBtLabel(speed);
+		setBt(BotTimeout[speed.toUpperCase()]);
+	}
 
 	return (
-		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={closeAndUpdate}>
-			<DialogContent style={{ padding: '10 15 !important' }}>
-				<Row className="setting">
-					<StyledText text={`${PaymentLabel.LABEL}`} variant="body2" />
-					<Centered style={{ width }}>
-						<StyledText text={`${PaymentLabel[game.pay]}`} variant="body2" />
-					</Centered>
-				</Row>
-				<Row className="setting">
-					<StyledText text={`${ButtonText.MINMAXTAI}`} variant="body2" />
-					<Centered style={{ width }}>
-						<StyledText text={`${game.px.join(' / ')}`} variant="body2" />
-					</Centered>
-				</Row>
-				{renderSetting(HandDescEng.CONCEALED, game.sHs.includes(ScoringHand.CONCEALED) ? false : true)}
-				{renderSetting(HandDescEng.SEVEN, game.sHs.includes(ScoringHand.SEVEN) ? false : true)}
-				{renderSetting(HandDescEng.GREEN, game.sHs.includes(ScoringHand.GREEN) ? false : true)}
+		<Dialog
+			open={show}
+			BackdropProps={{ invisible: true }}
+			onClose={closeAndUpdate}
+			PaperProps={{
+				style: {
+					...MuiStyles.medium_dialog
+				}
+			}}
+		>
+			<DialogContent>
+				{renderSettingValue(`${PaymentLabel.LABEL}`, `${PaymentLabel[game.pay]}`, rightWidth)}
+				{renderSettingValue(`${ButtonText.MINMAXTAI}`, `${game.px.join(' / ')}`, rightWidth)}
+				{renderSettingCheck(
+					HandDescEng.CONCEALED,
+					game.sHs.includes(ScoringHand.CONCEALED) ? false : true,
+					rightWidth
+				)}
+				{renderSettingCheck(HandDescEng.SEVEN, game.sHs.includes(ScoringHand.SEVEN) ? false : true, rightWidth)}
+				{renderSettingCheck(HandDescEng.GREEN, game.sHs.includes(ScoringHand.GREEN) ? false : true, rightWidth)}
 				{user?.uN === game.cO && (
 					<>
-						{!!game.ps.find(p => BotIds.includes(p.id)) && renderBotTimeSelect()}
-						{renderManualHuSelect()}
+						{!!game.ps.find(p => BotIds.includes(p.id)) &&
+							renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}
+						{renderSwitch(ButtonText.MANUAL_HU, mHu, () => setMHu(prev => !prev), rightWidth)}
 					</>
 				)}
-				{game.id === LocalFlag && renderRevealBot()}
+				{game.id === LocalFlag &&
+					renderSwitch(ButtonText.REVEAL_BOT_HANDS, revealBot, () => setRevealBot(!revealBot), rightWidth)}
 			</DialogContent>
 		</Dialog>
 	);

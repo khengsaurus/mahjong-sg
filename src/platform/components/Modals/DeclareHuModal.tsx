@@ -61,7 +61,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					}
 				}}
 			>
-				<DialogContent style={{ padding: '10px 15px' }}>
+				<DialogContent>
 					<StyledText
 						text={HH?.maxPx === px[1] ? ScreenTextEng.NICE_HAND : ScreenTextEng.READY_TO_HU}
 						variant="subtitle1"

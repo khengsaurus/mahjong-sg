@@ -21,14 +21,14 @@ import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
 import { useAndroidKeyboardListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { MuiStyles } from 'platform/style/MuiStyles';
+import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
 import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BotIds, LocalFlag, Page, PaymentType, Transition, TransitionSpeed } from 'shared/enums';
+import { BotIds, LocalFlag, Page, PaymentType, Status, Transition, TransitionSpeed } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
-import { AppContext } from 'shared/hooks';
+import { AppContext, useAsync } from 'shared/hooks';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText, PaymentLabel } from 'shared/screenTexts';
 import { IStore, setGameId } from 'shared/store';
@@ -70,7 +70,7 @@ const NewGame = () => {
 		setStartedGame(false);
 	}
 
-	async function startGame() {
+	const { execute: startGame, status } = useAsync(async () => {
 		const excludeShs = Object.keys(scoringHands).filter(s => scoringHands[s] === false) as ScoringHand[];
 		await ServiceInstance.initGame(
 			user,
@@ -89,12 +89,12 @@ const NewGame = () => {
 				setStartedGame(true);
 			}
 		});
-	}
+	}, false);
 
-	function handleStartJoinClick() {
+	async function handleStartJoinClick() {
 		if (startedGame) {
 			history.push(Page.TABLE);
-		} else {
+		} else if (status !== Status.PENDING) {
 			startGame();
 		}
 	}
@@ -138,7 +138,7 @@ const NewGame = () => {
 							<StyledButton
 								label={startedGame ? ButtonText.JOIN : ButtonText.START}
 								onClick={handleStartJoinClick}
-								disabled={players.length < 4}
+								disabled={players.length < 4 || status === Status.PENDING}
 							/>
 						</div>
 					</Fade>
@@ -166,7 +166,7 @@ const NewGame = () => {
 
 	const renderManualHu = () => (
 		<ListItem className="list-item">
-			<ListItemText secondary={`Manual Hu`} />
+			<ListItemText secondary={ButtonText.MANUAL_HU} />
 			<Centered style={{ width: 20 }}>
 				<IconButton onClick={() => setMHu(!mHu)} disableRipple>
 					{mHu ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
@@ -269,25 +269,27 @@ const NewGame = () => {
 		return (
 			<Fade in={showOptions && showBottom} timeout={Transition.FAST} unmountOnExit>
 				<div>
-					<Dialog
-						open={showOptions}
-						BackdropProps={{ invisible: true }}
-						onClose={() => {
-							setShowOptions(false);
-						}}
-					>
-						<DialogContent>
-							<List className="list">
-								{renderManualHu()}
-								{renderPaymentType()}
-								{renderTaiSelect(ButtonText.MINTAI, minTaiStr, handleMinTai)}
-								{renderTaiSelect(ButtonText.MAXTAI, maxTaiStr, handleMaxTai)}
-								{renderScoringHandOption(ScoringHand.CONCEALED)}
-								{renderScoringHandOption(ScoringHand.SEVEN)}
-								{renderScoringHandOption(ScoringHand.GREEN)}
-							</List>
-						</DialogContent>
-					</Dialog>
+					<TableTheme>
+						<Dialog
+							open={showOptions}
+							BackdropProps={{ invisible: true }}
+							onClose={() => {
+								setShowOptions(false);
+							}}
+						>
+							<DialogContent>
+								<List className="list">
+									{renderManualHu()}
+									{renderPaymentType()}
+									{renderTaiSelect(ButtonText.MINTAI, minTaiStr, handleMinTai)}
+									{renderTaiSelect(ButtonText.MAXTAI, maxTaiStr, handleMaxTai)}
+									{renderScoringHandOption(ScoringHand.CONCEALED)}
+									{renderScoringHandOption(ScoringHand.SEVEN)}
+									{renderScoringHandOption(ScoringHand.GREEN)}
+								</List>
+							</DialogContent>
+						</Dialog>
+					</TableTheme>
 				</div>
 			</Fade>
 		);
