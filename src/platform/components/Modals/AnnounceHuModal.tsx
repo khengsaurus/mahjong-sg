@@ -93,8 +93,9 @@ const AnnounceHuModal = ({
 				{hu.length > 2 && (
 					<>
 						<StyledCenterText
-							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} won with ${hu[1]}台`}
-							variant="h6"
+							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} Hu with ${hu[1]}台`}
+							style={{paddingBottom:'0px'}}
+							variant="body1"
 						/>
 						<StyledCenterText text={`${getPaymentText()} ${getLastThrownText()}`} />
 						<div className="ann-panels">
@@ -123,7 +124,8 @@ const AnnounceHuModal = ({
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'space-between',
-					padding: '0px 6px'
+					padding: '0px 6px',
+					marginTop: '-4px'
 				}}
 			>
 				<HomeButton style={{ padding: '10px' }} />

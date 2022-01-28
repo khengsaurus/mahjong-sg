@@ -104,7 +104,7 @@ const NewGame = () => {
 			<div>
 				<ListItem className="list-item">
 					<ListItemText primary={`Randomize`} />
-					<Centered style={{ width: 20 }}>
+					<Centered style={{ width: 30 }}>
 						<IconButton onClick={() => setRandom(!random)} disabled={players.length !== 4} disableRipple>
 							{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
 						</IconButton>

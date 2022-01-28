@@ -15,7 +15,9 @@ import { BotIds, EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/en
 import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useNotifs, useTAvail } from 'shared/hooks';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
+import { getCardName } from 'shared/util';
 import LeaveAlert from '../Modals/LeaveAlert';
+import OfferChiModal from '../Modals/OfferChiModal';
 import SingleActionModal from '../Modals/SingleActionModal';
 import ChiAlert from './ChiAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
@@ -46,7 +48,7 @@ const Controls = () => {
 	const isLocalGame = useMemo(() => gameId === LocalFlag, [gameId]);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
-	const { showChiAlert, setShowChiAlert } = notifOutput;
+	const { showChiAlert, setShowChiAlert, toChi } = notifOutput;
 
 	const { HH, HHStr } = useHand();
 	const {
@@ -65,11 +67,13 @@ const Controls = () => {
 		showLeaveAlert,
 		showBottomControls,
 		showAnnounceHuModal,
+		handleChi,
 		setExec,
 		setGamePaused
 	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, updateGame, handleHome, notifOutput);
 	useBot(isHuLocked, lThAvail, setExec);
 
+	const [showOfferChi, setShowOfferChi] = useState(false);
 	const [showStart, setShowStart] = useState(false);
 	const [startPrompt, setStartPrompt] = useState('');
 	const [startButtonText, setStartButtonText] = useState('');
@@ -81,7 +85,9 @@ const Controls = () => {
 			setStartPrompt(
 				game?.cO === user?.uN && botToGoFirst
 					? ScreenTextEng.START_PROMPT
-					: `Waiting for ${game.cO} to start the game`
+					: first_p.uN === user?.uN
+					? ScreenTextEng.DISCARD_TO_START
+					: `Waiting for ${first_p.uN} to start the round`
 			);
 			setStartButtonText(game?.cO === user?.uN && botToGoFirst ? ButtonText.START : '');
 		} else {
@@ -162,10 +168,32 @@ const Controls = () => {
 					Component={<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />}
 				/>
 				<FadeWrapper
-					Component={<ChiAlert show={showChiAlert} hide={() => setShowChiAlert(false)} />}
+					Component={
+						<ChiAlert
+							show={showChiAlert}
+							ms={toChi}
+							handleTake={handleChi}
+							handleOpenOffer={() => setShowOfferChi(true)}
+							onClose={() => setShowChiAlert(false)}
+						/>
+					}
 					show={showChiAlert}
 					wrapperClass={`chi-alert-${sizes.controlsSize}`}
 					unmountOnExit={false}
+				/>
+				<FadeWrapper
+					Component={
+						<OfferChiModal
+							show={showOfferChi}
+							card={game?.lTh?.c ? getCardName(game?.lTh?.c) : ''}
+							ms={toChi}
+							handleTake={handleChi}
+							onClose={() => setShowOfferChi(false)}
+						/>
+					}
+					show={showOfferChi}
+					wrapperClass={`chi-alert-${sizes.controlsSize}`}
+					unmountOnExit={true}
 				/>
 				<FadeWrapper
 					show={showStart}

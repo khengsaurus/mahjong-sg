@@ -78,6 +78,26 @@
 				}
 			}
 
+			&.offer {
+				@include flex-dir(row);
+				border-radius: $default-border-radius;
+				margin: 3px;
+				width: 3 * getShownTileWidth('large');
+			}
+			&.offer-hover {
+				@include flex-dir(row);
+				border-radius: $default-border-radius;
+				margin: 3px;
+				width: 3 * getShownTileWidth('large');
+				transition: 0ms;
+			}
+			&.offer-hover:hover {
+				transform: scale(1.03);
+				margin: 1px 3px;
+				border: 2px solid transparent;
+				cursor: pointer;
+			}
+
 			.hts {
 				height: getShownTileHeight($size);
 				width: getShownTileWidth($size);

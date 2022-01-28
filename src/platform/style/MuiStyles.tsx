@@ -77,7 +77,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
-						}
+						},
+						margin: 0
 					}
 				}
 			},
@@ -88,7 +89,9 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						secondary: `${highlightColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`,
+							transform: isMobile() ? `` : `scale(1.05)`,
+							transition: '150ms !important'
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
@@ -144,7 +147,9 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						color: `${textColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`
+							color: isMobile() ? `${textColor}` : `${highlightColor}`,
+							transform: isMobile() ? `` : `scale(1.1)`,
+							transition: '150ms !important'
 						}
 					}
 				}
@@ -316,11 +321,10 @@ export const MuiStyles = {
 		maxHeight: '28px'
 	},
 	small_dropdown_item: {
-		// width: '52px',
 		height: '28px',
 		minHeight: '28px',
 		maxHeight: '28px',
-		margin: '4px',
+		margin: '2px',
 		justifyContent: 'center'
 	}
 };

@@ -33,7 +33,7 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 			<DialogContent style={{ paddingBottom: 0 }}>
 				<Centered>
 					{notifs[0] && <StyledText text={notifs[0]} variant="subtitle1" padding="3px 0px" />}
-					<StyledText text={`${timeout}`} variant="subtitle1" padding="0px 0px 6px" />
+					<StyledText text={`${timeout}`} variant="subtitle1" padding="0px" />
 					{notifs.length > 1 &&
 						notifs
 							.slice(1, 10)
@@ -47,8 +47,9 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'center',
-					padding: '0px 8px',
-					minHeight: '14px'
+					marginTop: '-4px',
+					padding: '0px',
+					minHeight: '16px'
 				}}
 			>
 				{pong && <StyledButton label={'Pong'} onClick={pong} />}

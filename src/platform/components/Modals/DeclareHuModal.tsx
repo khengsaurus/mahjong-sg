@@ -65,12 +65,12 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					<StyledText
 						text={HH?.maxPx === px[1] ? ScreenTextEng.NICE_HAND : ScreenTextEng.READY_TO_HU}
 						variant="subtitle1"
-						padding="3px 0px"
+						padding="0px"
 					/>
 					{HH?.pxs?.map((p: IPoint, ix: number) => (
-						<StyledText key={ix} text={getHandDesc(p.hD)} variant="subtitle2" padding="2px 0px" />
+						<StyledText key={ix} text={getHandDesc(p.hD)} variant="subtitle2" padding="0px" />
 					))}
-					<StyledText text={`${tai} 台${zimo ? ` 自摸` : ``}`} variant="subtitle2" padding="2px 0px" />
+					{/* <StyledText text={`${tai} 台${zimo ? ` 自摸` : ``}`} variant="subtitle2" padding="2px 0px" /> */}
 					{renderManualHuOptions()}
 					<StyledButton
 						label={ButtonText.HU}

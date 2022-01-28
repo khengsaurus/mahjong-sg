@@ -36,7 +36,7 @@ const PaymentModalInline = ({ game, playerSeat }: PaymentModalInlineProps) => {
 	}
 
 	return (
-		<FormRow style={{ margin: '3px 0px 2px', placeSelf: 'center' }}>
+		<FormRow style={{ margin: '0px 0px 2px', placeSelf: 'center' }}>
 			<StyledText variant="body2" text={`Send:`} />
 			<FormControl>
 				<Select
