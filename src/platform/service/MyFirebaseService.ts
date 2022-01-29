@@ -252,15 +252,15 @@ export class FirebaseService {
 					addDoc(this.usersRef, {
 						uN,
 						email,
-						pUrl: '',
+						_b: [],
+						_s: [],
+						_n: [],
 						hSz: Size.MEDIUM,
 						tSz: Size.MEDIUM,
 						cSz: Size.MEDIUM,
 						bgC: BackgroundColor.BROWN,
 						tC: TableColor.GREEN,
 						tBC: TileColor.GREEN
-						// tileFrontColor: TileColor.LIGHT,
-						// decoration: Decoration.DEFAULT,
 					});
 					resolve(true);
 				} catch (err) {

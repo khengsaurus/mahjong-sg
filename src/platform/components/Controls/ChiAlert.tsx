@@ -28,7 +28,7 @@ const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertProps) => {
 	const closeRef = useRef(null);
 
 	useEffect(() => {
-		!show && setTimeout(() => setFoodEmoji(getRandomFoodEmoji), 1000);
+		show && setFoodEmoji(getRandomFoodEmoji());
 	}, [show]);
 
 	function handleClick(e: any) {

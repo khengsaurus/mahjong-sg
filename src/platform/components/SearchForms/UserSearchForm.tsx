@@ -24,7 +24,7 @@ const UserSearchForm: React.FC = () => {
 		await ServiceInstance.FBSearchUser(uN, user.uN).then(data => {
 			if (data.length > 0) {
 				data.forEach(u => {
-					foundUsers.push(new User(u.id, u.uN, u.pUrl, u.email));
+					foundUsers.push(new User(u.id, u.uN, u.email));
 				});
 				if (foundUsers.length > 0) {
 					setFoundUsers(foundUsers);
@@ -63,7 +63,7 @@ const UserSearchForm: React.FC = () => {
 		const availBots = BotIds.filter(b => !pIds.includes(b));
 		const botIndex = Math.floor(Math.random() * (availBots.length - 0.01));
 		const botId = availBots[botIndex];
-		return new User(botId, BotName[botId] || Bot, '', '');
+		return new User(botId, BotName[botId] || Bot, '');
 	};
 
 	const renderAddBotButton = () => (

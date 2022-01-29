@@ -132,6 +132,9 @@
 				&.hide {
 					transform: translateX(-100%);
 				}
+				&:hover {
+					cursor: pointer;
+				}
 			}
 		}
 	}

@@ -26,14 +26,14 @@ const PlayAIButton = () => {
 	const dispatch = useDispatch();
 
 	async function playVsAI() {
-		const tempUser = new User(Visitor, Visitor, '', '');
+		const tempUser = new User(Visitor, Visitor, '');
 		login(tempUser, false);
 
 		const tempPlayers = [
 			tempUser,
-			new User(BotIds[0], BotName.bot1 || Bot, '', ''),
-			new User(BotIds[1], BotName.bot2 || Bot, '', ''),
-			new User(BotIds[2], BotName.bot3 || Bot, '', '')
+			new User(BotIds[0], BotName.bot1 || Bot, ''),
+			new User(BotIds[1], BotName.bot2 || Bot, ''),
+			new User(BotIds[2], BotName.bot3 || Bot, '')
 		];
 
 		await ServiceInstance.initGame(tempUser, tempPlayers, false, 1, 5, false, PaymentType.SHOOTER, [], true).then(
