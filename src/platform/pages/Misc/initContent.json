@@ -42,7 +42,7 @@
 				"title": "How to Hu",
 				"points": [
 					"The {platform} will not let you Hu if you do not meet the minimum Tai. The Maximum Tai you can set is 5.",
-					"When you can Hu, a popup will appear giving you the option. Alternatively, a button (开?) will appear in the bottom right. After pressing that, a second one (开!) will appear on the left. Press on that to declare Hu.",
+					"When you can Hu, a popup will appear giving you the option. Alternatively, a button (开) will appear in the bottom right. After pressing that, a second one (开!) will appear on the left. Press on that to declare Hu.",
 					"Upon pressing the second button, your tiles will be shown to everyone, and no one can perform any actions. If you close the popup, you will hide your hand and the game will resume (careful ah - if a bot is next, it will play immediately).",
 					"When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you haven't drawn a tile and it is available. If you cancel the Hu it will be returned to whoever discarded it. There is no fake-hu (詐胡) functionality.",
 					"The creator of the game can toggle on or off 'Manual Hu' in the game Info popup. If Manual Hu is on, players can Hu at any time.",

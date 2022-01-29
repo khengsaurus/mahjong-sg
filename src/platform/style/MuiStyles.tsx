@@ -54,7 +54,9 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			primary: { main: textColor },
 			secondary: { main: highlightColor },
 			text: { primary: textColor },
-			action: { active: textColor, hover: highlightColor, disabled: 'grey' }
+			action: {
+				disabled: 'grey'
+			}
 		},
 		typography: {
 			body1: { color: textColor },
@@ -71,7 +73,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiButtonBase: {
 				styleOverrides: {
 					root: {
-						color: `${textColor}`,
+						primary: `${textColor}`,
+						secondary: `${highlightColor}`,
 						'&:hover': {
 							color: isMobile() ? `${textColor}` : `${highlightColor}`
 						},
@@ -89,7 +92,6 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						secondary: `${highlightColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`,
 							transform: isMobile() ? `` : `scale(1.05)`,
 							transition: '150ms !important'
 						},
@@ -184,12 +186,12 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					root: {
 						color: textColor,
 						backgroundColor: 'transparent !important'
-					},
-					button: {
-						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`
-						}
 					}
+					// button: {
+					// 	'&:hover': {
+					// 		color: isMobile() ? `${textColor}` : `${highlightColor}`
+					// 	}
+					// }
 				}
 			},
 			MuiListItemText: {

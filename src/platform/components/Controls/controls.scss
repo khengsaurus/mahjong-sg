@@ -33,9 +33,10 @@
 		}
 
 		.bottom-left-controls-#{$size} {
-			@include absolute-padding(0, 0, $main-padding - 3px, $main-padding);
-			@include flex-dir(row);
+			@include absolute-padding(0, 0, $main-padding - 3px, $main-padding - 3px);
+			@include flex-dir(column-reverse);
 			border-bottom: 4px solid transparent;
+			border-left: 4px solid transparent;
 			height: 1 * getButtonHeight($size);
 			width: 1 * getButtonWidth($size);
 			transition: $transition-fast;
@@ -47,14 +48,15 @@
 				min-height: getButtonHeight($size);
 			}
 			&.full {
-				width: 2 * getButtonWidth($size);
+				height: 2 * getButtonHeight($size);
 			}
 		}
 
 		.bottom-right-controls-#{$size} {
-			@include absolute-padding(0, $main-padding, $main-padding - 3px, 0);
-			@include flex-dir(row-reverse);
+			@include absolute-padding(0, $main-padding - 3px, $main-padding - 3px, 0);
+			@include flex-dir(column-reverse);
 			border-bottom: 4px solid transparent;
+			border-right: 4px solid transparent;
 			align-items: flex-start;
 			height: 1 * getButtonHeight($size);
 			width: 1 * getButtonWidth($size);
@@ -67,7 +69,7 @@
 				min-height: getButtonHeight($size);
 			}
 			&.full {
-				width: 2 * getButtonWidth($size);
+				height: 2 * getButtonHeight($size);
 			}
 		}
 
