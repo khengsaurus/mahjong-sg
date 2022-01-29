@@ -72,31 +72,33 @@ const Controls = () => {
 		setGamePaused
 	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, updateGame, handleHome, notifOutput);
 	useBot(isHuLocked, lThAvail, setExec);
+	const { cO, f = [], hu = [], lTh = {}, ps = [], wM } = game || {};
 
 	const [showOfferChi, setShowOfferChi] = useState(false);
 	const [showStart, setShowStart] = useState(false);
 	const [startPrompt, setStartPrompt] = useState('');
 	const [startButtonText, setStartButtonText] = useState('');
+
 	useEffect(() => {
-		const first_p = game?.ps[game?.wM];
+		const first_p = ps[wM];
 		const botToGoFirst = BotIds.includes(first_p?.id);
-		if (game.p) {
-			setShowStart(game?.p && (botToGoFirst || first_p.uN !== user.uN));
+		if (f[1]) {
+			setShowStart(botToGoFirst || first_p.uN !== user.uN);
 			setStartPrompt(
-				game?.cO === user?.uN && botToGoFirst
+				cO === user?.uN && botToGoFirst
 					? ScreenTextEng.START_PROMPT
 					: first_p.uN === user?.uN
 					? ScreenTextEng.DISCARD_TO_START
 					: `Waiting for ${first_p.uN} to start the round`
 			);
-			setStartButtonText(game?.cO === user?.uN && botToGoFirst ? ButtonText.START : '');
+			setStartButtonText(cO === user?.uN && botToGoFirst ? ButtonText.START : '');
 		} else {
 			setShowStart(false);
 			setStartPrompt('');
 			setStartButtonText('');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [game?.cO, game?.p, user?.uN, game?.ps[game?.wM]?.id]);
+	}, [cO, f[1], ps[wM]?.id, user?.uN]);
 
 	const _handleHome = useCallback(() => {
 		if (isLocalGame) {
@@ -157,7 +159,7 @@ const Controls = () => {
 				<FadeWrapper show={payModal?.show} Component={<PaymentModal {...payModal} />} />
 				<FadeWrapper show={settingsModal?.show} Component={<SettingsWindow {...settingsModal} />} />
 				<FadeWrapper
-					show={declareHuModal?.show && isEmpty(game?.hu)}
+					show={declareHuModal?.show && isEmpty(hu)}
 					Component={<DeclareHuModal HH={HH} {...declareHuModal} />}
 				/>
 				<FadeWrapper show={gameInfoModal?.show} Component={<GameInfo {...gameInfoModal} />} />
@@ -171,8 +173,6 @@ const Controls = () => {
 					Component={
 						<ChiAlert
 							show={showChiAlert}
-							ms={toChi}
-							handleTake={handleChi}
 							handleOpenOffer={() => setShowOfferChi(true)}
 							onClose={() => setShowChiAlert(false)}
 						/>
@@ -185,7 +185,7 @@ const Controls = () => {
 					Component={
 						<OfferChiModal
 							show={showOfferChi}
-							card={game?.lTh?.c ? getCardName(game?.lTh?.c) : ''}
+							card={lTh?.c ? getCardName(lTh?.c) : ''}
 							ms={toChi}
 							handleTake={handleChi}
 							onClose={() => setShowOfferChi(false)}

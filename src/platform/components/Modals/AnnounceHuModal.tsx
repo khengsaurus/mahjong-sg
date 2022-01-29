@@ -25,13 +25,13 @@ const AnnounceHuModal = ({
 	onClose: handleShow
 }: AnnounceHuModalProps) => {
 	const { user } = useSelector((store: IStore) => store);
-	const { hu = [], thB = 0, draw = false, on = true, _d = 0, pay, ps, logs, lTh } = game || {};
+	const { hu = [], thB = 0, f = [], _d = 0, pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);
 
 	const canHuFirst = useMemo((): boolean => {
 		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, thB) && !!HH?.maxPx;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [playerSeat, whoHu, game?.mHu, HH?.maxPx]);
+	}, [playerSeat, whoHu, f[6], HH?.maxPx]);
 
 	const sentLogs = useMemo(() => {
 		const huLogIndex = logs?.findIndex(l => l.includes('hu with'));
@@ -81,7 +81,7 @@ const AnnounceHuModal = ({
 
 	return (
 		<Dialog
-			open={!isEmpty(hu) || draw}
+			open={!isEmpty(hu) || f[5]}
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
 				style: {
@@ -94,7 +94,7 @@ const AnnounceHuModal = ({
 					<>
 						<StyledCenterText
 							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} Hu with ${hu[1]}台`}
-							style={{paddingBottom:'0px'}}
+							style={{ paddingBottom: '0px' }}
 							variant="body1"
 						/>
 						<StyledCenterText text={`${getPaymentText()} ${getLastThrownText()}`} />
@@ -109,8 +109,8 @@ const AnnounceHuModal = ({
 						</div>
 					</>
 				)}
-				{(draw || !on || _d === 9) &&
-					(draw ? (
+				{(!f[0] || f[5] || _d === 9) &&
+					(f[5] ? (
 						<>
 							<StyledCenterText text={`Draw!`} variant="h6" padding="6px" />
 							<StyledCenterText text={`15 tiles left`} variant="subtitle1" padding="0px" />

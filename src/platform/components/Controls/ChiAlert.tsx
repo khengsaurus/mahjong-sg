@@ -11,13 +11,11 @@ import { getCardName, getRandomFoodEmoji, isMobile } from 'shared/util';
 
 interface IChiAlertProps {
 	show: boolean;
-	ms: IShownTile[][];
-	handleTake: (m: string[]) => void;
 	onClose: () => void;
 	handleOpenOffer: () => void;
 }
 
-const ChiAlert = ({ show, ms, handleTake, handleOpenOffer, onClose }: IChiAlertProps) => {
+const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertProps) => {
 	const {
 		theme: { tableColor },
 		game,
@@ -35,11 +33,7 @@ const ChiAlert = ({ show, ms, handleTake, handleOpenOffer, onClose }: IChiAlertP
 
 	function handleClick(e: any) {
 		if (!closeRef.current?.contains(e.target)) {
-			if (ms.length === 1) {
-				handleTake(ms[0].map(t => t.c));
-			} else {
-				handleOpenOffer();
-			}
+			handleOpenOffer();
 			onClose();
 		}
 	}

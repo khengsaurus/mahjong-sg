@@ -5,7 +5,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BotIds, BotTimeout, LocalFlag, PaymentType } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
@@ -78,12 +78,13 @@ const renderBotTimeSelect = (
 };
 
 const GameInfo = ({ game, show, onClose }: ModalProps) => {
+	const { cO, id: gameId, f = [], pay, ps, px, sHs, bt } = game;
 	const { revealBot, setRevealBot } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
-	const [mHu, setMHu] = useState<boolean>(game?.mHu);
-	const [bt, setBt] = useState<number>(game?.bt);
-	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(game?.bt));
-	const rightWidth = game.pay === PaymentType.HALF_SHOOTER ? 75 : 60;
+	const [manualHu, setManualHu] = useState<boolean>(f[6]);
+	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(bt));
+	const [botSpeed, setBotSpeed] = useState<number>(bt);
+	const rightWidth = pay === PaymentType.HALF_SHOOTER ? 75 : 60;
 
 	function getSpeedLabel(timeout: number) {
 		switch (timeout) {
@@ -98,17 +99,17 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 		}
 	}
 
-	const closeAndUpdate = useCallback(() => {
-		if (game?.mHu !== mHu || game?.bt !== bt) {
-			ServiceInstance.adminUpdateGame(game, game.id === LocalFlag, mHu, bt);
+	const closeAndUpdate = () => {
+		if (f[6] !== manualHu || bt !== botSpeed) {
+			ServiceInstance.adminUpdateGame(game, gameId === LocalFlag, manualHu, botSpeed);
 		}
 		onClose();
-	}, [game, mHu, bt, onClose]);
+	};
 
 	function handleBotTimeSelect(event: React.ChangeEvent<HTMLInputElement>) {
 		const speed = (event.target as HTMLInputElement).value;
 		setBtLabel(speed);
-		setBt(BotTimeout[speed.toUpperCase()]);
+		setBotSpeed(BotTimeout[speed.toUpperCase()]);
 	}
 
 	return (
@@ -123,23 +124,23 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 			}}
 		>
 			<DialogContent>
-				{renderSettingValue(`${PaymentLabel.LABEL}`, `${PaymentLabel[game.pay]}`, rightWidth)}
-				{renderSettingValue(`${ButtonText.MINMAXTAI}`, `${game.px.join(' / ')}`, rightWidth)}
+				{renderSettingValue(`${PaymentLabel.LABEL}`, `${PaymentLabel[pay]}`, rightWidth)}
+				{renderSettingValue(`${ButtonText.MINMAXTAI}`, `${px.join(' / ')}`, rightWidth)}
 				{renderSettingCheck(
 					HandDescEng.CONCEALED,
-					game.sHs.includes(ScoringHand.CONCEALED) ? false : true,
+					sHs.includes(ScoringHand.CONCEALED) ? false : true,
 					rightWidth
 				)}
-				{renderSettingCheck(HandDescEng.SEVEN, game.sHs.includes(ScoringHand.SEVEN) ? false : true, rightWidth)}
-				{renderSettingCheck(HandDescEng.GREEN, game.sHs.includes(ScoringHand.GREEN) ? false : true, rightWidth)}
-				{user?.uN === game.cO && (
+				{renderSettingCheck(HandDescEng.SEVEN, sHs.includes(ScoringHand.SEVEN) ? false : true, rightWidth)}
+				{renderSettingCheck(HandDescEng.GREEN, sHs.includes(ScoringHand.GREEN) ? false : true, rightWidth)}
+				{user?.uN === cO && (
 					<>
-						{!!game.ps.find(p => BotIds.includes(p.id)) &&
+						{!!ps.find(p => BotIds.includes(p.id)) &&
 							renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}
-						{renderSwitch(ButtonText.MANUAL_HU, mHu, () => setMHu(prev => !prev), rightWidth)}
+						{renderSwitch(ButtonText.MANUAL_HU, f[6], () => setManualHu(prev => !prev), rightWidth)}
 					</>
 				)}
-				{game.id === LocalFlag &&
+				{gameId === LocalFlag &&
 					renderSwitch(ButtonText.REVEAL_BOT_HANDS, revealBot, () => setRevealBot(!revealBot), rightWidth)}
 			</DialogContent>
 		</Dialog>
@@ -148,7 +149,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 
 export default GameInfo;
 
-/* -------------------- {isDev() && game.id !== LocalFlag && <Scenarios />} -------------------- */
+/* -------------------- {isDev() && gameId !== LocalFlag && <Scenarios />} -------------------- */
 
 // interface IGameStateOption {
 // 	label: string;

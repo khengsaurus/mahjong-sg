@@ -11,12 +11,12 @@ import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: DeclareHuModalProps) => {
-	const { px = [HandPoint.MIN, HandPoint.MAX] } = game || {};
-	const defaultZimo = !!HH?.self || (game?.ta && game?.wM === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
+	const { f, hu, px = [HandPoint.MIN, HandPoint.MAX], wM } = game || {};
+	const defaultZimo = !!HH?.self || (f[3] && wM === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
 	const [zimo, setZimo] = useState(defaultZimo);
 	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
 
-	async function hu() {
+	async function declareHu() {
 		handleHu(game, playerSeat, HH, tai, zimo);
 		onClose(true);
 	}
@@ -75,8 +75,8 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 					<StyledButton
 						label={ButtonText.HU}
 						size="large"
-						onClick={hu}
-						disabled={!tai || tai < game?.px[0] || game?.hu.length > 2}
+						onClick={declareHu}
+						disabled={!tai || tai < px[0] || hu.length > 2}
 						style={{ position: 'absolute', bottom: 0, right: 5 }}
 					/>
 				</DialogContent>
