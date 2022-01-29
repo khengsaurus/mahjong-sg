@@ -212,7 +212,7 @@ export class Service {
 			this.updateGame(game, true);
 		} else {
 			try {
-				FBService.runTransactionUpdate(game.id, { mHu, bt });
+				FBService.runTransactionUpdate(game.id, mHu, bt);
 			} catch (err) {
 				console.error(err);
 			}

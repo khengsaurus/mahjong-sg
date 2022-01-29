@@ -9,14 +9,14 @@
 			{
 				"title": "Controls",
 				"points": [
-					"To Chi a tile thrown by the previous player, select the other two in your hand and the Chi button (吃) will light up. Press on it to chi.",
+					"When you can chi the tile thrown by the previous player, a popup will appear - click on it to bring up the options. Alternatively, you can select the other two in your hand and the Chi button (吃) will light up. Press on it to chi.",
 					"If you can Pong or Kang a discarded tile, a popup will appear offering you the options. Optionally, you can select the tiles in your hand you want to Pong/Kang with the last discarded tile, and the Pong button (碰) will light up. This button will read '杠' instead if you can Kang. Press on it to Pong or Kang.",
 					"You can also Kang if you select 4 of the same tile in your hand, or 1 tile when you've already Pong'ed it. You can only do this after you've drawn or taken a tile, during your turn.",
-					"The Draw (摸) and Discard (丢) buttons on the right will light up only when it's your turn. Note that you can only discard when it is your turn, after you've drawn or taken a tile.",
+					"The Draw (摸) or Discard (丢) button on the right will light up only when it's your turn. Note that you can only discard during your turn, after you've drawn or taken a tile.",
 					"The {platform} will automatically draw replacement tiles (補花) for you when you Kang or draw flower tiles.",
 					"If 15 tiles are left, the Draw button will read '完' instead. The last player to draw has to press on it to end the round. If anyone tries to draw replacement tiles (補花) and there are 15 tiles left, the game will also end in a draw."
 				],
-				"ps": "Paiseh ah, the buttons are in Chinese for now because using English leads to some big buttons and meh UI. We're still thinking about this though."
+				"ps": ""
 			},
 			{
 				"title": "Gameplay",
@@ -42,14 +42,13 @@
 				"title": "How to Hu",
 				"points": [
 					"The {platform} will not let you Hu if you do not meet the minimum Tai. The Maximum Tai you can set is 5.",
-					"You can Hu via the prompt in the popup, or a show button (开?) will appear in the bottom right when you can Hu. After you press that, a second one will appear on the left (开!). Press on that to show your tiles.",
+					"When you can Hu, a popup will appear giving you the option. Alternatively, a button (开?) will appear in the bottom right. After pressing that, a second one (开!) will appear on the left. Press on that to declare Hu.",
 					"Upon pressing the second button, your tiles will be shown to everyone, and no one can perform any actions. If you close the popup, you will hide your hand and the game will resume (careful ah - if a bot is next, it will play immediately).",
 					"When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you haven't drawn a tile and it is available. If you cancel the Hu it will be returned to whoever discarded it. There is no fake-hu (詐胡) functionality.",
 					"The creator of the game can toggle on or off 'Manual Hu' in the game Info popup. If Manual Hu is on, players can Hu at any time.",
-					"The {platform} will calculate how many points your hand is worth when you Hu. Note that not everything is accounted for, e.g. if you and your friends want to consider a certain hand 2 Tai instead of 4, be sure to use the Tai/Self Drawn options presented after pressing the second 开.",
 					"Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the pong option (Because it's not fair for A to pong when B can Hu right? Also, can Hu then just Hu lah).",
 					"If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the announcement. A can use that to cancel B's Hu and take the last discarded tile instead.",
-					"Note that if two players try to Hu at the same time, the {platform} will only allow the first player to (if the second person has priority they will see the Hu option on the announcement popup)."
+					"If two players try to Hu at the same time, the {platform} will only allow the first player to (if the second person has priority they will see the Hu option on the announcement popup)."
 				]
 			},
 			{

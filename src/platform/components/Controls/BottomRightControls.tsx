@@ -1,7 +1,9 @@
+import { Fade } from '@mui/material';
 import { ControlButton } from 'platform/components/Buttons/ControlButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
-import { Size } from 'shared/enums';
+import { Size, Transition } from 'shared/enums';
+import { GameTextChi } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
@@ -11,40 +13,49 @@ const BottomRightControls = (props: BRControlsProps) => {
 		handleDraw,
 		handleOpen,
 		setShowChiAlert,
-		showChiAlert,
+		HHStr,
+		highlight,
+		confirmHu,
 		disableThrow,
 		disableDraw,
 		drawText,
-		confirmHu,
 		showDeclareHu,
-		HHStr,
-		highlight
+		taken
 	} = props;
 	const {
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
+	const showKai = !confirmHu && !showDeclareHu && !!HHStr;
 
 	return (
-		<div className={`bottom-right-controls-${controlsSize}`} style={{ borderColor: highlight || null }}>
+		<div
+			className={`bottom-right-controls-${controlsSize} ${showKai ? `full` : ``}`}
+			style={{ borderColor: highlight || null }}
+		>
 			<ControlButton
-				label={`丢`}
-				callback={handleThrow}
-				disabled={disableThrow}
+				label={drawText === GameTextChi.END ? GameTextChi.END : taken ? GameTextChi.THROW : GameTextChi.DRAW}
+				callback={() => {
+					if (!disableDraw || !disableThrow) {
+						setShowChiAlert(false);
+						if (!disableDraw) {
+							handleDraw();
+						} else {
+							handleThrow();
+						}
+					}
+				}}
+				disabled={disableDraw && disableThrow}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			<ControlButton
-				label={drawText}
-				callback={() => (showChiAlert ? setShowChiAlert(false) : handleDraw())}
-				disabled={disableDraw}
-				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-			/>
-			{!confirmHu && !showDeclareHu && HHStr && (
-				<ControlButton
-					label={`开?`}
-					callback={handleOpen}
-					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-				/>
-			)}
+			<Fade in={showKai} timeout={Transition.FAST}>
+				<div>
+					<ControlButton
+						label={GameTextChi.KAI_QUESTION}
+						callback={handleOpen}
+						style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+					/>
+				</div>
+			</Fade>
 		</div>
 	);
 };

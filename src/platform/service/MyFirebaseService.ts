@@ -395,13 +395,11 @@ export class FirebaseService {
 			const q = query(this.gamesRef, where('es', 'array-contains', userEmail));
 			const games = await getDocsFromServer(q);
 			games.forEach(g => {
-				let lastUpdated = g.data()?.f[1];
+				let lastUpdated = g.data()?.t[1];
 				if (lastUpdated && lastUpdated?.toDate) {
 					lastUpdated = lastUpdated?.toDate() as Date;
-					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 0.02) {
-						deleteDoc(doc(this.gamesRef, g.id)).catch(err => {
-							console.error(err);
-						});
+					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 24) {
+						deleteDoc(doc(this.gamesRef, g.id)).catch(err => console.error(err));
 					}
 				}
 			});
@@ -535,7 +533,7 @@ export class FirebaseService {
 		});
 	}
 
-	async runTransactionUpdate(gameId: string, values: any): Promise<void> {
+	async runTransactionUpdate(gameId: string, mHu: boolean, bt: number): Promise<void> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				runTransaction(this.fs, async transaction => {
@@ -544,7 +542,11 @@ export class FirebaseService {
 						if (!gameDoc.exists()) {
 							reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
 						} else {
-							transaction.update(gameDocRef, { ...values });
+							const f = gameDoc.data()?.f;
+							f[6] = mHu;
+							const n = gameDoc.data()?.n;
+							n[10] = bt;
+							transaction.update(gameDocRef, { f, n });
 							resolve();
 						}
 					});

@@ -137,7 +137,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 					<>
 						{!!ps.find(p => BotIds.includes(p.id)) &&
 							renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}
-						{renderSwitch(ButtonText.MANUAL_HU, f[6], () => setManualHu(prev => !prev), rightWidth)}
+						{renderSwitch(ButtonText.MANUAL_HU, manualHu, () => setManualHu(prev => !prev), rightWidth)}
 					</>
 				)}
 				{gameId === LocalFlag &&

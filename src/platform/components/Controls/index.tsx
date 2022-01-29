@@ -149,13 +149,7 @@ const Controls = () => {
 				<TopRightControls {...topRight} />
 				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} setShowChiAlert={setShowChiAlert} />}
-				{showBottomControls && (
-					<BottomRightControls
-						{...bottomRight}
-						showChiAlert={showChiAlert}
-						setShowChiAlert={setShowChiAlert}
-					/>
-				)}
+				{showBottomControls && <BottomRightControls {...bottomRight} setShowChiAlert={setShowChiAlert} />}
 				<FadeWrapper show={payModal?.show} Component={<PaymentModal {...payModal} />} />
 				<FadeWrapper show={settingsModal?.show} Component={<SettingsWindow {...settingsModal} />} />
 				<FadeWrapper

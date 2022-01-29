@@ -26,7 +26,7 @@ const Help = () => {
 							<li key={`section-${ix1}-${ix2}`}>{parse(point.replace('{platform}', platform))}</li>
 						))}
 					</ul>
-					{section.ps && <p className="ps">{parse(section.ps.replace('{platform}', platform))}</p>}
+					{section?.ps && <p className="ps">{parse(section.ps.replace('{platform}', platform))}</p>}
 				</Fragment>
 			))}
 			<br />
