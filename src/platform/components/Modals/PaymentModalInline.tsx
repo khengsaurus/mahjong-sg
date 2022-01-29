@@ -16,15 +16,15 @@ interface PaymentModalInlineProps {
 }
 
 const PaymentModalInline = ({ game, playerSeat }: PaymentModalInlineProps) => {
-	const { hu, pay, thB } = game;
+	const { hu, n = [], pay } = game;
 
 	const { winner, defaultAmt } = useMemo(() => {
 		return {
 			winner: isEmpty(hu) ? null : Number(hu[0]),
-			defaultAmt: getDefaultAmt(hu, pay, playerSeat, thB)
+			defaultAmt: getDefaultAmt(hu, pay, playerSeat, n[7])
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [JSON.stringify(hu), pay, playerSeat, thB]);
+	}, [JSON.stringify(hu), pay, playerSeat, n[7]]);
 
 	const [amountStr, setAmountStr] = useState<string>(`${defaultAmt}`);
 	const [amount, setAmount] = useState(defaultAmt);

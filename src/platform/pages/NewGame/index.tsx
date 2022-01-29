@@ -84,7 +84,7 @@ const NewGame = () => {
 			isLocalGame
 		).then(game => {
 			if (game?.id) {
-				dispatch(setTHK(game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.st)));
+				dispatch(setTHK(game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.n[0])));
 				dispatch(setGameId(game.id));
 				setStartedGame(true);
 			}

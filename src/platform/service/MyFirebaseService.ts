@@ -32,12 +32,21 @@ import {
 	where
 } from 'firebase/firestore';
 import moment from 'moment';
-import { BackgroundColor, FBCollection, FBDatabase, PaymentType, Size, TableColor, TileColor } from 'shared/enums';
+import {
+	BackgroundColor,
+	BotTimeout,
+	FBCollection,
+	FBDatabase,
+	PaymentType,
+	Size,
+	TableColor,
+	TileColor
+} from 'shared/enums';
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
-import { shuffle } from 'shared/util';
+import { isDev, shuffle } from 'shared/util';
 import { gameToObj, playerToObj, userToObj } from 'shared/util/parsers';
 
 export class FirebaseService {
@@ -477,23 +486,16 @@ export class FirebaseService {
 							pS,
 							es,
 							[true, true, false, false, false, true, false, mHu],
+							[1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM],
 							cA,
 							null,
-							1,
-							0,
-							0,
-							0,
 							shuffledPlayers,
 							[],
-							[],
-							0,
 							{},
-							0,
 							[],
 							[],
 							[],
 							{},
-							[gMinPx, gMaxPx],
 							sHs,
 							pay
 						);

@@ -78,12 +78,12 @@ const renderBotTimeSelect = (
 };
 
 const GameInfo = ({ game, show, onClose }: ModalProps) => {
-	const { cO, id: gameId, f = [], pay, ps, px, sHs, bt } = game;
+	const { cO, id: gameId, f = [], n = [], pay, ps, sHs } = game;
 	const { revealBot, setRevealBot } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
 	const [manualHu, setManualHu] = useState<boolean>(f[6]);
-	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(bt));
-	const [botSpeed, setBotSpeed] = useState<number>(bt);
+	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(n[10]));
+	const [botSpeed, setBotSpeed] = useState<number>(n[10]);
 	const rightWidth = pay === PaymentType.HALF_SHOOTER ? 75 : 60;
 
 	function getSpeedLabel(timeout: number) {
@@ -100,7 +100,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 	}
 
 	const closeAndUpdate = () => {
-		if (f[6] !== manualHu || bt !== botSpeed) {
+		if (f[6] !== manualHu || n[10] !== botSpeed) {
 			ServiceInstance.adminUpdateGame(game, gameId === LocalFlag, manualHu, botSpeed);
 		}
 		onClose();
@@ -125,7 +125,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 		>
 			<DialogContent>
 				{renderSettingValue(`${PaymentLabel.LABEL}`, `${PaymentLabel[pay]}`, rightWidth)}
-				{renderSettingValue(`${ButtonText.MINMAXTAI}`, `${px.join(' / ')}`, rightWidth)}
+				{renderSettingValue(`${ButtonText.MINMAXTAI}`, `${n[8]} / ${n[9]}`, rightWidth)}
 				{renderSettingCheck(
 					HandDescEng.CONCEALED,
 					sHs.includes(ScoringHand.CONCEALED) ? false : true,

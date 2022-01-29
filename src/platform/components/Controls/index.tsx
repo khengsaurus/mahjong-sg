@@ -72,7 +72,7 @@ const Controls = () => {
 		setGamePaused
 	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, updateGame, handleHome, notifOutput);
 	useBot(isHuLocked, lThAvail, setExec);
-	const { cO, f = [], hu = [], lTh = {}, ps = [], wM } = game || {};
+	const { cO, f = [], hu = [], lTh = {}, n = [], ps = [] } = game || {};
 
 	const [showOfferChi, setShowOfferChi] = useState(false);
 	const [showStart, setShowStart] = useState(false);
@@ -80,7 +80,7 @@ const Controls = () => {
 	const [startButtonText, setStartButtonText] = useState('');
 
 	useEffect(() => {
-		const first_p = ps[wM];
+		const first_p = ps[n[3]];
 		const botToGoFirst = BotIds.includes(first_p?.id);
 		if (f[1]) {
 			setShowStart(botToGoFirst || first_p.uN !== user.uN);
@@ -98,7 +98,7 @@ const Controls = () => {
 			setStartButtonText('');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [cO, f[1], ps[wM]?.id, user?.uN]);
+	}, [cO, f[1], ps[n[3]]?.id, user?.uN]);
 
 	const _handleHome = useCallback(() => {
 		if (isLocalGame) {

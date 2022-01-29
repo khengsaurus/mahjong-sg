@@ -100,7 +100,7 @@ const Table = () => {
 						if (isEmpty(currentGame) || !user?.uN) {
 							history.push(Page.HOME);
 						} else {
-							dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.st)));
+							dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.n[0])));
 							hydrateGame(currentGame, user.uN);
 							dispatch(setGame(currentGame));
 						}
@@ -132,8 +132,8 @@ const Table = () => {
 	}, [currGame?.lTh?.i]);
 
 	const getMarkup = () => {
-		if (!isEmpty(currGame) && currGame?.st !== 0 && currGame?.repr) {
-			const { _d = 0, fr = [0, 0], lTh = {}, ps = [], thB = 0, wM = 0 } = currGame;
+		if (!isEmpty(currGame) && currGame?.n[0] !== 0 && currGame?.repr) {
+			const { lTh = {}, n = [], ps = [] } = currGame;
 			const currentWind = currGame?.repr() && currGame?.repr()[0];
 			const topPlayerX = findOpp(playerSeat);
 			const rightPlayerX = findRight(playerSeat);
@@ -148,12 +148,12 @@ const Table = () => {
 								{ps[topPlayerX] && (
 									<TopPlayer
 										player={ps[topPlayerX]}
-										dealer={_d === topPlayerX}
-										hasFront={fr[0] === topPlayerX}
-										hasBack={fr[1] === topPlayerX}
+										dealer={n[2] === topPlayerX}
+										hasFront={n[4] === topPlayerX}
+										hasBack={n[5] === topPlayerX}
 										tileSize={tileSize}
-										lastThrown={thB === topPlayerX || wM === topPlayerX ? lTh : null}
-										highlight={topPlayerX === wM ? highlightColor : ''}
+										lastThrown={n[7] === topPlayerX || n[3] === topPlayerX ? lTh : null}
+										highlight={topPlayerX === n[3] ? highlightColor : ''}
 									/>
 								)}
 							</div>
@@ -161,12 +161,12 @@ const Table = () => {
 								{ps[rightPlayerX] && (
 									<RightPlayer
 										player={ps[rightPlayerX]}
-										dealer={_d === rightPlayerX}
-										hasFront={fr[0] === rightPlayerX}
-										hasBack={fr[1] === rightPlayerX}
+										dealer={n[2] === rightPlayerX}
+										hasFront={n[4] === rightPlayerX}
+										hasBack={n[5] === rightPlayerX}
 										tileSize={tileSize}
-										lastThrown={thB === rightPlayerX || wM === rightPlayerX ? lTh : null}
-										highlight={rightPlayerX === wM ? highlightColor : ''}
+										lastThrown={n[7] === rightPlayerX || n[3] === rightPlayerX ? lTh : null}
+										highlight={rightPlayerX === n[3] ? highlightColor : ''}
 									/>
 								)}
 							</div>
@@ -174,11 +174,11 @@ const Table = () => {
 								{ps[playerSeat] && (
 									<BottomPlayer
 										player={ps[playerSeat]}
-										dealer={_d === playerSeat}
-										hasFront={fr[0] === playerSeat}
-										hasBack={fr[1] === playerSeat}
-										lastThrown={thB === playerSeat || wM === playerSeat ? lTh : null}
-										highlight={playerSeat === wM ? highlightColor : ''}
+										dealer={n[2] === playerSeat}
+										hasFront={n[4] === playerSeat}
+										hasBack={n[5] === playerSeat}
+										lastThrown={n[7] === playerSeat || n[3] === playerSeat ? lTh : null}
+										highlight={playerSeat === n[3] ? highlightColor : ''}
 									/>
 								)}
 							</div>
@@ -186,14 +186,14 @@ const Table = () => {
 								{ps[leftPlayerX] && (
 									<LeftPlayer
 										player={ps[leftPlayerX]}
-										dealer={_d === leftPlayerX}
-										hasFront={fr[0] === leftPlayerX}
-										hasBack={fr[1] === leftPlayerX}
+										dealer={n[2] === leftPlayerX}
+										hasFront={n[4] === leftPlayerX}
+										hasBack={n[5] === leftPlayerX}
 										tileSize={tileSize}
 										lastThrown={
-											thB === leftPlayerX || currGame.wM === leftPlayerX ? currGame.lTh : null
+											n[7] === leftPlayerX || currGame.n[3] === leftPlayerX ? currGame.lTh : null
 										}
-										highlight={leftPlayerX === wM ? highlightColor : ''}
+										highlight={leftPlayerX === n[3] ? highlightColor : ''}
 									/>
 								)}
 							</div>

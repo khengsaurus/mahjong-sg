@@ -208,7 +208,7 @@ export class Service {
 	adminUpdateGame(game: Game, isLocalGame: boolean, mHu: boolean, bt: number) {
 		if (isLocalGame) {
 			game.f[6] = mHu;
-			game.bt = bt;
+			game.n[10] = bt;
 			this.updateGame(game, true);
 		} else {
 			try {

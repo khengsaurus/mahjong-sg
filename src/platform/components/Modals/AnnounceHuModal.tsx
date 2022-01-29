@@ -25,11 +25,11 @@ const AnnounceHuModal = ({
 	onClose: handleShow
 }: AnnounceHuModalProps) => {
 	const { user } = useSelector((store: IStore) => store);
-	const { hu = [], thB = 0, f = [], _d = 0, pay, ps, logs, lTh } = game || {};
+	const { hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);
 
 	const canHuFirst = useMemo((): boolean => {
-		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, thB) && !!HH?.maxPx;
+		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, n[7]) && !!HH?.maxPx;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [playerSeat, whoHu, f[6], HH?.maxPx]);
 
@@ -72,8 +72,8 @@ const AnnounceHuModal = ({
 	}
 
 	function getLastThrownText() {
-		return Number(hu[2]) === 0 && thB !== Number(hu[0]) && !isEmpty(lTh)
-			? `Last tile thrown by ${thB === playerSeat ? 'you' : ps[thB]?.uN}.`
+		return Number(hu[2]) === 0 && n[7] !== Number(hu[0]) && !isEmpty(lTh)
+			? `Last tile thrown by ${n[7] === playerSeat ? 'you' : ps[n[7]]?.uN}.`
 			: Number(hu[2] === 1)
 			? `Last tile self drawn.`
 			: ``;
@@ -109,7 +109,7 @@ const AnnounceHuModal = ({
 						</div>
 					</>
 				)}
-				{(!f[0] || f[5] || _d === 9) &&
+				{(!f[0] || f[5] || n[2] === 9) &&
 					(f[5] ? (
 						<>
 							<StyledCenterText text={`Draw!`} variant="h6" padding="6px" />

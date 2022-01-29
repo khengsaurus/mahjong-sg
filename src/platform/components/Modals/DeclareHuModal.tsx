@@ -5,16 +5,15 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
-import { HandPoint } from 'shared/handEnums';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
 const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: DeclareHuModalProps) => {
-	const { f, hu, px = [HandPoint.MIN, HandPoint.MAX], wM } = game || {};
-	const defaultZimo = !!HH?.self || (f[3] && wM === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
+	const { f = [], hu, n = [] } = game || {};
+	const defaultZimo = !!HH?.self || (f[3] && n[3] === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
 	const [zimo, setZimo] = useState(defaultZimo);
-	const [tai, setTai] = useState(Math.min(HH?.maxPx, px[1]) || 0);
+	const [tai, setTai] = useState(Math.min(HH?.maxPx, n[9]) || 0);
 
 	async function declareHu() {
 		handleHu(game, playerSeat, HH, tai, zimo);
@@ -30,7 +29,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 			<FormRow>
 				<StyledText text="台: " variant="subtitle2" padding="0px" />
 				<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
-					{generateNumbers(px[0], px[1]).map((tai: number) => (
+					{generateNumbers(n[8], n[9]).map((tai: number) => (
 						<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
 					))}
 				</RadioGroup>
@@ -63,7 +62,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 			>
 				<DialogContent>
 					<StyledText
-						text={HH?.maxPx === px[1] ? ScreenTextEng.NICE_HAND : ScreenTextEng.READY_TO_HU}
+						text={HH?.maxPx === n[9] ? ScreenTextEng.NICE_HAND : ScreenTextEng.READY_TO_HU}
 						variant="subtitle1"
 						padding="0px"
 					/>
@@ -76,7 +75,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 						label={ButtonText.HU}
 						size="large"
 						onClick={declareHu}
-						disabled={!tai || tai < px[0] || hu.length > 2}
+						disabled={!tai || tai < n[8] || hu.length > 2}
 						style={{ position: 'absolute', bottom: 0, right: 5 }}
 					/>
 				</DialogContent>
