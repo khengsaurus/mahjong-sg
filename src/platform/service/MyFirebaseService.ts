@@ -395,10 +395,10 @@ export class FirebaseService {
 			const q = query(this.gamesRef, where('es', 'array-contains', userEmail));
 			const games = await getDocsFromServer(q);
 			games.forEach(g => {
-				let lastUpdated = g.data()?.up;
+				let lastUpdated = g.data()?.f[1];
 				if (lastUpdated && lastUpdated?.toDate) {
 					lastUpdated = lastUpdated?.toDate() as Date;
-					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 24) {
+					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 0.02) {
 						deleteDoc(doc(this.gamesRef, g.id)).catch(err => {
 							console.error(err);
 						});
@@ -482,13 +482,11 @@ export class FirebaseService {
 						const game: Game = new Game(
 							gameId,
 							user.uN,
-							cA,
 							pS,
 							es,
+							[cA, cA, null],
 							[true, true, false, false, false, true, false, mHu],
 							[1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM],
-							cA,
-							null,
 							shuffledPlayers,
 							[],
 							{},

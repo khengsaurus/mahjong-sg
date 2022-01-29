@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { Segment } from 'shared/enums';
 import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { getRandomFoodEmoji, isMobile } from 'shared/util';
+import { isMobile } from 'shared/util';
 import { ShownTile } from '../Tiles';
 
 interface IOfferChiModalProps {
@@ -23,7 +23,7 @@ const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalPr
 	const {
 		theme: { tableColor }
 	} = useSelector((state: IStore) => state);
-	const title = useMemo(() => `${ScreenTextEng.YOU_CAN_CHI} ${card} ${getRandomFoodEmoji()}`, [card]);
+	const title = useMemo(() => `${ScreenTextEng.YOU_CAN_CHI} ${card}`, [card]);
 
 	return (
 		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
