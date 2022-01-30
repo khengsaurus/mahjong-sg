@@ -32,10 +32,8 @@
 				"title": "Scoring",
 				"points": [
 					"The scoring logic largely follows <a href='http://gambiter.com/mahjong/Singaporean_mahjong_scoring_rules.html' style='color: #005eff'>this mahjong guide</a>",
-					"The logic for a Ping Hu hand follows standard rules: players cannot be waiting for a unique tile, and the pairs, if Pong'ed, cannot be worth Tai.",
-					"Note that the following scenarios have not been accounted for:<ul><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>8 Flower Tile-set (花胡)</li><li>Winning on Replacement Tile (花上, 杠上)</li><li>Robbing the Kang (抢杠)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li></ul>",
-					"Note that All Green (綠一色) scores Man Tai",
-					"There is no bao (包) functionality yet"
+					"The logic for a Ping Hu hand follows standard rules: players cannot be waiting for a unique tile, and the pair, if Pong'ed, cannot be worth Tai.",
+					"Note that the following scenarios are not accounted for:<ul><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Three Winners (一炮三响)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
 				]
 			},
 			{
