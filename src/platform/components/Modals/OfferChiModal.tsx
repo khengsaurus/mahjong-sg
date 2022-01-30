@@ -1,5 +1,6 @@
 import { Dialog, DialogContent } from '@mui/material';
 import 'platform/components/PlayerComponents/playerComponents.scss';
+import { ShownTile } from 'platform/components/Tiles';
 import { getHighlightColor } from 'platform/style/MuiStyles';
 import { Centered, Column } from 'platform/style/StyledComponents';
 import { StyledCenterText } from 'platform/style/StyledMui';
@@ -9,7 +10,6 @@ import { Segment } from 'shared/enums';
 import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
-import { ShownTile } from '../Tiles';
 
 interface IOfferChiModalProps {
 	show: boolean;

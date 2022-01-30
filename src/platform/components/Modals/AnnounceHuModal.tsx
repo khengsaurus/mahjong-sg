@@ -1,7 +1,7 @@
 import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
-import PaymentModalInline from 'platform/components/Modals/PaymentModalInline';
+import { PaymentModalInline } from 'platform/components/Modals';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton, StyledCenterText } from 'platform/style/StyledMui';
 import { useMemo } from 'react';

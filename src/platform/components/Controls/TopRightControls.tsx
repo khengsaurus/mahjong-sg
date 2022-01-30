@@ -1,7 +1,7 @@
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SubjectIcon from '@mui/icons-material/Subject';
 import { IconButton } from '@mui/material';
-import LogModal from 'platform/components/Modals/LogModal';
+import { LogModal } from 'platform/components/Modals';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Size, TableColor } from 'shared/enums';

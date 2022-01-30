@@ -1,5 +1,4 @@
-import { DiscardedTiles, HiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
-import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
+import { DiscardedTiles, HiddenHand, ShownHiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';

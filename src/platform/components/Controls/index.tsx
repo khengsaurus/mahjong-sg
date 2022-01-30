@@ -1,12 +1,17 @@
 import { Fade } from '@mui/material';
 import { history } from 'App';
 import { isEmpty } from 'lodash';
-import AnnounceHuModal from 'platform/components/Modals/AnnounceHuModal';
-import DeclareHuModal from 'platform/components/Modals/DeclareHuModal';
-import GameInfo from 'platform/components/Modals/GameInfo';
-import PaymentModal from 'platform/components/Modals/PaymentModal';
-import TableNotif from 'platform/components/Modals/TableNotif';
-import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
+import {
+	AnnounceHuModal,
+	DeclareHuModal,
+	GameInfo,
+	PaymentModal,
+	TableNotif,
+	LeaveAlert,
+	OfferChiModal,
+	SingleActionModal
+} from 'platform/components/Modals';
+import SettingsWindow from 'platform/components/SettingsWindow';
 import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -26,9 +31,6 @@ import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setGame, setGameId, setLocalGame, setTHK } from 'shared/store/actions';
 import { getCardName } from 'shared/util';
-import LeaveAlert from '../Modals/LeaveAlert';
-import OfferChiModal from '../Modals/OfferChiModal';
-import SingleActionModal from '../Modals/SingleActionModal';
 import ChiAlert from './ChiAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';

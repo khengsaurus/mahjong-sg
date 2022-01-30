@@ -1,6 +1,5 @@
 import { isEmpty } from 'lodash';
-import { DiscardedTiles, HiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
-import ShownHiddenHand from 'platform/components/Tiles/ShownHiddenHand';
+import { DiscardedTiles, HiddenHand, ShownHiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useDynamicWidth } from 'platform/hooks';
 import { useContext, useRef } from 'react';
 import { useSelector } from 'react-redux';

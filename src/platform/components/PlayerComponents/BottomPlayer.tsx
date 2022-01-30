@@ -1,10 +1,9 @@
-import { DiscardedTiles, ShownHiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
+import { BottomHiddenHand, DiscardedTiles, ShownHiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
 import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { PlayerComponentProps } from 'shared/typesPlus';
-import BottomHiddenHand from '../Tiles/BottomHiddenHand';
 import './playerComponents.scss';
 
 const BottomPlayer = (props: PlayerComponentProps) => {

@@ -7,7 +7,7 @@ import {
 	NewGameButton,
 	PrivacyButton
 } from 'platform/components/Buttons/TextNavButton';
-import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
+import SettingsWindow from 'platform/components/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import { BottomSpec } from 'platform/style/StyledComponents';
