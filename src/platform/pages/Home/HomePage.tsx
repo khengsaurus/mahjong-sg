@@ -6,17 +6,16 @@ import { history } from 'App';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader, NetworkLoader } from 'platform/components/Loader';
+import Overlay from 'platform/components/Overlay';
 import { useAndroidBack, useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, Row } from 'platform/style/StyledComponents';
 import { StyledCenterText, StyledText } from 'platform/style/StyledMui';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { EEvent, Page, Platform, Status } from 'shared/enums';
-import { AppContext } from 'shared/hooks';
 import { HomeScreenText } from 'shared/screenTexts';
-import { IStore, setGame, setGameId, setLocalGame } from 'shared/store';
-import { setTHK } from 'shared/store/actions';
+import { IStore } from 'shared/store';
 import './home.scss';
 
 interface HomePageProps {
@@ -40,11 +39,9 @@ const HomePage = ({
 	offsetKeyboard = 0
 }: HomePageProps) => {
 	const { user } = useSelector((state: IStore) => state);
-	const { setPlayers } = useContext(AppContext);
 	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
-	const dispatch = useDispatch();
 
 	/* -------------------- Keyboard offset for iOS + Android back button handling -------------------- */
 	const [marginBottom, setMarginBottom] = useState(0);
@@ -87,16 +84,6 @@ const HomePage = ({
 
 	/* ------------------ End keyboard offset for iOS + Android back button handling ------------------ */
 
-	// Reset store/AppContext on leaving game since Table useEffect cleanup is used for subscription
-	useEffect(() => {
-		setPlayers([user]);
-		dispatch(setGameId(''));
-		dispatch(setTHK(111));
-		dispatch(setGame(null));
-		dispatch(setLocalGame(null));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, setPlayers, user?.id]);
-
 	useEffect(() => {
 		if (!ready) {
 			timeoutRef.current = setTimeout(() => {
@@ -104,6 +91,7 @@ const HomePage = ({
 					<Centered>
 						<StyledText text={fallbackTitle} variant="subtitle1" />
 						<HomeButton />
+						<Overlay />
 					</Centered>
 				);
 			}, timeout);
@@ -132,7 +120,10 @@ const HomePage = ({
 							</div>
 						</Fade>
 						{title && <StyledCenterText text={title} variant="h6" padding="10px" />}
-						<Centered style={{ marginBottom }}>{markup()}</Centered>
+						<Centered style={{ marginBottom }}>
+							<Overlay />
+							{markup()}
+						</Centered>
 					</>
 				) : (
 					pendingScreen

@@ -5,6 +5,7 @@ import { ScaleLoader } from 'react-spinners';
 import BarLoader from 'react-spinners/BarLoader';
 import { TextColor } from 'shared/enums';
 import { IStore } from 'shared/store';
+import Overlay from './Overlay';
 
 interface LoaderProps {
 	color?: string;
@@ -26,6 +27,7 @@ export const Loader = (props: LoaderProps) => {
 	return (
 		<Centered>
 			<BarLoader loading={true} color={color} css={css} height={height} width={width} />
+			<Overlay />
 		</Centered>
 	);
 };

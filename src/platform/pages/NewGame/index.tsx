@@ -31,8 +31,8 @@ import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext, useAsync } from 'shared/hooks';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText, PaymentLabel } from 'shared/screenTexts';
-import { IStore, setGameId } from 'shared/store';
-import { setTHK } from 'shared/store/actions';
+import { IStore } from 'shared/store';
+import { setGameId, setTHK } from 'shared/store/actions';
 import { getTileHashKey } from 'shared/util';
 import './newGame.scss';
 

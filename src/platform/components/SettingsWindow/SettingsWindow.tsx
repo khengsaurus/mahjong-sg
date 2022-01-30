@@ -237,13 +237,10 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 														style={{
 															...MuiStyles.tabOptions
 														}}
-														// fullWidth={false}
 														key={size}
 														value={size}
 														label={size[0]}
-														onClick={() => {
-															preference.handleSelect(size);
-														}}
+														onClick={() => preference.handleSelect(size)}
 													/>
 												);
 											})}

@@ -159,7 +159,7 @@ const Login = () => {
 					variant="standard"
 				/>
 			</Collapse>
-			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '180px' }}>
+			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '170px' }}>
 				<StyledButton
 					label={showRegister ? ButtonText.BACK : ButtonText.REGISTER}
 					onClick={() => {
@@ -189,7 +189,7 @@ const Login = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.HOME_TITLE} timeout={2500} ready={ready} skipVerification />;
+	return <HomePage markup={markup} title={HomeScreenText.HOME_TITLE} ready={ready} skipVerification />;
 };
 
 export default Login;

@@ -69,7 +69,7 @@ const UserSearchForm: React.FC = () => {
 	const renderAddBotButton = () => (
 		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
 			<div>
-				<ListItem className="list-item" style={{ paddingTop: 6 }}>
+				<ListItem className="list-item" style={{ paddingTop: 8 }}>
 					<ListItemText primary={`Add bot`} />
 					<Centered style={{ width: 30 }}>
 						<IconButton

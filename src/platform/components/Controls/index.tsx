@@ -9,12 +9,22 @@ import TableNotif from 'platform/components/Modals/TableNotif';
 import SettingsWindow from 'platform/components/SettingsWindow/SettingsWindow';
 import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BotIds, EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
-import { useBot, useControls, useGameCountdown, useHand, useHuLocked, useNotifs, useTAvail } from 'shared/hooks';
+import {
+	AppContext,
+	useBot,
+	useControls,
+	useGameCountdown,
+	useHand,
+	useHuLocked,
+	useNotifs,
+	useTAvail
+} from 'shared/hooks';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
+import { setGame, setGameId, setLocalGame, setTHK } from 'shared/store/actions';
 import { getCardName } from 'shared/util';
 import LeaveAlert from '../Modals/LeaveAlert';
 import OfferChiModal from '../Modals/OfferChiModal';
@@ -43,8 +53,19 @@ const Controls = () => {
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const { delayLeft } = useGameCountdown();
+	const { setPlayers } = useContext(AppContext);
+	const dispatch = useDispatch();
 
-	const handleHome = useCallback(() => history.push(Page.INDEX), []);
+	const handleHome = useCallback(() => {
+		setPlayers([user]);
+		dispatch(setGameId(''));
+		dispatch(setTHK(111));
+		dispatch(setGame(null));
+		dispatch(setLocalGame(null));
+		history.push(Page.INDEX);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, setPlayers, user?.id]);
+
 	const isLocalGame = useMemo(() => gameId === LocalFlag, [gameId]);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);

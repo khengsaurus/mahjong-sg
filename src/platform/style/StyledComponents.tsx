@@ -52,7 +52,7 @@ export const ScrollableBase = styled.div`
 `;
 
 export const Scrollable = styled(ScrollableBase)`
-	width: clamp(200px, 90%, 600px) !important;
+	width: clamp(200px, 86%, 600px) !important;
 	text-align: left;
 `;
 
@@ -66,11 +66,9 @@ export const Notification = styled.div`
 export const Main = styled(Centered)`
 	position: fixed;
 	top: 0;
-	right: 0;
-	bottom: 0;
 	left: 0;
-	height: 100%;
-	width: 100%;
+	height: 100vh;
+	width: 100vw;
 	font-family: 'Roboto', sans-serif;
 	background-color: ${props => props.theme.backgroundColor};
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -87,13 +85,15 @@ export const MainTransparent = styled(Main)`
 
 export const BottomSpec = styled.div`
 	position: absolute;
+	bottom: 0px;
 	display: flex;
 	flex-direction: row;
-	bottom: 4px;
-	font-size: 12px;
+	height: 24px;
 	margin-bottom: const(safe-area-inset-bottom);
 	margin-bottom: env(safe-area-inset-bottom);
 	color: ${props => props.theme.mainTextColor};
+	background-color: ${props => props.theme.backgroundColor};
+	transition: ${TransitionSpeed.FAST};
 `;
 
 export const BottomLeft = styled(BottomSpec)`
@@ -120,6 +120,64 @@ export const Wind = styled.div`
 	color: ${props => props.theme.backgroundColor};
 `;
 
+export const OverlayBackground = styled.div`
+	position: absolute;
+	top: calc(10px + const(safe-area-inset-top));
+	top: calc(10px + env(safe-area-inset-top));
+	right: calc(6px + const(safe-area-inset-right));
+	right: calc(6px + env(safe-area-inset-right));
+	bottom: calc(10px + const(safe-area-inset-bottom));
+	bottom: calc(10px + env(safe-area-inset-bottom));
+	left: calc(6px + const(safe-area-inset-left));
+	left: calc(6px + env(safe-area-inset-left));
+	border: 2px solid transparent;
+	background-color: transparent;
+	border-color: ${props => props.theme.tableColor};
+	transition: ${TransitionSpeed.FAST};
+	z-index: -1;
+`;
+
+const OverlayDecor = styled.div`
+	position: fixed;
+	height: 60px;
+	width: 60px;
+	background-color: ${props => props.theme.backgroundColor};
+	transition: ${TransitionSpeed.FAST};
+	z-index: -1;
+`;
+
+export const OverlayDecorTopLeft = styled(OverlayDecor)`
+	transform: rotate(90deg);
+	top: calc(10px + const(safe-area-inset-top));
+	top: calc(10px + env(safe-area-inset-top));
+	left: calc(6px + const(safe-area-inset-left));
+	left: calc(6px + env(safe-area-inset-left));
+`;
+
+export const OverlayDecorTopRight = styled(OverlayDecor)`
+	transform: rotate(90deg);
+	top: calc(10px + const(safe-area-inset-top));
+	top: calc(10px + env(safe-area-inset-top));
+	right: calc(6px + const(safe-area-inset-right));
+	right: calc(6px + env(safe-area-inset-right));
+`;
+
+export const OverlayDecorBottomLeft = styled(OverlayDecor)`
+	transform: scaleX(-1) rotate(180deg);
+	bottom: calc(10px + const(safe-area-inset-bottom));
+	bottom: calc(10px + env(safe-area-inset-bottom));
+	left: calc(6px + const(safe-area-inset-left));
+	left: calc(6px + env(safe-area-inset-left));
+`;
+
+export const OverlayDecorBottomRight = styled(OverlayDecor)`
+	transform: rotate(270deg);
+	bottom: calc(10px + const(safe-area-inset-bottom));
+	bottom: calc(10px + env(safe-area-inset-bottom));
+	right: calc(6px + const(safe-area-inset-right));
+	right: calc(6px + env(safe-area-inset-right));
+`;
+
 export const TableText = styled.p`
 	color: ${props => props.theme.tableTextColor};
 	margin: 0px 5px;
@@ -133,15 +191,6 @@ export const GreenTableText = styled.p`
 
 export const TileBack = styled.div`
 	background-color: ${props => props.theme.tileColor || 'teal'};
-`;
-
-export const VerticalDivider = styled.div`
-	position: relative;
-	top: 5%;
-	height: 80%;
-	max-height: 180px;
-	width: 1px;
-	background-color: ${props => props.theme.tableTextColor};
 `;
 
 export const Column = styled.div`

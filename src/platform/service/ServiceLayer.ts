@@ -5,7 +5,8 @@ import { LocalFlag, PaymentType, UserActivity } from 'shared/enums';
 import { ScoringHand } from 'shared/handEnums';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
-import { setLocalGame, store } from 'shared/store';
+import { store } from 'shared/store';
+import { setLocalGame } from 'shared/store/actions';
 import { createLocalGame } from 'shared/util';
 import { objToUser } from 'shared/util/parsers';
 

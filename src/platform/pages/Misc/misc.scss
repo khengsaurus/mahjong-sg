@@ -1,5 +1,15 @@
 @import '../../../App.scss';
 
+.scrollable {
+	position: fixed;
+	top: 40px;
+	bottom: 40px;
+	margin-top: const(safe-area-inset-top);
+	margin-top: env(safe-area-inset-top);
+	margin-bottom: const(safe-area-inset-bottom);
+	margin-bottom: env(safe-area-inset-bottom);
+}
+
 .content {
 	@include flow(column wrap);
 	-webkit-text-size-adjust: 100%;
@@ -7,35 +17,29 @@
 		text-align: center;
 	}
 
-	h3 {
-		font-weight: bold;
-		font-size: 1.2rem;
-		margin: 0px 0px 20px;
-	}
-
 	h4 {
 		font-weight: bold;
-		font-size: 1.1rem;
-		margin: 10px 0px;
+		font-size: 18px;
+		margin: 2px 10px;
 	}
 
 	p {
-		font-size: 1rem;
+		font-size: 15px;
 		display: block;
 		margin: 0px !important;
 	}
 
 	.ps {
 		font-style: italic;
-		font-size: 14px;
-		padding-bottom: 14px;
+		font-size: 15px;
+		padding-bottom: 15px;
 	}
 
 	ul {
 		margin: 5px 0px;
 		padding-inline-start: 12px;
 		li {
-			font-size: 14px;
+			font-size: 15px;
 			margin: 10px;
 		}
 	}
@@ -48,24 +52,12 @@
 		.logos {
 			padding: 0px 4px;
 			img {
-				max-height: 1rem;
-				max-width: 1rem;
+				margin-top: 4px;
+				align-self: center;
+				max-height: 22px;
+				max-width: 22px;
 				padding: 0 2px;
 			}
 		}
 	}
-}
-
-.scrollable {
-	padding: 40px 0px 0px;
-	margin-top: const(safe-area-inset-top);
-	margin-top: env(safe-area-inset-top);
-	&.centered {
-		width: 80%;
-	}
-}
-
-.home-button {
-	margin-bottom: const(safe-area-inset-bottom);
-	margin-bottom: env(safe-area-inset-bottom);
 }

@@ -15,8 +15,8 @@ export function getHighlightColor(color: TableColor | BackgroundColor) {
 		return red[500];
 	} else if ([TableColor.RED, BackgroundColor.RED].includes(color)) {
 		return teal[500];
-	} else if ([TableColor.YELLOW, BackgroundColor.YELLOW].includes(color)) {
-		return red[700];
+		// } else if ([TableColor.YELLOW, BackgroundColor.YELLOW].includes(color)) {
+		// 	return red[700];
 	} else if ([TableColor.BLUE, BackgroundColor.BLUE].includes(color)) {
 		return yellow[700];
 	} else {
@@ -261,8 +261,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 
 export const MuiStyles = {
 	large_dialog: {
-		maxWidth: '370px',
-		minWidth: '370px'
+		maxWidth: '360px'
 	},
 	medium_dialog: {
 		minHeight: '80px',
@@ -290,8 +289,8 @@ export const MuiStyles = {
 		height: '32px'
 	},
 	tabOptions: {
-		minWidth: '80px',
-		maxWidth: '80px',
+		minWidth: '67px',
+		maxWidth: '67px',
 		minHeight: '32px',
 		maxHeight: '32px'
 	},
