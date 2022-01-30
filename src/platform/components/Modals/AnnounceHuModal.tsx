@@ -4,9 +4,10 @@ import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { PaymentModalInline, SentLogs } from 'platform/components/Modals';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton, StyledCenterText } from 'platform/style/StyledMui';
-import { useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { PaymentType } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
 import { ButtonText, PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { AnnounceHuModalProps } from 'shared/typesPlus';
@@ -25,9 +26,12 @@ const AnnounceHuModal = ({
 	nextRound,
 	onClose: handleShow
 }: AnnounceHuModalProps) => {
+	const { setAnnHuOpen } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
 	const { hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);
+
+	useEffect(() => setAnnHuOpen(show), [setAnnHuOpen, show]);
 
 	const canHuFirst = useMemo((): boolean => {
 		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, n[7]) && !!HH?.maxPx;

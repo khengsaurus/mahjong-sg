@@ -24,7 +24,7 @@ const TopLeftControls = ({
 		gameId,
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
-	const { handleHome } = useContext(AppContext);
+	const { annHuOpen, handleHome } = useContext(AppContext);
 
 	function goHome() {
 		if (gameId === LocalFlag) {
@@ -41,12 +41,12 @@ const TopLeftControls = ({
 				<IconControlButton Icon={InfoIcon} onClick={handleAdmin} size={controlsSize} />
 				<IconControlButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
 				<IconControlButton
-					Icon={showText ? VisibilityIcon : VisibilityOffIcon}
+					Icon={showText && !annHuOpen ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}
 					size={controlsSize}
 				/>
 			</div>
-			{showText && (
+			{showText && !annHuOpen && (
 				<div className="text-container">
 					{texts?.map((text, index) => (
 						<TableText className="text" key={`top-left-text-${index}`}>
