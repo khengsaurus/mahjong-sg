@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { LocalFlag } from 'shared/enums';
 import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { getCardName, getRandomFoodEmoji, isMobile } from 'shared/util';
+import { getCardName, getRandomFoodEmoji } from 'shared/util';
 
 interface IChiAlertProps {
 	show: boolean;
@@ -44,12 +44,7 @@ const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertProps) => {
 			style={{ backgroundColor: tableColor }}
 			onClick={handleClick}
 		>
-			<StyledText
-				text={`${isMobile() ? ScreenTextEng.PRESS : ScreenTextEng.CLICK} ${
-					ScreenTextEng.HERE_TO_CHI
-				} ${cardName}`}
-				variant="body1"
-			/>
+			<StyledText text={`${ScreenTextEng.YOU_CAN_CHI} ${cardName}`} variant="body1" />
 			<StyledText text={`${foodEmoji}`} variant="body1" />
 			<IconButton className="icon-button" onClick={onClose} disableRipple ref={closeRef}>
 				<CloseIcon fontSize={'medium'} />

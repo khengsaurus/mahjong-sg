@@ -203,9 +203,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiTypography: {
 				styleOverrides: {
-					root: {
-						color: textColor
-					}
+					root: { color: textColor }
 				}
 			},
 			MuiMenuItem: {

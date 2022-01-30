@@ -6,26 +6,41 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Amounts, LocalFlag } from 'shared/enums';
 import { Game, User } from 'shared/models';
+import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
+import './paymentModal.scss';
 
 export async function sendChips(game: Game, from: number, to: number, amt: number, sendCallback?: () => void) {
 	ServiceInstance.sendPayment(game, game.id === LocalFlag, from, to, amt);
 	sendCallback && sendCallback();
 }
 
-const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => {
+const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 	const { game, gameId, localGame } = useSelector((store: IStore) => store);
 	const [toWho, setToWho] = useState(10);
 	const [amt, setAmt] = useState(0);
 	const isLocalGame = gameId === LocalFlag;
 	const currGame = isLocalGame ? localGame : game;
-	const playerUsername = currGame.ps[playerSeat].uN;
+	const { ps } = currGame;
+	const playerUsername = ps[playerSeat].uN;
 
 	function sendCallback() {
 		setToWho(10);
 		setAmt(0);
 		onClose();
+	}
+
+	function renderChips() {
+		return (
+			<div className="chips">
+				{ps.map((p: User, ix: number) => (
+					<div className="item">
+						<StyledText key={ix} text={`${p.uN}: ${p.bal}`} variant="subtitle1" padding="0px" />
+					</div>
+				))}
+			</div>
+		);
 	}
 
 	const handleSelectRecipient = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,48 +63,59 @@ const PaymentModal = ({ playerSeat, show, updateGame, onClose }: ModalProps) => 
 			}}
 		>
 			<DialogContent>
-				<StyledText text="Send chips to: " variant="subtitle1" padding="3px 0px" />
-				<RadioGroup row value={toWho} onChange={handleSelectRecipient}>
-					{currGame.ps.map((otherPlayer: User, index: number) =>
+				<StyledText text={`${ScreenTextEng.CHIPS_DIST}:`} variant="subtitle1" padding="4px 0px" />
+				{renderChips()}
+				<StyledText text="Send chips to: " variant="subtitle1" padding="10px 0px 4px" />
+				<RadioGroup
+					row
+					value={toWho}
+					onChange={handleSelectRecipient}
+					style={{ height: 32, alignContent: 'center' }}
+				>
+					{ps.map((otherPlayer: User, index: number) =>
 						otherPlayer.uN !== playerUsername ? (
 							<FormControlLabel
 								key={otherPlayer.uN}
 								value={index}
-								control={<Radio disableRipple />}
+								control={<Radio style={{ height: '32px', width: '32px' }} disableRipple />}
+								style={{ width: '110px' }}
 								label={otherPlayer.uN}
 							/>
 						) : null
 					)}
 				</RadioGroup>
 
-				<StyledText text="Amount: " variant="subtitle1" padding="3px 0px" />
-				<RadioGroup row style={{ width: '90%' }} value={amt} onChange={handleSelectAmount}>
+				<StyledText text={`${ButtonText.AMOUNT}:`} variant="subtitle1" padding="4px 0px" />
+				<RadioGroup
+					row
+					value={amt}
+					onChange={handleSelectAmount}
+					style={{ height: 64, alignContent: 'center' }}
+				>
 					{Amounts.map(
 						(amt: number, index: number) =>
 							amt > 0 && (
 								<FormControlLabel
 									key={index}
+									label={amt}
 									value={amt}
-									control={<Radio />}
-									label={`${amt}`}
-									labelPlacement="end"
+									control={<Radio style={{ height: '32px', width: '32px' }} disableRipple />}
 									style={{ width: '60px' }}
+									labelPlacement="end"
 								/>
 							)
 					)}
 				</RadioGroup>
 
 				<Button
-					style={{ position: 'absolute', bottom: 9, right: 5 }}
+					style={{ position: 'absolute', bottom: 6, right: 5 }}
 					variant="text"
-					size="large"
-					onClick={() => {
-						sendChips(currGame, playerSeat, toWho, amt, sendCallback);
-					}}
+					size="medium"
+					onClick={() => sendChips(currGame, playerSeat, toWho, amt, sendCallback)}
 					disabled={toWho === 9 || !amt || amt <= 0}
 					disableRipple
 				>
-					{`Send`}
+					{ButtonText.SEND}
 				</Button>
 			</DialogContent>
 		</Dialog>

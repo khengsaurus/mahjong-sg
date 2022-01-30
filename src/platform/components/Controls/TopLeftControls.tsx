@@ -1,17 +1,18 @@
-import InfoIcon from '@mui/icons-material/Info';
 import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconControlButton from 'platform/components/Buttons/IconControlButton';
 import { TableText } from 'platform/style/StyledComponents';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { LocalFlag, Size } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
 const TopLeftControls = ({
-	handleHome,
 	handleSettings,
 	handleScreenText,
 	handleAdmin,
@@ -23,6 +24,7 @@ const TopLeftControls = ({
 		gameId,
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
+	const { handleHome } = useContext(AppContext);
 
 	function goHome() {
 		if (gameId === LocalFlag) {

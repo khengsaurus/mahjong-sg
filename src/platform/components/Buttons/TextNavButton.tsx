@@ -2,12 +2,9 @@ import { history } from 'App';
 import { useDocumentListener } from 'platform/hooks';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { EEvent, Page, PageName, Shortcut } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ButtonText } from 'shared/screenTexts';
-import { IStore } from 'shared/store';
-import { setGame, setGameId, setLocalGame, setTHK } from 'shared/store/actions';
 
 interface TextNavButtonProps extends IHasStyle {
 	label: PageName | ButtonText;
@@ -38,29 +35,13 @@ const TextNavButton = ({
 	return <StyledButton label={label} navigate={route} onClick={onClick} style={{ ...style }} />;
 };
 
-const HomeButton = ({ style = {}, label = PageName.HOME, disableShortcut = false }: IHomeButton) => {
-	const dispatch = useDispatch();
-	const { user } = useSelector((store: IStore) => store);
-	const { setPlayers } = useContext(AppContext);
-
-	const handleNav = useCallback(() => {
-		setPlayers([user]);
-		dispatch(setGameId(''));
-		dispatch(setTHK(111));
-		dispatch(setGame(null));
-		dispatch(setLocalGame(null));
-		if (!user) {
-			history.push(Page.LOGIN);
-		} else {
-			history.push(Page.INDEX);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, setPlayers, user?.id]);
+const HomeButton = ({ style = {}, label = PageName.HOME, disableShortcut = false, callback = null }: IHomeButton) => {
+	const { handleHome } = useContext(AppContext);
 
 	return (
 		<TextNavButton
 			label={label}
-			onClick={handleNav}
+			onClick={() => (callback ? callback() : handleHome())}
 			shortcut={Shortcut.HOME}
 			style={style}
 			disableShortcut={disableShortcut}

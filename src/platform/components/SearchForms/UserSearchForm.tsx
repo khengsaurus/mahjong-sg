@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { Bot, BotIds, BotName, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { User } from 'shared/models';
+import { ButtonText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './searchForm.scss';
 
@@ -67,10 +68,10 @@ const UserSearchForm: React.FC = () => {
 	};
 
 	const renderAddBotButton = () => (
-		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
+		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }}>
 			<div>
 				<ListItem className="list-item" style={{ paddingTop: 8 }}>
-					<ListItemText primary={`Add bot`} />
+					<ListItemText primary={ButtonText.ADD_BOT} />
 					<Centered style={{ width: 30 }}>
 						<IconButton
 							onClick={() => {
@@ -79,7 +80,7 @@ const UserSearchForm: React.FC = () => {
 									setPlayers([...players, generateBot()]);
 								}
 							}}
-							disabled={showOptions}
+							disabled={showOptions || players.length === 4}
 							disableRipple
 						>
 							<AddIcon />
@@ -97,7 +98,7 @@ const UserSearchForm: React.FC = () => {
 	return (
 		<Centered className="search-form-container">
 			<List>
-				<ListItem className="search-box list-item" style={{ marginBottom: '8px' }}>
+				<ListItem className="search-box list-item" style={{ marginBottom: '3px' }}>
 					<TextField
 						id="search-input"
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}
@@ -147,7 +148,6 @@ const UserSearchForm: React.FC = () => {
 					in={showOptions && foundUsers.length > 0}
 					className="search-box list-item"
 					timeout={Transition.FAST}
-					unmountOnExit
 				>
 					{foundUsers.map(foundUser =>
 						user && user.id !== foundUser.id && notSelected(foundUser) ? (
@@ -155,13 +155,9 @@ const UserSearchForm: React.FC = () => {
 								className="list-item"
 								button
 								key={foundUser.id}
-								style={{
-									borderRadius: '5px'
-								}}
+								style={{ borderRadius: '5px' }}
 								onClick={() => {
-									if (players?.length < 3) {
-										refocusInput();
-									}
+									players?.length < 3 && refocusInput();
 									handleSelect(foundUser);
 								}}
 							>

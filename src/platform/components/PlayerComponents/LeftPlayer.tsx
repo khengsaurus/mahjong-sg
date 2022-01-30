@@ -12,7 +12,7 @@ import './playerComponents.scss';
 const LeftPlayer = (props: PlayerComponentProps) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
-	const { revealBot } = useContext(AppContext);
+	const { showBot } = useContext(AppContext);
 	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
 	const {
 		sizes: { tileSize = Size.MEDIUM },
@@ -34,14 +34,14 @@ const LeftPlayer = (props: PlayerComponentProps) => {
 		ref: shownHiddenHandRef,
 		countTs: player.allHiddenTiles().length,
 		tileSize,
-		flag: sT || revealBot,
+		flag: sT || showBot,
 		addPx: isEmpty(lTa) ? 0 : _HiddenTileWidth[tileSize]
 	});
 
 	return (
 		<div className={`column-section-${tileSize || Size.MEDIUM}`}>
 			{/* Hidden or shown hand */}
-			{revealBot || sT ? (
+			{showBot || sT ? (
 				<ShownHiddenHand
 					className="vtss left"
 					segment={Segment.LEFT}

@@ -15,7 +15,7 @@ import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
 import './gameInfo.scss';
 
-const padding0Height35 = {
+const padding0Height32 = {
 	padding: 0,
 	height: 32,
 	width: 200,
@@ -23,7 +23,7 @@ const padding0Height35 = {
 };
 
 const renderSwitch = (label: string, checked: boolean, handleChange: () => void, rightWidth: number) => (
-	<ListItem style={{ ...padding0Height35 }}>
+	<ListItem style={{ ...padding0Height32 }}>
 		<StyledText text={label} variant="body2" />
 		<Centered style={{ width: rightWidth }}>
 			<Switch checked={checked} onChange={handleChange} />
@@ -41,7 +41,7 @@ const renderSettingValue = (label: string, value: string, rightWidth: number) =>
 );
 
 const renderSettingCheck = (label: string, toggle: boolean, rightWidth: number) => (
-	<ListItem style={{ ...padding0Height35, height: 32 }}>
+	<ListItem style={{ ...padding0Height32 }}>
 		<StyledText text={label} variant="body2" />
 		<Centered style={{ width: rightWidth }}>
 			{toggle ? <CheckIcon fontSize={'small'} /> : <CloseIcon fontSize={'small'} />}
@@ -55,7 +55,7 @@ const renderBotTimeSelect = (
 	rightWidth: number
 ) => {
 	return (
-		<ListItem style={{ ...padding0Height35 }}>
+		<ListItem style={{ ...padding0Height32 }}>
 			<StyledText text={ButtonText.BOT_SPEED} variant="body2" />
 			<Centered style={{ width: rightWidth }}>
 				<Select
@@ -79,7 +79,7 @@ const renderBotTimeSelect = (
 
 const GameInfo = ({ game, show, onClose }: ModalProps) => {
 	const { cO, id: gameId, f = [], n = [], pay, ps, sHs } = game;
-	const { revealBot, setRevealBot } = useContext(AppContext);
+	const { showBot, setShowBot } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
 	const [manualHu, setManualHu] = useState<boolean>(f[6]);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(n[10]));
@@ -141,7 +141,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 					</>
 				)}
 				{gameId === LocalFlag &&
-					renderSwitch(ButtonText.REVEAL_BOT_HANDS, revealBot, () => setRevealBot(!revealBot), rightWidth)}
+					renderSwitch(ButtonText.SHOW_BOT_HANDS, showBot, () => setShowBot(!showBot), rightWidth)}
 			</DialogContent>
 		</Dialog>
 	);

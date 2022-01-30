@@ -1,22 +1,21 @@
 import { Fade } from '@mui/material';
-import { history } from 'App';
 import { isEmpty } from 'lodash';
 import {
 	AnnounceHuModal,
 	DeclareHuModal,
 	GameInfo,
-	PaymentModal,
-	TableNotif,
 	LeaveAlert,
 	OfferChiModal,
-	SingleActionModal
+	PaymentModal,
+	SingleActionModal,
+	TableNotif
 } from 'platform/components/Modals';
 import SettingsWindow from 'platform/components/SettingsWindow';
 import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BotIds, EEvent, LocalFlag, Page, Shortcut, Transition } from 'shared/enums';
+import { useSelector } from 'react-redux';
+import { BotIds, EEvent, LocalFlag, Shortcut, Transition } from 'shared/enums';
 import {
 	AppContext,
 	useBot,
@@ -29,7 +28,6 @@ import {
 } from 'shared/hooks';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { setGame, setGameId, setLocalGame, setTHK } from 'shared/store/actions';
 import { getCardName } from 'shared/util';
 import ChiAlert from './ChiAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
@@ -55,18 +53,7 @@ const Controls = () => {
 	const { lThAvail, lThAvailHu } = useTAvail();
 	const { isHuLocked } = useHuLocked();
 	const { delayLeft } = useGameCountdown();
-	const { setPlayers } = useContext(AppContext);
-	const dispatch = useDispatch();
-
-	const handleHome = useCallback(() => {
-		setPlayers([user]);
-		dispatch(setGameId(''));
-		dispatch(setTHK(111));
-		dispatch(setGame(null));
-		dispatch(setLocalGame(null));
-		history.push(Page.INDEX);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, setPlayers, user?.id]);
+	const { handleHome } = useContext(AppContext);
 
 	const isLocalGame = useMemo(() => gameId === LocalFlag, [gameId]);
 	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
@@ -93,7 +80,7 @@ const Controls = () => {
 		handleChi,
 		setExec,
 		setGamePaused
-	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, updateGame, handleHome, notifOutput);
+	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, notifOutput, updateGame);
 	useBot(isHuLocked, lThAvail, setExec);
 	const { cO, f = [], hu = [], lTh = {}, n = [], ps = [] } = game || {};
 
@@ -180,7 +167,10 @@ const Controls = () => {
 					Component={<DeclareHuModal HH={HH} {...declareHuModal} />}
 				/>
 				<FadeWrapper show={gameInfoModal?.show} Component={<GameInfo {...gameInfoModal} />} />
-				<FadeWrapper show={showAnnounceHuModal} Component={<AnnounceHuModal HH={HH} {...announceHuModal} />} />
+				<FadeWrapper
+					show={showAnnounceHuModal}
+					Component={<AnnounceHuModal HH={HH} {...announceHuModal} handleHome={_handleHome} />}
+				/>
 				<FadeWrapper show={Number(notif?.timeout) > 0} Component={<TableNotif {...notif} />} />
 				<FadeWrapper
 					show={showLeaveAlert}
@@ -229,3 +219,20 @@ const Controls = () => {
 };
 
 export default Controls;
+
+/**
+ * const [showScoreboard, setShowScoreboard] = useState(false);
+ * useEffect(() => {
+ * 	if (f[1] && n[0] !== 1 && n[0] % 4 === 0) {
+ * 		setShowScoreboard(true);
+ * 	} else {
+ * 		setShowScoreboard(false);
+ * 	}
+ * 	// eslint-disable-next-line react-hooks/exhaustive-deps
+ * }, [f[1], n[0]]);
+ *
+ * <FadeWrapper
+ * show={showScoreboard}
+ * Component={<Scoreboard show={showScoreboard} onClose={() => setShowScoreboard(false)} handleHome={_handleHome} />}
+ * />;
+ */

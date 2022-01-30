@@ -439,6 +439,7 @@ export class FirebaseService {
 				shuffledPlayers.forEach(player => {
 					es.push(player.email);
 					pS = pS === '' ? player.uN : pS + `, ${player.uN}`;
+					player.bal = 1000;
 				});
 				let cA = new Date();
 				let gameId = '';
@@ -448,31 +449,16 @@ export class FirebaseService {
 						cA,
 						pS,
 						es,
-						on: false,
-						p: true,
-						up: cA,
-						dF: null,
-						st: 1,
-						pr: 0,
-						dealer: 0,
-						mid: false,
-						fN: false,
-						wM: 0,
+						t: [cA, cA, null],
+						f: [true, false, false, false, false, false, mHu],
+						n: [1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM],
 						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
-						fr: [0, 0],
-						th: false,
-						thB: 0,
 						lastT: {},
-						ta: true,
-						taB: 0,
 						hu: [],
-						draw: false,
 						logs: [],
 						sk: [],
 						prE: {},
-						px: [gMinPx, gMaxPx],
-						mHu,
 						sHs,
 						pay
 					}).then(newGame => {

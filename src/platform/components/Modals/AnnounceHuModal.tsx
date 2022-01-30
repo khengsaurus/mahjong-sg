@@ -1,18 +1,17 @@
 import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
-import { PaymentModalInline } from 'platform/components/Modals';
+import { PaymentModalInline, SentLogs } from 'platform/components/Modals';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton, StyledCenterText } from 'platform/style/StyledMui';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { PaymentType } from 'shared/enums';
-import { ButtonText, PaymentLabel } from 'shared/screenTexts';
+import { ButtonText, PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { AnnounceHuModalProps } from 'shared/typesPlus';
 import { getHandDesc, isBefore } from 'shared/util';
 import './announceHuModal.scss';
-import SentLogs from './SentLogs';
 
 const AnnounceHuModal = ({
 	game,
@@ -20,6 +19,8 @@ const AnnounceHuModal = ({
 	show,
 	HH,
 	showNextRound,
+	handleHome,
+	handleChips,
 	huFirst,
 	nextRound,
 	onClose: handleShow
@@ -36,9 +37,7 @@ const AnnounceHuModal = ({
 	const sentLogs = useMemo(() => {
 		const huLogIndex = logs?.findIndex(l => l.includes('hu with'));
 		const sent = logs?.slice(huLogIndex)?.filter(log => log.includes('sent')) || [];
-		return sent.map(log => {
-			return log.replace(`${ps[whoHu].uN} `, '').replace(user?.uN, log.startsWith(user?.uN) ? 'You' : 'you');
-		});
+		return sent.map(log => log.replace(user?.uN, log.startsWith(user?.uN) ? 'You' : 'you'));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [logs?.length]);
 
@@ -53,7 +52,7 @@ const AnnounceHuModal = ({
 				.map((p: string, ix: number) => (
 					<StyledCenterText
 						key={ix}
-						// title={p}
+						// text={p}
 						text={getHandDesc(p)}
 					/>
 				))
@@ -75,7 +74,7 @@ const AnnounceHuModal = ({
 		return Number(hu[2]) === 0 && n[7] !== Number(hu[0]) && !isEmpty(lTh)
 			? `Last tile thrown by ${n[7] === playerSeat ? 'you' : ps[n[7]]?.uN}.`
 			: Number(hu[2] === 1)
-			? `Last tile self drawn.`
+			? `${ScreenTextEng.LAST_TILE_SELF_DRAWN}.`
 			: ``;
 	}
 
@@ -109,33 +108,34 @@ const AnnounceHuModal = ({
 						</div>
 					</>
 				)}
-				{(!f[0] || f[5] || n[2] === 9) &&
-					(f[5] ? (
-						<>
-							<StyledCenterText text={`Draw!`} variant="h6" padding="6px" />
-							<StyledCenterText text={`15 tiles left`} variant="subtitle1" padding="0px" />
-						</>
-					) : (
-						<StyledCenterText text={`The game has ended!`} variant="subtitle1" padding="6px 0px" />
-					))}
+				{(!f[0] || f[5] || n[2] === 9) && f[5] && (
+					<>
+						<StyledCenterText text={ScreenTextEng.DRAW_GAME} variant="h6" padding="3px" />
+						<StyledCenterText text={ScreenTextEng.FIFTEEN_LEFT} variant="subtitle1" padding="0px" />
+						{n[2] === 9 && (
+							<StyledCenterText text={ScreenTextEng.GAME_ENDED} variant="subtitle1" padding="3px 0px" />
+						)}
+					</>
+				)}
 			</DialogContent>
 			<DialogActions
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'space-between',
-					padding: '0px 6px',
+					padding: '2px 6px 0px',
 					marginTop: '-4px'
 				}}
 			>
-				<HomeButton style={{ padding: '10px' }} />
+				<HomeButton callback={handleHome} />
+				<StyledButton label={ButtonText.CHIPS} onClick={handleChips} />
 				{hu[0] !== playerSeat &&
 					(canHuFirst ? (
-						<StyledButton label={ButtonText.HU} onClick={huFirst} padding="10px" />
+						<StyledButton label={ButtonText.HU} onClick={huFirst} />
 					) : (
-						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} padding="10px" />
+						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} />
 					))}
-				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} padding="10px" />}
+				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} />}
 			</DialogActions>
 		</Dialog>
 	);

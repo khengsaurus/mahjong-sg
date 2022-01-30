@@ -2,7 +2,6 @@ import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@material-ui/core';
-import { history } from 'App';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader, NetworkLoader } from 'platform/components/Loader';
@@ -11,9 +10,10 @@ import { useAndroidBack, useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
 import { Centered, Main, Row } from 'platform/style/StyledComponents';
 import { StyledCenterText, StyledText } from 'platform/style/StyledMui';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { EEvent, Page, Platform, Status } from 'shared/enums';
+import { EEvent, Platform, Status } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
 import { HomeScreenText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './home.scss';
@@ -38,6 +38,7 @@ const HomePage = ({
 	skipVerification = false,
 	offsetKeyboard = 0
 }: HomePageProps) => {
+	const { handleHome } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
@@ -78,9 +79,7 @@ const HomePage = ({
 		};
 	}, [isIOS, keyboardAvail, offsetKeyboard]);
 
-	useAndroidBack(() => {
-		history.push(Page.HOME);
-	});
+	useAndroidBack(() => handleHome());
 
 	/* ------------------ End keyboard offset for iOS + Android back button handling ------------------ */
 
