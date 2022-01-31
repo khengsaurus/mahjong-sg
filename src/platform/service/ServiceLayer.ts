@@ -234,7 +234,7 @@ export class Service {
 	}
 
 	cleanupGames(userEmail: string) {
-		FBService.cleanupFinishedGames(userEmail);
+		FBService.cleanupGames(userEmail);
 	}
 
 	// For dev

@@ -60,7 +60,7 @@ const Controls = () => {
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
 	const { showChiAlert, setShowChiAlert, toChi } = notifOutput;
 
-	const { HH, HHStr } = useHand();
+	const { HH } = useHand();
 	const {
 		game,
 		notif,
@@ -80,7 +80,7 @@ const Controls = () => {
 		handleChi,
 		setExec,
 		setGamePaused
-	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, HHStr, notifOutput, updateGame);
+	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, notifOutput, HH, updateGame);
 	useBot(isHuLocked, lThAvail, setExec);
 	const { cO, f = [], hu = [], lTh = {}, n = [], ps = [] } = game || {};
 

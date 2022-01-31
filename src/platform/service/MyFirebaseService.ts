@@ -390,7 +390,7 @@ export class FirebaseService {
 		});
 	}
 
-	async cleanupFinishedGames(userEmail: string) {
+	async cleanupGames(userEmail: string) {
 		if (userEmail && this.isFBConnected) {
 			const q = query(this.gamesRef, where('es', 'array-contains', userEmail));
 			const games = await getDocsFromServer(q);
@@ -398,7 +398,7 @@ export class FirebaseService {
 				let lastUpdated = g.data()?.t[1];
 				if (lastUpdated && lastUpdated?.toDate) {
 					lastUpdated = lastUpdated?.toDate() as Date;
-					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 24) {
+					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23) {
 						deleteDoc(doc(this.gamesRef, g.id)).catch(err => console.error(err));
 					}
 				}

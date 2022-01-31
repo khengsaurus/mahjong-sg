@@ -31,7 +31,10 @@ const AnnounceHuModal = ({
 	const { hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);
 
-	useEffect(() => setAnnHuOpen(show), [setAnnHuOpen, show]);
+	useEffect(() => {
+		setAnnHuOpen(hu.length > 2 || f[5]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [hu.length, f[5], show]);
 
 	const canHuFirst = useMemo((): boolean => {
 		return playerSeat !== whoHu && isBefore(playerSeat, whoHu, n[7]) && !!HH?.maxPx;

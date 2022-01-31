@@ -1,4 +1,5 @@
 import { Fade } from '@mui/material';
+import { isEmpty } from 'lodash';
 import { ControlButton } from 'platform/components/Buttons/ControlButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
@@ -19,13 +20,13 @@ const BottomLeftControls = (props: BLControlsProps) => {
 		pongText,
 		confirmHu,
 		showDeclareHu,
-		HHStr,
-		highlight
+		highlight,
+		HH
 	} = props;
 	const {
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);
-	const showKai = confirmHu && !showDeclareHu && !!HHStr && !disableHu;
+	const showKai = confirmHu && !showDeclareHu && !disableHu && !isEmpty(HH);
 
 	return (
 		<div
