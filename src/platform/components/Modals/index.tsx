@@ -6,7 +6,6 @@ import OfferChiModal from './OfferChiModal';
 import GameInfo from './GameInfo';
 import PaymentModal from './PaymentModal';
 import PaymentModalInline from './PaymentModalInline';
-import Scoreboard from './Scoreboard';
 import SentLogs from './SentLogs';
 import SingleActionModal from './SingleActionModal';
 import TableNotif from './TableNotif';
@@ -20,7 +19,6 @@ export {
 	OfferChiModal,
 	PaymentModal,
 	PaymentModalInline,
-	Scoreboard,
 	SentLogs,
 	SingleActionModal,
 	TableNotif

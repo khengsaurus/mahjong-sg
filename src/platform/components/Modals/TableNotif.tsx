@@ -12,6 +12,7 @@ import { triggerHaptic } from 'shared/util';
 
 const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifProps) => {
 	const { haptic } = useSelector((store: IStore) => store);
+	const hasMoreThanOneAction = (!!pong ? 1 : 0) + (!!kang ? 1 : 0) + (!!hu ? 1 : 0) > 1;
 
 	useEffect(() => {
 		if (haptic && !!notifs.find(notif => notif.includes('You can'))) {
@@ -24,13 +25,9 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 		<Dialog
 			open={timeout > 0}
 			BackdropProps={{ invisible: true }}
-			PaperProps={{
-				style: {
-					...MuiStyles.small_dialog
-				}
-			}}
+			PaperProps={{ style: { ...MuiStyles.small_dialog } }}
 		>
-			<DialogContent style={{ paddingBottom: 0 }}>
+			<DialogContent>
 				<Centered>
 					{notifs[0] && <StyledText text={notifs[0]} variant="subtitle1" padding="3px 0px" />}
 					<StyledText text={`${timeout}`} variant="subtitle1" padding="0px" />
@@ -42,16 +39,7 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifPr
 							))}
 				</Centered>
 			</DialogContent>
-			<DialogActions
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					marginTop: '-4px',
-					padding: '0px',
-					minHeight: '16px'
-				}}
-			>
+			<DialogActions style={hasMoreThanOneAction ? {} : { ...MuiStyles.single_action }}>
 				{pong && <StyledButton label={'Pong'} onClick={pong} />}
 				{kang && <StyledButton label={'Kang'} onClick={kang} />}
 				{hu && <StyledButton label={'Hu'} onClick={hu} />}

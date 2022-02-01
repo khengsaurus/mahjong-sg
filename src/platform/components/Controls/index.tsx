@@ -93,7 +93,7 @@ const Controls = () => {
 		const first_p = ps[n[3]];
 		const botToGoFirst = BotIds.includes(first_p?.id);
 		if (f[1]) {
-			setShowStart(botToGoFirst || first_p.uN !== user.uN);
+			setShowStart(hu.length < 3 && (botToGoFirst || first_p.uN !== user.uN));
 			setStartPrompt(
 				cO === user?.uN && botToGoFirst
 					? ScreenTextEng.START_PROMPT
@@ -159,7 +159,13 @@ const Controls = () => {
 				<TopRightControls {...topRight} />
 				<TopLeftControls {...topLeft} />
 				{showBottomControls && <BottomLeftControls {...bottomLeft} setShowChiAlert={setShowChiAlert} />}
-				{showBottomControls && <BottomRightControls {...bottomRight} setShowChiAlert={setShowChiAlert} />}
+				{showBottomControls && (
+					<BottomRightControls
+						{...bottomRight}
+						showChiAlert={showChiAlert}
+						setShowChiAlert={setShowChiAlert}
+					/>
+				)}
 				<FadeWrapper show={payModal?.show} Component={<PaymentModal {...payModal} />} />
 				<FadeWrapper show={settingsModal?.show} Component={<SettingsWindow {...settingsModal} />} />
 				<FadeWrapper
@@ -171,7 +177,8 @@ const Controls = () => {
 					show={showAnnounceHuModal}
 					Component={<AnnounceHuModal HH={HH} {...announceHuModal} handleHome={_handleHome} />}
 				/>
-				<FadeWrapper show={Number(notif?.timeout) > 0} Component={<TableNotif {...notif} />} />
+				{/* <FadeWrapper show={Number(notif?.timeout) > 0} Component={<TableNotif {...notif} />} /> */}
+				<FadeWrapper show={true} Component={<TableNotif {...notif} />} />
 				<FadeWrapper
 					show={showLeaveAlert}
 					Component={<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />}
@@ -219,20 +226,3 @@ const Controls = () => {
 };
 
 export default Controls;
-
-/**
- * const [showScoreboard, setShowScoreboard] = useState(false);
- * useEffect(() => {
- * 	if (f[1] && n[0] !== 1 && n[0] % 4 === 0) {
- * 		setShowScoreboard(true);
- * 	} else {
- * 		setShowScoreboard(false);
- * 	}
- * 	// eslint-disable-next-line react-hooks/exhaustive-deps
- * }, [f[1], n[0]]);
- *
- * <FadeWrapper
- * show={showScoreboard}
- * Component={<Scoreboard show={showScoreboard} onClose={() => setShowScoreboard(false)} handleHome={_handleHome} />}
- * />;
- */

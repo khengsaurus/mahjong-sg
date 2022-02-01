@@ -58,11 +58,11 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 			onClose={onClose}
 			PaperProps={{
 				style: {
-					...MuiStyles.large_dialog
+					...MuiStyles.medium_dialog
 				}
 			}}
 		>
-			<DialogContent>
+			<DialogContent style={{paddingBottom: '10px'}}>
 				<StyledText text={`${ScreenTextEng.CHIPS_DIST}:`} variant="subtitle1" padding="4px 0px" />
 				{renderChips()}
 				<StyledText text="Send chips to: " variant="subtitle1" padding="10px 0px 4px" />
@@ -90,7 +90,7 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 					row
 					value={amt}
 					onChange={handleSelectAmount}
-					style={{ height: 64, alignContent: 'center' }}
+					style={{ height: 64, alignContent: 'center', width: 300 }}
 				>
 					{Amounts.map(
 						(amt: number, index: number) =>

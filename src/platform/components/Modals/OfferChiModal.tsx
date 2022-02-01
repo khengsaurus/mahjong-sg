@@ -27,7 +27,7 @@ const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalPr
 
 	return (
 		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
-			<DialogContent>
+			<DialogContent style={{paddingBottom: '10px'}}>
 				<StyledCenterText text={title} variant="subtitle1" padding="3px 0px" />
 				<Centered>
 					<Column>

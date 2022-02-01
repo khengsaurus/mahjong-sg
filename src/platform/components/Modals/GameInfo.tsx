@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { BotIds, BotTimeout, LocalFlag, PaymentType } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext } from 'shared/hooks';
-import { ButtonText, PaymentLabel } from 'shared/screenTexts';
+import { PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { ModalProps } from 'shared/typesPlus';
 import './gameInfo.scss';
@@ -56,7 +56,7 @@ const renderBotTimeSelect = (
 ) => {
 	return (
 		<ListItem style={{ ...padding0Height32 }}>
-			<StyledText text={ButtonText.BOT_SPEED} variant="body2" />
+			<StyledText text={ScreenTextEng.BOT_SPEED} variant="body2" />
 			<Centered style={{ width: rightWidth }}>
 				<Select
 					value={label}
@@ -123,9 +123,9 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 				}
 			}}
 		>
-			<DialogContent>
+			<DialogContent style={{ paddingBottom: '10px' }}>
 				{renderSettingValue(`${PaymentLabel.LABEL}`, `${PaymentLabel[pay]}`, rightWidth)}
-				{renderSettingValue(`${ButtonText.MINMAXTAI}`, `${n[8]} / ${n[9]}`, rightWidth)}
+				{renderSettingValue(`${ScreenTextEng.MINMAXTAI}`, `${n[8]} / ${n[9]}`, rightWidth)}
 				{renderSettingCheck(
 					HandDescEng.CONCEALED,
 					sHs.includes(ScoringHand.CONCEALED) ? false : true,
@@ -133,15 +133,13 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 				)}
 				{renderSettingCheck(HandDescEng.SEVEN, sHs.includes(ScoringHand.SEVEN) ? false : true, rightWidth)}
 				{renderSettingCheck(HandDescEng.GREEN, sHs.includes(ScoringHand.GREEN) ? false : true, rightWidth)}
-				{user?.uN === cO && (
-					<>
-						{!!ps.find(p => BotIds.includes(p.id)) &&
-							renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}
-						{renderSwitch(ButtonText.MANUAL_HU, manualHu, () => setManualHu(prev => !prev), rightWidth)}
-					</>
-				)}
+				{user?.uN === cO &&
+					renderSwitch(ScreenTextEng.MANUAL_HU, manualHu, () => setManualHu(prev => !prev), rightWidth)}
 				{gameId === LocalFlag &&
-					renderSwitch(ButtonText.SHOW_BOT_HANDS, showBot, () => setShowBot(!showBot), rightWidth)}
+					renderSwitch(ScreenTextEng.SHOW_BOT_HANDS, showBot, () => setShowBot(!showBot), rightWidth)}
+				{user?.uN === cO &&
+					!!ps.find(p => BotIds.includes(p.id)) &&
+					renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}
 			</DialogContent>
 		</Dialog>
 	);

@@ -295,6 +295,11 @@ $log-margin-left-medium: 5px;
 }
 /* -------------------- Mixins -------------------- */
 
+@mixin default-modal-border {
+	box-shadow: 0 0 15px rgb(58, 58, 58);
+	border-radius: $default-border-radius;
+}
+
 @mixin alignI-justifyC($i, $c) {
 	align-items: #{$i};
 	justify-content: #{$c};

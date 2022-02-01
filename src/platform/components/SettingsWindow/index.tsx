@@ -20,7 +20,7 @@ import {
 } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
-import { ButtonText } from 'shared/screenTexts';
+import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setHaptic, setSizes, setTheme } from 'shared/store/actions';
 import { ModalProps } from 'shared/typesPlus';
@@ -166,7 +166,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 
 		return (
 			<Dialog open={showDeleteAlert} BackdropProps={{ invisible: true }} onClose={handleClose}>
-				<DialogContent style={{ paddingBottom: 0 }}>
+				<DialogContent>
 					<StyledText
 						text="Are you sure you wish to delete your account?"
 						variant="subtitle1"
@@ -179,11 +179,11 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 						textAlign="center"
 						padding="2px"
 					/>
-					<Row>
+					<Row style={{ marginTop: -4 }}>
 						<StyledButton label={ButtonText.CANCEL} onClick={handleClose} />
 						<StyledButton label={ButtonText.DELETE} onClick={handleDeleteAccount} />
 					</Row>
-					<Collapse in={!!alert} timeout={{ enter: Transition.FAST }} unmountOnExit>
+					<Collapse in={!!alert} timeout={{ enter: Transition.FAST }}>
 						<>
 							<Alert severity={alert?.status as AlertStatus}>
 								{alert?.msg || ErrorMessage.TRY_AGAIN}
@@ -216,7 +216,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 					}}
 					// style={{ transform }}
 				>
-					<DialogContent>
+					<DialogContent style={{ paddingBottom: '10px' }}>
 						<FormControl component="fieldset">
 							{preferences.map(preference =>
 								preference.size ? (
@@ -287,7 +287,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 								</Row>
 							) : (
 								<div className="preference no-margin">
-									<StyledText text={ButtonText.HAPTICS} variant="subtitle1" padding="0" />
+									<StyledText text={ScreenTextEng.HAPTICS} variant="subtitle1" padding="0" />
 									<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
 								</div>
 							)}

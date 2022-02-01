@@ -2,9 +2,5 @@
 
 .search-form-container {
 	width: $panel-segment-width;
-	// @include default-border;
-
-	.search-box {
-		margin: 5.5px 0px 5px;
-	}
+	transition: $transition-fast;
 }

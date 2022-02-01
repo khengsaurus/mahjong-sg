@@ -43,9 +43,10 @@ export const StyledText = ({
 	</Typography>
 );
 
-export const StyledCenterText = ({ text, padding, variant = 'body2' }: StyledTextProps) => (
+export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: StyledTextProps) => (
 	<Typography
 		style={{
+			...style,
 			justifySelf: 'center',
 			alignSelf: 'center',
 			textAlign: 'center',

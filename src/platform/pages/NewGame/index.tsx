@@ -30,7 +30,7 @@ import { BotIds, LocalFlag, Page, PaymentType, Status, Transition, TransitionSpe
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext, useAsync } from 'shared/hooks';
 import { User } from 'shared/models';
-import { ButtonText, HomeScreenText, PaymentLabel } from 'shared/screenTexts';
+import { ButtonText, HomeScreenText, PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setGameId, setTHK } from 'shared/store/actions';
 import { getTileHashKey } from 'shared/util';
@@ -165,8 +165,8 @@ const NewGame = () => {
 	);
 
 	const renderManualHu = () => (
-		<ListItem className="list-item">
-			<ListItemText secondary={ButtonText.MANUAL_HU} />
+		<ListItem className="list-item" style={{ padding: 0 }}>
+			<ListItemText secondary={ScreenTextEng.MANUAL_HU} />
 			<Centered style={{ width: 20 }}>
 				<IconButton onClick={() => setMHu(!mHu)} disableRipple>
 					{mHu ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
@@ -186,7 +186,7 @@ const NewGame = () => {
 	}
 
 	const renderPaymentType = () => (
-		<ListItem className="list-item">
+		<ListItem className="list-item" style={{ padding: 0 }}>
 			<ListItemText
 				secondary={
 					payment === PaymentType.NONE
@@ -223,7 +223,7 @@ const NewGame = () => {
 	const renderTaiSelect = (label: string, valueStr: string, handleChange: (e) => void) => {
 		const tai = [1, 2, 3, 4, 5].filter(t => (valueStr === minTaiStr ? t < maxTai : t > minTai));
 		return (
-			<ListItem className="list-item">
+			<ListItem className="list-item" style={{ padding: 0 }}>
 				<ListItemText secondary={label} />
 				<FormControl>
 					<Centered style={{ width: 20 }}>
@@ -255,7 +255,7 @@ const NewGame = () => {
 	};
 
 	const renderScoringHandOption = (s: ScoringHand) => (
-		<ListItem className="list-item">
+		<ListItem className="list-item" style={{ padding: 0 }}>
 			<ListItemText secondary={HandDescEng[s]} />
 			<Centered style={{ width: 20 }}>
 				<IconButton onClick={() => setScoringHands({ ...scoringHands, [s]: !scoringHands[s] })} disableRipple>
@@ -277,12 +277,12 @@ const NewGame = () => {
 								setShowOptions(false);
 							}}
 						>
-							<DialogContent>
+							<DialogContent style={{ paddingBottom: '10px' }}>
 								<List className="list">
 									{renderManualHu()}
 									{renderPaymentType()}
-									{renderTaiSelect(ButtonText.MINTAI, minTaiStr, handleMinTai)}
-									{renderTaiSelect(ButtonText.MAXTAI, maxTaiStr, handleMaxTai)}
+									{renderTaiSelect(ScreenTextEng.MINTAI, minTaiStr, handleMinTai)}
+									{renderTaiSelect(ScreenTextEng.MAXTAI, maxTaiStr, handleMaxTai)}
 									{renderScoringHandOption(ScoringHand.CONCEALED)}
 									{renderScoringHandOption(ScoringHand.SEVEN)}
 									{renderScoringHandOption(ScoringHand.GREEN)}

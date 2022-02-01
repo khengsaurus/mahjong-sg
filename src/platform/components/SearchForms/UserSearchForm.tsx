@@ -69,8 +69,8 @@ const UserSearchForm: React.FC = () => {
 
 	const renderAddBotButton = () => (
 		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }}>
-			<div>
-				<ListItem className="list-item" style={{ paddingTop: 0, marginTop: -1 }}>
+			<Centered>
+				<ListItem className="list-item">
 					<ListItemText primary={ButtonText.ADD_BOT} />
 					<Centered style={{ width: 30 }}>
 						<IconButton
@@ -87,7 +87,7 @@ const UserSearchForm: React.FC = () => {
 						</IconButton>
 					</Centered>
 				</ListItem>
-			</div>
+			</Centered>
 		</Fade>
 	);
 
@@ -98,7 +98,7 @@ const UserSearchForm: React.FC = () => {
 	return (
 		<Centered className="search-form-container">
 			<List>
-				<ListItem className="search-box list-item" style={{ marginBottom: '8px' }}>
+				<ListItem className="list-item" style={{ marginBottom: '8px' }}>
 					<TextField
 						id="search-input"
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}

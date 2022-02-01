@@ -21,19 +21,11 @@ const SingleActionModal = ({ show, text, buttonText, action }: ISingleActionProp
 				}
 			}}
 		>
-			<DialogContent style={{ paddingBottom: buttonText && action ? 0 : null }}>
+			<DialogContent style={{ paddingBottom: buttonText && action ? 0 : '10px' }}>
 				<StyledCenterText text={text} variant="subtitle1" padding="3px 0px" />
 			</DialogContent>
 			{buttonText && action && (
-				<DialogActions
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'center',
-						padding: '0px 8px',
-						minHeight: '14px'
-					}}
-				>
+				<DialogActions style={{ ...MuiStyles.single_action }}>
 					<StyledButton label={buttonText} onClick={action} />
 				</DialogActions>
 			)}

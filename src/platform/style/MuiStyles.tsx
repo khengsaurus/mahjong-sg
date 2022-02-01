@@ -2,7 +2,7 @@ import { blue, indigo, red, teal, yellow } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { BackgroundColor, TableColor, TextColor } from 'shared/enums';
+import { BackgroundColor, TableColor, TextColor, TransitionSpeed } from 'shared/enums';
 import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
 
@@ -122,10 +122,20 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					}
 				}
 			},
+			MuiDialogActions: {
+				styleOverrides: {
+					root: {
+						padding: '0px',
+						marginTop: '-4px',
+						justifyContent: 'space-between',
+						minHeight: '15px'
+					}
+				}
+			},
 			MuiDialogContent: {
 				styleOverrides: {
 					root: {
-						padding: '10px 15px',
+						padding: '10px 15px 0px 15px',
 						userSelect: 'none',
 						'&:first-of-type': { paddingTop: null }
 					}
@@ -187,11 +197,6 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						color: textColor,
 						backgroundColor: 'transparent !important'
 					}
-					// button: {
-					// 	'&:hover': {
-					// 		color: isMobile() ? `${textColor}` : `${highlightColor}`
-					// 	}
-					// }
 				}
 			},
 			MuiListItemText: {
@@ -203,7 +208,10 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			},
 			MuiTypography: {
 				styleOverrides: {
-					root: { color: textColor }
+					root: {
+						color: textColor,
+						margin: '4px 0px'
+					}
 				}
 			},
 			MuiMenuItem: {
@@ -259,17 +267,25 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 
 export const MuiStyles = {
 	large_dialog: {
-		maxWidth: '360px'
+		maxWidth: '500px',
+		transition: TransitionSpeed.MEDIUM
 	},
 	medium_dialog: {
 		minHeight: '80px',
 		minWidth: '200px',
-		maxWidth: '400px'
+		maxWidth: '450px',
+		transition: TransitionSpeed.MEDIUM
 	},
 	small_dialog: {
 		minHeight: '50px',
 		minWidth: '200px',
-		maxWidth: '320px'
+		maxWidth: '350px',
+		transition: TransitionSpeed.MEDIUM
+	},
+	single_action: {
+		justifyContent: 'center',
+		padding: '0px 8px',
+		minHeight: '15px'
 	},
 	topRight5: {
 		position: 'absolute',

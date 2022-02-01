@@ -1,3 +1,5 @@
+@import '../../../App.scss';
+
 @mixin column {
 	display: flex;
 	flex-direction: column;
@@ -10,17 +12,17 @@
 
 .ann-panels {
 	@include row;
-	justify-content: center;
 	margin-top: 3px;
+	align-items: center;
+	justify-content: center;
+	transition: $transition-fast;
 
 	.full-panel {
 		@include column;
-		align-items: center;
 	}
 
 	.left-panel {
 		@include column;
-		justify-content: center;
 		padding: 5px 10px 5px 0px;
 		margin-right: 10px;
 		max-width: 200px;
@@ -29,8 +31,6 @@
 
 	.right-panel {
 		@include column;
-		align-items: center;
-		justify-content: center;
-		max-width: 220px;
+		max-width: 200px;
 	}
 }

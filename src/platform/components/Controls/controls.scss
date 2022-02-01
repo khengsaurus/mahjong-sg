@@ -98,10 +98,9 @@
 			transition: $transition-fast;
 			&.expanded {
 				@include align-items-text(flex-start, start);
+				@include default-modal-border;
 				height: 4 * getIconButtonSize($size);
 				max-width: getLogLineWidth($size);
-				// padding-left: 2 * $main-padding;
-				@include default-border;
 			}
 		}
 		.log-box-#{$size}::-webkit-scrollbar {
@@ -125,12 +124,11 @@
 			bottom: getButtonHeight($size) + 10;
 			z-index: 15;
 			.chi-alert {
+				@include default-modal-border;
+				align-items: center;
+				justify-content: space-between;
 				height: 40px;
 				width: 180px;
-				justify-content: space-between;
-				align-items: center;
-				box-shadow: 0 0 15px rgb(58, 58, 58);
-				border-radius: $default-border-radius;
 				margin: 0px 4px;
 				padding: 0px 5px 0px 10px;
 				transition: $transition-medium;

@@ -17,21 +17,13 @@ const LeaveAlert = ({ show, onClose }: LeaveAlertProps) => {
 			}}
 			onClose={onClose}
 		>
-			<DialogContent style={{ paddingBottom: 0 }}>
+			<DialogContent>
 				<Centered>
 					<StyledText variant="subtitle1" text="Are you sure you want to leave?" padding="2px" />
 					<StyledText variant="subtitle2" text="This is a local game and won't be saved" padding="2px" />
 				</Centered>
 			</DialogContent>
-			<DialogActions
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					padding: '0px 8px',
-					minHeight: '14px'
-				}}
-			>
+			<DialogActions style={{ ...MuiStyles.single_action }}>
 				<HomeButton />
 			</DialogActions>
 		</Dialog>

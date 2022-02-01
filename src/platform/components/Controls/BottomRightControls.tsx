@@ -19,6 +19,7 @@ const BottomRightControls = (props: BRControlsProps) => {
 		disableThrow,
 		disableDraw,
 		drawText,
+		showChiAlert,
 		showDeclareHu,
 		taken,
 		HH
@@ -37,12 +38,7 @@ const BottomRightControls = (props: BRControlsProps) => {
 				label={drawText === GameTextChi.END ? GameTextChi.END : taken ? GameTextChi.THROW : GameTextChi.DRAW}
 				callback={() => {
 					if (!disableDraw || !disableThrow) {
-						setShowChiAlert(false);
-						if (!disableDraw) {
-							handleDraw();
-						} else {
-							handleThrow();
-						}
+						disableDraw ? handleThrow() : showChiAlert ? setShowChiAlert(false) : handleDraw();
 					}
 				}}
 				disabled={disableDraw && disableThrow}

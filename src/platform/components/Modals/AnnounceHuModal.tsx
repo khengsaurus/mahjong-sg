@@ -55,7 +55,7 @@ const AnnounceHuModal = ({
 		return (
 			hu
 				.slice(3, hu.length)
-				// ['Four Greater Blessings', 'Lots of stuff', '3 Flower Tiles']
+				// ['Four Greater Blessings', 'Lots of stuff', '3 Flower Tiles', 'Win on 2nd Replacement Tile']
 				.map((p: string, ix: number) => (
 					<StyledCenterText
 						key={ix}
@@ -95,7 +95,7 @@ const AnnounceHuModal = ({
 				}
 			}}
 		>
-			<DialogContent style={{ padding: '10px 15px 0 15px' }}>
+			<DialogContent>
 				{hu.length > 2 && (
 					<>
 						<StyledCenterText
@@ -111,6 +111,7 @@ const AnnounceHuModal = ({
 							<div className={hasHandDescs ? `right-panel` : `full-panel`}>
 								{hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 								<SentLogs logs={sentLogs} />
+								{/* <SentLogs logs={['ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips',]} /> */}
 							</div>
 						</div>
 					</>
@@ -125,22 +126,14 @@ const AnnounceHuModal = ({
 					</>
 				)}
 			</DialogContent>
-			<DialogActions
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					padding: '2px 6px 0px',
-					marginTop: '-4px'
-				}}
-			>
+			<DialogActions>
 				<HomeButton callback={handleHome} />
 				<StyledButton label={ButtonText.CHIPS} onClick={handleChips} />
 				{hu[0] !== playerSeat &&
 					(canHuFirst ? (
 						<StyledButton label={ButtonText.HU} onClick={huFirst} />
 					) : (
-						!show && <StyledButton label={ButtonText.SHOW} onClick={handleShow} />
+						<StyledButton label={ButtonText.SHOW} onClick={handleShow} disabled={show} />
 					))}
 				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} />}
 			</DialogActions>

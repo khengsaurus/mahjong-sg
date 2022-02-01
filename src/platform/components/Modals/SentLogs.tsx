@@ -4,10 +4,9 @@ import React, { useCallback, useEffect } from 'react';
 
 interface SentLogsProps {
 	logs?: string[];
-	align?: 'left' | 'center' | 'right';
 }
 
-const SentLogs = ({ logs, align = 'center' }: SentLogsProps) => {
+const SentLogs = ({ logs }: SentLogsProps) => {
 	const sentLogsId = 'sent-logs';
 
 	const scrollSentLogs = useCallback(() => {
@@ -23,8 +22,8 @@ const SentLogs = ({ logs, align = 'center' }: SentLogsProps) => {
 
 	return (
 		<ScrollableBase id={sentLogsId} style={{ maxHeight: '60px' }}>
-			{logs.map((log, index) => (
-				<StyledCenterText key={index} text={log} />
+			{logs.map((log, ix) => (
+				<StyledCenterText key={ix} text={log} style={{ height: '20px', overflow: 'hidden' }} />
 			))}
 		</ScrollableBase>
 	);
