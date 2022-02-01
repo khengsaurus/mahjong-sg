@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { Fade } from '@material-ui/core';
+import { Fade } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { Loader, NetworkLoader } from 'platform/components/Loader';

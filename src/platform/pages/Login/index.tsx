@@ -1,5 +1,4 @@
-import Alert from '@material-ui/lab/Alert';
-import { Collapse, TextField } from '@mui/material';
+import { Alert, Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
 import { AboutButton, HelpButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
