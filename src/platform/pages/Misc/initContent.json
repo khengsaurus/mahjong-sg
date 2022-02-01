@@ -24,15 +24,15 @@
 					"A glowing flower tile means that it is that player's flower tile, i.e. + 1 Tai.",
 					"There will only be instant payouts in Shooter or Half Shooter games. When a user Kang's, draws matching flowers, or collects a full flower set, it will be logged in the top right, and so will following instant payouts.",
 					"The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a tile discarded. The default timeout is 6s.",
-					"If more than one person can take the last throw tile, the timeout will be 12s. The first person with priority will see the option first. If they don't take it, others can take the tile after the first 6s are up. Act quickly!"
+					"If more than one person can take the last throw tile, the timeout will be 12s. The first person with priority will see the option first. If they don't take the last thrown tile, others can take it after the first 6s are up. Act quickly!"
 				],
 				"ps": "Playing accross different timezones is not recommended, due to how the delay system works. We're working on it."
 			},
 			{
 				"title": "Scoring",
 				"points": [
-					"The scoring logic largely follows <a href='http://gambiter.com/mahjong/Singaporean_mahjong_scoring_rules.html' style='color: #005eff'>this Singapore Mahjong guide</a>",
-					"The logic for a Ping Hu hand follows standard rules: players cannot be waiting for a unique tile, and the pair, if Pong'ed, cannot be worth Tai.",
+					"The scoring logic largely follows <a href='http://gambiter.com/mahjong/Singaporean_mahjong_scoring_rules.html' style='color: #005eff; textDecoration: none'>this Singapore Mahjong guide</a>",
+					"The logic for a Ping Hu hand follows standard rules: players cannot be waiting for a unique tile unless it is self drawn, and the pair, if Pong'ed, cannot be worth Tai.",
 					"Note that the following scenarios are not accounted for:<ul><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Three Winners (一炮三响)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
 				]
 			},
