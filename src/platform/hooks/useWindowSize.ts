@@ -44,7 +44,7 @@ export function useDynamicWidth({ ref, countTs, tileSize, flag, add = 0, addPx =
 	return useLayoutEffect(() => {
 		if (ref.current?.style) {
 			const length = countTs + add;
-			const maxColHeight = 0.85 * windowHeight; // Referenced in playerComponents.scss
+			const maxColHeight = 0.92 * windowHeight; // Referenced in playerComponents.scss
 			const reqHeight = length * _ShownTileWidth[tileSize] + addPx;
 			const colsReq =
 				maxColHeight >= reqHeight ? 1 : Number(maxColHeight) ? Math.ceil(reqHeight / maxColHeight) : 1;

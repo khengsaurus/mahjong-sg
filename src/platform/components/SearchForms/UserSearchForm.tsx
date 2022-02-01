@@ -70,7 +70,7 @@ const UserSearchForm: React.FC = () => {
 	const renderAddBotButton = () => (
 		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }}>
 			<div>
-				<ListItem className="list-item" style={{ paddingTop: 8 }}>
+				<ListItem className="list-item" style={{ paddingTop: 0, marginTop: -1 }}>
 					<ListItemText primary={ButtonText.ADD_BOT} />
 					<Centered style={{ width: 30 }}>
 						<IconButton
@@ -98,13 +98,11 @@ const UserSearchForm: React.FC = () => {
 	return (
 		<Centered className="search-form-container">
 			<List>
-				<ListItem className="search-box list-item" style={{ marginBottom: '3px' }}>
+				<ListItem className="search-box list-item" style={{ marginBottom: '8px' }}>
 					<TextField
 						id="search-input"
 						label={players.length < 4 ? 'Find user' : 'Players chosen'}
-						onChange={e => {
-							handleFormChange(e.target.value?.toLowerCase());
-						}}
+						onChange={e => handleFormChange(e.target.value?.toLowerCase())}
 						value={searchFor}
 						variant="standard"
 						InputProps={{
@@ -126,11 +124,10 @@ const UserSearchForm: React.FC = () => {
 										>
 											<ChevronRightIcon
 												color={showOptions ? 'secondary' : 'primary'}
-												style={
-													showOptions
-														? { transition: '300ms', transform: 'rotate(90deg)' }
-														: { transition: '300ms' }
-												}
+												style={{
+													transition: '300ms',
+													transform: showOptions ? 'rotate(90deg)' : null
+												}}
 											/>
 										</IconButton>
 									</Centered>
