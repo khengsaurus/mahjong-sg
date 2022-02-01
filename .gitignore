@@ -1,6 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 # /src/service/FirebaseConfig.ts
-/src/shared/images/.DS_Store
 
 #builds
 /build
