@@ -76,7 +76,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 						size="large"
 						onClick={declareHu}
 						disabled={!tai || tai < n[8] || hu.length > 2}
-						style={{ position: 'absolute', bottom: 0, right: 5 }}
+						style={{ position: 'absolute', bottom: 2, right: 5 }}
 					/>
 				</DialogContent>
 			</Dialog>

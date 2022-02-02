@@ -209,8 +209,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiTypography: {
 				styleOverrides: {
 					root: {
-						color: textColor,
-						margin: '4px 0px'
+						color: textColor
 					}
 				}
 			},

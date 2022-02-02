@@ -63,9 +63,9 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 			}}
 		>
 			<DialogContent style={{paddingBottom: '10px'}}>
-				<StyledText text={`${ScreenTextEng.CHIPS_DIST}:`} variant="subtitle1" padding="4px 0px" />
+				<StyledText text={`${ScreenTextEng.CHIPS_DIST}:`} variant="subtitle1" padding="0px" />
 				{renderChips()}
-				<StyledText text="Send chips to: " variant="subtitle1" padding="10px 0px 4px" />
+				<StyledText text="Send chips to: " variant="subtitle1" padding="10px 0px 0px" />
 				<RadioGroup
 					row
 					value={toWho}
@@ -85,7 +85,7 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 					)}
 				</RadioGroup>
 
-				<StyledText text={`${ButtonText.AMOUNT}:`} variant="subtitle1" padding="4px 0px" />
+				<StyledText text={`${ButtonText.AMOUNT}:`} variant="subtitle1" padding="10px 0px 0px" />
 				<RadioGroup
 					row
 					value={amt}
@@ -108,7 +108,7 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 				</RadioGroup>
 
 				<Button
-					style={{ position: 'absolute', bottom: 6, right: 5 }}
+					style={{ position: 'absolute', bottom: 8, right: 5 }}
 					variant="text"
 					size="medium"
 					onClick={() => sendChips(currGame, playerSeat, toWho, amt, sendCallback)}
