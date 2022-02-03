@@ -62,10 +62,10 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 				}
 			}}
 		>
-			<DialogContent style={{paddingBottom: '10px'}}>
+			<DialogContent style={{ paddingBottom: '10px' }}>
 				<StyledText text={`${ScreenTextEng.CHIPS_DIST}:`} variant="subtitle1" padding="0px" />
 				{renderChips()}
-				<StyledText text="Send chips to: " variant="subtitle1" padding="10px 0px 0px" />
+				<StyledText text={`${ScreenTextEng.SEND_CHIPS_TO}: `} variant="subtitle1" padding="10px 0px 0px" />
 				<RadioGroup
 					row
 					value={toWho}

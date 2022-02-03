@@ -6,8 +6,8 @@ android {
         applicationId "com.tk.mahjongSg"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 36 // built on 2 Feb 2PM
-        versionName "1.26_final_debug"
+        versionCode 37 // built on 2 Feb 4PM
+        versionName "2_pre_release"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

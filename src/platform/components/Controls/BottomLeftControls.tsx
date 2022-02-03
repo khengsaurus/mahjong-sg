@@ -4,7 +4,7 @@ import { ControlButton } from 'platform/components/Buttons/ControlButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
 import { Size, Transition } from 'shared/enums';
-import { GameTextChi } from 'shared/screenTexts';
+import { ControlsTextChi } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
@@ -34,7 +34,7 @@ const BottomLeftControls = (props: BLControlsProps) => {
 			style={{ borderColor: highlight || null }}
 		>
 			<ControlButton
-				label={disableChi ? (disablePong ? GameTextChi.CHI : pongText) : GameTextChi.CHI}
+				label={disableChi ? (disablePong ? ControlsTextChi.CHI : pongText) : ControlsTextChi.CHI}
 				callback={() => {
 					if (!disableChi || !disablePong) {
 						setShowChiAlert(false);
@@ -51,7 +51,7 @@ const BottomLeftControls = (props: BLControlsProps) => {
 			<Fade in={showKai} timeout={Transition.FAST}>
 				<div>
 					<ControlButton
-						label={GameTextChi.KAI_EXCLAIM}
+						label={ControlsTextChi.KAI_EXCLAIM}
 						callback={openDeclareHuDialog}
 						disabled={disableHu}
 						style={{ ...MuiStyles[`buttons_${controlsSize}`] }}

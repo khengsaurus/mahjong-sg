@@ -5,7 +5,7 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
-import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
+import { ButtonText, ScreenTextChi, ScreenTextEng } from 'shared/screenTexts';
 import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
@@ -27,7 +27,7 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 	const renderManualHuOptions = () => (
 		<div>
 			<FormRow>
-				<StyledText text="台: " variant="subtitle2" padding="0px" />
+				<StyledText text={`${ScreenTextChi.TAI}: `} variant="subtitle2" padding="0px" />
 				<RadioGroup row value={tai} onChange={handleSetTaiNumber} defaultValue={HH?.maxPx}>
 					{generateNumbers(n[8], n[9]).map((tai: number) => (
 						<FormControlLabel key={tai} value={tai} control={<Radio />} label={tai} />
@@ -35,15 +35,8 @@ const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: Decla
 				</RadioGroup>
 			</FormRow>
 			<FormRow style={{ height: 30 }}>
-				<StyledText text="自摸: " variant="subtitle2" padding="0px" />
-				<CheckBox
-					title=""
-					value={zimo}
-					onChange={() => {
-						setZimo(prev => !prev);
-					}}
-					defaultChecked={defaultZimo}
-				/>
+				<StyledText text={`${ScreenTextChi.SELF_DRAWN}:`} variant="subtitle2" padding="0px" />
+				<CheckBox title="" value={zimo} onChange={() => setZimo(prev => !prev)} defaultChecked={defaultZimo} />
 			</FormRow>
 		</div>
 	);

@@ -4,7 +4,7 @@ import { ControlButton } from 'platform/components/Buttons/ControlButton';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
 import { Size, Transition } from 'shared/enums';
-import { GameTextChi } from 'shared/screenTexts';
+import { ControlsTextChi } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
@@ -35,7 +35,13 @@ const BottomRightControls = (props: BRControlsProps) => {
 			style={{ borderColor: highlight || null }}
 		>
 			<ControlButton
-				label={drawText === GameTextChi.END ? GameTextChi.END : taken ? GameTextChi.THROW : GameTextChi.DRAW}
+				label={
+					drawText === ControlsTextChi.END
+						? ControlsTextChi.END
+						: taken
+						? ControlsTextChi.THROW
+						: ControlsTextChi.DRAW
+				}
 				callback={() => {
 					if (!disableDraw || !disableThrow) {
 						disableDraw ? handleThrow() : showChiAlert ? setShowChiAlert(false) : handleDraw();
@@ -47,7 +53,7 @@ const BottomRightControls = (props: BRControlsProps) => {
 			<Fade in={showKai} timeout={Transition.FAST}>
 				<div>
 					<ControlButton
-						label={GameTextChi.KAI_QUESTION}
+						label={ControlsTextChi.KAI_QUESTION}
 						callback={handleOpen}
 						style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 					/>

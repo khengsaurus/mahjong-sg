@@ -8,7 +8,7 @@ import { useContext, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { PaymentType } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
-import { ButtonText, PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
+import { ButtonText, PaymentLabel, ScreenTextChi, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { AnnounceHuModalProps } from 'shared/typesPlus';
 import { getHandDesc, isBefore } from 'shared/util';
@@ -99,7 +99,9 @@ const AnnounceHuModal = ({
 				{hu.length > 2 && (
 					<>
 						<StyledCenterText
-							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} Hu with ${hu[1]}台`}
+							text={`${hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN} Hu with ${hu[1]}${
+								ScreenTextChi.TAI
+							}`}
 							style={{ paddingBottom: '0px' }}
 							variant="body1"
 						/>
@@ -111,7 +113,7 @@ const AnnounceHuModal = ({
 							<div className={hasHandDescs ? `right-panel` : `full-panel`}>
 								{hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 								<SentLogs logs={sentLogs} />
-								{/* <SentLogs logs={['ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips',]} /> */}
+								{/* <SentLogs logs={['ah huay sent ah beng 64 points','ah huay sent ah beng 64 points','ah huay sent ah beng 64 points',]} /> */}
 							</div>
 						</div>
 					</>

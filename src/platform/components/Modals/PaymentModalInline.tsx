@@ -7,6 +7,7 @@ import { StyledText } from 'platform/style/StyledMui';
 import { useMemo, useState } from 'react';
 import { Amounts, Size } from 'shared/enums';
 import { Game } from 'shared/models';
+import { ScreenTextEng } from 'shared/screenTexts';
 import { getDefaultAmt } from 'shared/util';
 import { sendChips } from './PaymentModal';
 
@@ -37,12 +38,12 @@ const PaymentModalInline = ({ game, playerSeat }: PaymentModalInlineProps) => {
 
 	return (
 		<FormRow style={{ margin: '0px 0px 2px', placeSelf: 'center' }}>
-			<StyledText variant="body2" text={`Send:`} />
+			<StyledText variant="body2" text={`${ScreenTextEng.SEND}:`} />
 			<FormControl>
 				<Select
 					value={amountStr}
 					onChange={handleSelectAmount}
-					label="Chips"
+					label={ScreenTextEng.CHIPS}
 					variant="standard"
 					IconComponent={() => null}
 					style={{ ...MuiStyles.small_dropdown_select, marginLeft: '5px' }}
