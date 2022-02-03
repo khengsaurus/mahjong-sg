@@ -18,9 +18,9 @@ const Policy = () => {
 		<>
 			<Scrollable>
 				<div className="content centered">
-					<p>{parse(data.replace('{platform}', platform))}</p>
+					<p>{parse(data.replaceAll('{platform}', platform))}</p>
 					<br />
-					<p>{parse(gambling.replace('{platform}', platform))}</p>
+					<p>{parse(gambling.replaceAll('{platform}', platform))}</p>
 				</div>
 			</Scrollable>
 			<BottomSpec>

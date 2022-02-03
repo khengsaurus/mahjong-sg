@@ -22,15 +22,15 @@ const Help = () => {
 				<div className="content">
 					{sections.map((section, ix1) => (
 						<Fragment key={`section=${ix1}`}>
-							<h4>{parse(section.title.replace('{platform}', platform))}</h4>
+							<h4>{parse(section.title.replaceAll('{platform}', platform))}</h4>
 							<ul>
 								{section.points.map((point, ix2) => (
 									<li key={`section-${ix1}-${ix2}`}>
-										{parse(point.replace('{platform}', platform))}
+										{parse(point.replaceAll('{platform}', platform))}
 									</li>
 								))}
 							</ul>
-							{section?.ps && <p className="ps">{parse(section.ps.replace('{platform}', platform))}</p>}
+							{section?.ps && <p className="ps">{parse(section.ps.replaceAll('{platform}', platform))}</p>}
 						</Fragment>
 					))}
 					<h4>Thank you for reading, and have fun!</h4>

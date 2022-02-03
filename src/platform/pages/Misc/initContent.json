@@ -1,7 +1,7 @@
 {
 	"policyContent": {
-		"data": "Data: Mahjong SG does not collect any of your personal data, aside from your email.<br/>Your email is used solely for account and game management. We will not distribute your email, and you can remove it from our records any time by deleting your account.",
-		"gambling": "Gambling: The creators of this {platform} DO NOT advocate gambling.<br/>The scoring system is intended to keep the experience true to that of a real Mahjong game and to help users track their performance. It is not to be associated with any monetary transaction."
+		"data": "Data:<br/>Mahjong SG does not collect any of your personal data, aside from your email. Your email is used solely for account and game management. It is not revealed to other users. We will not distribute your email, and you can remove it from our records any time by deleting your account.",
+		"gambling": "Gambling:<br/>The creators of this {platform} DO NOT advocate gambling. This {platform} does not provide any means for monetary transaction or direct communication betwee users. The scoring system is intended solely to help users track their performance."
 	},
 	"aboutContent": {
 		"descMobile": "<span>You can also find us online at <a href='https://www.mahjong-sg.com/' style='color:#005eff; textDecoration: none'>www.mahjong-sg.com</a>.</span>",

@@ -26,8 +26,8 @@ const About = () => {
 							like it so far.{' '}
 						</span>
 						{isMobile()
-							? parse(descMobile.replace('{platform}', platform))
-							: parse(descWeb.replace('{platform}', platform))}
+							? parse(descMobile.replaceAll('{platform}', platform))
+							: parse(descWeb.replaceAll('{platform}', platform))}
 					</p>
 					<br />
 					<p>{parse(reachOut)}</p>
