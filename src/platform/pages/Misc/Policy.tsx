@@ -9,7 +9,7 @@ import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
 import initContent from './initContent.json';
 
-const DataPolicy = () => {
+const Policy = () => {
 	const { user, policyContent } = useSelector((store: IStore) => store);
 	const { data = '', gambling = '' } = policyContent || initContent.policyContent;
 	const platform = isMobile() ? 'app' : 'website';
@@ -32,4 +32,4 @@ const DataPolicy = () => {
 	return <HomePage markup={markup} title={HomeScreenText.POLICY} skipVerification />;
 };
 
-export default DataPolicy;
+export default Policy;

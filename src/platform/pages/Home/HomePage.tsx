@@ -118,7 +118,7 @@ const HomePage = ({
 								</Row>
 							</div>
 						</Fade>
-						{title && <StyledCenterText text={title} variant="h6" padding="10px" />}
+						{title && <StyledCenterText text={title} variant="h6" padding="0px 10px 10px" />}
 						<Centered style={{ marginBottom }}>
 							<Overlay />
 							{markup()}

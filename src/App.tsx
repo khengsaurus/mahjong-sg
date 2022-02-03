@@ -3,7 +3,7 @@ import Home from 'platform/pages/Home';
 import JoinGame from 'platform/pages/JoinGame';
 import Login from 'platform/pages/Login';
 import NewUser from 'platform/pages/Login/NewUser';
-import { About, DataPolicy, Help } from 'platform/pages/Misc';
+import { About, Policy, Help } from 'platform/pages/Misc';
 import NewGame from 'platform/pages/NewGame';
 import Table from 'platform/pages/Table';
 import { Styled } from 'platform/style/StyledComponents';
@@ -33,7 +33,7 @@ function App() {
 								<Route exact path={Page.LOGIN} component={Login} />
 								<Route exact path={Page.NEWUSER} component={NewUser} />
 								<Route exact path={Page.NEWGAME} component={NewGame} />
-								<Route exact path={Page.POLICY} component={DataPolicy} />
+								<Route exact path={Page.POLICY} component={Policy} />
 								<Route exact path={Page.TABLE} component={Table} />
 							</Switch>
 						</Styled>
