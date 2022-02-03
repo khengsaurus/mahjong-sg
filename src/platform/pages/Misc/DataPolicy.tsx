@@ -1,3 +1,4 @@
+import parse from 'html-react-parser';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import HomePage from 'platform/pages/Home/HomePage';
 import { BottomSpec, Scrollable } from 'platform/style/StyledComponents';
@@ -5,25 +6,21 @@ import { useSelector } from 'react-redux';
 import { PageName } from 'shared/enums';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
+import { isMobile } from 'shared/util';
+import initContent from './initContent.json';
 
 const DataPolicy = () => {
-	const { user } = useSelector((store: IStore) => store);
+	const { user, policyContent } = useSelector((store: IStore) => store);
+	const { data = '', gambling = '' } = policyContent || initContent.policyContent;
+	const platform = isMobile() ? 'app' : 'website';
 
 	const markup = () => (
 		<>
 			<Scrollable>
 				<div className="content centered">
-					<p>
-						Mahjong SG does not collect any of your personal data, aside from your email. Your email is used
-						solely for account and game management. We will not distribute your email, and you can remove it
-						from our records any time by deleting your account.
-					</p>
+					<p>{parse(data.replace('{platform}', platform))}</p>
 					<br />
-					<p>
-						Mahjong SG currently does not support username change or password reset. An email address can
-						only be used to register one account.
-					</p>
-					<br />
+					<p>{parse(gambling.replace('{platform}', platform))}</p>
 				</div>
 			</Scrollable>
 			<BottomSpec>
@@ -32,7 +29,7 @@ const DataPolicy = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.DATA} skipVerification />;
+	return <HomePage markup={markup} title={HomeScreenText.POLICY} skipVerification />;
 };
 
 export default DataPolicy;

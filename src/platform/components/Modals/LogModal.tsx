@@ -3,6 +3,7 @@ import { GreenTableText, TableText } from 'platform/style/StyledComponents';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { LocalFlag, Size, TableColor, Transition } from 'shared/enums';
+import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 
 interface LogModalProps {
@@ -52,7 +53,7 @@ const LogModal = (props: LogModalProps) => {
 			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 		>
 			{currGame?.logs.map((log: string, index) =>
-				log.includes('sent ') && log.includes('chip') ? (
+				log.includes('sent ') && log.includes(ScreenTextEng._CHIP_) ? (
 					<GreenTableText key={index}>{log}</GreenTableText>
 				) : (
 					<TableText key={index} style={{ marginLeft: 5, marginRight: 5 }}>

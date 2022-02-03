@@ -33,7 +33,7 @@ function App() {
 								<Route exact path={Page.LOGIN} component={Login} />
 								<Route exact path={Page.NEWUSER} component={NewUser} />
 								<Route exact path={Page.NEWGAME} component={NewGame} />
-								<Route exact path={Page.PRIVACY} component={DataPolicy} />
+								<Route exact path={Page.POLICY} component={DataPolicy} />
 								<Route exact path={Page.TABLE} component={Table} />
 							</Switch>
 						</Styled>

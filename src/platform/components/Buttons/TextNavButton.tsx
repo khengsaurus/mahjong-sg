@@ -60,8 +60,8 @@ const JoinGameButton = ({ style = {} }: IHasStyle) => {
 const PrivacyButton = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
-			label={ButtonText.DATA}
-			route={Page.PRIVACY}
+			label={ButtonText.POLICY}
+			route={Page.POLICY}
 			shortcut={null}
 			disableShortcut={true}
 			style={{ ...style, fontSize: 12, padding: 0 }}

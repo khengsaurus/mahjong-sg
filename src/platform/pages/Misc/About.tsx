@@ -25,7 +25,9 @@ const About = () => {
 							Thank you for using this {platform}. There is still much work in progress, but we hope you
 							like it so far.{' '}
 						</span>
-						{isMobile() ? parse(descMobile) : parse(descWeb)}
+						{isMobile()
+							? parse(descMobile.replace('{platform}', platform))
+							: parse(descWeb.replace('{platform}', platform))}
 					</p>
 					<br />
 					<p>{parse(reachOut)}</p>

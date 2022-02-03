@@ -1,6 +1,10 @@
 {
+	"policyContent": {
+		"data": "Data: Mahjong SG does not collect any of your personal data, aside from your email.<br/>Your email is used solely for account and game management. We will not distribute your email, and you can remove it from our records any time by deleting your account.",
+		"gambling": "Gambling: The creators of this {platform} DO NOT advocate gambling.<br/>The scoring system is intended to keep the experience true to that of a real Mahjong game and to help users track their performance. It is to be taken only at face value."
+	},
 	"aboutContent": {
-		"descMobile": "<span>You can also find us online at <a href='https://www.mahjong-sg.com/' style='color:#005eff'>www.mahjong-sg.com</a>.</span>",
+		"descMobile": "<span>You can also find us online at <a href='https://www.mahjong-sg.com/' style='color:#005eff; textDecoration: none'>www.mahjong-sg.com</a>.</span>",
 		"descWeb": "<span>You can also find us on the App Stores as Mahjong SG.</span>",
 		"reachOut": "If you have any feedback or would like to get in touch, do reach out to us at mahjongsgapp@gmail.com, or on <a href='https://www.linkedin.com/in/tzi-kheng-sim-4a561616b/' style='color: #005eff; textDecoration: none'>LinkedIn</a>."
 	},
@@ -31,9 +35,10 @@
 			{
 				"title": "Scoring",
 				"points": [
-					"The scoring logic largely follows <a href='http://gambiter.com/mahjong/Singaporean_mahjong_scoring_rules.html' style='color: #005eff; textDecoration: none'>this Singapore Mahjong guide</a>",
-					"The logic for a Ping Hu hand follows standard rules: players cannot be waiting for a unique tile unless it is self drawn, and the pair, if Pong'ed, cannot be worth Tai.",
-					"Note that the following scenarios are not accounted for:<ul><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Three Winners (一炮三响)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
+					"The scoring logic largely follows common playing rules and online guides.",
+					"Ping Hu requirements: player cannot be waiting for a unique tile unless it is self drawn, and if the pair is Pong'ed, it cannot be worth Tai.",
+					"Concealed Hand requirements: player's hand must be fully closed (no open meld) and the last tile must be self drawn.",
+					"Note that the following scoring scenarios are not accounted for:<ul><li>Nine Gates (九蓮寶燈)</li><li>Three Winners (一炮三响)</li><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
 				]
 			},
 			{
@@ -53,7 +58,7 @@
 				"title": "End of the round/game",
 				"points": [
 					"If the game draws, it will progress onto the next round if there was a Kang or someone drew matching flower tiles. If not, the round will be repeated.",
-					"In online games (with than 1 person playing), after the round ends, only the next dealer will see the 'Next Round' button in the popup.",
+					"In online games (with more than 1 person playing), after the round ends, only the next dealer will see the 'Next Round' button in the popup.",
 					"Games will be deleted after 24 hours of inactivity, regardless of whether they are still ongoing or not."
 				]
 			}
