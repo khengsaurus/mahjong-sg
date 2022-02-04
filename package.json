@@ -43,8 +43,7 @@
 		"styled-components": "^5.3.1",
 		"testing-library": "^0.0.2",
 		"ts-node": "^10.4.0",
-		"typescript": "^4.4.2",
-		"web-vitals": "^1.0.1"
+		"typescript": "^4.4.2"
 	},
 	"scripts": {
 		"copyAssets": "cp -R resources/iosAssets/Assets.xcassets ios/App/App",
