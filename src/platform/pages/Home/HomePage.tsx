@@ -8,7 +8,7 @@ import { Loader, NetworkLoader } from 'platform/components/Loader';
 import Overlay from 'platform/components/Overlay';
 import { useAndroidBack, useLocalSession } from 'platform/hooks';
 import { HomeTheme } from 'platform/style/MuiStyles';
-import { Centered, Main, Row } from 'platform/style/StyledComponents';
+import { Centered, Main, NetworkAlert } from 'platform/style/StyledComponents';
 import { StyledCenterText, StyledText } from 'platform/style/StyledMui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,7 +16,6 @@ import { EEvent, Platform, Status } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { HomeScreenText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import './home.scss';
 
 interface HomePageProps {
 	markup: () => React.FC | JSX.Element;
@@ -101,23 +100,23 @@ const HomePage = ({
 		};
 	}, [ready, fallbackTitle, timeout]);
 
+	function renderNetworkLoader() {
+		return (
+			<Fade in={!skipVerification && !isAppConnected} unmountOnExit>
+				<NetworkAlert>
+					<NetworkLoader />
+					<StyledText text="Waiting for network..." variant="subtitle2" padding="0px 0px 0px 10px" />
+				</NetworkAlert>
+			</Fade>
+		);
+	}
+
 	return (
 		<HomeTheme>
 			<Main>
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
 					<>
-						<Fade in={!skipVerification && !isAppConnected} unmountOnExit>
-							<div className="top-alert">
-								<Row>
-									<NetworkLoader />
-									<StyledText
-										text="Waiting for network..."
-										variant="subtitle2"
-										padding="0px 0px 0px 10px"
-									/>
-								</Row>
-							</div>
-						</Fade>
+						{renderNetworkLoader()}
 						{title && <StyledCenterText text={title} variant="h6" padding="0px 10px 10px" />}
 						<Centered style={{ marginBottom }}>
 							<Overlay />

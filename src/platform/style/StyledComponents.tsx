@@ -83,6 +83,20 @@ export const MainTransparent = styled(Main)`
 	background-color: transparent;
 `;
 
+export const NetworkAlert = styled.div`
+	position: absolute;
+	top: 0px;
+	display: flex;
+	flex-direction: row;
+	height: 24px;
+	padding: 2px 8px;
+	margin-top: const(safe-area-inset-top);
+	margin-top: env(safe-area-inset-top);
+	color: ${props => props.theme.mainTextColor};
+	background-color: ${props => props.theme.backgroundColor};
+	transition: ${TransitionSpeed.FAST};
+`;
+
 export const BottomSpec = styled.div`
 	position: absolute;
 	bottom: 0px;
