@@ -45,6 +45,7 @@ import {
 import { HandPoint, ScoringHand } from 'shared/handEnums';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
+import { ScreenTextEng } from 'shared/screenTexts';
 import FirebaseConfig from 'shared/service/FirebaseConfig';
 import { isDev, shuffle } from 'shared/util';
 import { gameToObj, playerToObj, userToObj } from 'shared/util/parsers';
@@ -560,7 +561,9 @@ export class FirebaseService {
 								_to.bal = Math.round(_to.bal + amt);
 							}
 							if (logs) {
-								logs.push(`${_from.uN} sent ${_to.uN} ${amt} chip${amt > 1 ? 's' : ''}`);
+								logs.push(
+									`${_from.uN} sent ${_to.uN} ${amt} ${ScreenTextEng._CHIP_}${amt > 1 ? 's' : ''}`
+								);
 							}
 							transaction.update(gameDocRef, { ps, logs });
 							resolve();

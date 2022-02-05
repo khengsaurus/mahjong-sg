@@ -24,7 +24,7 @@ import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setHaptic, setSizes, setTheme } from 'shared/store/actions';
 import { ModalProps } from 'shared/typesPlus';
-import { getTheme } from 'shared/util';
+import { getTheme, isMobile } from 'shared/util';
 import './settingsWindow.scss';
 
 interface IPreference {
@@ -286,10 +286,12 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 									/>
 								</Row>
 							) : (
-								<div className="preference no-margin">
-									<StyledText text={ScreenTextEng.HAPTICS} variant="subtitle1" padding="0" />
-									<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
-								</div>
+								isMobile() && (
+									<div className="preference no-margin">
+										<StyledText text={ScreenTextEng.HAPTICS} variant="subtitle1" padding="0" />
+										<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
+									</div>
+								)
 							)}
 						</FormControl>
 					</DialogContent>

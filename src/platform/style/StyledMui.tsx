@@ -2,7 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { history } from 'App';
 import { Page } from 'shared/enums';
 
-interface StyledTextProps {
+interface IStyledTextProps {
 	text: string;
 	color?: string;
 	padding?: string;
@@ -12,7 +12,7 @@ interface StyledTextProps {
 	style?: any;
 }
 
-interface StyledButtonProps {
+interface IStyledButtonProps {
 	label: string;
 	navigate?: Page;
 	color?: string;
@@ -34,7 +34,7 @@ export const StyledText = ({
 	textAlign = 'left',
 	placeSelf = 'center',
 	style = {}
-}: StyledTextProps) => (
+}: IStyledTextProps) => (
 	<Typography
 		style={{ justifySelf: 'center', alignSelf: 'center', color, padding, textAlign, placeSelf, ...style }}
 		variant={variant}
@@ -43,7 +43,7 @@ export const StyledText = ({
 	</Typography>
 );
 
-export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: StyledTextProps) => (
+export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: IStyledTextProps) => (
 	<Typography
 		style={{
 			...style,
@@ -71,7 +71,7 @@ export const StyledButton = ({
 	type,
 	disabled = false,
 	style = {}
-}: StyledButtonProps) => {
+}: IStyledButtonProps) => {
 	return (
 		<Button
 			style={{ color, padding, ...style }}

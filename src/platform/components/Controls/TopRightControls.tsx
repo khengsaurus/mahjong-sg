@@ -1,4 +1,4 @@
-import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SubjectIcon from '@mui/icons-material/Subject';
 import { IconButton } from '@mui/material';
 import { LogModal } from 'platform/components/Modals';
@@ -21,7 +21,7 @@ const TopRightControls = (props: TRControlsProps) => {
 	return (
 		<div className={`top-right-controls-${controlsSize}`}>
 			<IconButton className="icon-button" onClick={handlePay} disableRipple>
-				<LeaderboardIcon fontSize={controlsSize} />
+				<MonetizationOnIcon fontSize={controlsSize} />
 			</IconButton>
 			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
 				<SubjectIcon fontSize={controlsSize} />
