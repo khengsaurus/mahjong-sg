@@ -6,7 +6,7 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton, StyledCenterText } from 'platform/style/StyledMui';
 import { useContext, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { PaymentType } from 'shared/enums';
+import { LocalFlag, PaymentType } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ButtonText, PaymentLabel, ScreenTextChi, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
@@ -28,7 +28,7 @@ const AnnounceHuModal = ({
 }: AnnounceHuModalProps) => {
 	const { setAnnHuOpen } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
-	const { hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
+	const { id, hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);
 
 	useEffect(() => {
@@ -113,7 +113,7 @@ const AnnounceHuModal = ({
 							<div className={hasHandDescs ? `right-panel` : `full-panel`}>
 								{hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 								<SentLogs logs={sentLogs} />
-								{/* <SentLogs logs={['ah huay sent ah beng 64 points','ah huay sent ah beng 64 points','ah huay sent ah beng 64 points',]} /> */}
+								{/* <SentLogs logs={['ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips',]} /> */}
 							</div>
 						</div>
 					</>
@@ -135,7 +135,9 @@ const AnnounceHuModal = ({
 					(canHuFirst ? (
 						<StyledButton label={ButtonText.HU} onClick={huFirst} />
 					) : (
-						<StyledButton label={ButtonText.SHOW} onClick={handleShow} disabled={show} />
+						id !== LocalFlag && (
+							<StyledButton label={ButtonText.SHOW} onClick={handleShow} disabled={show} />
+						)
 					))}
 				{showNextRound && <StyledButton label={ButtonText.NEXT_ROUND} onClick={nextRound} />}
 			</DialogActions>
