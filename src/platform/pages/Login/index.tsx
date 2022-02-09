@@ -14,7 +14,7 @@ import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const Login = () => {
-	const { login, setUserEmail, alert, setAlert } = useContext(AppContext);
+	const { alert, login, setAlert, setUserEmail } = useContext(AppContext);
 	const { showBottom } = useAndroidKeyboardListener();
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
@@ -188,7 +188,7 @@ const Login = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.HOME_TITLE} ready={ready} skipVerification />;
+	return <HomePage markup={markup} title={HomeScreenText.HOME_TITLE} ready={ready} timeout={2500} skipVerification />;
 };
 
 export default Login;
