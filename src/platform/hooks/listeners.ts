@@ -4,29 +4,17 @@ import { EEvent } from 'shared/enums';
 
 function useDocumentListener(event: EEvent, callback: (p?: any) => any, apply = true) {
 	useEffect(() => {
-		if (apply && callback) {
-			document.addEventListener(event, callback);
-		}
+		apply && callback && document.addEventListener(event, callback);
 
-		return () => {
-			if (apply && callback) {
-				document.removeEventListener(event, callback);
-			}
-		};
+		return () => apply && callback && document.removeEventListener(event, callback);
 	}, [apply, event, callback]);
 }
 
 function useWindowListener(event: EEvent, callback: (p?: any) => any, apply = true) {
 	useEffect(() => {
-		if (apply && callback) {
-			window.addEventListener(event, callback);
-		}
+		apply && callback && window.addEventListener(event, callback);
 
-		return () => {
-			if (apply && callback) {
-				window.removeEventListener(event, callback);
-			}
-		};
+		return () => apply && callback && window.removeEventListener(event, callback);
 	}, [apply, event, callback]);
 }
 

@@ -72,9 +72,7 @@ const HomePage = ({
 			});
 		}
 		return () => {
-			if (keyboardAvail && isIOS) {
-				Keyboard.removeAllListeners();
-			}
+			keyboardAvail && isIOS && Keyboard.removeAllListeners();
 		};
 	}, [isIOS, keyboardAvail, offsetKeyboard]);
 
@@ -95,9 +93,7 @@ const HomePage = ({
 			}, timeout);
 		}
 
-		return () => {
-			clearTimeout(timeoutRef.current);
-		};
+		return () => clearTimeout(timeoutRef.current);
 	}, [ready, fallbackTitle, timeout]);
 
 	function renderNetworkLoader() {

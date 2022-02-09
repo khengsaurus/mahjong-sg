@@ -35,14 +35,10 @@ const LogModal = (props: LogModalProps) => {
 	}, [id]);
 
 	// Seems to be more consistent when these are in diff UE's
-	useEffect(() => {
-		scroll();
-	}, [currGame?.logs?.length, scroll]);
+	useEffect(() => scroll(), [currGame?.logs?.length, scroll]);
 
 	useEffect(() => {
-		setTimeout(() => {
-			scroll();
-		}, Transition.FAST);
+		setTimeout(() => scroll(), Transition.FAST);
 	}, [expanded, scroll]);
 
 	return (

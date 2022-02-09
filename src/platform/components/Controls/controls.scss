@@ -6,8 +6,8 @@
 			@include absolute-padding($main-padding, 0, 0, $main-padding);
 			@include flow(column);
 			align-items: flex-start;
-			z-index: 10;
 			transition: $transition-fast;
+			z-index: 10;
 			.buttons {
 				@include flex-dir(row);
 			}
@@ -33,10 +33,10 @@
 		}
 
 		.bottom-left-controls-#{$size} {
-			@include absolute-padding(0, 0, $main-padding - 3px, $main-padding - 3px);
+			@include absolute-padding(0, 0, $main-padding - 2px, $main-padding - 2px);
 			@include flex-dir(column-reverse);
-			border-bottom: 4px solid transparent;
-			border-left: 4px solid transparent;
+			border-bottom: 2 * getTilePadding($size) solid transparent;
+			border-left: 2 * getTilePadding($size) solid transparent;
 			height: 1 * getButtonHeight($size);
 			width: 1 * getButtonWidth($size);
 			transition: $transition-fast;
@@ -53,10 +53,10 @@
 		}
 
 		.bottom-right-controls-#{$size} {
-			@include absolute-padding(0, $main-padding - 3px, $main-padding - 3px, 0);
+			@include absolute-padding(0, $main-padding - 2px, $main-padding - 2px, 0);
 			@include flex-dir(column-reverse);
-			border-bottom: 4px solid transparent;
-			border-right: 4px solid transparent;
+			border-bottom: 2 * getTilePadding($size) solid transparent;
+			border-right: 2 * getTilePadding($size) solid transparent;
 			align-items: flex-start;
 			height: 1 * getButtonHeight($size);
 			width: 1 * getButtonWidth($size);
@@ -77,8 +77,8 @@
 			@include absolute-padding($main-padding, $main-padding, 0, 0);
 			@include flex-dir(row-reverse);
 			@include alignI-justifyC(flex-start, flex-start);
-			z-index: 10;
 			transition: $transition-fast;
+			z-index: 10;
 			.icon-button {
 				width: getIconButtonSize($size);
 				height: getIconButtonSize($size);

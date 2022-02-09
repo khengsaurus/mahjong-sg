@@ -27,18 +27,14 @@ function useLocalSession(skipVerification = true) {
 		}
 
 		return () => {
-			if (checkNetwork) {
-				Network?.removeAllListeners();
-			}
+			checkNetwork && Network?.removeAllListeners();
 		};
 	}, [skipVerification]);
 
 	useEffect(() => {
-		if (!skipVerification) {
-			if (verifyingSession === Status.SUCCESS && !sessionVerified) {
-				logout();
-				history.push(Page.LOGIN);
-			}
+		if (!skipVerification && verifyingSession === Status.SUCCESS && !sessionVerified) {
+			logout();
+			history.push(Page.LOGIN);
 		}
 	}, [skipVerification, verifyingSession, sessionVerified, logout]);
 

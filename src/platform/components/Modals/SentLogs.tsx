@@ -16,9 +16,7 @@ const SentLogs = ({ logs }: SentLogsProps) => {
 		}
 	}, [sentLogsId]);
 
-	useEffect(() => {
-		scrollSentLogs();
-	}, [scrollSentLogs, logs.length]);
+	useEffect(() => scrollSentLogs(), [scrollSentLogs, logs.length]);
 
 	return (
 		<ScrollableBase id={sentLogsId} style={{ maxHeight: '60px' }}>
