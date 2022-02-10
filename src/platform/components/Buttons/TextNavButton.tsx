@@ -14,7 +14,7 @@ interface TextNavButtonProps extends IHasStyle {
 	onClick?: () => void;
 }
 
-const TextNavButton = ({
+export const TextNavButton = ({
 	label,
 	route,
 	shortcut,
@@ -35,7 +35,12 @@ const TextNavButton = ({
 	return <StyledButton label={label} navigate={route} onClick={onClick} style={{ ...style }} />;
 };
 
-const HomeButton = ({ style = {}, label = PageName.HOME, disableShortcut = false, callback = null }: IHomeButton) => {
+export const HomeButton = ({
+	style = {},
+	label = PageName.HOME,
+	disableShortcut = false,
+	callback = null
+}: IHomeButton) => {
 	const { handleHome } = useContext(AppContext);
 
 	return (
@@ -49,15 +54,19 @@ const HomeButton = ({ style = {}, label = PageName.HOME, disableShortcut = false
 	);
 };
 
-const NewGameButton = ({ style = {} }: IHasStyle) => {
+export const BackButton = ({ style = {}, label = ButtonText.BACK, disableShortcut = true }: IHomeButton) => {
+	return <TextNavButton label={label} onClick={() => history.goBack()} style={style} disableShortcut={true} />;
+};
+
+export const NewGameButton = ({ style = {} }: IHasStyle) => {
 	return <TextNavButton label={PageName.NEWGAME} route={Page.NEWGAME} shortcut={Shortcut.NEWGAME} style={style} />;
 };
 
-const JoinGameButton = ({ style = {} }: IHasStyle) => {
+export const JoinGameButton = ({ style = {} }: IHasStyle) => {
 	return <TextNavButton label={PageName.JOINGAME} route={Page.JOINGAME} shortcut={Shortcut.JOINGAME} style={style} />;
 };
 
-const PrivacyButton = ({ style = {} }: IHasStyle) => {
+export const PrivacyButton = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
 			label={ButtonText.POLICY}
@@ -69,7 +78,7 @@ const PrivacyButton = ({ style = {} }: IHasStyle) => {
 	);
 };
 
-const AboutButton = ({ style = {} }: IHasStyle) => {
+export const AboutButton = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
 			label={ButtonText.ABOUT}
@@ -81,7 +90,7 @@ const AboutButton = ({ style = {} }: IHasStyle) => {
 	);
 };
 
-const HelpButton = ({ style = {} }: IHasStyle) => {
+export const HelpButton = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
 			label={ButtonText.HELP}
@@ -92,5 +101,3 @@ const HelpButton = ({ style = {} }: IHasStyle) => {
 		/>
 	);
 };
-
-export { AboutButton, HelpButton, HomeButton, JoinGameButton, NewGameButton, PrivacyButton, TextNavButton };

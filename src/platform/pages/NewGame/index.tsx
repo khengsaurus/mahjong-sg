@@ -18,7 +18,6 @@ import {
 import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
-import { useAndroidKeyboardListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
@@ -39,7 +38,6 @@ import './newGame.scss';
 const NewGame = () => {
 	const { user } = useSelector((state: IStore) => state);
 	const { players, setPlayers } = useContext(AppContext);
-	const { showBottom } = useAndroidKeyboardListener(true);
 	const [mHu, setMHu] = useState(false);
 	const [payment, setPayment] = useState(PaymentType.SHOOTER);
 	const [random, setRandom] = useState(false);
@@ -115,36 +113,32 @@ const NewGame = () => {
 	);
 
 	const renderBottomButtons = () => (
-		<Fade in={showBottom} timeout={20} unmountOnExit>
-			<div>
-				<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
-					<HomeButton
-						style={{
-							marginLeft:
-								players?.length < 4
-									? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
-									: 0,
-							transition: TransitionSpeed.MEDIUM
-						}}
-						disableShortcut
-					/>
+		<Row style={{ paddingTop: 5, transition: TransitionSpeed.FAST }} id="bottom-btns">
+			<HomeButton
+				style={{
+					marginLeft:
+						players?.length < 4
+							? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
+							: 0,
+					transition: TransitionSpeed.MEDIUM
+				}}
+				disableShortcut
+			/>
+			<StyledButton
+				label={ButtonText.OPTIONS}
+				onClick={() => setShowOptions(prev => !prev)}
+				disabled={startedGame}
+			/>
+			<Fade in={players.length === 4} timeout={Transition.FAST}>
+				<div id="start-join-btn">
 					<StyledButton
-						label={ButtonText.OPTIONS}
-						onClick={() => setShowOptions(prev => !prev)}
-						disabled={startedGame}
+						label={startedGame ? ButtonText.JOIN : ButtonText.START}
+						onClick={handleStartJoinClick}
+						disabled={players.length < 4 || status === Status.PENDING}
 					/>
-					<Fade in={players.length === 4} timeout={Transition.FAST}>
-						<div id="start-join-btn">
-							<StyledButton
-								label={startedGame ? ButtonText.JOIN : ButtonText.START}
-								onClick={handleStartJoinClick}
-								disabled={players.length < 4 || status === Status.PENDING}
-							/>
-						</div>
-					</Fade>
-				</Row>
-			</div>
-		</Fade>
+				</div>
+			</Fade>
+		</Row>
 	);
 
 	/* -------------------------------- Game Options -------------------------------- */
@@ -267,7 +261,7 @@ const NewGame = () => {
 
 	const renderGameOptions = () => {
 		return (
-			<Fade in={showOptions && showBottom} timeout={Transition.FAST} unmountOnExit>
+			<Fade in={showOptions} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<TableTheme>
 						<Dialog

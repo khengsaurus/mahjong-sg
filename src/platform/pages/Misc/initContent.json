@@ -4,8 +4,8 @@
 		"gambling": "Gambling:<br/>The creators of this {platform} DO NOT advocate gambling. This {platform} does not provide any means for monetary transaction or direct communication between users. The scoring system is intended solely to help users track their performance."
 	},
 	"aboutContent": {
-		"descMobile": "<span>You can also find us online at <a href='https://www.mahjong-sg.com/' style='color:#005eff; textDecoration: none'>www.mahjong-sg.com</a>.</span>",
-		"descWeb": "<span>You can also find us on the App Stores as Mahjong SG.</span>",
+		"descMobile": "You can also find us online at <a href='https://www.mahjong-sg.com/' style='color:#005eff; textDecoration: none'>www.mahjong-sg.com</a>.",
+		"descWeb": "You can also find us on the <a href='https://apps.apple.com/sg/app/mahjong-sg/id1608389963' style='color:#005eff; textDecoration: none'>App Store</a> or <a href='https://play.google.com/store/apps/details?id=com.tk.mahjongSg' style='color:#005eff; textDecoration: none'>Play Store</a> as Mahjong SG.",
 		"reachOut": "If you have any feedback or would like to get in touch, do reach out to us at mahjongsgapp@gmail.com, or on <a href='https://www.linkedin.com/in/tzi-kheng-sim-4a561616b/' style='color: #005eff; textDecoration: none'>LinkedIn</a>."
 	},
 	"helpContent": {

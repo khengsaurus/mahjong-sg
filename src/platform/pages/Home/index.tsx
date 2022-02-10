@@ -1,16 +1,9 @@
 import { Fade } from '@mui/material';
 import LogoutButton from 'platform/components/Buttons/LogoutButton';
-import {
-	AboutButton,
-	HelpButton,
-	JoinGameButton,
-	NewGameButton,
-	PrivacyButton
-} from 'platform/components/Buttons/TextNavButton';
+import { JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
 import SettingsWindow from 'platform/components/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
-import { BottomSpec } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -44,11 +37,6 @@ const Home = () => {
 			<JoinGameButton />
 			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
 			<LogoutButton />
-			<BottomSpec>
-				<PrivacyButton />
-				<AboutButton />
-				<HelpButton />
-			</BottomSpec>
 			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<SettingsWindow
@@ -63,7 +51,7 @@ const Home = () => {
 		</>
 	);
 
-	return <HomePage title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} markup={markup} />;
+	return <HomePage markup={markup} title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />;
 };
 
 export default Home;

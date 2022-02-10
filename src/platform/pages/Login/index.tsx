@@ -1,11 +1,10 @@
 import { Alert, Collapse, TextField } from '@mui/material';
 import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
-import { AboutButton, HelpButton, PrivacyButton } from 'platform/components/Buttons/TextNavButton';
-import { useAndroidKeyboardListener, useWindowListener } from 'platform/hooks';
+import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
-import { BottomSpec, Row } from 'platform/style/StyledComponents';
+import { Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
@@ -15,7 +14,6 @@ import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const Login = () => {
 	const { alert, login, setAlert, setUserEmail } = useContext(AppContext);
-	const { showBottom } = useAndroidKeyboardListener();
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -133,7 +131,7 @@ const Login = () => {
 				key="usernameEmail"
 				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
 				onChange={e => (showRegister ? setEmail(e.target.value) : setUsername(e.target.value?.toLowerCase()))}
-				style={{ width: '160px' }}
+				style={{ margin: '-5px 0px 0px', width: '150px' }}
 				type="text"
 				value={showRegister ? email : username}
 				variant="standard"
@@ -142,7 +140,7 @@ const Login = () => {
 				key="password"
 				label={HomeScreenText.PW}
 				onChange={e => setPassword(e.target.value)}
-				style={{ margin: '5px 0', width: '160px' }}
+				style={{ margin: '5px 0', width: '150px' }}
 				type="password"
 				value={password}
 				variant="standard"
@@ -152,7 +150,7 @@ const Login = () => {
 					key="confirmPassword"
 					label={HomeScreenText.C_PW}
 					onChange={e => setConfirmPassword(e.target.value)}
-					style={{ margin: '5px 0', width: '160px' }}
+					style={{ margin: '5px 0', width: '150px' }}
 					type="password"
 					value={confirmPassword}
 					variant="standard"
@@ -172,18 +170,8 @@ const Login = () => {
 			<Row style={{ justifyContent: 'center', marginTop: -5 }}>
 				<PlayAIButton />
 			</Row>
-			{showBottom && (
-				<BottomSpec>
-					<PrivacyButton />
-					<AboutButton />
-					<HelpButton />
-				</BottomSpec>
-			)}
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
-				<>
-					<br />
-					<Alert severity={alert?.status as AlertStatus}>{alert?.msg || ErrorMessage.TRY_AGAIN}</Alert>
-				</>
+				<Alert severity={alert?.status as AlertStatus}>{alert?.msg || ErrorMessage.TRY_AGAIN}</Alert>
 			</Collapse>
 		</>
 	);

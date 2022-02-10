@@ -4,7 +4,7 @@ import 'App.scss';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
-import { StyledButton, StyledText } from 'platform/style/StyledMui';
+import { StyledButton } from 'platform/style/StyledMui';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { AlertStatus, DisallowedUsernames, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
@@ -82,17 +82,16 @@ const NewUser = () => {
 
 	const markup = () => (
 		<>
-			<StyledText text={HomeScreenText.NEW_USER_TITLE} />
 			<TextField
 				inputProps={{ maxLength: 8 }}
 				label={HomeScreenText.USERNAME}
 				onChange={e => setUsername(e.target.value.toLowerCase())}
-				style={{ margin: '-3px 0 5px' }}
+				style={{ margin: '-5px 0px 5px', width: '150px' }}
 				type="text"
 				value={username}
 				variant="standard"
 			/>
-			<Row style={{ width: '80%', justifyContent: 'space-evenly' }}>
+			<Row style={{ width: '170px', justifyContent: 'space-between' }}>
 				{alert?.status !== Status.SUCCESS && (
 					<>
 						<StyledButton label="Cancel" onClick={cancelRegister} />
@@ -109,15 +108,12 @@ const NewUser = () => {
 				)}
 			</Row>
 			<Collapse in={!!alert} timeout={Transition.FAST} unmountOnExit>
-				<>
-					<br />
-					<Alert severity={alert?.status as AlertStatus}>{alert?.msg}</Alert>
-				</>
+				<Alert severity={alert?.status as AlertStatus}>{alert?.msg}</Alert>
 			</Collapse>
 		</>
 	);
 
-	return <HomePage markup={markup} timeout={2500} skipVerification />;
+	return <HomePage markup={markup} title={HomeScreenText.NEW_USER_TITLE} timeout={2500} skipVerification misc={3} />;
 };
 
 export default NewUser;
