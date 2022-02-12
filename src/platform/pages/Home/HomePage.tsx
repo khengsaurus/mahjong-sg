@@ -46,7 +46,7 @@ const HomePage = ({
 	skipVerification = false,
 	offsetKeyboard = 0
 }: HomePageProps) => {
-	const { handleHome } = useContext(AppContext);
+	const { handleHome, setAnnHuOpen } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
@@ -55,6 +55,8 @@ const HomePage = ({
 	/* ----------------------------------- Screen orientation ----------------------------------- */
 
 	useLayoutEffect(() => {
+		setAnnHuOpen(false);
+
 		if (isMobile()) {
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
@@ -66,6 +68,7 @@ const HomePage = ({
 				ScreenOrientation?.unlock();
 			}
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	/* ----------------- Keyboard offset for iOS + Android back button handling ----------------- */
