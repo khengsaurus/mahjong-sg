@@ -113,19 +113,18 @@ const AnnounceHuModal = ({
 							<div className={hasHandDescs ? `right-panel` : `full-panel`}>
 								{hu[0] !== playerSeat && <PaymentModalInline game={game} playerSeat={playerSeat} />}
 								<SentLogs logs={sentLogs} />
-								{/* <SentLogs logs={['ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips','ah huay sent ah beng 64 chips',]} /> */}
 							</div>
 						</div>
 					</>
 				)}
-				{(!f[0] || f[5] || n[2] === 9) && f[5] && (
+				{f[5] && (
 					<>
 						<StyledCenterText text={ScreenTextEng.DRAW_GAME} variant="h6" padding="3px" />
 						<StyledCenterText text={ScreenTextEng.FIFTEEN_LEFT} variant="subtitle1" padding="0px" />
-						{n[2] === 9 && (
-							<StyledCenterText text={ScreenTextEng.GAME_ENDED} variant="subtitle1" padding="3px 0px" />
-						)}
 					</>
+				)}
+				{n[2] === 9 && (
+					<StyledCenterText text={ScreenTextEng.GAME_ENDED} variant="subtitle1" padding="5px 0px 0px" />
 				)}
 			</DialogContent>
 			<DialogActions>
