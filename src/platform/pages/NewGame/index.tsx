@@ -120,6 +120,7 @@ const NewGame = () => {
 						players?.length < 4
 							? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
 							: 0,
+					paddingBottom: 0,
 					transition: TransitionSpeed.MEDIUM
 				}}
 				disableShortcut
@@ -127,6 +128,7 @@ const NewGame = () => {
 			<StyledButton
 				label={ButtonText.OPTIONS}
 				onClick={() => setShowOptions(prev => !prev)}
+				padding="10px 10px 0px"
 				disabled={startedGame}
 			/>
 			<Fade in={players.length === 4} timeout={Transition.FAST}>
@@ -134,6 +136,7 @@ const NewGame = () => {
 					<StyledButton
 						label={startedGame ? ButtonText.JOIN : ButtonText.START}
 						onClick={handleStartJoinClick}
+						padding="10px 10px 0px"
 						disabled={players.length < 4 || status === Status.PENDING}
 					/>
 				</div>
@@ -318,7 +321,7 @@ const NewGame = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.NEW_GAME_TITLE} />;
+	return <HomePage markup={markup} title={HomeScreenText.NEW_GAME_TITLE} misc={3} />;
 };
 
 export default NewGame;
