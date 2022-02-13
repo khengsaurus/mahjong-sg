@@ -2,8 +2,8 @@
 
 .join-game-panel {
 	align-content: flex-start;
-	max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-	max-height: calc(100vh - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+	max-height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	max-height: calc(100% - const(safe-area-inset-top) - const(safe-area-inset-bottom));
 	margin-bottom: env(safe-area-inset-bottom);
 	margin-bottom: const(safe-area-inset-bottom);
 	.list {
@@ -13,7 +13,6 @@
 		margin: 5px 0;
 		width: 250px;
 		overflow: scroll;
-		// @include default-border;
 	}
 	.list::-webkit-scrollbar {
 		display: none;

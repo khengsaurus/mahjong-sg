@@ -97,7 +97,7 @@ const HomePage = ({
 				setMarginBottom(0);
 			});
 		} else if (platform === Platform.ANDROID) {
-			setMarginBottom('10vh');
+			setMarginBottom('10%');
 		}
 
 		return () => {

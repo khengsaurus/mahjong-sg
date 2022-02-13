@@ -11,7 +11,6 @@
 			}
 			.htsh {
 				border: getTilePadding($size) solid transparent;
-				// border-radius: $default-border-radius;
 				&.unused {
 					z-index: -1;
 					&.bottom {
@@ -58,21 +57,21 @@
 			.htss {
 				@include flow(row wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
-				width: floor(85vw); // value used in useWindowSize
+				width: floor(85%); // IMPORTANT! used in useWindowSize
 				margin: getTilePadding($size);
 				&.top {
 					flex-flow: row-reverse wrap;
 				}
 				&.discarded {
-					width: floor(65vw);
+					width: floor(65%);
 					@media all and (min-aspect-ratio: 4/3) {
 						// Landscape
-						width: floor(45vw);
+						width: floor(45%);
 						@media all and (max-width: floor(calc(12 * getShownTileWidth($size) / 0.7))) {
-							width: floor(35vw);
+							width: floor(35%);
 						}
 						@media all and (max-width: floor(calc(9 * getShownTileWidth($size) / 0.7))) {
-							width: floor(25vw);
+							width: floor(25%);
 						}
 					}
 				}
@@ -175,21 +174,21 @@
 			.vtss {
 				@include flow(column-reverse wrap-reverse);
 				@include alignC-justifyC(flex-start, center);
-				height: floor(92vh); // value used in useWindowSize
+				height: floor(92%); // value used in useWindowSize
 				margin: getTilePadding($size);
 				&.left {
 					transform: rotate(180deg);
 				}
 				&.discarded {
-					height: floor(65vh);
+					height: floor(65%);
 					@media all and (max-aspect-ratio: 3/4) {
 						// Portrait
-						height: floor(45vh);
+						height: floor(45%);
 						@media all and (max-height: calc(12 * getShownTileWidth($size) / 0.7)) {
-							height: floor(35vh);
+							height: floor(35%);
 						}
 						@media all and (max-height: calc(9 * getShownTileWidth($size) / 0.7)) {
-							height: floor(25vh);
+							height: floor(25%);
 						}
 					}
 				}
