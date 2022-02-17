@@ -81,7 +81,7 @@ const Controls = () => {
 		setExec,
 		setGamePaused
 	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, notifOutput, HH, updateGame);
-	useBot(isHuLocked, lThAvail, setExec);
+	useBot(isHuLocked, delayLeft, lThAvail, setExec);
 	const { cO, f = [], hu = [], lTh = {}, n = [], ps = [] } = game || {};
 
 	const [showOfferChi, setShowOfferChi] = useState(false);
