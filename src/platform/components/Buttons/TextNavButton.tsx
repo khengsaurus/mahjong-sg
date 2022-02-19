@@ -1,4 +1,3 @@
-import { history } from 'App';
 import { useDocumentListener } from 'platform/hooks';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useContext } from 'react';
@@ -22,13 +21,14 @@ export const TextNavButton = ({
 	style = {},
 	onClick
 }: TextNavButtonProps) => {
+	const { navigate } = useContext(AppContext);
 	const handleShortcut = useCallback(
 		e => {
 			if (e.key === shortcut) {
-				onClick ? onClick() : history.push(route);
+				onClick ? onClick() : navigate(route);
 			}
 		},
-		[shortcut, route, onClick]
+		[shortcut, route, navigate, onClick]
 	);
 	useDocumentListener(EEvent.KEYDOWN, disableShortcut ? null : handleShortcut);
 
@@ -55,7 +55,8 @@ export const HomeButton = ({
 };
 
 export const BackButton = ({ style = {}, label = ButtonText.BACK, disableShortcut = true }: IHomeButton) => {
-	return <TextNavButton label={label} onClick={() => history.goBack()} style={style} disableShortcut={true} />;
+	const { navigate } = useContext(AppContext);
+	return <TextNavButton label={label} onClick={() => navigate(-1)} style={style} disableShortcut={true} />;
 };
 
 export const NewGameButton = ({ style = {} }: IHasStyle) => {

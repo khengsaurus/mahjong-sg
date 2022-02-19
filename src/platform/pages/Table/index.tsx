@@ -1,6 +1,5 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
-import { history } from 'App';
 import $ from 'jquery';
 import { isEmpty } from 'lodash';
 import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
@@ -36,7 +35,7 @@ const Table = () => {
 		sizes: { tileSize },
 		theme: { tableColor }
 	} = useSelector((state: IStore) => state);
-	const { setPlayers, playerSeat, setPlayerSeat } = useContext(AppContext);
+	const { navigate, playerSeat, setPlayers, setPlayerSeat } = useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const isLocalGame = gameId === LocalFlag;
 	const { verifyingSession } = useLocalSession(isLocalGame);
@@ -98,7 +97,7 @@ const Table = () => {
 					next: (gameData: any) => {
 						const currentGame: Game = objToGame(gameData, false);
 						if (isEmpty(currentGame) || !user?.uN) {
-							history.push(Page.HOME);
+							navigate(Page.HOME);
 						} else {
 							dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.n[0])));
 							hydrateGame(currentGame, user.uN);
@@ -110,7 +109,7 @@ const Table = () => {
 		}
 
 		if (!gameId) {
-			history.push(Page.INDEX);
+			navigate(Page.INDEX);
 		} else {
 			gameId === LocalFlag || isLocalGame ? handleLocalGame() : unsubscribe();
 		}

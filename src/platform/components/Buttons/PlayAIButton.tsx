@@ -1,4 +1,3 @@
-import { history } from 'App';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { StyledButton } from 'platform/style/StyledMui';
 import React, { useContext } from 'react';
@@ -22,7 +21,7 @@ import { ButtonText } from 'shared/screenTexts';
 import { setGameId, setLocalGame, setTheme, setTHK } from 'shared/store/actions';
 
 const PlayAIButton = () => {
-	const { login } = useContext(AppContext);
+	const { login, navigate } = useContext(AppContext);
 	const dispatch = useDispatch();
 
 	async function playVsAI() {
@@ -52,7 +51,7 @@ const PlayAIButton = () => {
 				tableTextColor: TextColor.LIGHT
 			})
 		);
-		history.push(Page.TABLE);
+		navigate(Page.TABLE);
 	}
 
 	return <StyledButton label={ButtonText.BOT_GAME} onClick={playVsAI} />;

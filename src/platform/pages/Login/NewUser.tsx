@@ -1,5 +1,4 @@
 import { Alert, Collapse, TextField } from '@mui/material';
-import { history } from 'App';
 import 'App.scss';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
@@ -14,7 +13,7 @@ import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 import { isDev } from 'shared/util';
 
 const NewUser = () => {
-	const { userEmail, login, logout, alert, setAlert } = useContext(AppContext);
+	const { alert, login, logout, navigate, setAlert, userEmail } = useContext(AppContext);
 	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
 	const checkAuthTimeoutRef = useRef<NodeJS.Timeout>(null);
@@ -23,10 +22,10 @@ const NewUser = () => {
 		clearTimeout(checkAuthTimeoutRef.current);
 		checkAuthTimeoutRef.current = setTimeout(async () => {
 			if (await !ServiceInstance.FBAuthenticated()) {
-				history.push(Page.LOGIN);
+				navigate(Page.LOGIN);
 			}
 		}, 500);
-	}, []);
+	}, [navigate]);
 
 	useEffect(() => {
 		window.onbeforeunload = () => {
@@ -44,7 +43,7 @@ const NewUser = () => {
 		setAlert(null);
 		ServiceInstance.FBDeleteCurrentFBUser();
 		logout();
-		history.push(Page.LOGIN);
+		navigate(Page.LOGIN);
 	}
 
 	function registerNewUsername(values: IEmailUser, callback: () => void) {
@@ -71,7 +70,7 @@ const NewUser = () => {
 			.then((user: User) => {
 				login(user, true);
 				setTimeout(function () {
-					history.push(Page.HOME);
+					navigate(Page.HOME);
 					setAlert(null);
 				}, 1000);
 			})

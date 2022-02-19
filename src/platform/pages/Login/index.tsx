@@ -1,5 +1,4 @@
 import { Alert, Collapse, TextField } from '@mui/material';
-import { history } from 'App';
 import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
 import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
@@ -13,7 +12,7 @@ import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
 
 const Login = () => {
-	const { alert, login, setAlert, setUserEmail } = useContext(AppContext);
+	const { alert, login, navigate, setAlert, setUserEmail } = useContext(AppContext);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -66,7 +65,7 @@ const Login = () => {
 						login(user, false);
 						user?.email && ServiceInstance.cleanupGames(user.email);
 						setReady(true);
-						history.push(Page.INDEX);
+						navigate(Page.INDEX);
 					} else {
 						throw new Error(ErrorMessage.REGISTER_ISSUE);
 					}
@@ -75,7 +74,7 @@ const Login = () => {
 					handleError(err);
 				});
 		}
-	}, [showRegister, username, password, login, setAlert, handleError]);
+	}, [handleError, login, navigate, password, showRegister, setAlert, username]);
 
 	const handleRegister = useCallback(() => {
 		if (showRegister && email.trim() && password.trim() && confirmPassword.trim()) {
@@ -88,7 +87,7 @@ const Login = () => {
 							clearForm();
 							setAlert(null);
 							setReady(true);
-							history.push(Page.NEWUSER);
+							navigate(Page.NEWUSER);
 						}
 					})
 					.catch(err => {
@@ -99,7 +98,7 @@ const Login = () => {
 				setAlert({ status: Status.ERROR, msg: ErrorMessage.PW_NOT_MATCHING });
 			}
 		}
-	}, [confirmPassword, email, password, setAlert, setUserEmail, showRegister]);
+	}, [confirmPassword, email, navigate, password, setAlert, setUserEmail, showRegister]);
 
 	const enterListener = useCallback(
 		e => {

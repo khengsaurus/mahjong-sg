@@ -1,6 +1,7 @@
 import { Button, Typography } from '@mui/material';
-import { history } from 'App';
+import { useContext } from 'react';
 import { Page } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
 
 interface IStyledTextProps {
 	text: string;
@@ -60,25 +61,26 @@ export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: IS
 );
 
 export const StyledButton = ({
-	label,
-	navigate,
 	color,
+	label,
+	onClick,
+	navigate,
+	type,
 	padding = '10px',
 	size = 'medium',
 	variant = 'text',
 	autoFocus = false,
-	onClick,
-	type,
 	disabled = false,
 	style = {}
 }: IStyledButtonProps) => {
+	const { navigate: _navigate } = useContext(AppContext);
 	return (
 		<Button
 			style={{ color, padding, ...style }}
 			size={size}
 			variant={variant}
 			autoFocus={autoFocus}
-			onClick={() => (navigate ? history.push(navigate) : onClick ? onClick() : null)}
+			onClick={() => (navigate ? _navigate(navigate) : onClick ? onClick() : null)}
 			type={type}
 			disabled={disabled}
 			disableRipple

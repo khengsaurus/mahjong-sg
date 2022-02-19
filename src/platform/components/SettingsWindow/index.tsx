@@ -1,5 +1,4 @@
 import { Alert, Collapse, Dialog, DialogContent, FormControl, Paper, Switch, Tab, Tabs } from '@mui/material';
-import { history } from 'App';
 import { extend, isEqual } from 'lodash';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles, TableTheme } from 'platform/style/MuiStyles';
@@ -40,7 +39,7 @@ interface SettingsWindowProps extends ModalProps {
 }
 
 const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowProps) => {
-	const { alert, handleLocalUO, setAlert, logout } = useContext(AppContext);
+	const { alert, handleLocalUO, logout, navigate, setAlert } = useContext(AppContext);
 	const { user, theme, sizes, haptic = true } = useSelector((state: IStore) => state);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);
 	const [tableColor, setTableColor] = useState(theme?.tableColor);
@@ -151,7 +150,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowPro
 		await ServiceInstance.FBDeleteUser(user).then(res => {
 			if (res) {
 				logout();
-				history.push(Page.LOGIN);
+				navigate(Page.LOGIN);
 			} else {
 				setAlert({ status: Status.ERROR, msg: ErrorMessage.DELETE_ERROR });
 			}

@@ -15,11 +15,11 @@ interface ShownHHProps {
 
 function compare(prev: ShownHHProps, next: ShownHHProps) {
 	return (
-		prev.className === next.className &&
 		prev.tHK === next.tHK &&
-		prev.segment === next.segment &&
-		prev.lastSuffix === next.lastSuffix &&
 		prev.lTa?.r === next.lTa?.r &&
+		prev.segment === next.segment &&
+		prev.className === next.className &&
+		prev.lastSuffix === next.lastSuffix &&
 		JSON.stringify(prev.hTs.map(t => t.r)) === JSON.stringify(next.hTs.map(t => t.r))
 	);
 }

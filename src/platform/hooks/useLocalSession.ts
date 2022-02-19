@@ -1,13 +1,12 @@
 import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
-import { history } from 'App';
 import { useContext, useEffect, useState } from 'react';
 import { EEvent, Page, Status } from 'shared/enums';
 import { AppContext, useSession } from 'shared/hooks';
 import { isMobile } from 'shared/util';
 
 function useLocalSession(skipVerification = true) {
-	const { logout } = useContext(AppContext);
+	const { logout, navigate } = useContext(AppContext);
 	const { verifyingSession, sessionVerified } = useSession(skipVerification);
 	const [isAppConnected, setIsAppConnected] = useState(true);
 
@@ -34,9 +33,9 @@ function useLocalSession(skipVerification = true) {
 	useEffect(() => {
 		if (!skipVerification && verifyingSession === Status.SUCCESS && !sessionVerified) {
 			logout();
-			history.push(Page.LOGIN);
+			navigate(Page.LOGIN);
 		}
-	}, [skipVerification, verifyingSession, sessionVerified, logout]);
+	}, [logout, navigate, skipVerification, sessionVerified, verifyingSession]);
 
 	return { verifyingSession, sessionVerified, isAppConnected };
 }

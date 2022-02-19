@@ -15,7 +15,6 @@ import {
 	MenuItem,
 	Select
 } from '@mui/material';
-import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
 import HomePage from 'platform/pages/Home/HomePage';
@@ -36,8 +35,8 @@ import { getTileHashKey } from 'shared/util';
 import './newGame.scss';
 
 const NewGame = () => {
+	const { navigate, players, setPlayers } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
-	const { players, setPlayers } = useContext(AppContext);
 	const [mHu, setMHu] = useState(false);
 	const [payment, setPayment] = useState(PaymentType.SHOOTER);
 	const [random, setRandom] = useState(false);
@@ -91,7 +90,7 @@ const NewGame = () => {
 
 	async function handleStartJoinClick() {
 		if (startedGame) {
-			history.push(Page.TABLE);
+			navigate(Page.TABLE);
 		} else if (status !== Status.PENDING) {
 			startGame();
 		}

@@ -1,14 +1,14 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Collapse, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { history } from 'App';
 import { HomeButton } from 'platform/components/Buttons/TextNavButton';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { Centered } from 'platform/style/StyledComponents';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EEvent, Page } from 'shared/enums';
+import { AppContext } from 'shared/hooks';
 import { Game } from 'shared/models';
 import { HomeScreenText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
@@ -18,6 +18,7 @@ import { objToGame } from 'shared/util/parsers';
 import './joinGame.scss';
 
 const JoinGame = () => {
+	const { navigate } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const [gameInvites, setGameInvites] = useState<Game[]>([]);
 	const [title, setTitle] = useState('Loading...');
@@ -62,7 +63,7 @@ const JoinGame = () => {
 
 	function handleJoinGame(gameId: string) {
 		dispatch(setGameId(gameId));
-		history.push(Page.TABLE);
+		navigate(Page.TABLE);
 	}
 
 	const markup = () => (
