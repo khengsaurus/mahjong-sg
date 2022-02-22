@@ -7,10 +7,10 @@ import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'shared/store';
-import { TableNotifProps } from 'shared/typesPlus';
+import { ITableNotifP } from 'shared/typesPlus';
 import { triggerHaptic } from 'shared/util';
 
-const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: TableNotifProps) => {
+const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: ITableNotifP) => {
 	const { haptic } = useSelector((store: IStore) => store);
 	const hasMoreThanOneAction = (!!pong ? 1 : 0) + (!!kang ? 1 : 0) + (!!hu ? 1 : 0) > 1;
 

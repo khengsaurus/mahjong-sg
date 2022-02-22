@@ -8,7 +8,7 @@ import { ControlsTextChi } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
-const BottomLeftControls = (props: BLControlsProps) => {
+const BottomLeftControls = (props: IBLControlsP) => {
 	const {
 		handleChi,
 		handlePong,

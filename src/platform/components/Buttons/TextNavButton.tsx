@@ -5,7 +5,7 @@ import { EEvent, Page, PageName, Shortcut } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ButtonText } from 'shared/screenTexts';
 
-interface TextNavButtonProps extends IHasStyle {
+interface ITextNavButtonP extends IHasStyle {
 	label: PageName | ButtonText;
 	route?: Page;
 	shortcut?: Shortcut;
@@ -20,7 +20,7 @@ export const TextNavButton = ({
 	disableShortcut = false,
 	style = {},
 	onClick
-}: TextNavButtonProps) => {
+}: ITextNavButtonP) => {
 	const { navigate } = useContext(AppContext);
 	const handleShortcut = useCallback(
 		e => {

@@ -24,7 +24,7 @@ import { HomeScreenText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
 
-interface HomePageProps {
+interface IHomePageP {
 	markup: () => React.FC | JSX.Element;
 	title?: string;
 	ready?: boolean;
@@ -45,7 +45,7 @@ const HomePage = ({
 	fallbackTitle = HomeScreenText.SOMETHING_WENT_WRONG,
 	skipVerification = false,
 	offsetKeyboard = 0
-}: HomePageProps) => {
+}: IHomePageP) => {
 	const { handleHome, setAnnHuOpen } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);

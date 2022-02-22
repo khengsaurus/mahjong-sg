@@ -9,13 +9,13 @@ import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { getCardName, getRandomFoodEmoji } from 'shared/util';
 
-interface IChiAlertProps {
+interface IChiAlertP {
 	show: boolean;
 	onClose: () => void;
 	handleOpenOffer: () => void;
 }
 
-const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertProps) => {
+const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertP) => {
 	const {
 		theme: { tableColor },
 		game,

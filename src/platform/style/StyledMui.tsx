@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { Page } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 
-interface IStyledTextProps {
+interface IStyledTextP {
 	text: string;
 	color?: string;
 	padding?: string;
@@ -35,7 +35,7 @@ export const StyledText = ({
 	textAlign = 'left',
 	placeSelf = 'center',
 	style = {}
-}: IStyledTextProps) => (
+}: IStyledTextP) => (
 	<Typography
 		style={{ justifySelf: 'center', alignSelf: 'center', color, padding, textAlign, placeSelf, ...style }}
 		variant={variant}
@@ -44,7 +44,7 @@ export const StyledText = ({
 	</Typography>
 );
 
-export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: IStyledTextProps) => (
+export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: IStyledTextP) => (
 	<Typography
 		style={{
 			...style,

@@ -2,13 +2,13 @@ import { memo } from 'react';
 import { Segment } from 'shared/enums';
 import ShownTile from './ShownTile';
 
-interface DiscardedTilesProps {
+interface IDiscardedTilesP {
 	tiles: IShownTile[];
 	segment: Segment;
 	className: string;
 }
 
-function compare(prev: DiscardedTilesProps, next: DiscardedTilesProps) {
+function compare(prev: IDiscardedTilesP, next: IDiscardedTilesP) {
 	return (
 		prev.segment === next.segment &&
 		prev.className === next.className &&
@@ -16,7 +16,7 @@ function compare(prev: DiscardedTilesProps, next: DiscardedTilesProps) {
 	);
 }
 
-const DiscardedTiles = ({ className, tiles, segment }: DiscardedTilesProps) => {
+const DiscardedTiles = ({ className, tiles, segment }: IDiscardedTilesP) => {
 	return (
 		<div className={className}>
 			{tiles.map(tile => (

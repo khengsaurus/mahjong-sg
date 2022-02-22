@@ -22,23 +22,15 @@ import { ErrorMessage } from 'shared/messages';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setHaptic, setSizes, setTheme } from 'shared/store/actions';
-import { ModalProps } from 'shared/typesPlus';
+import { IModalP } from 'shared/typesPlus';
 import { getTheme, isMobile } from 'shared/util';
 import './settingsWindow.scss';
 
-interface IPreference {
-	label: string;
-	size?: Size;
-	selectedColor?: BackgroundColor | TableColor | TileColor;
-	colors?: any[];
-	handleSelect: (value: Size | BackgroundColor | TableColor | TileColor) => void;
-}
-
-interface SettingsWindowProps extends ModalProps {
+interface ISettingsWindowP extends IModalP {
 	accActions?: boolean;
 }
 
-const SettingsWindow = ({ onClose, show, accActions = false }: SettingsWindowProps) => {
+const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP) => {
 	const { alert, handleLocalUO, logout, navigate, setAlert } = useContext(AppContext);
 	const { user, theme, sizes, haptic = true } = useSelector((state: IStore) => state);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);

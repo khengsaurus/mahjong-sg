@@ -11,7 +11,7 @@ import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
 
-interface IOfferChiModalProps {
+interface IOfferChiModalP {
 	show: boolean;
 	card: string;
 	ms: IShownTile[][];
@@ -19,7 +19,7 @@ interface IOfferChiModalProps {
 	onClose: () => void;
 }
 
-const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalProps) => {
+const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalP) => {
 	const {
 		theme: { tableColor }
 	} = useSelector((state: IStore) => state);

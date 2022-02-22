@@ -2,14 +2,14 @@ import { TileBack } from 'platform/style/StyledComponents';
 import { memo } from 'react';
 import { FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
 
-interface IUnusedTiles {
+interface IUnusedTilesP {
 	tiles: number;
 	segment: Segment;
 	tag?: FrontBackTag;
 	tileSize?: Size;
 }
 
-const UnusedTiles = ({ tiles, segment, tag, tileSize = Size.MEDIUM }: IUnusedTiles) => {
+const UnusedTiles = ({ tiles, segment, tag, tileSize = Size.MEDIUM }: IUnusedTilesP) => {
 	const bottomStackLength = Math.ceil(tiles / 2);
 	const topStackLength = Math.floor(tiles / 2);
 	const bottomStack = bottomStackLength * _HiddenTileWidth[tileSize];

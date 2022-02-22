@@ -15,7 +15,7 @@ import { useAndroidBack, useDocumentListener } from 'platform/hooks';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BotIds, EEvent, LocalFlag, Shortcut, Transition } from 'shared/enums';
+import { EEvent, LocalFlag, Shortcut, Transition } from 'shared/enums';
 import {
 	AppContext,
 	useBot,
@@ -28,19 +28,19 @@ import {
 } from 'shared/hooks';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { getCardName } from 'shared/util';
+import { getCardName, isBot } from 'shared/util';
 import ChiAlert from './ChiAlert';
 import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
 import './controls.scss';
 
-interface IFadeWrapperProps {
+interface IFadeWrapperP {
 	show: boolean;
 	Component: JSX.Element | React.FC;
 	unmountOnExit?: boolean;
 	wrapperClass?: string;
 }
 
-function FadeWrapper({ Component, show, unmountOnExit = true, wrapperClass = '' }: IFadeWrapperProps) {
+function FadeWrapper({ Component, show, unmountOnExit = true, wrapperClass = '' }: IFadeWrapperP) {
 	return (
 		<Fade in={show} timeout={Transition.FAST} unmountOnExit={unmountOnExit}>
 			<div className={wrapperClass}>{Component}</div>
@@ -91,7 +91,7 @@ const Controls = () => {
 
 	useEffect(() => {
 		const first_p = ps[n[3]];
-		const botToGoFirst = BotIds.includes(first_p?.id);
+		const botToGoFirst = isBot(first_p?.id);
 		if (f[1]) {
 			setShowStart(hu.length < 3 && (botToGoFirst || first_p.uN !== user.uN));
 			setStartPrompt(

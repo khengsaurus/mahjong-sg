@@ -4,7 +4,7 @@ import { EEvent, Platform, Size, _ShownTileHeight, _ShownTileWidth } from 'share
 import { isMobile } from 'shared/util';
 import { useWindowListener } from '.';
 
-interface useDynamicWidthProps {
+interface IUseDynamicWidthP {
 	ref: React.MutableRefObject<any>;
 	countTs: number;
 	tileSize: Size;
@@ -40,7 +40,7 @@ export function useWindowHeight() {
  * Workaround for column-wrap div's not having dynamic width
  * https://stackoverflow.com/questions/33891709/when-flexbox-items-wrap-in-column-mode-container-does-not-grow-its-width
  */
-export function useDynamicWidth({ ref, countTs, tileSize, flag, add = 0, addPx = 0 }: useDynamicWidthProps) {
+export function useDynamicWidth({ ref, countTs, tileSize, flag, add = 0, addPx = 0 }: IUseDynamicWidthP) {
 	const windowHeight = useWindowHeight();
 
 	return useLayoutEffect(() => {

@@ -7,12 +7,13 @@ import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BotIds, BotTimeout, LocalFlag, PaymentType } from 'shared/enums';
+import { BotTimeout, LocalFlag, PaymentType } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext } from 'shared/hooks';
 import { PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { ModalProps } from 'shared/typesPlus';
+import { IModalP } from 'shared/typesPlus';
+import { isBot } from 'shared/util';
 import './gameInfo.scss';
 
 const padding0Height32 = {
@@ -77,7 +78,7 @@ const renderBotTimeSelect = (
 	);
 };
 
-const GameInfo = ({ game, show, onClose }: ModalProps) => {
+const GameInfo = ({ game, show, onClose }: IModalP) => {
 	const { cO, id: gameId, f = [], n = [], pay, ps, sHs } = game;
 	const { showBot, setShowBot } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
@@ -138,7 +139,7 @@ const GameInfo = ({ game, show, onClose }: ModalProps) => {
 				{gameId === LocalFlag &&
 					renderSwitch(ScreenTextEng.SHOW_BOT_HANDS, showBot, () => setShowBot(!showBot), rightWidth)}
 				{user?.uN === cO &&
-					!!ps.find(p => BotIds.includes(p.id)) &&
+					!!ps.find(p => isBot(p.id)) &&
 					renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}
 			</DialogContent>
 		</Dialog>

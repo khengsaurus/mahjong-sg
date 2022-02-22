@@ -8,7 +8,7 @@ import { Amounts, LocalFlag } from 'shared/enums';
 import { Game, User } from 'shared/models';
 import { ButtonText, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { ModalProps } from 'shared/typesPlus';
+import { IModalP } from 'shared/typesPlus';
 import './paymentModal.scss';
 
 export async function sendChips(game: Game, from: number, to: number, amt: number, sendCallback?: () => void) {
@@ -16,7 +16,7 @@ export async function sendChips(game: Game, from: number, to: number, amt: numbe
 	sendCallback && sendCallback();
 }
 
-const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
+const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 	const { game, gameId, localGame } = useSelector((store: IStore) => store);
 	const [toWho, setToWho] = useState(10);
 	const [amt, setAmt] = useState(0);
@@ -35,7 +35,7 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 		return (
 			<div className="chips">
 				{ps.map((p: User, ix: number) => (
-					<div className="item">
+					<div className="item" key={`pay-user-${ix}`}>
 						<StyledText key={ix} text={`${p.uN}: ${p.bal}`} variant="subtitle1" padding="0px" />
 					</div>
 				))}

@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
-import { PlayerComponentProps } from 'shared/typesPlus';
+import { IPlayerComponentP } from 'shared/typesPlus';
 import './playerComponents.scss';
 
-const RightPlayer = (props: PlayerComponentProps) => {
+const RightPlayer = (props: IPlayerComponentP) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const { showBot } = useContext(AppContext);

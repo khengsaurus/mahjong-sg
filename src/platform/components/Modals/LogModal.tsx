@@ -6,7 +6,7 @@ import { LocalFlag, Size, TableColor, Transition } from 'shared/enums';
 import { ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 
-interface LogModalProps {
+interface ILogModalP {
 	expanded: boolean;
 	onClose: () => void;
 	externalRef?: React.MutableRefObject<any>;
@@ -14,11 +14,11 @@ interface LogModalProps {
 	tableColor: TableColor;
 }
 
-function compare(prev: LogModalProps, next: LogModalProps) {
+function compare(prev: ILogModalP, next: ILogModalP) {
 	return prev.size === next.size && prev.expanded === next.expanded && prev.tableColor === next.tableColor;
 }
 
-const LogModal = (props: LogModalProps) => {
+const LogModal = (props: ILogModalP) => {
 	const { expanded, onClose, externalRef, size, tableColor } = props;
 	const { game, gameId, localGame } = useSelector((store: IStore) => store);
 	const isLocalGame = gameId === LocalFlag;

@@ -10,7 +10,7 @@ import { LocalFlag, PaymentType } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ButtonText, PaymentLabel, ScreenTextChi, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
-import { AnnounceHuModalProps } from 'shared/typesPlus';
+import { IAnnounceHuModalP } from 'shared/typesPlus';
 import { getHandDesc, isBefore } from 'shared/util';
 import './announceHuModal.scss';
 
@@ -25,7 +25,7 @@ const AnnounceHuModal = ({
 	huFirst,
 	nextRound,
 	onClose: handleShow
-}: AnnounceHuModalProps) => {
+}: IAnnounceHuModalP) => {
 	const { setAnnHuOpen } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
 	const { id, hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};

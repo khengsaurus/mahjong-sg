@@ -4,7 +4,7 @@ import { Segment } from 'shared/enums';
 import { revealTile } from 'shared/util';
 import ShownTile from './ShownTile';
 
-interface ShownHHProps {
+interface IShownHHP {
 	className?: string;
 	hTs?: IHiddenTile[];
 	lTa?: IShownTile | IHiddenTile;
@@ -13,7 +13,7 @@ interface ShownHHProps {
 	lastSuffix?: string;
 }
 
-function compare(prev: ShownHHProps, next: ShownHHProps) {
+function compare(prev: IShownHHP, next: IShownHHP) {
 	return (
 		prev.tHK === next.tHK &&
 		prev.lTa?.r === next.lTa?.r &&
@@ -24,8 +24,8 @@ function compare(prev: ShownHHProps, next: ShownHHProps) {
 	);
 }
 
-const ShownHiddenHand = forwardRef<MutableRefObject<any>, ShownHHProps>(
-	(props: ShownHHProps, ref?: MutableRefObject<any>) => {
+const ShownHiddenHand = forwardRef<MutableRefObject<any>, IShownHHP>(
+	(props: IShownHHP, ref?: MutableRefObject<any>) => {
 		const { className, hTs, lTa, tHK, segment, lastSuffix } = props;
 		const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
 		return (

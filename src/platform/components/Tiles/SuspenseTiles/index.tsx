@@ -2,14 +2,14 @@ import React from 'react';
 import { Segment } from 'shared/enums';
 import './suspenseTiles.scss';
 
-interface SuspenseBlockProps {
+interface ISuspenseBlockP {
 	color?: string;
 	height?: number;
-	width?: number;
 	segment?: Segment;
+	width?: number;
 }
 
-const SuspenseTiles = ({ height, width, color, segment }: SuspenseBlockProps) => {
+const SuspenseTiles = ({ height, width, color, segment }: ISuspenseBlockP) => {
 	const horizontal = segment === Segment.TOP || segment === Segment.BOTTOM;
 	const background = `linear-gradient(${horizontal ? `-90deg,` : ``}gainsboro, ${color}, ${color}, gainsboro)`;
 

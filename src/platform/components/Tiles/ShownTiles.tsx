@@ -3,7 +3,7 @@ import React, { forwardRef, memo, MutableRefObject } from 'react';
 import { Segment, Size, Suit } from 'shared/enums';
 import ShownTile from './ShownTile';
 
-interface ShownTilesProps {
+interface IShownTilesP {
 	sT: boolean;
 	dealer: boolean;
 	className: string;
@@ -14,7 +14,7 @@ interface ShownTilesProps {
 	nonFlowers: IShownTile[];
 }
 
-function compare(prev: ShownTilesProps, next: ShownTilesProps) {
+function compare(prev: IShownTilesP, next: IShownTilesP) {
 	return (
 		prev.dealer === next.dealer &&
 		prev.segment === next.segment &&
@@ -28,8 +28,8 @@ function compare(prev: ShownTilesProps, next: ShownTilesProps) {
 	);
 }
 
-const ShownTiles = forwardRef<MutableRefObject<any>, ShownTilesProps>(
-	(props: ShownTilesProps, ref?: MutableRefObject<any>) => {
+const ShownTiles = forwardRef<MutableRefObject<any>, IShownTilesP>(
+	(props: IShownTilesP, ref?: MutableRefObject<any>) => {
 		const { className, nonFlowers, flowers, segment, dealer, tileSize, lastThrownId } = props;
 		return (
 			<div id={segment + '-shown'} className={className} ref={ref}>

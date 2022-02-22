@@ -9,7 +9,7 @@ import { AppContext } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import './controls.scss';
 
-const TopRightControls = (props: TRControlsProps) => {
+const TopRightControls = (props: ITRControlsP) => {
 	const { handlePay, handleLogs, showLogs, showText } = props;
 	const {
 		theme: { tableColor = TableColor.GREEN },

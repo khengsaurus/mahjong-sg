@@ -3,14 +3,14 @@ import { getHighlightColor } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
 import { IStore } from 'shared/store';
 
-interface ControlButtonProps {
-	label: string;
-	callback: () => void;
+interface IControlButtonP {
 	disabled?: boolean;
+	label: string;
 	style: any;
+	callback: () => void;
 }
 
-export const ControlButton = ({ label, callback, disabled = false, style }: ControlButtonProps) => {
+export const ControlButton = ({ label, callback, disabled = false, style }: IControlButtonP) => {
 	const {
 		theme: { tableColor }
 	} = useSelector((store: IStore) => store);

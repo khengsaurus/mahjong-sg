@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Segment } from 'shared/enums';
 import getTileSrc from 'shared/images';
 
-interface ShownTileProps {
+interface IShownTileP {
 	tileRef: number;
 	tileCard: string;
 	segment: Segment;
@@ -24,7 +24,7 @@ function getClass(segment: Segment) {
 /**
  * @description Renders a ShownTile for IShownTile | IHiddenTile, hence tileCard needs to be unhashed and passed as a prop
  */
-const ShownTile = (props: ShownTileProps) => {
+const ShownTile = (props: IShownTileP) => {
 	const { tileRef, tileCard, segment, highlight, classSuffix } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;

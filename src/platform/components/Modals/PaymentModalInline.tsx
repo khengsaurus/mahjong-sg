@@ -11,12 +11,12 @@ import { ScreenTextEng } from 'shared/screenTexts';
 import { getDefaultAmt } from 'shared/util';
 import { sendChips } from './PaymentModal';
 
-interface PaymentModalInlineProps {
+interface IPaymentModalInlineP {
 	game: Game;
 	playerSeat: number;
 }
 
-const PaymentModalInline = ({ game, playerSeat }: PaymentModalInlineProps) => {
+const PaymentModalInline = ({ game, playerSeat }: IPaymentModalInlineP) => {
 	const { hu, n = [], pay } = game;
 
 	const { winner, defaultAmt } = useMemo(() => {

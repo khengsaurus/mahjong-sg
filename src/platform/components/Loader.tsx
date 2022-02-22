@@ -7,7 +7,7 @@ import BarLoader from 'react-spinners/BarLoader';
 import { TextColor } from 'shared/enums';
 import { IStore } from 'shared/store';
 
-interface LoaderProps {
+interface ILoaderP {
 	color?: string;
 	css?: any;
 	height?: number;
@@ -19,7 +19,7 @@ const override = css`
 	margin: 0 auto;
 `;
 
-export const Loader = (props: LoaderProps) => {
+export const Loader = (props: ILoaderP) => {
 	const {
 		theme: { mainTextColor = TextColor.DARK }
 	} = useSelector((state: IStore) => state);
@@ -32,7 +32,7 @@ export const Loader = (props: LoaderProps) => {
 	);
 };
 
-export const NetworkLoader = (props: LoaderProps) => {
+export const NetworkLoader = (props: ILoaderP) => {
 	const {
 		theme: { mainTextColor = TextColor.DARK }
 	} = useSelector((state: IStore) => state);

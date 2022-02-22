@@ -2,14 +2,14 @@ import { TileBack } from 'platform/style/StyledComponents';
 import { memo } from 'react';
 import { Segment, Size, _HiddenTileWidth } from 'shared/enums';
 
-interface HiddenHandProps {
+interface IHiddenHandP {
 	tiles: number;
 	segment: Segment;
 	tileSize?: Size;
 	highlight?: string;
 }
 
-const HiddenHand = ({ tiles, segment, tileSize = Size.MEDIUM, highlight = '' }: HiddenHandProps) => {
+const HiddenHand = ({ tiles, segment, tileSize = Size.MEDIUM, highlight = '' }: IHiddenHandP) => {
 	return segment === Segment.TOP ? (
 		<div className="htsh" style={{ borderColor: highlight || null }}>
 			<TileBack className="horizontal-hidden" style={{ width: tiles * _HiddenTileWidth[tileSize] }} />

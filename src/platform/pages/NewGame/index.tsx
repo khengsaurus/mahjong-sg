@@ -24,14 +24,14 @@ import { Centered, Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { Fragment, useContext, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BotIds, LocalFlag, Page, PaymentType, Status, Transition, TransitionSpeed } from 'shared/enums';
+import { LocalFlag, Page, PaymentType, Status, Transition, TransitionSpeed } from 'shared/enums';
 import { HandDescEng, ScoringHand } from 'shared/handEnums';
 import { AppContext, useAsync } from 'shared/hooks';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText, PaymentLabel, ScreenTextEng } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { setGameId, setTHK } from 'shared/store/actions';
-import { getTileHashKey } from 'shared/util';
+import { getTileHashKey, isBot } from 'shared/util';
 import './newGame.scss';
 
 const NewGame = () => {
@@ -54,10 +54,7 @@ const NewGame = () => {
 	const playersRef = useRef<User[]>(players);
 	const dispatch = useDispatch();
 
-	const isLocalGame: boolean = useMemo(
-		() => players.every(p => p.id === user.id || BotIds.includes(p.id)),
-		[players, user]
-	);
+	const isLocalGame: boolean = useMemo(() => players.every(p => p.id === user.id || isBot(p.id)), [players, user]);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {

@@ -2,7 +2,7 @@ import { Checkbox } from '@mui/material';
 import { FormRow } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';
 
-interface CheckBoxProps {
+interface ICheckBoxP {
 	title: string;
 	value: boolean;
 	onChange: () => void;
@@ -18,7 +18,7 @@ const CheckBox = ({
 	titleVariant = 'subtitle2',
 	titlePadding = '0px',
 	defaultChecked = false
-}: CheckBoxProps) => {
+}: ICheckBoxP) => {
 	return (
 		<FormRow>
 			<StyledText text={title} variant={titleVariant} padding={titlePadding} />

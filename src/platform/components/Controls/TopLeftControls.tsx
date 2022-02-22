@@ -19,7 +19,7 @@ const TopLeftControls = ({
 	setShowLeaveAlert,
 	showText,
 	texts
-}: TLControlsProps) => {
+}: ITLControlsP) => {
 	const {
 		gameId,
 		sizes: { controlsSize = Size.MEDIUM }

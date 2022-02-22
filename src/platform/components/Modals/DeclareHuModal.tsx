@@ -6,10 +6,10 @@ import { FormRow, MainTransparent } from 'platform/style/StyledComponents';
 import { StyledButton, StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { ButtonText, ScreenTextChi, ScreenTextEng } from 'shared/screenTexts';
-import { DeclareHuModalProps, IPoint } from 'shared/typesPlus';
+import { IDeclareHuModalP, IPoint } from 'shared/typesPlus';
 import { generateNumbers, getHandDesc } from 'shared/util';
 
-const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: DeclareHuModalProps) => {
+const DeclareHuModal = ({ show, game, playerSeat, HH, handleHu, onClose }: IDeclareHuModalP) => {
 	const { f = [], hu, n = [] } = game || {};
 	const defaultZimo = !!HH?.self || (f[3] && n[3] === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
 	const [zimo, setZimo] = useState(defaultZimo);

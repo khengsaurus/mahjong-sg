@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
-import { PlayerComponentProps } from 'shared/typesPlus';
+import { IPlayerComponentP } from 'shared/typesPlus';
 import './playerComponents.scss';
 
-const BottomPlayer = (props: PlayerComponentProps) => {
+const BottomPlayer = (props: IPlayerComponentP) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
 	const {

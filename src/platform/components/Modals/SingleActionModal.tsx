@@ -3,14 +3,14 @@ import { MuiStyles } from 'platform/style/MuiStyles';
 import { StyledButton, StyledCenterText } from 'platform/style/StyledMui';
 import React from 'react';
 
-interface ISingleActionProps {
+interface ISingleActionP {
 	show: boolean;
 	text: string;
 	buttonText?: string;
 	action?: () => void;
 }
 
-const SingleActionModal = ({ show, text, buttonText, action }: ISingleActionProps) => {
+const SingleActionModal = ({ show, text, buttonText, action }: ISingleActionP) => {
 	return (
 		<Dialog
 			open={show}
