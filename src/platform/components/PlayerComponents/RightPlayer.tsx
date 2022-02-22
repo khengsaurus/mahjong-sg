@@ -12,7 +12,7 @@ import './playerComponents.scss';
 const RightPlayer = (props: IPlayerComponentP) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
-	const { showBot } = useContext(AppContext);
+	const { showAI } = useContext(AppContext);
 	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
 	const {
 		sizes: { tileSize = Size.MEDIUM },
@@ -34,14 +34,14 @@ const RightPlayer = (props: IPlayerComponentP) => {
 		ref: shownHiddenHandRef,
 		countTs: countHandTiles,
 		tileSize,
-		flag: sT || showBot,
+		flag: sT || showAI,
 		addPx: isEmpty(lTa) ? 0 : _HiddenTileWidth[tileSize]
 	});
 
 	return (
 		<div className={`column-section-${tileSize || Size.MEDIUM} right`}>
 			{/* Hidden or shown hand */}
-			{showBot || sT ? (
+			{showAI || sT ? (
 				<ShownHiddenHand
 					className="vtss col-r"
 					segment={Segment.RIGHT}

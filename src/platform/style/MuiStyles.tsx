@@ -141,6 +141,15 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					}
 				}
 			},
+			MuiDivider: {
+				styleOverrides: {
+					root: {
+						margin: '8px 0px',
+						borderColor: textColor
+						// '&:first-of-type': { paddingTop: null }
+					}
+				}
+			},
 			MuiFormLabel: {
 				styleOverrides: {
 					root: { color: textColor }

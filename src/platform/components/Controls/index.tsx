@@ -99,7 +99,7 @@ const Controls = () => {
 					? ScreenTextEng.START_PROMPT
 					: first_p.uN === user?.uN
 					? ScreenTextEng.DISCARD_TO_START
-					: `Waiting for ${first_p.uN} to start the round`
+					: `Waiting for ${isBot(first_p.id) ? cO : first_p.uN} to start the round`
 			);
 			setStartButtonText(cO === user?.uN && botToGoFirst ? ButtonText.START : '');
 		} else {

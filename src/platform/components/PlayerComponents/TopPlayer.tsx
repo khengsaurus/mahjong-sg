@@ -10,7 +10,7 @@ import './playerComponents.scss';
 const TopPlayer = (props: IPlayerComponentP) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
 	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
-	const { showBot } = useContext(AppContext);
+	const { showAI } = useContext(AppContext);
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const {
 		sizes: { tileSize = Size.MEDIUM },
@@ -24,7 +24,7 @@ const TopPlayer = (props: IPlayerComponentP) => {
 	return (
 		<div className={`row-section-${tileSize || Size.MEDIUM}`}>
 			{/* Hidden or shown hand */}
-			{showBot || sT ? (
+			{showAI || sT ? (
 				<ShownHiddenHand
 					className="htss top"
 					segment={Segment.TOP}

@@ -431,7 +431,7 @@ export class FirebaseService {
 		mHu = false,
 		pay = PaymentType.SHOOTER,
 		sHs: ScoringHand[] = [],
-		easy = false
+		easyAI = false
 	): Promise<Game> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
@@ -452,7 +452,7 @@ export class FirebaseService {
 						pS,
 						es,
 						t: [cA, cA, null],
-						f: [true, true, false, false, false, false, mHu, false, easy],
+						f: [true, true, false, false, false, false, mHu, false, easyAI],
 						n: [1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM, 0],
 						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
@@ -471,7 +471,7 @@ export class FirebaseService {
 							pS,
 							es,
 							[cA, cA, null],
-							[true, true, false, false, false, false, mHu, false, easy],
+							[true, true, false, false, false, false, mHu, false, easyAI],
 							[1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM, 0],
 							shuffledPlayers,
 							[],
@@ -521,7 +521,7 @@ export class FirebaseService {
 		});
 	}
 
-	async runTransactionUpdate(gameId: string, mHu: boolean, bt: number): Promise<void> {
+	async runTransactionUpdate(gameId: string, mHu: boolean, bt: number, easyAI: boolean): Promise<void> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				runTransaction(this.fs, async transaction => {
@@ -530,9 +530,9 @@ export class FirebaseService {
 						if (!gameDoc.exists()) {
 							reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
 						} else {
-							const f = gameDoc.data()?.f;
+							const { f, n } = gameDoc.data() || {};
 							f[6] = mHu;
-							const n = gameDoc.data()?.n;
+							f[8] = easyAI;
 							n[10] = bt;
 							transaction.update(gameDocRef, { f, n });
 							resolve();

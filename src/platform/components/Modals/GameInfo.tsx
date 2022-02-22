@@ -1,6 +1,6 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Dialog, DialogContent, ListItem, MenuItem, Select, Switch } from '@mui/material';
+import { Dialog, DialogContent, Divider, ListItem, MenuItem, Select, Switch } from '@mui/material';
 import ServiceInstance from 'platform/service/ServiceLayer';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered, Row } from 'platform/style/StyledComponents';
@@ -80,9 +80,10 @@ const renderBotTimeSelect = (
 
 const GameInfo = ({ game, show, onClose }: IModalP) => {
 	const { cO, id: gameId, f = [], n = [], pay, ps, sHs } = game;
-	const { showBot, setShowBot } = useContext(AppContext);
+	const { hasAI, showAI, setShowAI } = useContext(AppContext);
 	const { user } = useSelector((store: IStore) => store);
 	const [manualHu, setManualHu] = useState<boolean>(f[6]);
+	const [easyAI, setEasyAI] = useState<boolean>(f[8]);
 	const [btLabel, setBtLabel] = useState<string>(getSpeedLabel(n[10]));
 	const [botSpeed, setBotSpeed] = useState<number>(n[10]);
 	const rightWidth = pay === PaymentType.HALF_SHOOTER ? 75 : 60;
@@ -101,8 +102,8 @@ const GameInfo = ({ game, show, onClose }: IModalP) => {
 	}
 
 	const closeAndUpdate = () => {
-		if (f[6] !== manualHu || n[10] !== botSpeed) {
-			ServiceInstance.adminUpdateGame(game, gameId === LocalFlag, manualHu, botSpeed);
+		if (f[6] !== manualHu || n[10] !== botSpeed || f[8] !== easyAI) {
+			ServiceInstance.adminUpdateGame(game, gameId === LocalFlag, manualHu, botSpeed, easyAI);
 		}
 		onClose();
 	};
@@ -134,10 +135,14 @@ const GameInfo = ({ game, show, onClose }: IModalP) => {
 				)}
 				{renderSettingCheck(HandDescEng.SEVEN, sHs.includes(ScoringHand.SEVEN) ? false : true, rightWidth)}
 				{renderSettingCheck(HandDescEng.GREEN, sHs.includes(ScoringHand.GREEN) ? false : true, rightWidth)}
+				{(user?.uN === cO || gameId === LocalFlag) && <Divider />}
 				{user?.uN === cO &&
 					renderSwitch(ScreenTextEng.MANUAL_HU, manualHu, () => setManualHu(prev => !prev), rightWidth)}
 				{gameId === LocalFlag &&
-					renderSwitch(ScreenTextEng.SHOW_BOT_HANDS, showBot, () => setShowBot(!showBot), rightWidth)}
+					renderSwitch(ScreenTextEng.SHOW_BOT_HANDS, showAI, () => setShowAI(!showAI), rightWidth)}
+				{user?.uN === cO &&
+					hasAI &&
+					renderSwitch(ScreenTextEng.EASY_AI, easyAI, () => setEasyAI(!easyAI), rightWidth)}
 				{user?.uN === cO &&
 					!!ps.find(p => isBot(p.id)) &&
 					renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}

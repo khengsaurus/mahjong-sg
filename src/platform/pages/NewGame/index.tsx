@@ -6,6 +6,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import {
 	Dialog,
 	DialogContent,
+	Divider,
 	Fade,
 	FormControl,
 	IconButton,
@@ -35,13 +36,14 @@ import { getTileHashKey, isBot } from 'shared/util';
 import './newGame.scss';
 
 const NewGame = () => {
-	const { navigate, players, setPlayers } = useContext(AppContext);
+	const { hasAI, navigate, players, setPlayers } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const [mHu, setMHu] = useState(false);
-	const [payment, setPayment] = useState(PaymentType.SHOOTER);
-	const [random, setRandom] = useState(false);
 	const [minTai, setMinTai] = useState(1);
 	const [maxTai, setMaxTai] = useState(5);
+	const [random, setRandom] = useState(false);
+	const [easyAI, setEasyAI] = useState(false);
+	const [payment, setPayment] = useState(PaymentType.SHOOTER);
 	const [minTaiStr, setMinTaiStr] = useState('1');
 	const [maxTaiStr, setMaxTaiStr] = useState('5');
 	const [showOptions, setShowOptions] = useState(false);
@@ -75,6 +77,7 @@ const NewGame = () => {
 			mHu,
 			payment,
 			excludeShs,
+			easyAI,
 			isLocalGame
 		).then(game => {
 			if (game?.id) {
@@ -258,6 +261,17 @@ const NewGame = () => {
 		</ListItem>
 	);
 
+	const renderBotDifficulty = () => (
+		<ListItem className="list-item" style={{ padding: 0 }}>
+			<ListItemText secondary={ScreenTextEng.EASY_AI} />
+			<Centered style={{ width: 20 }}>
+				<IconButton onClick={() => setEasyAI(prev => !prev)} disableRipple>
+					{easyAI ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+				</IconButton>
+			</Centered>
+		</ListItem>
+	);
+
 	const renderGameOptions = () => {
 		return (
 			<Fade in={showOptions} timeout={Transition.FAST} unmountOnExit>
@@ -272,13 +286,15 @@ const NewGame = () => {
 						>
 							<DialogContent style={{ paddingBottom: '10px' }}>
 								<List className="list">
-									{renderManualHu()}
 									{renderPaymentType()}
 									{renderTaiSelect(ScreenTextEng.MINTAI, minTaiStr, handleMinTai)}
 									{renderTaiSelect(ScreenTextEng.MAXTAI, maxTaiStr, handleMaxTai)}
 									{renderScoringHandOption(ScoringHand.CONCEALED)}
 									{renderScoringHandOption(ScoringHand.SEVEN)}
 									{renderScoringHandOption(ScoringHand.GREEN)}
+									<Divider />
+									{renderManualHu()}
+									{hasAI && renderBotDifficulty()}
 								</List>
 							</DialogContent>
 						</Dialog>

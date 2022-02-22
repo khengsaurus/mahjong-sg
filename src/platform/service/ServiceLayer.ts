@@ -163,12 +163,13 @@ export class Service {
 		mHu: boolean,
 		pay: PaymentType,
 		sHs: ScoringHand[] = [],
+		easyAI = false,
 		isLocalGame = false
 	): Promise<Game> {
 		return new Promise(resolve => {
 			try {
 				if (isLocalGame) {
-					createLocalGame(user, players, random, minTai, maxTai, mHu, pay, sHs).then(game => {
+					createLocalGame(user, players, random, minTai, maxTai, mHu, pay, sHs, easyAI).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
 						this.store.dispatch(setLocalGame(game));
@@ -206,14 +207,15 @@ export class Service {
 	/**
 	 * Note that this runs a transaction -> 1 read + 1 write
 	 */
-	adminUpdateGame(game: Game, isLocalGame: boolean, mHu: boolean, bt: number) {
+	adminUpdateGame(game: Game, isLocalGame: boolean, mHu: boolean, bt: number, easyAI: boolean) {
 		if (isLocalGame) {
 			game.f[6] = mHu;
+			game.f[8] = easyAI;
 			game.n[10] = bt;
 			this.updateGame(game, true);
 		} else {
 			try {
-				FBService.runTransactionUpdate(game.id, mHu, bt);
+				FBService.runTransactionUpdate(game.id, mHu, bt, easyAI);
 			} catch (err) {
 				console.error(err);
 			}
