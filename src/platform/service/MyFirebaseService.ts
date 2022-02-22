@@ -229,7 +229,7 @@ export class FirebaseService {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				try {
-					get(child(ref(this.db), `users/${username}`)).then(snapshot => {
+					get(child(ref(this.db), `${FBDatabase.USERS}/${username}`)).then(snapshot => {
 						if (snapshot.exists()) {
 							resolve(snapshot.val());
 						} else {
@@ -430,7 +430,8 @@ export class FirebaseService {
 		gMaxPx = HandPoint.MAX,
 		mHu = false,
 		pay = PaymentType.SHOOTER,
-		sHs: ScoringHand[] = []
+		sHs: ScoringHand[] = [],
+		easy = false
 	): Promise<Game> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
@@ -451,7 +452,7 @@ export class FirebaseService {
 						pS,
 						es,
 						t: [cA, cA, null],
-						f: [true, true, false, false, false, false, mHu, false],
+						f: [true, true, false, false, false, false, mHu, false, easy],
 						n: [1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM, 0],
 						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
@@ -464,13 +465,13 @@ export class FirebaseService {
 						pay
 					}).then(newGame => {
 						gameId = newGame.id;
-						const game: Game = new Game(
+						const game = new Game(
 							gameId,
 							user.uN,
 							pS,
 							es,
 							[cA, cA, null],
-							[true, true, false, false, false, false, mHu, false],
+							[true, true, false, false, false, false, mHu, false, easy],
 							[1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM, 0],
 							shuffledPlayers,
 							[],
@@ -485,7 +486,7 @@ export class FirebaseService {
 						resolve(game);
 					});
 				} catch (err) {
-					console.error('FirebaseService - game was not created');
+					console.error('FirebaseService - game was not created: 🥞');
 					reject(err);
 				}
 			} else {
