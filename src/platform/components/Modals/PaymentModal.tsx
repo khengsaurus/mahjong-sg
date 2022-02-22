@@ -108,7 +108,7 @@ const PaymentModal = ({ playerSeat, show, onClose }: ModalProps) => {
 				</RadioGroup>
 
 				<Button
-					style={{ position: 'absolute', bottom: 8, right: 5 }}
+					style={{ position: 'absolute', bottom: 7, right: 5 }}
 					variant="text"
 					size="medium"
 					onClick={() => sendChips(currGame, playerSeat, toWho, amt, sendCallback)}

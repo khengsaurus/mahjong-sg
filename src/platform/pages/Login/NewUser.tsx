@@ -5,15 +5,18 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { AlertStatus, DisallowedUsernames, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { User } from 'shared/models';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
+import { IStore } from 'shared/store';
 import { isDev } from 'shared/util';
 
 const NewUser = () => {
 	const { alert, login, logout, navigate, setAlert, userEmail } = useContext(AppContext);
+	const { user } = useSelector((state: IStore) => state);
 	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
 	const checkAuthTimeoutRef = useRef<NodeJS.Timeout>(null);
@@ -21,12 +24,17 @@ const NewUser = () => {
 	useEffect(() => {
 		clearTimeout(checkAuthTimeoutRef.current);
 		checkAuthTimeoutRef.current = setTimeout(async () => {
-			if (await !ServiceInstance.FBAuthenticated()) {
+			// If failed to FB login user, push to login page. If user is logged in, push to Home page
+			const isFBAuthenticated = await ServiceInstance.FBAuthenticated();
+			if (!isFBAuthenticated) {
 				navigate(Page.LOGIN);
+			} else if (user?.uN) {
+				navigate(Page.HOME);
 			}
 		}, 500);
-	}, [navigate]);
+	}, [navigate, user?.uN]);
 
+	// If user ends session before setting username, delete records of email from DB to preserve email availability
 	useEffect(() => {
 		window.onbeforeunload = () => {
 			if (toDeleteIfUnload) {
@@ -90,7 +98,7 @@ const NewUser = () => {
 				value={username}
 				variant="standard"
 			/>
-			<Row style={{ width: '170px', justifyContent: 'space-between' }}>
+			<Row style={{ minHeight: '10px', width: '170px', justifyContent: 'space-between' }}>
 				{alert?.status !== Status.SUCCESS && (
 					<>
 						<StyledButton label="Cancel" onClick={cancelRegister} />
