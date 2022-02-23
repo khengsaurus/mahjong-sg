@@ -1,4 +1,4 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import parse from 'html-react-parser';
 import HomePage from 'platform/pages/Home/HomePage';
@@ -26,7 +26,7 @@ const Policy = () => {
 				{(content || []).map((c, index) => {
 					return (
 						<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
-							<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+							<AccordionSummary expandIcon={<ChevronRightIcon />}>
 								<Typography>{c.title}</Typography>
 							</AccordionSummary>
 							<AccordionDetails>

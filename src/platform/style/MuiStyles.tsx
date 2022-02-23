@@ -110,10 +110,14 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						}
 					},
 					expandIconWrapper: {
-						color: `${textColor} !important`,
+						color: textColor,
 						transition: TransitionSpeed.MEDIUM,
 						'&:hover': {
-							color: isMobile() ? textColor : `${highlightColor} !important`
+							color: isMobile() ? textColor : highlightColor
+						},
+						'&.Mui-expanded': {
+							color: highlightColor,
+							transform: 'rotate(90deg)'
 						}
 					}
 				}

@@ -1,4 +1,4 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import parse from 'html-react-parser';
 import HomePage from 'platform/pages/Home/HomePage';
@@ -27,7 +27,7 @@ const Help = () => {
 			<div className="content">
 				{sections.map((section, ix1) => (
 					<Accordion key={ix1} expanded={ix1 === showContent} onChange={() => toggleShow(ix1)}>
-						<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+						<AccordionSummary expandIcon={<ChevronRightIcon />}>
 							<StyledText text={section.title.replaceAll('{platform}', platform)} variant="body1" />
 						</AccordionSummary>
 						<AccordionDetails style={{ maxHeight: '50vh', overflow: 'scroll' }}>
