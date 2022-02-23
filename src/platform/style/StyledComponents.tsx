@@ -52,7 +52,7 @@ export const ScrollableBase = styled.div`
 `;
 
 export const Scrollable = styled(ScrollableBase)`
-	width: clamp(200px, 86%, 600px) !important;
+	width: clamp(200px, 80%, 400px) !important;
 	text-align: left;
 `;
 

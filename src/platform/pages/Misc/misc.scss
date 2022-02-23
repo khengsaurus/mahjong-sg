@@ -1,9 +1,10 @@
 @import '../../../App.scss';
 
 .scrollable {
-	position: fixed;
-	top: 40px;
-	bottom: 40px;
+	max-height: calc(100vh - 100px);
+	max-height: calc(100vh - 100px - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+	max-height: calc(100vh - 100px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	background-color: 'orange !important';
 	margin-top: const(safe-area-inset-top);
 	margin-top: env(safe-area-inset-top);
 	margin-bottom: const(safe-area-inset-bottom);
@@ -23,10 +24,10 @@
 		margin: 2px 10px;
 	}
 
-	p {
+	.para {
 		font-size: 15px;
 		display: block;
-		margin: 0px !important;
+		margin: 4px 0px !important;
 	}
 
 	.ps {

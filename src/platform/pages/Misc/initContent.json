@@ -1,8 +1,14 @@
 {
-	"policyContent": {
-		"data": "Data:<br/>Mahjong SG does not collect any of your personal data, aside from your email. Your email is used solely for account and game management. It is not revealed to other users. We will not distribute your email, and you can remove it from our records any time by deleting your account.",
-		"gambling": "Gambling:<br/>The creators of this {platform} DO NOT advocate gambling. This {platform} does not provide any means for monetary transaction or direct communication between users. The scoring system is intended solely to help users track their performance."
-	},
+	"policyContent": [
+		{
+			"title": "Data and Privacy",
+			"content": "We do not collect any of your personal data, aside from your email. Your email is used solely for account and game management. It is not revealed to other users. We will not distribute your email, and you can remove it from our records any time by deleting your account."
+		},
+		{
+			"title": "Gambling",
+			"content": "The creators of this {platform} DO NOT advocate gambling. This {platform} does not provide any means for monetary transaction or direct communication between users. The scoring system is intended solely to help users track their performance."
+		}
+	],
 	"aboutContent": {
 		"descMobile": "You can also find us online at <a href='https://www.mahjong-sg.com/' style='color:#005eff; textDecoration: none'>www.mahjong-sg.com</a>.",
 		"descWeb": "You can also find us on the <a href='https://apps.apple.com/sg/app/mahjong-sg/id1608389963' style='color:#005eff; textDecoration: none'>App Store</a> or <a href='https://play.google.com/store/apps/details?id=com.tk.mahjongSg' style='color:#005eff; textDecoration: none'>Play Store</a> as Mahjong SG.",
@@ -13,31 +19,31 @@
 			{
 				"title": "Controls",
 				"points": [
-					"When you can chi the tile thrown by the previous player, a popup will appear - click on it to bring up the options. Alternatively, you can select the other two in your hand and press on the bottom-left button - it will read '吃' if you can Chi.",
-					"If you can Pong/Kang a discarded tile, a popup will appear offering you the options. Alternatively, you can select the tiles in your hand you want to Pong/Kang the last discarded tile with, and press on bottom-left button - it will read '碰' if you can Pong, and '杠' if you can Kang",
-					"You can also Kang if you select 4 of the same tile in your hand, or 1 tile when you've already Pong'ed it. You can only do this after you've drawn or taken a tile, during your turn.",
-					"The Draw (摸) or Discard (丢) button on the right will light up only when it's your turn. Note that you can only discard during your turn, after you've drawn or taken a tile.",
+					"When you can take or Hu on a discarded tile, a popup will appear showing you the options. Alternatively, you can select the tiles in your hand and press on the bottom-left button.",
+					"You can Kang if you select 4 of the same tile in your hand, or 1 tile when you've already Pong'd it. You can only do this after you've drawn or taken a tile, during your turn.",
+					"The Draw (摸) or Discard (丢) button on the right will light up only when it's your turn. Note that you must draw or take a tile before discarding, and only during your turn.",
 					"The {platform} will automatically draw replacement tiles (補花) for you when you Kang or draw flower tiles.",
-					"After drawing, if 15 tiles are left, the bottom-right button will read '完'. The last player to draw has to press on it to end the round. If anyone tries to draw replacement tiles (補花) and there are 15 tiles left, the game will also end in a draw."
+					"After drawing the last tile, the bottom-right button will read '完'. The last player has to press on it to end the round. If anyone tries to draw replacement tiles (補花) and there are 15 tiles left, the game will also end in a draw."
 				],
 				"ps": ""
 			},
 			{
 				"title": "Gameplay",
 				"points": [
-					"A glowing flower tile means that it is that player's flower tile, i.e. + 1 Tai.",
-					"There will only be instant payouts in Shooter or Half Shooter games. When a user Kang's, draws matching flowers, or collects a full flower set, it will be logged in the top right, and so will following instant payouts.",
-					"The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a tile discarded. The default timeout is 6s.",
-					"If more than one person can take the last throw tile, the timeout will be 12s. The first person with priority will see the option first. If they don't take the last thrown tile, others can take it after the first 6s are up. Act quickly!"
-				],
-				"ps": "Playing accross different timezones is not recommended, due to how the delay system works. We're working on it."
+					"A glowing flower tile indicates that it is the player's flower tile, i.e. + 1 Tai.",
+					"There will only be instant payouts in Shooter or Half Shooter games, when a user Kang's, draws matching flower tiles, or collects a full flower set.",
+					"The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a discarded tile. The default timeout is 6s.",
+					"The timeout will be 12s if more than one person can take a discarded tile. The player with priority will have the first 6s to take the it. If they don't, others can take it after the first 6s.",
+					"Playing accross different timezones is not recommended, due to how the delay works. We're working on it."
+				]
 			},
 			{
 				"title": "Scoring",
 				"points": [
 					"The scoring logic largely follows common playing rules and online guides.",
-					"Ping Hu requirements: player cannot be waiting for a unique tile unless it is self drawn, and if the pair is Pong'ed, it cannot be worth Tai.",
-					"Concealed Hand requirements: player's hand must be fully closed (no open meld) and the last tile must be self drawn.",
+					"Ping Hu: player cannot be waiting for a unique tile unless it is self drawn, and the pair, if Pong'd, cannot be worth Tai.",
+					"Concealed Hand: player's hand must be fully closed (no open meld) and the last tile must be self drawn.",
+					"Three Great Scholars: player must Pongs/Kang all three dragons. No additional meld or pair is needed to Hu.",
 					"Note that the following scoring scenarios are not accounted for:<ul><li>Nine Gates (九蓮寶燈)</li><li>Three Winners (一炮三响)</li><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
 				]
 			},
@@ -49,16 +55,16 @@
 					"Upon pressing the second button, your tiles will be shown to everyone, and no one can perform any actions. If you close the popup, you will hide your hand and the game will resume (careful ah - if a bot is next, it will play immediately).",
 					"When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you haven't drawn a tile and it is available. If you cancel the Hu it will be returned to whoever discarded it. There is no fake-hu (詐胡) functionality.",
 					"The creator of the game can toggle on or off 'Manual Hu' in the Game Info popup. If Manual Hu is on, players can Hu at any time.",
-					"Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the pong option (Because it's not fair for A to pong when B can Hu right? Also, can Hu then just Hu lah).",
-					"If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the Hu Announcement. A can use that to cancel B's Hu and take the last discarded tile instead.",
-					"If two players try to Hu at the same time, the {platform} will only allow the first player to."
+					"Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the pong option (aiya, can Hu then just Hu lah).",
+					"If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the Hu Announcement. A can use that to cancel B's Hu and take the last discarded tile instead."
 				]
 			},
 			{
 				"title": "End of the round/game",
 				"points": [
 					"If the game draws, it will progress onto the next round if there was a Kang or someone drew matching flower tiles. If not, the round will be repeated.",
-					"In online games (with more than 1 person playing), after the round ends, only the next dealer will see the 'Next Round' button in the popup.",
+					"After the round ends, if the next dealer is a person, only that person will see the 'Next Round' button in the popup.",
+					"If the next dealer is an AI, only the creator will see the 'Next Round' button, and subsequently the 'Start Round' button to start the round",
 					"Games will be deleted after 24 hours of inactivity, regardless of whether they are still ongoing or not."
 				]
 			}

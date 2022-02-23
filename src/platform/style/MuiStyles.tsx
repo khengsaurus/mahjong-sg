@@ -70,6 +70,54 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 		},
 
 		components: {
+			MuiAccordion: {
+				styleOverrides: {
+					root: {
+						boxShadow: 'none',
+						'&:before': { content: 'none' },
+						'&.Mui-expanded': {
+							margin: '0px'
+						}
+					}
+				}
+			},
+			MuiAccordionDetails: {
+				styleOverrides: {
+					root: {
+						backgroundColor,
+						padding: 2,
+						borderTop: `1px solid ${textColor}`,
+						borderBottom: `1px solid ${textColor}`
+					}
+				}
+			},
+			MuiAccordionSummary: {
+				styleOverrides: {
+					root: {
+						backgroundColor,
+						boxShadow: 'none',
+						color: textColor,
+						minHeight: '40px',
+						padding: 0,
+						'&.Mui-expanded': {
+							minHeight: '40px'
+						}
+					},
+					content: {
+						margin: `4px 0px`,
+						'&.Mui-expanded': {
+							margin: `4px 0px !important`
+						}
+					},
+					expandIconWrapper: {
+						color: `${textColor} !important`,
+						transition: TransitionSpeed.MEDIUM,
+						'&:hover': {
+							color: isMobile() ? textColor : `${highlightColor} !important`
+						}
+					}
+				}
+			},
 			MuiButtonBase: {
 				styleOverrides: {
 					root: {
