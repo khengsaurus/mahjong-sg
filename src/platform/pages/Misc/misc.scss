@@ -1,14 +1,9 @@
 @import '../../../App.scss';
 
 .scrollable {
-	max-height: calc(100vh - 100px);
-	max-height: calc(100vh - 100px - const(safe-area-inset-top) - const(safe-area-inset-bottom));
-	max-height: calc(100vh - 100px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-	background-color: 'orange !important';
-	margin-top: const(safe-area-inset-top);
-	margin-top: env(safe-area-inset-top);
-	margin-bottom: const(safe-area-inset-bottom);
-	margin-bottom: env(safe-area-inset-bottom);
+	max-height: calc(100vh - 84px); // ref-home-title 40px ref-bottom-home-buttons 24px ref-decoration 20px
+	max-height: calc(100vh - 84px - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+	max-height: calc(100vh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 }
 
 .content {

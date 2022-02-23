@@ -102,7 +102,7 @@ export const BottomSpec = styled.div`
 	bottom: 0px;
 	display: flex;
 	flex-direction: row;
-	height: 24px;
+	height: 24px; // ref-bottom-home-buttons
 	margin-bottom: const(safe-area-inset-bottom);
 	margin-bottom: env(safe-area-inset-bottom);
 	color: ${props => props.theme.mainTextColor};

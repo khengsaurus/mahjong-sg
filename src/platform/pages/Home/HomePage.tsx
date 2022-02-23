@@ -142,7 +142,14 @@ const HomePage = ({
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
 					<>
 						{renderNetworkLoader()}
-						{title && <StyledCenterText text={title} variant="h6" padding="0px 10px 10px" />}
+						{/* ref-home-title shd be 40px */}
+						{title && (
+							<StyledCenterText
+								text={title}
+								variant="h6"
+								style={{ height: '30px', padding: '0px 10px 10px' }}
+							/>
+						)}
 						<Centered style={{ marginBottom }}>{markup()}</Centered>
 						<Overlay />
 					</>

@@ -30,7 +30,13 @@ const Help = () => {
 						<AccordionSummary expandIcon={<ChevronRightIcon />}>
 							<StyledText text={section.title.replaceAll('{platform}', platform)} variant="body1" />
 						</AccordionSummary>
-						<AccordionDetails style={{ maxHeight: '50vh', overflow: 'scroll' }}>
+						<AccordionDetails
+							style={{
+								maxHeight:
+									'calc(100vh - 284px - 30px - env(safe-area-inset-top) - env(safe-area-inset-bottom))', // 90px for approx safe area inset top/bottom
+								overflow: 'scroll',
+							}}
+						>
 							<ul>
 								{section.points.map((point, ix2) => (
 									<li key={`section-${ix1}-${ix2}`}>

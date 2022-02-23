@@ -47,12 +47,12 @@ export const StyledText = ({
 export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: IStyledTextP) => (
 	<Typography
 		style={{
-			...style,
 			justifySelf: 'center',
 			alignSelf: 'center',
 			textAlign: 'center',
 			placeSelf: 'center',
-			padding: padding ? padding : variant === 'h6' ? '5px 0px' : '0px'
+			padding: padding ? padding : variant === 'h6' ? '5px 0px' : '0px',
+			...style
 		}}
 		variant={variant}
 	>
