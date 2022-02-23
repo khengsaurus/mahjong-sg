@@ -17,7 +17,7 @@ const About = () => {
 	const markup = () => (
 		<Scrollable>
 			<div className="content centered">
-				<p>
+				<p className="para">
 					<span>
 						Thank you for using this {platform}. There is still much work in progress, but we hope you like
 						it so far.{' '}
@@ -26,11 +26,9 @@ const About = () => {
 						? parse(descMobile.replaceAll('{platform}', platform))
 						: parse(descWeb.replaceAll('{platform}', platform))}
 				</p>
-				<br />
-				<p>{parse(reachOut)}</p>
-				<br />
+				<p className="para">{parse(reachOut)}</p>
 				<div className="stack">
-					<p>Created with </p>
+					<p className="para">Created with </p>
 					<div className="logos">
 						<img alt="react-logo" src={reactLogo} />
 						<img alt="firebase-logo" src={firebaseLogo} />
