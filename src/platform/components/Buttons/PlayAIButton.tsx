@@ -35,13 +35,22 @@ const PlayAIButton = () => {
 			new User(BotIds[2], BotName.bot3 || Bot, '')
 		];
 
-		await ServiceInstance.initGame(tempUser, tempPlayers, false, 1, 5, false, PaymentType.SHOOTER, [], true).then(
-			game => {
-				dispatch(setTHK(111));
-				dispatch(setLocalGame(game));
-				dispatch(setGameId(LocalFlag));
-			}
-		);
+		await ServiceInstance.initGame(
+			tempUser,
+			tempPlayers,
+			false,
+			1,
+			5,
+			false,
+			PaymentType.SHOOTER,
+			[],
+			true,
+			true
+		).then(game => {
+			dispatch(setTHK(111));
+			dispatch(setLocalGame(game));
+			dispatch(setGameId(LocalFlag));
+		});
 		dispatch(
 			setTheme({
 				backgroundColor: BackgroundColor.BROWN,

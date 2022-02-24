@@ -31,7 +31,7 @@ const Help = () => {
 				const activeColor = showContent === index1 ? getHighlightColor(backgroundColor) : mainTextColor;
 				return (
 					<Accordion key={index1} expanded={index1 === showContent} onChange={() => toggleShow(index1)}>
-						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: 40 }}>
+						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: '40px' }}>
 							<StyledText
 								text={section.title.replaceAll('{platform}', platform)}
 								color={activeColor}

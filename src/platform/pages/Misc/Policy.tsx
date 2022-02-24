@@ -30,7 +30,7 @@ const Policy = () => {
 				const activeColor = showContent === index ? getHighlightColor(backgroundColor) : mainTextColor;
 				return (
 					<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
-						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: 40 }}>
+						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: '40px' }}>
 							<StyledText
 								text={c.title.replaceAll('{platform}', platform)}
 								color={activeColor}
