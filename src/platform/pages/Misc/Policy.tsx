@@ -1,8 +1,9 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import parse from 'html-react-parser';
 import HomePage from 'platform/pages/Home/HomePage';
-import { Scrollable } from 'platform/style/StyledComponents';
+import { getHighlightColor } from 'platform/style/MuiStyles';
+import { StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'shared/screenTexts';
@@ -11,7 +12,10 @@ import { isMobile } from 'shared/util';
 import initContent from './initContent.json';
 
 const Policy = () => {
-	const { policyContent } = useSelector((store: IStore) => store);
+	const {
+		policyContent,
+		theme: { backgroundColor, mainTextColor }
+	} = useSelector((store: IStore) => store);
 	const content = policyContent || initContent.policyContent;
 	const [showContent, setShowContent] = useState(-1);
 	const platform = isMobile() ? 'app' : 'website';
@@ -21,22 +25,25 @@ const Policy = () => {
 	}
 
 	const markup = () => (
-		<Scrollable>
-			<div className="content">
-				{(content || []).map((c, index) => {
-					return (
-						<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
-							<AccordionSummary expandIcon={<ChevronRightIcon />}>
-								<Typography>{c.title}</Typography>
-							</AccordionSummary>
-							<AccordionDetails>
-								<p className="para">{parse(c.content.replaceAll('{platform}', platform))}</p>
-							</AccordionDetails>
-						</Accordion>
-					);
-				})}
-			</div>
-		</Scrollable>
+		<div className="content">
+			{(content || []).map((c, index) => {
+				const activeColor = showContent === index ? getHighlightColor(backgroundColor) : mainTextColor;
+				return (
+					<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
+						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: 40 }}>
+							<StyledText
+								text={c.title.replaceAll('{platform}', platform)}
+								color={activeColor}
+								variant="body1"
+							/>
+						</AccordionSummary>
+						<AccordionDetails style={{ borderColor: activeColor }}>
+							<p className="para">{parse(c.content.replaceAll('{platform}', platform))}</p>
+						</AccordionDetails>
+					</Accordion>
+				);
+			})}
+		</div>
 	);
 
 	return <HomePage markup={markup} title={HomeScreenText.POLICY} misc={2} skipVerification />;

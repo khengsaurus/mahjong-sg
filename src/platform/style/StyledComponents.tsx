@@ -51,11 +51,6 @@ export const ScrollableBase = styled.div`
 	}
 `;
 
-export const Scrollable = styled(ScrollableBase)`
-	width: clamp(200px, 80%, 400px) !important;
-	text-align: left;
-`;
-
 export const Notification = styled.div`
 	position: absolute;
 	border-radius: 4px; /* $default-border-radius; */
