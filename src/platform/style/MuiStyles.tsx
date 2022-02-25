@@ -87,8 +87,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					root: {
 						backgroundColor,
 						padding: 2,
-						borderTop: `1px solid ${textColor}`,
-						borderBottom: `1px solid ${textColor}`
+						// borderTop: `1px solid ${textColor}`,
+						// borderBottom: `1px solid ${textColor}`
 					}
 				}
 			},

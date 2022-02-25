@@ -2,7 +2,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary, Fade } from '@mui/material';
 import parse from 'html-react-parser';
 import HomePage, { renderDefaultTitle } from 'platform/pages/Home/HomePage';
-import { getHighlightColor } from 'platform/style/MuiStyles';
 import { StyledText } from 'platform/style/StyledMui';
 import React, { useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -14,10 +13,7 @@ import initContent from './initContent.json';
 import './misc.scss';
 
 const Help = () => {
-	const {
-		helpContent,
-		theme: { backgroundColor, mainTextColor }
-	} = useSelector((store: IStore) => store);
+	const { helpContent } = useSelector((store: IStore) => store);
 	const { sections = [] } = helpContent || initContent.helpContent;
 	const [showContent, setShowContent] = useState(-1);
 	const hasToggledRef = useRef(false);
@@ -33,27 +29,23 @@ const Help = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasToggledRef.current]);
 
-	function getTransitionAmt(index: number) {
-		if (index === -1) {
-			return '0px';
-		}
-		return `${((sections.length - 2 - 2 * index) / 2) * 40}px`; // botEle - topEle
-	}
+	const transitionAmt = useMemo(() => {
+		return showContent === -1 ? '0px' : `calc(${((sections.length - 2 - 2 * showContent) / 2) * 40}px)`; // botEle - topEle
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sections.length, showContent]);
 
 	const markup = () => (
 		<div
 			className="content"
 			style={{
 				transition: `${overlayTimeout}ms`,
-				transform: `translateY(${showContent === -1 ? '0px' : getTransitionAmt(showContent)})`
+				transform: `translateY(${transitionAmt})`
 			}}
 		>
 			<Fade in={showContent === -1} timeout={overlayTimeout}>
 				<div>{renderDefaultTitle(HomeScreenText.HELP)}</div>
 			</Fade>
 			{sections.map((section, index1) => {
-				const activeColor = showContent === index1 ? getHighlightColor(backgroundColor) : mainTextColor;
-				const borderColor = showContent === index1 ? getHighlightColor(backgroundColor) : 'transparent';
 				const show = showContent === -1 || index1 === showContent;
 				return (
 					<Fade key={index1} in={show} timeout={overlayTimeout}>
@@ -62,7 +54,6 @@ const Help = () => {
 								<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: 40 }}>
 									<StyledText
 										text={section.title.replaceAll('{platform}', platform)}
-										color={activeColor}
 										variant="body1"
 									/>
 								</AccordionSummary>
@@ -70,8 +61,7 @@ const Help = () => {
 									style={{
 										maxHeight:
 											'calc(100vh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
-										overflow: 'scroll',
-										borderColor
+										overflow: 'scroll'
 									}}
 								>
 									<div className="content-wrapper">

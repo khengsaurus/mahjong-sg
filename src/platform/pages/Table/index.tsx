@@ -45,6 +45,8 @@ const Table = () => {
 
 	useLayoutEffect(() => {
 		if (isMobile()) {
+			// crazy but this unlock seems to be required...
+			ScreenOrientation?.unlock();
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
 			});

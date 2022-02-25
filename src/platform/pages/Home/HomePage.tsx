@@ -64,7 +64,8 @@ const HomePage = ({
 	useLayoutEffect(() => {
 		setAnnHuOpen(false);
 
-		if (isMobile() && Capacitor.getPlatform() === Platform.ANDROID) {
+		if (isMobile()) {
+			// && Capacitor.getPlatform() === Platform.ANDROID
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
 			});
@@ -85,12 +86,6 @@ const HomePage = ({
 				const windowHeight = window?.screen?.height || 0;
 				if (Number(keyboardHeight) && Number(windowHeight)) {
 					const ratio = keyboardHeight > 0.4 * windowHeight ? 0.7 : 0.4;
-					// : [
-					// 		ScreenOrientation.ORIENTATIONS.LANDSCAPE,
-					// 		ScreenOrientation.ORIENTATIONS.LANDSCAPE_PRIMARY,
-					// 		ScreenOrientation.ORIENTATIONS.LANDSCAPE_SECONDARY
-					//   ].includes(ScreenOrientation.type)
-					// ? 0.6
 					setMarginBottom(keyboardHeight * ratio - offsetKeyboard);
 				}
 			});

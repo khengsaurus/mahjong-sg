@@ -3,7 +3,6 @@ import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import parse from 'html-react-parser';
 import { isArray, isEmpty } from 'lodash';
 import HomePage from 'platform/pages/Home/HomePage';
-import { getHighlightColor } from 'platform/style/MuiStyles';
 import { StyledText } from 'platform/style/StyledMui';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,10 +12,7 @@ import { isMobile } from 'shared/util';
 import initContent from './initContent.json';
 
 const Policy = () => {
-	const {
-		policyContent,
-		theme: { backgroundColor, mainTextColor }
-	} = useSelector((store: IStore) => store);
+	const { policyContent } = useSelector((store: IStore) => store);
 	const content = !isEmpty(policyContent) && isArray(policyContent) ? policyContent : initContent.policyContent;
 	const [showContent, setShowContent] = useState(-1);
 	const platform = isMobile() ? 'app' : 'website';
@@ -28,17 +24,12 @@ const Policy = () => {
 	const markup = () => (
 		<div className="content">
 			{(content || []).map((c, index) => {
-				const activeColor = showContent === index ? getHighlightColor(backgroundColor) : mainTextColor;
 				return (
 					<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
 						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: '40px' }}>
-							<StyledText
-								text={c.title.replaceAll('{platform}', platform)}
-								color={activeColor}
-								variant="body1"
-							/>
+							<StyledText text={c.title.replaceAll('{platform}', platform)} variant="body1" />
 						</AccordionSummary>
-						<AccordionDetails style={{ borderColor: activeColor }}>
+						<AccordionDetails>
 							<p>{parse(c.content.replaceAll('{platform}', platform))}</p>
 						</AccordionDetails>
 					</Accordion>
