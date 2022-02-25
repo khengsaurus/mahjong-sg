@@ -301,43 +301,43 @@ $log-margin-left-medium: 5px;
 }
 
 @mixin alignI-justifyC($i, $c) {
-	align-items: #{$i};
-	justify-content: #{$c};
+	align-items: $i;
+	justify-content: $c;
 }
 
 @mixin alignC-justifyC($i, $c) {
-	align-content: #{$i};
-	justify-content: #{$c};
+	align-content: $i;
+	justify-content: $c;
 }
 
 @mixin flex-dir($d) {
 	display: flex;
-	flex-direction: #{$d};
+	flex-direction: $d;
 }
 
 @mixin flow($d) {
 	display: flex;
-	flex-flow: #{$d};
+	flex-flow: $d;
 }
 
 @mixin align-items-text($i, $t) {
-	align-items: #{$i};
-	text-align: #{$t};
+	align-items: $i;
+	text-align: $t;
 }
 
 @mixin absolute-padding($t, $r, $b, $l) {
 	position: absolute;
 	@if $t != 0 {
-		top: #{$t};
+		top: $t;
 	}
 	@if $r != 0 {
-		right: #{$r};
+		right: $r;
 	}
 	@if $b != 0 {
-		bottom: #{$b};
+		bottom: $b;
 	}
 	@if $l != 0 {
-		left: #{$l};
+		left: $l;
 	}
 }
 

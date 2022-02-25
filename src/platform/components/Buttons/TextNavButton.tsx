@@ -40,7 +40,7 @@ export const HomeButton = ({
 	label = PageName.HOME,
 	disableShortcut = false,
 	callback = null
-}: IHomeButton) => {
+}: IHomeButtonP) => {
 	const { handleHome } = useContext(AppContext);
 
 	return (
@@ -54,9 +54,16 @@ export const HomeButton = ({
 	);
 };
 
-export const BackButton = ({ style = {}, label = ButtonText.BACK, disableShortcut = true }: IHomeButton) => {
+export const BackButton = ({ style = {}, label = ButtonText.BACK, callback = null }: IHomeButtonP) => {
 	const { navigate } = useContext(AppContext);
-	return <TextNavButton label={label} onClick={() => navigate(-1)} style={style} disableShortcut={true} />;
+	return (
+		<TextNavButton
+			label={label}
+			onClick={() => (!!callback ? callback() : navigate(-1))}
+			style={style}
+			disableShortcut={true}
+		/>
+	);
 };
 
 export const NewGameButton = ({ style = {} }: IHasStyle) => {

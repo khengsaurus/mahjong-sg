@@ -1,6 +1,6 @@
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
 import { isEmpty } from 'lodash';
 import {
@@ -26,14 +26,20 @@ import { isMobile } from 'shared/util';
 
 interface IHomePageP {
 	markup: () => React.FC | JSX.Element;
-	title?: string;
+	title?: string | JSX.Element;
 	ready?: boolean;
 	timeout?: number;
 	misc?: 1 | 2 | 3;
+	customBack?: () => void;
 	fallbackTitle?: string;
 	skipVerification?: boolean;
 	offsetKeyboard?: number;
 	landscapeOnly?: boolean;
+}
+
+export function renderDefaultTitle(title: string) {
+	// ref-home-title shd be 40px
+	return <StyledCenterText text={title} variant="h6" style={{ height: '30px', padding: '0px 10px 10px' }} />;
 }
 
 const HomePage = ({
@@ -42,6 +48,7 @@ const HomePage = ({
 	ready = true,
 	timeout = 1500,
 	misc = 1,
+	customBack = null,
 	fallbackTitle = HomeScreenText.SOMETHING_WENT_WRONG,
 	skipVerification = false,
 	offsetKeyboard = 0
@@ -57,17 +64,11 @@ const HomePage = ({
 	useLayoutEffect(() => {
 		setAnnHuOpen(false);
 
-		if (isMobile()) {
+		if (isMobile() && Capacitor.getPlatform() === Platform.ANDROID) {
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
 			});
 		}
-
-		return () => {
-			if (isMobile()) {
-				ScreenOrientation?.unlock();
-			}
-		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -139,17 +140,10 @@ const HomePage = ({
 	return (
 		<HomeTheme>
 			<Main>
+				{renderNetworkLoader()}
 				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
 					<>
-						{renderNetworkLoader()}
-						{/* ref-home-title shd be 40px */}
-						{title && (
-							<StyledCenterText
-								text={title}
-								variant="h6"
-								style={{ height: '30px', padding: '0px 10px 10px' }}
-							/>
-						)}
+						{!!title && (typeof title === 'string' ? renderDefaultTitle(title) : title)}
 						<Centered style={{ marginBottom }}>{markup()}</Centered>
 						<Overlay />
 					</>
@@ -165,7 +159,7 @@ const HomePage = ({
 								<HelpButton />
 							</>
 						) : (
-							<BackButton style={{ fontSize: 12, padding: 0 }} />
+							<BackButton style={{ fontSize: 12, padding: 0 }} callback={customBack} />
 						)}
 					</BottomSpec>
 				)}

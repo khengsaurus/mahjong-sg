@@ -73,6 +73,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 			MuiAccordion: {
 				styleOverrides: {
 					root: {
+						backgroundColor,
 						boxShadow: 'none',
 						'&:before': { content: 'none' },
 						'&.Mui-expanded': {

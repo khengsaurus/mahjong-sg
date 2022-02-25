@@ -1,6 +1,7 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import parse from 'html-react-parser';
+import { isArray, isEmpty } from 'lodash';
 import HomePage from 'platform/pages/Home/HomePage';
 import { getHighlightColor } from 'platform/style/MuiStyles';
 import { StyledText } from 'platform/style/StyledMui';
@@ -16,7 +17,7 @@ const Policy = () => {
 		policyContent,
 		theme: { backgroundColor, mainTextColor }
 	} = useSelector((store: IStore) => store);
-	const content = policyContent || initContent.policyContent;
+	const content = !isEmpty(policyContent) && isArray(policyContent) ? policyContent : initContent.policyContent;
 	const [showContent, setShowContent] = useState(-1);
 	const platform = isMobile() ? 'app' : 'website';
 
@@ -38,7 +39,7 @@ const Policy = () => {
 							/>
 						</AccordionSummary>
 						<AccordionDetails style={{ borderColor: activeColor }}>
-							<p className="para">{parse(c.content.replaceAll('{platform}', platform))}</p>
+							<p>{parse(c.content.replaceAll('{platform}', platform))}</p>
 						</AccordionDetails>
 					</Accordion>
 				);
