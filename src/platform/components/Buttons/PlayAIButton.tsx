@@ -44,7 +44,7 @@ const PlayAIButton = () => {
 			false,
 			PaymentType.SHOOTER,
 			[],
-			true,
+			false,
 			true
 		).then(game => {
 			dispatch(setTHK(111));
