@@ -3,7 +3,7 @@ import { DiscardedTiles, HiddenHand, ShownHiddenHand, ShownTiles, UnusedTiles } 
 import { useDynamicWidth } from 'platform/hooks';
 import { useContext, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { FrontBackTag, Segment, Size, _HiddenTileWidth } from 'shared/enums';
+import { FrontBackTag, Segment, Size, _HiddenTileWidth, _ShownTileWidth } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentP } from 'shared/typesPlus';
@@ -27,12 +27,12 @@ const LeftPlayer = (props: IPlayerComponentP) => {
 		ref: shownTilesRef,
 		countTs: nonFlowers.length + flowers.length,
 		tileSize,
-		add: dealer ? 1 : 0
+		addPx: dealer ? _ShownTileWidth[tileSize] : 0
 	});
 	const shownHiddenHandRef = useRef(null);
 	useDynamicWidth({
 		ref: shownHiddenHandRef,
-		countTs: player.allHiddenTiles().length,
+		countTs: countHandTiles,
 		tileSize,
 		flag: sT || showAI,
 		addPx: isEmpty(lTa) ? 0 : _HiddenTileWidth[tileSize]
