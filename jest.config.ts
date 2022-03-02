@@ -20,7 +20,7 @@ const config = {
 	setupFiles: ['<rootDir>/jest.init.js'],
 	testEnvironment: 'jsdom',
 	setupFilesAfterEnv: ['<rootDir>/jest.setupTests.js'],
-	testPathIgnorePatterns: ['node_modules', 'index.ts'],
+	testPathIgnorePatterns: ['node_modules', 'util.ts'],
 	transform: {
 		'^.+\\.tsx?$': 'ts-jest',
 		'^.+\\.(ts|tsx)$': 'babel-jest',
