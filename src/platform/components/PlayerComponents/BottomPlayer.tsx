@@ -8,7 +8,7 @@ import './playerComponents.scss';
 
 const BottomPlayer = (props: IPlayerComponentP) => {
 	const { player, dealer, hasFront, hasBack, lastThrown } = props;
-	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
+	const { hTs = [], sTs = [], ms, dTs = [], lTa = {}, uTs, sT } = player;
 	const {
 		sizes: { tileSize },
 		tHK
@@ -34,7 +34,7 @@ const BottomPlayer = (props: IPlayerComponentP) => {
 			)}
 
 			{/* Shown tiles */}
-			{(dealer || sTs?.length > 0) && (
+			{(dealer || sTs.length > 0) && (
 				<ShownTiles
 					className="htss"
 					segment={Segment.BOTTOM}
@@ -53,7 +53,7 @@ const BottomPlayer = (props: IPlayerComponentP) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs?.length > 0 && <DiscardedTiles className="htss discarded" tiles={dTs} segment={Segment.BOTTOM} />}
+			{dTs.length > 0 && <DiscardedTiles className="htss discarded" tiles={dTs} segment={Segment.BOTTOM} />}
 		</div>
 	);
 };

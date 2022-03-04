@@ -9,7 +9,7 @@ import './playerComponents.scss';
 
 const TopPlayer = (props: IPlayerComponentP) => {
 	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
-	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
+	const { hTs = [], sTs = [], ms, dTs = [], lTa = {}, uTs, sT } = player;
 	const { showAI } = useContext(AppContext);
 	const allHiddenTiles = player?.allHiddenTiles() || [];
 	const {
@@ -41,7 +41,7 @@ const TopPlayer = (props: IPlayerComponentP) => {
 			)}
 
 			{/* Shown tiles */}
-			{(dealer || sTs?.length > 0) && (
+			{(dealer || sTs.length > 0) && (
 				<ShownTiles
 					className="htss top"
 					segment={Segment.TOP}
@@ -59,7 +59,7 @@ const TopPlayer = (props: IPlayerComponentP) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs?.length > 0 && <DiscardedTiles className="htss top discarded" tiles={dTs} segment={Segment.TOP} />}
+			{dTs.length > 0 && <DiscardedTiles className="htss top discarded" tiles={dTs} segment={Segment.TOP} />}
 		</div>
 	);
 };

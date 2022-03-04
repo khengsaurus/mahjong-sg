@@ -24,7 +24,7 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 	const selectedTsRef = selectedTiles.map(tile => tile.r);
 
 	const selectTile = useCallback(
-		tile => {
+		(tile: IShownTile) => {
 			haptic && triggerHaptic();
 			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
 				const selected = [...selectedTiles, tile];

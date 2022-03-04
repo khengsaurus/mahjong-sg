@@ -168,6 +168,7 @@ const Table = () => {
 										tileSize={tileSize}
 										lastThrown={n[7] === rightPlayerX || n[3] === rightPlayerX ? lTh : null}
 										highlight={rightPlayerX === n[3] ? highlightColor : ''}
+										totalRounds={n[12] || 0}
 									/>
 								)}
 							</div>
@@ -195,6 +196,7 @@ const Table = () => {
 											n[7] === leftPlayerX || currGame.n[3] === leftPlayerX ? currGame.lTh : null
 										}
 										highlight={leftPlayerX === n[3] ? highlightColor : ''}
+										totalRounds={n[12] || 0}
 									/>
 								)}
 							</div>

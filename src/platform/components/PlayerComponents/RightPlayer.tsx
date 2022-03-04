@@ -1,19 +1,17 @@
-import { isEmpty } from 'lodash';
 import { DiscardedTiles, HiddenHand, ShownHiddenHand, ShownTiles, UnusedTiles } from 'platform/components/Tiles';
-import { useDynamicWidth } from 'platform/hooks';
-import { useContext, useRef } from 'react';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { FrontBackTag, Segment, Size, _HiddenTileWidth, _ShownTileWidth } from 'shared/enums';
+import { FrontBackTag, Segment, Size } from 'shared/enums';
 import { AppContext, useTiles } from 'shared/hooks';
 import { IStore } from 'shared/store';
 import { IPlayerComponentP } from 'shared/typesPlus';
 import './playerComponents.scss';
 
 const RightPlayer = (props: IPlayerComponentP) => {
-	const { player, dealer, hasFront, hasBack, lastThrown, highlight } = props;
-	const { hTs, sTs, ms, dTs, lTa, uTs, sT } = player;
+	const { player, dealer, hasFront, hasBack, lastThrown, highlight, totalRounds } = props;
+	const { hTs = [], sTs = [], ms, dTs = [], lTa = {}, uTs, sT } = player;
 	const { showAI } = useContext(AppContext);
-	const countHandTiles = hTs?.length + (Number(lTa?.r) ? 1 : 0);
+	const countHandTiles = hTs.length + (Number(lTa.r) ? 1 : 0);
 	const {
 		sizes: { tileSize = Size.MEDIUM },
 		tHK
@@ -21,21 +19,6 @@ const RightPlayer = (props: IPlayerComponentP) => {
 	const { flowers, nonFlowers } = useTiles({
 		sTs,
 		ms
-	});
-	const shownTilesRef = useRef(null);
-	useDynamicWidth({
-		ref: shownTilesRef,
-		countTs: nonFlowers.length + flowers.length,
-		tileSize,
-		addPx: dealer ? _ShownTileWidth[tileSize] : 0
-	});
-	const shownHiddenHandRef = useRef(null);
-	useDynamicWidth({
-		ref: shownHiddenHandRef,
-		countTs: countHandTiles,
-		tileSize,
-		flag: sT || showAI,
-		addPx: isEmpty(lTa) ? 0 : _HiddenTileWidth[tileSize]
 	});
 
 	return (
@@ -46,20 +29,20 @@ const RightPlayer = (props: IPlayerComponentP) => {
 					className="vtss col-r"
 					segment={Segment.RIGHT}
 					lastSuffix="margin-bottom"
-					ref={shownHiddenHandRef}
+					dependencies={[tileSize, showAI || sT, countHandTiles, totalRounds]}
 					{...{ hTs, lTa, tHK }}
 				/>
 			) : (
-				<HiddenHand tiles={countHandTiles} segment={Segment.RIGHT} tileSize={tileSize} highlight={highlight} />
+				<HiddenHand segment={Segment.RIGHT} tiles={countHandTiles} tileSize={tileSize} highlight={highlight} />
 			)}
 
 			{/* Shown tiles */}
-			{(dealer || sTs?.length > 0) && (
+			{(dealer || sTs.length > 0) && (
 				<ShownTiles
 					className="vtss"
 					segment={Segment.RIGHT}
 					lastThrownId={lastThrown?.i}
-					ref={shownTilesRef}
+					dependencies={[dealer, sTs.length, totalRounds]}
 					{...{ dealer, flowers, nonFlowers, sT, tileSize }}
 				/>
 			)}
@@ -73,7 +56,7 @@ const RightPlayer = (props: IPlayerComponentP) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs?.length > 0 && <DiscardedTiles className="vtss discarded" tiles={dTs} segment={Segment.RIGHT} />}
+			{dTs.length > 0 && <DiscardedTiles className="vtss discarded" tiles={dTs} segment={Segment.RIGHT} />}
 		</div>
 	);
 };
