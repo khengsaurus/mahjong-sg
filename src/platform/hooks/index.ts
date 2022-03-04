@@ -3,7 +3,6 @@ import { useAndroidBack, useCloseListener, useDocumentListener, useWindowListene
 import useLocalObj from './useLocalObj';
 import useLocalSession from './useLocalSession';
 import useLocalStorage from './useLocalStorage';
-import { useDynamicWidth, useWindowHeight, useWindowSize } from './useWindowSize';
 
 export {
 	useAndroidBack,
@@ -13,8 +12,5 @@ export {
 	useLocalSession,
 	useLocalStorage,
 	useLocalObj,
-	useDynamicWidth,
-	useWindowHeight,
-	useWindowListener,
-	useWindowSize
+	useWindowListener
 };

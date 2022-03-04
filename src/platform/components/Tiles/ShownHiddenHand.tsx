@@ -1,7 +1,7 @@
 import { Highlight } from '@mui/icons-material';
 import { isEmpty } from 'lodash';
 import React, { forwardRef, memo, MutableRefObject } from 'react';
-import Column from 'react-column-flex-wrap';
+import ColumnFlexWrap from 'react-column-flex-wrap';
 import { Segment } from 'shared/enums';
 import { revealTile } from 'shared/util';
 import ShownTile from './ShownTile';
@@ -63,9 +63,9 @@ const ShownHiddenHand = forwardRef<MutableRefObject<any>, IShownHHP>(
 		const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
 
 		return segment === Segment.LEFT || segment === Segment.RIGHT ? (
-			<Column className={className} constantHeight constantWidth dependencies={dependencies} ref={ref}>
+			<ColumnFlexWrap className={className} constantHeight constantWidth dependencies={dependencies} ref={ref}>
 				{renderTiles(hTs, revLTT, lTa, segment, lastSuffix, Highlight, tHK)}
-			</Column>
+			</ColumnFlexWrap>
 		) : (
 			<div className={className} ref={ref}>
 				{renderTiles(hTs, revLTT, lTa, segment, lastSuffix, Highlight, tHK)}

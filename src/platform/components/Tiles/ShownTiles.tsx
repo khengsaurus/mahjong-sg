@@ -1,6 +1,6 @@
 import CasinoIcon from '@mui/icons-material/Casino';
 import React, { forwardRef, memo, MutableRefObject } from 'react';
-import Column from 'react-column-flex-wrap';
+import ColumnFlexWrap from 'react-column-flex-wrap';
 import { Segment, Size, Suit } from 'shared/enums';
 import ShownTile from './ShownTile';
 
@@ -69,16 +69,16 @@ const ShownTiles = forwardRef<MutableRefObject<any>, IShownTilesP>(
 		const { className, nonFlowers, flowers, segment, dealer, tileSize, lastThrownId, dependencies } = props;
 
 		return segment === Segment.LEFT || segment === Segment.RIGHT ? (
-			<Column
+			<ColumnFlexWrap
 				id={segment + '-shown'}
 				className={className}
 				constantHeight
 				constantWidth
-				ref={ref}
 				dependencies={dependencies}
+				ref={ref}
 			>
 				{renderTiles(nonFlowers, flowers, segment, lastThrownId, dealer, tileSize)}
-			</Column>
+			</ColumnFlexWrap>
 		) : (
 			<div id={segment + '-shown'} className={className} ref={ref}>
 				{renderTiles(nonFlowers, flowers, segment, lastThrownId, dealer, tileSize)}
