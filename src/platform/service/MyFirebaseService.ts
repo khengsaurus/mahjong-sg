@@ -79,7 +79,7 @@ export class FirebaseService {
 		return new Promise(resolve => {
 			try {
 				this.app = initializeApp(FirebaseConfig);
-				console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
+				isDev() && console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
 				resolve(true);
 			} catch (err) {
 				console.error(InfoMessage.FIREBASE_INIT_ERROR);
@@ -96,7 +96,7 @@ export class FirebaseService {
 			persistence: indexedDBLocalPersistence
 		});
 		this.auth.onAuthStateChanged(user => {
-			console.info(user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO);
+			isDev() && console.info(user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO);
 			this.user = user;
 		});
 	}

@@ -7,7 +7,7 @@ import { ErrorMessage, InfoMessage } from 'shared/messages';
 import { Game, User } from 'shared/models';
 import { store } from 'shared/store';
 import { setLocalGame } from 'shared/store/actions';
-import { createLocalGame } from 'shared/util';
+import { createLocalGame, isDev } from 'shared/util';
 import { objToUser } from 'shared/util/parsers';
 
 export class Service {
@@ -16,10 +16,10 @@ export class Service {
 
 	constructor() {
 		if (this.fbService) {
-			console.info(InfoMessage.SERVER_READY);
+			isDev() && console.info(InfoMessage.SERVER_READY);
 		} else {
 			this.fbService = FBService;
-			console.info(InfoMessage.SERVER_INIT);
+			isDev() && console.info(InfoMessage.SERVER_INIT);
 		}
 		this.store = store;
 	}
