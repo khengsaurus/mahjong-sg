@@ -6,7 +6,7 @@ import ServiceInstance from 'platform/service/ServiceLayer';
 import { Row } from 'platform/style/StyledComponents';
 import { StyledButton } from 'platform/style/StyledMui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
+import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
@@ -63,7 +63,12 @@ const Login = () => {
 					if (user) {
 						clearForm();
 						login(user, false);
-						user?.email && ServiceInstance.cleanupGames(user.email);
+						if (adminUsers.includes(user.uN)) {
+							// use admin login to cleanup old games since users may not login a second time
+							ServiceInstance.cleanupAllGames();
+						} else {
+							user?.email && ServiceInstance.cleanupGames(user.email);
+						}
 						setReady(true);
 						navigate(Page.INDEX);
 					} else {

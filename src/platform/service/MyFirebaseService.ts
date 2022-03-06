@@ -407,6 +407,21 @@ export class FirebaseService {
 		}
 	}
 
+	async cleanupAllGames() {
+		if (this.isFBConnected) {
+			const games = await getDocsFromServer(query(this.gamesRef));
+			games.forEach(g => {
+				let lastUpdated = g.data()?.t[1];
+				if (lastUpdated && lastUpdated?.toDate) {
+					lastUpdated = lastUpdated?.toDate() as Date;
+					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23) {
+						deleteDoc(doc(this.gamesRef, g.id)).catch(err => console.error(err));
+					}
+				}
+			});
+		}
+	}
+
 	/* ------------------------- Game related ------------------------- */
 
 	async getGameById(gameId?: string) {

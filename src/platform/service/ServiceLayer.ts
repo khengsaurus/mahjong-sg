@@ -239,6 +239,10 @@ export class Service {
 		FBService.cleanupGames(userEmail);
 	}
 
+	cleanupAllGames() {
+		FBService.cleanupAllGames();
+	}
+
 	// For dev
 	setGame(game: any) {
 		FBService.setGame(game);
