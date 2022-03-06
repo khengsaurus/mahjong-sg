@@ -1,11 +1,14 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary, Fade } from '@mui/material';
 import parse from 'html-react-parser';
+import { ShownTile } from 'platform/components/Tiles';
+import { useDocumentListener } from 'platform/hooks';
 import HomePage, { renderDefaultTitle } from 'platform/pages/Home/HomePage';
 import { StyledText } from 'platform/style/StyledMui';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Transition } from 'shared/enums';
+import { EEvent, ShownTileHeight, ShownTileWidth, Transition } from 'shared/enums';
+import { Animals } from 'shared/handEnums';
 import { HomeScreenText } from 'shared/screenTexts';
 import { IStore } from 'shared/store';
 import { isMobile } from 'shared/util';
@@ -18,6 +21,39 @@ const Help = () => {
 	const [showContent, setShowContent] = useState(-1);
 	const hasToggledRef = useRef(false);
 	const platform = isMobile() ? 'app' : 'website';
+
+	const handleCloseCallback = useCallback(e => {
+		if (e.key === 'Escape') {
+			setShowContent(-1);
+		}
+	}, []);
+
+	useDocumentListener(EEvent.KEYDOWN, handleCloseCallback);
+
+	function renderTiles(tiles: string, parentKey: string) {
+		const cards = tiles.split(',');
+		return (
+			<div className="small-tiles">
+				{cards.map((card, index) => {
+					const isAnimal = Animals.includes(card);
+					return (
+						<ShownTile
+							key={`${parentKey}-${index}`}
+							tileRef={index}
+							tileCard={card}
+							htsStyle={{
+								backgroundColor: 'gainsboro',
+								height: ShownTileHeight.SMALL - (isAnimal ? 2 : 0),
+								width: ShownTileWidth.SMALL - (isAnimal ? 2 : 0),
+								border: isAnimal ? '1px solid rgb(28, 28, 28)' : null,
+								borderRadius: 'calc(min(10%, 4px))'
+							}}
+						/>
+					);
+				})}
+			</div>
+		);
+	}
 
 	function toggleShow(index: number) {
 		hasToggledRef.current = true;
@@ -66,11 +102,30 @@ const Help = () => {
 								>
 									<div className="content-wrapper">
 										<ul>
-											{section.points.map((point, index2) => (
-												<li key={`section-${index1}-${index2}`}>
-													{parse(point.replaceAll('{platform}', platform))}
-												</li>
-											))}
+											{section.points.map((point, index2) => {
+												const key = `section-${index1}-${index2}`;
+												if (point.startsWith('_render_')) {
+													const arr = point.slice(8).split('_');
+													return (
+														<span key={key}>
+															{arr.length === 2 ? (
+																<>
+																	{parse(arr[0].replaceAll('{platform}', platform))}
+																	{renderTiles(arr[1], key)}
+																</>
+															) : (
+																renderTiles(arr[0], key)
+															)}
+														</span>
+													);
+												} else {
+													return (
+														<li key={key}>
+															{parse(point.replaceAll('{platform}', platform))}
+														</li>
+													);
+												}
+											})}
 										</ul>
 									</div>
 								</AccordionDetails>

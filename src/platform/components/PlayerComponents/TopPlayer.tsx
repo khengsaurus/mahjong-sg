@@ -29,14 +29,15 @@ const TopPlayer = (props: IPlayerComponentP) => {
 					className="htss top"
 					segment={Segment.TOP}
 					lastSuffix="margin-right"
-					{...{ hTs, lTa, tHK }}
+					{...{ hTs, lTa, tHK, dealer }}
 				/>
 			) : (
 				<HiddenHand
-					tiles={allHiddenTiles.length}
 					segment={Segment.TOP}
+					tiles={allHiddenTiles.length}
 					tileSize={tileSize}
 					highlight={highlight}
+					dealer={dealer}
 				/>
 			)}
 

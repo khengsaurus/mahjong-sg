@@ -45,4 +45,19 @@
 	max-height: calc(100vh - 84px); // ref-home-title 40px ref-bottom-home-buttons 24px ref-decoration 20px
 	max-height: calc(100vh - 84px - const(safe-area-inset-top) - const(safe-area-inset-bottom));
 	max-height: calc(100vh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	span {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 15px;
+		margin-left: 12px;
+		max-width: calc(100% - 24px);
+	}
+	.small-tiles {
+		@include flex-dir(row);
+		flex-wrap: wrap;
+		max-width: 85%;
+		min-height: 33px;
+	}
 }

@@ -1,13 +1,14 @@
-import { memo } from 'react';
+import { CSSProperties, memo } from 'react';
 import { Segment } from 'shared/enums';
 import getTileSrc from 'shared/images';
 
 interface IShownTileP {
 	tileRef: number;
 	tileCard: string;
-	segment: Segment;
+	segment?: Segment;
 	highlight?: boolean;
 	classSuffix?: string;
+	htsStyle?: CSSProperties;
 }
 
 function getClass(segment: Segment) {
@@ -25,7 +26,7 @@ function getClass(segment: Segment) {
  * @description Renders a ShownTile for IShownTile | IHiddenTile, hence tileCard needs to be unhashed and passed as a prop
  */
 const ShownTile = (props: IShownTileP) => {
-	const { tileRef, tileCard, segment, highlight, classSuffix } = props;
+	const { tileRef, tileCard, segment = Segment.BOTTOM, highlight, classSuffix, htsStyle = {} } = props;
 	let divClass = getClass(segment);
 	let bgClass = `${getClass(segment)}-bg`;
 
@@ -38,6 +39,7 @@ const ShownTile = (props: IShownTileP) => {
 					src={getTileSrc(tileCard)}
 					alt="tile"
 					draggable="false"
+					style={htsStyle}
 				/>
 			);
 		case 'vts':

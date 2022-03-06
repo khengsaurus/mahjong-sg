@@ -17,12 +17,78 @@
 	"helpContent": {
 		"sections": [
 			{
+				"title": "Basics of Mahjong",
+				"points": [
+					"Mahjong is a game where players take turns to draw and discard tiles.",
+					"Every round has a Prevailing Wind and players have their individual Seat Wind: the dealer is East (東) and other players are South (南), West (西), North (北), anti-clockwise around the table.",
+					"There are four rounds for each Prevailing Wind (East, South, West, North), and everyone takes turn to be the dealer as the game progresses.",
+					"The dealer starts with 14 tiles and is the first to discard.",
+					"The objective of the game is to form 'Melds', which can either be three consecutive tiles (Chi) or three or four of a kind (Pong/Kang).",
+					"_render_Chi:_1W,2W,3W,4T,5T,6T",
+					"_render_Pong:_2T,2T,2T,we,we,we",
+					"_render_Kang:_3S,3S,3S,3S,dh,dh,dh,dh",
+					"Players can only take tiles discarded by player's to their left to Chi, but can take any discarded tile to Pong, Kang, or Hu (win). Note that:<ul><li>Hu has priority over Pong/Kang and Chi</li><li>Pong/Kang has priority over Chi.</li></ul>",
+					"The points of each hand depends on the tiles it contains, and there are three main ways to gain points:<ul><li>Melding Dragon tiles, the Prevailing/Seat Winds</li><li>Having bonus tiles (see the Tiles section)</li><li>Certain combinations of melds/tiles (see the Scoring Hands section)</li></ul>",
+					"Players can only Hu (win) when they form a complete hand of 4 melds and a pair (eyes), or have a special combination of tiles, and their hand meets the minimum Tai (points) required.",
+					"If the dealer Hu's, the game will not proceed to the next round and the current dealer will be the dealer for the next round too.",
+					"If there are 15 tiles left and the last player to draw does not Hu, the round is drawn. If so, the game will only proceed to the next round if there was a Kang or someone drew matching bonus tiles."
+				]
+			},
+			{
+				"title": "Tiles",
+				"points": [
+					"There are four of each normal tile, comprising three Suits with cards numbered 1 to 9, four Winds, and three Dragon tiles",
+					"_render_Wan Tiles:_1W,2W,3W,7W,8W,9W",
+					"_render_Tong Tiles:_1T,2T,3T,7T,8T,9T",
+					"_render_Suo Tiles:_1S,2S,3S,7S,8S,9S",
+					"_render_Wind Tiles:_we,ws,ww,wn",
+					"_render_Dragon Tiles:_dh,db,df",
+					"Forming a Pong of the Prevailing/Seat Winds will award 1 point (Tai)",
+					"There are also bonus tiles - Animals, Seasons, and Flowers, with only one of each tile. Animals give 1 Tai while only players' respective Season and Flower tiles (based on Seat Wind) will give Tai.",
+					"_render_Animal Tiles:_am,al,ag,ac",
+					"_render_Season Tiles:_sc,sx,sq,sd",
+					"_render_Flower Tiles:_fm,fl,fj,fz"
+				]
+			},
+			{
+				"title": "Scoring Hands",
+				"points": [
+					"The scoring logic largely follows common playing rules and online guides.",
+					"Ping Hu: hand comprises of Chi melds and a pair. The last tile cannot be unique unless it is self drawn, and the pair cannot be the Prevailing/Seat Winds, or any of the dragon tiles.<br/>1 Tai if the player has any bonus tiles, 4 Tai if not.",
+					"_render_6W,7W,8W,3S,4S,5S,7S,7S,9S,2T,3T,4T,9W,9W",
+					"All Pong hand: hand comprises of Pong/Kang melds and a pair - 2 Tai",
+					"_render_1S,1S,1S,3T,3T,3T,ws,ws,ws,dh,dh,dh,8W,8W",
+					"Half Suited: hand comprises of one Suit and Dragon/Wind tiles only. Can include bonus tiles - 2 Tai",
+					"_render_1T,1T,1T,2T,3T,4T,ws,ws,ws,dh,dh,dh,wn,wn",
+					"Suited: hand comprises of one Suit only. Can include bonus tiles - 4 Tai",
+					"_render_1S,1S,1S,3S,4S,5S,6S,6S,6S,7S,8S,9S,9S,9S",
+					"Three Lesser Scholars: hand has Pong/Kang of two Dragons and the Pair is the third Dragon - 3 Tai.",
+					"_render_4W,4W,4W,4T,5T,6T,dh,dh,dh,db,db,db,df,df",
+					"Three Great Scholars: Pongs/Kang all three dragons. No additional meld or pair needed - maximum Tai",
+					"_render_4W,6W,8W,8S,9S,dh,dh,dh,db,db,db,df,df,df",
+					"Four Lesser Blessings: hand has 3 Wind Pong/Kangs and Pair of Wind tiles - 2 Tai, plus Tai for melding the Prevailing/Seat Winds",
+					"_render_4T,5T,6T,we,we,we,ws,ws,ws,ww,ww,ww,wn,wn",
+					"Four Greater Blessings: Pongs/Kang all four Winds dragons - maximum Tai",
+					"_render_we,we,we,ws,ws,ws,ww,ww,ww,wn,wn,wn,9S,9S",
+					"13 Orphans: must have a pair of any of the other tiles - maximum Tai",
+					"_render_1W,9W,1S,9S,1T,9T,we,ws,ww,wn,dh,db,df,df",
+					"Seven Pairs - maximum Tai",
+					"_render_4W,4W,6W,6W,1T,1T,5T,5T,wn,wn,dh,dh,db,db",
+					"Pure Green - maximum Tai",
+					"_render_2S,2S,2S,2S,3S,4S,6S,6S,6S,df,df,df,8S,8S",
+					"Concealed Hand: player's hand must be fully hidden (no open meld) and the last tile must be self drawn.",
+					"Completing a Bonus Tile set will also award additional Tai: all four Animals (maximum Tai), Seasons (+1 Tai), Flowers (+1 Tai), or all Seasons and Flowers (Maximum Tai)",
+					"Certain scenarios will also award Tai:<ul><li>Hu on replacement tile: Hu on the replacement tile after drawing a bonus tile/Kang - 1 Tai</li><li>Hu on second replacement tile: drawing a bonus tile as a replacement or Kang a replacement tile, then drawing another replacement tile to Hu - maximum Tai</li><li>Hu on the last tile: drawing the 16th last tile of the deck to Hu - 1 Tai</li><li>Robbing the Kang: player B Kang's and player A Hu's with that tile - 1 Tai</li></ul>",
+					"The following scoring scenarios are not accounted for:<ul><li>Nine Gates (九蓮寶燈)</li><li>Three Winners (一炮三响)</li><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
+				]
+			},
+			{
 				"title": "Controls",
 				"points": [
 					"When you can take or Hu on a discarded tile, a popup will appear showing you the options. Alternatively, you can select the tiles in your hand and press on the bottom-left button.",
 					"You can Kang if you select 4 of the same tile in your hand, or 1 tile when you've already Pong'd it. You can only do this after you've drawn or taken a tile, during your turn.",
 					"The Draw (摸) or Discard (丢) button on the right will light up only when it's your turn. Note that you must draw or take a tile before discarding, and only during your turn.",
-					"The {platform} will automatically draw replacement tiles (補花) for you when you Kang or draw flower tiles.",
+					"Replacement tiles (補花) will be automatically drawn for you when you Kang or draw flower tiles.",
 					"After drawing the last tile, the bottom-right button will read '完'. The last player has to press on it to end the round. If anyone tries to draw replacement tiles (補花) and there are 15 tiles left, the game will also end in a draw."
 				],
 				"ps": ""
@@ -33,29 +99,18 @@
 					"A glowing flower tile indicates that it is the player's flower tile, i.e. + 1 Tai.",
 					"There will only be instant payouts in Shooter or Half Shooter games, when a user Kang's, draws matching flower tiles, or collects a full flower set.",
 					"The 'Waiting...' alert will show when someone can Pong, Kang, or Hu on a discarded tile. The default timeout is 6s.",
-					"The timeout will be 12s if more than one person can take a discarded tile. The player with priority will have the first 6s to take the it. If they don't, others can take it after the first 6s.",
-					"Playing accross different timezones is not recommended, due to how the delay works. We're working on it."
-				]
-			},
-			{
-				"title": "Scoring",
-				"points": [
-					"The scoring logic largely follows common playing rules and online guides.",
-					"Ping Hu: player cannot be waiting for a unique tile unless it is self drawn, and the pair, if Pong'd, cannot be worth Tai.",
-					"Concealed Hand: player's hand must be fully closed (no open meld) and the last tile must be self drawn.",
-					"Three Great Scholars: player must Pongs/Kang all three dragons. No additional meld or pair is needed to Hu.",
-					"Note that the following scoring scenarios are not accounted for:<ul><li>Nine Gates (九蓮寶燈)</li><li>Three Winners (一炮三响)</li><li>Hidden Treasure (四暗刻/坎坎胡)</li><li>Heavenly, Earthly and Humanly Hands (天胡, 地胡, 人胡)</li><li>Scenario where the guilty person pays for all (包)</li></ul>"
+					"The timeout will be 12s if more than one person can take a discarded tile. The player with priority will have the first 6s to take the it. If they don't, others can take it after the first 6s."
 				]
 			},
 			{
 				"title": "How to Hu",
 				"points": [
-					"The {platform} will not let you Hu if you do not meet the minimum Tai. The Maximum Tai you can set is 5.",
+					"You will not be able to Hu if you do not meet the minimum Tai. The Maximum Tai you can set is 5.",
 					"When you can Hu, a popup will appear giving you the option. Alternatively, a button (开) will appear in the bottom right. After pressing that, a second one (开!) will appear on the left. Press on that to declare Hu.",
 					"Upon pressing the second button, your tiles will be shown to everyone, and no one can perform any actions. If you close the popup, you will hide your hand and the game will resume (careful ah - if a bot is next, it will play immediately).",
 					"When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you haven't drawn a tile and it is available. If you cancel the Hu it will be returned to whoever discarded it. There is no fake-hu (詐胡) functionality.",
 					"The creator of the game can toggle on or off 'Manual Hu' in the Game Info popup. If Manual Hu is on, players can Hu at any time.",
-					"Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the pong option (aiya, can Hu then just Hu lah).",
+					"Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the Pong option (aiya, can Hu then just Hu lah).",
 					"If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the Hu Announcement. A can use that to cancel B's Hu and take the last discarded tile instead."
 				]
 			},

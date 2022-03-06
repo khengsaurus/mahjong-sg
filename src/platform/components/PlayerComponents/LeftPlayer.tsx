@@ -30,10 +30,16 @@ const LeftPlayer = (props: IPlayerComponentP) => {
 					segment={Segment.LEFT}
 					lastSuffix="margin-bottom"
 					dependencies={[tileSize, showAI || sT, countHandTiles, totalRounds]}
-					{...{ hTs, lTa, tHK }}
+					{...{ hTs, lTa, tHK, dealer }}
 				/>
 			) : (
-				<HiddenHand segment={Segment.LEFT} tiles={countHandTiles} tileSize={tileSize} highlight={highlight} />
+				<HiddenHand
+					segment={Segment.LEFT}
+					tiles={countHandTiles}
+					tileSize={tileSize}
+					highlight={highlight}
+					dealer={dealer}
+				/>
 			)}
 
 			{/* Shown tiles */}
@@ -42,7 +48,7 @@ const LeftPlayer = (props: IPlayerComponentP) => {
 					className="vtss left"
 					segment={Segment.LEFT}
 					lastThrownId={lastThrown?.i}
-					dependencies={[dealer, sTs.length, totalRounds]}
+					dependencies={[sTs.length, totalRounds]}
 					{...{ dealer, flowers, nonFlowers, sT, tileSize }}
 				/>
 			)}
