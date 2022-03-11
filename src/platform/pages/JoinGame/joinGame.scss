@@ -2,8 +2,7 @@
 
 .join-game-panel {
 	align-content: flex-start;
-	max-height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-	max-height: calc(100% - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+	max-height: calc(80vh);
 	margin-bottom: env(safe-area-inset-bottom);
 	margin-bottom: const(safe-area-inset-bottom);
 	.list {

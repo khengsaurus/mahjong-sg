@@ -57,7 +57,7 @@
 	.small-tiles {
 		@include flex-dir(row);
 		flex-wrap: wrap;
-		max-width: 85%;
+		max-width: 90%;
 		min-height: 33px;
 	}
 }
