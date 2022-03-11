@@ -3,7 +3,14 @@ import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
 import { isEmpty } from 'lodash';
-import { AboutButton, BackButton, HelpButton, HomeButton, PrivacyButton } from 'platform/components/Buttons';
+import {
+	AboutButton,
+	BackButton,
+	DecorButton,
+	HelpButton,
+	HomeButton,
+	PrivacyButton
+} from 'platform/components/Buttons';
 import { Loader, NetworkLoader } from 'platform/components/Loader';
 import Overlay from 'platform/components/Overlay';
 import { useAndroidBack, useLocalSession } from 'platform/hooks';
@@ -143,9 +150,9 @@ const HomePage = ({
 					<BottomSpec>
 						{misc === 1 ? (
 							<>
-								<PrivacyButton />
-								<AboutButton />
-								<HelpButton />
+								<DecorButton Button={PrivacyButton} showOnHover={['', 'dh', '']} />
+								<DecorButton Button={AboutButton} showOnHover={['', 'db', '']} />
+								<DecorButton Button={HelpButton} showOnHover={['', 'df', '']} />
 							</>
 						) : (
 							<BackButton style={{ fontSize: 12, padding: 0 }} callback={customBack} />

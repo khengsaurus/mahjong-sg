@@ -1,5 +1,5 @@
 import { Alert, Collapse, TextField } from '@mui/material';
-import { PlayAIButton } from 'platform/components/Buttons';
+import { DecorButton, PlayAIButton } from 'platform/components/Buttons';
 import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';
@@ -172,7 +172,7 @@ const Login = () => {
 				{showRegister ? renderRegisterButton() : renderLoginButton()}
 			</Row>
 			<Row style={{ justifyContent: 'center', marginTop: -5 }}>
-				<PlayAIButton />
+				<DecorButton Button={PlayAIButton} showOnHover={['we', '', 'wn']} />
 			</Row>
 			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
 				<Alert severity={alert?.status as AlertStatus}>{alert?.msg || ErrorMessage.TRY_AGAIN}</Alert>
