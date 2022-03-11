@@ -1,6 +1,5 @@
 import { Fade } from '@mui/material';
-import LogoutButton from 'platform/components/Buttons/LogoutButton';
-import { JoinGameButton, NewGameButton } from 'platform/components/Buttons/TextNavButton';
+import { JoinGameButton, LogoutButton, NewGameButton } from 'platform/components/Buttons';
 import SettingsWindow from 'platform/components/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';

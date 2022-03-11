@@ -1,5 +1,5 @@
 import { Dialog, DialogActions, DialogContent } from '@mui/material';
-import { HomeButton } from 'platform/components/Buttons/TextNavButton';
+import { HomeButton } from 'platform/components/Buttons';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { Centered } from 'platform/style/StyledComponents';
 import { StyledText } from 'platform/style/StyledMui';

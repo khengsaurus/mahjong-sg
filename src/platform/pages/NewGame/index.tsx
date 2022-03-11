@@ -16,7 +16,7 @@ import {
 	MenuItem,
 	Select
 } from '@mui/material';
-import { HomeButton } from 'platform/components/Buttons/TextNavButton';
+import { HomeButton } from 'platform/components/Buttons';
 import UserSearchForm from 'platform/components/SearchForms/UserSearchForm';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';

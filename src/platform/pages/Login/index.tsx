@@ -1,5 +1,5 @@
 import { Alert, Collapse, TextField } from '@mui/material';
-import PlayAIButton from 'platform/components/Buttons/PlayAIButton';
+import { PlayAIButton } from 'platform/components/Buttons';
 import { useWindowListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';

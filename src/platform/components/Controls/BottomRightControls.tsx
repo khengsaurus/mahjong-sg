@@ -1,6 +1,6 @@
 import { Fade } from '@mui/material';
 import { isEmpty } from 'lodash';
-import { ControlButton } from 'platform/components/Buttons/ControlButton';
+import { ControlButton } from 'platform/components/Buttons';
 import { MuiStyles } from 'platform/style/MuiStyles';
 import { useSelector } from 'react-redux';
 import { Size, Transition } from 'shared/enums';

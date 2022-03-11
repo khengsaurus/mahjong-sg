@@ -2,7 +2,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
 import $ from 'jquery';
 import { isEmpty } from 'lodash';
-import { HomeButton, JoinGameButton } from 'platform/components/Buttons/TextNavButton';
+import { HomeButton, JoinGameButton } from 'platform/components/Buttons';
 import Controls from 'platform/components/Controls';
 import { Loader } from 'platform/components/Loader';
 import BottomPlayer from 'platform/components/PlayerComponents/BottomPlayer';

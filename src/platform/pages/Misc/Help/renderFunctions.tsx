@@ -1,10 +1,9 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary, Fade } from '@mui/material';
 import parse from 'html-react-parser';
-import { ShownTile } from 'platform/components/Tiles';
+import { SampleTile } from 'platform/components/Tiles';
 import { StyledText } from 'platform/style/StyledMui';
 import React from 'react';
-import { ShownTileHeight, ShownTileWidth } from 'shared/enums';
 import { Animals } from 'shared/handEnums';
 
 function renderTiles(tiles: string, parentKey: string) {
@@ -13,20 +12,7 @@ function renderTiles(tiles: string, parentKey: string) {
 		<div className="small-tiles">
 			{cards.map((card, index) => {
 				const isAnimal = Animals.includes(card);
-				return (
-					<ShownTile
-						key={`${parentKey}-${index}`}
-						tileRef={index}
-						tileCard={card}
-						htsStyle={{
-							backgroundColor: 'gainsboro',
-							height: ShownTileHeight.SMALL - (isAnimal ? 2 : 0),
-							width: ShownTileWidth.SMALL - (isAnimal ? 2 : 0),
-							border: isAnimal ? '1px solid rgb(28, 28, 28)' : null,
-							borderRadius: 'calc(min(10%, 4px))'
-						}}
-					/>
-				);
+				return <SampleTile key={`${parentKey}-${index}`} card={card} border={isAnimal} gold={false} />;
 			})}
 		</div>
 	);

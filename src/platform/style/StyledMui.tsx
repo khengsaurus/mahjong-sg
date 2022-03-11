@@ -25,6 +25,7 @@ interface IStyledButtonProps {
 	disabled?: boolean;
 	style?: any;
 	onClick?: () => void;
+	showOnHover?: string[];
 }
 
 export const StyledText = ({

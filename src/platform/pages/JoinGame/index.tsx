@@ -1,6 +1,6 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Collapse, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { HomeButton } from 'platform/components/Buttons/TextNavButton';
+import { HomeButton } from 'platform/components/Buttons';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
 import ServiceInstance from 'platform/service/ServiceLayer';

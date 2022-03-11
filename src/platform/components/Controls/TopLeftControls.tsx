@@ -3,7 +3,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import IconControlButton from 'platform/components/Buttons/IconControlButton';
+import { IconControlButton } from 'platform/components/Buttons';
 import { TableText } from 'platform/style/StyledComponents';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';

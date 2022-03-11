@@ -3,13 +3,7 @@ import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
 import { isEmpty } from 'lodash';
-import {
-	AboutButton,
-	BackButton,
-	HelpButton,
-	HomeButton,
-	PrivacyButton
-} from 'platform/components/Buttons/TextNavButton';
+import { AboutButton, BackButton, HelpButton, HomeButton, PrivacyButton } from 'platform/components/Buttons';
 import { Loader, NetworkLoader } from 'platform/components/Loader';
 import Overlay from 'platform/components/Overlay';
 import { useAndroidBack, useLocalSession } from 'platform/hooks';

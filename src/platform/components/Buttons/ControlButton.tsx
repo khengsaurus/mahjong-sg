@@ -10,7 +10,7 @@ interface IControlButtonP {
 	callback: () => void;
 }
 
-export const ControlButton = ({ label, callback, disabled = false, style }: IControlButtonP) => {
+const ControlButton = ({ label, callback, disabled = false, style }: IControlButtonP) => {
 	const {
 		theme: { tableColor }
 	} = useSelector((store: IStore) => store);
@@ -29,3 +29,5 @@ export const ControlButton = ({ label, callback, disabled = false, style }: ICon
 		</Button>
 	);
 };
+
+export default ControlButton;
