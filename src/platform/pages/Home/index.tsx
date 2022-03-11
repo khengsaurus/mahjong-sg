@@ -1,5 +1,5 @@
 import { Fade } from '@mui/material';
-import { JoinGameButton, LogoutButton, NewGameButton } from 'platform/components/Buttons';
+import { DecorButton, JoinGameButton, LogoutButton, NewGameButton } from 'platform/components/Buttons';
 import SettingsWindow from 'platform/components/SettingsWindow';
 import { useDocumentListener } from 'platform/hooks';
 import HomePage from 'platform/pages/Home/HomePage';
@@ -30,12 +30,16 @@ const Home = () => {
 	);
 	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
 
+	const SettingsButton: React.FC = () => {
+		return <StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />;
+	};
+
 	const markup = () => (
 		<>
-			<NewGameButton />
-			<JoinGameButton />
-			<StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />
-			<LogoutButton />
+			<DecorButton Button={NewGameButton} showOnHover={['we', '', 'ws']} />
+			<DecorButton Button={JoinGameButton} showOnHover={['ws', '', 'ww']} />
+			<DecorButton Button={SettingsButton} showOnHover={['ww', '', 'wn']} />
+			<DecorButton Button={LogoutButton} showOnHover={['wn', '', 'we']} />
 			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
 				<div>
 					<SettingsWindow
@@ -54,3 +58,8 @@ const Home = () => {
 };
 
 export default Home;
+
+// ['sc', '', 'fm']
+// ['sx', '', 'fl']
+// ['sq', '', 'fj']
+// ['sd', '', 'fl']

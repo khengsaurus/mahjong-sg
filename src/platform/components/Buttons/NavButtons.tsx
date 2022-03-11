@@ -1,15 +1,45 @@
-import TextNavButton, { IHoverButton } from 'platform/components/Buttons/TextNavButton';
-import { useContext } from 'react';
-import { Page, PageName, Shortcut } from 'shared/enums';
+import { useDocumentListener } from 'platform/hooks';
+import { StyledButton } from 'platform/style/StyledMui';
+import { useCallback, useContext } from 'react';
+import { EEvent, Page, PageName, Shortcut } from 'shared/enums';
 import { AppContext } from 'shared/hooks';
 import { ButtonText } from 'shared/screenTexts';
 
-const HomeButton = ({
+export interface ITextNavButtonP extends IHasStyle {
+	label: PageName | ButtonText;
+	route?: Page;
+	shortcut?: Shortcut;
+	disableShortcut?: boolean;
+	onClick?: () => void;
+}
+
+const TextNavButton: React.FC<ITextNavButtonP> = ({
+	label,
+	route,
+	shortcut,
+	onClick,
+	style = {},
+	disableShortcut = false
+}: ITextNavButtonP) => {
+	const { navigate } = useContext(AppContext);
+	const handleShortcut = useCallback(
+		e => {
+			if (e.key === shortcut) {
+				onClick ? onClick() : navigate(route);
+			}
+		},
+		[shortcut, route, navigate, onClick]
+	);
+	useDocumentListener(EEvent.KEYDOWN, disableShortcut ? null : handleShortcut);
+
+	return <StyledButton label={label} navigate={route} onClick={onClick} style={{ zIndex: 10, ...style }} />;
+};
+
+export const HomeButton: React.FC<IHomeButtonP> = ({
 	style = {},
 	label = PageName.HOME,
 	disableShortcut = false,
-	callback = null,
-	showOnHover = []
+	callback = null
 }: IHomeButtonP) => {
 	const { handleHome } = useContext(AppContext);
 
@@ -20,12 +50,11 @@ const HomeButton = ({
 			shortcut={Shortcut.HOME}
 			disableShortcut={disableShortcut}
 			style={style}
-			showOnHover={showOnHover}
 		/>
 	);
 };
 
-const BackButton = ({ style = {}, callback = null, showOnHover = [] }: IHomeButtonP) => {
+export const BackButton: React.FC<IHomeButtonP> = ({ style = {}, callback = null }: IHomeButtonP) => {
 	const { navigate } = useContext(AppContext);
 	return (
 		<TextNavButton
@@ -33,36 +62,19 @@ const BackButton = ({ style = {}, callback = null, showOnHover = [] }: IHomeButt
 			onClick={() => (!!callback ? callback() : navigate(-1))}
 			style={style}
 			disableShortcut={true}
-			showOnHover={showOnHover}
 		/>
 	);
 };
 
-const NewGameButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
-	return (
-		<TextNavButton
-			label={PageName.NEWGAME}
-			route={Page.NEWGAME}
-			shortcut={Shortcut.NEWGAME}
-			style={style}
-			showOnHover={showOnHover}
-		/>
-	);
+export const NewGameButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
+	return <TextNavButton label={PageName.NEWGAME} route={Page.NEWGAME} shortcut={Shortcut.NEWGAME} style={style} />;
 };
 
-const JoinGameButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
-	return (
-		<TextNavButton
-			label={PageName.JOINGAME}
-			route={Page.JOINGAME}
-			shortcut={Shortcut.JOINGAME}
-			style={style}
-			showOnHover={showOnHover}
-		/>
-	);
+export const JoinGameButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
+	return <TextNavButton label={PageName.JOINGAME} route={Page.JOINGAME} shortcut={Shortcut.JOINGAME} style={style} />;
 };
 
-const PrivacyButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
+export const PrivacyButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
 			label={ButtonText.POLICY}
@@ -70,12 +82,11 @@ const PrivacyButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
 			shortcut={null}
 			disableShortcut={true}
 			style={{ ...style, fontSize: 12, padding: 0 }}
-			showOnHover={showOnHover}
 		/>
 	);
 };
 
-const AboutButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
+export const AboutButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
 			label={ButtonText.ABOUT}
@@ -83,12 +94,11 @@ const AboutButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
 			shortcut={null}
 			disableShortcut={true}
 			style={{ ...style, fontSize: 12, padding: 0 }}
-			showOnHover={showOnHover}
 		/>
 	);
 };
 
-const HelpButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
+export const HelpButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
 	return (
 		<TextNavButton
 			label={ButtonText.HELP}
@@ -96,9 +106,8 @@ const HelpButton = ({ style = {}, showOnHover = [] }: IHoverButton) => {
 			shortcut={null}
 			disableShortcut={true}
 			style={{ ...style, fontSize: 12, padding: 0 }}
-			showOnHover={showOnHover}
 		/>
 	);
 };
 
-export { HomeButton, BackButton, NewGameButton, JoinGameButton, PrivacyButton, AboutButton, HelpButton };
+export default TextNavButton;

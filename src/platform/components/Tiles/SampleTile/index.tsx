@@ -6,20 +6,30 @@ import './sampleTile.scss';
 interface ISampleTileProps {
 	card: string;
 	size?: Size;
+	className?: string;
 	border?: boolean;
 	gold?: boolean;
 	pink?: boolean;
 }
 
-const SampleTile = ({ card, size = Size.SMALL, border = false, gold = true, pink = false }: ISampleTileProps) => {
+const SampleTile = ({
+	card,
+	size = Size.SMALL,
+	className = '',
+	border = false,
+	gold = true,
+	pink = false
+}: ISampleTileProps) => {
 	return (
-		<img
-			src={getTileSrc(card)}
-			className={`dummy-tile-${size} ${border ? 'border' : ''} ${pink ? 'pink' : ''} ${gold ? 'gold' : ''}`}
-			alt="tile"
-			draggable="false"
-		/>
+		<div className={className}>
+			<img
+				src={getTileSrc(card)}
+				className={`dummy-tile-${size} ${border ? 'border' : ''} ${pink ? 'pink' : ''} ${gold ? 'gold' : ''}`}
+				alt="tile"
+				draggable="false"
+			/>
+		</div>
 	);
 };
 
-export default SampleTile;
+export default React.memo(SampleTile);

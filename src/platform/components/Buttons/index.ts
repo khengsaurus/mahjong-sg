@@ -1,7 +1,8 @@
 import ControlButton from './ControlButton';
+import DecorButton from './DecorButton';
 import IconControlButton from './IconControlButton';
 import LogoutButton from './LogoutButton';
-import {
+import TextNavButton, {
 	AboutButton,
 	BackButton,
 	HelpButton,
@@ -11,10 +12,10 @@ import {
 	PrivacyButton
 } from './NavButtons';
 import PlayAIButton from './PlayAIButton';
-import TextNavButton from './TextNavButton';
 
 export {
 	ControlButton,
+	DecorButton,
 	IconControlButton,
 	LogoutButton,
 	PlayAIButton,
