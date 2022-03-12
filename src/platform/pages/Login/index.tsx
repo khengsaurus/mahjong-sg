@@ -10,12 +10,13 @@ import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'share
 import { AppContext } from 'shared/hooks';
 import { ErrorMessage } from 'shared/messages';
 import { ButtonText, HomeScreenText } from 'shared/screenTexts';
+import { isEmail } from 'shared/util';
 
 const Login = () => {
 	const { alert, login, navigate, setAlert, setUserEmail } = useContext(AppContext);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
-	const [username, setUsername] = useState('');
+	const [usernameEmail, setUsernameEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [showRegister, setShowRegister] = useState(false);
@@ -25,7 +26,10 @@ const Login = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showRegister]);
 
-	const loginDisabled = useMemo(() => username.trim() === '' || password.trim() === '', [username, password]);
+	const loginDisabled = useMemo(
+		() => usernameEmail.trim() === '' || password.trim() === '',
+		[usernameEmail, password]
+	);
 
 	const registerDisabled = useMemo(
 		() => email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '',
@@ -33,7 +37,7 @@ const Login = () => {
 	);
 
 	function clearForm() {
-		setUsername('');
+		setUsernameEmail('');
 		setEmail('');
 		setPassword('');
 		setConfirmPassword('');
@@ -51,12 +55,19 @@ const Login = () => {
 		[setReady, setAlert]
 	);
 
-	const handleLogin = useCallback(() => {
-		if (!showRegister && username.trim() && password.trim()) {
+	const handleLogin = useCallback(async () => {
+		if (!showRegister && usernameEmail.trim() && password.trim()) {
 			setReady(false);
-			ServiceInstance.getEmailFromUsername(username)
-				.then(email => ServiceInstance.FBAuthLogin({ email, password }))
-				.then(_email => ServiceInstance.FBResolveUser(_email))
+			let email;
+			if (isEmail(usernameEmail)) {
+				email = usernameEmail;
+			} else {
+				await ServiceInstance.getEmailFromUsername(usernameEmail).then(e => {
+					email = e;
+				});
+			}
+			ServiceInstance.FBAuthLogin({ email, password })
+				.then(e => ServiceInstance.FBResolveUser(e))
 				.then(user => {
 					setReady(true);
 					setAlert(null);
@@ -79,7 +90,7 @@ const Login = () => {
 					handleError(err);
 				});
 		}
-	}, [handleError, login, navigate, password, showRegister, setAlert, username]);
+	}, [handleError, login, navigate, password, showRegister, setAlert, usernameEmail]);
 
 	const handleRegister = useCallback(() => {
 		if (showRegister && email.trim() && password.trim() && confirmPassword.trim()) {
@@ -133,11 +144,13 @@ const Login = () => {
 		<>
 			<TextField
 				key="usernameEmail"
-				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME}
-				onChange={e => (showRegister ? setEmail(e.target.value) : setUsername(e.target.value?.toLowerCase()))}
+				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME_EMAIL}
+				onChange={e =>
+					showRegister ? setEmail(e.target.value) : setUsernameEmail(e.target.value?.toLowerCase())
+				}
 				style={{ margin: '-5px 0px 0px', width: '150px' }}
 				type="text"
-				value={showRegister ? email : username}
+				value={showRegister ? email : usernameEmail}
 				variant="standard"
 			/>
 			<TextField
