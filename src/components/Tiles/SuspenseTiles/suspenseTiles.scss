@@ -1,0 +1,13 @@
+@import '../../../App.scss';
+
+.suspense-tiles-horizontal {
+	background-size: 50% !important;
+	border-radius: $default-tile-border-radius;
+	animation: linear-gradient-unidir 3s ease infinite;
+}
+
+.suspense-tiles-vertical {
+	background-size: 50% !important;
+	border-radius: $default-tile-border-radius;
+	animation: linear-gradient-unidir 3s ease infinite;
+}

@@ -1,0 +1,25 @@
+@import '../../../App.scss';
+
+@mixin sample-tile-styles {
+	@each $size in $sizes {
+		.dummy-tile-#{$size} {
+			height: getShownTileHeight($size);
+			width: getShownTileWidth($size);
+			border-radius: $default-tile-border-radius;
+			background: $color-tile-front;
+			&.border {
+				height: getShownTileHeight($size) - (2 * getTileBorder($size));
+				width: getShownTileWidth($size) - (2 * getTileBorder($size));
+				border: getTileBorder($size) solid rgb(28, 28, 28);
+			}
+			&.pink {
+				@include default-flower;
+			}
+			&.gold {
+				@include highlight;
+			}
+		}
+	}
+}
+
+@include sample-tile-styles;

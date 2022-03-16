@@ -1,0 +1,28 @@
+@import '../../App.scss';
+
+.panels {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	height: 170px;
+	transition: $transition-fast !important;
+	.panel-segment {
+		flex-direction: column;
+		justify-content: center;
+		height: 100%;
+		width: $panel-segment-width;
+		transition: $transition-fast;
+		&.padding-top {
+			padding-top: 8px !important;
+		}
+	}
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	width: $panel-segment-width;
+	padding-top: 50px;
+	transition: $transition-fast;
+}

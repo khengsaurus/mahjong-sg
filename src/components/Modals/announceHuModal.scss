@@ -1,0 +1,36 @@
+@import '../../App.scss';
+
+@mixin column {
+	display: flex;
+	flex-direction: column;
+}
+
+@mixin row {
+	display: flex;
+	flex-direction: row;
+}
+
+.ann-panels {
+	@include row;
+	margin-top: 3px;
+	align-items: center;
+	justify-content: center;
+	transition: $transition-fast;
+
+	.full-panel {
+		@include column;
+	}
+
+	.left-panel {
+		@include column;
+		padding: 5px 10px 5px 0px;
+		margin-right: 10px;
+		max-width: 200px;
+		border-right: 1px solid transparent;
+	}
+
+	.right-panel {
+		@include column;
+		max-width: 200px;
+	}
+}

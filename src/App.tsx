@@ -1,26 +1,20 @@
-import Home from 'platform/pages/Home';
-import JoinGame from 'platform/pages/JoinGame';
-import Login from 'platform/pages/Login';
-import NewUser from 'platform/pages/Login/NewUser';
-import { About, Help, Policy } from 'platform/pages/Misc';
-import NewGame from 'platform/pages/NewGame';
-import Table from 'platform/pages/Table';
-import { Styled } from 'platform/style/StyledComponents';
+import { Page } from 'enums';
+import { AppContextProvider } from 'hooks';
+import { About, Help, Home, JoinGame, Login, NewGame, NewUser, Policy, Table } from 'pages';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Page } from 'shared/enums';
-import { AppContextProvider } from 'shared/hooks';
-import { persistor, store } from 'shared/store';
+import { persistor, store } from 'store';
+import { Styled } from 'style/StyledComponents';
 import './App.scss';
 
 function App() {
 	return (
-		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistor}>
-				<Styled>
-					<BrowserRouter>
-						<AppContextProvider>
+		<BrowserRouter>
+			<Provider store={store}>
+				<PersistGate loading={null} persistor={persistor}>
+					<AppContextProvider>
+						<Styled>
 							<Routes>
 								<Route path={Page.ABOUT} element={<About />} />
 								<Route path={Page.INDEX} element={<Home />} />
@@ -33,11 +27,11 @@ function App() {
 								<Route path={Page.POLICY} element={<Policy />} />
 								<Route path={Page.TABLE} element={<Table />} />
 							</Routes>
-						</AppContextProvider>
-					</BrowserRouter>
-				</Styled>
-			</PersistGate>
-		</Provider>
+						</Styled>
+					</AppContextProvider>
+				</PersistGate>
+			</Provider>
+		</BrowserRouter>
 	);
 }
 

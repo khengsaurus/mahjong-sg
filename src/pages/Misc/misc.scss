@@ -1,0 +1,63 @@
+@import '../../App.scss';
+
+.content {
+	@include flow(column wrap);
+	width: clamp(200px, 80%, 450px) !important;
+	text-align: left;
+	-webkit-text-size-adjust: 100%;
+	&.centered {
+		text-align: center;
+	}
+
+	p {
+		font-size: 15px;
+		display: block;
+		margin: 10px 0px !important;
+	}
+
+	ul {
+		margin: 5px 0px;
+		padding-inline-start: 12px;
+		li {
+			font-size: 15px;
+			margin: 5px;
+		}
+	}
+
+	.stack {
+		@include flex-dir(row);
+		align-self: center;
+		align-items: center;
+		.logos {
+			padding-left: 4px;
+			img {
+				margin-top: 4px;
+				align-self: center;
+				max-height: 22px;
+				max-width: 22px;
+				padding: 0 2px;
+			}
+		}
+	}
+}
+
+.content-wrapper {
+	max-height: calc(100vh - 84px); // ref-home-title 40px ref-bottom-home-buttons 24px ref-decoration 20px
+	max-height: calc(100vh - 84px - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+	max-height: calc(100vh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	span {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 15px;
+		margin-left: 12px;
+		max-width: calc(100% - 24px);
+	}
+	.small-tiles {
+		@include flex-dir(row);
+		flex-wrap: wrap;
+		max-width: 90%;
+		min-height: 33px;
+	}
+}
