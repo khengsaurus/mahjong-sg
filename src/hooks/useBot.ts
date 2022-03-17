@@ -1,8 +1,8 @@
-import { isEmpty } from 'lodash';
-import { useContext, useEffect, useMemo, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { getBotEval } from 'bot';
 import { Exec, LocalFlag } from 'enums';
+import isEmpty from 'lodash.isempty';
+import { useContext, useEffect, useMemo, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import { findLeft, findOpp, findRight, isBot, isDev } from 'utility';
 import { AppContext } from './AppContext';

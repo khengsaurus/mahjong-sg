@@ -1,13 +1,13 @@
 import SendIcon from '@mui/icons-material/Send';
 import { FormControl, IconButton, MenuItem, Select } from '@mui/material';
-import { isEmpty } from 'lodash';
+import { Amounts, Size } from 'enums';
+import isEmpty from 'lodash.isempty';
+import { Game } from 'models';
+import { useMemo, useState } from 'react';
+import { ScreenTextEng } from 'screenTexts';
 import { MuiStyles } from 'style/MuiStyles';
 import { FormRow } from 'style/StyledComponents';
 import { StyledText } from 'style/StyledMui';
-import { useMemo, useState } from 'react';
-import { Amounts, Size } from 'enums';
-import { Game } from 'models';
-import { ScreenTextEng } from 'screenTexts';
 import { getDefaultAmt } from 'utility';
 import { sendChips } from './PaymentModal';
 

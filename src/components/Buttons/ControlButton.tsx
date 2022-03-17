@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
-import { getHighlightColor } from 'style/MuiStyles';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
+import { getHighlightColor } from 'style/MuiStyles';
 
 interface IControlButtonP {
 	disabled?: boolean;

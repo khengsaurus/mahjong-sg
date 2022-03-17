@@ -1,13 +1,12 @@
+import { BotIds, Content, Page, Size, StorageKey } from 'enums';
 import { useLocalObj } from 'hooks';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
+import { ErrorMessage, InfoMessage } from 'messages';
+import { User } from 'models';
 import { createContext, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-import ServiceInstance from 'service/ServiceLayer';
-import { BotIds, Content, Page, Size, StorageKey } from 'enums';
-import { ErrorMessage, InfoMessage } from 'messages';
-import { User } from 'models';
-import HttpService from 'service/AxiosService';
+import { HttpService, ServiceInstance } from 'service';
 import { IStore } from 'store';
 import {
 	setAboutContent,

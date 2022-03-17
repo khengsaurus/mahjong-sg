@@ -1,10 +1,10 @@
+import { LocalFlag, Size, TableColor, Transition } from 'enums';
 import { useCloseListener } from 'hooks';
-import { GreenTableText, TableText } from 'style/StyledComponents';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { LocalFlag, Size, TableColor, Transition } from 'enums';
 import { ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
+import { GreenTableText, TableText } from 'style/StyledComponents';
 
 interface ILogModalP {
 	expanded: boolean;

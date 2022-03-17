@@ -4,12 +4,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconControlButton } from 'components/Buttons';
-import { TableText } from 'style/StyledComponents';
-import { useContext } from 'react';
-import { useSelector } from 'react-redux';
 import { LocalFlag, Size } from 'enums';
 import { AppContext } from 'hooks';
+import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
+import { TableText } from 'style/StyledComponents';
 import './controls.scss';
 
 const TopLeftControls = ({

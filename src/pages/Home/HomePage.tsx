@@ -2,27 +2,19 @@ import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
-import { isEmpty } from 'lodash';
-import {
-	AboutButton,
-	BackButton,
-	DecorButton,
-	HelpButton,
-	HomeButton,
-	PrivacyButton
-} from 'components/Buttons';
+import { AboutButton, BackButton, DecorButton, HelpButton, HomeButton, PrivacyButton } from 'components/Buttons';
 import { Loader, NetworkLoader } from 'components/Loader';
 import Overlay from 'components/Overlay';
-import { useAndroidBack, useLocalSession } from 'hooks';
+import { EEvent, Platform, Status } from 'enums';
+import { AppContext, useAndroidBack, useLocalSession } from 'hooks';
+import isEmpty from 'lodash.isempty';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { HomeScreenText, ScreenTextEng } from 'screenTexts';
+import { IStore } from 'store';
 import { HomeTheme } from 'style/MuiStyles';
 import { BottomSpec, Centered, Main, NetworkAlert } from 'style/StyledComponents';
 import { StyledCenterText, StyledText } from 'style/StyledMui';
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { EEvent, Platform, Status } from 'enums';
-import { AppContext } from 'hooks';
-import { HomeScreenText, ScreenTextEng } from 'screenTexts';
-import { IStore } from 'store';
 import { isMobile } from 'utility';
 
 interface IHomePageP {

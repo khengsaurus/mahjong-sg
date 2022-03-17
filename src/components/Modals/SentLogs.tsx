@@ -1,6 +1,6 @@
 import { ScrollableBase } from 'style/StyledComponents';
 import { StyledCenterText } from 'style/StyledMui';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface ISentLogsP {
 	logs?: string[];

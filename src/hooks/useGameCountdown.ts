@@ -1,6 +1,6 @@
+import { Exec, LocalFlag } from 'enums';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Exec, LocalFlag } from 'enums';
 import { IStore } from 'store';
 import useCountdown from './useCountdown';
 

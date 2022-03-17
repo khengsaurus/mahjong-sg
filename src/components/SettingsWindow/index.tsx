@@ -1,27 +1,17 @@
 import { Alert, Collapse, Dialog, DialogContent, FormControl, Paper, Switch, Tab, Tabs } from '@mui/material';
+import { AlertStatus, BackgroundColor, Page, Size, Status, TableColor, TileColor, Transition, Visitor } from 'enums';
+import { AppContext } from 'hooks';
 import { extend, isEqual } from 'lodash';
-import ServiceInstance from 'service/ServiceLayer';
+import { ErrorMessage } from 'messages';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ButtonText, ScreenTextEng } from 'screenTexts';
+import { ServiceInstance } from 'service';
+import { IStore } from 'store';
+import { setHaptic, setSizes, setTheme } from 'store/actions';
 import { MuiStyles, TableTheme } from 'style/MuiStyles';
 import { Row } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	AlertStatus,
-	BackgroundColor,
-	Page,
-	Size,
-	Status,
-	TableColor,
-	TileColor,
-	Transition,
-	Visitor
-} from 'enums';
-import { AppContext } from 'hooks';
-import { ErrorMessage } from 'messages';
-import { ButtonText, ScreenTextEng } from 'screenTexts';
-import { IStore } from 'store';
-import { setHaptic, setSizes, setTheme } from 'store/actions';
 import { IModalP } from 'typesPlus';
 import { getTheme, isMobile } from 'utility';
 import './settingsWindow.scss';

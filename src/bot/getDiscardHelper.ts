@@ -1,5 +1,5 @@
-import { isEmpty } from 'lodash';
 import { MeldType, Suit } from 'enums';
+import isEmpty from 'lodash.isempty';
 import {
 	arrToSetArr,
 	cardsWithoutNeighbors,

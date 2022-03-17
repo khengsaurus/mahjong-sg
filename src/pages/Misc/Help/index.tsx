@@ -1,15 +1,15 @@
 import { Fade } from '@mui/material';
+import { EEvent, Transition } from 'enums';
 import { useDocumentListener } from 'hooks';
-import HomePage, { renderDefaultTitle } from 'pages/Home/HomePage';
+import { HomePage, renderDefaultTitle } from 'pages';
 import renderSections from 'pages/Misc/Help/renderFunctions';
 import initContent from 'pages/Misc/initContent.json';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import 'pages/Misc/misc.scss';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { EEvent, Transition } from 'enums';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
 import { isMobile } from 'utility';
-import 'pages/Misc/misc.scss';
 
 const Help = () => {
 	const { helpContent } = useSelector((store: IStore) => store);

@@ -1,12 +1,12 @@
 import { ImpactStyle } from '@capacitor/haptics';
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogActions, DialogContent, IconButton } from '@mui/material';
-import { MuiStyles } from 'style/MuiStyles';
-import { Centered } from 'style/StyledComponents';
-import { StyledButton, StyledText } from 'style/StyledMui';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
+import { MuiStyles } from 'style/MuiStyles';
+import { Centered } from 'style/StyledComponents';
+import { StyledButton, StyledText } from 'style/StyledMui';
 import { ITableNotifP } from 'typesPlus';
 import { triggerHaptic } from 'utility';
 

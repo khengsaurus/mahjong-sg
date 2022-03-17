@@ -1,15 +1,14 @@
 import { Alert, Collapse, TextField } from '@mui/material';
 import { DecorButton, PlayAIButton } from 'components/Buttons';
-import { useWindowListener } from 'hooks';
-import HomePage from 'pages/Home/HomePage';
-import ServiceInstance from 'service/ServiceLayer';
+import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'enums';
+import { AppContext, useWindowListener } from 'hooks';
+import { ErrorMessage } from 'messages';
+import { HomePage } from 'pages';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ButtonText, HomeScreenText } from 'screenTexts';
+import { ServiceInstance } from 'service';
 import { Row } from 'style/StyledComponents';
 import { StyledButton } from 'style/StyledMui';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'enums';
-import { AppContext } from 'hooks';
-import { ErrorMessage } from 'messages';
-import { ButtonText, HomeScreenText } from 'screenTexts';
 import { isEmail } from 'utility';
 
 const Login = () => {

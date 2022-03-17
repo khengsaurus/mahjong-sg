@@ -1,7 +1,3 @@
-import ServiceInstance from 'service/ServiceLayer';
-import { StyledButton } from 'style/StyledMui';
-import React, { useContext } from 'react';
-import { useDispatch } from 'react-redux';
 import {
 	BackgroundColor,
 	Bot,
@@ -17,8 +13,12 @@ import {
 } from 'enums';
 import { AppContext } from 'hooks';
 import { User } from 'models';
+import { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import { ButtonText } from 'screenTexts';
+import { ServiceInstance } from 'service';
 import { setGameId, setLocalGame, setTheme, setTHK } from 'store/actions';
+import { StyledButton } from 'style/StyledMui';
 
 const PlayAIButton = () => {
 	const { login, navigate } = useContext(AppContext);

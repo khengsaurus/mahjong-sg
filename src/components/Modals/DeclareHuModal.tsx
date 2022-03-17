@@ -1,11 +1,11 @@
 import { Dialog, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { isEmpty } from 'lodash';
 import CheckBox from 'components/Form';
+import isEmpty from 'lodash.isempty';
+import { useState } from 'react';
+import { ButtonText, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import { MuiStyles } from 'style/MuiStyles';
 import { FormRow, MainTransparent } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
-import { useState } from 'react';
-import { ButtonText, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import { IDeclareHuModalP, IPoint } from 'typesPlus';
 import { generateNumbers, getHandDesc } from 'utility';
 

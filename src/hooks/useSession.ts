@@ -1,7 +1,7 @@
-import ServiceInstance from 'service/ServiceLayer';
+import { useAsync } from 'hooks';
 import { useCallback, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useAsync } from 'hooks';
+import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { AppContext } from './AppContext';
 

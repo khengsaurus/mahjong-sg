@@ -1,11 +1,11 @@
 import { Fade } from '@mui/material';
-import { isEmpty } from 'lodash';
 import { ControlButton } from 'components/Buttons';
-import { MuiStyles } from 'style/MuiStyles';
-import { useSelector } from 'react-redux';
 import { Size, Transition } from 'enums';
+import isEmpty from 'lodash.isempty';
+import { useSelector } from 'react-redux';
 import { ControlsTextChi } from 'screenTexts';
 import { IStore } from 'store';
+import { MuiStyles } from 'style/MuiStyles';
 import './controls.scss';
 
 const BottomLeftControls = (props: IBLControlsP) => {

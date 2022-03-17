@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, MutableRefObject } from 'react';
+import { forwardRef, memo, MutableRefObject } from 'react';
 import ColumnFlexWrap from 'react-column-flex-wrap';
 import { Segment, Size, Suit } from 'enums';
 import ShownTile from './ShownTile';

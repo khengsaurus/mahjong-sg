@@ -1,6 +1,6 @@
 import { App } from '@capacitor/app';
-import { useCallback, useEffect, useLayoutEffect } from 'react';
 import { EEvent } from 'enums';
+import { useCallback, useEffect, useLayoutEffect } from 'react';
 
 function useDocumentListener(event: EEvent, callback: (p?: any) => any, apply = true) {
 	useEffect(() => {

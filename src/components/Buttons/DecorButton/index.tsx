@@ -1,9 +1,9 @@
 import { Fade } from '@mui/material';
 import { SampleTile } from 'components/Tiles';
-import { useWindowListener } from 'hooks';
-import { Column, Row } from 'style/StyledComponents';
-import { useState } from 'react';
 import { EEvent, Transition } from 'enums';
+import { useWindowListener } from 'hooks';
+import { useState } from 'react';
+import { Column, Row } from 'style/StyledComponents';
 import { isMobile } from 'utility';
 import './decorButton.scss';
 

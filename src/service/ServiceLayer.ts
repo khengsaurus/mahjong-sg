@@ -1,10 +1,10 @@
-import { isEmpty } from 'lodash';
-import { Store } from 'redux';
-import FBService, { FirebaseService } from 'service/MyFirebaseService';
 import { LocalFlag, PaymentType, UserActivity } from 'enums';
 import { ScoringHand } from 'handEnums';
+import isEmpty from 'lodash.isempty';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { Game, User } from 'models';
+import { Store } from 'redux';
+import { FBService, FirebaseService } from 'service';
 import { store } from 'store';
 import { setLocalGame } from 'store/actions';
 import { createLocalGame, isDev } from 'utility';

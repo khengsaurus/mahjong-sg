@@ -1,5 +1,5 @@
-import { AnyAction } from 'redux';
 import { Game, User } from 'models';
+import { AnyAction } from 'redux';
 import { ISizes, ITheme } from 'typesPlus';
 
 export const SET_USER = 'SET_USER';

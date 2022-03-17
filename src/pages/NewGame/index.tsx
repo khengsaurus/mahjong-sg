@@ -18,20 +18,20 @@ import {
 } from '@mui/material';
 import { HomeButton } from 'components/Buttons';
 import UserSearchForm from 'components/SearchForms/UserSearchForm';
-import HomePage from 'pages/Home/HomePage';
-import ServiceInstance from 'service/ServiceLayer';
-import { MuiStyles, TableTheme } from 'style/MuiStyles';
-import { Centered, Row } from 'style/StyledComponents';
-import { StyledButton } from 'style/StyledMui';
-import { Fragment, useContext, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { LocalFlag, Page, PaymentType, Status, Transition, TransitionSpeed } from 'enums';
 import { HandDescEng, ScoringHand } from 'handEnums';
 import { AppContext, useAsync } from 'hooks';
 import { User } from 'models';
+import { HomePage } from 'pages';
+import { Fragment, useContext, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ButtonText, HomeScreenText, PaymentLabel, ScreenTextEng } from 'screenTexts';
+import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { setGameId, setTHK } from 'store/actions';
+import { MuiStyles, TableTheme } from 'style/MuiStyles';
+import { Centered, Row } from 'style/StyledComponents';
+import { StyledButton } from 'style/StyledMui';
 import { getTileHashKey, isBot } from 'utility';
 import './newGame.scss';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Size } from 'enums';
 import getTileSrc from 'images';
 import './sampleTile.scss';
@@ -32,4 +32,4 @@ const SampleTile = ({
 	);
 };
 
-export default React.memo(SampleTile);
+export default memo(SampleTile);

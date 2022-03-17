@@ -1,7 +1,7 @@
-import { useContext, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { getHands } from 'bot';
 import { LocalFlag } from 'enums';
+import { useContext, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import { AppContext } from './AppContext';
 

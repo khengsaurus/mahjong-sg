@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import { Status } from 'enums';
+import { useCallback, useEffect, useState } from 'react';
 
 function useAsync<T, E = string>(asyncFunction: () => Promise<T>, immediate = true, defaultValue?: T) {
 	const [status, setStatus] = useState<Status>(Status.IDLE);

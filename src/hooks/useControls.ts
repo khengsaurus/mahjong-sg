@@ -1,6 +1,6 @@
 import { ImpactStyle } from '@capacitor/haptics';
 import { CardName, Exec, LocalFlag, MeldName, MeldType } from 'enums';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';

@@ -1,9 +1,8 @@
-import { useDocumentListener } from 'hooks';
-import { StyledButton } from 'style/StyledMui';
-import { useCallback, useContext } from 'react';
 import { EEvent, Page, PageName, Shortcut } from 'enums';
-import { AppContext } from 'hooks';
+import { AppContext, useDocumentListener } from 'hooks';
+import { useCallback, useContext } from 'react';
 import { ButtonText } from 'screenTexts';
+import { StyledButton } from 'style/StyledMui';
 
 export interface ITextNavButtonP extends IHasStyle {
 	label: PageName | ButtonText;

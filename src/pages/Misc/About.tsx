@@ -1,7 +1,7 @@
 import parse from 'html-react-parser';
-import HomePage from 'pages/Home/HomePage';
-import { useSelector } from 'react-redux';
 import { capacitorLogo, firebaseLogo, reactLogo } from 'images/symbols';
+import { HomePage } from 'pages';
+import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
 import { isMobile } from 'utility';

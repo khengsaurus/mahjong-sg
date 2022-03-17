@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import Overlay from 'components/Overlay';
-import { Centered } from 'style/StyledComponents';
+import { TextColor } from 'enums';
 import { useSelector } from 'react-redux';
 import { ScaleLoader } from 'react-spinners';
 import BarLoader from 'react-spinners/BarLoader';
-import { TextColor } from 'enums';
 import { IStore } from 'store';
+import { Centered } from 'style/StyledComponents';
 
 interface ILoaderP {
 	color?: string;

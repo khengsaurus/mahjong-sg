@@ -4,7 +4,7 @@ import { ShownTile } from 'components/Tiles';
 import { getHighlightColor } from 'style/MuiStyles';
 import { Centered, Column } from 'style/StyledComponents';
 import { StyledCenterText } from 'style/StyledMui';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Segment } from 'enums';
 import { ScreenTextEng } from 'screenTexts';

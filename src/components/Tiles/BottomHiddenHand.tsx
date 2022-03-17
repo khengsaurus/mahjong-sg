@@ -1,12 +1,12 @@
 import { Fade } from '@mui/material';
-import { isEmpty } from 'lodash';
 import { HandTile } from 'components/Tiles';
-import { Row } from 'style/StyledComponents';
-import React, { useCallback, useContext } from 'react';
-import { useSelector } from 'react-redux';
 import { Size, Transition } from 'enums';
 import { AppContext } from 'hooks';
+import isEmpty from 'lodash.isempty';
+import { useCallback, useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
+import { Row } from 'style/StyledComponents';
 import { revealTile, triggerHaptic } from 'utility';
 
 interface IBottomHiddenHandP {

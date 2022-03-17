@@ -1,6 +1,6 @@
+import { CardName, Exec, LocalFlag, MeldType, SuitName } from 'enums';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CardName, Exec, LocalFlag, MeldType, SuitName } from 'enums';
 import { IStore } from 'store';
 import { findLeft, isDev } from 'utility';
 import { AppContext } from '.';

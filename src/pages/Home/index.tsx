@@ -1,14 +1,14 @@
 import { Fade } from '@mui/material';
 import { DecorButton, JoinGameButton, LogoutButton, NewGameButton } from 'components/Buttons';
 import SettingsWindow from 'components/SettingsWindow';
-import { useDocumentListener } from 'hooks';
-import HomePage from 'pages/Home/HomePage';
-import { StyledButton } from 'style/StyledMui';
-import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { EEvent, Shortcut, Transition } from 'enums';
+import { useDocumentListener } from 'hooks';
+import { HomePage } from 'pages';
+import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ButtonText } from 'screenTexts';
 import { IStore } from 'store';
+import { StyledButton } from 'style/StyledMui';
 import './home.scss';
 
 const Home = () => {

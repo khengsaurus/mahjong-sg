@@ -1,7 +1,7 @@
 import { Dialog, DialogActions, DialogContent } from '@mui/material';
+import React from 'react';
 import { MuiStyles } from 'style/MuiStyles';
 import { StyledButton, StyledCenterText } from 'style/StyledMui';
-import React from 'react';
 
 interface ISingleActionP {
 	show: boolean;

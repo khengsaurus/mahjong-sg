@@ -4,11 +4,11 @@ import { AlertStatus, DisallowedUsernames, Page, Status, Transition } from 'enum
 import { AppContext } from 'hooks';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { User } from 'models';
-import HomePage from 'pages/Home/HomePage';
+import { HomePage } from 'pages';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText, HomeScreenText } from 'screenTexts';
-import ServiceInstance from 'service/ServiceLayer';
+import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { Row } from 'style/StyledComponents';
 import { StyledButton } from 'style/StyledMui';

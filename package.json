@@ -29,6 +29,7 @@
 		"jsdom": "^19.0.0",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.21",
+		"lodash.isarray": "^4.0.0",
 		"moment": "^2.29.1",
 		"react": "^17.0.2",
 		"react-column-flex-wrap": "^0.1.6",

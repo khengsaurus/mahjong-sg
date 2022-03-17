@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import { Row } from 'style/StyledComponents';
 import { StyledText } from 'style/StyledMui';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { LocalFlag } from 'enums';
 import { ScreenTextEng } from 'screenTexts';

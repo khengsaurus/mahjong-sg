@@ -1,5 +1,9 @@
+import { TransitionSpeed } from 'enums';
 import { ReactComponent as EdgeDecor1 } from 'images/EdgeDecor1.svg';
 import { ReactComponent as EdgeDecor2 } from 'images/EdgeDecor2.svg';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { IStore } from 'store';
 import {
 	OverlayBackground,
 	OverlayDecorBottomLeft,
@@ -7,10 +11,6 @@ import {
 	OverlayDecorTopLeft,
 	OverlayDecorTopRight
 } from 'style/StyledComponents';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { IStore } from 'store';
-import { TransitionSpeed } from 'enums';
 
 const Overlay = () => {
 	const {

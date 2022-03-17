@@ -1,8 +1,8 @@
 import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { useLayoutEffect, useState } from 'react';
 import { EEvent, Platform } from 'enums';
+import { useLayoutEffect, useState } from 'react';
 
 /**
  * Android: Capacitor.Keyboard is not firing when android:windowSoftInputMode="adjustNothing".

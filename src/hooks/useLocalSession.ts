@@ -1,8 +1,8 @@
 import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
-import { useContext, useEffect, useState } from 'react';
 import { EEvent, Page, Status } from 'enums';
 import { AppContext, useSession } from 'hooks';
+import { useContext, useEffect, useState } from 'react';
 import { isMobile } from 'utility';
 
 function useLocalSession(skipVerification = true) {

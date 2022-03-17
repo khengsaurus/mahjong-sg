@@ -1,6 +1,6 @@
-import { isEmpty } from 'lodash';
 import { MeldType, Suit, Wind } from 'enums';
 import { greenCards, greenMelds, HBFCards, ScoringHand, thirteen, Winds } from 'handEnums';
+import isEmpty from 'lodash.isempty';
 import { containsPongOrKang, containsX, getSuitFromStr, getSuitsFromHand, isBigThree } from 'utility';
 
 /**

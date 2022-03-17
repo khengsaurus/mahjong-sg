@@ -1,13 +1,14 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import parse from 'html-react-parser';
-import { isArray, isEmpty } from 'lodash';
-import HomePage from 'pages/Home/HomePage';
-import { StyledText } from 'style/StyledMui';
+import isArray from 'lodash.isarray';
+import isEmpty from 'lodash.isempty';
+import { HomePage } from 'pages';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
+import { StyledText } from 'style/StyledMui';
 import { isMobile } from 'utility';
 import initContent from './initContent.json';
 

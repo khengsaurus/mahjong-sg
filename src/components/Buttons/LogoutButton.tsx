@@ -1,7 +1,7 @@
-import { StyledButton } from 'style/StyledMui';
-import React, { useContext } from 'react';
 import { Page } from 'enums';
 import { AppContext } from 'hooks';
+import { useContext } from 'react';
+import { StyledButton } from 'style/StyledMui';
 
 const LogoutButton = () => {
 	const { logout, navigate } = useContext(AppContext);

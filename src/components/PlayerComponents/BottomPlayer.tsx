@@ -1,7 +1,7 @@
 import { BottomHiddenHand, DiscardedTiles, ShownHiddenHand, ShownTiles, UnusedTiles } from 'components/Tiles';
-import { useSelector } from 'react-redux';
 import { FrontBackTag, Segment, Size } from 'enums';
 import { useTiles } from 'hooks';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import { IPlayerComponentP } from 'typesPlus';
 import './playerComponents.scss';

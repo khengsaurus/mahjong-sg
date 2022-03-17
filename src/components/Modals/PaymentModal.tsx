@@ -1,13 +1,13 @@
 import { Button, Dialog, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import ServiceInstance from 'service/ServiceLayer';
-import { MuiStyles } from 'style/MuiStyles';
-import { StyledText } from 'style/StyledMui';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Amounts, LocalFlag } from 'enums';
 import { Game, User } from 'models';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ButtonText, ScreenTextEng } from 'screenTexts';
+import { ServiceInstance } from 'service';
 import { IStore } from 'store';
+import { MuiStyles } from 'style/MuiStyles';
+import { StyledText } from 'style/StyledMui';
 import { IModalP } from 'typesPlus';
 import './paymentModal.scss';
 

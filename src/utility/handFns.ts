@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { Suit, Wind } from 'enums';
 import {
 	HandPoint,
@@ -17,6 +16,7 @@ import {
 	skipTerminals,
 	skipThirteen
 } from 'handEnums';
+import isEmpty from 'lodash.isempty';
 import { IPoint } from 'typesPlus';
 import { excludes, isNewInSet, tilesCanBeChi, tilesCanBePong } from 'utility';
 import {
@@ -29,12 +29,12 @@ import {
 	isHonor,
 	isLesserFour,
 	isLesserThree,
+	isMixedHonoursTerminals,
 	isPongHand,
+	isPureTerminals,
 	isSevenPair,
 	isSuited,
-	isPureTerminals,
-	isThirteen,
-	isMixedHonoursTerminals
+	isThirteen
 } from 'utility/scoreHand';
 import { mainLRUCache } from './LRUCache';
 

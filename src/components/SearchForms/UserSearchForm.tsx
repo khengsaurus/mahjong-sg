@@ -2,15 +2,15 @@ import AddIcon from '@mui/icons-material/Add';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FaceIcon from '@mui/icons-material/Face';
 import { Collapse, Fade, IconButton, InputAdornment, List, ListItem, ListItemText, TextField } from '@mui/material';
-import ServiceInstance from 'service/ServiceLayer';
-import { Centered } from 'style/StyledComponents';
-import { useContext, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Bot, BotIds, BotName, Transition } from 'enums';
 import { AppContext } from 'hooks';
 import { User } from 'models';
+import { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ButtonText } from 'screenTexts';
+import { ServiceInstance } from 'service';
 import { IStore } from 'store';
+import { Centered } from 'style/StyledComponents';
 import './searchForm.scss';
 
 const UserSearchForm: React.FC = () => {

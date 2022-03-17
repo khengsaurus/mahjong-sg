@@ -1,6 +1,6 @@
-import { isEmpty } from 'lodash';
 import { getDiscardCategories, getHandObjectives } from 'bot';
 import { DaPai, MeldType, Suit, Wind } from 'enums';
+import isEmpty from 'lodash.isempty';
 import { getHBFMock, getSuitedTileMock } from 'utility';
 
 const dummyUser = { uN: '', sTs: [], msStr: [], fPx: 0, dTs: [] };

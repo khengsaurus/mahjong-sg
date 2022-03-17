@@ -1,9 +1,9 @@
-import CasinoIcon from '@mui/icons-material/Casino';
 import { Highlight } from '@mui/icons-material';
-import { isEmpty } from 'lodash';
-import React, { forwardRef, memo, MutableRefObject } from 'react';
-import ColumnFlexWrap from 'react-column-flex-wrap';
+import CasinoIcon from '@mui/icons-material/Casino';
 import { Segment, Size } from 'enums';
+import isEmpty from 'lodash.isempty';
+import { forwardRef, memo, MutableRefObject } from 'react';
+import ColumnFlexWrap from 'react-column-flex-wrap';
 import { revealTile } from 'utility';
 import ShownTile from './ShownTile';
 

@@ -1,8 +1,8 @@
+import { StorageKey } from 'enums';
+import { Game, User } from 'models';
 import { createStore } from 'redux';
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { StorageKey } from 'enums';
-import { Game, User } from 'models';
 import { rootReducer } from 'store/reducers';
 import { ISizes, ITheme } from 'typesPlus';
 import { objToGame, objToUser } from 'utility/parsers';

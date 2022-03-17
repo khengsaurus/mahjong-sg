@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { getDiscardCategories, getDiscardHelper, getHandObjectives } from 'bot';
 import { CardName, DaPai, Exec, LocalFlag, MeldType, Suit, Wind } from 'enums';
 import {
@@ -12,6 +11,7 @@ import {
 	skipPongHBF,
 	skipWinds
 } from 'handEnums';
+import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
 import { IHWPx, IPoint } from 'typesPlus';
 import {

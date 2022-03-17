@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { getHands } from 'bot';
 import {
 	Animal,
@@ -19,6 +18,7 @@ import {
 	WindIndex
 } from 'enums';
 import { Animals, FlowersF, FlowersS, HBFCards, ScoringHand, Suits, Winds } from 'handEnums';
+import isEmpty from 'lodash.isempty';
 import { User } from 'models';
 import { ControlsTextChi, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import {

@@ -2,10 +2,10 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SubjectIcon from '@mui/icons-material/Subject';
 import { IconButton } from '@mui/material';
 import { LogModal } from 'components/Modals';
-import { useContext, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { Size, TableColor } from 'enums';
 import { AppContext } from 'hooks';
+import { useContext, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import './controls.scss';
 
