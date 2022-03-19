@@ -129,6 +129,7 @@ export const Wind = styled.div`
 	color: ${props => props.theme.backgroundColor};
 `;
 
+// Overriding these in Overlay for Android
 export const OverlayBackground = styled.div`
 	position: absolute;
 	top: calc(10px + const(safe-area-inset-top));
@@ -155,6 +156,7 @@ const OverlayDecor = styled.div`
 	z-index: -1;
 `;
 
+// Overriding these in Overlay for Android
 export const OverlayDecorTopLeft = styled(OverlayDecor)`
 	transform: rotate(90deg);
 	top: calc(10px + const(safe-area-inset-top));
@@ -163,6 +165,7 @@ export const OverlayDecorTopLeft = styled(OverlayDecor)`
 	left: calc(6px + env(safe-area-inset-left));
 `;
 
+// Overriding these in Overlay for Android
 export const OverlayDecorTopRight = styled(OverlayDecor)`
 	transform: rotate(90deg);
 	top: calc(10px + const(safe-area-inset-top));
@@ -171,6 +174,7 @@ export const OverlayDecorTopRight = styled(OverlayDecor)`
 	right: calc(6px + env(safe-area-inset-right));
 `;
 
+// Overriding these in Overlay for Android
 export const OverlayDecorBottomLeft = styled(OverlayDecor)`
 	transform: scaleX(-1) rotate(180deg);
 	bottom: calc(10px + const(safe-area-inset-bottom));
@@ -179,6 +183,7 @@ export const OverlayDecorBottomLeft = styled(OverlayDecor)`
 	left: calc(6px + env(safe-area-inset-left));
 `;
 
+// Overriding these in Overlay for Android
 export const OverlayDecorBottomRight = styled(OverlayDecor)`
 	transform: rotate(270deg);
 	bottom: calc(10px + const(safe-area-inset-bottom));

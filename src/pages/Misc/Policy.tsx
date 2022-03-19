@@ -4,19 +4,18 @@ import parse from 'html-react-parser';
 import isArray from 'lodash.isarray';
 import isEmpty from 'lodash.isempty';
 import { HomePage } from 'pages';
+import { platform } from 'platform';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
 import { StyledText } from 'style/StyledMui';
-import { isMobile } from 'utility';
 import initContent from './initContent.json';
 
 const Policy = () => {
 	const { policyContent } = useSelector((store: IStore) => store);
 	const content = !isEmpty(policyContent) && isArray(policyContent) ? policyContent : initContent.policyContent;
 	const [showContent, setShowContent] = useState(-1);
-	const platform = isMobile() ? 'app' : 'website';
 
 	function toggleShow(index: number) {
 		setShowContent(index === showContent ? -1 : index);
@@ -28,10 +27,10 @@ const Policy = () => {
 				return (
 					<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
 						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: '40px' }}>
-							<StyledText text={c.title.replaceAll('{platform}', platform)} variant="body1" />
+							<StyledText text={c.title.replace(/{platform}/g, platform)} variant="body1" />
 						</AccordionSummary>
 						<AccordionDetails>
-							<p>{parse(c.content.replaceAll('{platform}', platform))}</p>
+							<p>{parse(c.content.replace(/{platform}/g, platform))}</p>
 						</AccordionDetails>
 					</Accordion>
 				);

@@ -2,6 +2,7 @@ import { ImpactStyle } from '@capacitor/haptics';
 import { CardName, Exec, LocalFlag, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
+import { triggerHaptic } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ControlsTextChi, ScreenTextEng } from 'screenTexts';
@@ -17,8 +18,7 @@ import {
 	isDev,
 	isDevBot,
 	isEmptyTile,
-	revealTile,
-	triggerHaptic
+	revealTile
 } from 'utility';
 import { mainLRUCache } from 'utility/LRUCache';
 import { useFirstEffect, useOptions } from '.';

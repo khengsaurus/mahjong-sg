@@ -1,13 +1,13 @@
-import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
 import { AboutButton, BackButton, DecorButton, HelpButton, HomeButton, PrivacyButton } from 'components/Buttons';
 import { Loader, NetworkLoader } from 'components/Loader';
 import Overlay from 'components/Overlay';
-import { EEvent, Platform, Status } from 'enums';
+import { EEvent, Status } from 'enums';
 import { AppContext, useAndroidBack, useLocalSession } from 'hooks';
 import isEmpty from 'lodash.isempty';
+import { isAndroid, isIOS, isKeyboardAvail, isMobile } from 'platform';
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText, ScreenTextEng } from 'screenTexts';
@@ -15,7 +15,6 @@ import { IStore } from 'store';
 import { HomeTheme } from 'style/MuiStyles';
 import { BottomSpec, Centered, Main, NetworkAlert } from 'style/StyledComponents';
 import { StyledCenterText, StyledText } from 'style/StyledMui';
-import { isMobile } from 'utility';
 
 interface IHomePageP {
 	markup: () => React.FC | JSX.Element;
@@ -57,7 +56,7 @@ const HomePage = ({
 	useLayoutEffect(() => {
 		setAnnHuOpen(false);
 
-		if (isMobile()) {
+		if (isMobile) {
 			// && Capacitor.getPlatform() === Platform.ANDROID
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
 				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
@@ -69,11 +68,9 @@ const HomePage = ({
 	/* ----------------- Keyboard offset for iOS + Android back button handling ----------------- */
 
 	const [marginBottom, setMarginBottom] = useState<number | string>(0);
-	const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
-	const platform = Capacitor.getPlatform();
 
 	useEffect(() => {
-		if (keyboardAvail && platform === Platform.IOS) {
+		if (isKeyboardAvail && isIOS) {
 			Keyboard.addListener(EEvent.KEYBOARDSHOW, info => {
 				const keyboardHeight = Number(info?.keyboardHeight) || 0;
 				const windowHeight = window?.screen?.height || 0;
@@ -85,14 +82,14 @@ const HomePage = ({
 			Keyboard.addListener(EEvent.KEYBOARDHIDE, () => {
 				setMarginBottom(0);
 			});
-		} else if (platform === Platform.ANDROID) {
+		} else if (isAndroid) {
 			setMarginBottom('10%');
 		}
 
 		return () => {
-			keyboardAvail && platform === Platform.IOS && Keyboard.removeAllListeners();
+			isKeyboardAvail && isIOS && Keyboard.removeAllListeners();
 		};
-	}, [platform, keyboardAvail, offsetKeyboard]);
+	}, [offsetKeyboard]);
 
 	useAndroidBack(() => handleHome());
 

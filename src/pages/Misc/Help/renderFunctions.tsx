@@ -27,7 +27,7 @@ function renderSectionPoints(section, index: number, platform: string) {
 				<span key={key}>
 					{arr.length === 2 ? (
 						<>
-							{parse(arr[0].replaceAll('{platform}', platform))}
+							{parse(arr[0].replace(/{platform}/g, platform))}
 							{renderTiles(arr[1], key)}
 						</>
 					) : (
@@ -36,7 +36,7 @@ function renderSectionPoints(section, index: number, platform: string) {
 				</span>
 			);
 		} else {
-			return <li key={key}>{parse(point.replaceAll('{platform}', platform))}</li>;
+			return <li key={key}>{parse(point.replace(/{platform}/g, platform))}</li>;
 		}
 	});
 }
@@ -55,7 +55,7 @@ export default function renderSections(
 				<div>
 					<Accordion expanded={index === showContent} onChange={() => toggleShow(index)}>
 						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: 40 }}>
-							<StyledText text={section.title.replaceAll('{platform}', platform)} variant="body1" />
+							<StyledText text={section.title.replace(/{platform}/g, platform)} variant="body1" />
 						</AccordionSummary>
 						<AccordionDetails
 							style={{

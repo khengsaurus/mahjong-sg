@@ -1,7 +1,7 @@
-import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { EEvent, Platform } from 'enums';
+import { EEvent } from 'enums';
+import { isAndroid, isKeyboardAvail } from 'platform';
 import { useLayoutEffect, useState } from 'react';
 
 /**
@@ -12,8 +12,6 @@ import { useLayoutEffect, useState } from 'react';
  */
 const useAndroidKeyboardListener = (landscapeOnly = false) => {
 	const [showBottom, setShowBottom] = useState(true);
-	const keyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
-	const isAndroid = Capacitor.getPlatform() === Platform.ANDROID;
 	const isLandscape = [
 		ScreenOrientation.ORIENTATIONS.LANDSCAPE,
 		ScreenOrientation.ORIENTATIONS.LANDSCAPE_PRIMARY,
@@ -21,7 +19,7 @@ const useAndroidKeyboardListener = (landscapeOnly = false) => {
 	].includes(ScreenOrientation.type);
 
 	useLayoutEffect(() => {
-		if (keyboardAvail && isAndroid && (landscapeOnly ? isLandscape : true)) {
+		if (isKeyboardAvail && isAndroid && (landscapeOnly ? isLandscape : true)) {
 			Keyboard.addListener(EEvent.KEYBOARDWILLSHOW, () => {
 				setShowBottom(false);
 			});
@@ -30,11 +28,11 @@ const useAndroidKeyboardListener = (landscapeOnly = false) => {
 			});
 		}
 		return () => {
-			if (keyboardAvail && isAndroid) {
+			if (isKeyboardAvail && isAndroid) {
 				Keyboard.removeAllListeners();
 			}
 		};
-	}, [isAndroid, isLandscape, keyboardAvail, landscapeOnly]);
+	}, [isLandscape, landscapeOnly]);
 
 	return { showBottom };
 };

@@ -12,6 +12,7 @@ import { AppContext, useLocalSession } from 'hooks';
 import $ from 'jquery';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
+import { isMobile } from 'platform';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
@@ -21,7 +22,7 @@ import { setGame, setLocalGame, setTHK } from 'store/actions';
 import { getHighlightColor, HomeTheme, TableTheme } from 'style/MuiStyles';
 import { Centered, Main, TableDiv, Wind } from 'style/StyledComponents';
 import { StyledText } from 'style/StyledMui';
-import { findLeft, findOpp, findRight, getTileHashKey, isMobile } from 'utility';
+import { findLeft, findOpp, findRight, getTileHashKey } from 'utility';
 import { objToGame } from 'utility/parsers';
 import './table.scss';
 
@@ -43,7 +44,7 @@ const Table = () => {
 	/* ----------------------------------- Screen orientation ----------------------------------- */
 
 	useLayoutEffect(() => {
-		if (isMobile()) {
+		if (isMobile) {
 			// crazy but this unlock seems to be required...
 			ScreenOrientation?.unlock();
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
@@ -52,7 +53,7 @@ const Table = () => {
 		}
 
 		return () => {
-			if (isMobile()) {
+			if (isMobile) {
 				ScreenOrientation?.unlock();
 			}
 		};

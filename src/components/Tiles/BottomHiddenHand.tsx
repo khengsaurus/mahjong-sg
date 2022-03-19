@@ -3,11 +3,12 @@ import { HandTile } from 'components/Tiles';
 import { Size, Transition } from 'enums';
 import { AppContext } from 'hooks';
 import isEmpty from 'lodash.isempty';
+import { triggerHaptic } from 'platform';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import { Row } from 'style/StyledComponents';
-import { revealTile, triggerHaptic } from 'utility';
+import { revealTile } from 'utility';
 
 interface IBottomHiddenHandP {
 	hTs: IHiddenTile[];

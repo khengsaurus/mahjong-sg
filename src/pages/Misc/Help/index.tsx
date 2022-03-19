@@ -5,18 +5,17 @@ import { HomePage, renderDefaultTitle } from 'pages';
 import renderSections from 'pages/Misc/Help/renderFunctions';
 import initContent from 'pages/Misc/initContent.json';
 import 'pages/Misc/misc.scss';
+import { platform } from 'platform';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
-import { isMobile } from 'utility';
 
 const Help = () => {
 	const { helpContent } = useSelector((store: IStore) => store);
 	const { sections = [] } = helpContent || initContent.helpContent;
 	const [showContent, setShowContent] = useState(-1);
 	const hasToggledRef = useRef(false);
-	const platform = isMobile() ? 'app' : 'website';
 
 	const handleCloseCallback = useCallback(e => {
 		if (e.key === 'Escape') {
@@ -60,13 +59,7 @@ const Help = () => {
 		<HomePage
 			markup={markup}
 			misc={2}
-			customBack={
-				showContent !== -1
-					? () => {
-							setShowContent(-1);
-					  }
-					: null
-			}
+			customBack={showContent !== -1 ? () => setShowContent(-1) : null}
 			skipVerification
 		/>
 	);

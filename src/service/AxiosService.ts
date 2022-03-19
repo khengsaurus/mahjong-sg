@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { Content } from 'enums';
-import { getPlatform, isDev } from 'utility';
+import { platform } from 'platform';
+import { isDev } from 'utility';
 
 export class AxiosService {
 	private instance: AxiosInstance;
@@ -9,7 +10,7 @@ export class AxiosService {
 	constructor() {
 		const defaultOptions = {
 			headers: {
-				source: `mj-sg-${getPlatform()}`
+				source: `mj-sg-${platform}`
 			}
 		};
 		this.instance = axios.create(defaultOptions);

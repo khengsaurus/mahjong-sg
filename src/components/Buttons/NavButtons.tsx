@@ -80,7 +80,7 @@ export const PrivacyButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) =>
 			route={Page.POLICY}
 			shortcut={null}
 			disableShortcut={true}
-			style={{ ...style, fontSize: 12, padding: 0 }}
+			style={{ ...style, fontSize: 13, padding: 0 }}
 		/>
 	);
 };
@@ -92,7 +92,7 @@ export const AboutButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
 			route={Page.ABOUT}
 			shortcut={null}
 			disableShortcut={true}
-			style={{ ...style, fontSize: 12, padding: 0 }}
+			style={{ ...style, fontSize: 13, padding: 0 }}
 		/>
 	);
 };
@@ -104,7 +104,7 @@ export const HelpButton: React.FC<IHasStyle> = ({ style = {} }: IHasStyle) => {
 			route={Page.HELP}
 			shortcut={null}
 			disableShortcut={true}
-			style={{ ...style, fontSize: 12, padding: 0 }}
+			style={{ ...style, fontSize: 13, padding: 0 }}
 		/>
 	);
 };

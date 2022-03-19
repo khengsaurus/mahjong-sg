@@ -1,4 +1,3 @@
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import {
 	Animal,
 	AnimalIndex,
@@ -17,7 +16,6 @@ import {
 	LocalFlag,
 	MeldType,
 	PaymentType,
-	Platform,
 	Suit,
 	SuitName,
 	SuitsIndex,
@@ -267,30 +265,12 @@ export function getInclExcl(arr1: string[], req?: string[], fn?: (c: string) => 
 	return { incl, excl };
 }
 
-export async function triggerHaptic(impact = ImpactStyle.Light) {
-	if (isMobile()) {
-		try {
-			await Haptics.impact({ style: impact });
-		} catch (err) {
-			console.info('Platform does not support Haptics');
-		}
-	}
-}
-
 export function isDev() {
 	return process.env.REACT_APP_FLAG?.startsWith(AppFlag.DEV);
 }
 
 export function isDevBot() {
 	return process.env.REACT_APP_FLAG?.startsWith(AppFlag.DEV_BOT);
-}
-
-export function getPlatform() {
-	return process.env.REACT_APP_PLATFORM === Platform.MOBILE ? Platform.MOBILE : Platform.WEB;
-}
-
-export function isMobile() {
-	return getPlatform() === Platform.MOBILE;
 }
 
 /* ----------------------------------- Game ----------------------------------- */

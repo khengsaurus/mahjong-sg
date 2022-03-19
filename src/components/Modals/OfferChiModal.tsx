@@ -1,15 +1,15 @@
 import { Dialog, DialogContent } from '@mui/material';
 import 'components/PlayerComponents/playerComponents.scss';
 import { ShownTile } from 'components/Tiles';
+import { Segment } from 'enums';
+import { isMobile } from 'platform';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { ScreenTextEng } from 'screenTexts';
+import { IStore } from 'store';
 import { getHighlightColor } from 'style/MuiStyles';
 import { Centered, Column } from 'style/StyledComponents';
 import { StyledCenterText } from 'style/StyledMui';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { Segment } from 'enums';
-import { ScreenTextEng } from 'screenTexts';
-import { IStore } from 'store';
-import { isMobile } from 'utility';
 
 interface IOfferChiModalP {
 	show: boolean;
@@ -27,14 +27,14 @@ const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalP)
 
 	return (
 		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
-			<DialogContent style={{paddingBottom: '10px'}}>
+			<DialogContent style={{ paddingBottom: '10px' }}>
 				<StyledCenterText text={title} variant="subtitle1" padding="3px 0px" />
 				<Centered>
 					<Column>
 						{ms.map((m, ix1) => (
 							<div
 								id={`offer-${ix1}`}
-								className={`row-section-large offer${isMobile() ? `` : `-hover`}`}
+								className={`row-section-large offer${isMobile ? `` : `-hover`}`}
 								key={ix1}
 								onClick={() => {
 									handleTake(m.map(t => t.c));

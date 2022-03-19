@@ -3,6 +3,7 @@ import { AlertStatus, BackgroundColor, Page, Size, Status, TableColor, TileColor
 import { AppContext } from 'hooks';
 import { extend, isEqual } from 'lodash';
 import { ErrorMessage } from 'messages';
+import { isMobile } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonText, ScreenTextEng } from 'screenTexts';
@@ -13,7 +14,7 @@ import { MuiStyles, TableTheme } from 'style/MuiStyles';
 import { Row } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
 import { IModalP } from 'typesPlus';
-import { getTheme, isMobile } from 'utility';
+import { getTheme } from 'utility';
 import './settingsWindow.scss';
 
 interface ISettingsWindowP extends IModalP {
@@ -267,7 +268,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 									/>
 								</Row>
 							) : (
-								isMobile() && (
+								isMobile && (
 									<div className="preference no-margin">
 										<StyledText text={ScreenTextEng.HAPTICS} variant="subtitle1" padding="0" />
 										<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />

@@ -2,9 +2,9 @@ import { Fade } from '@mui/material';
 import { SampleTile } from 'components/Tiles';
 import { EEvent, Transition } from 'enums';
 import { useWindowListener } from 'hooks';
+import { isMobile } from 'platform';
 import { useState } from 'react';
 import { Column, Row } from 'style/StyledComponents';
-import { isMobile } from 'utility';
 import './decorButton.scss';
 
 export interface IDecorButtonP {
@@ -23,15 +23,15 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 	return (
 		<div
 			className="container"
-			onMouseEnter={() => setShowDecoration(hoverEffect && !isMobile() && true)}
+			onMouseEnter={() => setShowDecoration(hoverEffect && !isMobile)}
 			onMouseLeave={() => {
-				if (!isMobile()) {
+				if (!isMobile) {
 					setShowDecoration(false);
 				}
 			}}
 		>
 			<Column>
-				{hoverEffect && !isMobile() && showOnHover[1] && (
+				{hoverEffect && !isMobile && showOnHover[1] && (
 					<Fade in={showDecoration} timeout={timeout}>
 						<div>
 							<SampleTile className={`top ${showDecoration ? 'show' : ''}`} card={showOnHover[1]} />
@@ -39,7 +39,7 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 					</Fade>
 				)}
 				<Row>
-					{hoverEffect && !isMobile() && showOnHover[0] && (
+					{hoverEffect && !isMobile && showOnHover[0] && (
 						<Fade in={showDecoration} timeout={timeout}>
 							<div>
 								<SampleTile className={`left ${showDecoration ? 'show' : ''}`} card={showOnHover[0]} />
@@ -47,7 +47,7 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 						</Fade>
 					)}
 					<Button />
-					{hoverEffect && !isMobile() && showOnHover[2] && (
+					{hoverEffect && !isMobile && showOnHover[2] && (
 						<Fade in={showDecoration} timeout={timeout}>
 							<div>
 								<SampleTile className={`right ${showDecoration ? 'show' : ''}`} card={showOnHover[2]} />

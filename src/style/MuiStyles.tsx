@@ -1,10 +1,10 @@
 import { blue, indigo, red, teal, yellow } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { BackgroundColor, TableColor, TextColor, TransitionSpeed } from 'enums';
+import { isMobile } from 'platform';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { BackgroundColor, TableColor, TextColor, TransitionSpeed } from 'enums';
 import { IStore } from 'store';
-import { isMobile } from 'utility';
 
 export function getHighlightColor(color: TableColor | BackgroundColor) {
 	if ([TableColor.DARK, BackgroundColor.DARK].includes(color)) {
@@ -86,7 +86,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 				styleOverrides: {
 					root: {
 						backgroundColor,
-						padding: 2,
+						padding: 2
 						// borderTop: `1px solid ${textColor}`,
 						// borderBottom: `1px solid ${textColor}`
 					}
@@ -114,7 +114,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						color: textColor,
 						transition: TransitionSpeed.MEDIUM,
 						'&:hover': {
-							color: isMobile() ? textColor : highlightColor
+							color: isMobile ? textColor : highlightColor
 						},
 						'&.Mui-expanded': {
 							color: highlightColor,
@@ -129,7 +129,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						primary: `${textColor}`,
 						secondary: `${highlightColor}`,
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`
+							color: isMobile ? `${textColor}` : `${highlightColor}`
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
@@ -145,7 +145,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						secondary: `${highlightColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							transform: isMobile() ? `` : `scale(1.05)`,
+							transform: isMobile ? `` : `scale(1.05)`,
 							transition: '150ms !important'
 						},
 						'&:disabled': {
@@ -221,8 +221,8 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						color: `${textColor}`,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`,
-							transform: isMobile() ? `` : `scale(1.1)`,
+							color: isMobile ? `${textColor}` : `${highlightColor}`,
+							transform: isMobile ? `` : `scale(1.1)`,
 							transition: '150ms !important'
 						}
 					}
@@ -281,7 +281,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						justifyContent: 'center',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`
+							color: isMobile ? `${textColor}` : `${highlightColor}`
 						}
 					}
 				}
@@ -307,7 +307,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						paddingRight: '12px !important',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile() ? `${textColor}` : `${highlightColor}`
+							color: isMobile ? `${textColor}` : `${highlightColor}`
 						}
 					}
 				}
