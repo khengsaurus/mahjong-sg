@@ -5,6 +5,7 @@ import { AppContext } from 'hooks';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { User } from 'models';
 import { HomePage } from 'pages';
+import { isDev } from 'platform';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText, HomeScreenText } from 'screenTexts';
@@ -12,10 +13,10 @@ import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { Row } from 'style/StyledComponents';
 import { StyledButton } from 'style/StyledMui';
-import { isDev } from 'utility';
 
 const NewUser = () => {
-	const { alert, login, logout, navigate, setAlert, userEmail } = useContext(AppContext);
+	const { alert, login, logout, navigate, setAlert, userEmail } =
+		useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
@@ -55,14 +56,22 @@ const NewUser = () => {
 	}
 
 	function registerNewUsername(values: IEmailUser, callback: () => void) {
-		const disallowed = DisallowedUsernames.find(u => username.toLowerCase().startsWith(u));
-		if (!!disallowed && !isDev()) {
-			setAlert({ status: Status.ERROR, msg: `${ErrorMessage.USERNAME_NOT_ALLOWED} '${disallowed}'` });
+		const disallowed = DisallowedUsernames.find(u =>
+			username.toLowerCase().startsWith(u)
+		);
+		if (!!disallowed && !isDev) {
+			setAlert({
+				status: Status.ERROR,
+				msg: `${ErrorMessage.USERNAME_NOT_ALLOWED} '${disallowed}'`
+			});
 		} else {
 			ServiceInstance.FBNewUsername(values)
 				.then(res => {
 					if (res) {
-						setAlert({ status: Status.SUCCESS, msg: InfoMessage.REGISTER_SUCCESS });
+						setAlert({
+							status: Status.SUCCESS,
+							msg: InfoMessage.REGISTER_SUCCESS
+						});
 						callback();
 					}
 				})
@@ -98,7 +107,13 @@ const NewUser = () => {
 				value={username}
 				variant="standard"
 			/>
-			<Row style={{ minHeight: '10px', width: '180px', justifyContent: 'space-between' }}>
+			<Row
+				style={{
+					minHeight: '10px',
+					width: '180px',
+					justifyContent: 'space-between'
+				}}
+			>
 				{alert?.status !== Status.SUCCESS && (
 					<>
 						<StyledButton label="Cancel" onClick={cancelRegister} />
@@ -108,7 +123,10 @@ const NewUser = () => {
 							type="submit"
 							disabled={username.trim() === ''}
 							onClick={() => {
-								registerNewUsername({ email: userEmail, uN: username }, registerSuccessCallback);
+								registerNewUsername(
+									{ email: userEmail, uN: username },
+									registerSuccessCallback
+								);
 							}}
 						/>
 					</>
@@ -120,7 +138,15 @@ const NewUser = () => {
 		</>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.NEW_USER_TITLE} timeout={2500} skipVerification misc={3} />;
+	return (
+		<HomePage
+			markup={markup}
+			title={HomeScreenText.NEW_USER_TITLE}
+			timeout={2500}
+			skipVerification
+			misc={3}
+		/>
+	);
 };
 
 export default NewUser;

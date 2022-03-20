@@ -1,5 +1,6 @@
 import { MeldType, Suit } from 'enums';
 import isEmpty from 'lodash.isempty';
+import { isDevBot } from 'platform';
 import {
 	arrToSetArr,
 	cardsWithoutNeighbors,
@@ -7,14 +8,17 @@ import {
 	getCountPerStr,
 	getInclExcl,
 	getSuitFromStr,
-	isDevBot,
 	sortDaPaiDiscards,
 	terminalSortCs
 } from 'utility';
 import { getDeadDiscard, getHardDiscard } from './getDiscards';
 
 // Feeling really tired and just want to get this done... shd proabably come up with a better optimal approach
-function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand[]): string {
+function getDiscardHelper(
+	dc: IDiscardCategories,
+	ho: IHandObjectives,
+	hs: IHand[]
+): string {
 	const countReqCs: IObj<string, number> = {};
 	const {
 		countAllKnownCs,
@@ -78,7 +82,11 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 				unreqPs = excl;
 				unreqCs = excl;
 			} else {
-				const { incl, excl } = getInclExcl(reqPs, [], c => ![...easyChi, ...okayChi].includes(c));
+				const { incl, excl } = getInclExcl(
+					reqPs,
+					[],
+					c => ![...easyChi, ...okayChi].includes(c)
+				);
 				if (incl.length > 0 && incl.length < reqPs.length) {
 					reqPs = incl;
 					unreqPs = excl;
@@ -97,14 +105,18 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 
 		unreqCs = ownCs.filter(c => !reqCs.includes(c));
 		let s = hs.map(h => h.tsL);
-		_unreqCs = ((s.length === 1 ? s[0] : s.reduce((a, b) => commonEs(a, b, 'r'), [])) || []).map(t => t.c);
+		_unreqCs = (
+			(s.length === 1 ? s[0] : s.reduce((a, b) => commonEs(a, b, 'r'), [])) || []
+		).map(t => t.c);
 		_unreqCs = _unreqCs.length > 0 ? _unreqCs : unreqCs;
 	}
 
 	switch (_unreqCs.length) {
 		case 0:
-			isDevBot() && console.info('getDiscardHelper - all tiles may be required');
-			const l_reqCs = Object.keys(countReqCs).filter(c => countReqCs[c] === leastReqCount);
+			isDevBot && console.info('getDiscardHelper - all tiles may be required');
+			const l_reqCs = Object.keys(countReqCs).filter(
+				c => countReqCs[c] === leastReqCount
+			);
 			if (l_reqCs.length === 1) {
 				return l_reqCs[0];
 			} else if (l_reqCs.length === 2) {
@@ -119,7 +131,9 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 			}
 			if (priorMeld === MeldType.CHI) {
 				ss = sortDaPaiDiscards(
-					unreqCs.filter(c => getSuitFromStr(c) === Suit.DAPAI && !reqPs.includes(c)),
+					unreqCs.filter(
+						c => getSuitFromStr(c) === Suit.DAPAI && !reqPs.includes(c)
+					),
 					scoringPongs,
 					ownSingles,
 					countAllKnownCs
@@ -131,22 +145,30 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 				if (ownSingles.length > 0) {
 					return terminalSortCs(ownSingles)[0];
 				}
-				ss = ownCs.filter(c => !easyPong.includes(c) && !scoringPongs.includes(c));
-				ss = !isEmpty(ss) ? ss : ownCs.filter(c => !okayPong.includes(c) && !scoringPongs.includes(c));
+				ss = ownCs.filter(
+					c => !easyPong.includes(c) && !scoringPongs.includes(c)
+				);
+				ss = !isEmpty(ss)
+					? ss
+					: ownCs.filter(
+							c => !okayPong.includes(c) && !scoringPongs.includes(c)
+					  );
 				if (ss?.length > 0) {
 					return terminalSortCs(ss)[0];
 				}
 			}
 			break;
 		case 1:
-			isDevBot() && console.info('getDiscardHelper - only 1 unrequired tile');
+			isDevBot && console.info('getDiscardHelper - only 1 unrequired tile');
 			return _unreqCs[0];
 		case 3:
-			isDevBot() && console.info('getDiscardHelper - 3 unrequired tiles');
+			isDevBot && console.info('getDiscardHelper - 3 unrequired tiles');
 			if (priorMeld === MeldType.CHI) {
 				if (!keepDaPai) {
 					ss = sortDaPaiDiscards(
-						_unreqCs.filter(c => !reqPs.includes(c) && getSuitFromStr(c) === Suit.DAPAI),
+						_unreqCs.filter(
+							c => !reqPs.includes(c) && getSuitFromStr(c) === Suit.DAPAI
+						),
 						scoringPongs,
 						ownSingles,
 						countAllKnownCs
@@ -190,7 +212,7 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 			}
 			break;
 		default:
-			isDevBot() && console.info('getDiscardHelper - more than 3 unrequired tiles');
+			isDevBot && console.info('getDiscardHelper - more than 3 unrequired tiles');
 			ss = getDeadDiscard(ho, dc, reqCs, false);
 			if (ss) {
 				return ss;
@@ -205,7 +227,11 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 					return terminalSortCs(unreqPs)[0];
 				}
 
-				const { incl, excl } = getInclExcl(_unreqCs, [...easyChi, ...okayChi, ...easyPong]);
+				const { incl, excl } = getInclExcl(_unreqCs, [
+					...easyChi,
+					...okayChi,
+					...easyPong
+				]);
 				if (incl.length > 0 && excl.length > 0) {
 					return terminalSortCs(excl)[0];
 				}
@@ -219,7 +245,7 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 			break;
 	}
 
-	isDevBot() && console.info('getDiscardHelper - failed switch case -> final step');
+	isDevBot && console.info('getDiscardHelper - failed switch case -> final step');
 
 	// Where 6,7,7,8,9 and no other pairs -> if there is one most frequent tsL (multis will get an additional count), discard that
 	if (priorMeld === MeldType.CHI) {
@@ -247,7 +273,9 @@ function getDiscardHelper(dc: IDiscardCategories, ho: IHandObjectives, hs: IHand
 			: easyPong,
 		'r'
 	);
-	return terminalSortCs(ss?.length > 0 ? ss : _unreqCs.length > 0 ? _unreqCs : ownCs)[0];
+	return terminalSortCs(
+		ss?.length > 0 ? ss : _unreqCs.length > 0 ? _unreqCs : ownCs
+	)[0];
 }
 
 export default getDiscardHelper;

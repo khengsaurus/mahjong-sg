@@ -15,6 +15,7 @@ interface IStyledTextP {
 
 interface IStyledButtonProps {
 	label: string;
+	id?: string;
 	navigate?: Page;
 	color?: string;
 	padding?: string;
@@ -37,14 +38,27 @@ export const StyledText = ({
 	style = {}
 }: IStyledTextP) => (
 	<Typography
-		style={{ justifySelf: 'center', alignSelf: 'center', color, padding, textAlign, placeSelf, ...style }}
+		style={{
+			justifySelf: 'center',
+			alignSelf: 'center',
+			color,
+			padding,
+			textAlign,
+			placeSelf,
+			...style
+		}}
 		variant={variant}
 	>
 		{text}
 	</Typography>
 );
 
-export const StyledCenterText = ({ text, padding, style, variant = 'body2' }: IStyledTextP) => (
+export const StyledCenterText = ({
+	text,
+	padding,
+	style,
+	variant = 'body2'
+}: IStyledTextP) => (
 	<Typography
 		style={{
 			justifySelf: 'center',
@@ -66,6 +80,7 @@ export const StyledButton = ({
 	onClick,
 	navigate,
 	type,
+	id = '',
 	padding = '10px',
 	size = 'medium',
 	variant = 'text',

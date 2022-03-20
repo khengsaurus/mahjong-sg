@@ -153,7 +153,7 @@ const GameInfo = ({ game, show, onClose }: IModalP) => {
 
 export default GameInfo;
 
-/* -------------------- {isDev() && gameId !== LocalFlag && <Scenarios />} -------------------- */
+/* -------------------- {isDev && gameId !== LocalFlag && <Scenarios />} -------------------- */
 
 // interface IGameStateOption {
 // 	label: string;

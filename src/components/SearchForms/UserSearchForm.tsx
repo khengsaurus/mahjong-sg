@@ -1,7 +1,16 @@
 import AddIcon from '@mui/icons-material/Add';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FaceIcon from '@mui/icons-material/Face';
-import { Collapse, Fade, IconButton, InputAdornment, List, ListItem, ListItemText, TextField } from '@mui/material';
+import {
+	Collapse,
+	IconButton,
+	InputAdornment,
+	List,
+	ListItem,
+	ListItemText,
+	TextField
+} from '@mui/material';
+import { CustomFade } from 'components';
 import { Bot, BotIds, BotName, Transition } from 'enums';
 import { AppContext } from 'hooks';
 import { User } from 'models';
@@ -68,7 +77,7 @@ const UserSearchForm: React.FC = () => {
 	};
 
 	const renderAddBotButton = () => (
-		<Fade in={!showOptions && players.length < 4} timeout={{ enter: Transition.MEDIUM }}>
+		<CustomFade show={!showOptions && players.length < 4} timeout={Transition.MEDIUM}>
 			<Centered>
 				<ListItem className="list-item">
 					<ListItemText primary={ButtonText.ADD_BOT} />
@@ -88,7 +97,7 @@ const UserSearchForm: React.FC = () => {
 					</Centered>
 				</ListItem>
 			</Centered>
-		</Fade>
+		</CustomFade>
 	);
 
 	function refocusInput() {
@@ -117,16 +126,22 @@ const UserSearchForm: React.FC = () => {
 												if (players?.length < 4) {
 													refocusInput();
 												}
-												showOptions ? setShowOptions(false) : searchForUser(searchFor);
+												showOptions
+													? setShowOptions(false)
+													: searchForUser(searchFor);
 											}}
 											disabled={searchFor.trim() === ''}
 											disableRipple
 										>
 											<ChevronRightIcon
-												color={showOptions ? 'secondary' : 'primary'}
+												color={
+													showOptions ? 'secondary' : 'primary'
+												}
 												style={{
 													transition: '300ms',
-													transform: showOptions ? 'rotate(90deg)' : null
+													transform: showOptions
+														? 'rotate(90deg)'
+														: null
 												}}
 											/>
 										</IconButton>

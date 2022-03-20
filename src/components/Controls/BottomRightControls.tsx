@@ -1,5 +1,4 @@
-import { Fade } from '@mui/material';
-import { ControlButton } from 'components/Buttons';
+import { ControlButton, CustomFade } from 'components';
 import { Size, Transition } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { useSelector } from 'react-redux';
@@ -44,21 +43,23 @@ const BottomRightControls = (props: IBRControlsP) => {
 				}
 				callback={() => {
 					if (!disableDraw || !disableThrow) {
-						disableDraw ? handleThrow() : showChiAlert ? setShowChiAlert(false) : handleDraw();
+						disableDraw
+							? handleThrow()
+							: showChiAlert
+							? setShowChiAlert(false)
+							: handleDraw();
 					}
 				}}
 				disabled={disableDraw && disableThrow}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			<Fade in={showKai} timeout={Transition.FAST}>
-				<div>
-					<ControlButton
-						label={ControlsTextChi.KAI_QUESTION}
-						callback={handleOpen}
-						style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-					/>
-				</div>
-			</Fade>
+			<CustomFade show={showKai} timeout={Transition.FAST}>
+				<ControlButton
+					label={ControlsTextChi.KAI_QUESTION}
+					callback={handleOpen}
+					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+				/>
+			</CustomFade>
 		</div>
 	);
 };

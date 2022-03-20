@@ -15,6 +15,7 @@ import {
 } from './Buttons';
 import Controls from './Controls';
 import CustomFade from './CustomFade';
+import CheckBox from './Form';
 import { Loader, NetworkLoader } from './Loader';
 import {
 	AnnounceHuModal,
@@ -29,6 +30,7 @@ import {
 	SingleActionModal,
 	TableNotif
 } from './Modals';
+import Overlay from './Overlay';
 import BottomPlayer from './PlayerComponents/BottomPlayer';
 import LeftPlayer from './PlayerComponents/LeftPlayer';
 import RightPlayer from './PlayerComponents/RightPlayer';
@@ -92,5 +94,7 @@ export {
 	SuspenseTiles,
 	UnusedTiles,
 	Loader,
-	NetworkLoader
+	NetworkLoader,
+	Overlay,
+	CheckBox
 };

@@ -1,12 +1,15 @@
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
-import { HomeButton, JoinGameButton } from 'components/Buttons';
-import Controls from 'components/Controls';
-import { Loader } from 'components/Loader';
-import BottomPlayer from 'components/PlayerComponents/BottomPlayer';
-import LeftPlayer from 'components/PlayerComponents/LeftPlayer';
-import RightPlayer from 'components/PlayerComponents/RightPlayer';
-import TopPlayer from 'components/PlayerComponents/TopPlayer';
+import {
+	BottomPlayer,
+	Controls,
+	HomeButton,
+	JoinGameButton,
+	LeftPlayer,
+	Loader,
+	RightPlayer,
+	TopPlayer
+} from 'components';
 import { LocalFlag, Page, Status } from 'enums';
 import { AppContext, useLocalSession } from 'hooks';
 import $ from 'jquery';
@@ -48,7 +51,9 @@ const Table = () => {
 			// crazy but this unlock seems to be required...
 			ScreenOrientation?.unlock();
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
-				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
+				console.info(
+					'Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock'
+				);
 			});
 		}
 
@@ -101,7 +106,9 @@ const Table = () => {
 						if (isEmpty(currentGame) || !user?.uN) {
 							navigate(Page.HOME);
 						} else {
-							dispatch(setTHK(getTileHashKey(currentGame.id, currentGame.n[0])));
+							dispatch(
+								setTHK(getTileHashKey(currentGame.id, currentGame.n[0]))
+							);
 							hydrateGame(currentGame, user.uN);
 							dispatch(setGame(currentGame));
 						}
@@ -153,8 +160,14 @@ const Table = () => {
 										hasFront={n[4] === topPlayerX}
 										hasBack={n[5] === topPlayerX}
 										tileSize={tileSize}
-										lastThrown={n[7] === topPlayerX || n[3] === topPlayerX ? lTh : null}
-										highlight={topPlayerX === n[3] ? highlightColor : ''}
+										lastThrown={
+											n[7] === topPlayerX || n[3] === topPlayerX
+												? lTh
+												: null
+										}
+										highlight={
+											topPlayerX === n[3] ? highlightColor : ''
+										}
 									/>
 								)}
 							</div>
@@ -166,8 +179,14 @@ const Table = () => {
 										hasFront={n[4] === rightPlayerX}
 										hasBack={n[5] === rightPlayerX}
 										tileSize={tileSize}
-										lastThrown={n[7] === rightPlayerX || n[3] === rightPlayerX ? lTh : null}
-										highlight={rightPlayerX === n[3] ? highlightColor : ''}
+										lastThrown={
+											n[7] === rightPlayerX || n[3] === rightPlayerX
+												? lTh
+												: null
+										}
+										highlight={
+											rightPlayerX === n[3] ? highlightColor : ''
+										}
 										totalRounds={n[12] || 0}
 									/>
 								)}
@@ -179,8 +198,14 @@ const Table = () => {
 										dealer={n[2] === playerSeat}
 										hasFront={n[4] === playerSeat}
 										hasBack={n[5] === playerSeat}
-										lastThrown={n[7] === playerSeat || n[3] === playerSeat ? lTh : null}
-										highlight={playerSeat === n[3] ? highlightColor : ''}
+										lastThrown={
+											n[7] === playerSeat || n[3] === playerSeat
+												? lTh
+												: null
+										}
+										highlight={
+											playerSeat === n[3] ? highlightColor : ''
+										}
 									/>
 								)}
 							</div>
@@ -193,9 +218,14 @@ const Table = () => {
 										hasBack={n[5] === leftPlayerX}
 										tileSize={tileSize}
 										lastThrown={
-											n[7] === leftPlayerX || currGame.n[3] === leftPlayerX ? currGame.lTh : null
+											n[7] === leftPlayerX ||
+											currGame.n[3] === leftPlayerX
+												? currGame.lTh
+												: null
 										}
-										highlight={leftPlayerX === n[3] ? highlightColor : ''}
+										highlight={
+											leftPlayerX === n[3] ? highlightColor : ''
+										}
 										totalRounds={n[12] || 0}
 									/>
 								)}
@@ -209,7 +239,9 @@ const Table = () => {
 			return (
 				<HomeTheme>
 					<Main>
-						<Typography variant="h6">{HomeScreenText.GAME_NOT_STARTED}</Typography>
+						<Typography variant="h6">
+							{HomeScreenText.GAME_NOT_STARTED}
+						</Typography>
 						<br></br>
 						<HomeButton />
 					</Main>

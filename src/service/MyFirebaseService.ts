@@ -1,4 +1,13 @@
-import { BackgroundColor, BotTimeout, FBCollection, FBDatabase, PaymentType, Size, TableColor, TileColor } from 'enums';
+import {
+	BackgroundColor,
+	BotTimeout,
+	FBCollection,
+	FBDatabase,
+	PaymentType,
+	Size,
+	TableColor,
+	TileColor
+} from 'enums';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import {
 	Auth,
@@ -36,9 +45,10 @@ import { HandPoint, ScoringHand } from 'handEnums';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { Game, User } from 'models';
 import moment from 'moment';
+import { isDev } from 'platform';
 import { ScreenTextEng } from 'screenTexts';
 import FirebaseConfig from 'shared/FirebaseConfig';
-import { isDev, shuffle } from 'utility';
+import { shuffle } from 'utility';
 import { gameToObj, playerToObj, userToObj } from 'utility/parsers';
 
 export class FirebaseService {
@@ -70,7 +80,7 @@ export class FirebaseService {
 		return new Promise(resolve => {
 			try {
 				this.app = initializeApp(FirebaseConfig);
-				isDev() && console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
+				isDev && console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
 				resolve(true);
 			} catch (err) {
 				console.error(InfoMessage.FIREBASE_INIT_ERROR);
@@ -87,7 +97,10 @@ export class FirebaseService {
 			persistence: indexedDBLocalPersistence
 		});
 		this.auth.onAuthStateChanged(user => {
-			isDev() && console.info(user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO);
+			isDev &&
+				console.info(
+					user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO
+				);
 			this.user = user;
 		});
 	}
@@ -101,7 +114,11 @@ export class FirebaseService {
 			clearTimeout(timeoutRef);
 			timeoutRef = setTimeout(() => {
 				const connected = snap.val() === true || false;
-				console.info(connected ? InfoMessage.FIREBASE_CONNECTED : InfoMessage.FIREBASE_DISCONNECTED);
+				console.info(
+					connected
+						? InfoMessage.FIREBASE_CONNECTED
+						: InfoMessage.FIREBASE_DISCONNECTED
+				);
 				this.isFBConnected = connected;
 			}, 400);
 		});
@@ -166,7 +183,9 @@ export class FirebaseService {
 						}
 					})
 					.catch(err => {
-						console.error(`FirebaseService.authLoginEmailPass failed with err: ${err.message}`);
+						console.error(
+							`FirebaseService.authLoginEmailPass failed with err: ${err.message}`
+						);
 						reject(ErrorMessage.LOGIN_ERROR);
 					});
 			} else {
@@ -204,7 +223,9 @@ export class FirebaseService {
 		return new Promise(resolve => {
 			if (this.isFBConnected) {
 				try {
-					set(ref(this.db, `${FBDatabase.USERS}/${username}`), email).then(() => resolve(true));
+					set(ref(this.db, `${FBDatabase.USERS}/${username}`), email).then(() =>
+						resolve(true)
+					);
 				} catch (err) {
 					console.error(err);
 					resolve(false);
@@ -220,13 +241,15 @@ export class FirebaseService {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				try {
-					get(child(ref(this.db), `${FBDatabase.USERS}/${username}`)).then(snapshot => {
-						if (snapshot.exists()) {
-							resolve(snapshot.val());
-						} else {
-							reject(new Error(ErrorMessage.LOGIN_ERROR));
+					get(child(ref(this.db), `${FBDatabase.USERS}/${username}`)).then(
+						snapshot => {
+							if (snapshot.exists()) {
+								resolve(snapshot.val());
+							} else {
+								reject(new Error(ErrorMessage.LOGIN_ERROR));
+							}
 						}
-					});
+					);
 				} catch (err) {
 					console.error(err);
 					reject(new Error(ErrorMessage.TRY_AGAIN));
@@ -351,7 +374,9 @@ export class FirebaseService {
 			if (this.isFBConnected) {
 				const { id, uN } = user;
 				this.pairEmailToUsername(uN, '-')
-					.then(() => deleteDoc(doc(this.usersRef, id)).then(() => resolve(true)))
+					.then(() =>
+						deleteDoc(doc(this.usersRef, id)).then(() => resolve(true))
+					)
 					.catch(err => reject(err));
 			} else {
 				reject(ErrorMessage.SERVICE_OFFLINE);
@@ -390,8 +415,12 @@ export class FirebaseService {
 				let lastUpdated = g.data()?.t[1];
 				if (lastUpdated && lastUpdated?.toDate) {
 					lastUpdated = lastUpdated?.toDate() as Date;
-					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23) {
-						deleteDoc(doc(this.gamesRef, g.id)).catch(err => console.error(err));
+					if (
+						moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23
+					) {
+						deleteDoc(doc(this.gamesRef, g.id)).catch(err =>
+							console.error(err)
+						);
 					}
 				}
 			});
@@ -405,8 +434,12 @@ export class FirebaseService {
 				let lastUpdated = g.data()?.t[1];
 				if (lastUpdated && lastUpdated?.toDate) {
 					lastUpdated = lastUpdated?.toDate() as Date;
-					if (moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23) {
-						deleteDoc(doc(this.gamesRef, g.id)).catch(err => console.error(err));
+					if (
+						moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23
+					) {
+						deleteDoc(doc(this.gamesRef, g.id)).catch(err =>
+							console.error(err)
+						);
 					}
 				}
 			});
@@ -459,7 +492,20 @@ export class FirebaseService {
 						es,
 						t: [cA, cA, null],
 						f: [true, true, false, false, false, false, mHu, false, easyAI],
-						n: [1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM, 0],
+						n: [
+							1,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							gMinPx,
+							gMaxPx,
+							isDev ? BotTimeout.FAST : BotTimeout.MEDIUM,
+							0
+						],
 						ps: shuffledPlayers.map((player: User) => playerToObj(player)),
 						ts: [],
 						lTh: {},
@@ -489,7 +535,7 @@ export class FirebaseService {
 								0,
 								gMinPx,
 								gMaxPx,
-								isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM,
+								isDev ? BotTimeout.FAST : BotTimeout.MEDIUM,
 								0,
 								0
 							],
@@ -541,7 +587,12 @@ export class FirebaseService {
 		});
 	}
 
-	async runTransactionUpdate(gameId: string, mHu: boolean, bt: number, easyAI: boolean): Promise<void> {
+	async runTransactionUpdate(
+		gameId: string,
+		mHu: boolean,
+		bt: number,
+		easyAI: boolean
+	): Promise<void> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				runTransaction(this.fs, async transaction => {
@@ -565,7 +616,12 @@ export class FirebaseService {
 		});
 	}
 
-	async runTransactionPay(gameId: string, from: number, to: number, amt: number): Promise<void> {
+	async runTransactionPay(
+		gameId: string,
+		from: number,
+		to: number,
+		amt: number
+	): Promise<void> {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				runTransaction(this.fs, async transaction => {
@@ -583,7 +639,9 @@ export class FirebaseService {
 							}
 							if (logs) {
 								logs.push(
-									`${_from.uN} sent ${_to.uN} ${amt} ${ScreenTextEng._CHIP_}${amt > 1 ? 's' : ''}`
+									`${_from.uN} sent ${_to.uN} ${amt} ${
+										ScreenTextEng._CHIP_
+									}${amt > 1 ? 's' : ''}`
 								);
 							}
 							transaction.update(gameDocRef, { ps, logs });

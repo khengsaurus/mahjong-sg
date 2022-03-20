@@ -1,5 +1,4 @@
-import CustomFade from 'components/CustomFade';
-import { SampleTile } from 'components/Tiles';
+import { CustomFade, SampleTile } from 'components';
 import { EEvent, Transition } from 'enums';
 import { useWindowListener } from 'hooks';
 import { isMobile } from 'platform';

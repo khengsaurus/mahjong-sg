@@ -17,9 +17,18 @@ import {
 	Wind,
 	WindIndex
 } from 'enums';
-import { Animals, FlowersF, FlowersS, HBFCards, ScoringHand, Suits, Winds } from 'handEnums';
+import {
+	Animals,
+	FlowersF,
+	FlowersS,
+	HBFCards,
+	ScoringHand,
+	Suits,
+	Winds
+} from 'handEnums';
 import isEmpty from 'lodash.isempty';
 import { User } from 'models';
+import { isDev } from 'platform';
 import { ControlsTextChi, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import {
 	countHashedCards,
@@ -33,7 +42,6 @@ import {
 	getPlayerSeat,
 	getTileHashKey,
 	isBot,
-	isDev,
 	isHua,
 	randomNum,
 	revealTile,
@@ -153,7 +161,10 @@ export class Game {
 			Suits.forEach(suit => {
 				oneToNine.forEach(number => {
 					const tile: IHiddenTile = {
-						i: getHashed(`${CardCategory.REGULAR}${SuitsIndex[suit]}${number}${suit}${index}`, tHK)
+						i: getHashed(
+							`${CardCategory.REGULAR}${SuitsIndex[suit]}${number}${suit}${index}`,
+							tHK
+						)
 					};
 					tiles.push(tile);
 				});
@@ -173,13 +184,19 @@ export class Game {
 		});
 		[...FlowersF, ...FlowersS].forEach(c => {
 			const tile: IHiddenTile = {
-				i: getHashed(`${CardCategory.FLOWER}${FlowerIndex[c]}${c}${randomNum(9)}`, tHK)
+				i: getHashed(
+					`${CardCategory.FLOWER}${FlowerIndex[c]}${c}${randomNum(9)}`,
+					tHK
+				)
 			};
 			tiles.push(tile);
 		});
 		Animals.forEach(c => {
 			let tile: IHiddenTile = {
-				i: getHashed(`${CardCategory.ANIMAL}${AnimalIndex[c]}${c}${randomNum(9)}`, tHK)
+				i: getHashed(
+					`${CardCategory.ANIMAL}${AnimalIndex[c]}${c}${randomNum(9)}`,
+					tHK
+				)
 			};
 			tiles.push(tile);
 		});
@@ -230,16 +247,22 @@ export class Game {
 	getMatchingFlowersMsg(tile: IShownTile, _p: number) {
 		switch (tile.s) {
 			case Suit.ANIMAL:
-				return (tile.c === Animal.CAT && this.ps[_p].shownTilesContainCard(Animal.MOUSE)) ||
-					(tile.c === Animal.MOUSE && this.ps[_p].shownTilesContainCard(Animal.CAT)) ||
-					(tile.c === Animal.ROOSTER && this.ps[_p].shownTilesContainCard(Animal.WORM)) ||
-					(tile.c === Animal.WORM && this.ps[_p].shownTilesContainCard(Animal.ROOSTER))
+				return (tile.c === Animal.CAT &&
+					this.ps[_p].shownTilesContainCard(Animal.MOUSE)) ||
+					(tile.c === Animal.MOUSE &&
+						this.ps[_p].shownTilesContainCard(Animal.CAT)) ||
+					(tile.c === Animal.ROOSTER &&
+						this.ps[_p].shownTilesContainCard(Animal.WORM)) ||
+					(tile.c === Animal.WORM &&
+						this.ps[_p].shownTilesContainCard(Animal.ROOSTER))
 					? `${this.ps[_p].uN} got matching animals`
 					: '';
 			case Suit.FLOWER:
 				const matchingFs = PlayerFlower[_p];
-				return (tile.c === matchingFs[0] && this.ps[_p].shownTilesContainCard(matchingFs[1])) ||
-					(tile.c === matchingFs[1] && this.ps[_p].shownTilesContainCard(matchingFs[0]))
+				return (tile.c === matchingFs[0] &&
+					this.ps[_p].shownTilesContainCard(matchingFs[1])) ||
+					(tile.c === matchingFs[1] &&
+						this.ps[_p].shownTilesContainCard(matchingFs[0]))
 					? `${this.ps[_p].uN} got both his/her flowers`
 					: '';
 			default:
@@ -252,14 +275,20 @@ export class Game {
 		const { sTs = [], uN = '' } = this.ps[_p];
 		switch (tile.s) {
 			case Suit.ANIMAL:
-				return sTs.filter(t => Animals.includes(t.c)).length === 3 ? `${uN} collected all animals` : '';
+				return sTs.filter(t => Animals.includes(t.c)).length === 3
+					? `${uN} collected all animals`
+					: '';
 			case Suit.FLOWER:
 				if (sTs.filter(t => t.s === Suit.FLOWER).length === 7) {
 					return `${uN} collected all 8 flowers`;
 				} else if (FlowersS.includes(tile.c)) {
-					return sTs.filter(t => FlowersS.includes(t.c)).length === 3 ? `${uN} collected a flower set` : '';
+					return sTs.filter(t => FlowersS.includes(t.c)).length === 3
+						? `${uN} collected a flower set`
+						: '';
 				} else {
-					return sTs.filter(t => FlowersF.includes(t.c)).length === 3 ? `${uN} collected a flower set` : '';
+					return sTs.filter(t => FlowersF.includes(t.c)).length === 3
+						? `${uN} collected a flower set`
+						: '';
 				}
 			default:
 				return '';
@@ -271,7 +300,9 @@ export class Game {
 			this.ps[from].bal = Math.round(this.ps[from].bal - amt);
 			this.ps[to].bal = Math.round(this.ps[to].bal + amt);
 			this.newLog(
-				`${this.ps[from].uN} sent ${this.ps[to].uN} ${amt} ${ScreenTextEng._CHIP_}${amt > 1 ? 's' : ''}`
+				`${this.ps[from].uN} sent ${this.ps[to].uN} ${amt} ${
+					ScreenTextEng._CHIP_
+				}${amt > 1 ? 's' : ''}`
 			);
 		}
 	}
@@ -281,14 +312,18 @@ export class Game {
 	 * Side effects: shownTile.v = true if player's flower
 	 * @returns {tile, tile.c, announcement if player got matching flowers}
 	 */
-	validateFlower(tile: IShownTile, _p: number): { tile: IShownTile; hua: string; msg: string[] } {
+	validateFlower(
+		tile: IShownTile,
+		_p: number
+	): { tile: IShownTile; hua: string; msg: string[] } {
 		let matchingFlowersMsg = '';
 		let completedFsSetMsg = '';
 		if (!isHua(tile)) {
 			return { tile, hua: '', msg: [] };
 		} else if (
 			tile.s === Suit.ANIMAL ||
-			(tile.s === Suit.FLOWER && PlayerFlower[getPlayerSeat(_p, this.n[2])].includes(tile.c))
+			(tile.s === Suit.FLOWER &&
+				PlayerFlower[getPlayerSeat(_p, this.n[2])].includes(tile.c))
 		) {
 			tile.v = true;
 		}
@@ -305,11 +340,16 @@ export class Game {
 	 * If new tile is a flower, -> player.sTs. Else, draw ? player.getNewTile(tile) : -> player.hTs
 	 */
 	handleNewTile(hT: IHiddenTile, _p: number, draw: boolean) {
-		const { tile, hua, msg } = this.validateFlower(revealTile(hT, getTileHashKey(this.id, this.n[0])), _p);
+		const { tile, hua, msg } = this.validateFlower(
+			revealTile(hT, getTileHashKey(this.id, this.n[0])),
+			_p
+		);
 		if (hua) {
 			this.ps[_p].sTs = [...this.ps[_p].sTs, tile];
 		} else {
-			draw ? this.ps[_p].getNewTile(hT) : (this.ps[_p].hTs = [...this.ps[_p].hTs, hT]);
+			draw
+				? this.ps[_p].getNewTile(hT)
+				: (this.ps[_p].hTs = [...this.ps[_p].hTs, hT]);
 		}
 		return { hua, msg };
 	}
@@ -448,7 +488,9 @@ export class Game {
 		this.giveT(this.nDTs, findOpp(this.n[2]), false, false);
 		this.giveT(this.nDTs, findLeft(this.n[2]), false, false);
 		let r = 0;
-		const sumAllHiddenTiles = this.ps.map(p => p.countAllHiddenTiles()).reduce((a, b) => a + b, 0);
+		const sumAllHiddenTiles = this.ps
+			.map(p => p.countAllHiddenTiles())
+			.reduce((a, b) => a + b, 0);
 		if (sumAllHiddenTiles === this.dTs + 3 * this.nDTs) {
 			this.f[0] = true;
 		} else {
@@ -473,9 +515,18 @@ export class Game {
 
 	buHua() {
 		if (this.ps[this.n[2]].countAllHiddenTiles() < this.dTs) {
-			this.giveT(this.dTs - this.ps[this.n[2]].countAllHiddenTiles(), this.n[2], true, true);
+			this.giveT(
+				this.dTs - this.ps[this.n[2]].countAllHiddenTiles(),
+				this.n[2],
+				true,
+				true
+			);
 		}
-		let others: number[] = [findRight(this.n[2]), findOpp(this.n[2]), findLeft(this.n[2])];
+		let others: number[] = [
+			findRight(this.n[2]),
+			findOpp(this.n[2]),
+			findLeft(this.n[2])
+		];
 		others.forEach((n: number) => {
 			let initNum = this.ps[n].countAllHiddenTiles();
 			if (initNum < this.nDTs) {
@@ -511,7 +562,7 @@ export class Game {
 			this.n[0] += 1;
 			this.n[2] = (this.n[0] + 3) % 4;
 		}
-		if (isDev() && this.ps.find(p => p.uN === TestUser._LASTROUND)) {
+		if (isDev && this.ps.find(p => p.uN === TestUser._LASTROUND)) {
 			this.n[0] = 16;
 			this.n[2] = 3;
 		}
@@ -537,7 +588,11 @@ export class Game {
 		this.logs = [];
 		this.sk = [];
 		this.prE = {};
-		this.newLog(`Starting round ${this.n[0]} ${this.n[1] === this.n[0] ? ControlsTextChi.CHAIN : ``}`);
+		this.newLog(
+			`Starting round ${this.n[0]} ${
+				this.n[1] === this.n[0] ? ControlsTextChi.CHAIN : ``
+			}`
+		);
 	}
 
 	initRound() {
@@ -549,10 +604,10 @@ export class Game {
 		this.f[1] = true;
 		this.ts = shuffledTiles;
 		this.distributeTiles();
-		if (isDev() && this.ps.find(p => p.uN === TestUser._19LEFT)) {
+		if (isDev && this.ps.find(p => p.uN === TestUser._19LEFT)) {
 			this.ts = this.ts.slice(0, 19);
 		}
-		if (isDev() && this.ps.find(p => p.uN === TestUser._HUASHANGHUA)) {
+		if (isDev && this.ps.find(p => p.uN === TestUser._HUASHANGHUA)) {
 			this.ts = this.ts.slice(0, 22);
 			this.ts[18] = getAnimalHashTileMock(111, Animal.ROOSTER);
 			this.ts[0] = getAnimalHashTileMock(111, Animal.CAT);
@@ -560,11 +615,13 @@ export class Game {
 	}
 
 	declareHu(huVals: any[]) {
-		isDev() && console.info('declareHu called with: ' + JSON.stringify(huVals));
+		isDev && console.info('declareHu called with: ' + JSON.stringify(huVals));
 		if (huVals.length > 2) {
 			this.f[2] = Number(huVals[0]) !== this.n[2];
 			this.hu = huVals;
-			let huLog: string = `${this.ps[huVals[0]].uN} hu with ${huVals[1]}${ScreenTextChi.TAI}`;
+			let huLog: string = `${this.ps[huVals[0]].uN} hu with ${huVals[1]}${
+				ScreenTextChi.TAI
+			}`;
 			if (huVals[2] === 1) {
 				huLog += ` ${ScreenTextEng.SELF_DRAWN}`;
 			} else if (this.n[7] && this.ps[this.n[7]].uN !== this.ps[huVals[0]].uN) {
@@ -575,7 +632,11 @@ export class Game {
 			[findRight(w), findOpp(w), findLeft(w)].forEach(_p => {
 				if (isBot(this.ps[_p].id)) {
 					this.ps[_p].sT = true;
-					this.sendChips(_p, w, getDefaultAmt(this.hu, this.pay, _p, this.n[7]));
+					this.sendChips(
+						_p,
+						w,
+						getDefaultAmt(this.hu, this.pay, _p, this.n[7])
+					);
 				}
 			});
 		}
@@ -602,7 +663,10 @@ export class Game {
 		this.n[2] = this.prE._d;
 		this.prE = {};
 		this.logs = this.logs.filter(
-			l => !l.includes('hu with') && !l.includes('Game ended') && !l.includes('Round ended')
+			l =>
+				!l.includes('hu with') &&
+				!l.includes('Game ended') &&
+				!l.includes('Round ended')
 		);
 	}
 
@@ -653,7 +717,7 @@ export class Game {
 	 */
 	handleDelay() {
 		if (!isEmpty(this.lTh)) {
-			isDev() && console.info('-> Game.handleDelay()');
+			isDev && console.info('-> Game.handleDelay()');
 			this.sk = [];
 			const tHK = getTileHashKey(this.id, this.n[0]);
 			const hashCard = getHashed(this.lTh.c, tHK);
@@ -663,7 +727,11 @@ export class Game {
 				const _p = next[_n];
 				if (_p !== this.n[7]) {
 					if (!isEmpty(this.ps[_p])) {
-						const { HH } = getHands(this, _p, this.id === LocalFlag ? 111 : tHK);
+						const { HH } = getHands(
+							this,
+							_p,
+							this.id === LocalFlag ? 111 : tHK
+						);
 						if (!isEmpty(HH)) {
 							const huExec = `${_p}${Exec.HU}`;
 							if (!this.sk.find(s => s === huExec)) {
@@ -706,7 +774,9 @@ export class Game {
 					this.sendChips(this.n[7], _p, 3);
 				}
 				if (this.pay === PaymentType.HALF_SHOOTER) {
-					_from.forEach(from => this.sendChips(from, _p, from === this.n[7] ? 2 : 1));
+					_from.forEach(from =>
+						this.sendChips(from, _p, from === this.n[7] ? 2 : 1)
+					);
 				}
 			} else {
 				// hidden kang by self draw

@@ -2,7 +2,7 @@ import { ImpactStyle } from '@capacitor/haptics';
 import { CardName, Exec, LocalFlag, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
-import { triggerHaptic } from 'platform';
+import { isDev, isDevBot, triggerHaptic } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ControlsTextChi, ScreenTextEng } from 'screenTexts';
@@ -15,8 +15,6 @@ import {
 	getCardName,
 	indexToWind,
 	isBot,
-	isDev,
-	isDevBot,
 	isEmptyTile,
 	revealTile
 } from 'utility';
@@ -44,7 +42,15 @@ function useControls(
 		theme: { tableColor },
 		user
 	} = useSelector((state: IStore) => state);
-	const { isFirstToHu, othersFirstToHu, othersSecondToHu, isSecondToHu, offerPong, offerKang, notifs } = notifOutput;
+	const {
+		isFirstToHu,
+		othersFirstToHu,
+		othersSecondToHu,
+		isSecondToHu,
+		offerPong,
+		offerKang,
+		notifs
+	} = notifOutput;
 	const [exec, setExec] = useState<any[]>([]);
 	const [showPay, setShowPay] = useState(false);
 	const [showLogs, setShowLogs] = useState(false);
@@ -67,16 +73,18 @@ function useControls(
 	const pIdsRef = JSON.stringify(ps.map(p => p.id));
 	const execRef = JSON.stringify(exec);
 
-	const { botSecondToHu, execToBeCalled, midDelayRef } = useMemo(
+	const { bot2ndToHu, toExec, midDelayRef } = useMemo(
 		() => {
 			const midDelayRef = delayLeft >= 2 && delayLeft <= 3;
-			const botSecondToHu =
+			const bot2ndToHu =
 				sk.length > 1 &&
 				midDelayRef &&
-				!!sk.slice(1, 4)?.find(s => s.includes(Exec.HU) && isBot(ps[Number(s[0])]?.id));
-			const execToBeCalled = exec.join('').startsWith(sk[0]?.slice(0, 1)); // enable user to pong when can hu, bot to draw when can pong etc
+				!!sk
+					.slice(1, 4)
+					?.find(s => s.includes(Exec.HU) && isBot(ps[Number(s[0])]?.id));
+			const toExec = exec.join('').startsWith(sk[0]?.slice(0, 1)); // enable user to pong when can hu, bot to draw when can pong etc
 
-			return { botSecondToHu, execToBeCalled, midDelayRef };
+			return { bot2ndToHu, toExec, midDelayRef };
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[delayLeft, execRef, skRef, pIdsRef]
@@ -87,13 +95,20 @@ function useControls(
 			f[0]
 				? [
 						// `Dealer: ${dealerName}`,
-						`Seat: ${CardName[indexToWind((playerSeat - n[2] + 4) % 4)]}, ${ScreenTextEng.CHIPS}: ${
-							Math.round(player?.bal) || 0
-						}`,
+						`Seat: ${CardName[indexToWind((playerSeat - n[2] + 4) % 4)]}, ${
+							ScreenTextEng.CHIPS
+						}: ${Math.round(player?.bal) || 0}`,
 						`${ts?.length || 0} tiles left`,
-						`${n[3] === playerSeat ? ScreenTextEng.YOUR_TURN : `${ps[n[3]]?.uN}'s turn`}`
+						`${
+							n[3] === playerSeat
+								? ScreenTextEng.YOUR_TURN
+								: `${ps[n[3]]?.uN}'s turn`
+						}`
 				  ]
-				: [`${ScreenTextEng.CHIPS}: ${Math.round(player?.bal) || 0}`, ScreenTextEng.GAME_ENDED],
+				: [
+						`${ScreenTextEng.CHIPS}: ${Math.round(player?.bal) || 0}`,
+						ScreenTextEng.GAME_ENDED
+				  ],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dealerName, f[0], player?.bal, playerSeat, ps[n[3]]?.uN, ts?.length, n[2]]
 	);
@@ -111,18 +126,21 @@ function useControls(
 	);
 
 	/* ----------------------------------- Action ----------------------------------- */
-	const updateGameTaken = useCallback((_p: number, game: Game, resetLTh: boolean = true, halfA: boolean = true) => {
-		game.t[2] = null;
-		game.f[3] = true;
-		game.n[3] = _p;
-		if (resetLTh) {
-			game.lTh = { r: game.lTh.r };
-		}
-		if (halfA) {
+	const updateGameTaken = useCallback(
+		(_p: number, game: Game, resetLTh: boolean = true, halfA: boolean = true) => {
+			game.t[2] = null;
 			game.f[3] = true;
-			game.n[6] = _p;
-		}
-	}, []);
+			game.n[3] = _p;
+			if (resetLTh) {
+				game.lTh = { r: game.lTh.r };
+			}
+			if (halfA) {
+				game.f[3] = true;
+				game.n[6] = _p;
+			}
+		},
+		[]
+	);
 
 	const handleAction = useCallback(
 		(_p: number, game: Game) => {
@@ -143,7 +161,10 @@ function useControls(
 	// If player loads Table and sT && cfH -> setShowDeclareHu(true). Note that this bypasses isHuLocked
 	useFirstEffect(
 		useCallback(() => {
-			isDev() && console.info('useControls.useEffect -> check if should auto open Declare Hu modal');
+			isDev &&
+				console.info(
+					'useControls.useEffect -> check if should auto open Declare Hu modal'
+				);
 			if (hu?.length === 0) {
 				if (player?.sT && player?.cfH && !showDeclareHu) {
 					setShowDeclareHu(true);
@@ -190,7 +211,15 @@ function useControls(
 				handleAction(_p, game);
 			}
 		},
-		[isHuLocked, playerSeat, setConfirmHu, setShowDeclareHu, openTimeoutId, handleAction, lThAvailHu]
+		[
+			isHuLocked,
+			playerSeat,
+			setConfirmHu,
+			setShowDeclareHu,
+			openTimeoutId,
+			handleAction,
+			lThAvailHu
+		]
 	);
 
 	const returnLastThrown = useCallback((game: Game, _p: number) => {
@@ -349,7 +378,15 @@ function useControls(
 				}
 			}
 		},
-		[handleAction, handleBuHua, haptic, isHuLocked, handleDrawGame, playerSeat, updateGameTaken]
+		[
+			handleAction,
+			handleBuHua,
+			haptic,
+			isHuLocked,
+			handleDrawGame,
+			playerSeat,
+			updateGameTaken
+		]
 	);
 
 	const handleChi = (cs: string[]) => {
@@ -368,7 +405,10 @@ function useControls(
 					toTake = [...meld];
 				} else if (cs.length > 2) {
 					let refCs = [...cs];
-					(lThAvail ? [lTh, ...p.revealedHTs(tHK)] : p.revealedHTs(tHK)).forEach((t: IShownTile) => {
+					(lThAvail
+						? [lTh, ...p.revealedHTs(tHK)]
+						: p.revealedHTs(tHK)
+					).forEach((t: IShownTile) => {
 						if (refCs.includes(t.c)) {
 							toTake.push(t);
 							refCs.splice(
@@ -386,7 +426,8 @@ function useControls(
 						game.lTh = { r: lTh.r }; // setting it as an empty tile ref !important
 					}
 					p.createMeld(toTake);
-					const _c = (toTake.find(t => t.r === lTh.r) ? lTh?.c : toTake[0]?.c) || ''; // get card of tile to take
+					const _c =
+						(toTake.find(t => t.r === lTh.r) ? lTh?.c : toTake[0]?.c) || ''; // get card of tile to take
 					const cardName = getCardName(_c);
 					if (toTake.every(t => t.c === _c) && toTake?.length > 2) {
 						if (toTake.length === 4 || kang) {
@@ -394,11 +435,15 @@ function useControls(
 							if (toTake[0].r === lTh.r) {
 								game.lTh = { r: lTh.r };
 							}
-							game.newLog(`${p.uN} ${MeldName[MeldType.KANG]}'d ${cardName}`);
+							game.newLog(
+								`${p.uN} ${MeldName[MeldType.KANG]}'d ${cardName}`
+							);
 							game.handleKangPayment(_p, toTake);
 							handleBuHua(_p, game);
 						} else {
-							game.newLog(`${p.uN} ${MeldName[MeldType.PONG]}'d ${cardName}`);
+							game.newLog(
+								`${p.uN} ${MeldName[MeldType.PONG]}'d ${cardName}`
+							);
 						}
 					} else {
 						game.newLog(`${p.uN} chi'd ${cardName}`);
@@ -411,18 +456,32 @@ function useControls(
 				}
 			}
 		},
-		[handleBuHua, haptic, isHuLocked, lThAvail, meld, playerSeat, tHK, updateGameTaken, handleAction]
+		[
+			handleBuHua,
+			haptic,
+			isHuLocked,
+			lThAvail,
+			meld,
+			playerSeat,
+			tHK,
+			updateGameTaken,
+			handleAction
+		]
 	);
 
 	const handleKang = useCallback(
 		(_p: number, game: Game, card?: string) => {
-			if (!isHuLocked || execToBeCalled) {
+			if (!isHuLocked || toExec) {
 				let toKang: IShownTile[];
 				let p = game.ps[_p];
 				if (_p === playerSeat && !isEmpty(selectedTiles)) {
 					toKang = selectedTiles;
 				} else {
-					let toRev = card ? p.allHiddenTiles().filter(t => getCardFromHashId(t.i, tHK) === card) : null;
+					let toRev = card
+						? p
+								.allHiddenTiles()
+								.filter(t => getCardFromHashId(t.i, tHK) === card)
+						: null;
 					toKang = isEmpty(toRev) ? [] : toRev.map(t => revealTile(t, tHK));
 				}
 				let delay = false;
@@ -439,7 +498,11 @@ function useControls(
 							delay = true;
 						}
 					}
-					game.newLog(`${p.uN} ${MeldName[MeldType.KANG]}'d ${getCardName(toKang[0]?.c)}`);
+					game.newLog(
+						`${p.uN} ${MeldName[MeldType.KANG]}'d ${getCardName(
+							toKang[0]?.c
+						)}`
+					);
 					game.handleKangPayment(_p, toKang);
 					handleBuHua(_p, game);
 					if (delay) {
@@ -453,7 +516,17 @@ function useControls(
 				}
 			}
 		},
-		[execToBeCalled, haptic, handleAction, handleBuHua, isHuLocked, selectedTiles, tHK, playerSeat, updateGameTaken]
+		[
+			toExec,
+			haptic,
+			handleAction,
+			handleBuHua,
+			isHuLocked,
+			selectedTiles,
+			tHK,
+			playerSeat,
+			updateGameTaken
+		]
 	);
 
 	const handlePong = useCallback(
@@ -548,7 +621,7 @@ function useControls(
 
 	function handleExec(exec: any[]) {
 		if (!isEmpty(exec)) {
-			isDevBot() && console.info('handleExec called with: ' + exec);
+			isDevBot && console.info('handleExec called with: ' + exec);
 			const _b = Number(exec[0]);
 			switch (exec[1]) {
 				case Exec.DISCARD:
@@ -595,6 +668,8 @@ function useControls(
 	 * @description Call handleExec(exec) if exec, !isHuLocked, and exec tallies with sk[0] -> 1h, 1k, 1p etc.
 	 * Effective only when delay on, i.e. negligible when exec contains 'discard', 'draw', 'handleKang' etc
 	 */
+	const n10 = n[10];
+	const f1 = f[1];
 	useEffect(() => {
 		let didExec = false;
 		if (midDelayRef && sk.every(s => isBot(ps[Number(s[0])].id))) {
@@ -602,8 +677,12 @@ function useControls(
 			handleExec([playerSeat, Exec.SKIP]);
 		} else {
 			// only non-bots can trigger isHuLocked
-			if (!isEmpty(exec) && !isHuLocked && (delayLeft === 0 || execToBeCalled || botSecondToHu)) {
-				isDev() && console.info('useControls.useEffect -> handleExec');
+			if (
+				!isEmpty(exec) &&
+				!isHuLocked &&
+				(delayLeft === 0 || toExec || bot2ndToHu)
+			) {
+				isDev && console.info('useControls.useEffect -> handleExec');
 				didExec = true;
 				const _p = Number(exec[0]);
 				if (!isBot(ps[_p]?.id)) {
@@ -643,7 +722,18 @@ function useControls(
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [botSecondToHu, n[10], midDelayRef, execRef, execToBeCalled, f[1], handleSkipNotif, isHuLocked, pIdsRef, skRef]);
+	}, [
+		bot2ndToHu,
+		midDelayRef,
+		execRef,
+		toExec,
+		n10,
+		f1,
+		handleSkipNotif,
+		isHuLocked,
+		pIdsRef,
+		skRef
+	]);
 
 	const setGamePaused = (pause = false) => {
 		if (pause !== currGame.f[1]) {
@@ -675,11 +765,17 @@ function useControls(
 			notifs,
 			timeout: delayLeft,
 			pong:
-				offerPong && !isHuLocked && (othersFirstToHu ? delayLeft <= 5 : true) && !othersSecondToHu
+				offerPong &&
+				!isHuLocked &&
+				(othersFirstToHu ? delayLeft <= 5 : true) &&
+				!othersSecondToHu
 					? () => setExec([playerSeat, MeldType.PONG, lTh?.c])
 					: null,
 			kang:
-				offerKang && !isHuLocked && (othersFirstToHu ? delayLeft <= 5 : true) && !othersSecondToHu
+				offerKang &&
+				!isHuLocked &&
+				(othersFirstToHu ? delayLeft <= 5 : true) &&
+				!othersSecondToHu
 					? () => setExec([playerSeat, MeldType.KANG, lTh?.c])
 					: null,
 			hu:
@@ -687,7 +783,10 @@ function useControls(
 					? () => openDeclareHuDialog(playerSeat, currGame)
 					: null,
 			skip: useMemo(() => {
-				return (offerPong || offerKang || isFirstToHu) && sk.every(s => Number(s[0]) === playerSeat);
+				return (
+					(offerPong || offerKang || isFirstToHu) &&
+					sk.every(s => Number(s[0]) === playerSeat)
+				);
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, [offerPong, offerKang, isFirstToHu, skRef])
 				? () => handleSkipNotif(currGame)
@@ -700,8 +799,14 @@ function useControls(
 			showLogs
 		},
 		topLeft: {
-			handleSettings: useCallback(() => setShowSettings(prev => !prev), [setShowSettings]),
-			handleScreenText: useCallback(() => setShowText(prev => !prev), [setShowText]),
+			handleSettings: useCallback(
+				() => setShowSettings(prev => !prev),
+				[setShowSettings]
+			),
+			handleScreenText: useCallback(
+				() => setShowText(prev => !prev),
+				[setShowText]
+			),
 			handleAdmin: useCallback(() => setShowAdmin(prev => !prev), [setShowAdmin]),
 			setShowLeaveAlert,
 			showText,
@@ -721,13 +826,17 @@ function useControls(
 			highlight
 		},
 		bottomRight: {
-			handleThrow: () => (ts?.length === 15 ? handleDrawGame(currGame) : handleThrow(playerSeat, currGame)),
+			handleThrow: () =>
+				ts?.length === 15
+					? handleDrawGame(currGame)
+					: handleThrow(playerSeat, currGame),
 			handleDraw: () => handleDraw(playerSeat, currGame),
 			handleOpen: handleConfirmHuPrompt,
 			// handleOpen: () => handleHu(currGame, playerSeat, {}, 1, false),
 			confirmHu,
 			disableThrow: selectedTiles?.length !== 1 || n[3] !== playerSeat || !f[3],
-			disableDraw: ts?.length === 15 && f[3] && n[3] === playerSeat ? false : drawDisabled,
+			disableDraw:
+				ts?.length === 15 && f[3] && n[3] === playerSeat ? false : drawDisabled,
 			drawText: ts?.length === 15 ? ControlsTextChi.END : ControlsTextChi.DRAW,
 			HH: _HH,
 			highlight,
@@ -770,7 +879,10 @@ function useControls(
 					return false;
 				}
 				const nextDealer = f[2] ? findRight(n[2]) : n[2];
-				return nextDealer === playerSeat || (player?.uN === cO && isBot(ps[nextDealer]?.id));
+				return (
+					nextDealer === playerSeat ||
+					(player?.uN === cO && isBot(ps[nextDealer]?.id))
+				);
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, [n[2], f[1], f[2], playerSeat, player?.uN, cO]),
 			handleChips: useCallback(() => setShowPay(true), [setShowPay]),

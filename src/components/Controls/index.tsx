@@ -6,10 +6,10 @@ import {
 	LeaveAlert,
 	OfferChiModal,
 	PaymentModal,
+	SettingsWindow,
 	SingleActionModal,
 	TableNotif
-} from 'components/Modals';
-import SettingsWindow from 'components/SettingsWindow';
+} from 'components';
 import { EEvent, LocalFlag, Shortcut, Transition } from 'enums';
 import {
 	AppContext,
@@ -31,7 +31,12 @@ import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { getCardName, isBot } from 'utility';
 import ChiAlert from './ChiAlert';
-import { BottomLeftControls, BottomRightControls, TopLeftControls, TopRightControls } from './Controls';
+import {
+	BottomLeftControls,
+	BottomRightControls,
+	TopLeftControls,
+	TopRightControls
+} from './Controls';
 import './controls.scss';
 
 interface IFadeWrapperP {
@@ -41,7 +46,12 @@ interface IFadeWrapperP {
 	wrapperClass?: string;
 }
 
-function FadeWrapper({ Component, show, unmountOnExit = true, wrapperClass = '' }: IFadeWrapperP) {
+function FadeWrapper({
+	Component,
+	show,
+	unmountOnExit = true,
+	wrapperClass = ''
+}: IFadeWrapperP) {
 	return (
 		<Fade in={show} timeout={Transition.FAST} unmountOnExit={unmountOnExit}>
 			<div className={wrapperClass}>{Component}</div>
@@ -57,7 +67,10 @@ const Controls = () => {
 	const { handleHome } = useContext(AppContext);
 
 	const isLocalGame = useMemo(() => gameId === LocalFlag, [gameId]);
-	const updateGame = useCallback(game => ServiceInstance.updateGame(game, isLocalGame), [isLocalGame]);
+	const updateGame = useCallback(
+		game => ServiceInstance.updateGame(game, isLocalGame),
+		[isLocalGame]
+	);
 	const notifOutput = useNotifs(delayLeft, lThAvail, isHuLocked);
 	const { showChiAlert, setShowChiAlert, toChi } = notifOutput;
 
@@ -81,7 +94,15 @@ const Controls = () => {
 		handleChi,
 		setExec,
 		setGamePaused
-	} = useControls(lThAvail, lThAvailHu, delayLeft, isHuLocked, notifOutput, HH, updateGame);
+	} = useControls(
+		lThAvail,
+		lThAvailHu,
+		delayLeft,
+		isHuLocked,
+		notifOutput,
+		HH,
+		updateGame
+	);
 	useBot(isHuLocked, delayLeft, lThAvail, setExec);
 	const { cO, f = [], hu = [], lTh = {}, n = [], ps = [] } = game || {};
 
@@ -100,7 +121,9 @@ const Controls = () => {
 					? ScreenTextEng.START_PROMPT
 					: first_p.uN === user?.uN
 					? ScreenTextEng.DISCARD_TO_START
-					: `Waiting for ${isBot(first_p.id) ? cO : first_p.uN} to start the round`
+					: `Waiting for ${
+							isBot(first_p.id) ? cO : first_p.uN
+					  } to start the round`
 			);
 			setStartButtonText(cO === user?.uN && botToGoFirst ? ButtonText.START : '');
 		} else {
@@ -159,7 +182,12 @@ const Controls = () => {
 			<>
 				<TopRightControls {...topRight} />
 				<TopLeftControls {...topLeft} />
-				{showBottomControls && <BottomLeftControls {...bottomLeft} setShowChiAlert={setShowChiAlert} />}
+				{showBottomControls && (
+					<BottomLeftControls
+						{...bottomLeft}
+						setShowChiAlert={setShowChiAlert}
+					/>
+				)}
 				{showBottomControls && (
 					<BottomRightControls
 						{...bottomRight}
@@ -167,22 +195,42 @@ const Controls = () => {
 						setShowChiAlert={setShowChiAlert}
 					/>
 				)}
-				<FadeWrapper show={payModal?.show} Component={<PaymentModal {...payModal} />} />
-				<FadeWrapper show={settingsModal?.show} Component={<SettingsWindow {...settingsModal} />} />
+				<FadeWrapper
+					show={payModal?.show}
+					Component={<PaymentModal {...payModal} />}
+				/>
+				<FadeWrapper
+					show={settingsModal?.show}
+					Component={<SettingsWindow {...settingsModal} />}
+				/>
 				<FadeWrapper
 					show={declareHuModal?.show && isEmpty(hu)}
 					Component={<DeclareHuModal HH={HH} {...declareHuModal} />}
 				/>
-				<FadeWrapper show={gameInfoModal?.show} Component={<GameInfo {...gameInfoModal} />} />
+				<FadeWrapper
+					show={gameInfoModal?.show}
+					Component={<GameInfo {...gameInfoModal} />}
+				/>
 				<FadeWrapper
 					show={showAnnounceHuModal}
-					Component={<AnnounceHuModal HH={HH} {...announceHuModal} handleHome={_handleHome} />}
+					Component={
+						<AnnounceHuModal
+							HH={HH}
+							{...announceHuModal}
+							handleHome={_handleHome}
+						/>
+					}
 				/>
 				{/* <FadeWrapper show={Number(notif?.timeout) > 0} Component={<TableNotif {...notif} />} /> */}
 				<FadeWrapper show={true} Component={<TableNotif {...notif} />} />
 				<FadeWrapper
 					show={showLeaveAlert}
-					Component={<LeaveAlert show={showLeaveAlert} onClose={() => topLeft?.setShowLeaveAlert(false)} />}
+					Component={
+						<LeaveAlert
+							show={showLeaveAlert}
+							onClose={() => topLeft?.setShowLeaveAlert(false)}
+						/>
+					}
 				/>
 				<FadeWrapper
 					Component={

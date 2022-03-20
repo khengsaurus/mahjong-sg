@@ -1,4 +1,10 @@
-import { DiscardedTiles, HiddenHand, ShownHiddenHand, ShownTiles, UnusedTiles } from 'components/Tiles';
+import {
+	DiscardedTiles,
+	HiddenHand,
+	ShownHiddenHand,
+	ShownTiles,
+	UnusedTiles
+} from 'components';
 import { FrontBackTag, Segment, Size } from 'enums';
 import { AppContext, useTiles } from 'hooks';
 import { useContext } from 'react';
@@ -60,7 +66,13 @@ const TopPlayer = (props: IPlayerComponentP) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs.length > 0 && <DiscardedTiles className="htss top discarded" tiles={dTs} segment={Segment.TOP} />}
+			{dTs.length > 0 && (
+				<DiscardedTiles
+					className="htss top discarded"
+					tiles={dTs}
+					segment={Segment.TOP}
+				/>
+			)}
 		</div>
 	);
 };

@@ -1,7 +1,6 @@
 import {
 	Animal,
 	AnimalIndex,
-	AppFlag,
 	BackgroundColor,
 	BotIds,
 	BotTimeout,
@@ -29,6 +28,7 @@ import { HandDescEng, HandPoint, ScoringHand, Suits } from 'handEnums';
 import isEmpty from 'lodash.isempty';
 import { Game, User } from 'models';
 import moment from 'moment';
+import { isDev } from 'platform';
 import { ITheme } from 'typesPlus';
 import { mainLRUCache } from './LRUCache';
 
@@ -47,7 +47,10 @@ export function formatFirestoreTimestamp(date: any): string {
 	}
 }
 
-export function formatDate(date: Date, format: DateTimeFormat = DateTimeFormat.DDMMYYHMMA): string {
+export function formatDate(
+	date: Date,
+	format: DateTimeFormat = DateTimeFormat.DDMMYYHMMA
+): string {
 	return moment(date).format(format);
 }
 
@@ -87,7 +90,10 @@ export function shuffle<T extends any[] | []>(array: T) {
 	while (0 !== currentIndex) {
 		randomIndex = Math.floor(Math.random() * currentIndex);
 		currentIndex--;
-		[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+		[array[currentIndex], array[randomIndex]] = [
+			array[randomIndex],
+			array[currentIndex]
+		];
 	}
 	return array;
 }
@@ -127,7 +133,20 @@ export function findTwo(id: string, arr: any[], field?: string): boolean {
 	}
 }
 
-const foodEmojis = ['🍜', '🥞', '🥘', '🍕', '🍣', '🥮', '🧁', '🍩', '🍢', '🍙', '🍫', '🥟'];
+const foodEmojis = [
+	'🍜',
+	'🥞',
+	'🥘',
+	'🍕',
+	'🍣',
+	'🥮',
+	'🧁',
+	'🍩',
+	'🍢',
+	'🍙',
+	'🍫',
+	'🥟'
+];
 
 export function getRandomFoodEmoji() {
 	return foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
@@ -265,14 +284,6 @@ export function getInclExcl(arr1: string[], req?: string[], fn?: (c: string) => 
 	return { incl, excl };
 }
 
-export function isDev() {
-	return process.env.REACT_APP_FLAG?.startsWith(AppFlag.DEV);
-}
-
-export function isDevBot() {
-	return process.env.REACT_APP_FLAG?.startsWith(AppFlag.DEV_BOT);
-}
-
 /* ----------------------------------- Game ----------------------------------- */
 
 export async function createLocalGame(
@@ -304,7 +315,21 @@ export async function createLocalGame(
 				es,
 				[cA, cA, null],
 				[true, true, false, false, false, false, mHu, false, easyAI],
-				[1, 0, 0, 0, 0, 0, 0, 0, gMinPx, gMaxPx, isDev() ? BotTimeout.FAST : BotTimeout.MEDIUM, 0, 0],
+				[
+					1,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					gMinPx,
+					gMaxPx,
+					isDev ? BotTimeout.FAST : BotTimeout.MEDIUM,
+					0,
+					0
+				],
 				shuffledPlayers,
 				[],
 				{},
@@ -318,7 +343,7 @@ export async function createLocalGame(
 			resolve(game);
 		} catch (err) {
 			console.error(`Failed to create local game: 🥞`);
-			isDev() && console.error(err);
+			isDev && console.error(err);
 			resolve(null);
 		}
 	});
@@ -326,7 +351,12 @@ export async function createLocalGame(
 
 function getMainTextColor(bgc: BackgroundColor) {
 	return bgc
-		? [BackgroundColor.BLUE, BackgroundColor.DARK, BackgroundColor.GREEN, BackgroundColor.RED].includes(bgc)
+		? [
+				BackgroundColor.BLUE,
+				BackgroundColor.DARK,
+				BackgroundColor.GREEN,
+				BackgroundColor.RED
+		  ].includes(bgc)
 			? TextColor.LIGHT
 			: TextColor.DARK
 		: TextColor.DARK;
@@ -334,7 +364,9 @@ function getMainTextColor(bgc: BackgroundColor) {
 
 function getTableTextColor(tc: TableColor) {
 	return tc
-		? [TableColor.BLUE, TableColor.DARK, TableColor.GREEN, TableColor.RED].includes(tc)
+		? [TableColor.BLUE, TableColor.DARK, TableColor.GREEN, TableColor.RED].includes(
+				tc
+		  )
 			? TextColor.LIGHT
 			: TextColor.DARK
 		: TextColor.DARK;
@@ -376,8 +408,10 @@ export function findOpp(n: number) {
 }
 
 export function sortShownTiles(tiles: IShownTile[]): ShownTiles {
-	const flowers: IShownTile[] = tiles.filter(tile => tile.s === Suit.FLOWER || tile.s === Suit.ANIMAL) || [];
-	const nonFlowers: IShownTile[] = tiles.filter(tile => tile.s !== Suit.FLOWER && tile.s !== Suit.ANIMAL) || [];
+	const flowers: IShownTile[] =
+		tiles.filter(tile => tile.s === Suit.FLOWER || tile.s === Suit.ANIMAL) || [];
+	const nonFlowers: IShownTile[] =
+		tiles.filter(tile => tile.s !== Suit.FLOWER && tile.s !== Suit.ANIMAL) || [];
 	const flowerRefs = flowers.map(tile => tile.i);
 	const nonFlowerRefs = nonFlowers.map(tile => tile.i);
 	return { fs: flowers, nFs: nonFlowers, fIds: flowerRefs, nFIds: nonFlowerRefs };
@@ -484,7 +518,10 @@ export function getHashed(id: string, tHK: number): string {
 	let hashId = '';
 	if (id) {
 		const ids = id.split('');
-		ids.forEach((i, ix) => (hashId += `${i.charCodeAt(0) + tHK}${ix !== ids.length - 1 ? '|' : ''}`));
+		ids.forEach(
+			(i, ix) =>
+				(hashId += `${i.charCodeAt(0) + tHK}${ix !== ids.length - 1 ? '|' : ''}`)
+		);
 	}
 	return hashId;
 }
@@ -634,7 +671,10 @@ export function getSuitsFromHand(h: IHand) {
 	return Array.from(suits);
 }
 
-export function getTilesBySuit(ts: IShownTile[], full = false): IObj<Suit, string | number | IShownTile> {
+export function getTilesBySuit(
+	ts: IShownTile[],
+	full = false
+): IObj<Suit, string | number | IShownTile> {
 	let suits = {};
 	if (full) {
 		ts.forEach(t => {
@@ -799,7 +839,11 @@ export function terminalSortCs(cs: string[]): string[] {
 		return cs;
 	}
 	cs.sort((a, b) => {
-		return a[0] === b[0] ? 0 : Math.abs(5 - (Number(a[0]) || 5)) > Math.abs(5 - (Number(b[0]) || 5)) ? -1 : 1;
+		return a[0] === b[0]
+			? 0
+			: Math.abs(5 - (Number(a[0]) || 5)) > Math.abs(5 - (Number(b[0]) || 5))
+			? -1
+			: 1;
 	});
 	return cs;
 }
@@ -820,20 +864,35 @@ export function getAttr<T>(field: string, arr: T[]): string[] {
 export function cardsWithoutNeighbors(cs: string[]): string[] {
 	return cs.filter(c => {
 		const cN = Number(c[0]);
-		return !cs.find(t => t[1] === c[1] && (cN === Number(t[0]) - 1 || cN === Number(t[0]) + 1));
+		return !cs.find(
+			t => t[1] === c[1] && (cN === Number(t[0]) - 1 || cN === Number(t[0]) + 1)
+		);
 	});
 }
 
-export function processChiArr(arr1: string[], arr2: string[], multis: string[]): string[] {
+export function processChiArr(
+	arr1: string[],
+	arr2: string[],
+	multis: string[]
+): string[] {
 	return multis.length > 1
 		? [
-				...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(c => !multis.includes(c)),
-				...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(c => multis.includes(c))
+				...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(
+					c => !multis.includes(c)
+				),
+				...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(c =>
+					multis.includes(c)
+				)
 		  ]
 		: terminalSortCs(arr1.length > 0 ? arr1 : arr2);
 }
 
-export function trimCs(arr1: string[], excl: string[], c1 = true, hard = false): string[] {
+export function trimCs(
+	arr1: string[],
+	excl: string[],
+	c1 = true,
+	hard = false
+): string[] {
 	if (c1) {
 		const _arr1 = arr1.filter(c => !excl.includes(getSuitFromStr(c)));
 		return hard ? _arr1 : _arr1.length > 0 ? _arr1 : arr1;
@@ -857,7 +916,12 @@ export function getTypeOfMeld(ts: IShownTile[]): MeldType {
 	return MeldType.CHI;
 }
 
-export function getDefaultAmt(hu: (string | number)[], pay: PaymentType, _p: number, thB: number) {
+export function getDefaultAmt(
+	hu: (string | number)[],
+	pay: PaymentType,
+	_p: number,
+	thB: number
+) {
 	if (isEmpty(hu) || pay === PaymentType.NONE) {
 		return 0;
 	} else {
@@ -943,7 +1007,8 @@ export function shouldChi(tile: IShownTile, shown_hTs: IShownTile[]) {
 	// chi up
 	if (
 		shown_hTs.length !== 4 &&
-		((!inHand && has1More > 0 && has2More > 0) || (has1More > inHand && has2More > inHand)) && // 0 1 1 || 1 2 2
+		((!inHand && has1More > 0 && has2More > 0) ||
+			(has1More > inHand && has2More > inHand)) && // 0 1 1 || 1 2 2
 		(!has1Less ||
 			(has1Less && countLess > countMore) ||
 			!has3More ||
@@ -954,7 +1019,8 @@ export function shouldChi(tile: IShownTile, shown_hTs: IShownTile[]) {
 	// chi down
 	if (
 		shown_hTs.length !== 4 &&
-		((!inHand && has1Less > 0 && has2Less > 0) || (has1Less > inHand && has2Less > inHand)) &&
+		((!inHand && has1Less > 0 && has2Less > 0) ||
+			(has1Less > inHand && has2Less > inHand)) &&
 		(!has1More ||
 			(has1More && countMore > countLess) ||
 			!has3Less ||
@@ -963,9 +1029,17 @@ export function shouldChi(tile: IShownTile, shown_hTs: IShownTile[]) {
 		return [Exec.TAKE, `${tile.n - 2}${tile.s}`, `${tile.n - 1}${tile.s}`, tile.c];
 	}
 	// chi middle
-	if ((!inHand && has1Less > 0 && has1More > 0) || (has1Less > inHand && has1More > inHand)) {
+	if (
+		(!inHand && has1Less > 0 && has1More > 0) ||
+		(has1Less > inHand && has1More > inHand)
+	) {
 		if (!has2Less || !has2More) {
-			return [Exec.TAKE, `${tile.n - 1}${tile.s}`, tile.c, `${tile.n + 1}${tile.s}`];
+			return [
+				Exec.TAKE,
+				`${tile.n - 1}${tile.s}`,
+				tile.c,
+				`${tile.n + 1}${tile.s}`
+			];
 		}
 	}
 	return [];
@@ -1005,16 +1079,39 @@ export function isBot(id: string) {
 
 /* ----------------------------------- Mocks ----------------------------------- */
 
-export function getSuitedTileMock(s: Suit | string, n: number, ix: number = 1): IShownTile {
-	return { c: `${n}${s}`, n, s, i: `a${SuitsIndex[s as string]}${n}${s}${ix}`, r: Math.random(), x: ix };
+export function getSuitedTileMock(
+	s: Suit | string,
+	n: number,
+	ix: number = 1
+): IShownTile {
+	return {
+		c: `${n}${s}`,
+		n,
+		s,
+		i: `a${SuitsIndex[s as string]}${n}${s}${ix}`,
+		r: Math.random(),
+		x: ix
+	};
 }
 
 export function getWindTileMock(w: Wind | string, ix: number = 1): IShownTile {
-	return { c: w, s: Suit.DAPAI, i: `b${WindIndex[w as string]}${w}${ix}9`, r: Math.random(), x: ix };
+	return {
+		c: w,
+		s: Suit.DAPAI,
+		i: `b${WindIndex[w as string]}${w}${ix}9`,
+		r: Math.random(),
+		x: ix
+	};
 }
 
 export function getHBFMock(p: DaPai | string, ix: number = 1): IShownTile {
-	return { c: p, s: Suit.DAPAI, i: `c${DaPaiIndex[p as string]}${p}${ix}9`, r: Math.random(), x: ix };
+	return {
+		c: p,
+		s: Suit.DAPAI,
+		i: `c${DaPaiIndex[p as string]}${p}${ix}9`,
+		r: Math.random(),
+		x: ix
+	};
 }
 
 export function getAnimalMock(a: Animal | string): IShownTile {
@@ -1022,19 +1119,46 @@ export function getAnimalMock(a: Animal | string): IShownTile {
 }
 
 export function getFlowerMock(f: Flower | string, isValid = false): IShownTile {
-	return { c: f, s: Suit.FLOWER, i: `c${FlowerIndex[f]}${f}19`, r: Math.random(), v: isValid };
+	return {
+		c: f,
+		s: Suit.FLOWER,
+		i: `c${FlowerIndex[f]}${f}19`,
+		r: Math.random(),
+		v: isValid
+	};
 }
 
 // Hash mocks
-export function getSuitedHashTileMock(tHK: number, s: Suit | string, n: number, ix: number = 1): IHiddenTile {
-	return { i: getHashed(`${CardCategory.REGULAR}${SuitsIndex[s]}${n}${s}${ix}`, tHK), x: 0, r: Math.random() };
+export function getSuitedHashTileMock(
+	tHK: number,
+	s: Suit | string,
+	n: number,
+	ix: number = 1
+): IHiddenTile {
+	return {
+		i: getHashed(`${CardCategory.REGULAR}${SuitsIndex[s]}${n}${s}${ix}`, tHK),
+		x: 0,
+		r: Math.random()
+	};
 }
 
-export function getHBFHashTileMock(tHK: number, d: DaPai | string, ix: number = 1): IHiddenTile {
-	return { i: getHashed(`${CardCategory.HBF}${DaPaiIndex[d]}${d}${ix}${randomNum(9)}`, tHK), x: 0, r: Math.random() };
+export function getHBFHashTileMock(
+	tHK: number,
+	d: DaPai | string,
+	ix: number = 1
+): IHiddenTile {
+	return {
+		i: getHashed(`${CardCategory.HBF}${DaPaiIndex[d]}${d}${ix}${randomNum(9)}`, tHK),
+		x: 0,
+		r: Math.random()
+	};
 }
 
-export function getWindHashTileMock(tHK: number, w: Wind | string, ix: number = 1): IHiddenTile {
+export function getWindHashTileMock(
+	tHK: number,
+	w: Wind | string,
+	ix: number = 1
+): IHiddenTile {
 	return {
 		i: getHashed(`${CardCategory.WINDS}${WindIndex[w]}${w}${ix}${randomNum(9)}`, tHK),
 		x: 0,
@@ -1042,9 +1166,16 @@ export function getWindHashTileMock(tHK: number, w: Wind | string, ix: number = 
 	};
 }
 
-export function getAnimalHashTileMock(tHK: number, a: Animal, ix: number = 1): IHiddenTile {
+export function getAnimalHashTileMock(
+	tHK: number,
+	a: Animal,
+	ix: number = 1
+): IHiddenTile {
 	return {
-		i: getHashed(`${CardCategory.ANIMAL}${AnimalIndex[a]}${a}${ix}${randomNum(9)}`, tHK),
+		i: getHashed(
+			`${CardCategory.ANIMAL}${AnimalIndex[a]}${a}${ix}${randomNum(9)}`,
+			tHK
+		),
 		x: 0,
 		r: Math.random()
 	};

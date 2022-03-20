@@ -1,10 +1,11 @@
 import { getBotEval } from 'bot';
 import { Exec, LocalFlag } from 'enums';
 import isEmpty from 'lodash.isempty';
+import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
-import { findLeft, findOpp, findRight, isBot, isDev } from 'utility';
+import { findLeft, findOpp, findRight, isBot } from 'utility';
 import { AppContext } from './AppContext';
 
 /**
@@ -28,7 +29,12 @@ import { AppContext } from './AppContext';
  * * useBot.getBotEval will only call for bots
  * * Critical dependencies in useControls.useEffect's + useBot.useEffect to trigger this cycle
  */
-function useBot(isHuLocked: boolean, delayLeft: number, lThAvail: boolean, setExec: (e: any[]) => void) {
+function useBot(
+	isHuLocked: boolean,
+	delayLeft: number,
+	lThAvail: boolean,
+	setExec: (e: any[]) => void
+) {
 	const { playerSeat } = useContext(AppContext);
 	const { game, gameId, localGame } = useSelector((state: IStore) => state);
 	const currGame = gameId === LocalFlag ? localGame : game;
@@ -44,18 +50,24 @@ function useBot(isHuLocked: boolean, delayLeft: number, lThAvail: boolean, setEx
 	const lThRef = lTh?.c + lTh.r;
 	const pidsRef = JSON.stringify(pIds);
 	const skRef = JSON.stringify(sk);
+	const flags = JSON.stringify([f[3], f[4], n[3], n[7], n[10]]);
 	// 3rd condition to stop calculting 4th
 	const botToMove = f[3] && !f[4] && n[3] !== playerSeat && pIds.includes(ps[n[3]].id);
 
 	const toHandleBots = useMemo(
-		() => player?.uN === cO && f[0] && !f[1] && !isHuLocked && !!pIds.find(pid => isBot(pid)),
+		() =>
+			player?.uN === cO &&
+			f[0] &&
+			!f[1] &&
+			!isHuLocked &&
+			!!pIds.find(pid => isBot(pid)),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[cO, f[0], f[1], isHuLocked, pidsRef, player?.uN]
 	);
 
 	useEffect(() => {
 		if (toHandleBots && (!f[3] || botToMove)) {
-			isDev() && console.info('useBot.useEffect');
+			isDev && console.info('useBot.useEffect');
 			botTimerRef.current = setTimeout(() => {
 				setExec([]);
 				const execs = [];
@@ -103,7 +115,7 @@ function useBot(isHuLocked: boolean, delayLeft: number, lThAvail: boolean, setEx
 			botTimerRef.current = null;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [delayOver, dFRef, lThRef, lThAvail, skRef, f[3], f[4], n[3], n[7], n[10], toHandleBots, ts?.length]);
+	}, [delayOver, dFRef, lThRef, lThAvail, skRef, flags, toHandleBots, ts?.length]);
 }
 
 export default useBot;

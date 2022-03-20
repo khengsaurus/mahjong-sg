@@ -1,9 +1,17 @@
 import { Keyboard } from '@capacitor/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
-import { AboutButton, BackButton, DecorButton, HelpButton, HomeButton, PrivacyButton } from 'components/Buttons';
-import { Loader, NetworkLoader } from 'components/Loader';
-import Overlay from 'components/Overlay';
+import {
+	AboutButton,
+	BackButton,
+	DecorButton,
+	HelpButton,
+	HomeButton,
+	Loader,
+	NetworkLoader,
+	Overlay,
+	PrivacyButton
+} from 'components';
 import { EEvent, Status } from 'enums';
 import { AppContext, useAndroidBack, useLocalSession } from 'hooks';
 import isEmpty from 'lodash.isempty';
@@ -31,7 +39,13 @@ interface IHomePageP {
 
 export function renderDefaultTitle(title: string) {
 	// ref-home-title shd be 40px
-	return <StyledCenterText text={title} variant="h6" style={{ height: '30px', padding: '0px 10px 10px' }} />;
+	return (
+		<StyledCenterText
+			text={title}
+			variant="h6"
+			style={{ height: '30px', padding: '0px 10px 10px' }}
+		/>
+	);
 }
 
 const HomePage = ({
@@ -48,7 +62,9 @@ const HomePage = ({
 	const { handleHome, setAnnHuOpen } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
-	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(<Loader />);
+	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(
+		<Loader />
+	);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
 
 	/* ----------------------------------- Screen orientation ----------------------------------- */
@@ -59,7 +75,9 @@ const HomePage = ({
 		if (isMobile) {
 			// && Capacitor.getPlatform() === Platform.ANDROID
 			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
-				console.info('Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock');
+				console.info(
+					'Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock'
+				);
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,7 +134,11 @@ const HomePage = ({
 			<Fade in={!skipVerification && !isAppConnected} unmountOnExit>
 				<NetworkAlert>
 					<NetworkLoader />
-					<StyledText text={ScreenTextEng.WAITING_NETWORK} variant="subtitle2" padding="0px 0px 0px 10px" />
+					<StyledText
+						text={ScreenTextEng.WAITING_NETWORK}
+						variant="subtitle2"
+						padding="0px 0px 0px 10px"
+					/>
 				</NetworkAlert>
 			</Fade>
 		);
@@ -126,9 +148,14 @@ const HomePage = ({
 		<HomeTheme>
 			<Main>
 				{renderNetworkLoader()}
-				{(skipVerification || (!isEmpty(user) && verifyingSession !== Status.PENDING)) && ready ? (
+				{(skipVerification ||
+					(!isEmpty(user) && verifyingSession !== Status.PENDING)) &&
+				ready ? (
 					<>
-						{!!title && (typeof title === 'string' ? renderDefaultTitle(title) : title)}
+						{!!title &&
+							(typeof title === 'string'
+								? renderDefaultTitle(title)
+								: title)}
 						<Centered style={{ marginBottom }}>{markup()}</Centered>
 						<Overlay />
 					</>
@@ -139,12 +166,24 @@ const HomePage = ({
 					<BottomSpec>
 						{misc === 1 ? (
 							<>
-								<DecorButton Button={PrivacyButton} showOnHover={['', 'dh', '']} />
-								<DecorButton Button={AboutButton} showOnHover={['', 'db', '']} />
-								<DecorButton Button={HelpButton} showOnHover={['', 'df', '']} />
+								<DecorButton
+									Button={PrivacyButton}
+									showOnHover={['', 'dh', '']}
+								/>
+								<DecorButton
+									Button={AboutButton}
+									showOnHover={['', 'db', '']}
+								/>
+								<DecorButton
+									Button={HelpButton}
+									showOnHover={['', 'df', '']}
+								/>
 							</>
 						) : (
-							<BackButton style={{ fontSize: 12, padding: 0 }} callback={customBack} />
+							<BackButton
+								style={{ fontSize: 13, padding: 0 }}
+								callback={customBack}
+							/>
 						)}
 					</BottomSpec>
 				)}

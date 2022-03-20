@@ -1,4 +1,10 @@
-import { DiscardedTiles, HiddenHand, ShownHiddenHand, ShownTiles, UnusedTiles } from 'components/Tiles';
+import {
+	DiscardedTiles,
+	HiddenHand,
+	ShownHiddenHand,
+	ShownTiles,
+	UnusedTiles
+} from 'components';
 import { FrontBackTag, Segment, Size } from 'enums';
 import { AppContext, useTiles } from 'hooks';
 import { useContext } from 'react';
@@ -8,7 +14,8 @@ import { IPlayerComponentP } from 'typesPlus';
 import './playerComponents.scss';
 
 const LeftPlayer = (props: IPlayerComponentP) => {
-	const { player, dealer, hasFront, hasBack, lastThrown, highlight, totalRounds } = props;
+	const { player, dealer, hasFront, hasBack, lastThrown, highlight, totalRounds } =
+		props;
 	const { hTs = [], sTs = [], ms, dTs = [], lTa = {}, uTs, sT } = player;
 	const { showAI } = useContext(AppContext);
 	const countHandTiles = hTs.length + (Number(lTa.r) ? 1 : 0);
@@ -62,7 +69,13 @@ const LeftPlayer = (props: IPlayerComponentP) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs.length > 0 && <DiscardedTiles className="vtss left discarded" tiles={dTs} segment={Segment.LEFT} />}
+			{dTs.length > 0 && (
+				<DiscardedTiles
+					className="vtss left discarded"
+					tiles={dTs}
+					segment={Segment.LEFT}
+				/>
+			)}
 		</div>
 	);
 };

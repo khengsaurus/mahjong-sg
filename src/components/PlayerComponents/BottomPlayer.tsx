@@ -1,4 +1,10 @@
-import { BottomHiddenHand, DiscardedTiles, ShownHiddenHand, ShownTiles, UnusedTiles } from 'components/Tiles';
+import {
+	BottomHiddenHand,
+	DiscardedTiles,
+	ShownHiddenHand,
+	ShownTiles,
+	UnusedTiles
+} from 'components';
 import { FrontBackTag, Segment, Size } from 'enums';
 import { useTiles } from 'hooks';
 import { useSelector } from 'react-redux';
@@ -53,7 +59,13 @@ const BottomPlayer = (props: IPlayerComponentP) => {
 			/>
 
 			{/* Discarded tiles */}
-			{dTs.length > 0 && <DiscardedTiles className="htss discarded" tiles={dTs} segment={Segment.BOTTOM} />}
+			{dTs.length > 0 && (
+				<DiscardedTiles
+					className="htss discarded"
+					tiles={dTs}
+					segment={Segment.BOTTOM}
+				/>
+			)}
 		</div>
 	);
 };

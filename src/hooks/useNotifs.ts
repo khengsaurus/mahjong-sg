@@ -1,8 +1,9 @@
 import { CardName, Exec, LocalFlag, MeldType, SuitName } from 'enums';
+import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
-import { findLeft, isDev } from 'utility';
+import { findLeft } from 'utility';
 import { AppContext } from '.';
 
 export interface IUseNotifs {
@@ -18,7 +19,11 @@ export interface IUseNotifs {
 	setShowChiAlert: (_: boolean) => void;
 }
 
-const useNotifs = (delayLeft: number, lThAvail: boolean, isHuLocked: boolean): IUseNotifs => {
+const useNotifs = (
+	delayLeft: number,
+	lThAvail: boolean,
+	isHuLocked: boolean
+): IUseNotifs => {
 	const { playerSeat } = useContext(AppContext);
 	const { game, gameId, localGame, tHK } = useSelector((state: IStore) => state);
 	const [showChiAlert, setShowChiAlert] = useState(false);
@@ -96,19 +101,24 @@ const useNotifs = (delayLeft: number, lThAvail: boolean, isHuLocked: boolean): I
 		let notifs: string[] = [];
 
 		if (delayLeft > 0 && skRef) {
-			isDev() && console.info('useControls.useMemo -> notifs');
+			isDev && console.info('useControls.useMemo -> notifs');
 			isFirstToHu = sk[0] === `${playerSeat}${Exec.HU}`;
 			if (sk.length > 1) {
 				othersFirstToHu = !isFirstToHu && sk[0].includes(Exec.HU) ? sk[0] : '';
-				isSecondToHu = !!sk.slice(1, 4).find(s => s === `${playerSeat}${Exec.HU}`);
-				othersSecondToHu = isFirstToHu && sk.slice(1, 4).find(s => s.includes(Exec.HU));
+				isSecondToHu = !!sk
+					.slice(1, 4)
+					.find(s => s === `${playerSeat}${Exec.HU}`);
+				othersSecondToHu =
+					isFirstToHu && sk.slice(1, 4).find(s => s.includes(Exec.HU));
 			}
 			othersCanTake = !!sk.find(s => s[0] !== `${playerSeat}`);
 			if (canTakeLT && !(isFirstToHu && delayLeft > 5 && !!othersSecondToHu)) {
 				// don't offer pong/kang if another can hu
 				const offerTake = !isHuLocked && !othersFirstToHu && !othersSecondToHu;
-				offerPong = offerTake && !!sk.find(s => s === `${playerSeat}${MeldType.PONG}`);
-				offerKang = offerTake && !!sk.find(s => s === `${playerSeat}${MeldType.KANG}`);
+				offerPong =
+					offerTake && !!sk.find(s => s === `${playerSeat}${MeldType.PONG}`);
+				offerKang =
+					offerTake && !!sk.find(s => s === `${playerSeat}${MeldType.KANG}`);
 			}
 
 			if (isFirstToHu && othersCanTake && delayLeft > 5) {
@@ -122,11 +132,17 @@ const useNotifs = (delayLeft: number, lThAvail: boolean, isHuLocked: boolean): I
 							: `After that, others can take ${lastThrownCard}.`
 					]
 				];
-			} else if (othersFirstToHu && delayLeft > 5 && (isSecondToHu || offerPong || offerKang)) {
+			} else if (
+				othersFirstToHu &&
+				delayLeft > 5 &&
+				(isSecondToHu || offerPong || offerKang)
+			) {
 				// player has secondary take offer, waiting for the first 6s
 				notifs = [
 					`Waiting...`,
-					`You can take ${lastThrownCard} if ${ps[Number(othersFirstToHu[0])].uN} doesn't hu`
+					`You can take ${lastThrownCard} if ${
+						ps[Number(othersFirstToHu[0])].uN
+					} doesn't hu`
 				];
 			} else if (isFirstToHu || isSecondToHu || offerPong || offerKang) {
 				// FFA after first 6s
@@ -138,7 +154,15 @@ const useNotifs = (delayLeft: number, lThAvail: boolean, isHuLocked: boolean): I
 			notifs = [];
 		}
 
-		return { isFirstToHu, othersFirstToHu, othersSecondToHu, isSecondToHu, offerPong, offerKang, notifs };
+		return {
+			isFirstToHu,
+			othersFirstToHu,
+			othersSecondToHu,
+			isSecondToHu,
+			offerPong,
+			offerKang,
+			notifs
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [delayLeft, lastThrownCard, playerSeat, skRef]);
 

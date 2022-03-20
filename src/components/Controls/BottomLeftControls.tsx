@@ -1,5 +1,4 @@
-import { Fade } from '@mui/material';
-import { ControlButton } from 'components/Buttons';
+import { ControlButton, CustomFade } from 'components';
 import { Size, Transition } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { useSelector } from 'react-redux';
@@ -34,7 +33,13 @@ const BottomLeftControls = (props: IBLControlsP) => {
 			style={{ borderColor: highlight || null }}
 		>
 			<ControlButton
-				label={disableChi ? (disablePong ? ControlsTextChi.CHI : pongText) : ControlsTextChi.CHI}
+				label={
+					disableChi
+						? disablePong
+							? ControlsTextChi.CHI
+							: pongText
+						: ControlsTextChi.CHI
+				}
 				callback={() => {
 					if (!disableChi || !disablePong) {
 						setShowChiAlert(false);
@@ -48,16 +53,14 @@ const BottomLeftControls = (props: IBLControlsP) => {
 				disabled={disableChi && disablePong}
 				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
 			/>
-			<Fade in={showKai} timeout={Transition.FAST}>
-				<div>
-					<ControlButton
-						label={ControlsTextChi.KAI_EXCLAIM}
-						callback={openDeclareHuDialog}
-						disabled={disableHu}
-						style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
-					/>
-				</div>
-			</Fade>
+			<CustomFade show={showKai} timeout={Transition.FAST}>
+				<ControlButton
+					label={ControlsTextChi.KAI_EXCLAIM}
+					callback={openDeclareHuDialog}
+					disabled={disableHu}
+					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+				/>
+			</CustomFade>
 		</div>
 	);
 };

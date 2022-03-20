@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import Overlay from 'components/Overlay';
+import { Overlay } from 'components';
 import { TextColor } from 'enums';
 import { useSelector } from 'react-redux';
 import { ScaleLoader } from 'react-spinners';
@@ -23,10 +23,21 @@ export const Loader = (props: ILoaderP) => {
 	const {
 		theme: { mainTextColor = TextColor.DARK }
 	} = useSelector((state: IStore) => state);
-	const { color = mainTextColor || 'black', css = override, height = 2, width = 80 } = props;
+	const {
+		color = mainTextColor || 'black',
+		css = override,
+		height = 2,
+		width = 80
+	} = props;
 	return (
 		<Centered>
-			<BarLoader loading={true} color={color} css={css} height={height} width={width} />
+			<BarLoader
+				loading={true}
+				color={color}
+				css={css}
+				height={height}
+				width={width}
+			/>
 			<Overlay />
 		</Centered>
 	);
@@ -36,6 +47,20 @@ export const NetworkLoader = (props: ILoaderP) => {
 	const {
 		theme: { mainTextColor = TextColor.DARK }
 	} = useSelector((state: IStore) => state);
-	const { color = mainTextColor || 'black', css = override, height = 14, width = 2 } = props;
-	return <ScaleLoader loading={true} color={color} css={css} height={height} width={width} margin={2} />;
+	const {
+		color = mainTextColor || 'black',
+		css = override,
+		height = 14,
+		width = 2
+	} = props;
+	return (
+		<ScaleLoader
+			loading={true}
+			color={color}
+			css={css}
+			height={height}
+			width={width}
+			margin={2}
+		/>
+	);
 };

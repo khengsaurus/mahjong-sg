@@ -3,6 +3,7 @@ import { useLocalObj } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { User } from 'models';
+import { isDev } from 'platform';
 import {
 	createContext,
 	SetStateAction,
@@ -30,7 +31,7 @@ import {
 	setUser
 } from 'store/actions';
 import { IAlert } from 'typesPlus';
-import { getTheme, isDev } from 'utility';
+import { getTheme } from 'utility';
 import { mainLRUCache } from 'utility/LRUCache';
 import { jwtToObj, objToJwt } from 'utility/parsers';
 
@@ -120,7 +121,7 @@ export const AppContextProvider = (props: any) => {
 			!contentReqTimeout.current &&
 			(!contentUpdated ||
 				(contentUpdated && now.getTime() - new Date(contentUpdated).getTime()) >
-					(isDev() ? 1 / 60 : 6) * 60 * 60 * 1000) // 1 min if dev, 6 hours if prod
+					(isDev ? 1 / 60 : 6) * 60 * 60 * 1000) // 1 min if dev, 6 hours if prod
 		) {
 			contentReqTimeout.current = setTimeout(async () => {
 				try {

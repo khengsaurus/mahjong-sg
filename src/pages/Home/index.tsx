@@ -1,6 +1,11 @@
-import { Fade } from '@mui/material';
-import { DecorButton, JoinGameButton, LogoutButton, NewGameButton } from 'components/Buttons';
-import SettingsWindow from 'components/SettingsWindow';
+import {
+	CustomFade,
+	DecorButton,
+	JoinGameButton,
+	LogoutButton,
+	NewGameButton,
+	SettingsWindow
+} from 'components';
 import { EEvent, Shortcut, Transition } from 'enums';
 import { useDocumentListener } from 'hooks';
 import { HomePage } from 'pages';
@@ -31,7 +36,12 @@ const Home = () => {
 	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
 
 	const SettingsButton: React.FC = () => {
-		return <StyledButton label={ButtonText.SETTINGS} onClick={() => setShowSettings(true)} />;
+		return (
+			<StyledButton
+				label={ButtonText.SETTINGS}
+				onClick={() => setShowSettings(true)}
+			/>
+		);
 	};
 
 	const markup = () => (
@@ -40,21 +50,19 @@ const Home = () => {
 			<DecorButton Button={JoinGameButton} showOnHover={['ws', '', 'ww']} />
 			<DecorButton Button={SettingsButton} showOnHover={['ww', '', 'wn']} />
 			<DecorButton Button={LogoutButton} showOnHover={['wn', '', 'we']} />
-			<Fade in={showSettings} timeout={Transition.FAST} unmountOnExit>
-				<div>
-					<SettingsWindow
-						show={showSettings}
-						accActions={true}
-						onClose={() => {
-							setShowSettings(false);
-						}}
-					/>
-				</div>
-			</Fade>
+			<CustomFade show={showSettings} timeout={Transition.FAST}>
+				<SettingsWindow
+					show={showSettings}
+					accActions={true}
+					onClose={() => setShowSettings(false)}
+				/>
+			</CustomFade>
 		</>
 	);
 
-	return <HomePage markup={markup} title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />;
+	return (
+		<HomePage markup={markup} title={`Welcome${user?.uN ? `, ${user?.uN}` : ``}`} />
+	);
 };
 
 export default Home;

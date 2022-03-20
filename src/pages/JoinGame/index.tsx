@@ -1,6 +1,6 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Collapse, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { HomeButton } from 'components/Buttons';
+import { HomeButton } from 'components';
 import { EEvent, Page } from 'enums';
 import { AppContext, useDocumentListener } from 'hooks';
 import { Game } from 'models';
@@ -35,7 +35,11 @@ const JoinGame = () => {
 							games.push(objToGame(doc, true));
 						});
 						setGameInvites(games || []);
-						setTitle(games.length === 0 ? HomeScreenText.NO_AVAIL_GAMES : HomeScreenText.AVAIL_GAMES);
+						setTitle(
+							games.length === 0
+								? HomeScreenText.NO_AVAIL_GAMES
+								: HomeScreenText.AVAIL_GAMES
+						);
 					}
 				});
 			}
@@ -78,8 +82,14 @@ const JoinGame = () => {
 							disableRipple
 						>
 							<ListItemText
-								primary={<Typography variant="body2">{formatDate(game.t[0]) || ''}</Typography>}
-								secondary={<Typography variant="body2">{game.pS}</Typography>}
+								primary={
+									<Typography variant="body2">
+										{formatDate(game.t[0]) || ''}
+									</Typography>
+								}
+								secondary={
+									<Typography variant="body2">{game.pS}</Typography>
+								}
 							/>
 							<ArrowForwardIcon />
 						</ListItem>

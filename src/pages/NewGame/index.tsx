@@ -16,8 +16,7 @@ import {
 	MenuItem,
 	Select
 } from '@mui/material';
-import { HomeButton } from 'components/Buttons';
-import UserSearchForm from 'components/SearchForms/UserSearchForm';
+import { CustomFade, HomeButton, UserSearchForm } from 'components';
 import { LocalFlag, Page, PaymentType, Status, Transition, TransitionSpeed } from 'enums';
 import { HandDescEng, ScoringHand } from 'handEnums';
 import { AppContext, useAsync } from 'hooks';
@@ -56,7 +55,10 @@ const NewGame = () => {
 	const playersRef = useRef<User[]>(players);
 	const dispatch = useDispatch();
 
-	const isLocalGame: boolean = useMemo(() => players.every(p => p.id === user.id || isBot(p.id)), [players, user]);
+	const isLocalGame: boolean = useMemo(
+		() => players.every(p => p.id === user.id || isBot(p.id)),
+		[players, user]
+	);
 
 	function handleRemovePlayer(player: User) {
 		function isNotUserToRemove(userToRemove: User) {
@@ -67,7 +69,9 @@ const NewGame = () => {
 	}
 
 	const { execute: startGame, status } = useAsync(async () => {
-		const excludeShs = Object.keys(scoringHands).filter(s => scoringHands[s] === false) as ScoringHand[];
+		const excludeShs = Object.keys(scoringHands).filter(
+			s => scoringHands[s] === false
+		) as ScoringHand[];
 		await ServiceInstance.initGame(
 			user,
 			players,
@@ -81,7 +85,11 @@ const NewGame = () => {
 			isLocalGame
 		).then(game => {
 			if (game?.id) {
-				dispatch(setTHK(game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.n[0])));
+				dispatch(
+					setTHK(
+						game.id === LocalFlag ? 111 : getTileHashKey(game.id, game.n[0])
+					)
+				);
 				dispatch(setGameId(game.id));
 				setStartedGame(true);
 			}
@@ -97,18 +105,20 @@ const NewGame = () => {
 	}
 
 	const renderRandomizeOption = () => (
-		<Fade in={players.length === 4} timeout={{ enter: Transition.MEDIUM }} unmountOnExit>
-			<div>
-				<ListItem className="list-item">
-					<ListItemText primary={`Randomize`} />
-					<Centered style={{ width: 30 }}>
-						<IconButton onClick={() => setRandom(!random)} disabled={players.length !== 4} disableRipple>
-							{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-						</IconButton>
-					</Centered>
-				</ListItem>
-			</div>
-		</Fade>
+		<CustomFade show={players.length === 4} timeout={{ enter: Transition.MEDIUM }}>
+			<ListItem className="list-item">
+				<ListItemText primary={`Randomize`} />
+				<Centered style={{ width: 30 }}>
+					<IconButton
+						onClick={() => setRandom(!random)}
+						disabled={players.length !== 4}
+						disableRipple
+					>
+						{random ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+					</IconButton>
+				</Centered>
+			</ListItem>
+		</CustomFade>
 	);
 
 	const renderBottomButtons = () => (
@@ -117,7 +127,9 @@ const NewGame = () => {
 				style={{
 					marginLeft:
 						players?.length < 4
-							? document.getElementById('start-join-btn')?.getBoundingClientRect()?.width || 64
+							? document
+									.getElementById('start-join-btn')
+									?.getBoundingClientRect()?.width || 64
 							: 0,
 					paddingBottom: 0,
 					transition: TransitionSpeed.MEDIUM
@@ -130,16 +142,15 @@ const NewGame = () => {
 				padding="10px 10px 0px"
 				disabled={startedGame}
 			/>
-			<Fade in={players.length === 4} timeout={Transition.FAST}>
-				<div id="start-join-btn">
-					<StyledButton
-						label={startedGame ? ButtonText.JOIN : ButtonText.START}
-						onClick={handleStartJoinClick}
-						padding="10px 10px 0px"
-						disabled={players.length < 4 || status === Status.PENDING}
-					/>
-				</div>
-			</Fade>
+			<CustomFade show={players.length === 4} timeout={Transition.FAST}>
+				<StyledButton
+					id="start-join-btn"
+					label={startedGame ? ButtonText.JOIN : ButtonText.START}
+					onClick={handleStartJoinClick}
+					padding="10px 10px 0px"
+					disabled={players.length < 4 || status === Status.PENDING}
+				/>
+			</CustomFade>
 		</Row>
 	);
 
@@ -216,8 +227,14 @@ const NewGame = () => {
 		}
 	};
 
-	const renderTaiSelect = (label: string, valueStr: string, handleChange: (e) => void) => {
-		const tai = [1, 2, 3, 4, 5].filter(t => (valueStr === minTaiStr ? t < maxTai : t > minTai));
+	const renderTaiSelect = (
+		label: string,
+		valueStr: string,
+		handleChange: (e) => void
+	) => {
+		const tai = [1, 2, 3, 4, 5].filter(t =>
+			valueStr === minTaiStr ? t < maxTai : t > minTai
+		);
 		return (
 			<ListItem className="list-item" style={{ padding: 0 }}>
 				<ListItemText secondary={label} />
@@ -254,7 +271,12 @@ const NewGame = () => {
 		<ListItem className="list-item" style={{ padding: 0 }}>
 			<ListItemText secondary={HandDescEng[s]} />
 			<Centered style={{ width: 20 }}>
-				<IconButton onClick={() => setScoringHands({ ...scoringHands, [s]: !scoringHands[s] })} disableRipple>
+				<IconButton
+					onClick={() =>
+						setScoringHands({ ...scoringHands, [s]: !scoringHands[s] })
+					}
+					disableRipple
+				>
 					{scoringHands[s] ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
 				</IconButton>
 			</Centered>
@@ -274,33 +296,39 @@ const NewGame = () => {
 
 	const renderGameOptions = () => {
 		return (
-			<Fade in={showOptions} timeout={Transition.FAST} unmountOnExit>
-				<div>
-					<TableTheme>
-						<Dialog
-							open={showOptions}
-							BackdropProps={{ invisible: true }}
-							onClose={() => {
-								setShowOptions(false);
-							}}
-						>
-							<DialogContent style={{ paddingBottom: '10px' }}>
-								<List className="list">
-									{renderPaymentType()}
-									{renderTaiSelect(ScreenTextEng.MINTAI, minTaiStr, handleMinTai)}
-									{renderTaiSelect(ScreenTextEng.MAXTAI, maxTaiStr, handleMaxTai)}
-									{renderScoringHandOption(ScoringHand.CONCEALED)}
-									{renderScoringHandOption(ScoringHand.SEVEN)}
-									{renderScoringHandOption(ScoringHand.GREEN)}
-									<Divider />
-									{renderManualHu()}
-									{hasAI && renderBotDifficulty()}
-								</List>
-							</DialogContent>
-						</Dialog>
-					</TableTheme>
-				</div>
-			</Fade>
+			<CustomFade show={showOptions} timeout={Transition.FAST}>
+				<TableTheme>
+					<Dialog
+						open={showOptions}
+						BackdropProps={{ invisible: true }}
+						onClose={() => {
+							setShowOptions(false);
+						}}
+					>
+						<DialogContent style={{ paddingBottom: '10px' }}>
+							<List className="list">
+								{renderPaymentType()}
+								{renderTaiSelect(
+									ScreenTextEng.MINTAI,
+									minTaiStr,
+									handleMinTai
+								)}
+								{renderTaiSelect(
+									ScreenTextEng.MAXTAI,
+									maxTaiStr,
+									handleMaxTai
+								)}
+								{renderScoringHandOption(ScoringHand.CONCEALED)}
+								{renderScoringHandOption(ScoringHand.SEVEN)}
+								{renderScoringHandOption(ScoringHand.GREEN)}
+								<Divider />
+								{renderManualHu()}
+								{hasAI && renderBotDifficulty()}
+							</List>
+						</DialogContent>
+					</Dialog>
+				</TableTheme>
+			</CustomFade>
 		);
 	};
 	/* ------------------------------ End Game Options ------------------------------ */

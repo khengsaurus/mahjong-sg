@@ -1,7 +1,7 @@
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SubjectIcon from '@mui/icons-material/Subject';
 import { IconButton } from '@mui/material';
-import { LogModal } from 'components/Modals';
+import { LogModal } from 'components';
 import { Size, TableColor } from 'enums';
 import { AppContext } from 'hooks';
 import { useContext, useRef } from 'react';
@@ -23,7 +23,12 @@ const TopRightControls = (props: ITRControlsP) => {
 			<IconButton className="icon-button" onClick={handlePay} disableRipple>
 				<MonetizationOnIcon fontSize={controlsSize} />
 			</IconButton>
-			<IconButton className="icon-button" onClick={handleLogs} disableRipple ref={logRef}>
+			<IconButton
+				className="icon-button"
+				onClick={handleLogs}
+				disableRipple
+				ref={logRef}
+			>
 				<SubjectIcon fontSize={controlsSize} />
 			</IconButton>
 			{!annHuOpen && (showText || showLogs) && (

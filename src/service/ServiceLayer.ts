@@ -3,11 +3,12 @@ import { ScoringHand } from 'handEnums';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { Game, User } from 'models';
+import { isDev } from 'platform';
 import { Store } from 'redux';
 import { FBService, FirebaseService } from 'service';
 import { store } from 'store';
 import { setLocalGame } from 'store/actions';
-import { createLocalGame, isDev } from 'utility';
+import { createLocalGame } from 'utility';
 import { objToUser } from 'utility/parsers';
 
 export class Service {
@@ -16,10 +17,10 @@ export class Service {
 
 	constructor() {
 		if (this.fbService) {
-			isDev() && console.info(InfoMessage.SERVER_READY);
+			isDev && console.info(InfoMessage.SERVER_READY);
 		} else {
 			this.fbService = FBService;
-			isDev() && console.info(InfoMessage.SERVER_INIT);
+			isDev && console.info(InfoMessage.SERVER_INIT);
 		}
 		this.store = store;
 	}
@@ -77,7 +78,9 @@ export class Service {
 				.then(res => {
 					if (res) {
 						FBService.registerUserEmail(values.uN, values.email).then(() =>
-							FBService.pairEmailToUsername(values.uN, values.email).then(res => resolve(res))
+							FBService.pairEmailToUsername(values.uN, values.email).then(
+								res => resolve(res)
+							)
 						);
 					} else {
 						reject(new Error(ErrorMessage.USERNAME_TAKEN));
@@ -135,7 +138,9 @@ export class Service {
 						FBService.authDeleteCurrentUser()
 							.then(success => {
 								if (!success) {
-									handleError(new Error(ErrorMessage.AUTH_DELETE_ERROR));
+									handleError(
+										new Error(ErrorMessage.AUTH_DELETE_ERROR)
+									);
 								}
 								resolve(success);
 							})
@@ -169,14 +174,33 @@ export class Service {
 		return new Promise(resolve => {
 			try {
 				if (isLocalGame) {
-					createLocalGame(user, players, random, minTai, maxTai, mHu, pay, sHs, easyAI).then(game => {
+					createLocalGame(
+						user,
+						players,
+						random,
+						minTai,
+						maxTai,
+						mHu,
+						pay,
+						sHs,
+						easyAI
+					).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
 						this.store.dispatch(setLocalGame(game));
 						resolve(game);
 					});
 				} else {
-					FBService.createGame(user, players, random, minTai, maxTai, mHu, pay, sHs).then(game => {
+					FBService.createGame(
+						user,
+						players,
+						random,
+						minTai,
+						maxTai,
+						mHu,
+						pay,
+						sHs
+					).then(game => {
 						game.prepForNewRound(true);
 						game.initRound();
 						FBService.updateGame(game).then(() => {
@@ -185,7 +209,13 @@ export class Service {
 					});
 				}
 			} catch (err) {
-				console.error(`${isLocalGame ? ErrorMessage.INIT_LOCAL_GAME : ErrorMessage.INIT_ONLINE_GAME}: 🥞`);
+				console.error(
+					`${
+						isLocalGame
+							? ErrorMessage.INIT_LOCAL_GAME
+							: ErrorMessage.INIT_ONLINE_GAME
+					}: 🥞`
+				);
 				console.error(err);
 				resolve(null);
 			}
@@ -207,7 +237,13 @@ export class Service {
 	/**
 	 * Note that this runs a transaction -> 1 read + 1 write
 	 */
-	adminUpdateGame(game: Game, isLocalGame: boolean, mHu: boolean, bt: number, easyAI: boolean) {
+	adminUpdateGame(
+		game: Game,
+		isLocalGame: boolean,
+		mHu: boolean,
+		bt: number,
+		easyAI: boolean
+	) {
 		if (isLocalGame) {
 			game.f[6] = mHu;
 			game.f[8] = easyAI;

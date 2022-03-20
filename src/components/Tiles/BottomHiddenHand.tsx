@@ -1,5 +1,4 @@
-import { Fade } from '@mui/material';
-import { HandTile } from 'components/Tiles';
+import { CustomFade, HandTile } from 'components';
 import { Size, Transition } from 'enums';
 import { AppContext } from 'hooks';
 import isEmpty from 'lodash.isempty';
@@ -27,11 +26,16 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 	const selectTile = useCallback(
 		(tile: IShownTile) => {
 			haptic && triggerHaptic();
-			if (!selectedTiles.map(tile => tile.r).includes(tile.r) && selectedTiles.length < 4) {
+			if (
+				!selectedTiles.map(tile => tile.r).includes(tile.r) &&
+				selectedTiles.length < 4
+			) {
 				const selected = [...selectedTiles, tile];
 				setSelectedTiles(selected);
 			} else {
-				const selected = selectedTiles.filter(selectedTile => selectedTile.r !== tile.r);
+				const selected = selectedTiles.filter(
+					selectedTile => selectedTile.r !== tile.r
+				);
 				setSelectedTiles(selected);
 			}
 		},
@@ -41,7 +45,11 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 	const renderHiddenHand = (hTs: IHiddenTile[], lTa: IHiddenTile) => {
 		const revLTT = !isEmpty(lTa) ? revealTile(lTa, tHK) : null;
 		return (
-			<div className={`self-hidden-tiles-${handSize || Size.MEDIUM} ${!revLTT && 'transform-right'}`}>
+			<div
+				className={`self-hidden-tiles-${handSize || Size.MEDIUM} ${
+					!revLTT && 'transform-right'
+				}`}
+			>
 				<Row>
 					{hTs.map((tile: IHiddenTile) => {
 						const revealedTile = revealTile(tile, tHK);
@@ -57,17 +65,18 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 					})}
 				</Row>
 				<div>
-					<Fade in={!!revLTT} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }}>
-						<div>
-							<HandTile
-								key={revLTT?.i}
-								card={revLTT?.c}
-								selected={selectedTsRef.includes(revLTT?.r)}
-								last={true}
-								callback={() => selectTile(revLTT)}
-							/>
-						</div>
-					</Fade>
+					<CustomFade
+						show={!!revLTT}
+						timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }}
+					>
+						<HandTile
+							key={revLTT?.i}
+							card={revLTT?.c}
+							selected={selectedTsRef.includes(revLTT?.r)}
+							last={true}
+							callback={() => selectTile(revLTT)}
+						/>
+					</CustomFade>
 				</div>
 			</div>
 		);

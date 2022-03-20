@@ -13,6 +13,7 @@ import {
 } from 'handEnums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
+import { isDev } from 'platform';
 import { IHWPx, IPoint } from 'typesPlus';
 import {
 	arrToSetArr,
@@ -20,7 +21,6 @@ import {
 	excludes,
 	getTileHashKey,
 	indexToWind,
-	isDev,
 	isTakenTile,
 	shouldChi,
 	sortTiles
@@ -50,7 +50,7 @@ function getLastThrownOrTaken(game: Game, _p: number, tHK: number) {
 	} else {
 		lTa_lTh = isTakenTile(lTh) ? {} : lTh;
 	}
-	if (isDev() && isEmpty(lTa_lTh)) {
+	if (isDev && isEmpty(lTa_lTh)) {
 		console.info('getLastThrownOrTaken: lTa/lTh isEmpty');
 	}
 	return { lTa_lTh, meldedLTa };
@@ -63,14 +63,21 @@ interface IGetHands {
 	lTa_lTh: IShownTile;
 }
 
-function getHands(game: Game, _p: number, tHK: number, _shown_hTs?: IShownTile[]): IGetHands {
+function getHands(
+	game: Game,
+	_p: number,
+	tHK: number,
+	_shown_hTs?: IShownTile[]
+): IGetHands {
 	const { f = [], n = [], ps, sHs } = game;
 	const p = ps[_p];
 	const { hTs = [], lTa = {}, ms = [], sTs } = p || {};
 	const Fs = p?.flowersRepr();
 	const lTaSelf = n[3] === _p && f[3] && !isEmpty(lTa);
 	const { lTa_lTh, meldedLTa } = getLastThrownOrTaken(game, _p, tHK);
-	const key = `gh-${ms.join('')}${hTs?.map(t => t.r).join('')}${lTa_lTh.c}${meldedLTa}${lTaSelf}${Fs}${sHs.join('')}`;
+	const key = `gh-${ms.join('')}${hTs?.map(t => t.r).join('')}${
+		lTa_lTh.c
+	}${meldedLTa}${lTaSelf}${Fs}${sHs.join('')}`;
 	const cached = mainLRUCache.read(key);
 	if (cached) {
 		return cached;
@@ -163,9 +170,15 @@ function getHands(game: Game, _p: number, tHK: number, _shown_hTs?: IShownTile[]
 					let card = winds[i];
 					if (containsPongOrKang(hand, card)) {
 						if (card === sW && card === cW) {
-							pxs.push({ hD: `${ScoringHand.MELDED}-${CardName[card] || card}`, px: 2 });
+							pxs.push({
+								hD: `${ScoringHand.MELDED}-${CardName[card] || card}`,
+								px: 2
+							});
 						} else {
-							pxs.push({ hD: `${ScoringHand.MELDED}-${CardName[card] || card}`, px: 1 });
+							pxs.push({
+								hD: `${ScoringHand.MELDED}-${CardName[card] || card}`,
+								px: 1
+							});
 						}
 					}
 				}
@@ -177,7 +190,10 @@ function getHands(game: Game, _p: number, tHK: number, _shown_hTs?: IShownTile[]
 				for (let i = 0; i < scoringP.length; i++) {
 					let card = scoringP[i];
 					if (containsPongOrKang(hand, card)) {
-						pxs.push({ hD: `${ScoringHand.MELDED}-${CardName[card] || card}`, px: 1 });
+						pxs.push({
+							hD: `${ScoringHand.MELDED}-${CardName[card] || card}`,
+							px: 1
+						});
 					}
 				}
 			}
@@ -186,8 +202,12 @@ function getHands(game: Game, _p: number, tHK: number, _shown_hTs?: IShownTile[]
 			// add animals irregardless of flowers, if not full animal set
 			let flowerPx = 0;
 			if (!hDs.find(hd => hd === ScoringHand.FLOWERS)) {
-				const hasAllFF = p.sTs.filter(t => t.s === Suit.FLOWER && FlowersF.includes(t.c)).length === 4;
-				const hasAllFS = p.sTs.filter(t => t.s === Suit.FLOWER && FlowersS.includes(t.c)).length === 4;
+				const hasAllFF =
+					p.sTs.filter(t => t.s === Suit.FLOWER && FlowersF.includes(t.c))
+						.length === 4;
+				const hasAllFS =
+					p.sTs.filter(t => t.s === Suit.FLOWER && FlowersS.includes(t.c))
+						.length === 4;
 				if (hasAllFF || hasAllFS) {
 					pxs.push({ hD: ScoringHand.CFS, px: HandPoint.CFS });
 				}
@@ -202,12 +222,19 @@ function getHands(game: Game, _p: number, tHK: number, _shown_hTs?: IShownTile[]
 		}
 		// Tally the hand with the most pxs for fewest/ most valuable combinations
 		let maxPx: number =
-			pxs.length === 0 ? 0 : pxs.length === 1 ? pxs[0].px : pxs.map(p => p.px).reduce((a, b) => a + b);
+			pxs.length === 0
+				? 0
+				: pxs.length === 1
+				? pxs[0].px
+				: pxs.map(p => p.px).reduce((a, b) => a + b);
 		if (maxPx >= maxPxAch) {
 			maxPxAch = maxPx;
 			hc = Math.min(hc, pxs.length);
 		}
-		if (maxPx >= n[8] && (hand.tsL.length === 0 || !excludes(hDs, canHuWithoutMelds))) {
+		if (
+			maxPx >= n[8] &&
+			(hand.tsL.length === 0 || !excludes(hDs, canHuWithoutMelds))
+		) {
 			hsWPxs.push({ hand, self: lTaSelf, pxs, maxPx });
 		}
 	});
@@ -217,7 +244,11 @@ function getHands(game: Game, _p: number, tHK: number, _shown_hTs?: IShownTile[]
 			? hsWPxs[0]
 			: maxPxAch === 0
 			? {}
-			: hsWPxs.find(h => (h.maxPx === maxPxAch && h.pxs.length === hc) || h.maxPx === maxPxAch);
+			: hsWPxs.find(
+					h =>
+						(h.maxPx === maxPxAch && h.pxs.length === hc) ||
+						h.maxPx === maxPxAch
+			  );
 
 	const val = { hands, hsWPxs, HH, lTa_lTh };
 	mainLRUCache.write(key, val);
@@ -242,14 +273,17 @@ function getBotEval(game: Game, _p: number, lThAvail: boolean): any[] {
 		const cW: Wind = game?.currentWind() || Wind.E;
 		const sW: Wind = indexToWind((_p - n[2] + 4) % 4);
 		const defaultScoringPongs = [...HBFCards, cW, sW];
-		const canPongKang: number = !f[3] && lThAvail ? shown_hTs.filter(t => t.c === lTh.c).length : 0;
+		const canPongKang: number =
+			!f[3] && lThAvail ? shown_hTs.filter(t => t.c === lTh.c).length : 0;
 
 		// if can take scoringPong, just take
 		if (defaultScoringPongs.includes(lTh?.c) && canPongKang >= 2) {
 			return [canPongKang === 2 ? Exec.PONG : Exec.KANG, lTh.c];
 		} else {
 			// avoid hoisting these
-			const shown_hTsA: IShownTile[] = isEmpty(p?.lTa) ? shown_hTs : [...shown_hTs, p?.revealedLTa(tHK)];
+			const shown_hTsA: IShownTile[] = isEmpty(p?.lTa)
+				? shown_hTs
+				: [...shown_hTs, p?.revealedLTa(tHK)];
 
 			// if priorMeld === pong, pong
 			const dc = getDiscardCategories(
@@ -295,7 +329,9 @@ function getBotEval(game: Game, _p: number, lThAvail: boolean): any[] {
 				const mostCommonP = Object.keys(votePs).find(key => votePs[key] === maxP);
 				// const voteMs: IObj<string, number> = {};
 				closestHs = targetHs.filter(
-					h => h.tsL.length === fewestTsLeft || (h.pStr === mostCommonP && h.tsL.length <= fewestTsLeft + 1)
+					h =>
+						h.tsL.length === fewestTsLeft ||
+						(h.pStr === mostCommonP && h.tsL.length <= fewestTsLeft + 1)
 				);
 				closestHs = closestHs.length > 0 ? closestHs : targetHs;
 
@@ -307,7 +343,8 @@ function getBotEval(game: Game, _p: number, lThAvail: boolean): any[] {
 						const sameTs = hCsA.filter(c => c === cs[i]);
 						if (
 							(sameTs.length === 4 &&
-								(priorMeld === MeldType.PONG || defaultScoringPongs.includes(sameTs[0]))) ||
+								(priorMeld === MeldType.PONG ||
+									defaultScoringPongs.includes(sameTs[0]))) ||
 							(sameTs.length === 1 && p?.hasPong(cs[i]))
 						) {
 							return [Exec.SELF_KANG, cs[i]];

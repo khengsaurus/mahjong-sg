@@ -3,7 +3,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { IconControlButton } from 'components/Buttons';
+import { IconControlButton } from 'components';
 import { LocalFlag, Size } from 'enums';
 import { AppContext } from 'hooks';
 import { useContext } from 'react';
@@ -38,8 +38,16 @@ const TopLeftControls = ({
 		<div className={`top-left-controls-${controlsSize}`}>
 			<div className="buttons">
 				<IconControlButton Icon={HomeIcon} onClick={goHome} size={controlsSize} />
-				<IconControlButton Icon={InfoIcon} onClick={handleAdmin} size={controlsSize} />
-				<IconControlButton Icon={SettingsIcon} onClick={handleSettings} size={controlsSize} />
+				<IconControlButton
+					Icon={InfoIcon}
+					onClick={handleAdmin}
+					size={controlsSize}
+				/>
+				<IconControlButton
+					Icon={SettingsIcon}
+					onClick={handleSettings}
+					size={controlsSize}
+				/>
 				<IconControlButton
 					Icon={showText && !annHuOpen ? VisibilityIcon : VisibilityOffIcon}
 					onClick={handleScreenText}

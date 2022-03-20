@@ -448,9 +448,11 @@ $c: rgb(37, 65, 101);
 .fade {
 	opacity: 0;
 	transition: $transition-medium;
+	pointer-events: none;
 	&.show {
 		opacity: 1;
 		transition: $transition-medium;
+		pointer-events: all;
 	}
 }
 

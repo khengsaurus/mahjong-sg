@@ -1,5 +1,5 @@
 import { Alert, Collapse, TextField } from '@mui/material';
-import { DecorButton, PlayAIButton } from 'components/Buttons';
+import { DecorButton, PlayAIButton } from 'components';
 import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'enums';
 import { AppContext, useWindowListener } from 'hooks';
 import { ErrorMessage } from 'messages';
@@ -31,7 +31,10 @@ const Login = () => {
 	);
 
 	const registerDisabled = useMemo(
-		() => email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '',
+		() =>
+			email.trim() === '' ||
+			password.trim() === '' ||
+			confirmPassword.trim() === '',
 		[email, password, confirmPassword]
 	);
 
@@ -113,7 +116,15 @@ const Login = () => {
 				setAlert({ status: Status.ERROR, msg: ErrorMessage.PW_NOT_MATCHING });
 			}
 		}
-	}, [confirmPassword, email, navigate, password, setAlert, setUserEmail, showRegister]);
+	}, [
+		confirmPassword,
+		email,
+		navigate,
+		password,
+		setAlert,
+		setUserEmail,
+		showRegister
+	]);
 
 	const enterListener = useCallback(
 		e => {
@@ -126,7 +137,13 @@ const Login = () => {
 	useWindowListener(EEvent.KEYPRESS, enterListener);
 
 	const renderLoginButton = () => (
-		<StyledButton label={ButtonText.LOGIN} type="submit" autoFocus disabled={loginDisabled} onClick={handleLogin} />
+		<StyledButton
+			label={ButtonText.LOGIN}
+			type="submit"
+			autoFocus
+			disabled={loginDisabled}
+			onClick={handleLogin}
+		/>
 	);
 
 	const renderRegisterButton = () => (
@@ -143,9 +160,13 @@ const Login = () => {
 		<>
 			<TextField
 				key="usernameEmail"
-				label={showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME_EMAIL}
+				label={
+					showRegister ? HomeScreenText.EMAIL : HomeScreenText.USERNAME_EMAIL
+				}
 				onChange={e =>
-					showRegister ? setEmail(e.target.value) : setUsernameEmail(e.target.value?.toLowerCase())
+					showRegister
+						? setEmail(e.target.value)
+						: setUsernameEmail(e.target.value?.toLowerCase())
 				}
 				style={{ margin: '-5px 0px 0px', width: '160px' }}
 				type="text"
@@ -172,7 +193,9 @@ const Login = () => {
 					variant="standard"
 				/>
 			</Collapse>
-			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '180px' }}>
+			<Row
+				style={{ paddingTop: 5, justifyContent: 'space-between', width: '180px' }}
+			>
 				<StyledButton
 					label={showRegister ? ButtonText.BACK : ButtonText.REGISTER}
 					onClick={() => {
@@ -186,13 +209,27 @@ const Login = () => {
 			<Row style={{ justifyContent: 'center', marginTop: -5 }}>
 				<DecorButton Button={PlayAIButton} showOnHover={['we', '', 'wn']} />
 			</Row>
-			<Collapse in={!!alert} timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }} unmountOnExit>
-				<Alert severity={alert?.status as AlertStatus}>{alert?.msg || ErrorMessage.TRY_AGAIN}</Alert>
+			<Collapse
+				in={!!alert}
+				timeout={{ enter: Transition.FAST, exit: Transition.INSTANT }}
+				unmountOnExit
+			>
+				<Alert severity={alert?.status as AlertStatus}>
+					{alert?.msg || ErrorMessage.TRY_AGAIN}
+				</Alert>
 			</Collapse>
 		</>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.HOME_TITLE} ready={ready} timeout={2500} skipVerification />;
+	return (
+		<HomePage
+			markup={markup}
+			title={HomeScreenText.HOME_TITLE}
+			ready={ready}
+			timeout={2500}
+			skipVerification
+		/>
+	);
 };
 
 export default Login;

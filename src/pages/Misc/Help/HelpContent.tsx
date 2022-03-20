@@ -1,7 +1,6 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import { CustomFade } from 'components';
-import { SampleTile } from 'components/Tiles';
+import { CustomFade, SampleTile } from 'components';
 import { Animals } from 'handEnums';
 import parse from 'html-react-parser';
 import React from 'react';

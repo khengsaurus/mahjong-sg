@@ -1,6 +1,10 @@
 import { Capacitor } from '@capacitor/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { Platform } from 'enums';
+import { AppFlag, Platform } from 'enums';
+
+export const isDev = process.env.REACT_APP_FLAG?.startsWith(AppFlag.DEV);
+
+export const isDevBot = process.env.REACT_APP_FLAG?.startsWith(AppFlag.DEV_BOT);
 
 export const isIOS = Capacitor.getPlatform() === Platform.IOS;
 
