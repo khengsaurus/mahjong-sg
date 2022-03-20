@@ -10,9 +10,10 @@ export const isKeyboardAvail = Capacitor.isPluginAvailable('Keyboard') || false;
 
 export const isNetworkAvail = Capacitor.isPluginAvailable('Network');
 
-export const platform = process.env.REACT_APP_PLATFORM === Platform.MOBILE ? Platform.MOBILE : Platform.WEB;
+export const platform =
+	process.env.REACT_APP_PLATFORM === Platform.MOBILE ? 'app' : 'website';
 
-export const isMobile = platform === Platform.MOBILE;
+export const isMobile = process.env.REACT_APP_PLATFORM === Platform.MOBILE;
 
 export async function triggerHaptic(impact = ImpactStyle.Light) {
 	if (isMobile) {

@@ -1,7 +1,7 @@
 import parse from 'html-react-parser';
 import { capacitorLogo, firebaseLogo, reactLogo } from 'images/symbols';
 import { HomePage } from 'pages';
-import { isMobile } from 'platform';
+import { isMobile, platform } from 'platform';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
@@ -13,15 +13,18 @@ const About = () => {
 		aboutContent,
 		theme: { mainTextColor }
 	} = useSelector((store: IStore) => store);
-	const { descMobile = '', descWeb = '', reachOut = '' } = aboutContent || initContent.aboutContent;
-	const platform = isMobile ? 'app' : 'website';
+	const {
+		descMobile = '',
+		descWeb = '',
+		reachOut = ''
+	} = aboutContent || initContent.aboutContent;
 
 	const markup = () => (
 		<div className="content centered" style={{ color: mainTextColor }}>
 			<p>
 				<span>
-					Thank you for using this {platform}. There is still much work in progress, but we hope you like it
-					so far.{' '}
+					Thank you for using this {platform}. There is still much work in
+					progress, but we hope you like it so far.{' '}
 				</span>
 				{isMobile
 					? parse(descMobile.replace(/{platform}/g, platform))
@@ -39,7 +42,14 @@ const About = () => {
 		</div>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.ABOUT} misc={2} skipVerification />;
+	return (
+		<HomePage
+			markup={markup}
+			title={HomeScreenText.ABOUT}
+			misc={2}
+			skipVerification
+		/>
+	);
 };
 
 export default About;

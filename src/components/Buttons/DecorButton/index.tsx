@@ -1,4 +1,4 @@
-import { Fade } from '@mui/material';
+import CustomFade from 'components/CustomFade';
 import { SampleTile } from 'components/Tiles';
 import { EEvent, Transition } from 'enums';
 import { useWindowListener } from 'hooks';
@@ -32,27 +32,30 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 		>
 			<Column>
 				{hoverEffect && !isMobile && showOnHover[1] && (
-					<Fade in={showDecoration} timeout={timeout}>
-						<div>
-							<SampleTile className={`top ${showDecoration ? 'show' : ''}`} card={showOnHover[1]} />
-						</div>
-					</Fade>
+					<CustomFade show={showDecoration} timeout={timeout}>
+						<SampleTile
+							className={`top ${showDecoration ? 'show' : ''}`}
+							card={showOnHover[1]}
+						/>
+					</CustomFade>
 				)}
 				<Row>
 					{hoverEffect && !isMobile && showOnHover[0] && (
-						<Fade in={showDecoration} timeout={timeout}>
-							<div>
-								<SampleTile className={`left ${showDecoration ? 'show' : ''}`} card={showOnHover[0]} />
-							</div>
-						</Fade>
+						<CustomFade show={showDecoration} timeout={timeout}>
+							<SampleTile
+								className={`left ${showDecoration ? 'show' : ''}`}
+								card={showOnHover[0]}
+							/>
+						</CustomFade>
 					)}
 					<Button />
 					{hoverEffect && !isMobile && showOnHover[2] && (
-						<Fade in={showDecoration} timeout={timeout}>
-							<div>
-								<SampleTile className={`right ${showDecoration ? 'show' : ''}`} card={showOnHover[2]} />
-							</div>
-						</Fade>
+						<CustomFade show={showDecoration} timeout={timeout}>
+							<SampleTile
+								className={`right ${showDecoration ? 'show' : ''}`}
+								card={showOnHover[2]}
+							/>
+						</CustomFade>
 					)}
 				</Row>
 			</Column>

@@ -29,8 +29,8 @@ const Policy = () => {
 						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: '40px' }}>
 							<StyledText text={c.title.replace(/{platform}/g, platform)} variant="body1" />
 						</AccordionSummary>
-						<AccordionDetails>
-							<p>{parse(c.content.replace(/{platform}/g, platform))}</p>
+						<AccordionDetails style={{ paddingTop: 0 }}>
+							<p className="no-margin">{parse(c.content.replace(/{platform}/g, platform))}</p>
 						</AccordionDetails>
 					</Accordion>
 				);

@@ -53,7 +53,6 @@
 			{
 				"title": "Scoring Hands",
 				"points": [
-					"The scoring logic largely follows common playing rules and online guides.",
 					"Ping Hu: hand comprises of Chi melds and a pair. The last tile cannot be unique unless it is self drawn, and the pair cannot be the Prevailing/Seat Winds, or any of the dragon tiles.<br/>1 Tai if the player has any bonus tiles, 4 Tai if not.",
 					"_render_6W,7W,8W,3S,4S,5S,7S,8S,9S,2T,3T,4T,9W,9W",
 					"All Pong hand: hand comprises of Pong/Kang melds and a pair (2 Tai)",
@@ -112,12 +111,9 @@
 				"title": "How to Hu",
 				"points": [
 					"You will not be able to Hu if you do not meet the minimum Tai. The Maximum Tai you can set is 5.",
-					"When you can Hu, a popup will appear giving you the option. Alternatively, a button (开) will appear in the bottom right. After pressing that, a second one (开!) will appear on the left. Press on that to declare Hu.",
+					"When you can Hu, a popup will appear giving you the option. If can Hu on a tile you draw, a button (开) will appear in the bottom right. After pressing that, a second one (开!) will appear on the left. Press on that to declare Hu.",
 					"Upon pressing the second button, your tiles will be shown to everyone, and no one can perform any actions. If you close the popup, you will hide your hand and the game will resume (careful ah - if a bot is next, it will play immediately).",
-					"When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you haven't drawn a tile and it is available. If you cancel the Hu it will be returned to whoever discarded it. There is no fake-hu (詐胡) functionality.",
-					"The creator of the game can toggle on or off 'Manual Hu' in the Game Info popup. If Manual Hu is on, players can Hu at any time.",
-					"Note that if A can Hu and Pong, and B can Hu, in the first 6s, A will see the Hu option, and B will not see any options. In the next 6s, both A and B will see the Hu option, and A will NOT see the Pong option (aiya, can Hu then just Hu lah).",
-					"If A and B can Hu on a discarded tile (A has priority) and B Hu's, A will see an option to Hu in the Hu Announcement. A can use that to cancel B's Hu and take the last discarded tile instead."
+					"When you Hu, the {platform} will automatically put the last discarded tile next to your hand if you haven't drawn a tile and it is available. If you cancel the Hu it will be returned to whoever discarded it. There is no fake-hu (詐胡) functionality."
 				]
 			},
 			{

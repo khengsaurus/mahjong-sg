@@ -1,8 +1,8 @@
-import { Fade } from '@mui/material';
+import { CustomFade } from 'components';
 import { EEvent, Transition } from 'enums';
 import { useDocumentListener } from 'hooks';
 import { HomePage, renderDefaultTitle } from 'pages';
-import renderSections from 'pages/Misc/Help/renderFunctions';
+import HelpContent from 'pages/Misc/Help/HelpContent';
 import initContent from 'pages/Misc/initContent.json';
 import 'pages/Misc/misc.scss';
 import { platform } from 'platform';
@@ -36,10 +36,11 @@ const Help = () => {
 	}, [hasToggledRef.current]);
 
 	const transitionAmt = useMemo(() => {
-		return showContent === -1 ? '0px' : `calc(${((sections.length - 2 - 2 * showContent) / 2) * 40}px)`; // botEle - topEle
+		return showContent === -1
+			? '0px'
+			: (sections.length / 2 - showContent - 1) * 40 + 'px';
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sections.length, showContent]);
-
 	const markup = () => (
 		<div
 			className="content"
@@ -48,10 +49,16 @@ const Help = () => {
 				transform: `translateY(${transitionAmt})`
 			}}
 		>
-			<Fade in={showContent === -1} timeout={overlayTimeout}>
-				<div>{renderDefaultTitle(HomeScreenText.HELP)}</div>
-			</Fade>
-			{renderSections(sections, showContent, toggleShow, overlayTimeout, platform)}
+			<CustomFade show={showContent === -1} timeout={overlayTimeout}>
+				{renderDefaultTitle(HomeScreenText.HELP)}
+			</CustomFade>
+			<HelpContent
+				sections={sections}
+				showContent={showContent}
+				toggleShow={toggleShow}
+				overlayTimeout={overlayTimeout}
+				platform={platform}
+			/>
 		</div>
 	);
 

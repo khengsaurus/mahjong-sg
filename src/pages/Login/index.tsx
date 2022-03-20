@@ -147,7 +147,7 @@ const Login = () => {
 				onChange={e =>
 					showRegister ? setEmail(e.target.value) : setUsernameEmail(e.target.value?.toLowerCase())
 				}
-				style={{ margin: '-5px 0px 0px', width: '150px' }}
+				style={{ margin: '-5px 0px 0px', width: '160px' }}
 				type="text"
 				value={showRegister ? email : usernameEmail}
 				variant="standard"
@@ -156,7 +156,7 @@ const Login = () => {
 				key="password"
 				label={HomeScreenText.PW}
 				onChange={e => setPassword(e.target.value)}
-				style={{ margin: '5px 0', width: '150px' }}
+				style={{ margin: '5px 0', width: '160px' }}
 				type="password"
 				value={password}
 				variant="standard"
@@ -166,13 +166,13 @@ const Login = () => {
 					key="confirmPassword"
 					label={HomeScreenText.C_PW}
 					onChange={e => setConfirmPassword(e.target.value)}
-					style={{ margin: '5px 0', width: '150px' }}
+					style={{ margin: '5px 0', width: '160px' }}
 					type="password"
 					value={confirmPassword}
 					variant="standard"
 				/>
 			</Collapse>
-			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '170px' }}>
+			<Row style={{ paddingTop: 5, justifyContent: 'space-between', width: '180px' }}>
 				<StyledButton
 					label={showRegister ? ButtonText.BACK : ButtonText.REGISTER}
 					onClick={() => {

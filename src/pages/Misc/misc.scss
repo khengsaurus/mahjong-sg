@@ -1,10 +1,23 @@
 @import '../../App.scss';
 
+@mixin content-width($o) {
+	// Clamp doesn't seem to be playing well with older native webviews...
+	// ref: MuiStyles Accordion styles
+	min-width: 200px;
+	width: calc(80vw - $o);
+	max-width: 450px - $o;
+}
+
+@mixin li-style {
+	font-size: 15px;
+	margin: 5px;
+}
+
 .content {
 	@include flow(column wrap);
-	width: clamp(200px, 80%, 450px) !important;
-	text-align: left;
+	@include content-width(0px);
 	-webkit-text-size-adjust: 100%;
+	text-align: left;
 	&.centered {
 		text-align: center;
 	}
@@ -12,15 +25,9 @@
 	p {
 		font-size: 15px;
 		display: block;
-		margin: 10px 0px !important;
-	}
-
-	ul {
-		margin: 5px 0px;
-		padding-inline-start: 12px;
-		li {
-			font-size: 15px;
-			margin: 5px;
+		margin: 8px 0px;
+		&.no-margin-top {
+			margin: 0px 0px 8px;
 		}
 	}
 
@@ -41,21 +48,30 @@
 }
 
 .content-wrapper {
-	max-height: calc(100vh - 84px); // ref-home-title 40px ref-bottom-home-buttons 24px ref-decoration 20px
-	max-height: calc(100vh - 84px - const(safe-area-inset-top) - const(safe-area-inset-bottom));
-	max-height: calc(100vh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-	span {
-		@include flex-dir(row);
-		align-items: center;
-		justify-content: space-between;
-		font-size: 15px;
-		margin-left: 5px;
-		max-width: calc(100% - 24px);
-	}
-	.small-tiles {
-		@include flex-dir(row);
-		flex-wrap: wrap;
-		max-width: 95%;
-		min-height: getShownTileHeight('small');
+	@include content-width(12px);
+	max-height: calc(100vh - 84px);
+	// ref-home-title 40px ref-bottom-home-buttons 24px ref-decoration 20px
+	max-height: calc(
+		100vh - 84px - const(safe-area-inset-top) - const(safe-area-inset-bottom)
+	);
+	max-height: calc(
+		100vh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+	);
+	ul {
+		margin: 5px 0px;
+		padding-inline-start: 12px;
+		li {
+			@include li-style;
+		}
+		.list-content {
+			@include flex-dir(row);
+			@include li-style;
+			@include alignI-justifyC(center, space-between);
+
+			.small-tiles {
+				@include flex-dir(row);
+				flex-wrap: wrap;
+			}
+		}
 	}
 }

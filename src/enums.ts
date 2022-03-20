@@ -139,7 +139,8 @@ export enum DateTimeFormat {
 export enum TransitionSpeed {
 	SLOW = '800ms',
 	MEDIUM = '450ms',
-	FAST = '300ms'
+	FAST = '300ms',
+	INSTANT = '0ms'
 }
 
 export enum Transition {

@@ -3,7 +3,14 @@ import { useLocalObj } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { User } from 'models';
-import { createContext, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import {
+	createContext,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useRef,
+	useState
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { HttpService, ServiceInstance } from 'service';
@@ -23,7 +30,7 @@ import {
 	setUser
 } from 'store/actions';
 import { IAlert } from 'typesPlus';
-import { getTheme } from 'utility';
+import { getTheme, isDev } from 'utility';
 import { mainLRUCache } from 'utility/LRUCache';
 import { jwtToObj, objToJwt } from 'utility/parsers';
 
@@ -83,7 +90,11 @@ export const AppContext = createContext<IAppContext>(initialContext);
 
 export const AppContextProvider = (props: any) => {
 	const { user, contentUpdated } = useSelector((state: IStore) => state);
-	const { resolveLocalObj, handleLocalObj } = useLocalObj<User>(StorageKey.USERJWT, jwtToObj, objToJwt);
+	const { resolveLocalObj, handleLocalObj } = useLocalObj<User>(
+		StorageKey.USERJWT,
+		jwtToObj,
+		objToJwt
+	);
 	const [alert, setAlert] = useState<IAlert>(null);
 	const [annHuOpen, setAnnHuOpen] = useState(false);
 	const [hasAI, setHasAI] = useState(false);
@@ -108,7 +119,8 @@ export const AppContextProvider = (props: any) => {
 		if (
 			!contentReqTimeout.current &&
 			(!contentUpdated ||
-				(contentUpdated && now.getTime() - new Date(contentUpdated).getTime()) > 6 * 60 * 60 * 1000)
+				(contentUpdated && now.getTime() - new Date(contentUpdated).getTime()) >
+					(isDev() ? 1 / 60 : 6) * 60 * 60 * 1000) // 1 min if dev, 6 hours if prod
 		) {
 			contentReqTimeout.current = setTimeout(async () => {
 				try {

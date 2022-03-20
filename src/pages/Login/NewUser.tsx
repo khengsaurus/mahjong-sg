@@ -93,12 +93,12 @@ const NewUser = () => {
 				inputProps={{ maxLength: 8 }}
 				label={HomeScreenText.USERNAME}
 				onChange={e => setUsername(e.target.value.toLowerCase())}
-				style={{ margin: '-5px 0px 5px', width: '150px' }}
+				style={{ margin: '-5px 0px 5px', width: '160px' }}
 				type="text"
 				value={username}
 				variant="standard"
 			/>
-			<Row style={{ minHeight: '10px', width: '170px', justifyContent: 'space-between' }}>
+			<Row style={{ minHeight: '10px', width: '180px', justifyContent: 'space-between' }}>
 				{alert?.status !== Status.SUCCESS && (
 					<>
 						<StyledButton label="Cancel" onClick={cancelRegister} />

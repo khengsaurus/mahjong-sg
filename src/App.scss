@@ -14,8 +14,18 @@ $transition-slow: 80ms;
 $color-tile-front: gainsboro;
 $color-border: rgb(40, 40, 40);
 
-$radial-gradient-gold: radial-gradient($color-tile-front, #d8ba85, #ffffff, $color-tile-front);
-$radial-gradient-gold-2: radial-gradient($color-tile-front, #ffffff, #e3c797, $color-tile-front);
+$radial-gradient-gold: radial-gradient(
+	$color-tile-front,
+	#d8ba85,
+	#ffffff,
+	$color-tile-front
+);
+$radial-gradient-gold-2: radial-gradient(
+	$color-tile-front,
+	#ffffff,
+	#e3c797,
+	$color-tile-front
+);
 
 $linear-gradient-multi: linear-gradient(-45deg, #e3ab9a, #df86a8, #73b8d1, #7389c0);
 $linear-gradient-multi-dark: linear-gradient(-45deg, #eb8667, #e6528b, #4bc6f2, #4ce6c2);
@@ -255,10 +265,16 @@ $log-margin-left-medium: 5px;
 /* -------------------- Safe area -------------------- */
 
 @mixin safeAreaHeight {
-	@supports ((top: const(safe-area-inset-top)) and (bottom: const(safe-area-inset-bottom))) {
-		height: calc(100% - const(safe-area-inset-bottom) - const(safe-area-inset-bottom));
+	@supports (
+		(top: const(safe-area-inset-top)) and (bottom: const(safe-area-inset-bottom))
+	) {
+		height: calc(
+			100% - const(safe-area-inset-bottom) - const(safe-area-inset-bottom)
+		);
 	}
-	@supports ((top: env(safe-area-inset-top)) and (bottom: env(safe-area-inset-bottom))) {
+	@supports (
+		(top: env(safe-area-inset-top)) and (bottom: env(safe-area-inset-bottom))
+	) {
 		height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 	}
 	@supports not ((top: const(safe-area-inset-top)) or (top: env(safe-area-inset-top))) {
@@ -267,13 +283,19 @@ $log-margin-left-medium: 5px;
 }
 
 @mixin safeAreaWidth {
-	@supports ((left: const(safe-area-inset-left)) and (right: const(safe-area-inset-right))) {
+	@supports (
+		(left: const(safe-area-inset-left)) and (right: const(safe-area-inset-right))
+	) {
 		width: calc(100% - const(safe-area-inset-right) - const(safe-area-inset-right));
 	}
-	@supports ((left: env(safe-area-inset-left)) and (right: env(safe-area-inset-right))) {
+	@supports (
+		(left: env(safe-area-inset-left)) and (right: env(safe-area-inset-right))
+	) {
 		width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
 	}
-	@supports not ((left: const(safe-area-inset-left)) or (left: env(safe-area-inset-left))) {
+	@supports not (
+		(left: const(safe-area-inset-left)) or (left: env(safe-area-inset-left))
+	) {
 		width: 100%;
 	}
 }
@@ -422,6 +444,15 @@ $c: rgb(37, 65, 101);
 }
 
 /* -------------------- . -------------------- */
+
+.fade {
+	opacity: 0;
+	transition: $transition-medium;
+	&.show {
+		opacity: 1;
+		transition: $transition-medium;
+	}
+}
 
 .noselect {
 	-webkit-touch-callout: none; /* iOS Safari */

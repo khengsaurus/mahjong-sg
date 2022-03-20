@@ -48,7 +48,18 @@ export const TableTheme = (props: any) => {
 	return <ThemeProvider theme={_theme} {...props} />;
 };
 
-function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: TextColor, highlightColor: string) {
+function newMuiTheme(
+	backgroundColor: BackgroundColor | TableColor,
+	textColor: TextColor,
+	highlightColor: string
+) {
+	const accordionWidth = {
+		// ref: misc.scss content-width
+		minWidth: '200px',
+		width: '80vw',
+		maxWidth: '450px'
+	};
+
 	return createTheme({
 		palette: {
 			primary: { main: textColor },
@@ -75,6 +86,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 					root: {
 						backgroundColor,
 						boxShadow: 'none',
+						...accordionWidth,
 						'&:before': { content: 'none' },
 						'&.Mui-expanded': {
 							margin: '0px'
@@ -86,9 +98,12 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 				styleOverrides: {
 					root: {
 						backgroundColor,
-						padding: 2
-						// borderTop: `1px solid ${textColor}`,
-						// borderBottom: `1px solid ${textColor}`
+						padding: 2,
+						overflowX: 'hidden',
+						overflowY: 'scroll',
+						...accordionWidth
+						// borderTop: `1px solid ${highlightColor}`,
+						// borderBottom: `1px solid ${highlightColor}`
 					}
 				}
 			},
@@ -99,6 +114,7 @@ function newMuiTheme(backgroundColor: BackgroundColor | TableColor, textColor: T
 						boxShadow: 'none',
 						color: textColor,
 						minHeight: '40px',
+						...accordionWidth,
 						padding: 0,
 						'&.Mui-expanded': {
 							minHeight: '40px'

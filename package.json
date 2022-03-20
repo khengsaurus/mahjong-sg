@@ -118,7 +118,7 @@
 		"ts-jest": "^27.0.7"
 	},
 	"prettier": {
-		"printWidth": 120,
+		"printWidth": 90,
 		"tabWidth": 4,
 		"useTabs": true,
 		"semi": true,
