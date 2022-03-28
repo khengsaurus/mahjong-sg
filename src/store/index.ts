@@ -20,6 +20,7 @@ export interface IStore {
 	aboutContent?: IAboutContent;
 	helpContent?: IHelpContent;
 	policyContent?: IPolicyContent;
+	notifsContent?: INotifsContent;
 }
 
 const setUserTransform = createTransform(

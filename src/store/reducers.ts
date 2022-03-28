@@ -8,6 +8,7 @@ import {
 	SET_HAPTIC,
 	SET_HELP,
 	SET_LOCAL_GAME,
+	SET_NOTIFS,
 	SET_POLICY,
 	SET_SIZES,
 	SET_THEME,
@@ -27,6 +28,7 @@ export function rootReducer(
 		aboutContent: null,
 		helpContent: null,
 		policyContent: null,
+		notifsContent: null,
 		contentUpdated: null
 	},
 	action: AnyAction
@@ -81,6 +83,11 @@ export function rootReducer(
 			return {
 				...state,
 				policyContent: action.payload
+			};
+		case SET_NOTIFS:
+			return {
+				...state,
+				notifsContent: action.payload
 			};
 		case SET_CONTENT_UPDATED:
 			return {

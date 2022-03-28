@@ -1,5 +1,5 @@
 import { BotIds, Content, Page, Size, StorageKey } from 'enums';
-import { useInitMobile, useLocalObj } from 'hooks';
+import { useFirstEffect, useInitMobile, useLocalObj } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { User } from 'models';
@@ -24,6 +24,7 @@ import {
 	setHaptic,
 	setHelpContent,
 	setLocalGame,
+	setNotifsContent,
 	setPolicyContent,
 	setSizes,
 	setTheme,
@@ -43,7 +44,9 @@ interface IAppContext {
 	playerSeat?: number;
 	selectedTiles?: IShownTile[];
 	showAI: false;
-	showDisconnectedAlert?: boolean;
+	showDisconnectedAlert: boolean;
+	homeAlert: string;
+	showHomeAlert: boolean;
 	userEmail: string;
 	handleHome: () => void;
 	handleLocalUO: (user: User) => void;
@@ -58,6 +61,7 @@ interface IAppContext {
 	setSelectedTiles: (tiles: IShownTile[]) => void;
 	setShowAI: (b?: boolean) => void;
 	setShowDisconnectedAlert: (b: boolean) => void;
+	setShowHomeAlert: (b: boolean) => void;
 	setUserEmail: (email: string) => void;
 }
 
@@ -70,6 +74,8 @@ const initialContext: IAppContext = {
 	selectedTiles: [],
 	showAI: false,
 	showDisconnectedAlert: false,
+	homeAlert: '',
+	showHomeAlert: false,
 	userEmail: '',
 	handleHome: () => {},
 	handleLocalUO: (_: User) => {},
@@ -82,10 +88,19 @@ const initialContext: IAppContext = {
 	setSelectedTiles: (_: IShownTile[]) => {},
 	setShowAI: (_: SetStateAction<boolean>) => {},
 	setShowDisconnectedAlert: (_: SetStateAction<boolean>) => {},
+	setShowHomeAlert: (_: boolean) => {},
 	setPlayers: (_: User[]) => {},
 	setPlayerSeat: (_: number) => {},
 	setUserEmail: (_: string) => {}
 };
+
+async function getContent() {
+	const aboutContent = HttpService.getContent(Content.ABOUT);
+	const helpContent = HttpService.getContent(Content.HELP);
+	const policyContent = HttpService.getContent(Content.POLICY);
+	const notifsContent = HttpService.getContent(Content.NOTIFS);
+	return Promise.all([aboutContent, helpContent, policyContent, notifsContent]);
+}
 
 export const AppContext = createContext<IAppContext>(initialContext);
 
@@ -104,17 +119,29 @@ export const AppContextProvider = (props: any) => {
 	const [selectedTiles, setSelectedTiles] = useState<IShownTile[]>([]);
 	const [showAI, setShowAI] = useState(false);
 	const [userEmail, setUserEmail] = useState('');
+	const [showHomeAlert, setShowHomeAlert] = useState(false);
 	const contentReqTimeout = useRef<NodeJS.Timeout>();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	useInitMobile();
 
-	async function getContent() {
-		const aboutContent = HttpService.getContent(Content.ABOUT);
-		const helpContent = HttpService.getContent(Content.HELP);
-		const policyContent = HttpService.getContent(Content.POLICY);
-		return Promise.all([aboutContent, helpContent, policyContent]);
-	}
+	const handleHome = useCallback(() => {
+		dispatch(setGameId(''));
+		dispatch(setTHK(111));
+		dispatch(setGame(null));
+		dispatch(setLocalGame(null));
+		mainLRUCache.clear();
+		if (!user) {
+			setPlayers([]);
+			navigate(Page.LOGIN);
+		} else {
+			setPlayers([user]);
+			navigate(Page.INDEX);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, setPlayers, user?.id]);
+
+	const { homeAlert } = useInitMobile(handleHome);
+	useFirstEffect(() => setShowHomeAlert(!!homeAlert), [homeAlert]);
 
 	useEffect(() => {
 		const now = new Date();
@@ -127,10 +154,11 @@ export const AppContextProvider = (props: any) => {
 			contentReqTimeout.current = setTimeout(async () => {
 				try {
 					getContent().then(data => {
-						if (data.length === 3 && data.every(d => !isEmpty(d))) {
+						if (data.length === 4 && data.every(d => !isEmpty(d))) {
 							dispatch(setAboutContent(data[0] as IAboutContent));
 							dispatch(setHelpContent(data[1] as IHelpContent));
 							dispatch(setPolicyContent(data[2] as IPolicyContent));
+							dispatch(setNotifsContent(data[3] as INotifsContent));
 							dispatch(setContentUpdated(now));
 							console.info(
 								`${InfoMessage.CONTENT_RETRIEVED} from ${HttpService.serverEndpoint} at ${now}`
@@ -157,22 +185,6 @@ export const AppContextProvider = (props: any) => {
 		setHasAI(players.length > 1 && !!players.find(p => BotIds.includes(p?.id)));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [players?.map(p => p?.id)]);
-
-	const handleHome = useCallback(() => {
-		dispatch(setGameId(''));
-		dispatch(setTHK(111));
-		dispatch(setGame(null));
-		dispatch(setLocalGame(null));
-		mainLRUCache.clear();
-		if (!user) {
-			setPlayers([]);
-			navigate(Page.LOGIN);
-		} else {
-			setPlayers([user]);
-			navigate(Page.INDEX);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, setPlayers, user?.id]);
 
 	const handleUserPref = useCallback(
 		(user?: User) => {
@@ -251,10 +263,12 @@ export const AppContextProvider = (props: any) => {
 				alert,
 				annHuOpen,
 				hasAI,
+				homeAlert,
 				players,
 				playerSeat,
 				selectedTiles,
 				showAI,
+				showHomeAlert,
 				userEmail,
 				handleHome,
 				handleLocalUO: handleLocalObj,
@@ -268,6 +282,7 @@ export const AppContextProvider = (props: any) => {
 				setPlayerSeat,
 				setSelectedTiles,
 				setShowAI,
+				setShowHomeAlert,
 				setUserEmail
 			}}
 			{...props}

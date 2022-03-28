@@ -82,6 +82,17 @@ interface IPolicyItem {
 
 type IPolicyContent = IPolicyItem[];
 
+interface IHomeNotif {
+	key: number;
+	message: string;
+}
+
+interface INotifsContent {
+	latestIOSVersion: number;
+	latestAndVersion: number;
+	notifs: IHomeNotif[];
+}
+
 /* ------------------------------ Props ------------------------------*/
 
 interface ITLControlsP {

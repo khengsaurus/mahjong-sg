@@ -10,10 +10,11 @@ import {
 	Loader,
 	NetworkLoader,
 	Overlay,
-	PrivacyButton
+	PrivacyButton,
+	SingleActionModal
 } from 'components';
 import { EEvent, Status } from 'enums';
-import { AppContext, useAndroidBack, useLocalSession } from 'hooks';
+import { AppContext, useLocalSession } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { isAndroid, isIOS, isKeyboardAvail, isMobile } from 'platform';
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -59,7 +60,8 @@ const HomePage = ({
 	skipVerification = false,
 	offsetKeyboard = 0
 }: IHomePageP) => {
-	const { handleHome, setAnnHuOpen } = useContext(AppContext);
+	const { homeAlert, setAnnHuOpen, showHomeAlert, setShowHomeAlert } =
+		useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(
@@ -67,7 +69,7 @@ const HomePage = ({
 	);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
 
-	/* ----------------------------------- Screen orientation ----------------------------------- */
+	/* ------------------------- Screen orientation ------------------------- */
 
 	useLayoutEffect(() => {
 		setAnnHuOpen(false);
@@ -83,7 +85,7 @@ const HomePage = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	/* ----------------- Keyboard offset for iOS + Android back button handling ----------------- */
+	/* ---------------------- Keyboard offset for iOS ---------------------- */
 
 	const [marginBottom, setMarginBottom] = useState<number | string>(0);
 
@@ -97,9 +99,7 @@ const HomePage = ({
 					setMarginBottom(keyboardHeight * ratio - offsetKeyboard);
 				}
 			});
-			Keyboard.addListener(EEvent.KEYBOARDHIDE, () => {
-				setMarginBottom(0);
-			});
+			Keyboard.addListener(EEvent.KEYBOARDHIDE, () => setMarginBottom(0));
 		} else if (isAndroid) {
 			setMarginBottom('10%');
 		}
@@ -109,9 +109,7 @@ const HomePage = ({
 		};
 	}, [offsetKeyboard]);
 
-	useAndroidBack(() => handleHome());
-
-	/* --------------- End keyboard offset for iOS + Android back button handling --------------- */
+	/* --------------- End keyboard offset for iOS --------------- */
 
 	useEffect(() => {
 		if (!ready) {
@@ -186,6 +184,14 @@ const HomePage = ({
 							/>
 						)}
 					</BottomSpec>
+				)}
+				{showHomeAlert && (
+					<SingleActionModal
+						show={showHomeAlert}
+						text={homeAlert}
+						buttonText={HomeScreenText.OK}
+						action={() => setShowHomeAlert(false)}
+					/>
 				)}
 			</Main>
 		</HomeTheme>

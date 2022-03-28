@@ -8,6 +8,7 @@ export enum HomeScreenText {
 	NEW_USER_TITLE = 'Choose a username',
 	NEW_GAME_TITLE = 'Create a new game',
 
+	OK = 'Ok',
 	USERNAME = 'Username',
 	USERNAME_EMAIL = "Username or email",
 	EMAIL = 'Email',
