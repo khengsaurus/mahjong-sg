@@ -27,7 +27,9 @@ const PaymentModalInline = ({ game, playerSeat }: IPaymentModalInlineP) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [JSON.stringify(hu), pay, playerSeat, n[7]]);
 
-	const [amountStr, setAmountStr] = useState<string>(`${defaultAmt > 0 ? defaultAmt : ``}`);
+	const [amountStr, setAmountStr] = useState<string>(
+		`${defaultAmt > 0 ? defaultAmt : ``}`
+	);
 	const [amount, setAmount] = useState(defaultAmt);
 
 	function handleSelectAmount(event: React.ChangeEvent<HTMLInputElement>) {
@@ -53,7 +55,7 @@ const PaymentModalInline = ({ game, playerSeat }: IPaymentModalInlineP) => {
 							amount > 0 && (
 								<MenuItem
 									key={`amount-${amount}`}
-									style={{ ...MuiStyles.small_dropdown_item }}
+									style={MuiStyles.small_dropdown_item}
 									value={amount}
 								>
 									{amount}

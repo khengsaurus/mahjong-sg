@@ -251,7 +251,7 @@ const NewGame = () => {
 								{tai.map(t => (
 									<MenuItem
 										key={`${label}-tai-${t}`}
-										style={{ ...MuiStyles.small_dropdown_item }}
+										style={MuiStyles.small_dropdown_item}
 										value={t}
 									>
 										{t}

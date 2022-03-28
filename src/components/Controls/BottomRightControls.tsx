@@ -51,13 +51,13 @@ const BottomRightControls = (props: IBRControlsP) => {
 					}
 				}}
 				disabled={disableDraw && disableThrow}
-				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+				style={MuiStyles[`buttons_${controlsSize}`]}
 			/>
 			<CustomFade show={showKai} timeout={Transition.FAST}>
 				<ControlButton
 					label={ControlsTextChi.KAI_QUESTION}
 					callback={handleOpen}
-					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+					style={MuiStyles[`buttons_${controlsSize}`]}
 				/>
 			</CustomFade>
 		</div>

@@ -16,16 +16,14 @@ const SingleActionModal = ({ show, text, buttonText, action }: ISingleActionP) =
 			open={show}
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
-				style: {
-					...MuiStyles.small_dialog
-				}
+				style: MuiStyles.small_dialog
 			}}
 		>
 			<DialogContent style={{ paddingBottom: buttonText && action ? 0 : '10px' }}>
 				<StyledCenterText text={text} variant="subtitle1" padding="3px 0px" />
 			</DialogContent>
 			{buttonText && action && (
-				<DialogActions style={{ ...MuiStyles.single_action }}>
+				<DialogActions style={MuiStyles.single_action}>
 					<StyledButton label={buttonText} onClick={action} />
 				</DialogActions>
 			)}

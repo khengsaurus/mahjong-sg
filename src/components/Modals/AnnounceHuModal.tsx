@@ -91,9 +91,7 @@ const AnnounceHuModal = ({
 			open={!isEmpty(hu) || f[5]}
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
-				style: {
-					...MuiStyles.medium_dialog
-				}
+				style: MuiStyles.medium_dialog
 			}}
 		>
 			<DialogContent>

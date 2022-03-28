@@ -85,9 +85,7 @@ const DeclareHuModal = ({
 				BackdropProps={{ invisible: true }}
 				onClose={() => onClose(false)}
 				PaperProps={{
-					style: {
-						...MuiStyles.medium_dialog
-					}
+					style: MuiStyles.medium_dialog
 				}}
 			>
 				<DialogContent style={{ paddingBottom: '10px' }}>

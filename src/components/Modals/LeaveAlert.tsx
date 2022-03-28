@@ -11,9 +11,7 @@ const LeaveAlert = ({ show, onClose }: ILeaveAlertP) => {
 			open={show}
 			BackdropProps={{ invisible: true }}
 			PaperProps={{
-				style: {
-					...MuiStyles.small_dialog
-				}
+				style: MuiStyles.small_dialog
 			}}
 			onClose={onClose}
 		>
@@ -31,7 +29,7 @@ const LeaveAlert = ({ show, onClose }: ILeaveAlertP) => {
 					/>
 				</Centered>
 			</DialogContent>
-			<DialogActions style={{ ...MuiStyles.single_action }}>
+			<DialogActions style={MuiStyles.single_action}>
 				<HomeButton />
 			</DialogActions>
 		</Dialog>

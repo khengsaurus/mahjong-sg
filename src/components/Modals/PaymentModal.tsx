@@ -1,4 +1,11 @@
-import { Button, Dialog, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import {
+	Button,
+	Dialog,
+	DialogContent,
+	FormControlLabel,
+	Radio,
+	RadioGroup
+} from '@mui/material';
 import { Amounts, LocalFlag } from 'enums';
 import { Game, User } from 'models';
 import { useState } from 'react';
@@ -11,7 +18,13 @@ import { StyledText } from 'style/StyledMui';
 import { IModalP } from 'typesPlus';
 import './paymentModal.scss';
 
-export async function sendChips(game: Game, from: number, to: number, amt: number, sendCallback?: () => void) {
+export async function sendChips(
+	game: Game,
+	from: number,
+	to: number,
+	amt: number,
+	sendCallback?: () => void
+) {
 	ServiceInstance.sendPayment(game, game.id === LocalFlag, from, to, amt);
 	sendCallback && sendCallback();
 }
@@ -36,7 +49,12 @@ const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 			<div className="chips">
 				{ps.map((p: User, ix: number) => (
 					<div className="item" key={`pay-user-${ix}`}>
-						<StyledText key={ix} text={`${p.uN}: ${p.bal}`} variant="subtitle1" padding="0px" />
+						<StyledText
+							key={ix}
+							text={`${p.uN}: ${p.bal}`}
+							variant="subtitle1"
+							padding="0px"
+						/>
 					</div>
 				))}
 			</div>
@@ -57,15 +75,21 @@ const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 			BackdropProps={{ invisible: true }}
 			onClose={onClose}
 			PaperProps={{
-				style: {
-					...MuiStyles.medium_dialog
-				}
+				style: MuiStyles.medium_dialog
 			}}
 		>
 			<DialogContent style={{ paddingBottom: '10px' }}>
-				<StyledText text={`${ScreenTextEng.CHIPS_DIST}:`} variant="subtitle1" padding="0px" />
+				<StyledText
+					text={`${ScreenTextEng.CHIPS_DIST}:`}
+					variant="subtitle1"
+					padding="0px"
+				/>
 				{renderChips()}
-				<StyledText text={`${ScreenTextEng.SEND_CHIPS_TO}: `} variant="subtitle1" padding="10px 0px 0px" />
+				<StyledText
+					text={`${ScreenTextEng.SEND_CHIPS_TO}: `}
+					variant="subtitle1"
+					padding="10px 0px 0px"
+				/>
 				<RadioGroup
 					row
 					value={toWho}
@@ -77,7 +101,12 @@ const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 							<FormControlLabel
 								key={otherPlayer.uN}
 								value={index}
-								control={<Radio style={{ height: '32px', width: '32px' }} disableRipple />}
+								control={
+									<Radio
+										style={{ height: '32px', width: '32px' }}
+										disableRipple
+									/>
+								}
 								style={{ width: '110px' }}
 								label={otherPlayer.uN}
 							/>
@@ -85,7 +114,11 @@ const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 					)}
 				</RadioGroup>
 
-				<StyledText text={`${ButtonText.AMOUNT}:`} variant="subtitle1" padding="10px 0px 0px" />
+				<StyledText
+					text={`${ButtonText.AMOUNT}:`}
+					variant="subtitle1"
+					padding="10px 0px 0px"
+				/>
 				<RadioGroup
 					row
 					value={amt}
@@ -99,7 +132,12 @@ const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 									key={index}
 									label={amt}
 									value={amt}
-									control={<Radio style={{ height: '32px', width: '32px' }} disableRipple />}
+									control={
+										<Radio
+											style={{ height: '32px', width: '32px' }}
+											disableRipple
+										/>
+									}
 									style={{ width: '60px' }}
 									labelPlacement="end"
 								/>
@@ -111,7 +149,9 @@ const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
 					style={{ position: 'absolute', bottom: 7, right: 5 }}
 					variant="text"
 					size="medium"
-					onClick={() => sendChips(currGame, playerSeat, toWho, amt, sendCallback)}
+					onClick={() =>
+						sendChips(currGame, playerSeat, toWho, amt, sendCallback)
+					}
 					disabled={toWho === 9 || !amt || amt <= 0}
 					disableRipple
 				>

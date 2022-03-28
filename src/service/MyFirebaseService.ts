@@ -357,7 +357,7 @@ export class FirebaseService {
 		if (this.isFBConnected) {
 			try {
 				const userRef = doc(this.usersRef, userId);
-				await updateDoc(userRef, { ...keyVals });
+				await updateDoc(userRef, keyVals);
 			} catch (err) {
 				console.error(err);
 			}
@@ -564,9 +564,8 @@ export class FirebaseService {
 	async updateGame(game: Game) {
 		if (this.isFBConnected) {
 			try {
-				let gameObj = gameToObj(game);
 				const gameRef = doc(this.gamesRef, game.id);
-				await updateDoc(gameRef, { ...gameObj });
+				await updateDoc(gameRef, gameToObj(game));
 			} catch (err) {
 				console.error(err);
 			}

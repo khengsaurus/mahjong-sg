@@ -1,5 +1,25 @@
-import { Alert, Collapse, Dialog, DialogContent, FormControl, Paper, Switch, Tab, Tabs } from '@mui/material';
-import { AlertStatus, BackgroundColor, Page, Size, Status, TableColor, TileColor, Transition, Visitor } from 'enums';
+import {
+	Alert,
+	Collapse,
+	Dialog,
+	DialogContent,
+	FormControl,
+	Paper,
+	Switch,
+	Tab,
+	Tabs
+} from '@mui/material';
+import {
+	AlertStatus,
+	BackgroundColor,
+	Page,
+	Size,
+	Status,
+	TableColor,
+	TileColor,
+	Transition,
+	Visitor
+} from 'enums';
 import { AppContext } from 'hooks';
 import { extend, isEqual } from 'lodash';
 import { ErrorMessage } from 'messages';
@@ -35,12 +55,17 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	const dispatch = useDispatch();
 
 	const flagThemeDiff = useMemo(
-		() => !isEqual([backgroundColor, tableColor, tileColor], [user.bgC, user.tC, user.tBC]),
+		() =>
+			!isEqual(
+				[backgroundColor, tableColor, tileColor],
+				[user.bgC, user.tC, user.tBC]
+			),
 		[backgroundColor, tableColor, user.bgC, user.tC, user.tBC, tileColor]
 	);
 
 	const flagSizesDiff = useMemo(
-		() => !isEqual([controlsSize, handSize, tileSize], [user.cSz, user.hSz, user.tSz]),
+		() =>
+			!isEqual([controlsSize, handSize, tileSize], [user.cSz, user.hSz, user.tSz]),
 		[controlsSize, handSize, user.cSz, user.hSz, user.tSz, tileSize]
 	);
 
@@ -90,7 +115,9 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 			handleSelect: (bgc: BackgroundColor) => {
 				setBackgroundColor(bgc);
 			},
-			colors: Object.keys(BackgroundColor).map(key => BackgroundColor[key.toUpperCase()])
+			colors: Object.keys(BackgroundColor).map(
+				key => BackgroundColor[key.toUpperCase()]
+			)
 		},
 		{
 			label: 'Table',
@@ -111,7 +138,10 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	];
 
 	function handleClose() {
-		if (user?.id !== Visitor && (flagSizesDiff || flagThemeDiff || user?.hp !== hapticOn)) {
+		if (
+			user?.id !== Visitor &&
+			(flagSizesDiff || flagThemeDiff || user?.hp !== hapticOn)
+		) {
 			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,
@@ -147,7 +177,11 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 		}
 
 		return (
-			<Dialog open={showDeleteAlert} BackdropProps={{ invisible: true }} onClose={handleClose}>
+			<Dialog
+				open={showDeleteAlert}
+				BackdropProps={{ invisible: true }}
+				onClose={handleClose}
+			>
 				<DialogContent>
 					<StyledText
 						text="Are you sure you wish to delete your account?"
@@ -163,7 +197,10 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 					/>
 					<Row style={{ marginTop: -4 }}>
 						<StyledButton label={ButtonText.CANCEL} onClick={handleClose} />
-						<StyledButton label={ButtonText.DELETE} onClick={handleDeleteAccount} />
+						<StyledButton
+							label={ButtonText.DELETE}
+							onClick={handleDeleteAccount}
+						/>
 					</Row>
 					<Collapse in={!!alert} timeout={{ enter: Transition.FAST }}>
 						<>
@@ -179,7 +216,12 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	};
 
 	const Label = ({ label }: IHasLabel) => (
-		<StyledText text={label} variant="body1" padding="0px" style={{ height: 30, marginTop: 6 }} />
+		<StyledText
+			text={label}
+			variant="body1"
+			padding="0px"
+			style={{ height: 30, marginTop: 6 }}
+		/>
 	);
 
 	return (
@@ -192,9 +234,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 					BackdropProps={{ invisible: true }}
 					onClose={handleClose}
 					PaperProps={{
-						style: {
-							...MuiStyles.large_dialog
-						}
+						style: MuiStyles.large_dialog
 					}}
 					// style={{ transform }}
 				>
@@ -202,7 +242,10 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 						<FormControl component="fieldset">
 							{preferences.map(preference =>
 								preference.size ? (
-									<div className="preference" key={`preference-${preference.label}`}>
+									<div
+										className="preference"
+										key={`preference-${preference.label}`}
+									>
 										<Label label={preference.label} />
 										<Tabs
 											style={{
@@ -216,13 +259,13 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 												const size = Size[key.toUpperCase()];
 												return (
 													<Tab
-														style={{
-															...MuiStyles.tabOptions
-														}}
+														style={MuiStyles.tabOptions}
 														key={size}
 														value={size}
 														label={size[0]}
-														onClick={() => preference.handleSelect(size)}
+														onClick={() =>
+															preference.handleSelect(size)
+														}
 													/>
 												);
 											})}
@@ -232,9 +275,17 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 							)}
 							{preferences.map(preference =>
 								preference.colors ? (
-									<div className="preference" key={`preference-${preference.label}`}>
+									<div
+										className="preference"
+										key={`preference-${preference.label}`}
+									>
 										<Label label={preference.label} />
-										<Paper style={{ ...MuiStyles.tabs, backgroundColor: 'transparent' }}>
+										<Paper
+											style={{
+												...MuiStyles.tabs,
+												backgroundColor: 'transparent'
+											}}
+										>
 											<Tabs
 												style={{
 													...MuiStyles.tabs,
@@ -251,7 +302,9 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 														}}
 														key={rgb}
 														value={rgb}
-														onClick={() => preference.handleSelect(rgb)}
+														onClick={() =>
+															preference.handleSelect(rgb)
+														}
 													/>
 												))}
 											</Tabs>
@@ -270,8 +323,15 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 							) : (
 								isMobile && (
 									<div className="preference no-margin">
-										<StyledText text={ScreenTextEng.HAPTICS} variant="subtitle1" padding="0" />
-										<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
+										<StyledText
+											text={ScreenTextEng.HAPTICS}
+											variant="subtitle1"
+											padding="0"
+										/>
+										<Switch
+											checked={hapticOn}
+											onChange={() => setHapticOn(prev => !prev)}
+										/>
 									</div>
 								)
 							)}

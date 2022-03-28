@@ -51,14 +51,14 @@ const BottomLeftControls = (props: IBLControlsP) => {
 					}
 				}}
 				disabled={disableChi && disablePong}
-				style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+				style={MuiStyles[`buttons_${controlsSize}`]}
 			/>
 			<CustomFade show={showKai} timeout={Transition.FAST}>
 				<ControlButton
 					label={ControlsTextChi.KAI_EXCLAIM}
 					callback={openDeclareHuDialog}
 					disabled={disableHu}
-					style={{ ...MuiStyles[`buttons_${controlsSize}`] }}
+					style={MuiStyles[`buttons_${controlsSize}`]}
 				/>
 			</CustomFade>
 		</div>

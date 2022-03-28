@@ -1,6 +1,14 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Dialog, DialogContent, Divider, ListItem, MenuItem, Select, Switch } from '@mui/material';
+import {
+	Dialog,
+	DialogContent,
+	Divider,
+	ListItem,
+	MenuItem,
+	Select,
+	Switch
+} from '@mui/material';
 import { BotTimeout, LocalFlag, PaymentType } from 'enums';
 import { HandDescEng, ScoringHand } from 'handEnums';
 import { AppContext } from 'hooks';
@@ -23,8 +31,13 @@ const padding0Height32 = {
 	justifyContent: 'space-between'
 };
 
-const renderSwitch = (label: string, checked: boolean, handleChange: () => void, rightWidth: number) => (
-	<ListItem style={{ ...padding0Height32 }}>
+const renderSwitch = (
+	label: string,
+	checked: boolean,
+	handleChange: () => void,
+	rightWidth: number
+) => (
+	<ListItem style={padding0Height32}>
 		<StyledText text={label} variant="body2" />
 		<Centered style={{ width: rightWidth }}>
 			<Switch checked={checked} onChange={handleChange} />
@@ -42,7 +55,7 @@ const renderSettingValue = (label: string, value: string, rightWidth: number) =>
 );
 
 const renderSettingCheck = (label: string, toggle: boolean, rightWidth: number) => (
-	<ListItem style={{ ...padding0Height32 }}>
+	<ListItem style={padding0Height32}>
 		<StyledText text={label} variant="body2" />
 		<Centered style={{ width: rightWidth }}>
 			{toggle ? <CheckIcon fontSize={'small'} /> : <CloseIcon fontSize={'small'} />}
@@ -56,7 +69,7 @@ const renderBotTimeSelect = (
 	rightWidth: number
 ) => {
 	return (
-		<ListItem style={{ ...padding0Height32 }}>
+		<ListItem style={padding0Height32}>
 			<StyledText text={ScreenTextEng.BOT_SPEED} variant="body2" />
 			<Centered style={{ width: rightWidth }}>
 				<Select
@@ -68,7 +81,11 @@ const renderBotTimeSelect = (
 					style={{ fontSize: 14 }}
 				>
 					{['Fast', 'Medium', 'Slow'].map(t => (
-						<MenuItem key={`bt-${t}`} style={{ ...MuiStyles.small_dropdown_item }} value={t}>
+						<MenuItem
+							key={`bt-${t}`}
+							style={MuiStyles.small_dropdown_item}
+							value={t}
+						>
 							{t}
 						</MenuItem>
 					))}
@@ -103,7 +120,13 @@ const GameInfo = ({ game, show, onClose }: IModalP) => {
 
 	const closeAndUpdate = () => {
 		if (f[6] !== manualHu || n[10] !== botSpeed || f[8] !== easyAI) {
-			ServiceInstance.adminUpdateGame(game, gameId === LocalFlag, manualHu, botSpeed, easyAI);
+			ServiceInstance.adminUpdateGame(
+				game,
+				gameId === LocalFlag,
+				manualHu,
+				botSpeed,
+				easyAI
+			);
 		}
 		onClose();
 	};
@@ -120,29 +143,58 @@ const GameInfo = ({ game, show, onClose }: IModalP) => {
 			BackdropProps={{ invisible: true }}
 			onClose={closeAndUpdate}
 			PaperProps={{
-				style: {
-					...MuiStyles.medium_dialog
-				}
+				style: MuiStyles.medium_dialog
 			}}
 		>
 			<DialogContent style={{ paddingBottom: '10px' }}>
-				{renderSettingValue(`${PaymentLabel.LABEL}`, `${PaymentLabel[pay]}`, rightWidth)}
-				{renderSettingValue(`${ScreenTextEng.MINMAXTAI}`, `${n[8]} / ${n[9]}`, rightWidth)}
+				{renderSettingValue(
+					`${PaymentLabel.LABEL}`,
+					`${PaymentLabel[pay]}`,
+					rightWidth
+				)}
+				{renderSettingValue(
+					`${ScreenTextEng.MINMAXTAI}`,
+					`${n[8]} / ${n[9]}`,
+					rightWidth
+				)}
 				{renderSettingCheck(
 					HandDescEng.CONCEALED,
 					sHs.includes(ScoringHand.CONCEALED) ? false : true,
 					rightWidth
 				)}
-				{renderSettingCheck(HandDescEng.SEVEN, sHs.includes(ScoringHand.SEVEN) ? false : true, rightWidth)}
-				{renderSettingCheck(HandDescEng.GREEN, sHs.includes(ScoringHand.GREEN) ? false : true, rightWidth)}
+				{renderSettingCheck(
+					HandDescEng.SEVEN,
+					sHs.includes(ScoringHand.SEVEN) ? false : true,
+					rightWidth
+				)}
+				{renderSettingCheck(
+					HandDescEng.GREEN,
+					sHs.includes(ScoringHand.GREEN) ? false : true,
+					rightWidth
+				)}
 				{(user?.uN === cO || gameId === LocalFlag) && <Divider />}
 				{user?.uN === cO &&
-					renderSwitch(ScreenTextEng.MANUAL_HU, manualHu, () => setManualHu(prev => !prev), rightWidth)}
+					renderSwitch(
+						ScreenTextEng.MANUAL_HU,
+						manualHu,
+						() => setManualHu(prev => !prev),
+						rightWidth
+					)}
 				{gameId === LocalFlag &&
-					renderSwitch(ScreenTextEng.SHOW_BOT_HANDS, showAI, () => setShowAI(!showAI), rightWidth)}
+					renderSwitch(
+						ScreenTextEng.SHOW_BOT_HANDS,
+						showAI,
+						() => setShowAI(!showAI),
+						rightWidth
+					)}
 				{user?.uN === cO &&
 					hasAI &&
-					renderSwitch(ScreenTextEng.EASY_AI, easyAI, () => setEasyAI(!easyAI), rightWidth)}
+					renderSwitch(
+						ScreenTextEng.EASY_AI,
+						easyAI,
+						() => setEasyAI(!easyAI),
+						rightWidth
+					)}
 				{user?.uN === cO &&
 					!!ps.find(p => isBot(p.id)) &&
 					renderBotTimeSelect(btLabel, handleBotTimeSelect, rightWidth)}

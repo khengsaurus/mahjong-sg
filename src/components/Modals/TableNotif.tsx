@@ -25,21 +25,32 @@ const TableNotif = ({ notifs = [], timeout, pong, kang, hu, skip }: ITableNotifP
 		<Dialog
 			open={timeout > 0}
 			BackdropProps={{ invisible: true }}
-			PaperProps={{ style: { ...MuiStyles.small_dialog } }}
+			PaperProps={{ style: MuiStyles.small_dialog }}
 		>
 			<DialogContent>
 				<Centered>
-					{notifs[0] && <StyledText text={notifs[0]} variant="subtitle1" padding="3px 0px" />}
+					{notifs[0] && (
+						<StyledText
+							text={notifs[0]}
+							variant="subtitle1"
+							padding="3px 0px"
+						/>
+					)}
 					<StyledText text={`${timeout}`} variant="subtitle1" padding="0px" />
 					{notifs.length > 1 &&
 						notifs
 							.slice(1, 10)
 							.map((n: string, ix: number) => (
-								<StyledText key={ix} text={n} variant="subtitle2" padding="0px" />
+								<StyledText
+									key={ix}
+									text={n}
+									variant="subtitle2"
+									padding="0px"
+								/>
 							))}
 				</Centered>
 			</DialogContent>
-			<DialogActions style={hasMoreThanOneAction ? {} : { ...MuiStyles.single_action }}>
+			<DialogActions style={hasMoreThanOneAction ? {} : MuiStyles.single_action}>
 				{pong && <StyledButton label={'Pong'} onClick={pong} />}
 				{kang && <StyledButton label={'Kang'} onClick={kang} />}
 				{hu && <StyledButton label={'Hu'} onClick={hu} />}
