@@ -10,7 +10,7 @@ export enum HomeScreenText {
 
 	OK = 'Ok',
 	USERNAME = 'Username',
-	USERNAME_EMAIL = "Username or email",
+	USERNAME_EMAIL = 'Username or email',
 	EMAIL = 'Email',
 	PW = 'Password',
 	C_PW = 'Confirm password',
@@ -77,7 +77,8 @@ export enum ScreenTextEng {
 	TAI = 'Tai',
 	WAITING_NETWORK = 'Waiting for network...',
 	YOUR_TURN = 'Your turn',
-	YOU_CAN_CHI = 'You can Chi'
+	YOU_CAN_CHI = 'You can Chi',
+	ENGLISH_ONLY = 'English text only'
 }
 
 export enum ScreenTextChi {
@@ -106,7 +107,8 @@ export enum ScreenTextChi {
 	TAI = '台',
 	WAITING_NETWORK = 'Waiting for network...',
 	YOUR_TURN = 'Your turn',
-	YOU_CAN_CHI = 'You can Chi'
+	YOU_CAN_CHI = 'You can Chi',
+	ENGLISH_ONLY = 'English text only'
 }
 
 export enum ControlsTextEng {

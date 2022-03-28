@@ -190,7 +190,7 @@ export const AppContextProvider = (props: any) => {
 		(user?: User) => {
 			setPlayers(user ? [user] : []);
 			setUserEmail(user ? user.email : '');
-			const theme = getTheme(user?.bgC, user?.tC, user?.tBC);
+			const theme = getTheme(user?.bgC, user?.tC, user?.tBC, user?._b[0] || false);
 			dispatch(setUser(user || null));
 			dispatch(setTheme(theme));
 			dispatch(setHaptic(user?.hp || true));

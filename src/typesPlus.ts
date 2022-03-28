@@ -35,6 +35,7 @@ export interface ITheme {
 	tileColor?: TileColor;
 	mainTextColor?: TextColor;
 	tableTextColor?: TextColor;
+	enOnly?: boolean;
 }
 
 export interface ISizes {

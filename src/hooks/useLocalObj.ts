@@ -12,7 +12,7 @@ function useLocalObj<T>(
 	signingFn: (obj: T, key?: string) => string
 ): IUseLocalObject<T> {
 	const [localObj, setLocalObj] = useLocalStorage<string>(storageKey, null);
-	const key = 'shouldBeServerSideKey';
+	const key = 'secretKey';
 
 	const resolveLocalObj = useCallback(() => {
 		return new Promise<T>((resolve, reject) => {

@@ -260,14 +260,18 @@ export class FirebaseService {
 		});
 	}
 
-	async registerUserEmail(uN: string, email: string): Promise<boolean> {
+	async registerUserEmail(
+		uN: string,
+		email: string,
+		enOnly: boolean
+	): Promise<boolean> {
 		return new Promise(resolve => {
 			if (this.isFBConnected) {
 				try {
 					addDoc(this.usersRef, {
 						uN,
 						email,
-						_b: [],
+						_b: [enOnly],
 						_s: [],
 						_n: [],
 						hSz: Size.MEDIUM,

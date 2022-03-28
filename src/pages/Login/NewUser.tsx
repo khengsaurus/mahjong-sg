@@ -1,4 +1,6 @@
-import { Alert, Collapse, TextField } from '@mui/material';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import { Alert, Collapse, IconButton, TextField } from '@mui/material';
 import 'App.scss';
 import { AlertStatus, DisallowedUsernames, Page, Status, Transition } from 'enums';
 import { AppContext } from 'hooks';
@@ -8,11 +10,11 @@ import { HomePage } from 'pages';
 import { isDev } from 'platform';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ButtonText, HomeScreenText } from 'screenTexts';
+import { ButtonText, HomeScreenText, ScreenTextEng } from 'screenTexts';
 import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { Row } from 'style/StyledComponents';
-import { StyledButton } from 'style/StyledMui';
+import { StyledButton, StyledText } from 'style/StyledMui';
 
 const NewUser = () => {
 	const { alert, login, logout, navigate, setAlert, userEmail } =
@@ -20,6 +22,7 @@ const NewUser = () => {
 	const { user } = useSelector((state: IStore) => state);
 	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
+	const [enOnly, setEnOnly] = useState(false);
 	const checkAuthTimeoutRef = useRef<NodeJS.Timeout>(null);
 
 	useEffect(() => {
@@ -65,7 +68,7 @@ const NewUser = () => {
 				msg: `${ErrorMessage.USERNAME_NOT_ALLOWED} '${disallowed}'`
 			});
 		} else {
-			ServiceInstance.FBNewUsername(values)
+			ServiceInstance.FBNewUsername(values, enOnly)
 				.then(res => {
 					if (res) {
 						setAlert({
@@ -96,6 +99,19 @@ const NewUser = () => {
 			});
 	}
 
+	const renderEnOnly = () => (
+		<Row style={{ width: 160, justifyContent: 'space-between' }}>
+			<StyledText text={ScreenTextEng.ENGLISH_ONLY} variant="body2" />
+			<IconButton
+				onClick={() => setEnOnly(prev => !prev)}
+				disableRipple
+				style={{ padding: 0 }}
+			>
+				{enOnly ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+			</IconButton>
+		</Row>
+	);
+
 	const markup = () => (
 		<>
 			<TextField
@@ -107,8 +123,10 @@ const NewUser = () => {
 				value={username}
 				variant="standard"
 			/>
+			{alert?.status !== Status.SUCCESS && renderEnOnly()}
 			<Row
 				style={{
+					paddingTop: 8,
 					minHeight: '10px',
 					width: '180px',
 					justifyContent: 'space-between'

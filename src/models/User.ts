@@ -10,6 +10,9 @@ export class User {
 	id: string;
 	uN: string;
 	email: string;
+	/**
+	 * 0: English text only
+	 */
 	_b: boolean[];
 	_s: string[];
 	_n: number[];

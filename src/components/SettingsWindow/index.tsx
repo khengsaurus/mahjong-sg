@@ -21,7 +21,7 @@ import {
 	Visitor
 } from 'enums';
 import { AppContext } from 'hooks';
-import { extend, isEqual } from 'lodash';
+import { extend, isEmpty, isEqual } from 'lodash';
 import { ErrorMessage } from 'messages';
 import { isMobile } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -52,6 +52,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	const [tileSize, setTileSize] = useState(sizes?.tileSize);
 	const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 	const [hapticOn, setHapticOn] = useState<boolean>(haptic);
+	const [enOnly, setEnOnly] = useState<boolean>(theme?.enOnly || false);
 	const dispatch = useDispatch();
 
 	const flagThemeDiff = useMemo(
@@ -70,8 +71,8 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	);
 
 	useEffect(() => {
-		dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor)));
-	}, [dispatch, backgroundColor, hapticOn, tableColor, tileColor]);
+		dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor, enOnly)));
+	}, [dispatch, backgroundColor, enOnly, hapticOn, tableColor, tileColor]);
 
 	useEffect(() => {
 		dispatch(setHaptic(hapticOn));
@@ -140,8 +141,17 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	function handleClose() {
 		if (
 			user?.id !== Visitor &&
-			(flagSizesDiff || flagThemeDiff || user?.hp !== hapticOn)
+			(flagSizesDiff ||
+				flagThemeDiff ||
+				user?.hp !== hapticOn ||
+				user?._b[0] !== enOnly)
 		) {
+			const _b =
+				user?._b[0] !== enOnly
+					? isEmpty(user?._b)
+						? [enOnly]
+						: [enOnly, ...user._b.slice(1, user._b.length)]
+					: user._b;
 			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,
@@ -149,7 +159,8 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 				bgC: backgroundColor,
 				tC: tableColor,
 				tBC: tileColor,
-				hp: hapticOn
+				hp: hapticOn,
+				_b
 			};
 			ServiceInstance.FBUpdateUser(user.id, keyVal)
 				.then(() => handleLocalUO(extend(user, keyVal)))
@@ -223,6 +234,42 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 			style={{ height: 30, marginTop: 6 }}
 		/>
 	);
+
+	function renderHaptic() {
+		return (
+			<div className="preference no-margin">
+				<StyledText
+					text={ScreenTextEng.HAPTICS}
+					variant="subtitle1"
+					padding="0"
+				/>
+				<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
+			</div>
+		);
+	}
+
+	function renderEnOnly() {
+		return (
+			<div className="preference no-margin">
+				<StyledText
+					text={ScreenTextEng.ENGLISH_ONLY}
+					variant="subtitle1"
+					padding="0"
+				/>
+				<Switch checked={enOnly} onChange={() => setEnOnly(prev => !prev)} />
+			</div>
+		);
+	}
+
+	function renderAccActions() {
+		return (
+			<StyledButton
+				label={ButtonText.DELETE_ACCOUNT}
+				onClick={() => setShowDeleteAlert(true)}
+				style={{ padding: 0, marginTop: 5, textTransform: 'capitalize', fontSize: 15 }}
+			/>
+		);
+	}
 
 	return (
 		<TableTheme>
@@ -312,29 +359,9 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 									</div>
 								) : null
 							)}
-							{accActions ? (
-								<Row style={{ alignItems: 'center', marginTop: 5 }}>
-									<StyledButton
-										label={ButtonText.DELETE_ACCOUNT}
-										onClick={() => setShowDeleteAlert(true)}
-										padding={'0'}
-									/>
-								</Row>
-							) : (
-								isMobile && (
-									<div className="preference no-margin">
-										<StyledText
-											text={ScreenTextEng.HAPTICS}
-											variant="subtitle1"
-											padding="0"
-										/>
-										<Switch
-											checked={hapticOn}
-											onChange={() => setHapticOn(prev => !prev)}
-										/>
-									</div>
-								)
-							)}
+							{!accActions && isMobile && renderHaptic()}
+							{renderEnOnly()}
+							{accActions && renderAccActions()}
 						</FormControl>
 					</DialogContent>
 				</Dialog>

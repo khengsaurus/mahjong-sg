@@ -72,12 +72,16 @@ export class Service {
 		});
 	}
 
-	async FBNewUsername(values: IEmailUser): Promise<boolean> {
+	async FBNewUsername(values: IEmailUser, enOnly: boolean): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			FBService.isUsernameAvail(values.uN)
 				.then(res => {
 					if (res) {
-						FBService.registerUserEmail(values.uN, values.email).then(() =>
+						FBService.registerUserEmail(
+							values.uN,
+							values.email,
+							enOnly
+						).then(() =>
 							FBService.pairEmailToUsername(values.uN, values.email).then(
 								res => resolve(res)
 							)

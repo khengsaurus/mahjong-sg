@@ -372,13 +372,19 @@ function getTableTextColor(tc: TableColor) {
 		: TextColor.DARK;
 }
 
-export function getTheme(bgc: BackgroundColor, tc: TableColor, tbc: TileColor): ITheme {
+export function getTheme(
+	bgc: BackgroundColor,
+	tc: TableColor,
+	tbc: TileColor,
+	enOnly: boolean
+): ITheme {
 	return {
 		backgroundColor: bgc || BackgroundColor.BROWN,
 		tableColor: tc || TableColor.GREEN,
 		tileColor: tbc || TileColor.DARK,
 		mainTextColor: getMainTextColor(bgc) || TextColor.DARK,
-		tableTextColor: getTableTextColor(tc) || TextColor.DARK
+		tableTextColor: getTableTextColor(tc) || TextColor.DARK,
+		enOnly
 	};
 }
 
