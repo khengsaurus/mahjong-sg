@@ -1,5 +1,10 @@
 import { AppContext, AppContextProvider } from './AppContext';
-import { useAndroidBack, useCloseListener, useDocumentListener, useWindowListener } from './listeners';
+import {
+	useAndroidBack,
+	useCloseListener,
+	useDocumentListener,
+	useWindowListener
+} from './listeners';
 import useAndroidKeyboardListener from './useAndroidKeyboardListener';
 import useAsync from './useAsync';
 import useBot from './useBot';
@@ -9,6 +14,7 @@ import useFirstEffect from './useFirstEffect';
 import useGameCountdown from './useGameCountdown';
 import useHand from './useHand';
 import useHuLocked from './useHuLocked';
+import useInitMobile from './useInitMobile';
 import useLocalObj from './useLocalObj';
 import useLocalSession from './useLocalSession';
 import useLocalStorage from './useLocalStorage';
@@ -33,6 +39,7 @@ export {
 	useGameCountdown,
 	useHand,
 	useHuLocked,
+	useInitMobile,
 	useLocalObj,
 	useLocalSession,
 	useLocalStorage,

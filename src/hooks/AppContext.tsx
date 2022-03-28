@@ -1,5 +1,5 @@
 import { BotIds, Content, Page, Size, StorageKey } from 'enums';
-import { useLocalObj } from 'hooks';
+import { useInitMobile, useLocalObj } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { User } from 'models';
@@ -107,6 +107,7 @@ export const AppContextProvider = (props: any) => {
 	const contentReqTimeout = useRef<NodeJS.Timeout>();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	useInitMobile();
 
 	async function getContent() {
 		const aboutContent = HttpService.getContent(Content.ABOUT);
