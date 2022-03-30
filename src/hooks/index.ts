@@ -10,6 +10,7 @@ import useAsync from './useAsync';
 import useBot from './useBot';
 import useControls from './useControls';
 import useCountdown from './useCountdown';
+import useDebounce from './useDebounce';
 import useFirstEffect from './useFirstEffect';
 import useGameCountdown from './useGameCountdown';
 import useHand from './useHand';
@@ -34,6 +35,7 @@ export {
 	useCloseListener,
 	useControls,
 	useCountdown,
+	useDebounce,
 	useDocumentListener,
 	useFirstEffect,
 	useGameCountdown,

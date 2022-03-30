@@ -12,9 +12,9 @@ import {
 } from '@mui/material';
 import { CustomFade } from 'components';
 import { Bot, BotIds, BotName, Transition } from 'enums';
-import { AppContext } from 'hooks';
+import { AppContext, useDebounce } from 'hooks';
 import { User } from 'models';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText } from 'screenTexts';
 import { ServiceInstance } from 'service';
@@ -28,27 +28,34 @@ const UserSearchForm: React.FC = () => {
 	const [showOptions, setShowOptions] = useState<boolean>(false);
 	const [foundUsers, setFoundUsers] = useState<User[]>([]);
 	const [searchFor, setSearchFor] = useState('');
+	const [actualSearch, setActualSearch] = useState('');
 
-	async function searchForUser(uN: string) {
-		let foundUsers: Array<User> = [];
-		await ServiceInstance.FBSearchUser(uN, user.uN).then(data => {
-			if (data.length > 0) {
-				data.forEach(u => {
-					foundUsers.push(new User(u.id, u.uN, u.email));
-				});
-				if (foundUsers.length > 0) {
-					setFoundUsers(foundUsers);
-					setShowOptions(true);
+	const searchForUser = useCallback(
+		async (uN: string) => {
+			let foundUsers: Array<User> = [];
+			await ServiceInstance.FBSearchUser(uN, user.uN).then(data => {
+				if (data.length > 0) {
+					data.forEach(u => {
+						foundUsers.push(new User(u.id, u.uN, u.email));
+					});
+					if (foundUsers.length > 0) {
+						setFoundUsers(foundUsers);
+						setShowOptions(true);
+					}
 				}
-			}
-		});
-	}
+			});
+		},
+		[user?.uN]
+	);
+
+	useDebounce(searchForUser, actualSearch);
 
 	function handleFormChange(str: string): void {
 		setSearchFor(str);
 		if (str.length > 3) {
-			searchForUser(str.toLowerCase());
+			setActualSearch(str);
 		} else {
+			setActualSearch('');
 			setShowOptions(false);
 		}
 	}
