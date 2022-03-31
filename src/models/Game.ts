@@ -29,7 +29,7 @@ import {
 import isEmpty from 'lodash.isempty';
 import { User } from 'models';
 import { isDev } from 'platform';
-import { ControlsTextChi, ScreenTextChi, ScreenTextEng } from 'screenTexts';
+import { ControlsTextEng, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import {
 	countHashedCards,
 	findLeft,
@@ -539,7 +539,7 @@ export class Game {
 		this.n[3] = findRight(this.n[3]);
 		this.f[3] = false;
 		this.f[4] = false;
-		this.newLog(`${this.ps[this.n[3]].uN}'s turn`);
+		// this.newLog(`${this.ps[this.n[3]].uN}'s turn`);
 	}
 
 	currentWind(): Wind {
@@ -590,7 +590,7 @@ export class Game {
 		this.prE = {};
 		this.newLog(
 			`Starting round ${this.n[0]} ${
-				this.n[1] === this.n[0] ? ControlsTextChi.CHAIN : ``
+				this.n[1] === this.n[0] ? ControlsTextEng.CHAIN : ``
 			}`
 		);
 	}
@@ -691,9 +691,9 @@ export class Game {
 		} else if (this.n[0] <= 16) {
 			res = [CardName[Wind.N], ((this.n[0] - 1) % 12) + 1];
 		}
-		if (this.n[0] === this.n[1]) {
-			res.push([ControlsTextChi.CHAIN]);
-		}
+		// if (this.n[0] === this.n[1]) {
+		// 	res.push([ControlsTextEng.CHAIN]);
+		// }
 		return res;
 	}
 

@@ -1,8 +1,9 @@
 import { ControlButton, CustomFade } from 'components';
 import { Size, Transition } from 'enums';
 import isEmpty from 'lodash.isempty';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { ControlsTextChi } from 'screenTexts';
+import { ControlsTextChi, ControlsTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { MuiStyles } from 'style/MuiStyles';
 import './controls.scss';
@@ -24,9 +25,26 @@ const BottomRightControls = (props: IBRControlsP) => {
 		HH
 	} = props;
 	const {
-		sizes: { controlsSize = Size.MEDIUM }
+		sizes: { controlsSize = Size.MEDIUM },
+		theme: { enOnly = false }
 	} = useSelector((state: IStore) => state);
 	const showKai = !confirmHu && !showDeclareHu && !isEmpty(HH);
+
+	const controlLabel = useMemo(() => {
+		return drawText === ControlsTextChi.END || drawText === ControlsTextEng.END
+			? drawText
+			: taken
+			? enOnly
+				? ControlsTextEng.THROW
+				: ControlsTextChi.THROW
+			: enOnly
+			? ControlsTextEng.DRAW
+			: ControlsTextChi.DRAW;
+	}, [drawText, enOnly, taken]);
+
+	const showLabel = useMemo(() => {
+		return enOnly ? ControlsTextEng.KAI_QUESTION : ControlsTextChi.KAI_QUESTION;
+	}, [enOnly]);
 
 	return (
 		<div
@@ -34,13 +52,7 @@ const BottomRightControls = (props: IBRControlsP) => {
 			style={{ borderColor: highlight || null }}
 		>
 			<ControlButton
-				label={
-					drawText === ControlsTextChi.END
-						? ControlsTextChi.END
-						: taken
-						? ControlsTextChi.THROW
-						: ControlsTextChi.DRAW
-				}
+				label={controlLabel}
 				callback={() => {
 					if (!disableDraw || !disableThrow) {
 						disableDraw
@@ -55,7 +67,7 @@ const BottomRightControls = (props: IBRControlsP) => {
 			/>
 			<CustomFade show={showKai} timeout={Transition.FAST}>
 				<ControlButton
-					label={ControlsTextChi.KAI_QUESTION}
+					label={showLabel}
 					callback={handleOpen}
 					style={MuiStyles[`buttons_${controlsSize}`]}
 				/>

@@ -8,7 +8,9 @@ import {
 import { CheckBox } from 'components';
 import isEmpty from 'lodash.isempty';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ButtonText, ScreenTextChi, ScreenTextEng } from 'screenTexts';
+import { IStore } from 'store';
 import { MuiStyles } from 'style/MuiStyles';
 import { FormRow, MainTransparent } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
@@ -24,6 +26,9 @@ const DeclareHuModal = ({
 	onClose
 }: IDeclareHuModalP) => {
 	const { f = [], hu, n = [] } = game || {};
+	const {
+		theme: { enOnly }
+	} = useSelector((state: IStore) => state);
 	const defaultZimo =
 		!!HH?.self || (f[3] && n[3] === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));
 	const [zimo, setZimo] = useState(defaultZimo);
@@ -42,7 +47,7 @@ const DeclareHuModal = ({
 		<div>
 			<FormRow>
 				<StyledText
-					text={`${ScreenTextChi.TAI}: `}
+					text={enOnly ? ScreenTextEng.TAI : ScreenTextChi.TAI}
 					variant="subtitle2"
 					padding="0px"
 				/>
@@ -64,7 +69,7 @@ const DeclareHuModal = ({
 			</FormRow>
 			<FormRow style={{ height: 30 }}>
 				<StyledText
-					text={`${ScreenTextChi.SELF_DRAWN}:`}
+					text={enOnly ? ScreenTextEng.SELF_DRAWN : ScreenTextChi.SELF_DRAWN}
 					variant="subtitle2"
 					padding="0px"
 				/>

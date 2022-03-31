@@ -2,7 +2,7 @@ import { ControlButton, CustomFade } from 'components';
 import { Size, Transition } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { useSelector } from 'react-redux';
-import { ControlsTextChi } from 'screenTexts';
+import { ControlsTextChi, ControlsTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { MuiStyles } from 'style/MuiStyles';
 import './controls.scss';
@@ -23,9 +23,12 @@ const BottomLeftControls = (props: IBLControlsP) => {
 		HH
 	} = props;
 	const {
-		sizes: { controlsSize = Size.MEDIUM }
+		sizes: { controlsSize = Size.MEDIUM },
+		theme: { enOnly = false }
 	} = useSelector((state: IStore) => state);
 	const showKai = confirmHu && !showDeclareHu && !disableHu && !isEmpty(HH);
+	const chiText = enOnly ? ControlsTextEng.CHI : ControlsTextChi.CHI;
+	const showLabel = enOnly ? ControlsTextEng.KAI_EXCLAIM : ControlsTextChi.KAI_EXCLAIM;
 
 	return (
 		<div
@@ -33,13 +36,7 @@ const BottomLeftControls = (props: IBLControlsP) => {
 			style={{ borderColor: highlight || null }}
 		>
 			<ControlButton
-				label={
-					disableChi
-						? disablePong
-							? ControlsTextChi.CHI
-							: pongText
-						: ControlsTextChi.CHI
-				}
+				label={disablePong ? chiText : pongText}
 				callback={() => {
 					if (!disableChi || !disablePong) {
 						setShowChiAlert(false);
@@ -55,7 +52,7 @@ const BottomLeftControls = (props: IBLControlsP) => {
 			/>
 			<CustomFade show={showKai} timeout={Transition.FAST}>
 				<ControlButton
-					label={ControlsTextChi.KAI_EXCLAIM}
+					label={showLabel}
 					callback={openDeclareHuDialog}
 					disabled={disableHu}
 					style={MuiStyles[`buttons_${controlsSize}`]}

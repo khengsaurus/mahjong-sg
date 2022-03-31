@@ -408,6 +408,36 @@ export enum PaymentType {
 	HALF_SHOOTER = 'h'
 }
 
+/* ------------------------------ En ------------------------------ */
+
+export enum SuitNameEn {
+	W = 'W',
+	T = 'T',
+	S = 'S'
+}
+
+export enum CardNameEn {
+	dh = 'Red Dragon',
+	db = 'White Dragon',
+	df = 'Green Dragon',
+	am = 'Cat',
+	al = 'Rat',
+	ag = 'Chicken',
+	ac = 'Worm',
+	sc = 'Spring',
+	sx = 'Summer',
+	sq = 'Autumn',
+	sd = 'Winter',
+	fm = 'Plum',
+	fl = 'Orchid',
+	fj = 'Chrys.',
+	fz = 'Bamboo',
+	we = 'East',
+	ws = 'South',
+	ww = 'West',
+	wn = 'North'
+}
+
 /* ------------------------------ Bot ------------------------------ */
 
 export const BotIds = ['bot1', 'bot2', 'bot3', 'bot4'];

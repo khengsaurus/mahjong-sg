@@ -6,6 +6,7 @@ import {
 	BotTimeout,
 	CardCategory,
 	CardName,
+	CardNameEn,
 	DaPai,
 	DaPaiIndex,
 	DateTimeFormat,
@@ -17,6 +18,7 @@ import {
 	PaymentType,
 	Suit,
 	SuitName,
+	SuitNameEn,
 	SuitsIndex,
 	TableColor,
 	TextColor,
@@ -1192,4 +1194,30 @@ export function containsPongOrKang(h: IHand, card: string): boolean {
 	return !![...openMsStr, ...hideMsStr].find(
 		m => m === `${MeldType.PONG}-${card}` || m === `${MeldType.KANG}-${card}`
 	);
+}
+
+export function convertToEn(str: string) {
+	return str
+		.replace(CardName.dh, CardNameEn.dh)
+		.replace(CardName.db, CardNameEn.db)
+		.replace(CardName.df, CardNameEn.df)
+		.replace(CardName.am, CardNameEn.am)
+		.replace(CardName.al, CardNameEn.al)
+		.replace(CardName.ag, CardNameEn.ag)
+		.replace(CardName.ac, CardNameEn.ac)
+		.replace(CardName.sc, CardNameEn.sc)
+		.replace(CardName.sx, CardNameEn.sx)
+		.replace(CardName.sq, CardNameEn.sq)
+		.replace(CardName.sd, CardNameEn.sd)
+		.replace(CardName.fm, CardNameEn.fm)
+		.replace(CardName.fl, CardNameEn.fl)
+		.replace(CardName.fj, CardNameEn.fj)
+		.replace(CardName.fz, CardNameEn.fz)
+		.replace(CardName.we, CardNameEn.we)
+		.replace(CardName.ws, CardNameEn.ws)
+		.replace(CardName.ww, CardNameEn.ww)
+		.replace(CardName.wn, CardNameEn.wn)
+		.replace(SuitName.W, SuitNameEn.W)
+		.replace(SuitName.T, SuitNameEn.T)
+		.replace(SuitName.S, SuitNameEn.S);
 }

@@ -35,17 +35,18 @@
 		.bottom-left-controls-#{$size} {
 			@include absolute-padding(0, 0, $main-padding - 2px, $main-padding - 2px);
 			@include flex-dir(column-reverse);
+			align-items: flex-start;
 			border-bottom: 2 * getTilePadding($size) solid transparent;
 			border-left: 2 * getTilePadding($size) solid transparent;
-			height: 1 * getButtonHeight($size);
-			width: 1 * getButtonWidth($size);
+			height: getButtonHeight($size);
+			// width: getButtonWidth($size);
 			transition: $transition-fast;
 			z-index: 10;
 			.button {
-				max-width: getButtonWidth($size);
 				max-height: getButtonHeight($size);
-				min-width: getButtonWidth($size);
 				min-height: getButtonHeight($size);
+				// max-width: getButtonWidth($size);
+				// min-width: getButtonWidth($size);
 			}
 			&.full {
 				height: 2 * getButtonHeight($size);
@@ -55,18 +56,18 @@
 		.bottom-right-controls-#{$size} {
 			@include absolute-padding(0, $main-padding - 2px, $main-padding - 2px, 0);
 			@include flex-dir(column-reverse);
+			align-items: flex-end;
 			border-bottom: 2 * getTilePadding($size) solid transparent;
 			border-right: 2 * getTilePadding($size) solid transparent;
-			align-items: flex-start;
-			height: 1 * getButtonHeight($size);
-			width: 1 * getButtonWidth($size);
+			height: getButtonHeight($size);
+			// width: getButtonWidth($size);
 			transition: $transition-fast;
 			z-index: 10;
 			.button {
-				max-width: getButtonWidth($size);
 				max-height: getButtonHeight($size);
-				min-width: getButtonWidth($size);
 				min-height: getButtonHeight($size);
+				// max-width: getButtonWidth($size);
+				// min-width: getButtonWidth($size);
 			}
 			&.full {
 				height: 2 * getButtonHeight($size);

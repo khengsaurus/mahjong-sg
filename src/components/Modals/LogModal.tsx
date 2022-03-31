@@ -1,26 +1,27 @@
 import { LocalFlag, Size, TableColor, Transition } from 'enums';
 import { useCloseListener } from 'hooks';
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { GreenTableText, TableText } from 'style/StyledComponents';
+import { convertToEn } from 'utility';
 
 interface ILogModalP {
 	expanded: boolean;
 	onClose: () => void;
 	externalRef?: React.MutableRefObject<any>;
-	size: Size;
-	tableColor: TableColor;
-}
-
-function compare(prev: ILogModalP, next: ILogModalP) {
-	return prev.size === next.size && prev.expanded === next.expanded && prev.tableColor === next.tableColor;
 }
 
 const LogModal = (props: ILogModalP) => {
-	const { expanded, onClose, externalRef, size, tableColor } = props;
-	const { game, gameId, localGame } = useSelector((store: IStore) => store);
+	const { expanded, onClose, externalRef } = props;
+	const {
+		game,
+		gameId,
+		localGame,
+		theme: { tableColor = TableColor.GREEN, enOnly },
+		sizes: { controlsSize = Size.MEDIUM }
+	} = useSelector((store: IStore) => store);
 	const isLocalGame = gameId === LocalFlag;
 	const currGame = isLocalGame ? localGame : game;
 	const modalRef = useRef(null);
@@ -41,14 +42,19 @@ const LogModal = (props: ILogModalP) => {
 		setTimeout(() => scroll(), Transition.FAST);
 	}, [expanded, scroll]);
 
+	const logs = useMemo(() => {
+		return currGame?.logs.map(log => (enOnly ? convertToEn(log) : log));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [enOnly, JSON.stringify(currGame?.logs)]);
+
 	return (
 		<div
 			id={id}
 			ref={modalRef}
-			className={`log-box-${size || Size.MEDIUM}${expanded ? ` expanded` : ``}`}
+			className={`log-box-${controlsSize}${expanded ? ` expanded` : ``}`}
 			style={{ backgroundColor: expanded ? tableColor : 'transparent' }}
 		>
-			{currGame?.logs.map((log: string, index) =>
+			{logs.map((log: string, index) =>
 				log.includes('sent ') && log.includes(ScreenTextEng._CHIP_) ? (
 					<GreenTableText key={index}>{log}</GreenTableText>
 				) : (
@@ -61,4 +67,4 @@ const LogModal = (props: ILogModalP) => {
 	);
 };
 
-export default memo(LogModal, compare);
+export default memo(LogModal);

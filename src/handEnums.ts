@@ -134,7 +134,8 @@ export enum HandDescChi {
 	TERMS = 'Teminals',
 	MIXED_HONOURS_TERMS = 'Mixed Honours/Terminals',
 	HUA_SHANG = 'Win On Replacement Tile',
-	HUA_SHANG_HUA = 'Win On 2nd Replacement Tile'
+	HUA_SHANG_HUA = 'Win On 2nd Replacement Tile',
+	QIANG_KANG = 'Robbing the Kang'
 }
 
 export const thirteen = [

@@ -26,7 +26,10 @@ const AnnounceHuModal = ({
 	onClose: handleShow
 }: IAnnounceHuModalP) => {
 	const { setAnnHuOpen } = useContext(AppContext);
-	const { user } = useSelector((store: IStore) => store);
+	const {
+		user,
+		theme: { enOnly }
+	} = useSelector((store: IStore) => store);
 	const { id, hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);
 
@@ -100,7 +103,9 @@ const AnnounceHuModal = ({
 						<StyledCenterText
 							text={`${
 								hu[0] === playerSeat ? 'You' : ps[hu[0]]?.uN
-							} Hu with ${hu[1]}${ScreenTextChi.TAI}`}
+							} Hu with ${hu[1]} ${
+								enOnly ? ScreenTextEng.TAI : ScreenTextChi.TAI
+							}`}
 							style={{ paddingBottom: '0px' }}
 							variant="body1"
 						/>

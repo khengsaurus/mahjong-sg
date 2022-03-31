@@ -1,11 +1,11 @@
 import { ImpactStyle } from '@capacitor/haptics';
-import { CardName, Exec, LocalFlag, MeldName, MeldType } from 'enums';
+import { CardName, CardNameEn, Exec, LocalFlag, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
 import { isDev, isDevBot, triggerHaptic } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ControlsTextChi, ScreenTextEng } from 'screenTexts';
+import { ControlsTextChi, ControlsTextEng, ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { getHighlightColor } from 'style/MuiStyles';
 import { IControls, IHWPx } from 'typesPlus';
@@ -39,7 +39,7 @@ function useControls(
 		haptic,
 		localGame,
 		tHK,
-		theme: { tableColor },
+		theme: { tableColor, enOnly = false },
 		user
 	} = useSelector((state: IStore) => state);
 	const {
@@ -90,14 +90,20 @@ function useControls(
 		[delayLeft, execRef, skRef, pIdsRef]
 	);
 
+	const seat = useMemo(() => {
+		const wind = indexToWind((playerSeat - n[2] + 4) % 4);
+		return enOnly ? CardNameEn[wind] : CardName[wind];
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [enOnly, playerSeat, n[2]]);
+
 	const texts = useMemo(
 		() =>
 			f[0]
 				? [
 						// `Dealer: ${dealerName}`,
-						`Seat: ${CardName[indexToWind((playerSeat - n[2] + 4) % 4)]}, ${
-							ScreenTextEng.CHIPS
-						}: ${Math.round(player?.bal) || 0}`,
+						`Seat: ${seat}, ${ScreenTextEng.CHIPS}: ${
+							Math.round(player?.bal) || 0
+						}`,
 						`${ts?.length || 0} tiles left`,
 						`${
 							n[3] === playerSeat
@@ -110,7 +116,7 @@ function useControls(
 						ScreenTextEng.GAME_ENDED
 				  ],
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dealerName, f[0], player?.bal, playerSeat, ps[n[3]]?.uN, ts?.length, n[2]]
+		[dealerName, f[0], player?.bal, playerSeat, ps[n[3]]?.uN, ts?.length, seat]
 	);
 
 	/* ----------------------------------- Options ----------------------------------- */
@@ -757,6 +763,28 @@ function useControls(
 
 	const _HH = isEmpty(HH) ? (f[6] ? { hand: {}, px: [] } : {}) : HH;
 
+	/* --------------------------------- Button text --------------------------------- */
+
+	const pongText = useMemo(() => {
+		return enOnly
+			? canKang
+				? ControlsTextEng.KANG
+				: ControlsTextEng.PONG
+			: canKang
+			? ControlsTextChi.KANG
+			: ControlsTextChi.PONG;
+	}, [enOnly, canKang]);
+
+	const drawText = useMemo(() => {
+		return enOnly
+			? ts?.length === 15
+				? ControlsTextEng.END
+				: ControlsTextEng.DRAW
+			: ts?.length === 15
+			? ControlsTextChi.END
+			: ControlsTextChi.DRAW;
+	}, [enOnly, ts?.length]);
+
 	// I know... unreadable af but gna do this to save on const declaration memory
 	return {
 		game: currGame,
@@ -819,7 +847,7 @@ function useControls(
 			disableChi: !canChi || delayLeft > 0,
 			disablePong: !canPong && !canKang,
 			disableHu: isHuLocked,
-			pongText: canKang ? ControlsTextChi.KANG : ControlsTextChi.PONG,
+			pongText,
 			confirmHu,
 			showDeclareHu,
 			HH: _HH,
@@ -837,7 +865,7 @@ function useControls(
 			disableThrow: selectedTiles?.length !== 1 || n[3] !== playerSeat || !f[3],
 			disableDraw:
 				ts?.length === 15 && f[3] && n[3] === playerSeat ? false : drawDisabled,
-			drawText: ts?.length === 15 ? ControlsTextChi.END : ControlsTextChi.DRAW,
+			drawText,
 			HH: _HH,
 			highlight,
 			showDeclareHu,

@@ -112,7 +112,7 @@ export enum ScreenTextChi {
 }
 
 export enum ControlsTextEng {
-	CHAIN = '',
+	CHAIN = '(repeat)',
 	CHI = 'Chi',
 	DRAW = 'Draw',
 	END = 'End',
@@ -120,7 +120,7 @@ export enum ControlsTextEng {
 	KAI_EXCLAIM = 'Hu!',
 	KAI_QUESTION = 'Hu?',
 	KANG = 'Kong',
-	THROW = 'Discard'
+	THROW = 'Throw'
 }
 
 export enum ControlsTextChi {
