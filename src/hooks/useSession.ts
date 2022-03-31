@@ -17,7 +17,8 @@ function useSession(skipVerification = true) {
 				} else {
 					setTimeout(async () => {
 						try {
-							const FBAuthenticated = await ServiceInstance.FBAuthenticated();
+							const FBAuthenticated =
+								await ServiceInstance.FBAuthenticated();
 							if (FBAuthenticated) {
 								resolve(!!user || (await handleUserState()));
 							} else {
@@ -34,7 +35,11 @@ function useSession(skipVerification = true) {
 		[user, handleUserState]
 	);
 
-	const { execute, status: verifyingSession, value: sessionVerified } = useAsync(validateSession, false, true);
+	const {
+		execute,
+		status: verifyingSession,
+		value: sessionVerified
+	} = useAsync(validateSession, false, true);
 
 	useEffect(() => {
 		!skipVerification && execute();

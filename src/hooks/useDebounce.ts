@@ -1,6 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
-import { isDev } from 'platform';
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // https://usehooks.com/useDebounce/
 function useDebounce<P, R>(callback: (p?: P) => Promise<R>, args: P, delay = 500) {
@@ -13,7 +12,7 @@ function useDebounce<P, R>(callback: (p?: P) => Promise<R>, args: P, delay = 500
 			try {
 				callback(debouncedArgs).then(results => setResults(results));
 			} catch (err) {
-				isDev && console.error(err);
+				console.error(err);
 				setResults(null);
 			}
 		} else {

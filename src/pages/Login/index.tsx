@@ -9,10 +9,12 @@ import { ButtonText, HomeScreenText } from 'screenTexts';
 import { ServiceInstance } from 'service';
 import { Row } from 'style/StyledComponents';
 import { StyledButton } from 'style/StyledMui';
+import { IAlert } from 'typesPlus';
 import { isEmail } from 'utility';
 
 const Login = () => {
-	const { alert, login, navigate, setAlert, setUserEmail } = useContext(AppContext);
+	const { login, navigate, setUserEmail } = useContext(AppContext);
+	const [alert, setAlert] = useState<IAlert>(null);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
 	const [usernameEmail, setUsernameEmail] = useState('');
@@ -64,33 +66,37 @@ const Login = () => {
 			if (isEmail(usernameEmail)) {
 				email = usernameEmail;
 			} else {
-				await ServiceInstance.getEmailFromUsername(usernameEmail).then(e => {
-					email = e;
-				});
-			}
-			ServiceInstance.FBAuthLogin({ email, password })
-				.then(e => ServiceInstance.FBResolveUser(e))
-				.then(user => {
-					setReady(true);
-					setAlert(null);
-					if (user) {
-						clearForm();
-						login(user, false);
-						if (adminUsers.includes(user.uN)) {
-							// use admin login to cleanup old games since users may not login a second time
-							ServiceInstance.cleanupAllGames();
-						} else {
-							user?.email && ServiceInstance.cleanupGames(user.email);
-						}
+				await ServiceInstance.getEmailFromUsername(usernameEmail)
+					.then(e => (email = e))
+					.catch(err => {
+						setAlert({ status: Status.ERROR, msg: err.message });
 						setReady(true);
-						navigate(Page.INDEX);
-					} else {
-						throw new Error(ErrorMessage.REGISTER_ISSUE);
-					}
-				})
-				.catch(err => {
-					handleError(err);
-				});
+						return;
+					});
+			}
+			if (email) {
+				ServiceInstance.FBAuthLogin({ email, password })
+					.then(e => ServiceInstance.FBResolveUser(e))
+					.then(user => {
+						setReady(true);
+						setAlert(null);
+						if (user) {
+							clearForm();
+							login(user, false);
+							if (adminUsers.includes(user.uN)) {
+								// use admin login to cleanup old games since users may not login a second time
+								ServiceInstance.cleanupAllGames();
+							} else {
+								user?.email && ServiceInstance.cleanupGames(user.email);
+							}
+							setReady(true);
+							navigate(Page.INDEX);
+						} else {
+							throw new Error(ErrorMessage.REGISTER_ISSUE);
+						}
+					})
+					.catch(err => handleError(err));
+			}
 		}
 	}, [handleError, login, navigate, password, showRegister, setAlert, usernameEmail]);
 
@@ -165,7 +171,7 @@ const Login = () => {
 				}
 				onChange={e =>
 					showRegister
-						? setEmail(e.target.value)
+						? setEmail(e.target.value?.toLowerCase())
 						: setUsernameEmail(e.target.value?.toLowerCase())
 				}
 				style={{ margin: '-5px 0px 0px', width: '160px' }}
@@ -226,7 +232,7 @@ const Login = () => {
 			markup={markup}
 			title={HomeScreenText.HOME_TITLE}
 			ready={ready}
-			timeout={2500}
+			timeout={5000}
 			skipVerification
 		/>
 	);

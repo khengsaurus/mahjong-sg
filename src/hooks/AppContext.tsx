@@ -31,13 +31,11 @@ import {
 	setTHK,
 	setUser
 } from 'store/actions';
-import { IAlert } from 'typesPlus';
 import { getTheme } from 'utility';
 import { mainLRUCache } from 'utility/LRUCache';
 import { jwtToObj, objToJwt } from 'utility/parsers';
 
 interface IAppContext {
-	alert: IAlert;
 	annHuOpen: boolean;
 	hasAI: boolean;
 	players: User[];
@@ -54,7 +52,6 @@ interface IAppContext {
 	login: (user: User, writeToLocal: boolean) => boolean;
 	logout: () => void;
 	navigate: NavigateFunction;
-	setAlert?: (alert: IAlert) => void;
 	setAnnHuOpen?: (b: boolean) => void;
 	setPlayers: (players: User[]) => void;
 	setPlayerSeat: (seat: number) => void;
@@ -66,7 +63,6 @@ interface IAppContext {
 }
 
 const initialContext: IAppContext = {
-	alert: null,
 	annHuOpen: false,
 	hasAI: false,
 	players: [],
@@ -83,7 +79,6 @@ const initialContext: IAppContext = {
 	navigate: (_: any) => {},
 	login: (_: User, __: boolean) => true,
 	logout: () => {},
-	setAlert: (_: IAlert) => {},
 	setAnnHuOpen: (_: boolean) => {},
 	setSelectedTiles: (_: IShownTile[]) => {},
 	setShowAI: (_: SetStateAction<boolean>) => {},
@@ -111,7 +106,6 @@ export const AppContextProvider = (props: any) => {
 		jwtToObj,
 		objToJwt
 	);
-	const [alert, setAlert] = useState<IAlert>(null);
 	const [annHuOpen, setAnnHuOpen] = useState(false);
 	const [hasAI, setHasAI] = useState(false);
 	const [players, setPlayers] = useState<User[]>([user]);
@@ -260,7 +254,6 @@ export const AppContextProvider = (props: any) => {
 	return (
 		<AppContext.Provider
 			value={{
-				alert,
 				annHuOpen,
 				hasAI,
 				homeAlert,
@@ -276,7 +269,6 @@ export const AppContextProvider = (props: any) => {
 				login,
 				logout,
 				navigate,
-				setAlert,
 				setAnnHuOpen,
 				setPlayers,
 				setPlayerSeat,

@@ -15,11 +15,12 @@ import { ServiceInstance } from 'service';
 import { IStore } from 'store';
 import { Row } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
+import { IAlert } from 'typesPlus';
 
 const NewUser = () => {
-	const { alert, login, logout, navigate, setAlert, userEmail } =
-		useContext(AppContext);
+	const { login, logout, navigate, userEmail } = useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
+	const [alert, setAlert] = useState<IAlert>(null);
 	const [toDeleteIfUnload, setToDeleteIfUnload] = useState(true);
 	const [username, setUsername] = useState('');
 	const [enOnly, setEnOnly] = useState(false);
@@ -78,9 +79,7 @@ const NewUser = () => {
 						callback();
 					}
 				})
-				.catch(err => {
-					setAlert({ status: Status.ERROR, msg: err.message });
-				});
+				.catch(err => setAlert({ status: Status.ERROR, msg: err.message }));
 		}
 	}
 
@@ -94,9 +93,7 @@ const NewUser = () => {
 					setAlert(null);
 				}, 1000);
 			})
-			.catch(err => {
-				setAlert({ status: Status.ERROR, msg: err.message });
-			});
+			.catch(err => setAlert({ status: Status.ERROR, msg: err.message }));
 	}
 
 	const renderEnOnly = () => (

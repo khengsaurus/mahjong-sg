@@ -54,46 +54,48 @@ export class Service {
 	}
 
 	/**
-	 * @throws ErrorMessage.LOGIN_ERROR
+	 * @throws ErrorMessage.SERVICE_OFFLINE || ErrorMessage.LOGIN_ERROR
 	 */
-	FBResolveUser(email: string): Promise<User | null> {
-		return new Promise((resolve, reject) => {
+	FBResolveUser(email: string, retry = 1, retryAfter = 1000): Promise<User | null> {
+		return new Promise(async (resolve, reject) => {
 			try {
 				if (email) {
-					FBService.getUserReprByEmail(email).then((userData: Object) =>
-						resolve(!isEmpty(userData) ? objToUser(userData) : null)
-					);
+					for (let i = 0; i <= retry; i++) {
+						FBService.getUserReprByEmail(email)
+							.then((userData: Object) => {
+								if (!isEmpty(userData)) {
+									resolve(objToUser(userData));
+									return;
+								}
+							})
+							.catch(err => reject(err));
+						// Wait before retrying
+						await new Promise(r => setTimeout(r, retryAfter));
+					}
+					reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 				} else {
 					reject(new Error(ErrorMessage.LOGIN_ERROR));
 				}
 			} catch (err) {
-				reject(new Error(ErrorMessage.LOGIN_ERROR));
+				reject(err);
 			}
 		});
 	}
 
 	async FBNewUsername(values: IEmailUser, enOnly: boolean): Promise<boolean> {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			FBService.isUsernameAvail(values.uN)
-				.then(res => {
-					if (res) {
-						FBService.registerUserEmail(
-							values.uN,
-							values.email,
-							enOnly
-						).then(() =>
-							FBService.pairEmailToUsername(values.uN, values.email).then(
-								res => resolve(res)
-							)
-						);
-					} else {
-						reject(new Error(ErrorMessage.USERNAME_TAKEN));
-					}
-				})
-				.catch(err => {
-					console.error(err);
-					reject(new Error(ErrorMessage.REGISTER_ERROR));
-				});
+				.then(
+					avail =>
+						avail &&
+						FBService.registerUserEmail(values.uN, values.email, enOnly)
+				)
+				.then(
+					success =>
+						success && FBService.pairEmailToUsername(values.uN, values.email)
+				)
+				.then(success => resolve(success))
+				.catch(err => reject(err));
 		});
 	}
 
@@ -132,29 +134,21 @@ export class Service {
 			});
 		}
 
-		return new Promise(async resolve => {
+		return new Promise(async (resolve, reject) => {
 			const timeout = new Promise<Error>(reject =>
-				setTimeout(() => reject(new Error(ErrorMessage.ACC_DELETE_TIMEOUT)), 3000)
+				setTimeout(() => reject(new Error(ErrorMessage.ACC_DELETE_TIMEOUT)), 5000)
 			);
 			await Promise.race([FBService.deleteUserAccount(user), timeout])
 				.then(_success => {
-					if (_success) {
-						FBService.authDeleteCurrentUser()
-							.then(success => {
-								if (!success) {
-									handleError(
-										new Error(ErrorMessage.AUTH_DELETE_ERROR)
-									);
-								}
-								resolve(success);
-							})
-							.catch(err => handleError(err));
+					if (_success === true) {
+						FBService.authDeleteCurrentUser().then(res => resolve(res));
+					} else {
+						handleError(new Error(ErrorMessage.AUTH_DELETE_ERROR));
 					}
 				})
 				.catch(err => {
-					console.error(err);
-					handleError(err.message);
-					resolve(false);
+					handleError(err);
+					reject(err);
 				});
 		});
 	}

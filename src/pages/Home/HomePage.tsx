@@ -53,7 +53,7 @@ const HomePage = ({
 	markup,
 	title,
 	ready = true,
-	timeout = 1500,
+	timeout = 2500,
 	misc = 1,
 	customBack = null,
 	fallbackTitle = HomeScreenText.SOMETHING_WENT_WRONG,

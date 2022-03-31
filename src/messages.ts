@@ -22,7 +22,7 @@ export enum ErrorMessage {
 	FIREBASE_WRONG_PW = 'WRONG-PASSWORD',
 	ACC_DELETE_TIMEOUT = 'Account deletion request timeout',
 	TRANSACTION_UPDATE_FAILED = 'Transaction update failed',
-	SERVICE_OFFLINE = 'Service is disconnected',
+	SERVICE_OFFLINE = 'Service is not connected',
 
 	// User display msgs
 	DELETE_ERROR = 'Failed to delete account. Please try again later',
@@ -34,9 +34,9 @@ export enum ErrorMessage {
 	NO_USER_BY_USERNAME = 'Could not find a user with that username',
 	PW_NOT_MATCHING = 'Passwords do not match',
 	REGISTER_ERROR = 'Unable to register',
-	REGISTER_ISSUE = 'User may not be registered correctly',
+	REGISTER_ISSUE = `Please close the app, then open it and try logging in again. If this keeps happening, there may have been an issue during registration with an earlier version of the app. Please get in touch with us :/`,
 	TRY_AGAIN = 'Please try again',
-	UNABLE_TO_CONNET = 'Unable to connect to the server',
+	UNABLE_TO_CONNECT = 'Unable to connect to the server',
 	USERNAME_NOT_ALLOWED = 'Usernames cannot start with ',
 	USERNAME_TAKEN = 'Username already taken'
 }

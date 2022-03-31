@@ -1,6 +1,6 @@
 export const LocalFlag = 'local';
 export const Visitor = 'Visitor';
-export const DisallowedUsernames = ['admin', 'user', 'test'];
+export const DisallowedUsernames = ['admin', 'test'];
 
 export type AlertStatus = 'success' | 'info' | 'warning' | 'error';
 

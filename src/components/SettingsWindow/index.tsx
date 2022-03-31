@@ -33,7 +33,7 @@ import { setHaptic, setSizes, setTheme } from 'store/actions';
 import { MuiStyles, TableTheme } from 'style/MuiStyles';
 import { Row } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
-import { IModalP } from 'typesPlus';
+import { IAlert, IModalP } from 'typesPlus';
 import { getTheme } from 'utility';
 import './settingsWindow.scss';
 
@@ -42,8 +42,9 @@ interface ISettingsWindowP extends IModalP {
 }
 
 const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP) => {
-	const { alert, handleLocalUO, logout, navigate, setAlert } = useContext(AppContext);
+	const { handleLocalUO, logout, navigate } = useContext(AppContext);
 	const { user, theme, sizes, haptic = true } = useSelector((state: IStore) => state);
+	const [alert, setAlert] = useState<IAlert>(null);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);
 	const [tableColor, setTableColor] = useState(theme?.tableColor);
 	const [tileColor, setTileColor] = useState(theme?.tileColor);
@@ -169,16 +170,25 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 		onClose();
 	}
 
+	function setDeleteAlert() {
+		setAlert({ status: Status.ERROR, msg: ErrorMessage.DELETE_ERROR });
+	}
+
 	async function handleDeleteAccount() {
 		setAlert(null);
-		await ServiceInstance.FBDeleteUser(user).then(res => {
-			if (res) {
-				logout();
-				navigate(Page.LOGIN);
-			} else {
-				setAlert({ status: Status.ERROR, msg: ErrorMessage.DELETE_ERROR });
-			}
-		});
+		try {
+			await ServiceInstance.FBDeleteUser(user).then(res => {
+				if (res) {
+					logout();
+					navigate(Page.LOGIN);
+				} else {
+					setDeleteAlert();
+				}
+			});
+		} catch (err) {
+			console.error(err);
+			setDeleteAlert();
+		}
 	}
 
 	const DeleteAlert: React.FC = () => {
@@ -266,7 +276,12 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 			<StyledButton
 				label={ButtonText.DELETE_ACCOUNT}
 				onClick={() => setShowDeleteAlert(true)}
-				style={{ padding: 0, marginTop: 5, textTransform: 'capitalize', fontSize: 15 }}
+				style={{
+					padding: 0,
+					marginTop: 5,
+					textTransform: 'capitalize',
+					fontSize: 15
+				}}
 			/>
 		);
 	}

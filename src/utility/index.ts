@@ -345,7 +345,7 @@ export async function createLocalGame(
 			resolve(game);
 		} catch (err) {
 			console.error(`Failed to create local game: 🥞`);
-			isDev && console.error(err);
+			console.error(err);
 			resolve(null);
 		}
 	});

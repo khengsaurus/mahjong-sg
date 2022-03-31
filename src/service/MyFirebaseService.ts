@@ -158,14 +158,10 @@ export class FirebaseService {
 		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				createUserWithEmailAndPassword(this.auth, email, password)
-					.then((values: UserCredential) => {
-						resolve(values.user.email);
-					})
-					.catch(err => {
-						reject(err);
-					});
+					.then((values: UserCredential) => resolve(values.user.email))
+					.catch(err => reject(err));
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -186,10 +182,10 @@ export class FirebaseService {
 						console.error(
 							`FirebaseService.authLoginEmailPass failed with err: ${err.message}`
 						);
-						reject(ErrorMessage.LOGIN_ERROR);
+						reject(new Error(ErrorMessage.LOGIN_ERROR));
 					});
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -201,18 +197,14 @@ export class FirebaseService {
 
 	authDeleteCurrentUser(): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			if (this.isFBConnected) {
-				if (!!this.auth.currentUser) {
-					try {
-						deleteUser(this.auth.currentUser).then(() => resolve(true));
-					} catch (err) {
-						reject(err);
-					}
-				} else {
-					resolve(false);
+			if (this.isFBConnected && !!this.auth.currentUser) {
+				try {
+					deleteUser(this.auth.currentUser).then(() => resolve(true));
+				} catch (err) {
+					reject(err);
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -220,15 +212,17 @@ export class FirebaseService {
 	/* ------------------------- User related ------------------------- */
 
 	pairEmailToUsername(username: string, email: string): Promise<boolean> {
-		return new Promise(resolve => {
+		return new Promise((resolve, reject) => {
 			if (this.isFBConnected) {
 				try {
-					set(ref(this.db, `${FBDatabase.USERS}/${username}`), email).then(() =>
-						resolve(true)
+					set(ref(this.db, `${FBDatabase.USERS}/${username}`), email).then(
+						() => {
+							resolve(true);
+							return;
+						}
 					);
 				} catch (err) {
-					console.error(err);
-					resolve(false);
+					reject(err);
 				}
 			}
 		});
@@ -237,25 +231,33 @@ export class FirebaseService {
 	/**
 	 * @throws if no userEmail, ErrorMessage.LOGIN_ERROR, else ErrorMessage.TRY_AGAIN
 	 */
-	getEmailFromUsername(username: string): Promise<string> {
-		return new Promise((resolve, reject) => {
+	getEmailFromUsername(
+		username: string,
+		retry = 1,
+		retryAfter = 1000
+	): Promise<string> {
+		return new Promise(async (resolve, reject) => {
 			if (this.isFBConnected) {
 				try {
-					get(child(ref(this.db), `${FBDatabase.USERS}/${username}`)).then(
-						snapshot => {
-							if (snapshot.exists()) {
-								resolve(snapshot.val());
-							} else {
-								reject(new Error(ErrorMessage.LOGIN_ERROR));
+					for (let i = 0; i <= retry; i++) {
+						get(child(ref(this.db), `${FBDatabase.USERS}/${username}`)).then(
+							snapshot => {
+								if (snapshot.exists()) {
+									resolve(snapshot.val());
+									return;
+								}
 							}
-						}
-					);
+						);
+						// Wait before retrying
+						await new Promise(r => setTimeout(r, retryAfter));
+					}
+					reject(new Error(ErrorMessage.LOGIN_ERROR));
 				} catch (err) {
 					console.error(err);
 					reject(new Error(ErrorMessage.TRY_AGAIN));
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -265,7 +267,7 @@ export class FirebaseService {
 		email: string,
 		enOnly: boolean
 	): Promise<boolean> {
-		return new Promise(resolve => {
+		return new Promise(async (resolve, reject) => {
 			if (this.isFBConnected) {
 				try {
 					addDoc(this.usersRef, {
@@ -280,11 +282,16 @@ export class FirebaseService {
 						bgC: BackgroundColor.BROWN,
 						tC: TableColor.GREEN,
 						tBC: TileColor.GREEN
+					}).then(res => {
+						if (res?.id) {
+							resolve(true);
+							return;
+						} else {
+							reject(new Error(ErrorMessage.REGISTER_ERROR));
+						}
 					});
-					resolve(true);
 				} catch (err) {
-					console.error('FirebaseService - user was not created: ', +err);
-					resolve(false);
+					reject(err);
 				}
 			}
 		});
@@ -299,35 +306,52 @@ export class FirebaseService {
 					if (querySnapshot?.empty) {
 						resolve(true);
 					} else {
-						resolve(false);
+						reject(new Error(ErrorMessage.USERNAME_TAKEN));
 					}
 				} catch (err) {
 					console.error(err);
-					reject(new Error(ErrorMessage.UNABLE_TO_CONNET));
+					reject(new Error(ErrorMessage.UNABLE_TO_CONNECT));
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
 
-	async getUserReprByEmail(email: string): Promise<Object> {
+	async getUserReprByEmail(
+		email: string,
+		retry = 1,
+		retryAfter = 1000
+	): Promise<Object> {
 		return new Promise(async (resolve, reject) => {
 			if (this.isFBConnected) {
 				const res = [];
 				try {
-					const q = query(this.usersRef, where('email', '==', email), limit(1));
-					const querySnapshot = await getDocsFromServer(q);
-					querySnapshot.forEach(doc => {
-						res.push({ id: doc.id, ...doc.data() });
-					});
-					resolve(res[0] || null);
+					for (let i = 0; i <= retry; i++) {
+						const q = query(
+							this.usersRef,
+							where('email', '==', email),
+							limit(1)
+						);
+						const querySnapshot = await getDocsFromServer(q);
+						querySnapshot.forEach(doc =>
+							res.push({ id: doc.id, ...doc.data() })
+						);
+						if (res.length > 0) {
+							resolve(res[0]);
+							return;
+						}
+						// Wait before retrying
+						await new Promise(r => setTimeout(r, retryAfter));
+					}
+					if (res.length === 0) {
+						throw new Error(ErrorMessage.SERVICE_OFFLINE);
+					}
 				} catch (err) {
-					console.error(err);
 					reject(err);
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -383,7 +407,7 @@ export class FirebaseService {
 					)
 					.catch(err => reject(err));
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -406,7 +430,7 @@ export class FirebaseService {
 					reject(err);
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -560,7 +584,7 @@ export class FirebaseService {
 					reject(err);
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -585,7 +609,7 @@ export class FirebaseService {
 					reject(err);
 				}
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -602,7 +626,7 @@ export class FirebaseService {
 					const gameDocRef = doc(this.gamesRef, gameId);
 					await transaction.get(gameDocRef).then(gameDoc => {
 						if (!gameDoc.exists()) {
-							reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
+							reject(new Error(ErrorMessage.TRANSACTION_UPDATE_FAILED));
 						} else {
 							const { f, n } = gameDoc.data() || {};
 							f[6] = mHu;
@@ -614,7 +638,7 @@ export class FirebaseService {
 					});
 				});
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
@@ -631,7 +655,7 @@ export class FirebaseService {
 					const gameDocRef = doc(this.gamesRef, gameId);
 					await transaction.get(gameDocRef).then(gameDoc => {
 						if (!gameDoc.exists()) {
-							reject(ErrorMessage.TRANSACTION_UPDATE_FAILED);
+							reject(new Error(ErrorMessage.TRANSACTION_UPDATE_FAILED));
 						} else {
 							const { ps, logs } = gameDoc.data();
 							const _from = ps[from];
@@ -653,7 +677,7 @@ export class FirebaseService {
 					});
 				});
 			} else {
-				reject(ErrorMessage.SERVICE_OFFLINE);
+				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
 	}
