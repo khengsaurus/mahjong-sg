@@ -17,13 +17,13 @@ interface IChiAlertP {
 
 const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertP) => {
 	const {
-		theme: { tableColor },
+		theme: { tableColor, enOnly = false },
 		game,
 		localGame,
 		gameId
 	} = useSelector((store: IStore) => store);
 	const currGame = gameId === LocalFlag ? localGame : game;
-	const cardName = currGame?.lTh?.c ? getCardName(currGame.lTh.c) : '';
+	const cardName = currGame?.lTh?.c ? getCardName(currGame.lTh.c, enOnly) : '';
 	const [foodEmoji, setFoodEmoji] = useState(getRandomFoodEmoji());
 	const closeRef = useRef(null);
 
@@ -44,9 +44,17 @@ const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertP) => {
 			style={{ backgroundColor: tableColor }}
 			onClick={handleClick}
 		>
-			<StyledText text={`${ScreenTextEng.YOU_CAN_CHI} ${cardName}`} variant="body1" />
+			<StyledText
+				text={`${ScreenTextEng.YOU_CAN_CHI} ${cardName}`}
+				variant="body1"
+			/>
 			<StyledText text={`${foodEmoji}`} variant="body1" />
-			<IconButton className="icon-button" onClick={onClose} disableRipple ref={closeRef}>
+			<IconButton
+				className="icon-button"
+				onClick={onClose}
+				disableRipple
+				ref={closeRef}
+			>
 				<CloseIcon fontSize={'medium'} />
 			</IconButton>
 		</Row>

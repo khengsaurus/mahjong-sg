@@ -1,9 +1,9 @@
-import { CardName, Exec, LocalFlag, MeldType, SuitName } from 'enums';
+import { Exec, LocalFlag, MeldType } from 'enums';
 import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
-import { findLeft } from 'utility';
+import { findLeft, getCardName } from 'utility';
 import { AppContext } from '.';
 
 export interface IUseNotifs {
@@ -25,7 +25,13 @@ const useNotifs = (
 	isHuLocked: boolean
 ): IUseNotifs => {
 	const { playerSeat } = useContext(AppContext);
-	const { game, gameId, localGame, tHK } = useSelector((state: IStore) => state);
+	const {
+		game,
+		gameId,
+		localGame,
+		tHK,
+		theme: { enOnly = false }
+	} = useSelector((state: IStore) => state);
 	const [showChiAlert, setShowChiAlert] = useState(false);
 	const [toChi, setToChi] = useState<IShownTile[][]>([]);
 
@@ -35,10 +41,9 @@ const useNotifs = (
 	const canTakeLT = n[7] !== playerSeat && lThAvail;
 
 	const skRef = JSON.stringify(sk);
-	const lastThrownCard =
-		lTh?.c?.length > 1 && !!Number(lTh?.c[0])
-			? `${lTh?.c[0]}${SuitName[lTh?.c[1]] || lTh?.c[1]}`
-			: CardName[lTh?.c] || lTh?.c;
+	const lastThrownCard = useMemo(() => {
+		return getCardName(lTh?.c, enOnly);
+	}, [enOnly, lTh?.c]);
 
 	useEffect(() => {
 		if (lThAvail && !f[3] && n[7] === findLeft(playerSeat)) {

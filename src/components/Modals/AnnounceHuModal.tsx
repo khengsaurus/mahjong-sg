@@ -28,7 +28,7 @@ const AnnounceHuModal = ({
 	const { setAnnHuOpen } = useContext(AppContext);
 	const {
 		user,
-		theme: { enOnly }
+		theme: { enOnly = false }
 	} = useSelector((store: IStore) => store);
 	const { id, hu = [], f = [], n = [], pay, ps, logs, lTh } = game || {};
 	const whoHu = Number(hu[0]);

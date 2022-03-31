@@ -21,7 +21,11 @@ const ControlButton = ({ label, callback, disabled = false, style }: IControlBut
 			variant="text"
 			onClick={callback}
 			disabled={disabled}
-			style={{ ...style, color: disabled ? 'grey' : getHighlightColor(tableColor) }}
+			style={{
+				...style,
+				color: disabled ? 'grey' : getHighlightColor(tableColor),
+				textTransform: 'capitalize'
+			}}
 			color="secondary"
 			disableRipple
 		>

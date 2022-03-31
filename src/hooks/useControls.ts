@@ -1,5 +1,5 @@
 import { ImpactStyle } from '@capacitor/haptics';
-import { CardName, CardNameEn, Exec, LocalFlag, MeldName, MeldType } from 'enums';
+import { Exec, LocalFlag, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
 import { isDev, isDevBot, triggerHaptic } from 'platform';
@@ -92,7 +92,7 @@ function useControls(
 
 	const seat = useMemo(() => {
 		const wind = indexToWind((playerSeat - n[2] + 4) % 4);
-		return enOnly ? CardNameEn[wind] : CardName[wind];
+		return getCardName(wind, enOnly);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [enOnly, playerSeat, n[2]]);
 

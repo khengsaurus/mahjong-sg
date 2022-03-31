@@ -27,7 +27,7 @@ const DeclareHuModal = ({
 }: IDeclareHuModalP) => {
 	const { f = [], hu, n = [] } = game || {};
 	const {
-		theme: { enOnly }
+		theme: { enOnly = false }
 	} = useSelector((state: IStore) => state);
 	const defaultZimo =
 		!!HH?.self || (f[3] && n[3] === playerSeat && !isEmpty(game.ps[playerSeat]?.lTa));

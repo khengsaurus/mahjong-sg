@@ -19,7 +19,7 @@ const LogModal = (props: ILogModalP) => {
 		game,
 		gameId,
 		localGame,
-		theme: { tableColor = TableColor.GREEN, enOnly },
+		theme: { tableColor = TableColor.GREEN, enOnly = false },
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((store: IStore) => store);
 	const isLocalGame = gameId === LocalFlag;

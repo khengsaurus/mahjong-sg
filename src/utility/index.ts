@@ -948,8 +948,15 @@ export function getDefaultAmt(
 	}
 }
 
-export function getCardName(c: string) {
-	return Number(c[0]) ? `${c[0]}${SuitName[c[1]] || c[1]}` : CardName[c] || c;
+/**
+ * @param c: a string like 4S or 4索
+ */
+export function getCardName(c: string, enOnly = false) {
+	return c
+		? Number(c[0])
+			? `${c[0]}${(enOnly ? convertSuitToEn(c[1]) : SuitName[c[1]]) || c[1]}`
+			: (enOnly ? CardNameEn[c] : CardName[c]) || c
+		: '';
 }
 
 export function isEmptyTile(tile: IShownTile) {
@@ -1194,6 +1201,13 @@ export function containsPongOrKang(h: IHand, card: string): boolean {
 	return !![...openMsStr, ...hideMsStr].find(
 		m => m === `${MeldType.PONG}-${card}` || m === `${MeldType.KANG}-${card}`
 	);
+}
+
+export function convertSuitToEn(s: string) {
+	return s
+		.replace(SuitName.W, SuitNameEn.W)
+		.replace(SuitName.T, SuitNameEn.T)
+		.replace(SuitName.S, SuitNameEn.S);
 }
 
 export function convertToEn(str: string) {

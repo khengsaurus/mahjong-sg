@@ -10,6 +10,7 @@ import { IStore } from 'store';
 import { getHighlightColor } from 'style/MuiStyles';
 import { Centered, Column } from 'style/StyledComponents';
 import { StyledCenterText } from 'style/StyledMui';
+import { getCardName } from 'utility';
 
 interface IOfferChiModalP {
 	show: boolean;
@@ -21,9 +22,11 @@ interface IOfferChiModalP {
 
 const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalP) => {
 	const {
-		theme: { tableColor }
+		theme: { tableColor, enOnly = false }
 	} = useSelector((state: IStore) => state);
-	const title = useMemo(() => `${ScreenTextEng.YOU_CAN_CHI} ${card}`, [card]);
+	const title = useMemo(() => {
+		return `${ScreenTextEng.YOU_CAN_CHI} ${getCardName(card, enOnly)}`;
+	}, [card, enOnly]);
 
 	return (
 		<Dialog open={show} BackdropProps={{ invisible: true }} onClose={onClose}>
