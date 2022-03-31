@@ -23,7 +23,7 @@ import {
 import { AppContext } from 'hooks';
 import { extend, isEqual } from 'lodash';
 import { ErrorMessage } from 'messages';
-import { isMobile } from 'platform';
+import { isDev, isMobile } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonText, ScreenTextEng } from 'screenTexts';
@@ -159,7 +159,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 			};
 			ServiceInstance.FBUpdateUser(user.id, keyVal)
 				.then(() => handleLocalUO(extend(user, keyVal)))
-				.catch(err => console.error(err));
+				.catch(err => isDev && console.error(err));
 		}
 		onClose();
 	}
@@ -180,7 +180,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 				}
 			});
 		} catch (err) {
-			console.error(err);
+			isDev && console.error(err);
 			setDeleteAlert();
 		}
 	}

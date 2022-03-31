@@ -245,7 +245,7 @@ export const AppContextProvider = (props: any) => {
 					});
 				}
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 				resolve(false);
 			}
 		});

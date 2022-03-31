@@ -42,7 +42,7 @@ export class Service {
 					} else if (err.message.includes('invalid-email')) {
 						reject(new Error(ErrorMessage.INVALID_EMAIL));
 					} else {
-						console.error(err);
+						isDev && console.error(err);
 						reject(new Error(ErrorMessage.REGISTER_ERROR));
 					}
 				});
@@ -123,7 +123,7 @@ export class Service {
 	// + unsure when FB will throw client offline or 'requires-recent-login' error...
 	async FBDeleteUser(user: User): Promise<boolean> {
 		function handleError(error: Error) {
-			console.error(error);
+			isDev && console.error(error);
 			FBService.restoreUser(user);
 			FBService.newLog({
 				userId: user?.id,
@@ -207,14 +207,15 @@ export class Service {
 					});
 				}
 			} catch (err) {
-				console.error(
-					`${
-						isLocalGame
-							? ErrorMessage.INIT_LOCAL_GAME
-							: ErrorMessage.INIT_ONLINE_GAME
-					}: 🥞`
-				);
-				console.error(err);
+				isDev &&
+					console.error(
+						`${
+							isLocalGame
+								? ErrorMessage.INIT_LOCAL_GAME
+								: ErrorMessage.INIT_ONLINE_GAME
+						}: 🥞`
+					);
+				isDev && console.error(err);
 				resolve(null);
 			}
 		});
@@ -251,7 +252,7 @@ export class Service {
 			try {
 				FBService.runTransactionUpdate(game.id, mHu, bt, easyAI);
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 			}
 		}
 	}
@@ -264,7 +265,7 @@ export class Service {
 			try {
 				FBService.runTransactionPay(game.id, from, to, amt);
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 			}
 		}
 	}

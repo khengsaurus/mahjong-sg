@@ -1,4 +1,5 @@
 import { useAsync } from 'hooks';
+import { isDev } from 'platform';
 import { useCallback, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ServiceInstance } from 'service';
@@ -25,7 +26,7 @@ function useSession(skipVerification = true) {
 								resolve(false);
 							}
 						} catch (err) {
-							console.error(err);
+							isDev && console.error(err);
 							resolve(false);
 						}
 					}, timeout);

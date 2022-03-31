@@ -3,6 +3,7 @@ import { PaymentType } from 'enums';
 import { Game, User } from 'models';
 import { IUserJwt } from 'typesPlus';
 import { getDateTime } from 'utility';
+import { isDev } from 'platform';
 
 export function userToObj(user: User) {
 	return {
@@ -48,7 +49,7 @@ export function objToUser(obj: any): User {
 		};
 		user = new User(id, ref.uN, ref.email, ref._b, ref._s, ref._n, uData);
 	} catch (err) {
-		console.error(err.message + 'Failed to resolve user object');
+		isDev && console.error(err.message + 'Failed to resolve user object');
 	} finally {
 		return user;
 	}
@@ -127,7 +128,7 @@ export function objToGame(doc: any, repr = false): Game {
 					ref.pay
 			  );
 	} catch (err) {
-		console.error(err);
+		isDev && console.error(err);
 		return null;
 	}
 }

@@ -83,7 +83,7 @@ export class FirebaseService {
 				isDev && console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
 				resolve(true);
 			} catch (err) {
-				console.error(InfoMessage.FIREBASE_INIT_ERROR);
+				isDev && console.error(InfoMessage.FIREBASE_INIT_ERROR);
 				resolve(false);
 			}
 		});
@@ -179,9 +179,10 @@ export class FirebaseService {
 						}
 					})
 					.catch(err => {
-						console.error(
-							`FirebaseService.authLoginEmailPass failed with err: ${err.message}`
-						);
+						isDev &&
+							console.error(
+								`FirebaseService.authLoginEmailPass failed with err: ${err.message}`
+							);
 						reject(new Error(ErrorMessage.LOGIN_ERROR));
 					});
 			} else {
@@ -253,7 +254,7 @@ export class FirebaseService {
 					}
 					reject(new Error(ErrorMessage.LOGIN_ERROR));
 				} catch (err) {
-					console.error(err);
+					isDev && console.error(err);
 					reject(new Error(ErrorMessage.TRY_AGAIN));
 				}
 			} else {
@@ -309,7 +310,7 @@ export class FirebaseService {
 						reject(new Error(ErrorMessage.USERNAME_TAKEN));
 					}
 				} catch (err) {
-					console.error(err);
+					isDev && console.error(err);
 					reject(new Error(ErrorMessage.UNABLE_TO_CONNECT));
 				}
 			} else {
@@ -373,7 +374,7 @@ export class FirebaseService {
 				});
 				return users;
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 				return null;
 			}
 		} else {
@@ -387,7 +388,7 @@ export class FirebaseService {
 				const userRef = doc(this.usersRef, userId);
 				await updateDoc(userRef, keyVals);
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 			}
 		}
 	}
@@ -446,8 +447,8 @@ export class FirebaseService {
 					if (
 						moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23
 					) {
-						deleteDoc(doc(this.gamesRef, g.id)).catch(err =>
-							console.error(err)
+						deleteDoc(doc(this.gamesRef, g.id)).catch(
+							err => isDev && console.error(err)
 						);
 					}
 				}
@@ -465,8 +466,8 @@ export class FirebaseService {
 					if (
 						moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23
 					) {
-						deleteDoc(doc(this.gamesRef, g.id)).catch(err =>
-							console.error(err)
+						deleteDoc(doc(this.gamesRef, g.id)).catch(
+							err => isDev && console.error(err)
 						);
 					}
 				}
@@ -484,7 +485,7 @@ export class FirebaseService {
 					return { id: doc.id, ...doc.data() };
 				});
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 			}
 		}
 	}
@@ -580,7 +581,7 @@ export class FirebaseService {
 						resolve(game);
 					});
 				} catch (err) {
-					console.error('FirebaseService - game was not created: 🥞');
+					isDev && console.error('FirebaseService - game was not created: 🥞');
 					reject(err);
 				}
 			} else {
@@ -595,7 +596,7 @@ export class FirebaseService {
 				const gameRef = doc(this.gamesRef, game.id);
 				await updateDoc(gameRef, gameToObj(game));
 			} catch (err) {
-				console.error(err);
+				isDev && console.error(err);
 			}
 		}
 	}

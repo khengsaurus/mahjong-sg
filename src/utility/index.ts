@@ -44,7 +44,7 @@ export function formatFirestoreTimestamp(date: any): string {
 	try {
 		return moment(date.toDate()).format('DD/MM/YY, h:mm a');
 	} catch (err) {
-		console.error(err);
+		isDev && console.error(err);
 		return '';
 	}
 }
@@ -75,7 +75,7 @@ export function getDateTime(dt?: any, defaultNull = false) {
 				}
 			}
 		} catch (err) {
-			console.error(err);
+			isDev && console.error(err);
 		}
 	} else {
 		return defaultNull ? null : new Date();
@@ -344,8 +344,8 @@ export async function createLocalGame(
 			);
 			resolve(game);
 		} catch (err) {
-			console.error(`Failed to create local game: 🥞`);
-			console.error(err);
+			isDev && console.error(`Failed to create local game: 🥞`);
+			isDev && console.error(err);
 			resolve(null);
 		}
 	});

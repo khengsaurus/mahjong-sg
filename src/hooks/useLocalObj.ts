@@ -1,4 +1,5 @@
 import useLocalStorage from 'hooks/useLocalStorage';
+import { isDev } from 'platform';
 import { useCallback } from 'react';
 
 export interface IUseLocalObject<T> {
@@ -19,7 +20,7 @@ function useLocalObj<T>(
 			try {
 				resolve(localObj ? parser(localObj, key) : null);
 			} catch (err) {
-				console.error(`Token not found for key '${storageKey}': 🥞`);
+				isDev && console.error(`Token not found for key '${storageKey}': 🥞`);
 				reject(err);
 			}
 		});
