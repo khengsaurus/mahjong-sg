@@ -21,7 +21,7 @@ import {
 	Visitor
 } from 'enums';
 import { AppContext } from 'hooks';
-import { extend, isEmpty, isEqual } from 'lodash';
+import { extend, isEqual } from 'lodash';
 import { ErrorMessage } from 'messages';
 import { isMobile } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -144,15 +144,10 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 			user?.id !== Visitor &&
 			(flagSizesDiff ||
 				flagThemeDiff ||
-				user?.hp !== hapticOn ||
-				user?._b[0] !== enOnly)
+				user?._b[0] !== enOnly ||
+				user?._b[1] !== hapticOn)
 		) {
-			const _b =
-				user?._b[0] !== enOnly
-					? isEmpty(user?._b)
-						? [enOnly]
-						: [enOnly, ...user._b.slice(1, user._b.length)]
-					: user._b;
+			const _b = [enOnly, hapticOn, ...user._b.slice(2, user._b.length)];
 			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,
@@ -160,7 +155,6 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 				bgC: backgroundColor,
 				tC: tableColor,
 				tBC: tileColor,
-				hp: hapticOn,
 				_b
 			};
 			ServiceInstance.FBUpdateUser(user.id, keyVal)

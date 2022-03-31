@@ -12,6 +12,7 @@ export class User {
 	email: string;
 	/**
 	 * 0: English text only
+	 * 1: haptic feedback
 	 */
 	_b: boolean[];
 	_s: string[];
@@ -35,9 +36,33 @@ export class User {
 	cfH?: boolean;
 	hp?: boolean; // haptic
 
-	constructor(id?: string, uN?: string, email?: string, _b?: boolean[], _s?: string[], _n?: number[], data?: IUser);
-	constructor(id?: string, uN?: string, email?: string, _b?: boolean[], _s?: string[], _n?: number[], data?: IPlayer);
-	constructor(id?: string, uN?: string, email?: string, _b?: boolean[], _s?: string[], _n?: number[], data?: any) {
+	constructor(
+		id?: string,
+		uN?: string,
+		email?: string,
+		_b?: boolean[],
+		_s?: string[],
+		_n?: number[],
+		data?: IUser
+	);
+	constructor(
+		id?: string,
+		uN?: string,
+		email?: string,
+		_b?: boolean[],
+		_s?: string[],
+		_n?: number[],
+		data?: IPlayer
+	);
+	constructor(
+		id?: string,
+		uN?: string,
+		email?: string,
+		_b?: boolean[],
+		_s?: string[],
+		_n?: number[],
+		data?: any
+	) {
 		this.id = id;
 		this.uN = uN;
 		this.email = email;
@@ -51,7 +76,6 @@ export class User {
 			this.bgC = data?.bgC;
 			this.tC = data?.tC;
 			this.tBC = data?.tBC;
-			this.hp = data?.hp;
 		}
 		if (data?.ms) {
 			this.ms = data?.ms || [];
@@ -138,7 +162,9 @@ export class User {
 
 	/* ----------------------------------- Contains ----------------------------------- */
 	allHiddenTilesContain(t: IShownTile | IHiddenTile): boolean {
-		return (!isEmpty(this.lTa) ? [...this.hTs, this.lTa] : this.hTs).map(tile => tile.r).includes(t.r);
+		return (!isEmpty(this.lTa) ? [...this.hTs, this.lTa] : this.hTs)
+			.map(tile => tile.r)
+			.includes(t.r);
 	}
 	hiddenTilesContain(t: IShownTile | IHiddenTile): boolean {
 		return this.hTs?.map(tile => tile.r).includes(t.r);
@@ -209,14 +235,22 @@ export class User {
 		if (!Number(t.length)) {
 			if (index) {
 				let initLength = this.sTs.length;
-				this.sTs = [...this.sTs.slice(0, index), t, ...this.sTs.slice(index, initLength)];
+				this.sTs = [
+					...this.sTs.slice(0, index),
+					t,
+					...this.sTs.slice(index, initLength)
+				];
 			} else {
 				this.sTs = [t, ...this.sTs];
 			}
 			t.c && this.updatePongToKang(t.c);
 		} else if (t.length > 0) {
 			this.sTs = [...t, ...this.sTs];
-			let type = this.canKang(t) ? MeldType.KANG : tilesCanBePong(t) ? MeldType.PONG : MeldType.CHI;
+			let type = this.canKang(t)
+				? MeldType.KANG
+				: tilesCanBePong(t)
+				? MeldType.PONG
+				: MeldType.CHI;
 			this.addMeld(t[1].c, type);
 		}
 	}
@@ -297,10 +331,18 @@ export class User {
 	}
 
 	revealedHTs(tHK: number, includingLTa = false): IShownTile[] {
-		return (includingLTa ? this.allHiddenTiles() : this.hTs).map(t => (Number(t.x) ? t : revealTile(t, tHK))) || [];
+		return (
+			(includingLTa ? this.allHiddenTiles() : this.hTs).map(t =>
+				Number(t.x) ? t : revealTile(t, tHK)
+			) || []
+		);
 	}
 
 	revealedLTa(tHK: number): IShownTile {
-		return isEmpty(this.lTa) ? {} : Number(this.lTa.x) ? this.lTa : revealTile(this.lTa, tHK);
+		return isEmpty(this.lTa)
+			? {}
+			: Number(this.lTa.x)
+			? this.lTa
+			: revealTile(this.lTa, tHK);
 	}
 }

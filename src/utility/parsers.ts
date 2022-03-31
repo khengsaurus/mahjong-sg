@@ -17,8 +17,7 @@ export function userToObj(user: User) {
 		cSz: user.cSz,
 		bgC: user.bgC,
 		tC: user.tC,
-		tBC: user.tBC,
-		hp: user.hp
+		tBC: user.tBC
 	};
 }
 
@@ -45,8 +44,7 @@ export function objToUser(obj: any): User {
 			cSz: ref.cSz,
 			bgC: ref.bgC,
 			tC: ref.tC,
-			tBC: ref.tBC,
-			hp: ref.hp
+			tBC: ref.tBC
 		};
 		user = new User(id, ref.uN, ref.email, ref._b, ref._s, ref._n, uData);
 	} catch (err) {

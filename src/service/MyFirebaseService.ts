@@ -273,7 +273,7 @@ export class FirebaseService {
 					addDoc(this.usersRef, {
 						uN,
 						email,
-						_b: [enOnly],
+						_b: [enOnly, true],
 						_s: [],
 						_n: [],
 						hSz: Size.MEDIUM,
