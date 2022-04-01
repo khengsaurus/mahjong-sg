@@ -1,7 +1,20 @@
 import { MeldType, Suit, Wind } from 'enums';
-import { greenCards, greenMelds, HBFCards, ScoringHand, thirteen, Winds } from 'handEnums';
+import {
+	greenCards,
+	greenMelds,
+	HBFCards,
+	ScoringHand,
+	thirteen,
+	Winds
+} from 'handEnums';
 import isEmpty from 'lodash.isempty';
-import { containsPongOrKang, containsX, getSuitFromStr, getSuitsFromHand, isBigThree } from 'utility';
+import {
+	containsPongOrKang,
+	containsX,
+	getSuitFromStr,
+	getSuitsFromHand,
+	isBigThree
+} from 'utility';
 
 /**
  * @param pC: pair card
@@ -9,7 +22,12 @@ import { containsPongOrKang, containsX, getSuitFromStr, getSuitsFromHand, isBigT
  * @param mTsNs: middle tile number of chi's of the same S as the lTa
  * @param noOtherSuitTs: no other tiles of same suit as last taken
  */
-function pingHuPair(pC: string, lTa: IShownTile, mTsNs: number[], noOtherSuitTs: boolean) {
+function pingHuPair(
+	pC: string,
+	lTa: IShownTile,
+	mTsNs: number[],
+	noOtherSuitTs: boolean
+) {
 	return lTa.c === pC
 		? noOtherSuitTs
 			? false
@@ -29,7 +47,14 @@ function pingHuPair(pC: string, lTa: IShownTile, mTsNs: number[], noOtherSuitTs:
  */
 function pingHuMeld(pair: IShownTile[], lTa: IShownTile, mTsNs: number[]): boolean {
 	const { c: lTC, n: lTN } = lTa;
-	if ((lTN === 7 && !mTsNs.includes(6)) || (lTN === 3 && !mTsNs.includes(4))) {
+	const didPairLtaAndMeld5 = pair[0].c === lTa.c && mTsNs.includes(5);
+	// Did take lTa to form pair and did meld 4,5,6
+	if (lTN === 3 && !mTsNs.includes(4) && !didPairLtaAndMeld5) {
+		// If last taken was 3, return false if did not meld 3,4,5
+		return false;
+	}
+	if (lTN === 7 && !mTsNs.includes(6) && !didPairLtaAndMeld5) {
+		// If last taken was 7, return false if did not meld 6,7,8
 		return false;
 	}
 	if (pair[0].c === lTC && containsX(mTsNs, lTN) === 2) {
@@ -67,8 +92,24 @@ export function didChiButIsPingHu(lTa: IShownTile, openTs: IShownTile[]) {
 	return false;
 }
 
-export function isChiHand(h: IHand, lTSelf: boolean, meldedLTa: boolean, cW: Wind, sW: Wind, Fs: number): string {
-	const { openMsStr = [], openTs, hideMsStr = [], hideMs = [], pStr = '', pair, lTa, tsL = [] } = h;
+export function isChiHand(
+	h: IHand,
+	lTSelf: boolean,
+	meldedLTa: boolean,
+	cW: Wind,
+	sW: Wind,
+	Fs: number
+): string {
+	const {
+		openMsStr = [],
+		openTs,
+		hideMsStr = [],
+		hideMs = [],
+		pStr = '',
+		pair,
+		lTa,
+		tsL = []
+	} = h;
 	const msStr = [...openMsStr, ...hideMsStr];
 	let isChi = false;
 	if (
@@ -89,7 +130,12 @@ export function isChiHand(h: IHand, lTSelf: boolean, meldedLTa: boolean, cW: Win
 		const mTsNs = hideMs.filter(m => m[0].s === lTa.s).map(m => m[1].n);
 		isChi =
 			pingHuMeld(pair, lTa, mTsNs) && // note this has to return false when 1,2,3,3,3
-			pingHuPair(pair[0].c, lTa, mTsNs, hideMs.flat().filter(m => m.s === lTa.s).length === 0);
+			pingHuPair(
+				pair[0].c,
+				lTa,
+				mTsNs,
+				hideMs.flat().filter(m => m.s === lTa.s).length === 0
+			);
 	}
 	return isChi ? (Fs > 0 ? ScoringHand.CHI_1 : ScoringHand.CHI_4) : '';
 }
@@ -198,7 +244,9 @@ export function isAllGreen(h: IHand): string {
 export function isEighteen(h: IHand): string {
 	const { openMsStr = [], hideMsStr = [] } = h;
 	const msStr = [...openMsStr, ...hideMsStr];
-	return msStr.length === 4 && msStr.every(m => m[0] === MeldType.KANG) ? ScoringHand._18 : '';
+	return msStr.length === 4 && msStr.every(m => m[0] === MeldType.KANG)
+		? ScoringHand._18
+		: '';
 }
 
 export function isThirteen(h: IHand): string {
@@ -234,7 +282,8 @@ export function isHalfSuited(h: IHand): string {
 
 export function isPureTerminals(h: IHand): string {
 	const { openMsStr = [], hideMsStr = [], pStr } = h;
-	const msStrNs = [...openMsStr, ...hideMsStr].map(m => (m[0] === MeldType.CHI ? '5' : m[2])) || [];
+	const msStrNs =
+		[...openMsStr, ...hideMsStr].map(m => (m[0] === MeldType.CHI ? '5' : m[2])) || [];
 	const allNsStr = [pStr, ...msStrNs].map(c => c[0]);
 	for (let i = 0; i < allNsStr.length; i++) {
 		const n = Number(allNsStr[i]) || 0;

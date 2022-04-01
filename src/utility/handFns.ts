@@ -63,7 +63,10 @@ function rmPIx(i: number, ts: IShownTile[]): { pair: IShownTile[]; tsWoP: IShown
  * @returns Obj {meld: string, tsL: IShownTile[]}
  * @O n
  */
-function getFirstMeld(ts: IShownTile[], str = false): { meldStr: string; meld: IShownTile[]; tsL: IShownTile[] } {
+function getFirstMeld(
+	ts: IShownTile[],
+	str = false
+): { meldStr: string; meld: IShownTile[]; tsL: IShownTile[] } {
 	let l = ts.length;
 	let tsL = [...ts];
 	if (l <= 2) {
@@ -92,7 +95,11 @@ function getFirstMeld(ts: IShownTile[], str = false): { meldStr: string; meld: I
 					} else if (tsL[i].n === tsL[j].n - 2) {
 						meld = tsL.splice(i, 2);
 						meld.push(...tsL.splice(j - 2, 1));
-						return { meldStr: `c-${meld[1].c}`, meld: str ? null : meld, tsL };
+						return {
+							meldStr: `c-${meld[1].c}`,
+							meld: str ? null : meld,
+							tsL
+						};
 					}
 				}
 			}
@@ -102,7 +109,12 @@ function getFirstMeld(ts: IShownTile[], str = false): { meldStr: string; meld: I
 }
 
 // O: n^2 (getFirstMeld)
-function r_getFirstMeld(exMsStr: string[], exMs: IShownTile[][], tilesSkipped: IShownTile[], tiles: IShownTile[]) {
+function r_getFirstMeld(
+	exMsStr: string[],
+	exMs: IShownTile[][],
+	tilesSkipped: IShownTile[],
+	tiles: IShownTile[]
+) {
 	// r_getFirstMeld_calls += 1;
 	let { meld, meldStr, tsL } = getFirstMeld(tiles);
 	return {
@@ -141,14 +153,33 @@ export function getMeldsPairs(ts: IShownTile[], lTa?: IShownTile): IHand[] {
 		let tiles = [...ts];
 		if (tiles.length === 0) {
 			if (isNewInSet(exMsStr.sort().join('') + pStr, handsSet)) {
-				hs.push({ hideMsStr: exMsStr.sort(), hideMs: exMs, pStr, pair, tsL: [], lTa });
+				hs.push({
+					hideMsStr: exMsStr.sort(),
+					hideMs: exMs,
+					pStr,
+					pair,
+					tsL: [],
+					lTa
+				});
 			}
 		} else {
 			for (let i = 0; i < tiles.length - 2; i++) {
-				let { hideMs, hideMsStr, tsL } = r_getFirstMeld(exMsStr, exMs, tiles.slice(0, i), tiles.slice(i));
+				let { hideMs, hideMsStr, tsL } = r_getFirstMeld(
+					exMsStr,
+					exMs,
+					tiles.slice(0, i),
+					tiles.slice(i)
+				);
 				hideMsStr.sort();
 				if (isNewInSet(hideMsStr.join('') + pStr, handsSet)) {
-					hs.push({ hideMsStr: hideMsStr, hideMs: hideMs, pStr, pair, tsL, lTa });
+					hs.push({
+						hideMsStr: hideMsStr,
+						hideMs: hideMs,
+						pStr,
+						pair,
+						tsL,
+						lTa
+					});
 				}
 				if (tsL.length !== 0 && tsL.length !== tiles.length) {
 					r_breakIntoMelds(hideMsStr, hideMs, pStr, pair, tsL);

@@ -12,21 +12,34 @@ export function hasSelfDrawn(g, lTa: IHiddenTile) {
 	g.ps[0].lTa = lTa;
 }
 
-export function hasMelded_2S3S(g: Game, flowers: IShownTile[] = []) {
-	g.ps[0].sTs = [...[1, 2, 3, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.SUO, i, index)), ...flowers];
+export function hasMelded_2S_3S(g: Game, flowers: IShownTile[] = []) {
+	g.ps[0].sTs = [
+		...[1, 2, 3, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.SUO, i, index)),
+		...flowers
+	];
 	g.ps[0].ms = [`${MeldType.CHI}-2${Suit.SUO}`, `${MeldType.CHI}-3${Suit.SUO}`];
 }
 
 export function hasMelded_2S_3S_2W(g: Game) {
-	const suoTs = [1, 2, 3, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.SUO, i, index));
+	const suoTs = [1, 2, 3, 2, 3, 4].map((i, index) =>
+		getSuitedTileMock(Suit.SUO, i, index)
+	);
 	const wanTs = [1, 2, 3].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
 	g.ps[0].sTs = [...suoTs, ...wanTs];
-	g.ps[0].ms = [`${MeldType.CHI}-2${Suit.SUO}`, `${MeldType.CHI}-3${Suit.SUO}`, `${MeldType.CHI}-2${Suit.WAN}`];
+	g.ps[0].ms = [
+		`${MeldType.CHI}-2${Suit.SUO}`,
+		`${MeldType.CHI}-3${Suit.SUO}`,
+		`${MeldType.CHI}-2${Suit.WAN}`
+	];
 }
 
 export function hasMelded_2S_3S_2W_3W(g: Game) {
-	const suoTs = [1, 2, 3, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.SUO, i, index));
-	const wanTs = [1, 2, 3, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
+	const suoTs = [1, 2, 3, 2, 3, 4].map((i, index) =>
+		getSuitedTileMock(Suit.SUO, i, index)
+	);
+	const wanTs = [1, 2, 3, 2, 3, 4].map((i, index) =>
+		getSuitedTileMock(Suit.WAN, i, index)
+	);
 	g.ps[0].sTs = [...suoTs, ...wanTs];
 	g.ps[0].ms = [
 		`${MeldType.CHI}-2${Suit.SUO}`,

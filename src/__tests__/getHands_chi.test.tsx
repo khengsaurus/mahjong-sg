@@ -1,10 +1,11 @@
 import isEmpty from 'lodash/isempty';
 import { getHands } from 'bot';
-import { Animal, DaPai, MeldType, Suit, Wind } from 'enums';
+import { Animal, DaPai, Flower, MeldType, Suit, Wind } from 'enums';
 import { ScoringHand } from 'handEnums';
 import { Game, User } from 'models';
 import {
 	getAnimalMock,
+	getFlowerMock,
 	getHBFHashTileMock,
 	getSuitedHashTileMock,
 	getSuitedTileMock,
@@ -12,7 +13,7 @@ import {
 } from 'utility';
 import { mainLRUCache } from 'utility/LRUCache';
 import {
-	hasMelded_2S3S,
+	hasMelded_2S_3S,
 	hasMelded_2S_3S_2W,
 	hasMelded_2S_3S_2W_3W,
 	hasNotDrawn,
@@ -34,28 +35,38 @@ describe('useHand -> HH', () => {
 	afterEach(() => mainLRUCache.clear());
 
 	function reuseMockHashLess7W() {
-		g.ps[0].hTs = [1, 2, 3, 4, 4, 8, 9].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
+		g.ps[0].hTs = [1, 2, 3, 4, 4, 8, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.WAN, i, index)
+		);
 	}
 
 	function reuseMockHashLess3W() {
-		g.ps[0].hTs = [1, 1, 2, 2, 3, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
+		g.ps[0].hTs = [1, 1, 2, 2, 3, 9, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.WAN, i, index)
+		);
 	}
 
 	function reuseMockHashLess2W() {
-		g.ps[0].hTs = [1, 1, 2, 3, 3, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
+		g.ps[0].hTs = [1, 1, 2, 3, 3, 9, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.WAN, i, index)
+		);
 	}
 
 	function lacking9WPair() {
-		g.ps[0].hTs = [1, 2, 3, 4, 5, 6, 9].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
+		g.ps[0].hTs = [1, 2, 3, 4, 5, 6, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.WAN, i, index)
+		);
 	}
 
 	function lacking3WEdgePair() {
-		g.ps[0].hTs = [1, 2, 3, 3, 5, 6, 7].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
+		g.ps[0].hTs = [1, 2, 3, 3, 5, 6, 7].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.WAN, i, index)
+		);
 	}
 
 	describe('HH', () => {
 		it('pinghu if self drawn (7 edge tile)', () => {
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			reuseMockHashLess7W();
 			hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.WAN, 7, 9));
 
@@ -65,7 +76,7 @@ describe('useHand -> HH', () => {
 		});
 
 		it('not pinghu if not self drawn (7 edge tile)', () => {
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			reuseMockHashLess7W();
 			hasNotDrawn(g, getSuitedTileMock(Suit.WAN, 7, 9));
 
@@ -74,7 +85,7 @@ describe('useHand -> HH', () => {
 		});
 
 		it('pinghu if self drawn (3 edge tile)', () => {
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			reuseMockHashLess3W();
 			hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.WAN, 3, 9));
 
@@ -84,7 +95,7 @@ describe('useHand -> HH', () => {
 		});
 
 		it('not pinghu if not self drawn (3 edge tile)', () => {
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			reuseMockHashLess3W();
 			hasNotDrawn(g, getSuitedTileMock(Suit.WAN, 3, 9));
 
@@ -93,7 +104,7 @@ describe('useHand -> HH', () => {
 		});
 
 		it('pingHu if self drawn (middle tile), with flowers', () => {
-			hasMelded_2S3S(g, [getAnimalMock(Animal.CAT)]);
+			hasMelded_2S_3S(g, [getAnimalMock(Animal.CAT)]);
 			reuseMockHashLess2W();
 			hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.WAN, 2));
 
@@ -105,7 +116,7 @@ describe('useHand -> HH', () => {
 		});
 
 		it('not pingHu if not self drawn (middle tile)', () => {
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			hasNotDrawn(g, getSuitedTileMock(Suit.WAN, 2, 9));
 			reuseMockHashLess2W();
 
@@ -115,7 +126,7 @@ describe('useHand -> HH', () => {
 
 		it('pingHu if self drawn (pair)', () => {
 			lacking9WPair();
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.WAN, 9, 9));
 
 			const { HH } = getHands(g, 0, 111);
@@ -125,7 +136,7 @@ describe('useHand -> HH', () => {
 
 		it('not pingHu if not self drawn (pair)', () => {
 			lacking9WPair();
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			hasNotDrawn(g, getSuitedTileMock(Suit.WAN, 9, 9));
 
 			const { HH } = getHands(g, 0, 111);
@@ -134,7 +145,7 @@ describe('useHand -> HH', () => {
 
 		it('pingHu if self drawn edge (pair)', () => {
 			lacking3WEdgePair();
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.WAN, 3, 9));
 
 			const { HH } = getHands(g, 0, 111);
@@ -144,7 +155,7 @@ describe('useHand -> HH', () => {
 
 		it('not pingHu if not self drawn edge (pair)', () => {
 			lacking3WEdgePair();
-			hasMelded_2S3S(g);
+			hasMelded_2S_3S(g);
 			hasNotDrawn(g, getSuitedTileMock(Suit.WAN, 3, 9));
 
 			const { HH } = getHands(g, 0, 111);
@@ -195,10 +206,44 @@ describe('useHand -> HH', () => {
 			expect(HH.maxPx).toBe(9);
 		});
 
-		it('ping hu - formed pair when waiting with 4 consec', () => {
+		it('ping hu - formed 1 pair when waiting with 1 2 3 4, self drawn', () => {
 			hasMelded_2S_3S_2W(g);
-			g.ps[0].hTs = [1, 2, 3, 4].map(i => getSuitedHashTileMock(111, Suit.TONG, i, i));
+			g.ps[0].hTs = [1, 2, 3, 4].map(i =>
+				getSuitedHashTileMock(111, Suit.TONG, i, i)
+			);
 			hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.TONG, 1, 2));
+
+			const { HH } = getHands(g, 0, 111);
+			const hDs = HH.pxs.map(p => p.hD);
+			expect(hDs.includes(ScoringHand.CHI_4)).toBeTruthy();
+			expect(HH.maxPx).toBe(4);
+		});
+
+		it('ping hu - formed 7 pair when waiting with 4 5 6 7, with flower, not self drawn', () => {
+			hasMelded_2S_3S(g, [getFlowerMock(Flower.FM, true)]);
+			const wanTs = [7, 8, 9].map(i => getSuitedHashTileMock(111, Suit.WAN, i, i));
+			const tongTs = [4, 5, 6, 7].map(i =>
+				getSuitedHashTileMock(111, Suit.TONG, i, i)
+			);
+			g.ps[0].hTs = [...wanTs, ...tongTs];
+
+			hasNotDrawn(g, getSuitedTileMock(Suit.TONG, 7, 2));
+
+			const { HH } = getHands(g, 0, 111);
+			const hDs = HH.pxs.map(p => p.hD);
+			expect(hDs.includes(ScoringHand.CHI_1)).toBeTruthy();
+			expect(HH.maxPx).toBe(2);
+		});
+
+		it('ping hu - formed 3 pair when waiting with 3 4 5 6, not self drawn', () => {
+			hasMelded_2S_3S(g);
+			const wanTs = [2, 3, 4].map(i => getSuitedHashTileMock(111, Suit.WAN, i, i));
+			const tongTs = [3, 4, 5, 6].map(i =>
+				getSuitedHashTileMock(111, Suit.TONG, i, i)
+			);
+			g.ps[0].hTs = [...wanTs, ...tongTs];
+
+			hasNotDrawn(g, getSuitedTileMock(Suit.TONG, 3, 2));
 
 			const { HH } = getHands(g, 0, 111);
 			const hDs = HH.pxs.map(p => p.hD);
@@ -208,7 +253,9 @@ describe('useHand -> HH', () => {
 
 		it('not ping hu - non unique waiting pair', () => {
 			hasMelded_2S_3S_2W(g);
-			g.ps[0].hTs = [1, 3, 4, 5].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
+			g.ps[0].hTs = [1, 3, 4, 5].map((i, index) =>
+				getSuitedHashTileMock(111, Suit.WAN, i, index)
+			);
 			hasNotDrawn(g, getSuitedTileMock(Suit.WAN, 1, 9));
 
 			const { HH } = getHands(g, 0, 111);
@@ -217,9 +264,13 @@ describe('useHand -> HH', () => {
 
 		/* ----------------------------------- Player melded first ----------------------------------- */
 
-		it('not ping hu - melded middle tile to form complete chi hand', () => {
-			const hiddenTs = [1, 2, 2, 3, 3, 4, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
-			const shownTs = [2, 3, 4, 1].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
+		it('not ping hu - alr melded middle tile to form complete chi hand', () => {
+			const hiddenTs = [1, 2, 2, 3, 3, 4, 9, 9].map((i, index) =>
+				getSuitedHashTileMock(111, Suit.SUO, i, index)
+			);
+			const shownTs = [2, 3, 4, 1].map((i, index) =>
+				getSuitedTileMock(Suit.WAN, i, index)
+			);
 			const lTh = getSuitedTileMock(Suit.WAN, 2, 2);
 			g.lTh = { r: lTh.r }; // taken lTh tile
 			g.ps[0].ms = [`${MeldType.CHI}-3${Suit.WAN}`, `${MeldType.CHI}-2${Suit.WAN}`];
@@ -232,20 +283,28 @@ describe('useHand -> HH', () => {
 			expect(isEmpty(HH)).toBeTruthy();
 		});
 
-		it('not ping hu - melded edge tile to form complete chi hand', () => {
-			g.ps[0].sTs = [2, 3, 4, 1, 2].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
+		it('not ping hu - alr melded edge tile to form complete chi hand', () => {
+			g.ps[0].sTs = [2, 3, 4, 1, 2].map((i, index) =>
+				getSuitedTileMock(Suit.WAN, i, index)
+			);
 			g.ps[0].ms = [`${MeldType.CHI}-3${Suit.WAN}`, `${MeldType.CHI}-2${Suit.WAN}`];
-			g.ps[0].hTs = [1, 2, 2, 3, 3, 4, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
+			g.ps[0].hTs = [1, 2, 2, 3, 3, 4, 9, 9].map((i, index) =>
+				getSuitedHashTileMock(111, Suit.SUO, i, index)
+			);
 			meldedLastThrown(g, getSuitedTileMock(Suit.WAN, 3, 2));
 
 			const { HH } = getHands(g, 0, 111);
 			expect(isEmpty(HH)).toBeTruthy();
 		});
 
-		it('ping hu - melded tile to form complete chi hand', () => {
-			g.ps[0].sTs = [2, 3, 4, 2, 3].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
+		it('ping hu - alr melded tile to form complete chi hand', () => {
+			g.ps[0].sTs = [2, 3, 4, 2, 3].map((i, index) =>
+				getSuitedTileMock(Suit.WAN, i, index)
+			);
 			g.ps[0].ms = [`${MeldType.CHI}-3${Suit.WAN}`, `${MeldType.CHI}-3${Suit.WAN}`];
-			g.ps[0].hTs = [1, 2, 2, 3, 3, 4, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
+			g.ps[0].hTs = [1, 2, 2, 3, 3, 4, 9, 9].map((i, index) =>
+				getSuitedHashTileMock(111, Suit.SUO, i, index)
+			);
 			meldedLastThrown(g, getSuitedTileMock(Suit.WAN, 4, 2));
 
 			const { HH } = getHands(g, 0, 111);
