@@ -66,9 +66,9 @@ export class User {
 		this.id = id;
 		this.uN = uN;
 		this.email = email;
-		this._b = _b;
-		this._s = _s;
-		this._n = _n;
+		this._b = _b || [];
+		this._s = _s || [];
+		this._n = _n || [];
 		if (data?.hSz) {
 			this.hSz = data?.hSz;
 			this.tSz = data?.tSz;

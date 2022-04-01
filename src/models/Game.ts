@@ -35,7 +35,6 @@ import {
 	findLeft,
 	findOpp,
 	findRight,
-	getAnimalHashTileMock,
 	getCardName,
 	getDefaultAmt,
 	getHashed,
@@ -604,14 +603,12 @@ export class Game {
 		this.f[1] = true;
 		this.ts = shuffledTiles;
 		this.distributeTiles();
-		if (isDev && this.ps.find(p => p.uN === TestUser._19LEFT)) {
-			this.ts = this.ts.slice(0, 19);
-		}
-		if (isDev && this.ps.find(p => p.uN === TestUser._HUASHANGHUA)) {
-			this.ts = this.ts.slice(0, 22);
-			this.ts[18] = getAnimalHashTileMock(111, Animal.ROOSTER);
-			this.ts[0] = getAnimalHashTileMock(111, Animal.CAT);
-		}
+		// Uncomment to test 19 left:
+		// this.ts = this.ts.slice(0, 19);
+		// Uncomment to test hua shang hua:
+		// this.ts = this.ts.slice(0, 22);
+		// this.ts[18] = getAnimalHashTileMock(111, Animal.ROOSTER);
+		// this.ts[0] = getAnimalHashTileMock(111, Animal.CAT);
 	}
 
 	declareHu(huVals: any[]) {
