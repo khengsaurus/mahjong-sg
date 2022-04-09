@@ -64,7 +64,7 @@ const AnnounceHuModal = ({
 					<StyledCenterText
 						key={ix}
 						// text={p}
-						text={getHandDesc(p)}
+						text={getHandDesc(p, enOnly)}
 					/>
 				))
 		);

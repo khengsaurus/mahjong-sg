@@ -23,7 +23,6 @@ const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertP) => {
 		gameId
 	} = useSelector((store: IStore) => store);
 	const currGame = gameId === LocalFlag ? localGame : game;
-	const cardName = currGame?.lTh?.c ? getCardName(currGame.lTh.c, enOnly) : '';
 	const [foodEmoji, setFoodEmoji] = useState(getRandomFoodEmoji());
 	const closeRef = useRef(null);
 
@@ -45,7 +44,10 @@ const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertP) => {
 			onClick={handleClick}
 		>
 			<StyledText
-				text={`${ScreenTextEng.YOU_CAN_CHI} ${cardName}`}
+				text={`${ScreenTextEng.YOU_CAN_CHI} ${getCardName(
+					currGame.lTh.c,
+					enOnly
+				)}`}
 				variant="body1"
 			/>
 			<StyledText text={`${foodEmoji}`} variant="body1" />

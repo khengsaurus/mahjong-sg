@@ -3,7 +3,7 @@ import { CardName, Exec, MeldType, Suit, Wind } from 'enums';
 import { ScoringHand } from 'handEnums';
 import { Game, User } from 'models';
 import { getSuitedHashTileMock, getSuitedTileMock, getWindHashTileMock } from 'utility';
-import { mainLRUCache } from 'utility/LRUCache';
+import { primaryLRU } from 'utility/LRUCache';
 import { resetGame, resetPlayer } from './util';
 
 describe('adhoc tests', () => {
@@ -16,11 +16,15 @@ describe('adhoc tests', () => {
 		resetGame(g, [p1, p2]);
 	});
 
-	afterEach(() => mainLRUCache.clear());
+	afterEach(() => primaryLRU.clear());
 
 	function scenario1() {
-		const suoTs1 = [2, 3, 5, 6, 7, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
-		const windTs1 = [Wind.S, Wind.S, Wind.S].map((w, index) => getWindHashTileMock(111, w, index));
+		const suoTs1 = [2, 3, 5, 6, 7, 9, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.SUO, i, index)
+		);
+		const windTs1 = [Wind.S, Wind.S, Wind.S].map((w, index) =>
+			getWindHashTileMock(111, w, index)
+		);
 		const lTh = getSuitedTileMock(Suit.SUO, 1, 1);
 		g.ps[0].ms = [`${MeldType.CHI}-2${Suit.WAN}`];
 		g.ps[0].hTs = [...suoTs1, ...windTs1];

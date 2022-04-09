@@ -10,6 +10,21 @@ import {
 	secondNeighbors,
 	terminalSortTs
 } from 'utility';
+import { secondaryLRU } from 'utility/LRUCache';
+
+function getTsWNs(hTs: IShownTile[]): IShownTileWNeighbors[] {
+	const key = hTs.map(t => t.r);
+	const cached = secondaryLRU.read(key);
+	if (cached) return cached as IShownTileWNeighbors[];
+	const r = hTs.map(t => {
+		const _1 = arrToSetArr(firstNeighbors(t, hTs));
+		const _2 = arrToSetArr(secondNeighbors(t, hTs));
+		const wChi =
+			arrToSetArr([..._1, ..._2].map(n => getChiWaitingTs(t.c, n)).flat()) || [];
+		return { ...t, _1, _2, wChi };
+	});
+	return secondaryLRU.write(key, r);
+}
 
 const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategories => {
 	const otherOpenTs = ps.map(p => [...p.sTs, ...p.dTs]).flat();
@@ -18,12 +33,7 @@ const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategor
 	const ownCs = hTs.map(t => t.c).sort();
 	const manyDaPai = hTs.length > 10 && hTs.filter(t => t.s === Suit.DAPAI).length > 5;
 
-	const _ownTsWNs: IShownTileWNeighbors[] = hTs.map(t => {
-		const _1 = arrToSetArr(firstNeighbors(t, hTs));
-		const _2 = arrToSetArr(secondNeighbors(t, hTs));
-		const wChi = arrToSetArr([..._1, ..._2].map(n => getChiWaitingTs(t.c, n)).flat()) || [];
-		return { ...t, _1, _2, wChi };
-	});
+	const _ownTsWNs = getTsWNs(hTs);
 	const allKnownCs = [...otherOpenCs, ...ownCs];
 	const countAllKnownCs = countStrEle(allKnownCs);
 	const countHandCs = countStrEle(ownCs);
@@ -34,7 +44,9 @@ const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategor
 	const _3known = arrToSetArr(allKnownCs.filter(c => countAllKnownCs[c] === 3));
 	const _4known = arrToSetArr(allKnownCs.filter(c => countAllKnownCs[c] === 4));
 	const loneTs = arrToSetArr(
-		terminalSortTs(_ownTsWNs.filter(t => countHandCs[t.c] === 1 && t._1.length === 0)).map(t => t.c)
+		terminalSortTs(
+			_ownTsWNs.filter(t => countHandCs[t.c] === 1 && t._1.length === 0)
+		).map(t => t.c)
 	);
 
 	function playerHasC(c: string) {
@@ -48,7 +60,10 @@ const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategor
 	// PONG
 	// isOkPC if player has 2 and T has been shown 1 time
 	function isOkPC(c: string) {
-		return (multis.includes(c) && _3known.includes(c)) || (ownSingles.includes(c) && isFreshC(c));
+		return (
+			(multis.includes(c) && _3known.includes(c)) ||
+			(ownSingles.includes(c) && isFreshC(c))
+		);
 	}
 
 	// isHPC if player has 1 and T has been shown 1 times
@@ -83,13 +98,21 @@ const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategor
 			(loneTs.includes(t.c) ||
 				t._1.length === 0 ||
 				(t.wChi.length > 0 &&
-					t.wChi.every(c => !playerHasC(c) && [..._2known, ..._3known, ..._4known].includes(c))))
+					t.wChi.every(
+						c =>
+							!playerHasC(c) &&
+							[..._2known, ..._3known, ..._4known].includes(c)
+					)))
 		);
 	}
 
 	// isDCT if each waitingChiT has been shown 4 times
 	function isDCT(t: IShownTileWNeighbors) {
-		return isSuitedTile(t) && t.wChi.length > 0 && t.wChi.every(c => !playerHasC(c) && _4known.includes(c));
+		return (
+			isSuitedTile(t) &&
+			t.wChi.length > 0 &&
+			t.wChi.every(c => !playerHasC(c) && _4known.includes(c))
+		);
 	}
 
 	const deadPairs: string[] = [];
@@ -143,9 +166,11 @@ const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategor
 	}
 	// const minorChiTs = arrToSetArr(hTs.filter(t => isSuitedMinorTile(t)).map(t => t.c));
 	// const waitingOneChi = arrToSetArr(_ownTsWNs.filter(t => isWaitingOne(t)).map(t => t.c));
-	const waitingTwoChi = arrToSetArr(_ownTsWNs.filter(t => isWaitingTwo(t)).map(t => t.c));
+	const waitingTwoChi = arrToSetArr(
+		_ownTsWNs.filter(t => isWaitingTwo(t)).map(t => t.c)
+	);
 
-	return {
+	const dc = {
 		ownCs,
 		ownSingles,
 		multis,
@@ -165,6 +190,7 @@ const getDiscardCategories = (ps: IPlayer[], hTs: IShownTile[]): IDiscardCategor
 		countAllKnownCs,
 		manyDaPai
 	};
+	return dc;
 };
 
 export default getDiscardCategories;

@@ -12,7 +12,7 @@ import {
 	getWindHashTileMock,
 	getWindTileMock
 } from 'utility';
-import { mainLRUCache } from 'utility/LRUCache';
+import { primaryLRU } from 'utility/LRUCache';
 import { hasSelfDrawn, resetGame, resetPlayer } from './util';
 
 describe('useHand -> HH', () => {
@@ -24,7 +24,7 @@ describe('useHand -> HH', () => {
 		resetGame(g, [p]);
 	});
 
-	afterEach(() => mainLRUCache.clear());
+	afterEach(() => primaryLRU.clear());
 
 	it('can hu with 1 tile left, drawing to form pair', () => {
 		const tiles = [getSuitedTileMock(Suit.SUO, 1, 1)];
@@ -44,8 +44,12 @@ describe('useHand -> HH', () => {
 	});
 
 	it('concealed', () => {
-		const wanTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
-		const suoTiles = [1, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.SUO, i, index));
+		const wanTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, index) =>
+			getSuitedTileMock(Suit.WAN, i, index)
+		);
+		const suoTiles = [1, 2, 3, 4].map((i, index) =>
+			getSuitedTileMock(Suit.SUO, i, index)
+		);
 		const lT = getSuitedTileMock(Suit.SUO, 4, 4);
 		g.f[3] = true;
 		g.ps[0].lTa = lT;
@@ -67,8 +71,12 @@ describe('useHand -> HH', () => {
 	});
 
 	it('pure terminals', () => {
-		const wanTs = [1, 9, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.WAN, i, index));
-		const suoTs = [9, 9, 9].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
+		const wanTs = [1, 9, 9, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.WAN, i, index)
+		);
+		const suoTs = [9, 9, 9].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.SUO, i, index)
+		);
 		g.ps[0].ms = [`${MeldType.KANG}-1${Suit.TONG}`, `${MeldType.PONG}-1${Suit.SUO}`];
 		g.ps[0].hTs = [...wanTs, ...suoTs];
 		g.lTh = getSuitedTileMock(Suit.WAN, 1, 1);
@@ -82,10 +90,19 @@ describe('useHand -> HH', () => {
 	});
 
 	it('pure honours', () => {
-		const HBFTs = [DaPai.RED, DaPai.RED].map((i, index) => getHBFHashTileMock(111, i, index));
-		const windTs = [Wind.E, Wind.E, Wind.E, Wind.S, Wind.S, Wind.S, Wind.W, Wind.W].map((i, index) =>
-			getWindHashTileMock(111, i, index)
+		const HBFTs = [DaPai.RED, DaPai.RED].map((i, index) =>
+			getHBFHashTileMock(111, i, index)
 		);
+		const windTs = [
+			Wind.E,
+			Wind.E,
+			Wind.E,
+			Wind.S,
+			Wind.S,
+			Wind.S,
+			Wind.W,
+			Wind.W
+		].map((i, index) => getWindHashTileMock(111, i, index));
 		g.ps[0].ms = [`${MeldType.KANG}-${DaPai.GREEN}`];
 		g.ps[0].hTs = [...HBFTs, ...windTs];
 		g.lTh = getWindTileMock(Wind.W, 9);
@@ -100,8 +117,12 @@ describe('useHand -> HH', () => {
 	});
 
 	it('mixed terminals/honours, pong, melded we', () => {
-		const HBFTs = [DaPai.RED, DaPai.RED].map((i, index) => getHBFHashTileMock(111, i, index));
-		const windTs = [Wind.E, Wind.E, Wind.E, Wind.W, Wind.W].map((i, index) => getWindHashTileMock(111, i, index));
+		const HBFTs = [DaPai.RED, DaPai.RED].map((i, index) =>
+			getHBFHashTileMock(111, i, index)
+		);
+		const windTs = [Wind.E, Wind.E, Wind.E, Wind.W, Wind.W].map((i, index) =>
+			getWindHashTileMock(111, i, index)
+		);
 		g.ps[0].ms = [`${MeldType.KANG}-1${Suit.TONG}`, `${MeldType.PONG}-1${Suit.SUO}`];
 		g.ps[0].hTs = [...HBFTs, ...windTs];
 		g.lTh = getWindTileMock(Wind.W, 9);
@@ -118,11 +139,20 @@ describe('useHand -> HH', () => {
 	});
 
 	it('seven pairs', () => {
-		const wanTiles = [1, 1, 9, 9].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
-		const suoTiles = [1, 1, 9].map((i, index) => getSuitedTileMock(Suit.SUO, i, index));
-		const daPaiTiles = [DaPai.RED, DaPai.RED, DaPai.GREEN, DaPai.GREEN, DaPai.WHITE, DaPai.WHITE].map((i, index) =>
-			getHBFMock(i, index)
+		const wanTiles = [1, 1, 9, 9].map((i, index) =>
+			getSuitedTileMock(Suit.WAN, i, index)
 		);
+		const suoTiles = [1, 1, 9].map((i, index) =>
+			getSuitedTileMock(Suit.SUO, i, index)
+		);
+		const daPaiTiles = [
+			DaPai.RED,
+			DaPai.RED,
+			DaPai.GREEN,
+			DaPai.GREEN,
+			DaPai.WHITE,
+			DaPai.WHITE
+		].map((i, index) => getHBFMock(i, index));
 		g.lTh = getSuitedTileMock(Suit.SUO, 9, 9);
 		g.ps[0].lTa = {};
 		g.f[3] = false;
@@ -135,10 +165,18 @@ describe('useHand -> HH', () => {
 	});
 
 	it('lesser three, two pxs for cW and sW', () => {
-		const daPaiTiles = [DaPai.RED, DaPai.RED, DaPai.RED, DaPai.GREEN, DaPai.GREEN, DaPai.GREEN, DaPai.WHITE].map(
-			(i, index) => getHBFMock(i, index)
+		const daPaiTiles = [
+			DaPai.RED,
+			DaPai.RED,
+			DaPai.RED,
+			DaPai.GREEN,
+			DaPai.GREEN,
+			DaPai.GREEN,
+			DaPai.WHITE
+		].map((i, index) => getHBFMock(i, index));
+		const windTiles = [Wind.E, Wind.E, Wind.E].map((card, index) =>
+			getWindTileMock(card, index)
 		);
-		const windTiles = [Wind.E, Wind.E, Wind.E].map((card, index) => getWindTileMock(card, index));
 		g.ps[0].ms = [`${MeldType.CHI}-2${Suit.SUO}`];
 		g.lTh = getHBFMock(DaPai.WHITE, 9);
 
@@ -147,7 +185,9 @@ describe('useHand -> HH', () => {
 		expect(hDs.includes(ScoringHand.H_SUITED)).toBeTruthy();
 		expect(hDs.includes(ScoringHand.L_3)).toBeTruthy();
 		expect(hDs.includes(`${ScoringHand.MELDED}-${CardName[Wind.E]}`)).toBeTruthy();
-		expect(HH.pxs.find(ps => ps.hD === `${ScoringHand.MELDED}-${CardName[Wind.E]}`).px).toBe(2);
+		expect(
+			HH.pxs.find(ps => ps.hD === `${ScoringHand.MELDED}-${CardName[Wind.E]}`).px
+		).toBe(2);
 		expect(hDs.length).toBe(3);
 		expect(HH.maxPx).toBe(7);
 	});
@@ -175,8 +215,12 @@ describe('useHand -> HH', () => {
 	});
 
 	it('green, pong fa', () => {
-		const suoTiles = [2, 2, 2, 3, 3, 3, 4, 4, 4, 6].map((i, index) => getSuitedTileMock(Suit.SUO, i, index));
-		const daPaiTiles = [DaPai.GREEN, DaPai.GREEN, DaPai.GREEN].map((i, index) => getHBFMock(i, index));
+		const suoTiles = [2, 2, 2, 3, 3, 3, 4, 4, 4, 6].map((i, index) =>
+			getSuitedTileMock(Suit.SUO, i, index)
+		);
+		const daPaiTiles = [DaPai.GREEN, DaPai.GREEN, DaPai.GREEN].map((i, index) =>
+			getHBFMock(i, index)
+		);
 		g.lTh = getSuitedTileMock(Suit.SUO, 6, 6);
 
 		const { HH } = getHands(g, 0, 111, [...suoTiles, ...daPaiTiles]);
@@ -186,9 +230,16 @@ describe('useHand -> HH', () => {
 	});
 
 	it('moon, 1 flower set, 1 animal, chi', () => {
-		const suoTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, index) => getSuitedTileMock(Suit.SUO, i, index));
-		const wanTiles = [1, 2, 3, 4].map((i, index) => getSuitedTileMock(Suit.WAN, i, index));
-		g.ps[0].sTs = [...[...FlowersS, Flower.FM].map(c => getFlowerMock(c)), getAnimalMock(Animal.ROOSTER)];
+		const suoTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, index) =>
+			getSuitedTileMock(Suit.SUO, i, index)
+		);
+		const wanTiles = [1, 2, 3, 4].map((i, index) =>
+			getSuitedTileMock(Suit.WAN, i, index)
+		);
+		g.ps[0].sTs = [
+			...[...FlowersS, Flower.FM].map(c => getFlowerMock(c)),
+			getAnimalMock(Animal.ROOSTER)
+		];
 		g.ps[0].sTs[0].v = true; // manually assign valid flower
 		g.ps[0].sTs[4].v = true;
 		g.ps[0].lTa = getSuitedHashTileMock(111, Suit.WAN, 4, 4);
@@ -206,8 +257,12 @@ describe('useHand -> HH', () => {
 	});
 
 	it('full animal set', () => {
-		const suoTs = [2, 2, 2, 3, 3, 3, 5, 5, 5, 6].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
-		const animalTs = [Animal.CAT, Animal.ROOSTER, Animal.MOUSE, Animal.WORM].map(a => getAnimalMock(a));
+		const suoTs = [2, 2, 2, 3, 3, 3, 5, 5, 5, 6].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.SUO, i, index)
+		);
+		const animalTs = [Animal.CAT, Animal.ROOSTER, Animal.MOUSE, Animal.WORM].map(a =>
+			getAnimalMock(a)
+		);
 		const wanTs = [1, 2, 3].map(i => getSuitedHashTileMock(111, Suit.WAN, i));
 		hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.SUO, 6, 2));
 		g.ps[0].hTs = suoTs;
@@ -221,9 +276,13 @@ describe('useHand -> HH', () => {
 	});
 
 	it('1 flower set + 1 animal', () => {
-		const suoTs = [2, 2, 2, 3, 3, 3, 5, 5, 5, 6].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
+		const suoTs = [2, 2, 2, 3, 3, 3, 5, 5, 5, 6].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.SUO, i, index)
+		);
 		const animalTs = [Animal.CAT].map(a => getAnimalMock(a));
-		const flowerTs = [Flower.FJ, Flower.FL, Flower.FM, Flower.FZ].map(f => getFlowerMock(f, f === Flower.FJ));
+		const flowerTs = [Flower.FJ, Flower.FL, Flower.FM, Flower.FZ].map(f =>
+			getFlowerMock(f, f === Flower.FJ)
+		);
 		const wanTs = [1, 2, 3].map(i => getSuitedHashTileMock(111, Suit.WAN, i));
 		hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.SUO, 6, 2));
 		g.ps[0].hTs = suoTs;
@@ -239,11 +298,20 @@ describe('useHand -> HH', () => {
 	});
 
 	it('8 flowers + 1 animal', () => {
-		const suoTs = [2, 2, 2, 3, 3, 3, 5, 5, 5, 6].map((i, index) => getSuitedHashTileMock(111, Suit.SUO, i, index));
-		const animalTs = [Animal.CAT].map(a => getAnimalMock(a));
-		const flowerTs = [Flower.FJ, Flower.FL, Flower.FM, Flower.FZ, Flower.SC, Flower.SX, Flower.SQ, Flower.SD].map(
-			f => getFlowerMock(f, f === Flower.FJ || f === Flower.SC)
+		const suoTs = [2, 2, 2, 3, 3, 3, 5, 5, 5, 6].map((i, index) =>
+			getSuitedHashTileMock(111, Suit.SUO, i, index)
 		);
+		const animalTs = [Animal.CAT].map(a => getAnimalMock(a));
+		const flowerTs = [
+			Flower.FJ,
+			Flower.FL,
+			Flower.FM,
+			Flower.FZ,
+			Flower.SC,
+			Flower.SX,
+			Flower.SQ,
+			Flower.SD
+		].map(f => getFlowerMock(f, f === Flower.FJ || f === Flower.SC));
 		const wanTs = [1, 2, 3].map(i => getSuitedHashTileMock(111, Suit.WAN, i));
 		hasSelfDrawn(g, getSuitedHashTileMock(111, Suit.SUO, 6, 2));
 		g.ps[0].hTs = suoTs;

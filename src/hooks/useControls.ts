@@ -18,7 +18,7 @@ import {
 	isEmptyTile,
 	revealTile
 } from 'utility';
-import { mainLRUCache } from 'utility/LRUCache';
+import { primaryLRU } from 'utility/LRUCache';
 import { useFirstEffect, useOptions } from '.';
 import { AppContext } from './AppContext';
 import { IUseNotifs } from './useNotifs';
@@ -317,7 +317,7 @@ function useControls(
 			setExec([]);
 			game.prepForNewRound();
 			game.initRound();
-			mainLRUCache.clear();
+			primaryLRU.clear();
 			updateGame(game);
 			haptic && triggerHaptic(ImpactStyle.Heavy);
 		},

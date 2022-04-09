@@ -36,7 +36,7 @@ import {
 	isSuited,
 	isThirteen
 } from 'utility/scoreHand';
-import { mainLRUCache } from './LRUCache';
+import { primaryLRU } from './LRUCache';
 
 export function tilesBySuit(tiles: IShownTile[]): ITilesBySuit {
 	let arr: ITilesBySuit = {};
@@ -133,10 +133,8 @@ function r_getFirstMeld(
  */
 export function getMeldsPairs(ts: IShownTile[], lTa?: IShownTile): IHand[] {
 	const key = `gmp-${ts.map(t => t.c).join('')}${lTa?.r}`;
-	const cached = mainLRUCache.read(key);
-	if (cached) {
-		return cached;
-	}
+	const cached = primaryLRU.read(key);
+	if (cached) return cached;
 
 	const pairsSet = new Set<string>();
 	const handsSet = new Set<string>();
@@ -201,8 +199,7 @@ export function getMeldsPairs(ts: IShownTile[], lTa?: IShownTile): IHand[] {
 	}
 
 	breakIntoPairs_thenMelds(ts);
-	mainLRUCache.write(key, hs);
-	return hs;
+	return primaryLRU.write(key, hs);
 }
 
 /**
@@ -219,14 +216,6 @@ export function scoreHand(
 	ach: string[],
 	Fs: number[]
 ): IPoint {
-	// TODO: LRUCache this
-	// const key = `${(hand.tsL || []).map(t => t.r).join('')}${(hand.hideMsStr || []).join('')}${(
-	// 	hand.openMsStr || []
-	// ).join('')}${hand.pStr}`;
-	// const cached = mainLRUCache.read(key);
-	// if (cached) {
-	// 	return cached;
-	// }
 	const melds = (hand.openMsStr?.length || 0) + (hand.hideMsStr?.length || 0);
 	const pair = hand.pStr;
 	switch (check) {

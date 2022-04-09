@@ -121,13 +121,9 @@ function getDiscardHelper(
 				return l_reqCs[0];
 			} else if (l_reqCs.length === 2) {
 				const c0_c1 = countHandCs[l_reqCs[0]] - countHandCs[l_reqCs[1]];
-				if (c0_c1 < 0) {
-					return l_reqCs[1];
-				} else if (c0_c1 > 0) {
-					return l_reqCs[0];
-				} else {
-					return terminalSortCs(l_reqCs)[0];
-				}
+				if (c0_c1 < 0) return l_reqCs[1];
+				if (c0_c1 > 0) return l_reqCs[0];
+				return terminalSortCs(l_reqCs)[0];
 			}
 			if (priorMeld === MeldType.CHI) {
 				ss = sortDaPaiDiscards(
@@ -138,13 +134,9 @@ function getDiscardHelper(
 					ownSingles,
 					countAllKnownCs
 				);
-				if (ss?.length > 0) {
-					return ss[0];
-				}
+				if (ss?.length > 0) return ss[0];
 			} else {
-				if (ownSingles.length > 0) {
-					return terminalSortCs(ownSingles)[0];
-				}
+				if (ownSingles.length > 0) return terminalSortCs(ownSingles)[0];
 				ss = ownCs.filter(
 					c => !easyPong.includes(c) && !scoringPongs.includes(c)
 				);
@@ -153,9 +145,7 @@ function getDiscardHelper(
 					: ownCs.filter(
 							c => !okayPong.includes(c) && !scoringPongs.includes(c)
 					  );
-				if (ss?.length > 0) {
-					return terminalSortCs(ss)[0];
-				}
+				if (ss?.length > 0) return terminalSortCs(ss)[0];
 			}
 			break;
 		case 1:
@@ -173,41 +163,31 @@ function getDiscardHelper(
 						ownSingles,
 						countAllKnownCs
 					);
-					if (ss?.length > 0) {
-						return ss[0];
-					}
+					if (ss?.length > 0) return ss[0];
 				}
 				// *1
 				if (unreqPs.length > 0) {
 					ss = unreqPs.filter(c => !reqMs.includes(c));
-					if (ss?.length > 0) {
-						return terminalSortCs(ss)[0];
-					}
+					if (ss?.length > 0) return terminalSortCs(ss)[0];
 					return terminalSortCs(unreqPs)[0];
 				}
 				if (multis.length > 1) {
 					ss = multis.filter(c => !reqPs.includes(c) && !easyChi.includes(c));
-					if (ss?.length > 0) {
-						return terminalSortCs(ss)[0];
-					}
+					if (ss?.length > 0) return terminalSortCs(ss)[0];
 				}
 				ss = _unreqCs.filter(c => deadChi.includes(c));
 				ss = !isEmpty(ss) ? ss : cardsWithoutNeighbors(_unreqCs);
 				ss = !isEmpty(ss) ? ss : _unreqCs.filter(c => !waitingTwoChi.includes(c));
 				ss = !isEmpty(ss) ? ss : _unreqCs.filter(c => !easyChi.includes(c));
 				ss = !isEmpty(ss) ? ss : _unreqCs.filter(c => loneTs.includes(c));
-				if (ss?.length > 0) {
-					return terminalSortCs(ss)[0];
-				}
+				if (ss?.length > 0) return terminalSortCs(ss)[0];
 			} else {
 				ss = _unreqCs.filter(c => deadPong.includes(c));
 				ss = !isEmpty(ss) ? ss : _unreqCs.filter(c => deadPairs.includes(c));
 				ss = !isEmpty(ss) ? ss : _unreqCs.filter(c => hardPong.includes(c));
 				ss = !isEmpty(ss) ? ss : loneTs.filter(c => _unreqCs.includes(c));
 				ss = !isEmpty(ss) ? ss : ownSingles.filter(c => ownSingles.includes(c));
-				if (ss?.length > 0) {
-					return terminalSortCs(ss)[0];
-				}
+				if (ss?.length > 0) return terminalSortCs(ss)[0];
 				return terminalSortCs(_unreqCs)[0];
 			}
 			break;

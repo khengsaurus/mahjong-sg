@@ -26,7 +26,7 @@ import {
 	sortTiles
 } from 'utility';
 import { getMeldsPairs, scoreHand } from 'utility/handFns';
-import { mainLRUCache } from 'utility/LRUCache';
+import { primaryLRU } from 'utility/LRUCache';
 
 /**
  * @return { !isEmpty(lTa) ? lTa : lTh, (player melded lTh) }
@@ -77,11 +77,9 @@ function getHands(
 	const { lTa_lTh, meldedLTa } = getLastThrownOrTaken(game, _p, tHK);
 	const key = `gh-${ms.join('')}${hTs?.map(t => t.r).join('')}${
 		lTa_lTh.c
-	}${meldedLTa}${lTaSelf}${Fs}${sHs.join('')}`;
-	const cached = mainLRUCache.read(key);
-	if (cached) {
-		return cached;
-	}
+	}${meldedLTa}${lTaSelf}${Fs}}`;
+	const cached = primaryLRU.read(key);
+	if (cached) return cached;
 
 	const shown_hTs = _shown_hTs ? _shown_hTs : p?.revealedHTs(tHK);
 	const cW = game?.currentWind() || Wind.E;
@@ -250,10 +248,7 @@ function getHands(
 						h.maxPx === maxPxAch
 			  );
 
-	const val = { hands, hsWPxs, HH, lTa_lTh };
-	mainLRUCache.write(key, val);
-
-	return val;
+	return primaryLRU.write(key, { hands, hsWPxs, HH, lTa_lTh });
 }
 
 /**
@@ -286,10 +281,7 @@ function getBotEval(game: Game, _p: number, lThAvail: boolean): any[] {
 				: [...shown_hTs, p?.revealedLTa(tHK)];
 
 			// if priorMeld === pong, pong
-			const dc = getDiscardCategories(
-				ps.map(p => ({ uN: p.uN, sTs: p.sTs, dTs: p.dTs })),
-				shown_hTsA
-			);
+			const dc = getDiscardCategories(ps, shown_hTsA);
 			const ho = getHandObjectives(dc, p?.ms, [cW, sW]);
 			const { priorMeld = MeldType.CHI } = ho;
 			if (priorMeld === MeldType.PONG && canPongKang >= 2) {

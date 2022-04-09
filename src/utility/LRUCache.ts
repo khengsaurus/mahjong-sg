@@ -51,6 +51,7 @@ class LRU {
 		// update cacheMap with LinkedList key and Node reference
 		this.cacheMap[key] = this.head;
 		this.size++;
+		return value;
 	}
 
 	read(key) {
@@ -110,6 +111,6 @@ class LRU {
 	}
 }
 
-const mainLRUCache = new LRU();
-const secondaryLRU = new LRU(20);
-export { mainLRUCache, secondaryLRU };
+const primaryLRU = new LRU(50);
+const secondaryLRU = new LRU(50);
+export { primaryLRU, secondaryLRU };

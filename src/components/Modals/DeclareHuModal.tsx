@@ -106,7 +106,7 @@ const DeclareHuModal = ({
 					{HH?.pxs?.map((p: IPoint, ix: number) => (
 						<StyledText
 							key={ix}
-							text={getHandDesc(p.hD)}
+							text={getHandDesc(p.hD, enOnly)}
 							variant="subtitle2"
 							padding="0px"
 						/>

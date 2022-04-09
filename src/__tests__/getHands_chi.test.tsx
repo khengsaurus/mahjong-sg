@@ -11,7 +11,7 @@ import {
 	getSuitedTileMock,
 	getWindHashTileMock
 } from 'utility';
-import { mainLRUCache } from 'utility/LRUCache';
+import { primaryLRU } from 'utility/LRUCache';
 import {
 	hasMelded_2S_3S,
 	hasMelded_2S_3S_2W,
@@ -32,7 +32,7 @@ describe('useHand -> HH', () => {
 		resetGame(g, [p]);
 	});
 
-	afterEach(() => mainLRUCache.clear());
+	afterEach(() => primaryLRU.clear());
 
 	function reuseMockHashLess7W() {
 		g.ps[0].hTs = [1, 2, 3, 4, 4, 8, 9].map((i, index) =>

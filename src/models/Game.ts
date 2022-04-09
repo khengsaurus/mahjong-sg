@@ -603,12 +603,9 @@ export class Game {
 		this.f[1] = true;
 		this.ts = shuffledTiles;
 		this.distributeTiles();
-		// Uncomment to test 19 left:
-		// this.ts = this.ts.slice(0, 19);
-		// Uncomment to test hua shang hua:
-		// this.ts = this.ts.slice(0, 22);
-		// this.ts[18] = getAnimalHashTileMock(111, Animal.ROOSTER);
-		// this.ts[0] = getAnimalHashTileMock(111, Animal.CAT);
+		// this._19TilesLeft()
+		// this.huaShangHua()
+		// this.kangShangHua()
 	}
 
 	declareHu(huVals: any[]) {
@@ -781,4 +778,72 @@ export class Game {
 			}
 		}
 	}
+
+	/* ------------------------------ Dev ------------------------------*/
+
+	// _19TilesLeft() {
+	// 	this.ts = this.ts.slice(0, 19);
+	// }
+
+	// huaShangHua() {
+	// 	this.ps[0].hTs = [
+	// 		...[1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9].map((n, index) =>
+	// 			getSuitedHashTileMock(
+	// 				getTileHashKey(this.id, this.n[0]),
+	// 				Suit.TONG,
+	// 				n,
+	// 				index
+	// 			)
+	// 		),
+	// 		...[1, 9].map((n, index) =>
+	// 			getSuitedHashTileMock(
+	// 				getTileHashKey(this.id, this.n[0]),
+	// 				Suit.SUO,
+	// 				n,
+	// 				index
+	// 			)
+	// 		)
+	// 	];
+	// 	this.ts = this.ts.slice(0, 25);
+	// 	this.ts[21] = getAnimalHashTileMock(111, Animal.ROOSTER);
+	// 	this.ts[1] = getSuitedHashTileMock(
+	// 		getTileHashKey(this.id, this.n[0]),
+	// 		Suit.SUO,
+	// 		1
+	// 	);
+	// 	this.ts[0] = getAnimalHashTileMock(111, Animal.CAT);
+	// }
+
+	// kangShangHua() {
+	// 	this.ps[0].hTs = [
+	// 		...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n, index) =>
+	// 			getSuitedHashTileMock(
+	// 				getTileHashKey(this.id, this.n[0]),
+	// 				Suit.TONG,
+	// 				n,
+	// 				index
+	// 			)
+	// 		),
+	// 		...[1, 9].map((n, index) =>
+	// 			getSuitedHashTileMock(
+	// 				getTileHashKey(this.id, this.n[0]),
+	// 				Suit.SUO,
+	// 				n,
+	// 				index
+	// 			)
+	// 		)
+	// 	];
+	// 	this.ps[0].sTs = [DaPai.RED, DaPai.RED, DaPai.RED].map((p, index) =>
+	// 		getHBFMock(p, index)
+	// 	);
+	// 	this.ps[0].ms = [`${MeldType.PONG}-${DaPai.RED}`];
+	// 	this.ts = this.ts.slice(0, 25);
+	// 	this.ts[21] = getHBFMock(DaPai.RED, 9);
+	// 	this.ts[1] = getSuitedHashTileMock(
+	// 		getTileHashKey(this.id, this.n[0]),
+	// 		Suit.SUO,
+	// 		1
+	// 	);
+	// 	this.ts[0] = getAnimalHashTileMock(111, Animal.CAT);
+	// }
 }

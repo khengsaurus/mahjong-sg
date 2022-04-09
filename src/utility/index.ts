@@ -32,7 +32,7 @@ import { Game, User } from 'models';
 import moment from 'moment';
 import { isDev } from 'platform';
 import { ITheme } from 'typesPlus';
-import { mainLRUCache } from './LRUCache';
+import { secondaryLRU } from './LRUCache';
 
 /* ----------------------------------- Util ----------------------------------- */
 
@@ -198,27 +198,22 @@ export function arrToSetArr<T>(arr: T[]): T[] {
 		return arr;
 	} else {
 		const key = `atsa-${JSON.stringify(arr)}`;
-		const cached = mainLRUCache.read(key);
-		if (cached) {
-			return cached;
+		const cached = secondaryLRU.read(key);
+		if (cached) return cached;
+
+		if (typeof arr[0] === 'string') {
+			const set = new Set<T>();
+			arr.forEach(e => set.add(e));
+			return secondaryLRU.write(key, Array.from(set));
 		} else {
-			if (typeof arr[0] === 'string') {
-				const set = new Set<T>();
-				arr.forEach(e => set.add(e));
-				const r = Array.from(set);
-				mainLRUCache.write(key, r);
-				return r;
-			} else {
-				const set = new Set<string>();
-				const r = [];
-				arr.forEach(e => {
-					if (isNewInSet(JSON.stringify(e), set)) {
-						r.push(e);
-					}
-				});
-				mainLRUCache.write(key, r);
-				return r;
-			}
+			const set = new Set<string>();
+			const r = [];
+			arr.forEach(e => {
+				if (isNewInSet(JSON.stringify(e), set)) {
+					r.push(e);
+				}
+			});
+			return secondaryLRU.write(key, r);
 		}
 	}
 }
@@ -475,21 +470,6 @@ export function indexToWind(n: number): Wind {
 	}
 }
 
-export function stageToWindName(n: number): String {
-	switch (Math.floor(n / 4)) {
-		case 0:
-			return CardName[Wind.E];
-		case 1:
-			return CardName[Wind.S];
-		case 2:
-			return CardName[Wind.W];
-		case 3:
-			return CardName[Wind.N];
-		default:
-			return null;
-	}
-}
-
 export function randomNum(n: number) {
 	return Math.round(Math.random() * n);
 }
@@ -736,20 +716,13 @@ export function getCountPerSuit(ts: IShownTile[] | string[]): IObj<Suit, number>
 	return suits;
 }
 
-export function getHandDesc(hD: string) {
+export function getHandDesc(hD: string, enOnly: boolean) {
 	let arr = hD.split('-');
 	switch (arr[0] as ScoringHand) {
 		case ScoringHand.FS:
 			return `${arr[1]} ${HandDescEng[arr[0]]}${Number(arr[1]) === 1 ? `` : `s`}`;
 		case ScoringHand.MELDED:
-			let cardName = '';
-			const card = arr[1];
-			if (card.length === 1) {
-				cardName = CardName[card] || card;
-			} else {
-				cardName = `${card[0]}${SuitName[card[1]] || card[1]}`;
-			}
-			return `${HandDescEng[arr[0]]} ${cardName}`;
+			return `${HandDescEng[arr[0]]} ${getCardName(arr[1], enOnly)}`;
 		default:
 			return HandDescEng[arr[0]];
 	}
@@ -833,13 +806,11 @@ export function terminalSortTs<T extends IShownTile>(ts: T[]): T[] {
 		return ts;
 	}
 	const key = `tsTs-${JSON.stringify(ts.map(t => t.r))}`;
-	const cached = mainLRUCache.read(key);
-	if (cached) {
-		return cached;
-	}
+	const cached = secondaryLRU.read(key);
+	if (cached) return cached;
+
 	ts.sort((a, b) => (Math.abs(5 - a.n) > Math.abs(5 - b.n) ? -1 : 1));
-	mainLRUCache.write(key, ts);
-	return ts;
+	return secondaryLRU.write(key, ts);
 }
 
 export function terminalSortCs(cs: string[]): string[] {
@@ -949,13 +920,13 @@ export function getDefaultAmt(
 }
 
 /**
- * @param c: a string like 4S or 4索
+ * @param c: a string like 4S, 4索, or 红中
  */
 export function getCardName(c: string, enOnly = false) {
 	return c
 		? Number(c[0])
 			? `${c[0]}${(enOnly ? convertSuitToEn(c[1]) : SuitName[c[1]]) || c[1]}`
-			: (enOnly ? CardNameEn[c] : CardName[c]) || c
+			: (enOnly ? CardNameEn[c] || convertToEn(c) : CardName[c]) || c
 		: '';
 }
 

@@ -32,7 +32,7 @@ import {
 	setUser
 } from 'store/actions';
 import { getTheme } from 'utility';
-import { mainLRUCache } from 'utility/LRUCache';
+import { primaryLRU } from 'utility/LRUCache';
 import { jwtToObj, objToJwt } from 'utility/parsers';
 
 interface IAppContext {
@@ -123,7 +123,7 @@ export const AppContextProvider = (props: any) => {
 		dispatch(setTHK(111));
 		dispatch(setGame(null));
 		dispatch(setLocalGame(null));
-		mainLRUCache.clear();
+		primaryLRU.clear();
 		if (!user) {
 			setPlayers([]);
 			navigate(Page.LOGIN);
