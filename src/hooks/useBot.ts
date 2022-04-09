@@ -15,7 +15,7 @@ import { AppContext } from './AppContext';
  *     -> * get _p discard categories (req for hand objectives)
  *     -> ** get _p hand objectives
  *     -> setExec (chi | draw)
- *   -> useControls.handleExec
+ *   -> useControlsMain.handleExec
  *     -> *, **
  *     -> *** getDiscardHelper -> decide on discard tile
  *     -> setExec (-> handleDiscard)
@@ -27,7 +27,7 @@ import { AppContext } from './AppContext';
  *
  * Note:
  * * useBot.getBotEval will only call for bots
- * * Critical dependencies in useControls.useEffect's + useBot.useEffect to trigger this cycle
+ * * Critical dependencies in useControlsMain.useEffect's + useBot.useEffect to trigger this cycle
  */
 function useBot(
 	isHuLocked: boolean,

@@ -100,30 +100,42 @@ export interface IDeclareHuModalP extends IModalP {
 export interface IAnnounceHuModalP extends IModalP {
 	HH?: IHWPx;
 	showNextRound?: boolean;
-	handleHome?: () => void;
 	handleChips?: () => void;
+	handleHome?: () => void;
 	huFirst?: (boolean?) => void;
 	nextRound?: () => void;
 }
 
-export interface IControls {
-	game: Game;
-	player: User;
-	notif: ITableNotifP;
-	topLeft: ITLControlsP;
-	topRight: ITRControlsP;
+export interface IControlsMain {
 	bottomLeft: IBLControlsP;
 	bottomRight: IBRControlsP;
+	exec: any[];
+	game: Game;
+	notif: ITableNotifP;
+	player: User;
+	showBottomControls: boolean;
+	handleChi: (cs: string[]) => void;
+	setGamePaused: (b: boolean) => void;
+	setExec: (e: any[]) => void;
+}
+
+export interface IControlsTop {
+	gameInfoModal: IModalP;
 	payModal: IModalP;
 	settingsModal: IModalP;
-	gameInfoModal: IModalP;
-	declareHuModal: IDeclareHuModalP;
-	announceHuModal: IAnnounceHuModalP;
 	showLeaveAlert: boolean;
-	showBottomControls: boolean;
+	topLeft: ITLControlsP;
+	topRight: ITRControlsP;
+	setShowPay: (b: boolean) => void;
+}
+
+export interface IControlsHu {
+	announceHuModal: IAnnounceHuModalP;
+	confirmHu: boolean;
+	declareHuModal: IDeclareHuModalP;
 	showAnnounceHuModal: boolean;
-	exec: any[];
-	handleChi: (cs: string[]) => void;
-	setExec: (exec: any[]) => void;
-	setGamePaused: (pause: boolean) => void;
+	showDeclareHu: boolean;
+	handleAction: (_p: number, g: Game) => void;
+	handleConfirmHuPrompt: () => void;
+	openDeclareHuDialog: (_p: number, g: Game) => void;
 }

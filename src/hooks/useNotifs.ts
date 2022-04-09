@@ -106,7 +106,7 @@ const useNotifs = (
 		let notifs: string[] = [];
 
 		if (delayLeft > 0 && skRef) {
-			isDev && console.info('useControls.useMemo -> notifs');
+			isDev && console.info('useControlsMain.useMemo -> notifs');
 			isFirstToHu = sk[0] === `${playerSeat}${Exec.HU}`;
 			if (sk.length > 1) {
 				othersFirstToHu = !isFirstToHu && sk[0].includes(Exec.HU) ? sk[0] : '';

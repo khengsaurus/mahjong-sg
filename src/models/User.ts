@@ -300,7 +300,7 @@ export class User {
 
 	createMeld(tiles: IShownTile[], pongToKang = false) {
 		if (tiles.length > 1 && tiles.every(t => t.c === tiles[0].c)) {
-			// To show last taken for pong/kang on player's left. @see useControls.handleTake
+			// To show last taken for pong/kang on player's left. @see useControlsMain.handleTake
 			tiles.reverse();
 		}
 		this.removeFromHidden(tiles);

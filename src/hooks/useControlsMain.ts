@@ -8,31 +8,27 @@ import { useSelector } from 'react-redux';
 import { ControlsTextChi, ControlsTextEng, ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { getHighlightColor } from 'style/MuiStyles';
-import { IControls, IHWPx } from 'typesPlus';
-import {
-	findRight,
-	getCardFromHashId,
-	getCardName,
-	indexToWind,
-	isBot,
-	isEmptyTile,
-	revealTile
-} from 'utility';
-import { primaryLRU } from 'utility/LRUCache';
-import { useFirstEffect, useOptions } from '.';
+import { IControlsMain, IHWPx } from 'typesPlus';
+import { getCardFromHashId, getCardName, isBot, revealTile } from 'utility';
+import { useOptions } from '.';
 import { AppContext } from './AppContext';
 import { IUseNotifs } from './useNotifs';
 
-function useControls(
+function useControlsMain(
+	confirmHu,
+	delayLeft: number,
+	HH: IHWPx,
+	isHuLocked: boolean,
 	lThAvail: boolean,
 	lThAvailHu: boolean,
-	delayLeft: number,
-	isHuLocked: boolean,
 	notifOutput: IUseNotifs,
-	HH: IHWPx,
-	updateGame: (game: Game) => void
-): IControls {
-	const { playerSeat, selectedTiles, setSelectedTiles } = useContext(AppContext);
+	showDeclareHu,
+	handleAction: (_p: number, g: Game) => void,
+	updateGame: (game: Game) => void,
+	handleConfirmHuPrompt: () => void,
+	openDeclareHuDialog: (_p: number, game: Game) => void
+): IControlsMain {
+	const { playerSeat, selectedTiles } = useContext(AppContext);
 	const {
 		game,
 		gameId,
@@ -52,21 +48,9 @@ function useControls(
 		notifs
 	} = notifOutput;
 	const [exec, setExec] = useState<any[]>([]);
-	const [showPay, setShowPay] = useState(false);
-	const [showLogs, setShowLogs] = useState(false);
-	const [showText, setShowText] = useState(true);
-	const [confirmHu, setConfirmHu] = useState(false);
-	const [showAdmin, setShowAdmin] = useState(false);
-	const [showSettings, setShowSettings] = useState(false);
-	const [showDeclareHu, setShowDeclareHu] = useState(false);
-	const [showLeaveAlert, setShowLeaveAlert] = useState(false);
-	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
-
-	// Consts
 	const currGame = gameId === LocalFlag ? localGame : game;
-	const { cO, f, hu, lTh, n = [], prE, ps, sk, ts } = currGame;
+	const { f, lTh, n = [], ps, sk, ts } = currGame;
 	const player = ps[playerSeat];
-	const dealerName = ps[prE._d || n[2]]?.uN;
 
 	// Dependencies
 	const skRef = JSON.stringify(sk);
@@ -90,35 +74,6 @@ function useControls(
 		[delayLeft, execRef, skRef, pIdsRef]
 	);
 
-	const seat = useMemo(() => {
-		const wind = indexToWind((playerSeat - n[2] + 4) % 4);
-		return getCardName(wind, enOnly);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [enOnly, playerSeat, n[2]]);
-
-	const texts = useMemo(
-		() =>
-			f[0]
-				? [
-						// `Dealer: ${dealerName}`,
-						`Seat: ${seat}, ${ScreenTextEng.CHIPS}: ${
-							Math.round(player?.bal) || 0
-						}`,
-						`${ts?.length || 0} tiles left`,
-						`${
-							n[3] === playerSeat
-								? ScreenTextEng.YOUR_TURN
-								: `${ps[n[3]]?.uN}'s turn`
-						}`
-				  ]
-				: [
-						`${ScreenTextEng.CHIPS}: ${Math.round(player?.bal) || 0}`,
-						ScreenTextEng.GAME_ENDED
-				  ],
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dealerName, f[0], player?.bal, playerSeat, ps[n[3]]?.uN, ts?.length, seat]
-	);
-
 	/* ----------------------------------- Options ----------------------------------- */
 	const { meld, canChi, canPong, canKang } = useOptions(
 		player,
@@ -131,7 +86,6 @@ function useControls(
 		lThAvail
 	);
 
-	/* ----------------------------------- Action ----------------------------------- */
 	const updateGameTaken = useCallback(
 		(_p: number, game: Game, resetLTh: boolean = true, halfA: boolean = true) => {
 			game.t[2] = null;
@@ -148,183 +102,6 @@ function useControls(
 		[]
 	);
 
-	const handleAction = useCallback(
-		(_p: number, game: Game) => {
-			if (_p === playerSeat) {
-				setSelectedTiles([]);
-			}
-			if (game.f[3] && game.f[4]) {
-				game.ps[_p]?.setHiddenTiles();
-				game.nextPlayerMove();
-			}
-			updateGame(game);
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[playerSeat, setSelectedTiles, updateGame]
-	);
-
-	/* ----------------------------------- Hu ----------------------------------- */
-	// If player loads Table and sT && cfH -> setShowDeclareHu(true). Note that this bypasses isHuLocked
-	useFirstEffect(
-		useCallback(() => {
-			isDev &&
-				console.info(
-					'useControls.useEffect -> check if should auto open Declare Hu modal'
-				);
-			if (hu?.length === 0) {
-				if (player?.sT && player?.cfH && !showDeclareHu) {
-					setShowDeclareHu(true);
-				}
-			} else if (showDeclareHu && Number(hu[0]) !== playerSeat) {
-				hideDeclareHuModal(playerSeat, currGame);
-			}
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [playerSeat, player?.cfH, player?.sT, showDeclareHu])
-	);
-
-	const openDeclareHuDialog = useCallback(
-		(_p: number, game: Game) => {
-			const { lTh, f = [], n = [], ps } = game;
-			if (!isHuLocked) {
-				if (_p === playerSeat) {
-					setConfirmHu(false);
-					setShowDeclareHu(true);
-					clearTimeout(openTimeoutId);
-				}
-				const p = ps[_p];
-				if (isEmpty(p?.lTa)) {
-					if (lThAvailHu) {
-						game.ps[n[7]]?.removeFromDiscarded(lTh);
-						p.getNewTile(lTh);
-					} else if (
-						// can 抢杠
-						f[3] &&
-						n[3] !== _p &&
-						!isEmptyTile(lTh) &&
-						ps[n[3]].shownTilesContain(lTh) &&
-						ps[n[3]].hasKang(lTh.c)
-					) {
-						ps[n[3]].updateKangToPong(lTh.c);
-						ps[n[3]].removeFromShown(lTh);
-						game.f[7] = true;
-						game.n[6] = _p;
-						p.getNewTile(lTh);
-					}
-				}
-				p.sT = true;
-				p.cfH = true;
-				game.t[2] = null;
-				handleAction(_p, game);
-			}
-		},
-		[
-			isHuLocked,
-			playerSeat,
-			setConfirmHu,
-			setShowDeclareHu,
-			openTimeoutId,
-			handleAction,
-			lThAvailHu
-		]
-	);
-
-	const returnLastThrown = useCallback((game: Game, _p: number) => {
-		const { n = [], ps } = game;
-		if (ps[_p]) {
-			const toReturn = ps[_p].returnLastThrown();
-			// prevent duplicating lTh when another player is holding lTh
-			if (!isEmpty(toReturn)) {
-				if (ps[n[7]].hasPong(toReturn.c)) {
-					// return 抢杠
-					ps[n[7]].createMeld([toReturn], true);
-					game.lTh = toReturn;
-					game.f[7] = false;
-					game.n[6] = n[7];
-				} else if (!ps[n[7]].lastDiscardedTileIs(toReturn)) {
-					ps[n[7]]?.addToDiscarded(toReturn);
-					game.lTh = toReturn;
-				}
-			}
-		}
-	}, []);
-
-	const hideDeclareHuModal = useCallback(
-		(_p: number, game: Game, hu?: boolean) => {
-			if (_p === playerSeat) {
-				setShowDeclareHu(false);
-			}
-			const p = game.ps[_p];
-			if (p && !hu) {
-				if (p?.lTa.r === game.lTh.r) {
-					returnLastThrown(game, _p);
-				}
-				p.sT = false;
-				p.cfH = false;
-				handleAction(_p, game);
-			}
-		},
-		[playerSeat, setShowDeclareHu, handleAction, returnLastThrown]
-	);
-
-	const huFirst = useCallback(
-		(_p: number, game: Game) => {
-			const p = game.ps[_p];
-			const t = game?.ps[Number(game.hu[0])]?.returnLastThrown();
-			p?.getNewTile(t);
-			p.sT = true;
-			p.cfH = true;
-			game.ps.forEach(p => {
-				p.sT = false;
-				p.cfH = false;
-			});
-			game.hu = [];
-			game.undoEndRound();
-			openDeclareHuDialog(_p, game);
-			handleAction(_p, game);
-		},
-		[openDeclareHuDialog, handleAction]
-	);
-
-	function setConfirmHuTimeout() {
-		setOpenTimeoutId(
-			setTimeout(function () {
-				setConfirmHu(false);
-			}, 3000)
-		);
-	}
-
-	const handleConfirmHuPrompt = useCallback(() => {
-		if (confirmHu) {
-			clearTimeout(openTimeoutId);
-		}
-		setConfirmHu(true);
-		setConfirmHuTimeout();
-	}, [confirmHu, openTimeoutId]);
-
-	const showTiles = useCallback(
-		(_p: number, game: Game) => {
-			const p = game.ps[_p];
-			if (!p.sT) {
-				p.sT = true;
-				updateGame(game);
-			}
-		},
-		[updateGame]
-	);
-
-	const nextRound = useCallback(
-		(game: Game) => {
-			setExec([]);
-			game.prepForNewRound();
-			game.initRound();
-			primaryLRU.clear();
-			updateGame(game);
-			haptic && triggerHaptic(ImpactStyle.Heavy);
-		},
-		[haptic, updateGame]
-	);
-
-	/* ----------------------------------- Game actions ----------------------------------- */
 	const drawDisabled = useMemo(
 		() =>
 			// Added canChi || canPong || canKang to prevent accidental draw
@@ -454,7 +231,7 @@ function useControls(
 					} else {
 						game.newLog(`${p.uN} chi'd ${cardName}`);
 					}
-					updateGameTaken(_p, game, true); // TODO: MONITOR
+					updateGameTaken(_p, game, true);
 					handleAction(_p, game);
 					if (haptic && _p === playerSeat) {
 						triggerHaptic(ImpactStyle.Medium);
@@ -643,10 +420,6 @@ function useControls(
 					break;
 				case Exec.HU:
 					handleHu(currGame, _b, exec[2] as IHWPx);
-					// probably shd pass these fns to AnnounceHuModal and call from there...
-					setShowPay(false);
-					setShowAdmin(false);
-					setShowSettings(false);
 					break;
 				case Exec.KANG:
 					handleTake(_b, currGame, true, exec[2], exec[2], exec[2], exec[2]);
@@ -688,7 +461,7 @@ function useControls(
 				!isHuLocked &&
 				(delayLeft === 0 || toExec || bot2ndToHu)
 			) {
-				isDev && console.info('useControls.useEffect -> handleExec');
+				isDev && console.info('useControlsMain.useEffect -> handleExec');
 				didExec = true;
 				const _p = Number(exec[0]);
 				if (!isBot(ps[_p]?.id)) {
@@ -820,26 +593,6 @@ function useControls(
 				? () => handleSkipNotif(currGame)
 				: null
 		},
-		topRight: {
-			handlePay: useCallback(() => setShowPay(prev => !prev), [setShowPay]),
-			handleLogs: useCallback(() => setShowLogs(prev => !prev), [setShowLogs]),
-			showText,
-			showLogs
-		},
-		topLeft: {
-			handleSettings: useCallback(
-				() => setShowSettings(prev => !prev),
-				[setShowSettings]
-			),
-			handleScreenText: useCallback(
-				() => setShowText(prev => !prev),
-				[setShowText]
-			),
-			handleAdmin: useCallback(() => setShowAdmin(prev => !prev), [setShowAdmin]),
-			setShowLeaveAlert,
-			showText,
-			texts
-		},
 		bottomLeft: {
 			handleChi: () => handleTake(playerSeat, currGame),
 			handlePong: () => handlePong(playerSeat, currGame),
@@ -860,7 +613,6 @@ function useControls(
 					: handleThrow(playerSeat, currGame),
 			handleDraw: () => handleDraw(playerSeat, currGame),
 			handleOpen: handleConfirmHuPrompt,
-			// handleOpen: () => handleHu(currGame, playerSeat, {}, 1, false),
 			confirmHu,
 			disableThrow: selectedTiles?.length !== 1 || n[3] !== playerSeat || !f[3],
 			disableDraw:
@@ -871,56 +623,7 @@ function useControls(
 			showDeclareHu,
 			taken: n[3] === playerSeat && f[3]
 		},
-		payModal: {
-			game: currGame,
-			playerSeat,
-			show: showPay,
-			updateGame,
-			onClose: useCallback(() => setShowPay(false), [setShowPay])
-		},
-		settingsModal: {
-			game: currGame,
-			playerSeat,
-			show: showSettings,
-			onClose: useCallback(() => setShowSettings(false), [setShowSettings])
-		},
-		declareHuModal: {
-			game: currGame,
-			playerSeat,
-			show: showDeclareHu,
-			handleHu,
-			updateGame, // not used
-			onClose: (hu: boolean) => hideDeclareHuModal(playerSeat, currGame, hu)
-		},
-		gameInfoModal: {
-			game: currGame,
-			show: showAdmin,
-			updateGame,
-			onClose: useCallback(() => setShowAdmin(false), [setShowAdmin])
-		},
-		announceHuModal: {
-			game: currGame,
-			playerSeat,
-			show: player?.sT,
-			showNextRound: useMemo(() => {
-				if (f[0] === false || n[2] === 9) {
-					return false;
-				}
-				const nextDealer = f[2] ? findRight(n[2]) : n[2];
-				return (
-					nextDealer === playerSeat ||
-					(player?.uN === cO && isBot(ps[nextDealer]?.id))
-				);
-				// eslint-disable-next-line react-hooks/exhaustive-deps
-			}, [n[2], f[1], f[2], playerSeat, player?.uN, cO]),
-			handleChips: useCallback(() => setShowPay(true), [setShowPay]),
-			huFirst: () => huFirst(playerSeat, currGame),
-			nextRound: () => nextRound(currGame),
-			onClose: () => showTiles(playerSeat, currGame)
-		},
-		showLeaveAlert,
 		showBottomControls: !isHuLocked && !showDeclareHu,
-		showAnnounceHuModal: currGame?.hu?.length > 2 || f[5],
 		exec,
 		handleChi,
 		setExec,
@@ -928,4 +631,4 @@ function useControls(
 	};
 }
 
-export default useControls;
+export default useControlsMain;

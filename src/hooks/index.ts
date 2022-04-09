@@ -8,7 +8,9 @@ import {
 import useAndroidKeyboardListener from './useAndroidKeyboardListener';
 import useAsync from './useAsync';
 import useBot from './useBot';
-import useControls from './useControls';
+import useControlsHu from './useControlsHu';
+import useControlsMain from './useControlsMain';
+import useControlsTop from './useControlsTop';
 import useCountdown from './useCountdown';
 import useDebounce from './useDebounce';
 import useFirstEffect from './useFirstEffect';
@@ -33,7 +35,7 @@ export {
 	useAndroidKeyboardListener,
 	useBot,
 	useCloseListener,
-	useControls,
+	useControlsMain,
 	useCountdown,
 	useDebounce,
 	useDocumentListener,
@@ -50,5 +52,7 @@ export {
 	useSession,
 	useTAvail,
 	useTiles,
+	useControlsHu,
+	useControlsTop,
 	useWindowListener
 };

@@ -15,7 +15,9 @@ import {
 	AppContext,
 	useAndroidBack,
 	useBot,
-	useControls,
+	useControlsHu,
+	useControlsMain,
+	useControlsTop,
 	useDocumentListener,
 	useGameCountdown,
 	useHand,
@@ -76,33 +78,51 @@ const Controls = () => {
 
 	const { HH } = useHand();
 	const {
-		game,
-		notif,
-		player,
-		topRight,
 		topLeft,
-		bottomLeft,
-		bottomRight,
+		topRight,
 		payModal,
 		settingsModal,
 		gameInfoModal,
-		declareHuModal,
-		announceHuModal,
 		showLeaveAlert,
-		showBottomControls,
+		setShowPay
+	} = useControlsTop(updateGame);
+
+	const {
+		announceHuModal,
+		confirmHu,
+		declareHuModal,
 		showAnnounceHuModal,
+		showDeclareHu,
+		handleAction,
+		handleConfirmHuPrompt,
+		openDeclareHuDialog
+	} = useControlsHu(isHuLocked, lThAvailHu, updateGame, setShowPay);
+
+	const {
+		game,
+		notif,
+		player,
+		bottomLeft,
+		bottomRight,
+		showBottomControls,
 		handleChi,
 		setExec,
 		setGamePaused
-	} = useControls(
+	} = useControlsMain(
+		confirmHu,
+		delayLeft,
+		HH,
+		isHuLocked,
 		lThAvail,
 		lThAvailHu,
-		delayLeft,
-		isHuLocked,
 		notifOutput,
-		HH,
-		updateGame
+		showDeclareHu,
+		handleAction,
+		updateGame,
+		handleConfirmHuPrompt,
+		openDeclareHuDialog
 	);
+
 	useBot(isHuLocked, delayLeft, lThAvail, setExec);
 	const { cO, f = [], hu = [], lTh = {}, n = [], ps = [] } = game || {};
 
