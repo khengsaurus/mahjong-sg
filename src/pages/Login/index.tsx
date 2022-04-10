@@ -51,7 +51,7 @@ const Login = () => {
 		(err: Error) => {
 			setReady(true);
 			if (err.message?.toUpperCase().includes(ErrorMessage.FIREBASE_WRONG_PW)) {
-				setAlert({ status: Status.ERROR, msg: ErrorMessage.LOGIN_ERROR });
+				setAlert({ status: Status.ERROR, msg: ErrorMessage.INCORRECT_LOGIN });
 			} else {
 				setAlert({ status: Status.ERROR, msg: err.message });
 			}

@@ -54,7 +54,7 @@ export class Service {
 	}
 
 	/**
-	 * @throws ErrorMessage.SERVICE_OFFLINE || ErrorMessage.LOGIN_ERROR
+	 * @throws ErrorMessage.SERVICE_OFFLINE || ErrorMessage.INCORRECT_LOGIN
 	 */
 	FBResolveUser(email: string, retry = 1, retryAfter = 1000): Promise<User | null> {
 		return new Promise(async (resolve, reject) => {
@@ -74,7 +74,7 @@ export class Service {
 					}
 					reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 				} else {
-					reject(new Error(ErrorMessage.LOGIN_ERROR));
+					reject(new Error(ErrorMessage.INCORRECT_LOGIN));
 				}
 			} catch (err) {
 				reject(err);

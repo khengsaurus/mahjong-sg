@@ -167,7 +167,7 @@ export class FirebaseService {
 	}
 
 	/**
-	 * @throws ErrorMessage.LOGIN_ERROR
+	 * @throws ErrorMessage.INCORRECT_LOGIN
 	 */
 	async authLoginEmailPass(email: string, password: string): Promise<string> {
 		return new Promise((resolve, reject) => {
@@ -176,6 +176,8 @@ export class FirebaseService {
 					.then((values: UserCredential) => {
 						if (email === values.user.email) {
 							resolve(email);
+						} else {
+							reject(new Error(ErrorMessage.INCORRECT_LOGIN));
 						}
 					})
 					.catch(err => {
@@ -230,7 +232,7 @@ export class FirebaseService {
 	}
 
 	/**
-	 * @throws if no userEmail, ErrorMessage.LOGIN_ERROR, else ErrorMessage.TRY_AGAIN
+	 * @throws if no userEmail, ErrorMessage.INCORRECT_LOGIN, else ErrorMessage.TRY_AGAIN
 	 */
 	getEmailFromUsername(
 		username: string,
