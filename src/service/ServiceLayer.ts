@@ -186,6 +186,7 @@ export class Service {
 						game.prepForNewRound(true);
 						game.initRound();
 						this.store.dispatch(setLocalGame(game));
+						!isDev && FBService.incrementLocalGameCount();
 						resolve(game);
 					});
 				} else {
@@ -202,6 +203,7 @@ export class Service {
 						game.prepForNewRound(true);
 						game.initRound();
 						FBService.updateGame(game).then(() => {
+							!isDev && FBService.incrementOnlineGameCount();
 							resolve(game);
 						});
 					});

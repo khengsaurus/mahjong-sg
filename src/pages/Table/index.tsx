@@ -15,7 +15,7 @@ import { AppContext, useLocalSession } from 'hooks';
 import $ from 'jquery';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
-import { isMobile } from 'platform';
+import { isDev, isMobile } from 'platform';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
@@ -113,7 +113,7 @@ const Table = () => {
 							dispatch(setGame(currentGame));
 						}
 					}
-				});
+				}).catch(err => isDev && console.error(err));
 			}
 		}
 

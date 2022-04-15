@@ -59,6 +59,7 @@ export class FirebaseService {
 	private fs: Firestore;
 	private usersRef: CollectionReference;
 	private gamesRef: CollectionReference;
+	private metricsRef: CollectionReference;
 	private logsRef: CollectionReference;
 	private isFBConnected: boolean;
 
@@ -70,6 +71,7 @@ export class FirebaseService {
 				this.db = getDatabase(this.app, FirebaseConfig.databaseUrl);
 				this.usersRef = collection(this.fs, FBCollection.USERREPR);
 				this.gamesRef = collection(this.fs, FBCollection.GAMES);
+				this.metricsRef = collection(this.fs, FBCollection.METRICS);
 				this.logsRef = collection(this.fs, FBCollection.LOGS);
 				this.initFBConnectionWatcher();
 			}
@@ -683,6 +685,48 @@ export class FirebaseService {
 				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
 		});
+	}
+
+	/* ------------------------------ Metrics ------------------------------ */
+
+	incrementLocalGameCount() {
+		try {
+			if (this.isFBConnected) {
+				runTransaction(this.fs, async transaction => {
+					const counterRef = doc(this.metricsRef, 'local-counter');
+					await transaction.get(counterRef).then(counterDoc => {
+						if (counterDoc.exists()) {
+							const { count } = counterDoc.data();
+							if (count > 0) {
+								transaction.update(counterRef, { count: count + 1 });
+							}
+						}
+					});
+				});
+			}
+		} catch (err) {
+			isDev && console.error(err);
+		}
+	}
+
+	incrementOnlineGameCount() {
+		try {
+			if (this.isFBConnected) {
+				runTransaction(this.fs, async transaction => {
+					const counterRef = doc(this.metricsRef, 'online-counter');
+					await transaction.get(counterRef).then(counterDoc => {
+						if (counterDoc.exists()) {
+							const { count } = counterDoc.data();
+							if (count > 0) {
+								transaction.update(counterRef, { count: count + 1 });
+							}
+						}
+					});
+				});
+			}
+		} catch (err) {
+			isDev && console.error(err);
+		}
 	}
 
 	/* ------------------------- Dev / maintenance ------------------------- */

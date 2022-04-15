@@ -122,6 +122,7 @@ export enum FBCollection {
 	USERVAL = 'userVal',
 	USERREPR = 'userRepr',
 	GAMES = 'games',
+	METRICS = 'metrics',
 	LOGS = 'logs'
 }
 
