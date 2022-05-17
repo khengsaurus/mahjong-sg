@@ -48,7 +48,6 @@ export enum Platform {
 }
 
 export enum StorageKey {
-	CONTENTUPDATE = 'contentUpdated',
 	ROOT = 'root',
 	USER = 'user',
 	GAME = 'game',

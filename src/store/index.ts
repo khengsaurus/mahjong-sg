@@ -16,7 +16,6 @@ export interface IStore {
 	game?: Game;
 	localGame?: Game;
 	tHK?: number;
-	contentUpdated?: Date;
 	aboutContent?: IAboutContent;
 	helpContent?: IHelpContent;
 	policyContent?: IPolicyContent;
@@ -31,8 +30,6 @@ const setUserTransform = createTransform(
 				return stateOut ? objToUser(stateOut) : null;
 			case StorageKey.LOCALGAME:
 				return objToGame(stateOut);
-			case StorageKey.CONTENTUPDATE:
-				return stateOut ? new Date(stateOut as string) : null;
 			default:
 				return stateOut;
 		}

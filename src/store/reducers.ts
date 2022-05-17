@@ -2,7 +2,6 @@ import { AnyAction } from 'redux';
 import { IStore } from 'store';
 import {
 	SET_ABOUT,
-	SET_CONTENT_UPDATED,
 	SET_GAME,
 	SET_GAME_ID,
 	SET_HAPTIC,
@@ -28,8 +27,7 @@ export function rootReducer(
 		aboutContent: null,
 		helpContent: null,
 		policyContent: null,
-		notifsContent: null,
-		contentUpdated: null
+		notifsContent: null
 	},
 	action: AnyAction
 ) {
@@ -88,11 +86,6 @@ export function rootReducer(
 			return {
 				...state,
 				notifsContent: action.payload
-			};
-		case SET_CONTENT_UPDATED:
-			return {
-				...state,
-				contentUpdated: action.payload
 			};
 		case SET_HAPTIC:
 			return {

@@ -1,24 +1,16 @@
 import { BotIds, Content, Page, Size, StorageKey } from 'enums';
 import { useFirstEffect, useInitMobile, useLocalObj } from 'hooks';
 import isEmpty from 'lodash.isempty';
-import { ErrorMessage, InfoMessage } from 'messages';
+import { ErrorMessage } from 'messages';
 import { User } from 'models';
 import { isDev } from 'platform';
-import {
-	createContext,
-	SetStateAction,
-	useCallback,
-	useEffect,
-	useRef,
-	useState
-} from 'react';
+import { createContext, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { HttpService, ServiceInstance } from 'service';
 import { IStore } from 'store';
 import {
 	setAboutContent,
-	setContentUpdated,
 	setGame,
 	setGameId,
 	setHaptic,
@@ -100,7 +92,7 @@ async function getContent() {
 export const AppContext = createContext<IAppContext>(initialContext);
 
 export const AppContextProvider = (props: any) => {
-	const { user, contentUpdated } = useSelector((state: IStore) => state);
+	const { user } = useSelector((state: IStore) => state);
 	const { resolveLocalObj, handleLocalObj } = useLocalObj<User>(
 		StorageKey.USERJWT,
 		jwtToObj,
@@ -114,7 +106,6 @@ export const AppContextProvider = (props: any) => {
 	const [showAI, setShowAI] = useState(false);
 	const [userEmail, setUserEmail] = useState('');
 	const [showHomeAlert, setShowHomeAlert] = useState(false);
-	const contentReqTimeout = useRef<NodeJS.Timeout>();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -138,42 +129,20 @@ export const AppContextProvider = (props: any) => {
 	useFirstEffect(() => setShowHomeAlert(!!homeAlert), [homeAlert]);
 
 	useEffect(() => {
-		const now = new Date();
-		if (
-			!contentReqTimeout.current &&
-			(!contentUpdated ||
-				(contentUpdated && now.getTime() - new Date(contentUpdated).getTime()) >
-					(isDev ? 1 / 60 : 6) * 60 * 60 * 1000) // 1 min if dev, 6 hours if prod
-		) {
-			contentReqTimeout.current = setTimeout(async () => {
-				try {
-					getContent().then(data => {
-						if (data.length === 4 && data.every(d => !isEmpty(d))) {
-							dispatch(setAboutContent(data[0] as IAboutContent));
-							dispatch(setHelpContent(data[1] as IHelpContent));
-							dispatch(setPolicyContent(data[2] as IPolicyContent));
-							dispatch(setNotifsContent(data[3] as INotifsContent));
-							dispatch(setContentUpdated(now));
-							console.info(
-								`${InfoMessage.CONTENT_RETRIEVED} from ${HttpService.serverEndpoint} at ${now}`
-							);
-						} else {
-							throw new Error(ErrorMessage.CONTENT_FETCH_FAIL);
-						}
-					});
-				} catch (err) {
-					console.info(err.message);
-					dispatch(setContentUpdated(null));
+		getContent()
+			.then(data => {
+				if (data.length === 4 && data.every(d => !isEmpty(d))) {
+					dispatch(setAboutContent(data[0] as IAboutContent));
+					dispatch(setHelpContent(data[1] as IHelpContent));
+					dispatch(setPolicyContent(data[2] as IPolicyContent));
+					dispatch(setNotifsContent(data[3] as INotifsContent));
+				} else {
+					throw new Error(ErrorMessage.CONTENT_FETCH_FAIL);
 				}
-			}, 500);
-		}
-
-		return () => {
-			clearTimeout(contentReqTimeout.current);
-			contentReqTimeout.current = null;
-		};
+			})
+			.catch(err => console.info(err.message));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [contentUpdated, dispatch]);
+	}, [dispatch]);
 
 	useEffect(() => {
 		setHasAI(players.length > 1 && !!players.find(p => BotIds.includes(p?.id)));
