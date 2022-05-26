@@ -11,7 +11,7 @@ import {
 	TopPlayer
 } from 'components';
 import { LocalFlag, Page, Status } from 'enums';
-import { AppContext, useLocalSession } from 'hooks';
+import { AppContext, useLocalSession, usePreLoadAssets } from 'hooks';
 import $ from 'jquery';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
@@ -43,6 +43,7 @@ const Table = () => {
 	const isLocalGame = gameId === LocalFlag;
 	const { verifyingSession } = useLocalSession(isLocalGame);
 	const dispatch = useDispatch();
+	usePreLoadAssets(true);
 
 	/* ----------------------------------- Screen orientation ----------------------------------- */
 

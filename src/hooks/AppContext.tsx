@@ -1,5 +1,5 @@
 import { BotIds, Content, Page, Size, StorageKey } from 'enums';
-import { useFirstEffect, useInitMobile, useLocalObj } from 'hooks';
+import { useFirstEffect, useInitMobile, useLocalObj, usePreLoadAssets } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage } from 'messages';
 import { User } from 'models';
@@ -127,6 +127,7 @@ export const AppContextProvider = (props: any) => {
 
 	const { homeAlert } = useInitMobile(handleHome);
 	useFirstEffect(() => setShowHomeAlert(!!homeAlert), [homeAlert]);
+	usePreLoadAssets();
 
 	useEffect(() => {
 		getContent()

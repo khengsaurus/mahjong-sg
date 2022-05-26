@@ -23,6 +23,7 @@ import useLocalSession from './useLocalSession';
 import useLocalStorage from './useLocalStorage';
 import useNotifs from './useNotifs';
 import useOptions from './useOptions';
+import usePreLoadAssets from './usePreLoadAssets';
 import useSession from './useSession';
 import useTAvail from './useTAvail';
 import useTiles from './useTiles';
@@ -37,6 +38,8 @@ export {
 	useCloseListener,
 	useControlsMain,
 	useCountdown,
+	useControlsHu,
+	useControlsTop,
 	useDebounce,
 	useDocumentListener,
 	useFirstEffect,
@@ -49,10 +52,9 @@ export {
 	useLocalStorage,
 	useNotifs,
 	useOptions,
+	usePreLoadAssets,
 	useSession,
 	useTAvail,
 	useTiles,
-	useControlsHu,
-	useControlsTop,
 	useWindowListener
 };
