@@ -7,7 +7,7 @@ Offers P-v-P and P-vs-bot modes, calculation of hand points, account-management 
 
 ## Persistence
 
-Games and User information are persisted as NoSQL documents. Reading and writing are delegated to the Service Layer:
+Games and users are persisted as NoSQL documents. Reading and writing are delegated to the Service Layer:
 
 -   user related & online games: Firestore
 -   bot games: localStorage
@@ -32,10 +32,10 @@ When given the opportunity to meld a tile, it will only do so if melding aligns 
 
 The 'Easy AI' mode works simply by introducting a 50% chance that the bot will take when it can Pong, Kang or Chi.
 
-E.g., The bot has a hand like (1W, 2W, 3W, 1T, 2T, 3T...) and calculates that a Chi-hand is more achievable than a Pong-hang. If it is presented the opportunity to Pong, it will decline. It will also prioritise discarding Dragon tiles, as a valid Chi-hand cannot contain any Dragon tiles in Singapore Mahjong.
+E.g. - The bot has a hand like (1W, 2W, 3W, 1T, 2T, 3T, 4T, 4T...) and calculates that a Chi-hand is more achievable than a Pong-hand. If it is presented the opportunity to Pong 4T, it will decline. It will also prioritise discarding Dragon tiles, as a valid Chi-hand cannot contain any Dragon tiles in Singapore Mahjong.
 
 ## Published
 
--   Online: https://mahjong-sg.com
--   App Store: https://apps.apple.com/sg/app/mahjong-sg/id1608389963
--   Play Store: https://play.google.com/store/apps/details?id=com.tk.mahjongSg
+-   https://mahjong-sg.com
+-   [App Store](https://apps.apple.com/sg/app/mahjong-sg/id1608389963)
+-   [Play Store](https://play.google.com/store/apps/details?id=com.tk.mahjongSg)

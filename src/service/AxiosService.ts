@@ -19,16 +19,15 @@ export class AxiosService {
 
 	async getContent(key: Content) {
 		return new Promise(resolve => {
-			try {
-				this.instance
-					.get(`${this.serverEndpoint}/content/${key}`)
-					.then(res => resolve(res.data || null));
-			} catch (err) {
-				console.info(
-					`Failed to fetch resource from ${this.serverEndpoint}: ${err.message}`
-				);
-				resolve(null);
-			}
+			this.instance
+				.get(`${this.serverEndpoint}/content/${key}`)
+				.then(res => resolve(res.data || null))
+				.catch(err => {
+					console.info(
+						`Failed to fetch resource from ${this.serverEndpoint}: ${err.message}`
+					);
+					resolve(null);
+				});
 		});
 	}
 }

@@ -165,7 +165,7 @@ const UserSearchForm: React.FC = () => {
 				</ListItem>
 				<Collapse
 					in={showOptions && foundUsers.length > 0}
-					className="search-box list-item"
+					className="list-item"
 					timeout={Transition.FAST}
 				>
 					{foundUsers.map(foundUser =>

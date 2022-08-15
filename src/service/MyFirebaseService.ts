@@ -689,35 +689,18 @@ export class FirebaseService {
 
 	/* ------------------------------ Metrics ------------------------------ */
 
-	incrementLocalGameCount() {
+	incrementGameCount(online = false) {
 		try {
 			if (this.isFBConnected) {
 				runTransaction(this.fs, async transaction => {
-					const counterRef = doc(this.metricsRef, 'local-counter');
+					const counterRef = doc(
+						this.metricsRef,
+						online ? 'online-counter' : 'local-counter'
+					);
 					await transaction.get(counterRef).then(counterDoc => {
 						if (counterDoc.exists()) {
 							const { count } = counterDoc.data();
-							if (count > 0) {
-								transaction.update(counterRef, { count: count + 1 });
-							}
-						}
-					});
-				});
-			}
-		} catch (err) {
-			isDev && console.error(err);
-		}
-	}
-
-	incrementOnlineGameCount() {
-		try {
-			if (this.isFBConnected) {
-				runTransaction(this.fs, async transaction => {
-					const counterRef = doc(this.metricsRef, 'online-counter');
-					await transaction.get(counterRef).then(counterDoc => {
-						if (counterDoc.exists()) {
-							const { count } = counterDoc.data();
-							if (count > 0) {
+							if (count) {
 								transaction.update(counterRef, { count: count + 1 });
 							}
 						}

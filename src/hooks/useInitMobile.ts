@@ -51,8 +51,9 @@ const useInitMobile = (handleHome: () => void): IPlatformAppSettings => {
 		}
 	}, []);
 
+	// Display notification if app version < latest version, or notifs is not empty
 	useEffect(() => {
-		if (isMobile && !isEmpty(notifsContent)) {
+		if (!isEmpty(notifsContent)) {
 			const showUpdateAlert =
 				(isIOS && appVersion < notifsContent.latestIOSVersion) ||
 				(isAndroid && appVersion < notifsContent.latestAndVersion);

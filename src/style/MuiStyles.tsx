@@ -142,10 +142,10 @@ function newMuiTheme(
 			MuiButtonBase: {
 				styleOverrides: {
 					root: {
-						primary: `${textColor}`,
-						secondary: `${highlightColor}`,
+						primary: textColor,
+						secondary: highlightColor,
 						'&:hover': {
-							color: isMobile ? `${textColor}` : `${highlightColor}`
+							color: isMobile ? textColor : highlightColor
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
@@ -157,8 +157,8 @@ function newMuiTheme(
 			MuiButton: {
 				styleOverrides: {
 					root: {
-						primary: `${textColor}`,
-						secondary: `${highlightColor}`,
+						primary: textColor,
+						secondary: highlightColor,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
 							transform: isMobile ? `` : `scale(1.05)`,
@@ -232,12 +232,12 @@ function newMuiTheme(
 			},
 			MuiIconButton: {
 				styleOverrides: {
-					colorInherit: { color: `${textColor}` },
+					colorInherit: { color: textColor },
 					root: {
-						color: `${textColor}`,
+						color: textColor,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile ? `${textColor}` : `${highlightColor}`,
+							color: isMobile ? textColor : highlightColor,
 							transform: isMobile ? `` : `scale(1.1)`,
 							transition: '150ms !important'
 						}
@@ -256,7 +256,7 @@ function newMuiTheme(
 			MuiInputLabel: {
 				styleOverrides: {
 					shrink: {
-						'&.MuiInputLabel-animated': { color: `${textColor}` }
+						'&.MuiInputLabel-animated': { color: textColor }
 					}
 				}
 			},
@@ -297,7 +297,7 @@ function newMuiTheme(
 						justifyContent: 'center',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile ? `${textColor}` : `${highlightColor}`
+							color: isMobile ? textColor : highlightColor
 						}
 					}
 				}
@@ -323,7 +323,7 @@ function newMuiTheme(
 						paddingRight: '12px !important',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile ? `${textColor}` : `${highlightColor}`
+							color: isMobile ? textColor : highlightColor
 						}
 					}
 				}
@@ -331,7 +331,7 @@ function newMuiTheme(
 			MuiTab: {
 				styleOverrides: {
 					root: {
-						color: `${textColor}`,
+						color: textColor,
 						minHeight: '32px !important',
 						justifyContent: 'baseline',
 						fontSize: '1rem'
