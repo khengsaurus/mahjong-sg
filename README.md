@@ -1,4 +1,14 @@
-# Mahjong SG
+<span align="center">
+
+![app-logo](./public/icon.svg)
+
+# [Mahjong SG](https://mahjong-sg.com)
+
+![Games played](https://img.shields.io/endpoint?url=https://mahjong-sg-content.herokuapp.com/counter/?badge=true)
+[![iOS Version](https://img.shields.io/itunes/v/1608389963?label=iOS)](https://apps.apple.com/sg/app/mahjong-sg/id1608389963)
+[![Android Version](https://img.shields.io/endpoint?color=green&url=https%3A%2F%2Fplayshields.herokuapp.com%2Fplay%3Fi%3Dcom.tk.mahjongSg%26l%3DAndroid%26m%3Dv%24version)](https://play.google.com/store/apps/details?id=com.tk.mahjongSg)
+
+</span>
 
 ## About
 
@@ -33,9 +43,3 @@ When given the opportunity to meld a tile, it will only do so if melding aligns 
 The 'Easy AI' mode works simply by introducting a 50% chance that the bot will take when it can Pong, Kang or Chi.
 
 E.g. - The bot has a hand like (1W, 2W, 3W, 1T, 2T, 3T, 4T, 4T...) and calculates that a Chi-hand is more achievable than a Pong-hand. If it is presented the opportunity to Pong 4T, it will decline. It will also prioritise discarding Dragon tiles, as a valid Chi-hand cannot contain any Dragon tiles in Singapore Mahjong.
-
-## Published
-
--   https://mahjong-sg.com
--   [App Store](https://apps.apple.com/sg/app/mahjong-sg/id1608389963)
--   [Play Store](https://play.google.com/store/apps/details?id=com.tk.mahjongSg)
