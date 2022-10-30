@@ -167,29 +167,34 @@ const Controls = () => {
 		e => {
 			switch (e.key) {
 				case Shortcut.INFO:
-					topLeft?.handleAdmin();
+					topLeft?.toggleShowAdmin();
 					break;
 				case Shortcut.HOME:
 					_handleHome();
 					break;
 				case Shortcut.PAY:
-					topRight?.handlePay();
+					topRight?.toggleShowPay();
 					break;
 				case Shortcut.SETTINGS:
-					topLeft?.handleSettings();
+					topLeft?.toggleShowSettings();
 					break;
 				case Shortcut.TEXT:
-					topRight?.handleLogs();
+					topRight?.toggleShowLogs();
 					break;
 				case Shortcut.VIEW:
-					topLeft?.handleScreenText();
+					topLeft?.toggleShowScreenText();
 					break;
 				default:
 					break;
 			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[handleHome, topLeft?.handleAdmin, topRight?.handlePay, topLeft?.handleScreenText]
+		[
+			handleHome,
+			topLeft?.toggleShowAdmin,
+			topRight?.toggleShowPay,
+			topLeft?.toggleShowScreenText
+		]
 	);
 	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
 	useAndroidBack(_handleHome);

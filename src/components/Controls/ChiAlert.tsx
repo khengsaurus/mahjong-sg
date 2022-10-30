@@ -2,12 +2,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import { Row } from 'style/StyledComponents';
 import { StyledText } from 'style/StyledMui';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { LocalFlag } from 'enums';
 import { ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { getCardName, getRandomFoodEmoji } from 'utility';
+import { AppContext } from 'hooks';
 
 interface IChiAlertP {
 	show: boolean;
@@ -16,13 +16,10 @@ interface IChiAlertP {
 }
 
 const ChiAlert = ({ show, handleOpenOffer, onClose }: IChiAlertP) => {
+	const { currGame } = useContext(AppContext);
 	const {
-		theme: { tableColor, enOnly = false },
-		game,
-		localGame,
-		gameId
+		theme: { tableColor, enOnly = false }
 	} = useSelector((store: IStore) => store);
-	const currGame = gameId === LocalFlag ? localGame : game;
 	const [foodEmoji, setFoodEmoji] = useState(getRandomFoodEmoji());
 	const closeRef = useRef(null);
 

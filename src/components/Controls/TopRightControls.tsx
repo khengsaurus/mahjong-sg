@@ -10,7 +10,7 @@ import { IStore } from 'store';
 import './controls.scss';
 
 const TopRightControls = (props: ITRControlsP) => {
-	const { handlePay, handleLogs, showLogs, showText } = props;
+	const { toggleShowPay: handlePay, toggleShowLogs: handleLogs, showLogs, showText } = props;
 	const {
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((state: IStore) => state);

@@ -47,7 +47,7 @@ import { Game, User } from 'models';
 import moment from 'moment';
 import { isDev } from 'platform';
 import { ScreenTextEng } from 'screenTexts';
-import FirebaseConfig from 'shared/FirebaseConfig';
+import FirebaseConfig from 'config';
 import { shuffle } from 'utility';
 import { gameToObj, playerToObj, userToObj } from 'utility/parsers';
 

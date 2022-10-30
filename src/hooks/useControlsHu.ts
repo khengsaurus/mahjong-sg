@@ -1,5 +1,4 @@
 import { ImpactStyle } from '@capacitor/haptics';
-import { LocalFlag } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
 import { isDev, triggerHaptic } from 'platform';
@@ -18,14 +17,13 @@ function useControlsHu(
 	updateGame: (game: Game) => void,
 	setShowPay: (b: boolean) => void
 ): IControlsHu {
-	const { playerSeat, setSelectedTiles } = useContext(AppContext);
-	const { game, gameId, haptic, localGame } = useSelector((state: IStore) => state);
+	const { currGame, playerSeat, setSelectedTiles } = useContext(AppContext);
+	const { haptic } = useSelector((state: IStore) => state);
 	const [confirmHu, setConfirmHu] = useState(false);
 	const [showDeclareHu, setShowDeclareHu] = useState(false);
 	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
 
 	// Consts
-	const currGame = gameId === LocalFlag ? localGame : game;
 	const { cO, f, hu, n = [], ps } = currGame;
 	const player = ps[playerSeat];
 
@@ -169,11 +167,7 @@ function useControlsHu(
 	);
 
 	function setConfirmHuTimeout() {
-		setOpenTimeoutId(
-			setTimeout(function () {
-				setConfirmHu(false);
-			}, 3000)
-		);
+		setOpenTimeoutId(setTimeout(() => setConfirmHu(false), 3000));
 	}
 
 	const handleConfirmHuPrompt = useCallback(() => {

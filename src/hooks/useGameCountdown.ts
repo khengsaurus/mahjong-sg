@@ -1,12 +1,10 @@
-import { Exec, LocalFlag } from 'enums';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { IStore } from 'store';
+import { Exec } from 'enums';
+import { AppContext } from 'hooks';
+import { useContext, useMemo } from 'react';
 import useCountdown from './useCountdown';
 
 const useGameCountdown = () => {
-	const { game, gameId, localGame } = useSelector((state: IStore) => state);
-	const currGame = gameId === LocalFlag ? localGame : game;
+	const { currGame } = useContext(AppContext);
 
 	/**
 	 * AsCanHu:string[] being players who can hu
@@ -15,7 +13,7 @@ const useGameCountdown = () => {
 	const { AsCanHu, BCanPong = false } = useMemo(() => {
 		const AsCanHu = currGame.sk.filter(s => s.includes(Exec.HU));
 		const BCanPong =
-			AsCanHu.length > 0 &&
+			AsCanHu.length &&
 			currGame.sk.length > 1 &&
 			!!currGame.sk.find(s => !s.includes(Exec.HU) && s[0] !== AsCanHu[0][0]);
 		return { AsCanHu, BCanPong };

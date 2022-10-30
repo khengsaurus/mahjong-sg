@@ -7,12 +7,11 @@ import {
 	RadioGroup
 } from '@mui/material';
 import { Amounts, LocalFlag } from 'enums';
+import { AppContext } from 'hooks';
 import { Game, User } from 'models';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useContext, useState } from 'react';
 import { ButtonText, ScreenTextEng } from 'screenTexts';
 import { ServiceInstance } from 'service';
-import { IStore } from 'store';
 import { MuiStyles } from 'style/MuiStyles';
 import { StyledText } from 'style/StyledMui';
 import { IModalP } from 'typesPlus';
@@ -30,11 +29,9 @@ export async function sendChips(
 }
 
 const PaymentModal = ({ playerSeat, show, onClose }: IModalP) => {
-	const { game, gameId, localGame } = useSelector((store: IStore) => store);
+	const { currGame } = useContext(AppContext);
 	const [toWho, setToWho] = useState(10);
 	const [amt, setAmt] = useState(0);
-	const isLocalGame = gameId === LocalFlag;
-	const currGame = isLocalGame ? localGame : game;
 	const { ps } = currGame;
 	const playerUsername = ps[playerSeat].uN;
 

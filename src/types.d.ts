@@ -96,9 +96,9 @@ interface INotifsContent {
 /* ------------------------------ Props ------------------------------*/
 
 interface ITLControlsP {
-	handleSettings: () => void;
-	handleAdmin: () => void;
-	handleScreenText: () => void;
+	toggleShowSettings: () => void;
+	toggleShowAdmin: () => void;
+	toggleShowScreenText: () => void;
 	handleBotExec?: () => void;
 	setShowLeaveAlert?: (b?: boolean) => void;
 	showText: boolean;
@@ -106,8 +106,8 @@ interface ITLControlsP {
 }
 
 interface ITRControlsP {
-	handlePay: () => void;
-	handleLogs: () => void;
+	toggleShowPay: () => void;
+	toggleShowLogs: () => void;
 	showText: boolean;
 	showLogs: boolean;
 }

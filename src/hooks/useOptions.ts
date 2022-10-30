@@ -16,8 +16,7 @@ const useOptions = (
 	const [canPong, setCanPong] = useState(false);
 	const [canKang, setCanKang] = useState(false);
 	const [meld, setMeld] = useState<IShownTile[]>([]);
-	const lThRef = lTh?.c + lTh.r;
-	const selectedTsRef = JSON.stringify(selectedTiles.map(t => t.r));
+	const selectedTsRef = selectedTiles.map(t => t.r).join('');
 
 	const setOptions = useCallback(
 		(kang: boolean, pong: boolean, chi: boolean, ts: IShownTile[]) => {
@@ -26,12 +25,16 @@ const useOptions = (
 			setCanChi(chi);
 			setMeld(ts);
 		},
-		[setCanKang, setCanPong, setCanChi, setMeld]
+		[]
 	);
 
 	useEffect(() => {
 		let tiles: IShownTile[] = [];
-		if (whoseMove === playerSeat && (selectedTiles.length === 1 || selectedTiles.length === 4) && taken) {
+		if (
+			taken &&
+			whoseMove === playerSeat &&
+			(selectedTiles.length === 1 || selectedTiles.length === 4)
+		) {
 			// Can self kang during turn & selecting 1 || 4
 			setOptions(player?.canKang(selectedTiles), false, false, selectedTiles);
 		} else if (lThAvail && selectedTiles.length === 3) {
@@ -41,18 +44,22 @@ const useOptions = (
 		} else if (lThAvail && selectedTiles.length === 2) {
 			// If last thrown available, can pong during anyone's turn, can chi only during own's turn
 			const canPongFlag = tilesCanBePong([lTh, ...selectedTiles]);
-			tiles = canPongFlag ? [lTh, ...selectedTiles] : sortTiles([...selectedTiles, lTh]);
+			tiles = canPongFlag
+				? [lTh, ...selectedTiles]
+				: sortTiles([...selectedTiles, lTh]);
 			setOptions(
 				false,
 				canPongFlag,
-				thrownBy === findLeft(playerSeat) && whoseMove === playerSeat && tilesCanBeChi(tiles),
+				thrownBy === findLeft(playerSeat) &&
+					whoseMove === playerSeat &&
+					tilesCanBeChi(tiles),
 				tiles
 			);
 		} else {
 			setOptions(false, false, false, tiles);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [taken, lThRef, lThAvail, playerSeat, selectedTsRef, thrownBy, whoseMove]);
+	}, [taken, lTh?.c, lTh.r, lThAvail, playerSeat, selectedTsRef, thrownBy, whoseMove]);
 
 	return { canChi, canPong, canKang, meld };
 };

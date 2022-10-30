@@ -1,8 +1,8 @@
-import { BotIds, Content, Page, Size, StorageKey } from 'enums';
+import { BotIds, Content, LocalFlag, Page, Size, StorageKey } from 'enums';
 import { useFirstEffect, useInitMobile, useLocalObj, usePreLoadAssets } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage } from 'messages';
-import { User } from 'models';
+import { Game, User } from 'models';
 import { isDev } from 'platform';
 import { createContext, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +29,7 @@ import { jwtToObj, objToJwt } from 'utility/parsers';
 
 interface IAppContext {
 	annHuOpen: boolean;
+	currGame: Game;
 	hasAI: boolean;
 	players: User[];
 	playerSeat?: number;
@@ -56,6 +57,7 @@ interface IAppContext {
 
 const initialContext: IAppContext = {
 	annHuOpen: false,
+	currGame: null,
 	hasAI: false,
 	players: [],
 	playerSeat: 0,
@@ -92,7 +94,7 @@ async function getContent() {
 export const AppContext = createContext<IAppContext>(initialContext);
 
 export const AppContextProvider = (props: any) => {
-	const { user } = useSelector((state: IStore) => state);
+	const { user, game, gameId, localGame } = useSelector((state: IStore) => state);
 	const { resolveLocalObj, handleLocalObj } = useLocalObj<User>(
 		StorageKey.USERJWT,
 		jwtToObj,
@@ -225,6 +227,7 @@ export const AppContextProvider = (props: any) => {
 		<AppContext.Provider
 			value={{
 				annHuOpen,
+				currGame: gameId === LocalFlag ? localGame : game,
 				hasAI,
 				homeAlert,
 				players,

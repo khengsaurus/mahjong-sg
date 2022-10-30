@@ -1,6 +1,5 @@
-import { LocalFlag } from 'enums';
 import { Game } from 'models';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
@@ -9,11 +8,8 @@ import { getCardName, indexToWind } from 'utility';
 import { AppContext } from './AppContext';
 
 function useControlsTop(updateGame: (game: Game) => void): IControlsTop {
-	const { playerSeat } = useContext(AppContext);
+	const { currGame, playerSeat } = useContext(AppContext);
 	const {
-		game,
-		gameId,
-		localGame,
 		theme: { enOnly = false }
 	} = useSelector((state: IStore) => state);
 
@@ -25,7 +21,6 @@ function useControlsTop(updateGame: (game: Game) => void): IControlsTop {
 	const [showLeaveAlert, setShowLeaveAlert] = useState(false);
 
 	// Consts
-	const currGame = gameId === LocalFlag ? localGame : game;
 	const { f, n = [], prE, ps, ts } = currGame;
 	const player = ps[playerSeat];
 	const dealerName = ps[prE._d || n[2]]?.uN;
@@ -61,21 +56,15 @@ function useControlsTop(updateGame: (game: Game) => void): IControlsTop {
 
 	return {
 		topRight: {
-			handlePay: useCallback(() => setShowPay(prev => !prev), [setShowPay]),
-			handleLogs: useCallback(() => setShowLogs(prev => !prev), [setShowLogs]),
+			toggleShowPay: () => setShowPay(prev => !prev),
+			toggleShowLogs: () => setShowLogs(prev => !prev),
 			showText,
 			showLogs
 		},
 		topLeft: {
-			handleSettings: useCallback(
-				() => setShowSettings(prev => !prev),
-				[setShowSettings]
-			),
-			handleScreenText: useCallback(
-				() => setShowText(prev => !prev),
-				[setShowText]
-			),
-			handleAdmin: useCallback(() => setShowAdmin(prev => !prev), [setShowAdmin]),
+			toggleShowSettings: () => setShowSettings(prev => !prev),
+			toggleShowScreenText: () => setShowText(prev => !prev),
+			toggleShowAdmin: () => setShowAdmin(prev => !prev),
 			setShowLeaveAlert,
 			showText,
 			texts
@@ -85,19 +74,19 @@ function useControlsTop(updateGame: (game: Game) => void): IControlsTop {
 			playerSeat,
 			show: showPay,
 			updateGame,
-			onClose: useCallback(() => setShowPay(false), [setShowPay])
+			onClose: () => setShowPay(false)
 		},
 		settingsModal: {
 			game: currGame,
 			playerSeat,
 			show: showSettings,
-			onClose: useCallback(() => setShowSettings(false), [setShowSettings])
+			onClose: () => setShowSettings(false)
 		},
 		gameInfoModal: {
 			game: currGame,
 			show: showAdmin,
 			updateGame,
-			onClose: useCallback(() => setShowAdmin(false), [setShowAdmin])
+			onClose: () => setShowAdmin(false)
 		},
 		showLeaveAlert,
 		setShowPay

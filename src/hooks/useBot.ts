@@ -1,10 +1,8 @@
 import { getBotEval } from 'bot';
-import { Exec, LocalFlag } from 'enums';
+import { Exec } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { IStore } from 'store';
 import { findLeft, findOpp, findRight, isBot } from 'utility';
 import { AppContext } from './AppContext';
 
@@ -35,9 +33,7 @@ function useBot(
 	lThAvail: boolean,
 	setExec: (e: any[]) => void
 ) {
-	const { playerSeat } = useContext(AppContext);
-	const { game, gameId, localGame } = useSelector((state: IStore) => state);
-	const currGame = gameId === LocalFlag ? localGame : game;
+	const { currGame, playerSeat } = useContext(AppContext);
 	const { cO, f = [], lTh, n = [], ps, sk, t = [], ts } = currGame;
 	const player = ps[playerSeat];
 	const pIds = ps.map(p => p.id);

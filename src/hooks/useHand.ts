@@ -1,19 +1,16 @@
 import { getHands } from 'bot';
-import { LocalFlag } from 'enums';
 import { useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import { AppContext } from './AppContext';
 
 export default function useHand(): IUseHand {
-	const { playerSeat } = useContext(AppContext);
-	const { game, gameId, localGame, tHK } = useSelector((state: IStore) => state);
-	const currGame = gameId === LocalFlag ? localGame : game;
+	const { currGame, playerSeat } = useContext(AppContext);
+	const { tHK } = useSelector((state: IStore) => state);
 	const { lTh, n = [], ps = [] } = currGame;
 	const { ms, hTs, lTa } = ps[playerSeat] || {};
 
-	const _pRef =
-		JSON.stringify(ms) + JSON.stringify(hTs.map(t => t.r)) + JSON.stringify(lTa?.r);
+	const _pRef = [...ms, ...hTs.map(t => t.r), lTa?.r].join('');
 
 	return useMemo(() => {
 		if (n[3] !== playerSeat && n[7] === playerSeat) {

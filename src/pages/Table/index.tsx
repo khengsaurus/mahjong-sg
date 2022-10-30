@@ -38,7 +38,8 @@ const Table = () => {
 		sizes: { tileSize },
 		theme: { tableColor }
 	} = useSelector((state: IStore) => state);
-	const { navigate, playerSeat, setPlayers, setPlayerSeat } = useContext(AppContext);
+	const { currGame, playerSeat, navigate, setPlayers, setPlayerSeat } =
+		useContext(AppContext);
 	const [pendingScreen, setPendingScreen] = useState(<Loader />);
 	const isLocalGame = gameId === LocalFlag;
 	const { verifyingSession } = useLocalSession(isLocalGame);
@@ -129,8 +130,6 @@ const Table = () => {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [gameId, isLocalGame, user?.uN]);
-
-	const currGame = isLocalGame ? localGame : game;
 
 	useLayoutEffect(() => {
 		const lTh = document.getElementById(`shown-tile-${currGame?.lTh?.r}`);

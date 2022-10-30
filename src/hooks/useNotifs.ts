@@ -24,18 +24,14 @@ const useNotifs = (
 	lThAvail: boolean,
 	isHuLocked: boolean
 ): IUseNotifs => {
-	const { playerSeat } = useContext(AppContext);
+	const { currGame, playerSeat } = useContext(AppContext);
 	const {
-		game,
-		gameId,
-		localGame,
 		tHK,
 		theme: { enOnly = false }
 	} = useSelector((state: IStore) => state);
 	const [showChiAlert, setShowChiAlert] = useState(false);
 	const [toChi, setToChi] = useState<IShownTile[][]>([]);
 
-	const currGame = gameId === LocalFlag ? localGame : game;
 	const { f = [], lTh, n = [], ps, sk } = currGame;
 	const p = ps[playerSeat];
 	const canTakeLT = n[7] !== playerSeat && lThAvail;

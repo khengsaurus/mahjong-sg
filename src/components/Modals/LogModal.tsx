@@ -1,6 +1,6 @@
-import { LocalFlag, Size, TableColor, Transition } from 'enums';
-import { useCloseListener } from 'hooks';
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { Size, TableColor, Transition } from 'enums';
+import { AppContext, useCloseListener } from 'hooks';
+import { memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
@@ -15,15 +15,11 @@ interface ILogModalP {
 
 const LogModal = (props: ILogModalP) => {
 	const { expanded, onClose, externalRef } = props;
+	const { currGame } = useContext(AppContext);
 	const {
-		game,
-		gameId,
-		localGame,
 		theme: { tableColor = TableColor.GREEN, enOnly = false },
 		sizes: { controlsSize = Size.MEDIUM }
 	} = useSelector((store: IStore) => store);
-	const isLocalGame = gameId === LocalFlag;
-	const currGame = isLocalGame ? localGame : game;
 	const modalRef = useRef(null);
 	const id = 'log-box';
 	useCloseListener(expanded, onClose, modalRef, externalRef);

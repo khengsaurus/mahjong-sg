@@ -13,9 +13,9 @@ import { TableText } from 'style/StyledComponents';
 import './controls.scss';
 
 const TopLeftControls = ({
-	handleSettings,
-	handleScreenText,
-	handleAdmin,
+	toggleShowSettings: handleSettings,
+	toggleShowScreenText: handleScreenText,
+	toggleShowAdmin: handleAdmin,
 	setShowLeaveAlert,
 	showText,
 	texts

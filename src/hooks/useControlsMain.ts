@@ -1,5 +1,5 @@
 import { ImpactStyle } from '@capacitor/haptics';
-import { Exec, LocalFlag, MeldName, MeldType } from 'enums';
+import { Exec, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
 import { isDev, isDevBot, triggerHaptic } from 'platform';
@@ -28,12 +28,9 @@ function useControlsMain(
 	handleConfirmHuPrompt: () => void,
 	openDeclareHuDialog: (_p: number, game: Game) => void
 ): IControlsMain {
-	const { playerSeat, selectedTiles } = useContext(AppContext);
+	const { currGame, playerSeat, selectedTiles } = useContext(AppContext);
 	const {
-		game,
-		gameId,
 		haptic,
-		localGame,
 		tHK,
 		theme: { tableColor, enOnly = false },
 		user
@@ -48,7 +45,6 @@ function useControlsMain(
 		notifs
 	} = notifOutput;
 	const [exec, setExec] = useState<any[]>([]);
-	const currGame = gameId === LocalFlag ? localGame : game;
 	const { f, lTh, n = [], ps, sk, ts } = currGame;
 	const player = ps[playerSeat];
 

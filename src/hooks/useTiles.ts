@@ -13,7 +13,7 @@ const useTiles = (args: Args) => {
 	const { fs: flowers, nFs: nonFlowers } = useMemo(
 		() => sortShownTiles(sTs),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[JSON.stringify(sTs?.map(tile => tile.i))]
+		[sTs?.map(tile => tile.i).join('')]
 	);
 
 	const rotatedNonFlowers = useMemo(

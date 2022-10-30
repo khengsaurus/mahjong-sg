@@ -2,6 +2,8 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import { isDev } from 'platform';
 import { useCallback } from 'react';
 
+const key = 'secretKey';
+
 export interface IUseLocalObject<T> {
 	resolveLocalObj: () => Promise<T>;
 	handleLocalObj: (obj: T) => void;
@@ -13,7 +15,6 @@ function useLocalObj<T>(
 	signingFn: (obj: T, key?: string) => string
 ): IUseLocalObject<T> {
 	const [localObj, setLocalObj] = useLocalStorage<string>(storageKey, null);
-	const key = 'secretKey';
 
 	const resolveLocalObj = useCallback(() => {
 		return new Promise<T>((resolve, reject) => {
