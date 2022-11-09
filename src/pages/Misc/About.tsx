@@ -22,10 +22,7 @@ const About = () => {
 	const markup = () => (
 		<div className="content centered" style={{ color: mainTextColor }}>
 			<p>
-				<span>
-					Thank you for using this {platform}. There is still much work in
-					progress, but we hope you like it so far.{' '}
-				</span>
+				<span>Thank you for using this {platform}. </span>
 				{isMobile
 					? parse(descMobile.replace(/{platform}/g, platform))
 					: parse(descWeb.replace(/{platform}/g, platform))}

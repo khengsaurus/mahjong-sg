@@ -79,7 +79,7 @@ const NewUser = () => {
 						callback();
 					}
 				})
-				.catch(err => setAlert({ status: Status.ERROR, msg: err.message }));
+				.catch(err => setAlert({ status: Status.ERROR, msg: err?.message }));
 		}
 	}
 
@@ -93,7 +93,7 @@ const NewUser = () => {
 					setAlert(null);
 				}, 1000);
 			})
-			.catch(err => setAlert({ status: Status.ERROR, msg: err.message }));
+			.catch(err => setAlert({ status: Status.ERROR, msg: err?.message }));
 	}
 
 	const renderEnOnly = () => (

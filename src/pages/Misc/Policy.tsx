@@ -14,7 +14,10 @@ import initContent from './initContent.json';
 
 const Policy = () => {
 	const { policyContent } = useSelector((store: IStore) => store);
-	const content = !isEmpty(policyContent) && isArray(policyContent) ? policyContent : initContent.policyContent;
+	const content =
+		!isEmpty(policyContent) && isArray(policyContent?.policies)
+			? policyContent.policies
+			: initContent.policyContent;
 	const [showContent, setShowContent] = useState(-1);
 
 	function toggleShow(index: number) {
@@ -25,12 +28,24 @@ const Policy = () => {
 		<div className="content">
 			{(content || []).map((c, index) => {
 				return (
-					<Accordion key={index} expanded={index === showContent} onChange={() => toggleShow(index)}>
-						<AccordionSummary expandIcon={<ChevronRightIcon />} style={{ height: '40px' }}>
-							<StyledText text={c.title.replace(/{platform}/g, platform)} variant="body1" />
+					<Accordion
+						key={index}
+						expanded={index === showContent}
+						onChange={() => toggleShow(index)}
+					>
+						<AccordionSummary
+							expandIcon={<ChevronRightIcon />}
+							style={{ height: '40px' }}
+						>
+							<StyledText
+								text={c.title.replace(/{platform}/g, platform)}
+								variant="body1"
+							/>
 						</AccordionSummary>
 						<AccordionDetails style={{ paddingTop: 0 }}>
-							<p className="no-margin">{parse(c.content.replace(/{platform}/g, platform))}</p>
+							<p className="no-margin">
+								{parse(c.content.replace(/{platform}/g, platform))}
+							</p>
 						</AccordionDetails>
 					</Accordion>
 				);
@@ -38,7 +53,14 @@ const Policy = () => {
 		</div>
 	);
 
-	return <HomePage markup={markup} title={HomeScreenText.POLICY} misc={2} skipVerification />;
+	return (
+		<HomePage
+			markup={markup}
+			title={HomeScreenText.POLICY}
+			misc={2}
+			skipVerification
+		/>
+	);
 };
 
 export default Policy;

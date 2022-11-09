@@ -143,7 +143,7 @@ export const AppContextProvider = (props: any) => {
 					throw new Error(ErrorMessage.CONTENT_FETCH_FAIL);
 				}
 			})
-			.catch(err => console.info(err.message));
+			.catch(err => console.info(err?.message));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch]);
 

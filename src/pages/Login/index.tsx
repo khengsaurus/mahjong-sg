@@ -50,10 +50,10 @@ const Login = () => {
 	const handleError = useCallback(
 		(err: Error) => {
 			setReady(true);
-			if (err.message?.toUpperCase().includes(ErrorMessage.FIREBASE_WRONG_PW)) {
+			if (err?.message?.toUpperCase().includes(ErrorMessage.FIREBASE_WRONG_PW)) {
 				setAlert({ status: Status.ERROR, msg: ErrorMessage.INCORRECT_LOGIN });
 			} else {
-				setAlert({ status: Status.ERROR, msg: err.message });
+				setAlert({ status: Status.ERROR, msg: err?.message });
 			}
 		},
 		[setReady, setAlert]
@@ -69,7 +69,7 @@ const Login = () => {
 				await ServiceInstance.getEmailFromUsername(usernameEmail)
 					.then(e => (email = e))
 					.catch(err => {
-						setAlert({ status: Status.ERROR, msg: err.message });
+						setAlert({ status: Status.ERROR, msg: err?.message });
 						setReady(true);
 						return;
 					});
@@ -116,7 +116,7 @@ const Login = () => {
 					})
 					.catch(err => {
 						setReady(true);
-						setAlert({ status: Status.ERROR, msg: err.message });
+						setAlert({ status: Status.ERROR, msg: err?.message });
 					});
 			} else {
 				setAlert({ status: Status.ERROR, msg: ErrorMessage.PW_NOT_MATCHING });

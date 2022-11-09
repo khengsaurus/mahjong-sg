@@ -1,6 +1,5 @@
 import { MeldType, Suit } from 'enums';
 import isEmpty from 'lodash.isempty';
-import { isDevBot } from 'platform';
 import {
 	arrToSetArr,
 	cardsWithoutNeighbors,
@@ -113,7 +112,7 @@ function getDiscardHelper(
 
 	switch (_unreqCs.length) {
 		case 0:
-			isDevBot && console.info('getDiscardHelper - all tiles may be required');
+			// isDevBot && console.info('getDiscardHelper - all tiles may be required');
 			const l_reqCs = Object.keys(countReqCs).filter(
 				c => countReqCs[c] === leastReqCount
 			);
@@ -149,10 +148,10 @@ function getDiscardHelper(
 			}
 			break;
 		case 1:
-			isDevBot && console.info('getDiscardHelper - only 1 unrequired tile');
+			// isDevBot && console.info('getDiscardHelper - only 1 unrequired tile');
 			return _unreqCs[0];
 		case 3:
-			isDevBot && console.info('getDiscardHelper - 3 unrequired tiles');
+			// isDevBot && console.info('getDiscardHelper - 3 unrequired tiles');
 			if (priorMeld === MeldType.CHI) {
 				if (!keepDaPai) {
 					ss = sortDaPaiDiscards(
@@ -192,7 +191,7 @@ function getDiscardHelper(
 			}
 			break;
 		default:
-			isDevBot && console.info('getDiscardHelper - more than 3 unrequired tiles');
+			// isDevBot && console.info('getDiscardHelper - more than 3 unrequired tiles');
 			ss = getDeadDiscard(ho, dc, reqCs, false);
 			if (ss) {
 				return ss;
@@ -225,7 +224,7 @@ function getDiscardHelper(
 			break;
 	}
 
-	isDevBot && console.info('getDiscardHelper - failed switch case -> final step');
+	// isDevBot && console.info('getDiscardHelper - failed switch case -> final step');
 
 	// Where 6,7,7,8,9 and no other pairs -> if there is one most frequent tsL (multis will get an additional count), discard that
 	if (priorMeld === MeldType.CHI) {

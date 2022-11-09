@@ -80,7 +80,7 @@ interface IPolicyItem {
 	content: string;
 }
 
-type IPolicyContent = IPolicyItem[];
+type IPolicyContent = { policies: IPolicyItem[] };
 
 interface IHomeNotif {
 	key: number;

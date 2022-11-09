@@ -161,7 +161,7 @@ export class FirebaseService {
 			if (this.isFBConnected) {
 				createUserWithEmailAndPassword(this.auth, email, password)
 					.then((values: UserCredential) => resolve(values.user.email))
-					.catch(err => reject(err));
+					.catch(reject);
 			} else {
 				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}
@@ -185,7 +185,7 @@ export class FirebaseService {
 					.catch(err => {
 						isDev &&
 							console.error(
-								`FirebaseService.authLoginEmailPass failed with err: ${err.message}`
+								`FirebaseService.authLoginEmailPass failed with err: ${err?.message}`
 							);
 						reject(new Error(ErrorMessage.LOGIN_ERROR));
 					});
@@ -410,7 +410,7 @@ export class FirebaseService {
 					.then(() =>
 						deleteDoc(doc(this.usersRef, id)).then(() => resolve(true))
 					)
-					.catch(err => reject(err));
+					.catch(reject);
 			} else {
 				reject(new Error(ErrorMessage.SERVICE_OFFLINE));
 			}

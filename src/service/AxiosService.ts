@@ -4,7 +4,7 @@ import { isDev, platform } from 'platform';
 
 export class AxiosService {
 	private instance: AxiosInstance;
-	public serverEndpoint = isDev
+	public cmsUrl = isDev
 		? process.env.REACT_APP_LOCAL_8080
 		: process.env.REACT_APP_SERVER_ENDPOINT;
 
@@ -20,11 +20,11 @@ export class AxiosService {
 	async getContent(key: Content) {
 		return new Promise(resolve => {
 			this.instance
-				.get(`${this.serverEndpoint}/content/${key}`)
+				.get(`${this.cmsUrl}/mj/${key}`)
 				.then(res => resolve(res.data || null))
 				.catch(err => {
 					console.info(
-						`Failed to fetch resource from ${this.serverEndpoint}: ${err.message}`
+						`Failed to fetch resource from ${this.cmsUrl}: ${err?.message}`
 					);
 					resolve(null);
 				});

@@ -101,7 +101,7 @@ async function preload(tiles: string[]) {
 		imagesPromiseList.push(preloadImage(i));
 	}
 	await Promise.all(imagesPromiseList).catch(err =>
-		console.info('Failed to preload tiles: ' + err.message)
+		console.info('Failed to preload tiles: ' + err?.message)
 	);
 }
 

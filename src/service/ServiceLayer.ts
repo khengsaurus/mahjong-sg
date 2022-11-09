@@ -37,9 +37,9 @@ export class Service {
 			FBService.authRegisterEmailPass(props.email, props.password)
 				.then(email => resolve(email))
 				.catch(err => {
-					if (err.message.includes('email-already-in-use')) {
+					if (err?.message.includes('email-already-in-use')) {
 						reject(new Error(ErrorMessage.EMAIL_USED));
-					} else if (err.message.includes('invalid-email')) {
+					} else if (err?.message.includes('invalid-email')) {
 						reject(new Error(ErrorMessage.INVALID_EMAIL));
 					} else {
 						isDev && console.error(err);
@@ -68,7 +68,7 @@ export class Service {
 									return;
 								}
 							})
-							.catch(err => reject(err));
+							.catch(reject);
 						// Wait before retrying
 						await new Promise(r => setTimeout(r, retryAfter));
 					}
@@ -95,7 +95,7 @@ export class Service {
 						success && FBService.pairEmailToUsername(values.uN, values.email)
 				)
 				.then(success => resolve(success))
-				.catch(err => reject(err));
+				.catch(reject);
 		});
 	}
 

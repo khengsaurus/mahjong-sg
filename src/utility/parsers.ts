@@ -49,7 +49,7 @@ export function objToUser(obj: any): User {
 		};
 		user = new User(id, ref.uN, ref.email, ref._b, ref._s, ref._n, uData);
 	} catch (err) {
-		isDev && console.error(err.message + 'Failed to resolve user object');
+		isDev && console.error(err?.message + 'Failed to resolve user object');
 	} finally {
 		return user;
 	}

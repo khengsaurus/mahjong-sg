@@ -13,7 +13,6 @@ import {
 	PlayerFlower,
 	Suit,
 	SuitsIndex,
-	TestUser,
 	Wind,
 	WindIndex
 } from 'enums';
@@ -561,10 +560,10 @@ export class Game {
 			this.n[0] += 1;
 			this.n[2] = (this.n[0] + 3) % 4;
 		}
-		if (isDev && this.ps.find(p => p.uN === TestUser._LASTROUND)) {
-			this.n[0] = 16;
-			this.n[2] = 3;
-		}
+		// if (isDev && this.ps.find(p => p.uN === TestUser._LASTROUND)) {
+		// 	this.n[0] = 16;
+		// 	this.n[2] = 3;
+		// }
 		this.ps.forEach(player => {
 			player.prepForNewRound();
 		});

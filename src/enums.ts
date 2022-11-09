@@ -6,8 +6,8 @@ export type AlertStatus = 'success' | 'info' | 'warning' | 'error';
 
 export enum Content {
 	ABOUT = 'about',
-	HELP = 'helpNew',
-	POLICY = 'policyNew',
+	HELP = 'help',
+	POLICY = 'policy',
 	NOTIFS = 'notifs'
 }
 
