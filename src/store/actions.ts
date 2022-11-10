@@ -13,6 +13,7 @@ export const SET_ABOUT = 'SET_ABOUT';
 export const SET_HELP = 'SET_HELP';
 export const SET_POLICY = 'SET_POLICY';
 export const SET_NOTIFS = 'SET_NOTIFS';
+export const SET_CONTENT_UPDATED = 'SET_CONTENT_UPDATED';
 export const SET_HAPTIC = 'SET_HAPTIC';
 
 export const setUser = (user: User): AnyAction => ({
@@ -68,6 +69,11 @@ export const setPolicyContent = (content: IPolicyContent): AnyAction => ({
 export const setNotifsContent = (content: INotifsContent): AnyAction => ({
 	type: SET_NOTIFS,
 	payload: content
+});
+
+export const setContentUpdated = (date: Date): AnyAction => ({
+	type: SET_CONTENT_UPDATED,
+	payload: date
 });
 
 export const setHaptic = (haptic: boolean): AnyAction => ({

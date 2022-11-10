@@ -11,6 +11,7 @@ import { HttpService, ServiceInstance } from 'service';
 import { IStore } from 'store';
 import {
 	setAboutContent,
+	setContentUpdated,
 	setGame,
 	setGameId,
 	setHaptic,
@@ -139,6 +140,7 @@ export const AppContextProvider = (props: any) => {
 					dispatch(setHelpContent(data[1] as IHelpContent));
 					dispatch(setPolicyContent(data[2] as IPolicyContent));
 					dispatch(setNotifsContent(data[3] as INotifsContent));
+					dispatch(setContentUpdated(new Date()));
 				} else {
 					throw new Error(ErrorMessage.CONTENT_FETCH_FAIL);
 				}

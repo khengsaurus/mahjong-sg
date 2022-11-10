@@ -18,6 +18,7 @@
 	@include content-width(0px);
 	-webkit-text-size-adjust: 100%;
 	text-align: left;
+	max-width: 380px;
 	&.centered {
 		text-align: center;
 	}
@@ -44,6 +45,28 @@
 				padding: 0 2px;
 			}
 		}
+	}
+
+	.linkedin,
+	.updated {
+		position: relative;
+		bottom: -60px;
+		opacity: 0;
+		transition: $transition-fast;
+		p {
+			font-size: 12px;
+		}
+		&.visible {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.linkedin {
+		position: absolute;
+		bottom: 12vh;
+		right: 10px;
+		transform: translateX(140px);
 	}
 }
 

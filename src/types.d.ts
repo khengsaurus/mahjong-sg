@@ -63,6 +63,7 @@ interface IAboutContent {
 	descMobile: string;
 	descWeb: string;
 	reachOut: string;
+	linkedin: string;
 }
 
 interface IHelpItem {
