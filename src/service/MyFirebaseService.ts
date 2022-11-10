@@ -47,7 +47,6 @@ import { Game, User } from 'models';
 import moment from 'moment';
 import { isDev } from 'platform';
 import { ScreenTextEng } from 'screenTexts';
-import FirebaseConfig from 'config';
 import { shuffle } from 'utility';
 import { gameToObj, playerToObj, userToObj } from 'utility/parsers';
 
@@ -68,7 +67,7 @@ export class FirebaseService {
 			if (res) {
 				this.initAuth();
 				this.fs = getFirestore(this.app);
-				this.db = getDatabase(this.app, FirebaseConfig.databaseUrl);
+				this.db = getDatabase(this.app, process.env.REACT_APP_DB_URL);
 				this.usersRef = collection(this.fs, FBCollection.USERREPR);
 				this.gamesRef = collection(this.fs, FBCollection.GAMES);
 				this.metricsRef = collection(this.fs, FBCollection.METRICS);
@@ -81,7 +80,11 @@ export class FirebaseService {
 	async initApp(): Promise<boolean> {
 		return new Promise(resolve => {
 			try {
-				this.app = initializeApp(FirebaseConfig);
+				this.app = initializeApp({
+					apiKey: process.env.REACT_APP_API_KEY,
+					authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+					projectId: process.env.REACT_APP_PROJECT_ID
+				});
 				isDev && console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
 				resolve(true);
 			} catch (err) {

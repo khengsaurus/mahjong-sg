@@ -1,5 +1,4 @@
 import { Exec, MeldType } from 'enums';
-import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
@@ -102,7 +101,6 @@ const useNotifs = (
 		let notifs: string[] = [];
 
 		if (delayLeft > 0 && skRef) {
-			isDev && console.info('useControlsMain.useMemo -> notifs');
 			isFirstToHu = sk[0] === `${playerSeat}${Exec.HU}`;
 			if (sk.length > 1) {
 				othersFirstToHu = !isFirstToHu && sk[0].includes(Exec.HU) ? sk[0] : '';

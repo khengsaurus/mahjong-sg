@@ -1,7 +1,6 @@
 import { getBotEval } from 'bot';
 import { Exec } from 'enums';
 import isEmpty from 'lodash.isempty';
-import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useRef } from 'react';
 import { findLeft, findOpp, findRight, isBot } from 'utility';
 import { AppContext } from './AppContext';
@@ -63,7 +62,6 @@ function useBot(
 
 	useEffect(() => {
 		if (toHandleBots && (!f[3] || botToMove)) {
-			isDev && console.info('useBot.useEffect');
 			botTimerRef.current = setTimeout(() => {
 				setExec([]);
 				const execs = [];

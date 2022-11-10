@@ -27,7 +27,6 @@ import {
 } from 'handEnums';
 import isEmpty from 'lodash.isempty';
 import { User } from 'models';
-import { isDev } from 'platform';
 import { ControlsTextEng, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import {
 	countHashedCards,
@@ -608,7 +607,6 @@ export class Game {
 	}
 
 	declareHu(huVals: any[]) {
-		isDev && console.info('declareHu called with: ' + JSON.stringify(huVals));
 		if (huVals.length > 2) {
 			this.f[2] = Number(huVals[0]) !== this.n[2];
 			this.hu = huVals;
@@ -710,7 +708,6 @@ export class Game {
 	 */
 	handleDelay() {
 		if (!isEmpty(this.lTh)) {
-			isDev && console.info('-> Game.handleDelay()');
 			this.sk = [];
 			const tHK = getTileHashKey(this.id, this.n[0]);
 			const hashCard = getHashed(this.lTh.c, tHK);

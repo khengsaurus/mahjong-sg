@@ -2,7 +2,7 @@ import { ImpactStyle } from '@capacitor/haptics';
 import { Exec, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
-import { isDev, triggerHaptic } from 'platform';
+import { triggerHaptic } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ControlsTextChi, ControlsTextEng, ScreenTextEng } from 'screenTexts';
@@ -400,7 +400,6 @@ function useControlsMain(
 
 	function handleExec(exec: any[]) {
 		if (!isEmpty(exec)) {
-			// isDevBot && console.info('handleExec called with: ' + exec);
 			const _b = Number(exec[0]);
 			switch (exec[1]) {
 				case Exec.DISCARD:
@@ -457,7 +456,6 @@ function useControlsMain(
 				!isHuLocked &&
 				(delayLeft === 0 || toExec || bot2ndToHu)
 			) {
-				isDev && console.info('useControlsMain.useEffect -> handleExec');
 				didExec = true;
 				const _p = Number(exec[0]);
 				if (!isBot(ps[_p]?.id)) {
