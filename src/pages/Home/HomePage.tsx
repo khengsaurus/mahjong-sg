@@ -60,10 +60,10 @@ const HomePage = ({
 	skipVerification = false,
 	offsetKeyboard = 0
 }: IHomePageP) => {
-	const { homeAlert, setAnnHuOpen, showHomeAlert, setShowHomeAlert } =
+	const { appConnected, homeAlert, setAnnHuOpen, showHomeAlert, setShowHomeAlert } =
 		useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
-	const { verifyingSession, isAppConnected } = useLocalSession(skipVerification);
+	const { verifyingSession } = useLocalSession(skipVerification);
 	const [pendingScreen, setPendingScreen] = useState<React.FC | JSX.Element>(
 		<Loader />
 	);
@@ -75,13 +75,13 @@ const HomePage = ({
 		setAnnHuOpen(false);
 
 		if (isMobile) {
-			// && Capacitor.getPlatform() === Platform.ANDROID
-			ScreenOrientation?.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
+			ScreenOrientation.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
 				console.info(
 					'Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock'
 				);
 			});
 		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -129,7 +129,7 @@ const HomePage = ({
 
 	function renderNetworkLoader() {
 		return (
-			<Fade in={!skipVerification && !isAppConnected} unmountOnExit>
+			<Fade in={isMobile && !appConnected} unmountOnExit>
 				<NetworkAlert>
 					<NetworkLoader />
 					<StyledText

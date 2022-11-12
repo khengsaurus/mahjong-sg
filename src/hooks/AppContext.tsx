@@ -1,13 +1,14 @@
-import { BotIds, Content, LocalFlag, Page, Size, StorageKey } from 'enums';
+import { Network } from '@capacitor/network';
+import { BotIds, Content, EEvent, LocalFlag, Page, Size, StorageKey } from 'enums';
 import { useFirstEffect, useInitMobile, useLocalObj, usePreLoadAssets } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage } from 'messages';
 import { Game, User } from 'models';
-import { isDev } from 'platform';
-import { createContext, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { isDev, isMobile } from 'platform';
+import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { HttpService, ServiceInstance } from 'service';
+import { FBService, HttpService, ServiceInstance } from 'service';
 import { IStore } from 'store';
 import {
 	setAboutContent,
@@ -24,11 +25,12 @@ import {
 	setTHK,
 	setUser
 } from 'store/actions';
-import { getTheme } from 'utility';
+import { getNetworkStatus, getTheme } from 'utility';
 import { primaryLRU } from 'utility/LRUCache';
 import { jwtToObj, objToJwt } from 'utility/parsers';
 
 interface IAppContext {
+	appConnected: boolean;
 	annHuOpen: boolean;
 	currGame: Game;
 	hasAI: boolean;
@@ -57,6 +59,7 @@ interface IAppContext {
 }
 
 const initialContext: IAppContext = {
+	appConnected: true,
 	annHuOpen: false,
 	currGame: null,
 	hasAI: false,
@@ -69,19 +72,19 @@ const initialContext: IAppContext = {
 	showHomeAlert: false,
 	userEmail: '',
 	handleHome: () => {},
-	handleLocalUO: (_: User) => {},
+	handleLocalUO: () => {},
 	handleUserState: async () => false,
-	navigate: (_: any) => {},
-	login: (_: User, __: boolean) => true,
+	navigate: () => {},
+	login: () => true,
 	logout: () => {},
-	setAnnHuOpen: (_: boolean) => {},
-	setSelectedTiles: (_: IShownTile[]) => {},
-	setShowAI: (_: SetStateAction<boolean>) => {},
-	setShowDisconnectedAlert: (_: SetStateAction<boolean>) => {},
-	setShowHomeAlert: (_: boolean) => {},
-	setPlayers: (_: User[]) => {},
-	setPlayerSeat: (_: number) => {},
-	setUserEmail: (_: string) => {}
+	setAnnHuOpen: () => {},
+	setSelectedTiles: () => {},
+	setShowAI: () => {},
+	setShowDisconnectedAlert: () => {},
+	setShowHomeAlert: () => {},
+	setPlayers: () => {},
+	setPlayerSeat: () => {},
+	setUserEmail: () => {}
 };
 
 async function getContent() {
@@ -101,6 +104,7 @@ export const AppContextProvider = (props: any) => {
 		jwtToObj,
 		objToJwt
 	);
+	const [appConnected, setAppConnected] = useState(true);
 	const [annHuOpen, setAnnHuOpen] = useState(false);
 	const [hasAI, setHasAI] = useState(false);
 	const [players, setPlayers] = useState<User[]>([user]);
@@ -109,6 +113,8 @@ export const AppContextProvider = (props: any) => {
 	const [showAI, setShowAI] = useState(false);
 	const [userEmail, setUserEmail] = useState('');
 	const [showHomeAlert, setShowHomeAlert] = useState(false);
+	const prevConnectedState = useRef(true);
+	const retryFbInitRef = useRef<NodeJS.Timer>(null);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -131,6 +137,34 @@ export const AppContextProvider = (props: any) => {
 	const { homeAlert } = useInitMobile(handleHome);
 	useFirstEffect(() => setShowHomeAlert(!!homeAlert), [homeAlert]);
 	usePreLoadAssets();
+
+	useEffect(() => {
+		if (isMobile) {
+			getNetworkStatus().then(setAppConnected);
+			Network?.addListener(EEvent.NETWORK_CHANGE, status => {
+				const c = status?.connected === true;
+				// If newly connected, try to reconnect
+				if (c && !prevConnectedState.current) {
+					FBService.initApp().catch(() => {
+						retryFbInitRef.current = setInterval(() => {
+							FBService.initApp()
+								.then(() => {
+									clearInterval(retryFbInitRef.current);
+									retryFbInitRef.current = null;
+								})
+								.catch(console.info);
+						}, 4000);
+					});
+				}
+				setAppConnected(c);
+				prevConnectedState.current = c;
+			});
+		}
+
+		return () => {
+			isMobile && Network?.removeAllListeners();
+		};
+	}, []);
 
 	useEffect(() => {
 		getContent()
@@ -228,6 +262,7 @@ export const AppContextProvider = (props: any) => {
 	return (
 		<AppContext.Provider
 			value={{
+				appConnected,
 				annHuOpen,
 				currGame: gameId === LocalFlag ? localGame : game,
 				hasAI,

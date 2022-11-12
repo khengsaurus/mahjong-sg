@@ -1,3 +1,4 @@
+import { Network } from '@capacitor/network';
 import {
 	Animal,
 	AnimalIndex,
@@ -33,6 +34,14 @@ import moment from 'moment';
 import { isDev } from 'platform';
 import { ITheme } from 'typesPlus';
 import { secondaryLRU } from './LRUCache';
+
+export function getNetworkStatus(): Promise<boolean> {
+	return new Promise(resolve => {
+		Network.getStatus()
+			.then(status => resolve(status?.connected === true))
+			.catch(_ => resolve(false));
+	});
+}
 
 /* ----------------------------------- Util ----------------------------------- */
 
@@ -349,11 +358,11 @@ export async function createLocalGame(
 function getMainTextColor(bgc: BackgroundColor) {
 	return bgc
 		? [
-				BackgroundColor.BLUE,
-				BackgroundColor.DARK,
-				BackgroundColor.GREEN,
-				BackgroundColor.RED
-		  ].includes(bgc)
+			BackgroundColor.BLUE,
+			BackgroundColor.DARK,
+			BackgroundColor.GREEN,
+			BackgroundColor.RED
+		].includes(bgc)
 			? TextColor.LIGHT
 			: TextColor.DARK
 		: TextColor.DARK;
@@ -362,8 +371,8 @@ function getMainTextColor(bgc: BackgroundColor) {
 function getTableTextColor(tc: TableColor) {
 	return tc
 		? [TableColor.BLUE, TableColor.DARK, TableColor.GREEN, TableColor.RED].includes(
-				tc
-		  )
+			tc
+		)
 			? TextColor.LIGHT
 			: TextColor.DARK
 		: TextColor.DARK;
@@ -821,8 +830,8 @@ export function terminalSortCs(cs: string[]): string[] {
 		return a[0] === b[0]
 			? 0
 			: Math.abs(5 - (Number(a[0]) || 5)) > Math.abs(5 - (Number(b[0]) || 5))
-			? -1
-			: 1;
+				? -1
+				: 1;
 	});
 	return cs;
 }
@@ -856,13 +865,13 @@ export function processChiArr(
 ): string[] {
 	return multis.length > 1
 		? [
-				...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(
-					c => !multis.includes(c)
-				),
-				...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(c =>
-					multis.includes(c)
-				)
-		  ]
+			...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(
+				c => !multis.includes(c)
+			),
+			...terminalSortCs(arr1.length > 0 ? arr1 : arr2).filter(c =>
+				multis.includes(c)
+			)
+		]
 		: terminalSortCs(arr1.length > 0 ? arr1 : arr2);
 }
 
@@ -1047,8 +1056,8 @@ export function sortDaPaiDiscards(
 				? 1
 				: -1
 			: ca > cb
-			? -1
-			: 1;
+				? -1
+				: 1;
 	}).forEach(c => {
 		if (ownSingles.includes(c)) {
 			cs1.push(c);

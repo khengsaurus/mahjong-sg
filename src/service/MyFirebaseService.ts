@@ -16,7 +16,6 @@ import {
 	indexedDBLocalPersistence,
 	initializeAuth,
 	signInWithEmailAndPassword,
-	User as FirebaseUser,
 	UserCredential
 } from 'firebase/auth';
 import { child, Database, get, getDatabase, onValue, ref, set } from 'firebase/database';
@@ -51,7 +50,6 @@ import { shuffle } from 'utility';
 import { gameToObj, playerToObj, userToObj } from 'utility/parsers';
 
 export class FirebaseService {
-	private user: FirebaseUser;
 	private app: FirebaseApp;
 	private auth: Auth;
 	private db: Database;
@@ -63,33 +61,30 @@ export class FirebaseService {
 	private isFBConnected: boolean;
 
 	constructor() {
-		this.initApp().then(res => {
-			if (res) {
-				this.initAuth();
-				this.fs = getFirestore(this.app);
-				this.db = getDatabase(this.app, process.env.REACT_APP_DB_URL);
-				this.usersRef = collection(this.fs, FBCollection.USERREPR);
-				this.gamesRef = collection(this.fs, FBCollection.GAMES);
-				this.metricsRef = collection(this.fs, FBCollection.METRICS);
-				this.logsRef = collection(this.fs, FBCollection.LOGS);
-				this.initFBConnectionWatcher();
-			}
+		this.app = initializeApp({
+			apiKey: process.env.REACT_APP_API_KEY,
+			authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+			projectId: process.env.REACT_APP_PROJECT_ID
 		});
+		this.fs = getFirestore(this.app);
+		this.db = getDatabase(this.app, process.env.REACT_APP_DB_URL);
+		this.usersRef = collection(this.fs, FBCollection.USERREPR);
+		this.gamesRef = collection(this.fs, FBCollection.GAMES);
+		this.metricsRef = collection(this.fs, FBCollection.METRICS);
+		this.logsRef = collection(this.fs, FBCollection.LOGS);
+		this.initApp().catch(console.info);
 	}
 
-	async initApp(): Promise<boolean> {
-		return new Promise(resolve => {
+
+	initApp(): Promise<void> {
+		return new Promise((resolve, reject) => {
 			try {
-				this.app = initializeApp({
-					apiKey: process.env.REACT_APP_API_KEY,
-					authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-					projectId: process.env.REACT_APP_PROJECT_ID
-				});
+				this.initAuth();
+				this.initFBConnectionWatcher();
 				isDev && console.info(InfoMessage.FIREBASE_INIT_SUCCESS);
-				resolve(true);
+				resolve();
 			} catch (err) {
-				isDev && console.error(InfoMessage.FIREBASE_INIT_ERROR);
-				resolve(false);
+				reject(new Error(InfoMessage.FIREBASE_INIT_ERROR));
 			}
 		});
 	}
@@ -106,7 +101,6 @@ export class FirebaseService {
 				console.info(
 					user ? InfoMessage.FIREBASE_USER_YES : InfoMessage.FIREBASE_USER_NO
 				);
-			this.user = user;
 		});
 	}
 
@@ -118,7 +112,7 @@ export class FirebaseService {
 		onValue(connectedRef, snap => {
 			clearTimeout(timeoutRef);
 			timeoutRef = setTimeout(() => {
-				const connected = snap.val() === true || false;
+				const connected = snap.val() === true;
 				console.info(
 					connected
 						? InfoMessage.FIREBASE_CONNECTED
@@ -199,7 +193,6 @@ export class FirebaseService {
 	}
 
 	authLogout() {
-		this.user = null;
 		this.auth.signOut();
 	}
 
@@ -674,8 +667,7 @@ export class FirebaseService {
 							}
 							if (logs) {
 								logs.push(
-									`${_from.uN} sent ${_to.uN} ${amt} ${
-										ScreenTextEng._CHIP_
+									`${_from.uN} sent ${_to.uN} ${amt} ${ScreenTextEng._CHIP_
 									}${amt > 1 ? 's' : ''}`
 								);
 							}

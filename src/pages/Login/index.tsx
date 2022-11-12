@@ -1,9 +1,10 @@
 import { Alert, Collapse, TextField } from '@mui/material';
 import { DecorButton, PlayAIButton } from 'components';
-import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'enums';
+import { AlertStatus, EEvent, Page, Status, Transition } from 'enums';
 import { AppContext, useWindowListener } from 'hooks';
 import { ErrorMessage } from 'messages';
 import { HomePage } from 'pages';
+import { isMobile } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ButtonText, HomeScreenText } from 'screenTexts';
 import { ServiceInstance } from 'service';
@@ -13,7 +14,7 @@ import { IAlert } from 'typesPlus';
 import { isEmail } from 'utility';
 
 const Login = () => {
-	const { login, navigate, setUserEmail } = useContext(AppContext);
+	const { appConnected, login, navigate, setUserEmail } = useContext(AppContext);
 	const [alert, setAlert] = useState<IAlert>(null);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
@@ -83,12 +84,12 @@ const Login = () => {
 						if (user) {
 							clearForm();
 							login(user, false);
-							if (adminUsers.includes(user.uN)) {
-								// use admin login to cleanup old games since users may not login a second time
-								ServiceInstance.cleanupAllGames();
-							} else {
-								user?.email && ServiceInstance.cleanupGames(user.email);
-							}
+							// if (adminUsers.includes(user.uN)) {
+							// use admin login to cleanup old games since users may not login a second time
+							// 	ServiceInstance.cleanupAllGames();
+							// } else {
+							user?.email && ServiceInstance.cleanupGames(user.email);
+							// }
 							setReady(true);
 							navigate(Page.INDEX);
 						} else {
@@ -147,7 +148,7 @@ const Login = () => {
 			label={ButtonText.LOGIN}
 			type="submit"
 			autoFocus
-			disabled={loginDisabled}
+			disabled={loginDisabled || (isMobile && !appConnected)}
 			onClick={handleLogin}
 		/>
 	);
