@@ -122,7 +122,8 @@ export enum FBCollection {
 	USERREPR = 'userRepr',
 	GAMES = 'games',
 	METRICS = 'metrics',
-	LOGS = 'logs'
+	LOGS = 'logs',
+	STATIC = 'static'
 }
 
 export enum FBDatabase {

@@ -17,7 +17,6 @@
 		"@emotion/styled": "^11.6.0",
 		"@firebase/app": "^0.7.11",
 		"@ionic-native/core": "^5.36.0",
-		"@ionic-native/screen-orientation": "^5.36.0",
 		"@mui/icons-material": "^5.2.5",
 		"@mui/material": "^5.2.5",
 		"axios": "^0.26.0",

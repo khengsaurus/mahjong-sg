@@ -1,5 +1,4 @@
 import { Keyboard } from '@capacitor/keyboard';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { EEvent } from 'enums';
 import { isAndroid, isKeyboardAvail } from 'platform';
 import { useLayoutEffect, useState } from 'react';
@@ -12,11 +11,7 @@ import { useLayoutEffect, useState } from 'react';
  */
 const useAndroidKeyboardListener = (landscapeOnly = false) => {
 	const [showBottom, setShowBottom] = useState(true);
-	const isLandscape = [
-		ScreenOrientation.ORIENTATIONS.LANDSCAPE,
-		ScreenOrientation.ORIENTATIONS.LANDSCAPE_PRIMARY,
-		ScreenOrientation.ORIENTATIONS.LANDSCAPE_SECONDARY
-	].includes(ScreenOrientation.type);
+	const isLandscape = window.screen?.orientation?.type?.toLowerCase()?.startsWith('landscape');
 
 	useLayoutEffect(() => {
 		if (isKeyboardAvail && isAndroid && (landscapeOnly ? isLandscape : true)) {

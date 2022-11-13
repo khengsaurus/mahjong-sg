@@ -9,6 +9,7 @@ import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { FBService, HttpService, ServiceInstance } from 'service';
+import AxiosService from 'service/AxiosService';
 import { IStore } from 'store';
 import {
 	setAboutContent,
@@ -87,12 +88,19 @@ const initialContext: IAppContext = {
 	setUserEmail: () => {}
 };
 
-async function getContent() {
-	const aboutContent = HttpService.getContent(Content.ABOUT);
-	const helpContent = HttpService.getContent(Content.HELP);
-	const policyContent = HttpService.getContent(Content.POLICY);
-	const notifsContent = HttpService.getContent(Content.NOTIFS);
-	return Promise.all([aboutContent, helpContent, policyContent, notifsContent]);
+async function getStaticContent() {
+	return AxiosService.initCmsUrl()
+		.then(() => {
+			return Promise.all([
+				HttpService.getContent(Content.ABOUT),
+				HttpService.getContent(Content.HELP),
+				HttpService.getContent(Content.POLICY),
+				HttpService.getContent(Content.NOTIFS)
+			]);
+		})
+		.catch(err => {
+			throw err;
+		});
 }
 
 export const AppContext = createContext<IAppContext>(initialContext);
@@ -167,7 +175,7 @@ export const AppContextProvider = (props: any) => {
 	}, []);
 
 	useEffect(() => {
-		getContent()
+		getStaticContent()
 			.then(data => {
 				if (data.length === 4 && data.every(d => !isEmpty(d))) {
 					dispatch(setAboutContent(data[0] as IAboutContent));

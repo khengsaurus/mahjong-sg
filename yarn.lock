@@ -1168,14 +1168,14 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@capacitor/android@^3.3.4":
-  version "3.4.1"
-  resolved "https://registry.npmjs.org/@capacitor/android/-/android-3.4.1.tgz"
-  integrity sha512-4qQGEdZTW8W01PTOzSScmx9NBDcsi1GRl32tyYnpQrjdH2f7hI9OX2MLbNkirtOwKNCDeinQfEqqn0hVCkgHag==
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-3.9.0.tgz#73032c49e0d6cdb4bdd1c01565e28f3913f25fee"
+  integrity sha512-YTPyrh1NozEuYXWGtfqN27TLXUrLbZX9fggyd4JQ1yMaUZTmLPm5dCuznONhQ49aPkJnUJB02JfpHy/qGwa2Lw==
 
 "@capacitor/app@^1.0.3":
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/@capacitor/app/-/app-1.1.0.tgz"
-  integrity sha512-CjcMLThYfPBGBexb6Xy98MHA9olduS0OL0X8Ot9z9x5RN/Cx5K5OmlZkGMKOncR2R1h2n/whdO5tmDbjeqS6tw==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/app/-/app-1.1.1.tgz#bde7202faad1b47c4ae2c4a622285d7569384c5e"
+  integrity sha512-8ADkldHnoE1xkWvPUsGlERVGm6/Zvcxy6hCI80AxydIKyaCG7kbDAvUclebbnw/eFRxj2zBoVatGLjmJNvTbYw==
 
 "@capacitor/cli@^3.5.1":
   version "3.5.1"
@@ -1200,35 +1200,35 @@
     xml2js "^0.4.23"
 
 "@capacitor/core@^3.2.3":
-  version "3.4.1"
-  resolved "https://registry.npmjs.org/@capacitor/core/-/core-3.4.1.tgz"
-  integrity sha512-BwN925gwXGEVAhnnVAXH57cp+/YW5PhFZloGYaN3Sm8eKcYDNeti38lV9DQ8A/T5PYkJw/+TSu8SsuoEQD0vwQ==
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-3.9.0.tgz#ab5eccbeb02e140382e983b794ead296f1db7e6d"
+  integrity sha512-j1lL0+/7stY8YhIq1Lm6xixvUqIn89vtyH5ZpJNNmcZ0kwz6K9eLkcG6fvq1UWMDgSVZg9JrRGSFhb4LLoYOsw==
   dependencies:
     tslib "^2.1.0"
 
 "@capacitor/haptics@^1.0.3":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@capacitor/haptics/-/haptics-1.1.4.tgz"
+  resolved "https://registry.yarnpkg.com/@capacitor/haptics/-/haptics-1.1.4.tgz#80d5bc4776740a227a8cb83c85fac4db1316db8e"
   integrity sha512-+pJIb5X7xAcbrWj6rJaV+cwBlv8aFwB1/Ob6EV4atydThuuVSSsAL4hI4ZYlPNOxM6H5s+ZDLj7Pa2os4eFmtg==
 
 "@capacitor/ios@^3.3.3":
-  version "3.4.1"
-  resolved "https://registry.npmjs.org/@capacitor/ios/-/ios-3.4.1.tgz"
-  integrity sha512-ycFCyKI8DsgedVg7PW5MpCVgqFuD0PMHQGVfC5ichXc2C/jAATX32EVdEMCB0N3guKoH2k6T3Efwg59+Fcdx2w==
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-3.9.0.tgz#5e31b88701fe355cacf0c9790b319731d8b85b04"
+  integrity sha512-GezPCJIujRHnF4wbrKJx6Q/mgFz0f9rmh/steTTXQZI+nEl6mHk6NWh8235p7YbhonYi5WD0rFNirrjGg1EaGw==
 
 "@capacitor/keyboard@^1.2.0":
-  version "1.2.2"
-  resolved "https://registry.npmjs.org/@capacitor/keyboard/-/keyboard-1.2.2.tgz"
-  integrity sha512-dOZSXJTY/tTbRQ+Neiny72BIXN2Hvf/2AgPpMdTErDfaQM7C2MMgtJrm+Mi+YUeT6AnJFmt68nHJGImAL4lzmA==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@capacitor/keyboard/-/keyboard-1.2.3.tgz#8046d8256e1c72ed3a2dad6ff01dc37a0c415077"
+  integrity sha512-KTSzJkMa6CrmDIDhWfswNPqS7gvYlL25E1gqXbY7w/EhyBjJhEdF0bc6QUFufS+ZVMlcPafc0/E5P+pTfLnKiA==
 
 "@capacitor/network@^1.0.6":
   version "1.0.7"
-  resolved "https://registry.npmjs.org/@capacitor/network/-/network-1.0.7.tgz"
+  resolved "https://registry.yarnpkg.com/@capacitor/network/-/network-1.0.7.tgz#9494d76f9b6fd516bf5dc3045e3c816930641df7"
   integrity sha512-Le1pcXlBB6Vsz+9Y5jkwcoFONq93Fm06T+EXfH52khrIH61k5rOYRM1HGR5Q0hu6pDKqA9jM/tU06h2kqsJteA==
 
 "@capacitor/status-bar@^1.0.3":
   version "1.0.8"
-  resolved "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-1.0.8.tgz"
+  resolved "https://registry.yarnpkg.com/@capacitor/status-bar/-/status-bar-1.0.8.tgz#a783561fb5815b30f3e75dd95c87e00aaff5450b"
   integrity sha512-lhxa70K6vg0QjdddbT9RqFLfQ9a0Fk1OVE54MhUH30DWymv4h2LrC+mJgH6JS46WQbR2UCHRymfmVCq1PS2Qiw==
 
 "@capacitor/text-zoom@^1.0.8":
@@ -1834,13 +1834,6 @@
   version "5.36.0"
   resolved "https://registry.npmjs.org/@ionic-native/core/-/core-5.36.0.tgz"
   integrity sha512-lOrkktadlKYbYf1LrDyAtsu1JnQ0oCCdkOU7iHQ8oXnNOkMwobFfD2m62F1CoOr0u9LIkpYnZSPjng8lZbmbNw==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/screen-orientation@^5.36.0":
-  version "5.36.0"
-  resolved "https://registry.npmjs.org/@ionic-native/screen-orientation/-/screen-orientation-5.36.0.tgz"
-  integrity sha512-+VILGrCJO76Ta6Mudd6IKc66xDek1uw5OEovFWjGCqkg0OYHFIiJFZNx4NLhF5hA1UKN2fWE6qDJaSXR+1w1Rg==
   dependencies:
     "@types/cordova" latest
 

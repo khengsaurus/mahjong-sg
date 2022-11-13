@@ -1,5 +1,4 @@
 import { Keyboard } from '@capacitor/keyboard';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Fade } from '@mui/material';
 import {
 	AboutButton,
@@ -17,7 +16,7 @@ import { EEvent, Status } from 'enums';
 import { AppContext, useLocalSession } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { isAndroid, isIOS, isKeyboardAvail, isMobile } from 'platform';
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText, ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
@@ -71,15 +70,11 @@ const HomePage = ({
 
 	/* ------------------------- Screen orientation ------------------------- */
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		setAnnHuOpen(false);
 
 		if (isMobile) {
-			ScreenOrientation.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT).catch(_ => {
-				console.info(
-					'Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock'
-				);
-			});
+			window.screen.orientation.lock('portrait').catch(console.error);
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps

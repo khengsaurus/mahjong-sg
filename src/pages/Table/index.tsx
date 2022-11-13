@@ -1,4 +1,3 @@
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Typography } from '@mui/material';
 import {
 	BottomPlayer,
@@ -50,15 +49,11 @@ const Table = () => {
 
 	useEffect(() => {
 		if (isMobile) {
-			ScreenOrientation.unlock();
-			ScreenOrientation.lock(ScreenOrientation.ORIENTATIONS.LANDSCAPE).catch(_ => {
-				console.info(
-					'Platform does not support @ionic-native/screen-orientation.ScreenOrientation.lock'
-				);
-			});
+			window.screen.orientation.unlock();
+			window.screen.orientation.lock('landscape').catch(console.error);
 		}
 
-		return () => isMobile && ScreenOrientation.unlock();
+		return () => isMobile && window.screen.orientation.unlock();
 	}, []);
 
 	/* --------------------------------- End screen orientation --------------------------------- */

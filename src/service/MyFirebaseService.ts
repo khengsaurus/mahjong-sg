@@ -27,6 +27,7 @@ import {
 	doc,
 	DocumentData,
 	Firestore,
+	getDoc,
 	getDocFromServer,
 	getDocsFromServer,
 	getFirestore,
@@ -58,6 +59,7 @@ export class FirebaseService {
 	private gamesRef: CollectionReference;
 	private metricsRef: CollectionReference;
 	private logsRef: CollectionReference;
+	private staticRef: CollectionReference;
 	private isFBConnected: boolean;
 
 	constructor() {
@@ -72,6 +74,7 @@ export class FirebaseService {
 		this.gamesRef = collection(this.fs, FBCollection.GAMES);
 		this.metricsRef = collection(this.fs, FBCollection.METRICS);
 		this.logsRef = collection(this.fs, FBCollection.LOGS);
+		this.staticRef = collection(this.fs, FBCollection.STATIC);
 		this.initApp().catch(console.info);
 	}
 
@@ -149,6 +152,12 @@ export class FirebaseService {
 				}, timeout);
 			}
 		});
+	}
+
+	/* ---------------------------- Static ---------------------------- */
+
+	readCms() {
+		return getDoc(doc(this.staticRef, 'cms'));
 	}
 
 	/* ------------------------- Auth related ------------------------- */
