@@ -1,7 +1,10 @@
-import { useSelector } from 'react-redux';
 import { TextColor, TransitionSpeed } from 'enums';
+import { isAndroid } from 'platform';
+import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import styled, { ThemeProvider } from 'styled-components';
+
+const androidYM = isAndroid ? '14px' : '0px';
 
 export const Styled = (props: any) => {
 	const {
@@ -80,7 +83,7 @@ export const MainTransparent = styled(Main)`
 
 export const NetworkAlert = styled.div`
 	position: absolute;
-	top: 0px;
+	top: ${androidYM};
 	display: flex;
 	flex-direction: row;
 	height: 24px;
@@ -92,25 +95,17 @@ export const NetworkAlert = styled.div`
 	transition: ${TransitionSpeed.FAST};
 `;
 
-export const BottomSpec = styled.div`
+export const BottomSpecs = styled.div`
 	position: absolute;
 	bottom: 0px;
 	display: flex;
 	flex-direction: row;
 	height: 24px; // ref-bottom-home-buttons
-	margin-bottom: const(safe-area-inset-bottom);
-	margin-bottom: env(safe-area-inset-bottom);
+	margin-bottom: calc(const(safe-area-inset-bottom) + ${androidYM});
+	margin-bottom: calc(env(safe-area-inset-bottom) + ${androidYM});
 	color: ${props => props.theme.mainTextColor};
 	background-color: ${props => props.theme.backgroundColor};
 	transition: ${TransitionSpeed.FAST};
-`;
-
-export const BottomLeft = styled(BottomSpec)`
-	left: 10px;
-`;
-
-export const BottomRight = styled(BottomSpec)`
-	right: 2px;
 `;
 
 export const TableDiv = styled.div`

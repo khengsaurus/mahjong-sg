@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { HomeScreenText, ScreenTextEng } from 'screenTexts';
 import { IStore } from 'store';
 import { HomeTheme } from 'style/MuiStyles';
-import { BottomSpec, Centered, Main, NetworkAlert } from 'style/StyledComponents';
+import { BottomSpecs, Centered, Main, NetworkAlert } from 'style/StyledComponents';
 import { StyledCenterText, StyledText } from 'style/StyledMui';
 
 interface IHomePageP {
@@ -156,7 +156,7 @@ const HomePage = ({
 					pendingScreen
 				)}
 				{misc !== 3 && (
-					<BottomSpec>
+					<BottomSpecs id="bottom-specs">
 						{misc === 1 ? (
 							<>
 								<DecorButton
@@ -178,7 +178,7 @@ const HomePage = ({
 								callback={customBack}
 							/>
 						)}
-					</BottomSpec>
+					</BottomSpecs>
 				)}
 				{showHomeAlert && (
 					<SingleActionModal

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Segment } from 'enums';
 import './suspenseTiles.scss';
 
@@ -11,7 +10,9 @@ interface ISuspenseBlockP {
 
 const SuspenseTiles = ({ height, width, color, segment }: ISuspenseBlockP) => {
 	const horizontal = segment === Segment.TOP || segment === Segment.BOTTOM;
-	const background = `linear-gradient(${horizontal ? `-90deg,` : ``}gainsboro, ${color}, ${color}, gainsboro)`;
+	const background = `linear-gradient(${
+		horizontal ? `-90deg,` : ``
+	}gainsboro, ${color}, ${color}, gainsboro)`;
 
 	return (
 		<div

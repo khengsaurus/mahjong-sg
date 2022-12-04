@@ -20,7 +20,8 @@
             android:theme="@style/AppTheme.Default"
             android:launchMode="singleTask"
             android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustNothing"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,6 +1,6 @@
 import { Alert, Collapse, TextField } from '@mui/material';
 import { DecorButton, PlayAIButton } from 'components';
-import { AlertStatus, EEvent, Page, Status, Transition } from 'enums';
+import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'enums';
 import { AppContext, useWindowListener } from 'hooks';
 import { ErrorMessage } from 'messages';
 import { HomePage } from 'pages';
@@ -84,12 +84,12 @@ const Login = () => {
 						if (user) {
 							clearForm();
 							login(user, false);
-							// if (adminUsers.includes(user.uN)) {
-							// use admin login to cleanup old games since users may not login a second time
-							// 	ServiceInstance.cleanupAllGames();
-							// } else {
-							user?.email && ServiceInstance.cleanupGames(user.email);
-							// }
+							if (adminUsers.includes(user.uN)) {
+								// use admin login to cleanup old games since users may not login a second time
+								ServiceInstance.cleanupAllGames();
+							} else {
+								user?.email && ServiceInstance.cleanupGames(user.email);
+							}
 							setReady(true);
 							navigate(Page.INDEX);
 						} else {

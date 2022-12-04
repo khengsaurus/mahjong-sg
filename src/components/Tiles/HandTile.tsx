@@ -1,5 +1,4 @@
 import getTileSrc from 'images';
-import React from 'react';
 
 interface IHandTileP {
 	card: string;
@@ -12,10 +11,17 @@ const HandTile: React.FC<IHandTileP> = (props: IHandTileP) => {
 	const { card, selected, last, callback } = props;
 	return (
 		<div
-			className={`self-hidden-tile${selected ? ` selected` : ` unselected`}${last ? ` last` : ``}`}
+			className={`self-hidden-tile${selected ? ` selected` : ` unselected`}${
+				last ? ` last` : ``
+			}`}
 			onClick={callback}
 		>
-			<img className="self-hidden-tile-bg" src={getTileSrc(card)} alt="tile" draggable="false" />
+			<img
+				className="self-hidden-tile-bg"
+				src={getTileSrc(card)}
+				alt="tile"
+				draggable="false"
+			/>
 		</div>
 	);
 };

@@ -1,12 +1,49 @@
 @import '../../App.scss';
 
+$table-m: 30px;
+
 .wind-background {
 	font-size: $wind-font-size;
 }
 
 .table {
-	@include safeAreaHeight;
-	@include safeAreaWidth;
+	@supports (
+		(top: const(safe-area-inset-top)) and (bottom: const(safe-area-inset-bottom))
+	) {
+		height: calc(
+			100% - const(safe-area-inset-bottom) - const(safe-area-inset-bottom) -
+				$table-m
+		);
+	}
+	@supports (
+		(top: env(safe-area-inset-top)) and (bottom: env(safe-area-inset-bottom))
+	) {
+		height: calc(
+			100% - env(safe-area-inset-top) - env(safe-area-inset-bottom) - $table-m
+		);
+	}
+	@supports not ((top: const(safe-area-inset-top)) or (top: env(safe-area-inset-top))) {
+		height: calc(100% - $table-m);
+	}
+	@supports (
+		(left: const(safe-area-inset-left)) and (right: const(safe-area-inset-right))
+	) {
+		width: calc(
+			100% - const(safe-area-inset-right) - const(safe-area-inset-right) - $table-m
+		);
+	}
+	@supports (
+		(left: env(safe-area-inset-left)) and (right: env(safe-area-inset-right))
+	) {
+		width: calc(
+			100% - env(safe-area-inset-left) - env(safe-area-inset-right) - $table-m
+		);
+	}
+	@supports not (
+		(left: const(safe-area-inset-left)) or (left: env(safe-area-inset-left))
+	) {
+		width: calc(100% - $table-m);
+	}
 	position: relative;
 	max-height: 900px;
 	max-width: 900px;

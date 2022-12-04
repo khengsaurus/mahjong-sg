@@ -53,7 +53,8 @@
 		"devbot": "REACT_APP_PLATFORM=web REACT_APP_FLAG=devbot react-scripts start",
 		"start": "REACT_APP_PLATFORM=web react-scripts start",
 		"build": "GENERATE_SOURCEMAP=false REACT_APP_PLATFORM=web react-scripts build",
-		"buildapp": "GENERATE_SOURCEMAP=false react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
+		"buildapp": "GENERATE_SOURCEMAP=false react-scripts build && ionic capacitor copy android",
+		"buildapp_with_ios": "GENERATE_SOURCEMAP=false react-scripts build && ionic capacitor copy ios && ionic capacitor copy android",
 		"test": "jest",
 		"eject": "react-scripts eject"
 	},

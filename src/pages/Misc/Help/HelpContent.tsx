@@ -3,7 +3,6 @@ import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { CustomFade, SampleTile } from 'components';
 import { Animals } from 'handEnums';
 import parse from 'html-react-parser';
-import React from 'react';
 import { StyledText } from 'style/StyledMui';
 import '../../../App.scss';
 
@@ -100,9 +99,10 @@ const HelpContent: React.FC<IHelpContent> = ({
 								/>
 							</AccordionSummary>
 							<AccordionDetails
+								id="shown-help-content"
 								style={{
 									maxHeight:
-										'calc(100vh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
+										'calc(100vh - 180px - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
 								}}
 							>
 								{renderAccordionDetails(
