@@ -1,8 +1,6 @@
-import { ImpactStyle } from '@capacitor/haptics';
 import { Exec, MeldName, MeldType } from 'enums';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
-import { triggerHaptic } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ControlsTextChi, ControlsTextEng, ScreenTextEng } from 'screenTexts';
@@ -30,7 +28,6 @@ function useControlsMain(
 ): IControlsMain {
 	const { currGame, playerSeat, selectedTiles } = useContext(AppContext);
 	const {
-		haptic,
 		tHK,
 		theme: { tableColor, enOnly = false },
 		user
@@ -131,12 +128,9 @@ function useControlsMain(
 					}
 				}
 				game.f[3] = true;
-				if (haptic && _p === playerSeat) {
-					triggerHaptic(ImpactStyle.Medium);
-				}
 			}
 		},
-		[haptic, playerSeat, handleDrawGame]
+		[handleDrawGame]
 	);
 
 	const handleDraw = useCallback(
@@ -152,20 +146,9 @@ function useControlsMain(
 					handleDrawGame(game);
 				}
 				handleAction(_p, game);
-				if (haptic && _p === playerSeat) {
-					triggerHaptic();
-				}
 			}
 		},
-		[
-			handleAction,
-			handleBuHua,
-			haptic,
-			isHuLocked,
-			handleDrawGame,
-			playerSeat,
-			updateGameTaken
-		]
+		[handleAction, handleBuHua, isHuLocked, handleDrawGame, updateGameTaken]
 	);
 
 	const handleChi = (cs: string[]) => {
@@ -229,15 +212,11 @@ function useControlsMain(
 					}
 					updateGameTaken(_p, game, true);
 					handleAction(_p, game);
-					if (haptic && _p === playerSeat) {
-						triggerHaptic(ImpactStyle.Medium);
-					}
 				}
 			}
 		},
 		[
 			handleBuHua,
-			haptic,
 			isHuLocked,
 			lThAvail,
 			meld,
@@ -290,14 +269,10 @@ function useControlsMain(
 					updateGameTaken(_p, game, false);
 					handleAction(_p, game);
 				}
-				if (haptic && _p === playerSeat) {
-					triggerHaptic(ImpactStyle.Medium);
-				}
 			}
 		},
 		[
 			toExec,
-			haptic,
 			handleAction,
 			handleBuHua,
 			isHuLocked,
@@ -318,12 +293,9 @@ function useControlsMain(
 						handleTake(_p, game);
 					}
 				}
-				if (haptic && _p === playerSeat) {
-					triggerHaptic(ImpactStyle.Medium);
-				}
 			}
 		},
-		[haptic, isHuLocked, playerSeat, selectedTiles, handleKang, handleTake]
+		[isHuLocked, playerSeat, selectedTiles, handleKang, handleTake]
 	);
 
 	const handleThrow = useCallback(
@@ -349,12 +321,9 @@ function useControlsMain(
 					game.handleDelay();
 					handleAction(_p, game);
 				}
-				if (haptic && _p === playerSeat) {
-					triggerHaptic(ImpactStyle.Medium);
-				}
 			}
 		},
-		[handleAction, haptic, isHuLocked, playerSeat, selectedTiles, tHK]
+		[handleAction, isHuLocked, playerSeat, selectedTiles, tHK]
 	);
 
 	const handleHu = useCallback(
@@ -382,9 +351,8 @@ function useControlsMain(
 			}
 			game.endRound();
 			updateGame(game);
-			haptic && triggerHaptic(ImpactStyle.Heavy);
 		},
-		[haptic, lThAvailHu, updateGame]
+		[lThAvailHu, updateGame]
 	);
 
 	const handleSkipNotif = useCallback(
@@ -516,11 +484,6 @@ function useControlsMain(
 	};
 
 	/* --------------------------------- End bot & exec --------------------------------- */
-
-	useEffect(() => {
-		haptic && playerSeat === n[3] && triggerHaptic(ImpactStyle.Heavy);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [haptic, playerSeat, n[3]]);
 
 	const highlight = useMemo(
 		() => (playerSeat === n[3] ? getHighlightColor(tableColor) : null),

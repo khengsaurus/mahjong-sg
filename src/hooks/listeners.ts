@@ -1,6 +1,5 @@
-import { App } from '@capacitor/app';
 import { EEvent } from 'enums';
-import { useCallback, useEffect, useLayoutEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 function useDocumentListener(event: EEvent, callback: (p?: any) => any, apply = true) {
 	useEffect(() => {
@@ -46,14 +45,4 @@ function useCloseListener(
 	useDocumentListener(EEvent.KEYDOWN, handleCloseCallback, escape);
 }
 
-async function useAndroidBack(callback) {
-	return useLayoutEffect(() => {
-		App.addListener(EEvent.ANDROID_BACK, callback);
-
-		return () => {
-			App.removeAllListeners();
-		};
-	}, [callback]);
-}
-
-export { useAndroidBack, useCloseListener, useDocumentListener, useWindowListener };
+export { useCloseListener, useDocumentListener, useWindowListener };

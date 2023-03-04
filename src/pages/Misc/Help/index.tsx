@@ -5,7 +5,6 @@ import { HomePage, renderDefaultTitle } from 'pages';
 import HelpContent from 'pages/Misc/Help/HelpContent';
 import initContent from 'pages/Misc/initContent.json';
 import 'pages/Misc/misc.scss';
-import { platform } from 'platform';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
@@ -57,7 +56,6 @@ const Help = () => {
 				showContent={showContent}
 				toggleShow={toggleShow}
 				overlayTimeout={overlayTimeout}
-				platform={platform}
 			/>
 		</div>
 	);

@@ -33,20 +33,6 @@ export enum EEvent {
 	RESIZE = 'resize'
 }
 
-export enum Offset {
-	HALF_MOBILE = '0',
-	HOMEPAGE_MOBILE = '0'
-	// HALF_MOBILE = '5vh',
-	// HOMEPAGE_MOBILE = '10vh'
-}
-
-export enum Platform {
-	MOBILE = 'mobile',
-	WEB = 'web',
-	ANDROID = 'android',
-	IOS = 'ios'
-}
-
 export enum StorageKey {
 	ROOT = 'root',
 	USER = 'user',

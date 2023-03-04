@@ -13,7 +13,6 @@ import {
 import { EEvent, LocalFlag, Shortcut, Transition } from 'enums';
 import {
 	AppContext,
-	useAndroidBack,
 	useBot,
 	useControlsHu,
 	useControlsMain,
@@ -197,7 +196,6 @@ const Controls = () => {
 		]
 	);
 	useDocumentListener(EEvent.KEYDOWN, handleKeyListeners);
-	useAndroidBack(_handleHome);
 
 	/* ----------------------------------- Markup ----------------------------------- */
 

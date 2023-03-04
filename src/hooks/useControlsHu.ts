@@ -1,10 +1,7 @@
-import { ImpactStyle } from '@capacitor/haptics';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
-import { isDev, triggerHaptic } from 'platform';
+import { isDev } from 'platform';
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { IStore } from 'store';
 import { IControlsHu, IHWPx } from 'typesPlus';
 import { findRight, isBot, isEmptyTile } from 'utility';
 import { primaryLRU } from 'utility/LRUCache';
@@ -18,7 +15,6 @@ function useControlsHu(
 	setShowPay: (b: boolean) => void
 ): IControlsHu {
 	const { currGame, playerSeat, setSelectedTiles } = useContext(AppContext);
-	const { haptic } = useSelector((state: IStore) => state);
 	const [confirmHu, setConfirmHu] = useState(false);
 	const [showDeclareHu, setShowDeclareHu] = useState(false);
 	const [openTimeoutId, setOpenTimeoutId] = useState<NodeJS.Timeout>(null);
@@ -195,9 +191,8 @@ function useControlsHu(
 			game.initRound();
 			primaryLRU.clear();
 			updateGame(game);
-			haptic && triggerHaptic(ImpactStyle.Heavy);
 		},
-		[haptic, updateGame]
+		[updateGame]
 	);
 
 	const handleHu = useCallback(
@@ -225,9 +220,8 @@ function useControlsHu(
 			}
 			game.endRound();
 			updateGame(game);
-			haptic && triggerHaptic(ImpactStyle.Heavy);
 		},
-		[haptic, lThAvailHu, updateGame]
+		[lThAvailHu, updateGame]
 	);
 
 	// I know... unreadable af but gna do this to save on const declaration memory

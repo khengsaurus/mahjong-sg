@@ -14,7 +14,7 @@ import { AppContext, useLocalSession, usePreLoadAssets } from 'hooks';
 import $ from 'jquery';
 import isEmpty from 'lodash.isempty';
 import { Game } from 'models';
-import { isDev, isMobile } from 'platform';
+import { isDev } from 'platform';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
@@ -44,19 +44,6 @@ const Table = () => {
 	const { verifyingSession } = useLocalSession(isLocalGame);
 	const dispatch = useDispatch();
 	usePreLoadAssets(true);
-
-	/* ----------------------------------- Screen orientation ----------------------------------- */
-
-	useEffect(() => {
-		if (isMobile) {
-			window.screen.orientation.unlock();
-			window.screen.orientation.lock('landscape').catch(console.error);
-		}
-
-		return () => isMobile && window.screen.orientation.unlock();
-	}, []);
-
-	/* --------------------------------- End screen orientation --------------------------------- */
 
 	function hydrateGame(game: Game, currUsername: string) {
 		const { ps = [] } = game;

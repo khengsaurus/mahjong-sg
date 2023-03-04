@@ -1,7 +1,6 @@
 import { TransitionSpeed } from 'enums';
 import { ReactComponent as EdgeDecor1 } from 'images/EdgeDecor1.svg';
 import { ReactComponent as EdgeDecor2 } from 'images/EdgeDecor2.svg';
-import { isAndroid } from 'platform';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
 import {
@@ -12,8 +11,7 @@ import {
 	OverlayDecorTopRight
 } from 'style/StyledComponents';
 
-const xM = isAndroid ? '10px' : '6px';
-export const yM = isAndroid ? '25px' : '10px'; // additional 6px Y margin for anrdoid
+export const yM = '10px'; // additional 6px Y margin for anrdoid
 
 const Overlay = () => {
 	const {
@@ -23,20 +21,17 @@ const Overlay = () => {
 	const style = { height: 60, width: 60, transition: TransitionSpeed.FAST };
 
 	return (
-		<OverlayBackground
-			id="overlay-background"
-			style={isAndroid ? { top: yM, right: xM, bottom: yM, left: xM } : null}
-		>
-			<OverlayDecorTopLeft style={isAndroid ? { top: yM, left: xM } : null}>
+		<OverlayBackground id="overlay-background">
+			<OverlayDecorTopLeft>
 				<EdgeDecor2 stroke={tableColor} style={style} />
 			</OverlayDecorTopLeft>
-			<OverlayDecorTopRight style={isAndroid ? { top: yM, right: xM } : null}>
+			<OverlayDecorTopRight>
 				<EdgeDecor1 stroke={tableColor} style={style} />
 			</OverlayDecorTopRight>
-			<OverlayDecorBottomLeft style={isAndroid ? { bottom: yM, left: xM } : null}>
+			<OverlayDecorBottomLeft>
 				<EdgeDecor1 stroke={tableColor} style={style} />
 			</OverlayDecorBottomLeft>
-			<OverlayDecorBottomRight style={isAndroid ? { bottom: yM, right: xM } : null}>
+			<OverlayDecorBottomRight>
 				<EdgeDecor2 stroke={tableColor} style={style} />
 			</OverlayDecorBottomRight>
 		</OverlayBackground>

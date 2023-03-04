@@ -47,7 +47,7 @@ import {
 	_9T,
 	_9W
 } from 'images';
-import { isDev, isMobile } from 'platform';
+import { isDev } from 'platform';
 import { useEffect } from 'react';
 
 const tiles1 = [db, df, dh, we, wn, ws, ww];
@@ -116,12 +116,9 @@ function preloadImage(src: string) {
 
 const usePreLoadAssets = (all = false) => {
 	useEffect(() => {
-		if (!isMobile) {
-			preload(all ? tiles2 : tiles1).then(() => {
-				isDev &&
-					console.info(`Successfully preloaded${all ? ' all ' : ' '}tiles`);
-			});
-		}
+		preload(all ? tiles2 : tiles1).then(() => {
+			isDev && console.info(`Successfully preloaded${all ? ' all ' : ' '}tiles`);
+		});
 	}, [all]);
 };
 

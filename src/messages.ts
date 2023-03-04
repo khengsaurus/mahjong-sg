@@ -1,7 +1,3 @@
-export enum Notif {
-	UPDATE = 'Please update Mahjong SG to the latest version for the best experience '
-}
-
 export enum InfoMessage {
 	CONTENT_RETRIEVED = 'Content retrieved',
 	FIREBASE_CONNECTED = 'Server connected 🍦',

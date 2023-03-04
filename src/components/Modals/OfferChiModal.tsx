@@ -2,7 +2,6 @@ import { Dialog, DialogContent } from '@mui/material';
 import { ShownTile } from 'components';
 import 'components/PlayerComponents/playerComponents.scss';
 import { Segment } from 'enums';
-import { isMobile } from 'platform';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ScreenTextEng } from 'screenTexts';
@@ -37,9 +36,7 @@ const OfferChiModal = ({ show, card, ms, handleTake, onClose }: IOfferChiModalP)
 						{ms.map((m, ix1) => (
 							<div
 								id={`offer-${ix1}`}
-								className={`row-section-large offer${
-									isMobile ? `` : `-hover`
-								}`}
+								className="row-section-large offer-hover"
 								key={ix1}
 								onClick={() => {
 									handleTake(m.map(t => t.c));

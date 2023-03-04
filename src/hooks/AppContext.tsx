@@ -1,14 +1,13 @@
-import { Network } from '@capacitor/network';
-import { BotIds, Content, EEvent, LocalFlag, Page, Size, StorageKey } from 'enums';
+import { BotIds, Content, LocalFlag, Page, Size, StorageKey } from 'enums';
 import { useFirstEffect, useInitMobile, useLocalObj, usePreLoadAssets } from 'hooks';
 import isEmpty from 'lodash.isempty';
 import { ErrorMessage } from 'messages';
 import { Game, User } from 'models';
-import { isDev, isMobile } from 'platform';
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { isDev } from 'platform';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { FBService, HttpService, ServiceInstance } from 'service';
+import { HttpService, ServiceInstance } from 'service';
 import AxiosService from 'service/AxiosService';
 import { IStore } from 'store';
 import {
@@ -26,7 +25,7 @@ import {
 	setTHK,
 	setUser
 } from 'store/actions';
-import { getNetworkStatus, getTheme } from 'utility';
+import { getTheme } from 'utility';
 import { primaryLRU } from 'utility/LRUCache';
 import { jwtToObj, objToJwt } from 'utility/parsers';
 
@@ -112,7 +111,6 @@ export const AppContextProvider = (props: any) => {
 		jwtToObj,
 		objToJwt
 	);
-	const [appConnected, setAppConnected] = useState(true);
 	const [annHuOpen, setAnnHuOpen] = useState(false);
 	const [hasAI, setHasAI] = useState(false);
 	const [players, setPlayers] = useState<User[]>([user]);
@@ -121,8 +119,6 @@ export const AppContextProvider = (props: any) => {
 	const [showAI, setShowAI] = useState(false);
 	const [userEmail, setUserEmail] = useState('');
 	const [showHomeAlert, setShowHomeAlert] = useState(false);
-	const prevConnectedState = useRef(true);
-	const retryFbInitRef = useRef<NodeJS.Timer>(null);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -142,37 +138,9 @@ export const AppContextProvider = (props: any) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, setPlayers, user?.id]);
 
-	const { homeAlert } = useInitMobile(handleHome);
+	const { homeAlert } = useInitMobile();
 	useFirstEffect(() => setShowHomeAlert(!!homeAlert), [homeAlert]);
 	usePreLoadAssets();
-
-	useEffect(() => {
-		if (isMobile) {
-			getNetworkStatus().then(setAppConnected);
-			Network?.addListener(EEvent.NETWORK_CHANGE, status => {
-				const c = status?.connected === true;
-				// If newly connected, try to reconnect
-				if (c && !prevConnectedState.current) {
-					FBService.initApp().catch(() => {
-						retryFbInitRef.current = setInterval(() => {
-							FBService.initApp()
-								.then(() => {
-									clearInterval(retryFbInitRef.current);
-									retryFbInitRef.current = null;
-								})
-								.catch(console.info);
-						}, 4000);
-					});
-				}
-				setAppConnected(c);
-				prevConnectedState.current = c;
-			});
-		}
-
-		return () => {
-			isMobile && Network?.removeAllListeners();
-		};
-	}, []);
 
 	useEffect(() => {
 		getStaticContent()
@@ -270,7 +238,7 @@ export const AppContextProvider = (props: any) => {
 	return (
 		<AppContext.Provider
 			value={{
-				appConnected,
+				appConnected: true,
 				annHuOpen,
 				currGame: gameId === LocalFlag ? localGame : game,
 				hasAI,

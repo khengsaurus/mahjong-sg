@@ -1,11 +1,5 @@
 import { AppContext, AppContextProvider } from './AppContext';
-import {
-	useAndroidBack,
-	useCloseListener,
-	useDocumentListener,
-	useWindowListener
-} from './listeners';
-import useAndroidKeyboardListener from './useAndroidKeyboardListener';
+import { useCloseListener, useDocumentListener, useWindowListener } from './listeners';
 import useAsync from './useAsync';
 import useBot from './useBot';
 import useControlsHu from './useControlsHu';
@@ -32,8 +26,6 @@ export {
 	AppContext,
 	AppContextProvider,
 	useAsync,
-	useAndroidBack,
-	useAndroidKeyboardListener,
 	useBot,
 	useCloseListener,
 	useControlsMain,

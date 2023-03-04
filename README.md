@@ -5,7 +5,6 @@
 # [Mahjong SG](https://mahjong-sg.com)
 
 ![Games played](https://img.shields.io/endpoint?url=https://mj-cms.fly.dev/counter?badge=true)
-[![iOS Version](https://img.shields.io/itunes/v/1608389963?label=iOS)](https://apps.apple.com/sg/app/mahjong-sg/id1608389963)
 [![Android Version](https://img.shields.io/endpoint?color=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.tk.mahjongSg%26l%3DAndroid%26m%3Dv%24version)](https://play.google.com/store/apps/details?id=com.tk.mahjongSg)
 
 </span>

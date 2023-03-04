@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { Content } from 'enums';
-import { isDev, platform } from 'platform';
+import { isDev } from 'platform';
 import FBService from './MyFirebaseService';
 
 export class AxiosService {
@@ -9,13 +9,13 @@ export class AxiosService {
 
 	constructor() {
 		const defaultOptions = {
-			headers: { source: `mj-sg-${platform}` },
+			headers: { source: 'mj-sg-web' }
 		};
 		this.instance = axios.create(defaultOptions);
 	}
 
 	initCmsUrl(): Promise<void> {
-		return new Promise((resolve) => {
+		return new Promise(resolve => {
 			if (this.cmsUrl) {
 				resolve();
 				return;
@@ -24,10 +24,12 @@ export class AxiosService {
 				this.cmsUrl = process.env.REACT_APP_LOCAL_8080;
 				resolve();
 			} else {
-				FBService.readCms().then(res => {
-					this.cmsUrl = res.data()?.url || "";
-					resolve();
-				}).catch(console.error);
+				FBService.readCms()
+					.then(res => {
+						this.cmsUrl = res.data()?.url || '';
+						resolve();
+					})
+					.catch(console.error);
 			}
 		});
 	}
@@ -38,7 +40,7 @@ export class AxiosService {
 			if (!this.cmsUrl) {
 				resolve(null);
 				return;
-			};
+			}
 			this.instance
 				.get(`${this.cmsUrl}/mj/${key}`)
 				.then(res => resolve(res.data || null))
@@ -52,5 +54,4 @@ export class AxiosService {
 	}
 }
 
-const HttpService = new AxiosService();
-export default HttpService;
+export default new AxiosService();

@@ -1,5 +1,3 @@
-import { Keyboard } from '@capacitor/keyboard';
-import { Fade } from '@mui/material';
 import {
 	AboutButton,
 	BackButton,
@@ -7,21 +5,19 @@ import {
 	HelpButton,
 	HomeButton,
 	Loader,
-	NetworkLoader,
 	Overlay,
 	PrivacyButton,
 	SingleActionModal
 } from 'components';
-import { EEvent, Status } from 'enums';
+import { Status } from 'enums';
 import { AppContext, useLocalSession } from 'hooks';
 import isEmpty from 'lodash.isempty';
-import { isAndroid, isIOS, isKeyboardAvail, isMobile } from 'platform';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { HomeScreenText, ScreenTextEng } from 'screenTexts';
+import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
 import { HomeTheme } from 'style/MuiStyles';
-import { BottomSpecs, Centered, Main, NetworkAlert } from 'style/StyledComponents';
+import { BottomSpecs, Centered, Main } from 'style/StyledComponents';
 import { StyledCenterText, StyledText } from 'style/StyledMui';
 
 interface IHomePageP {
@@ -59,7 +55,7 @@ const HomePage = ({
 	skipVerification = false,
 	offsetKeyboard = 0
 }: IHomePageP) => {
-	const { appConnected, homeAlert, setAnnHuOpen, showHomeAlert, setShowHomeAlert } =
+	const { homeAlert, setAnnHuOpen, showHomeAlert, setShowHomeAlert } =
 		useContext(AppContext);
 	const { user } = useSelector((state: IStore) => state);
 	const { verifyingSession } = useLocalSession(skipVerification);
@@ -72,37 +68,8 @@ const HomePage = ({
 
 	useEffect(() => {
 		setAnnHuOpen(false);
-
-		if (isMobile) {
-			window.screen.orientation.lock('portrait').catch(console.error);
-		}
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	/* ---------------------- Keyboard offset for iOS ---------------------- */
-
-	const [marginBottom, setMarginBottom] = useState<number | string>(0);
-
-	useEffect(() => {
-		if (isKeyboardAvail && isIOS) {
-			Keyboard.addListener(EEvent.KEYBOARDSHOW, info => {
-				const keyboardHeight = Number(info?.keyboardHeight) || 0;
-				const windowHeight = window?.screen?.height || 0;
-				if (Number(keyboardHeight) && Number(windowHeight)) {
-					const ratio = keyboardHeight > 0.4 * windowHeight ? 0.7 : 0.4;
-					setMarginBottom(keyboardHeight * ratio - offsetKeyboard);
-				}
-			});
-			Keyboard.addListener(EEvent.KEYBOARDHIDE, () => setMarginBottom(0));
-		} else if (isAndroid) {
-			setMarginBottom('10%');
-		}
-
-		return () => {
-			isKeyboardAvail && isIOS && Keyboard.removeAllListeners();
-		};
-	}, [offsetKeyboard]);
 
 	/* --------------- End keyboard offset for iOS --------------- */
 
@@ -122,25 +89,9 @@ const HomePage = ({
 		return () => clearTimeout(timeoutRef.current);
 	}, [ready, fallbackTitle, timeout]);
 
-	function renderNetworkLoader() {
-		return (
-			<Fade in={isMobile && !appConnected} unmountOnExit>
-				<NetworkAlert>
-					<NetworkLoader />
-					<StyledText
-						text={ScreenTextEng.WAITING_NETWORK}
-						variant="subtitle2"
-						padding="0px 0px 0px 10px"
-					/>
-				</NetworkAlert>
-			</Fade>
-		);
-	}
-
 	return (
 		<HomeTheme>
 			<Main>
-				{renderNetworkLoader()}
 				{(skipVerification ||
 					(!isEmpty(user) && verifyingSession !== Status.PENDING)) &&
 				ready ? (
@@ -149,7 +100,7 @@ const HomePage = ({
 							(typeof title === 'string'
 								? renderDefaultTitle(title)
 								: title)}
-						<Centered style={{ marginBottom }}>{markup()}</Centered>
+						<Centered>{markup()}</Centered>
 						<Overlay />
 					</>
 				) : (

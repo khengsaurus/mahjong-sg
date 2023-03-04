@@ -1,7 +1,6 @@
 import { CustomFade, SampleTile } from 'components';
 import { EEvent, Transition } from 'enums';
 import { useWindowListener } from 'hooks';
-import { isMobile } from 'platform';
 import { useState } from 'react';
 import { Column, Row } from 'style/StyledComponents';
 import './decorButton.scss';
@@ -22,15 +21,11 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 	return (
 		<div
 			className="container"
-			onMouseEnter={() => setShowDecoration(hoverEffect && !isMobile)}
-			onMouseLeave={() => {
-				if (!isMobile) {
-					setShowDecoration(false);
-				}
-			}}
+			onMouseEnter={() => setShowDecoration(hoverEffect)}
+			onMouseLeave={() => setShowDecoration(false)}
 		>
 			<Column>
-				{hoverEffect && !isMobile && showOnHover[1] && (
+				{hoverEffect && showOnHover[1] && (
 					<CustomFade show={showDecoration} timeout={timeout}>
 						<SampleTile
 							className={`top ${showDecoration ? 'show' : ''}`}
@@ -39,7 +34,7 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 					</CustomFade>
 				)}
 				<Row>
-					{hoverEffect && !isMobile && showOnHover[0] && (
+					{hoverEffect && showOnHover[0] && (
 						<CustomFade show={showDecoration} timeout={timeout}>
 							<SampleTile
 								className={`left ${showDecoration ? 'show' : ''}`}
@@ -48,7 +43,7 @@ const DecorButton = ({ Button, hoverEffect = true, showOnHover = [] }: IDecorBut
 						</CustomFade>
 					)}
 					<Button />
-					{hoverEffect && !isMobile && showOnHover[2] && (
+					{hoverEffect && showOnHover[2] && (
 						<CustomFade show={showDecoration} timeout={timeout}>
 							<SampleTile
 								className={`right ${showDecoration ? 'show' : ''}`}

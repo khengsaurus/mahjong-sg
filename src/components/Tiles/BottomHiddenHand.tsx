@@ -2,7 +2,6 @@ import { CustomFade, HandTile } from 'components';
 import { Size, Transition } from 'enums';
 import { AppContext } from 'hooks';
 import isEmpty from 'lodash.isempty';
-import { triggerHaptic } from 'platform';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
@@ -17,7 +16,6 @@ interface IBottomHiddenHandP {
 const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 	const { selectedTiles, setSelectedTiles } = useContext(AppContext);
 	const {
-		haptic,
 		sizes: { handSize },
 		tHK
 	} = useSelector((state: IStore) => state);
@@ -25,7 +23,6 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 
 	const selectTile = useCallback(
 		(tile: IShownTile) => {
-			haptic && triggerHaptic();
 			if (
 				!selectedTiles.map(tile => tile.r).includes(tile.r) &&
 				selectedTiles.length < 4
@@ -39,7 +36,7 @@ const BottomHiddenHand = ({ hTs, lTa }: IBottomHiddenHandP) => {
 				setSelectedTiles(selected);
 			}
 		},
-		[haptic, selectedTiles, setSelectedTiles]
+		[selectedTiles, setSelectedTiles]
 	);
 
 	const renderHiddenHand = (hTs: IHiddenTile[], lTa: IHiddenTile) => {

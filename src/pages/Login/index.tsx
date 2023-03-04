@@ -4,7 +4,6 @@ import { adminUsers, AlertStatus, EEvent, Page, Status, Transition } from 'enums
 import { AppContext, useWindowListener } from 'hooks';
 import { ErrorMessage } from 'messages';
 import { HomePage } from 'pages';
-import { isMobile } from 'platform';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ButtonText, HomeScreenText } from 'screenTexts';
 import { ServiceInstance } from 'service';
@@ -14,7 +13,7 @@ import { IAlert } from 'typesPlus';
 import { isEmail } from 'utility';
 
 const Login = () => {
-	const { appConnected, login, navigate, setUserEmail } = useContext(AppContext);
+	const { login, navigate, setUserEmail } = useContext(AppContext);
 	const [alert, setAlert] = useState<IAlert>(null);
 	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
@@ -148,7 +147,7 @@ const Login = () => {
 			label={ButtonText.LOGIN}
 			type="submit"
 			autoFocus
-			disabled={loginDisabled || (isMobile && !appConnected)}
+			disabled={loginDisabled}
 			onClick={handleLogin}
 		/>
 	);

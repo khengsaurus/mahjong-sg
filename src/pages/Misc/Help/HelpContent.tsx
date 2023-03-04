@@ -25,11 +25,7 @@ const SampleTiles = ({ tiles, parentKey }) => {
 	);
 };
 
-function renderAccordionDetails(
-	points: string[],
-	index: string | number,
-	platform: string
-) {
+function renderAccordionDetails(points: string[], index: string | number) {
 	return (
 		<div className="content-wrapper">
 			<ul>
@@ -41,7 +37,7 @@ function renderAccordionDetails(
 							<div key={key} className="list-content">
 								{arr.length === 2 ? (
 									<>
-										{parse(arr[0].replace(/{platform}/g, platform))}
+										{parse(arr[0].replace(/{platform}/g, 'website'))}
 										<SampleTiles tiles={arr[1]} parentKey={key} />
 									</>
 								) : (
@@ -52,7 +48,7 @@ function renderAccordionDetails(
 					} else {
 						return (
 							<li key={key}>
-								{parse(point.replace(/{platform}/g, platform))}
+								{parse(point.replace(/{platform}/g, 'website'))}
 							</li>
 						);
 					}
@@ -67,15 +63,13 @@ interface IHelpContent {
 	showContent: number;
 	toggleShow: (i: number) => void;
 	overlayTimeout: number;
-	platform: string;
 }
 
 const HelpContent: React.FC<IHelpContent> = ({
 	sections,
 	showContent,
 	toggleShow,
-	overlayTimeout,
-	platform
+	overlayTimeout
 }: IHelpContent) => {
 	return (
 		<>
@@ -94,7 +88,7 @@ const HelpContent: React.FC<IHelpContent> = ({
 								style={{ height: 40 }}
 							>
 								<StyledText
-									text={section.title.replace(/{platform}/g, platform)}
+									text={section.title.replace(/{platform}/g, 'website')}
 									variant="body1"
 								/>
 							</AccordionSummary>
@@ -105,11 +99,7 @@ const HelpContent: React.FC<IHelpContent> = ({
 										'calc(100vh - 180px - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
 								}}
 							>
-								{renderAccordionDetails(
-									section.points || [],
-									index,
-									platform
-								)}
+								{renderAccordionDetails(section.points || [], index)}
 							</AccordionDetails>
 						</Accordion>
 					</CustomFade>

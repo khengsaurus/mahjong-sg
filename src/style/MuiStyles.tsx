@@ -1,7 +1,6 @@
 import { blue, indigo, red, teal, yellow } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BackgroundColor, TableColor, TextColor, TransitionSpeed } from 'enums';
-import { isMobile } from 'platform';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';
@@ -130,7 +129,7 @@ function newMuiTheme(
 						color: textColor,
 						transition: TransitionSpeed.MEDIUM,
 						'&:hover': {
-							color: isMobile ? textColor : highlightColor
+							color: highlightColor
 						},
 						'&.Mui-expanded': {
 							color: highlightColor,
@@ -145,7 +144,7 @@ function newMuiTheme(
 						primary: textColor,
 						secondary: highlightColor,
 						'&:hover': {
-							color: isMobile ? textColor : highlightColor
+							color: highlightColor
 						},
 						'&:disabled': {
 							color: 'rgb(75, 75, 75)'
@@ -161,7 +160,7 @@ function newMuiTheme(
 						secondary: highlightColor,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							transform: isMobile ? `` : `scale(1.05)`,
+							transform: 'scale(1.05)',
 							transition: '150ms !important'
 						},
 						'&:disabled': {
@@ -237,8 +236,8 @@ function newMuiTheme(
 						color: textColor,
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile ? textColor : highlightColor,
-							transform: isMobile ? `` : `scale(1.1)`,
+							color: highlightColor,
+							transform: 'scale(1.1)',
 							transition: '150ms !important'
 						}
 					}
@@ -297,7 +296,7 @@ function newMuiTheme(
 						justifyContent: 'center',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile ? textColor : highlightColor
+							color: highlightColor
 						}
 					}
 				}
@@ -323,7 +322,7 @@ function newMuiTheme(
 						paddingRight: '12px !important',
 						backgroundColor: 'transparent !important',
 						'&:hover': {
-							color: isMobile ? textColor : highlightColor
+							color: highlightColor
 						}
 					}
 				}

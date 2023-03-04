@@ -1,4 +1,3 @@
-import { Network } from '@capacitor/network';
 import {
 	Animal,
 	AnimalIndex,
@@ -34,14 +33,6 @@ import moment from 'moment';
 import { isDev } from 'platform';
 import { ITheme } from 'typesPlus';
 import { secondaryLRU } from './LRUCache';
-
-export function getNetworkStatus(): Promise<boolean> {
-	return new Promise(resolve => {
-		Network.getStatus()
-			.then(status => resolve(status?.connected === true))
-			.catch(_ => resolve(false));
-	});
-}
 
 /* ----------------------------------- Util ----------------------------------- */
 

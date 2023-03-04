@@ -1,8 +1,7 @@
 import parse from 'html-react-parser';
-import { capacitorLogo, firebaseLogo, reactLogo } from 'images/symbols';
+import { firebaseLogo, reactLogo } from 'images/symbols';
 import moment from 'moment';
 import { HomePage } from 'pages';
-import { isMobile, platform } from 'platform';
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
@@ -19,7 +18,6 @@ const About = () => {
 		theme: { mainTextColor }
 	} = useSelector((store: IStore) => store);
 	const {
-		descMobile = '',
 		descWeb = '',
 		reachOut = '',
 		linkedin = ''
@@ -30,10 +28,8 @@ const About = () => {
 	const markup = () => (
 		<div className="content centered" style={{ color: mainTextColor }}>
 			<p>
-				<span>Thank you for using this {platform}. </span>
-				{isMobile
-					? parse(descMobile.replace(/{platform}/g, platform))
-					: parse(descWeb.replace(/{platform}/g, platform))}
+				<span>Thank you for using this website. </span>
+				{parse(descWeb.replace(/{platform}/g, 'website'))}
 			</p>
 			<p>{parse(reachOut)}</p>
 			<div className="stack">
@@ -41,7 +37,6 @@ const About = () => {
 				<div className="logos">
 					<img alt="react-logo" src={reactLogo} />
 					<img alt="firebase-logo" src={firebaseLogo} />
-					{isMobile && <img alt="ionic-logo" src={capacitorLogo} />}
 				</div>
 			</div>
 			<div

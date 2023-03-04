@@ -23,13 +23,13 @@ import {
 import { AppContext } from 'hooks';
 import { extend, isEqual } from 'lodash';
 import { ErrorMessage } from 'messages';
-import { isDev, isMobile } from 'platform';
+import { isDev } from 'platform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonText, ScreenTextEng } from 'screenTexts';
 import { ServiceInstance } from 'service';
 import { IStore } from 'store';
-import { setHaptic, setSizes, setTheme } from 'store/actions';
+import { setSizes, setTheme } from 'store/actions';
 import { MuiStyles, TableTheme } from 'style/MuiStyles';
 import { Row } from 'style/StyledComponents';
 import { StyledButton, StyledText } from 'style/StyledMui';
@@ -43,7 +43,7 @@ interface ISettingsWindowP extends IModalP {
 
 const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP) => {
 	const { handleLocalUO, logout, navigate } = useContext(AppContext);
-	const { user, theme, sizes, haptic = true } = useSelector((state: IStore) => state);
+	const { user, theme, sizes } = useSelector((state: IStore) => state);
 	const [alert, setAlert] = useState<IAlert>(null);
 	const [backgroundColor, setBackgroundColor] = useState(theme?.backgroundColor);
 	const [tableColor, setTableColor] = useState(theme?.tableColor);
@@ -52,7 +52,6 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	const [handSize, setHandSize] = useState(sizes?.handSize);
 	const [tileSize, setTileSize] = useState(sizes?.tileSize);
 	const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-	const [hapticOn, setHapticOn] = useState<boolean>(haptic);
 	const [enOnly, setEnOnly] = useState<boolean>(theme?.enOnly || false);
 	const dispatch = useDispatch();
 
@@ -73,11 +72,7 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 
 	useEffect(() => {
 		dispatch(setTheme(getTheme(backgroundColor, tableColor, tileColor, enOnly)));
-	}, [dispatch, backgroundColor, enOnly, hapticOn, tableColor, tileColor]);
-
-	useEffect(() => {
-		dispatch(setHaptic(hapticOn));
-	}, [dispatch, hapticOn]);
+	}, [dispatch, backgroundColor, enOnly, tableColor, tileColor]);
 
 	useEffect(() => {
 		dispatch(
@@ -142,12 +137,13 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 	function handleClose() {
 		if (
 			user?.id !== Visitor &&
-			(flagSizesDiff ||
-				flagThemeDiff ||
-				user?._b[0] !== enOnly ||
-				user?._b[1] !== hapticOn)
+			(flagSizesDiff || flagThemeDiff || user?._b[0] !== enOnly)
 		) {
-			const _b = [enOnly, hapticOn, ...user._b.slice(2, user._b.length)];
+			const _b = [
+				enOnly,
+				user?._b[1] || false,
+				...user._b.slice(2, user._b.length)
+			];
 			const keyVal = {
 				cSz: controlsSize,
 				hSz: handSize,
@@ -238,19 +234,6 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 			style={{ height: 30, marginTop: 6 }}
 		/>
 	);
-
-	function renderHaptic() {
-		return (
-			<div className="preference no-margin">
-				<StyledText
-					text={ScreenTextEng.HAPTICS}
-					variant="subtitle1"
-					padding="0"
-				/>
-				<Switch checked={hapticOn} onChange={() => setHapticOn(prev => !prev)} />
-			</div>
-		);
-	}
 
 	function renderEnOnly() {
 		return (
@@ -368,7 +351,6 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 									</div>
 								) : null
 							)}
-							{!accActions && isMobile && renderHaptic()}
 							{renderEnOnly()}
 							{accActions && renderAccActions()}
 						</FormControl>

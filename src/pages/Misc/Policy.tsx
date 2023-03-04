@@ -4,7 +4,6 @@ import parse from 'html-react-parser';
 import isArray from 'lodash.isarray';
 import isEmpty from 'lodash.isempty';
 import { HomePage } from 'pages';
-import { platform } from 'platform';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
@@ -38,13 +37,13 @@ const Policy = () => {
 							style={{ height: '40px' }}
 						>
 							<StyledText
-								text={c.title.replace(/{platform}/g, platform)}
+								text={c.title.replace(/{platform}/g, 'website')}
 								variant="body1"
 							/>
 						</AccordionSummary>
 						<AccordionDetails style={{ paddingTop: 0 }}>
 							<p className="no-margin">
-								{parse(c.content.replace(/{platform}/g, platform))}
+								{parse(c.content.replace(/{platform}/g, 'website'))}
 							</p>
 						</AccordionDetails>
 					</Accordion>
