@@ -78,7 +78,6 @@ export class FirebaseService {
 		this.initApp().catch(console.info);
 	}
 
-
 	initApp(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			try {
@@ -451,11 +450,9 @@ export class FirebaseService {
 			const games = await getDocsFromServer(q);
 			games.forEach(g => {
 				let lastUpdated = g.data()?.t[1];
-				if (lastUpdated && lastUpdated?.toDate) {
+				if (lastUpdated?.toDate) {
 					lastUpdated = lastUpdated?.toDate() as Date;
-					if (
-						moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23
-					) {
+					if (moment.duration(moment().diff(lastUpdated)).asHours() > 23) {
 						deleteDoc(doc(this.gamesRef, g.id)).catch(
 							err => isDev && console.error(err)
 						);
@@ -470,10 +467,12 @@ export class FirebaseService {
 			const games = await getDocsFromServer(query(this.gamesRef));
 			games.forEach(g => {
 				let lastUpdated = g.data()?.t[1];
-				if (lastUpdated && lastUpdated?.toDate) {
-					lastUpdated = lastUpdated?.toDate() as Date;
+				if (lastUpdated?.toDate) {
+					lastUpdated = lastUpdated?.toDate();
 					if (
-						moment.duration(moment(moment()).diff(lastUpdated)).asHours() > 23
+						moment
+							.duration(moment(moment()).diff(lastUpdated as Date))
+							.asHours() > 23
 					) {
 						deleteDoc(doc(this.gamesRef, g.id)).catch(
 							err => isDev && console.error(err)
@@ -676,7 +675,8 @@ export class FirebaseService {
 							}
 							if (logs) {
 								logs.push(
-									`${_from.uN} sent ${_to.uN} ${amt} ${ScreenTextEng._CHIP_
+									`${_from.uN} sent ${_to.uN} ${amt} ${
+										ScreenTextEng._CHIP_
 									}${amt > 1 ? 's' : ''}`
 								);
 							}
@@ -716,16 +716,8 @@ export class FirebaseService {
 		}
 	}
 
-	/* ------------------------- Dev / maintenance ------------------------- */
-
 	newLog(log: IFBLog) {
 		addDoc(this.logsRef, log);
-	}
-
-	setGame(game: any) {
-		if (this.isFBConnected) {
-			setDoc(doc(this.gamesRef, game.id), JSON.parse(JSON.stringify(game)));
-		}
 	}
 }
 

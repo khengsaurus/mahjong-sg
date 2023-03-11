@@ -140,11 +140,8 @@ export enum Transition {
 
 /* ------------------------------ Dev ------------------------------ */
 
-export const adminUsers = ['tk', 'user1', 'user2', 'user3', 'user4'];
-
 export enum AppFlag {
-	DEV = 'dev',
-	DEV_BOT = 'devbot'
+	DEV = 'dev'
 }
 
 export enum TestUser {

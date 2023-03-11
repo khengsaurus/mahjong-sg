@@ -14,7 +14,7 @@ export class AxiosService {
 		this.instance = axios.create(defaultOptions);
 	}
 
-	initCmsUrl(): Promise<void> {
+	async initCmsUrl(): Promise<void> {
 		return new Promise(resolve => {
 			if (this.cmsUrl) {
 				resolve();
@@ -54,4 +54,5 @@ export class AxiosService {
 	}
 }
 
-export default new AxiosService();
+const axiosServiceInstance = new AxiosService();
+export default axiosServiceInstance;

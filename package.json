@@ -38,9 +38,7 @@
 	},
 	"scripts": {
 		"build": "GENERATE_SOURCEMAP=false react-scripts build",
-		"copyAssets": "cp -R resources/iosAssets/Assets.xcassets ios/App/App",
 		"dev": "REACT_APP_FLAG=dev react-scripts start",
-		"devbot": "REACT_APP_FLAG=devbot react-scripts start",
 		"start": "react-scripts start",
 		"start-docker": "react-scripts --openssl-legacy-provider start",
 		"test": "jest",

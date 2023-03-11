@@ -275,15 +275,6 @@ export class Service {
 	cleanupGames(userEmail: string) {
 		FBService.cleanupGames(userEmail);
 	}
-
-	cleanupAllGames() {
-		FBService.cleanupAllGames();
-	}
-
-	// For dev
-	setGame(game: any) {
-		FBService.setGame(game);
-	}
 }
 
 const ServiceInstance = new Service();
