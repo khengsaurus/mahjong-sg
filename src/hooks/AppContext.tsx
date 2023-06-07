@@ -38,7 +38,6 @@ interface IAppContext {
 	playerSeat?: number;
 	selectedTiles?: IShownTile[];
 	showAI: false;
-	showDisconnectedAlert: boolean;
 	homeAlert: string;
 	showHomeAlert: boolean;
 	userEmail: string;
@@ -53,7 +52,6 @@ interface IAppContext {
 	setPlayerSeat: (seat: number) => void;
 	setSelectedTiles: (tiles: IShownTile[]) => void;
 	setShowAI: (b?: boolean) => void;
-	setShowDisconnectedAlert: (b: boolean) => void;
 	setShowHomeAlert: (b: boolean) => void;
 	setUserEmail: (email: string) => void;
 }
@@ -67,7 +65,6 @@ const initialContext: IAppContext = {
 	playerSeat: 0,
 	selectedTiles: [],
 	showAI: false,
-	showDisconnectedAlert: false,
 	homeAlert: '',
 	showHomeAlert: false,
 	userEmail: '',
@@ -80,7 +77,6 @@ const initialContext: IAppContext = {
 	setAnnHuOpen: () => {},
 	setSelectedTiles: () => {},
 	setShowAI: () => {},
-	setShowDisconnectedAlert: () => {},
 	setShowHomeAlert: () => {},
 	setPlayers: () => {},
 	setPlayerSeat: () => {},

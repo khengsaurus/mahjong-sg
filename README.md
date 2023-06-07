@@ -4,7 +4,7 @@
 
 # [Mahjong SG](https://mahjong-sg.com)
 
-![Games played](https://img.shields.io/endpoint?url=https://mj-cms.fly.dev/counter?badge=true)
+![Games played](https://img.shields.io/endpoint?url=https://much-egg.site/mj-cms/counter?badge=true)
 [![Android Version](https://img.shields.io/endpoint?color=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.tk.mahjongSg%26l%3DAndroid%26m%3Dv%24version)](https://play.google.com/store/apps/details?id=com.tk.mahjongSg)
 
 </span>
@@ -21,7 +21,7 @@ Games and users are persisted as NoSQL documents. Reading and writing are delega
 -   user related & online games: Firestore
 -   bot games: localStorage
 
-Help, About, Policy, and Notification content are maintained on a separate Express server.
+Help, About, Policy, and Notification content are maintained on a separate [server](https://github.com/khengsaurus/mahjong-cms).
 
 ## UI
 
@@ -35,7 +35,7 @@ As these calculations are run for users individually when they draw a new tile a
 
 ## The Bot
 
-Note that 'bot' here is not an AI but refers to a collective of scripts run to make decisions in order to progress the game. The bot functions by assessing its own hand, tiles show on the table, and what it has already melded. It then sets several goals, including whether it should go for Pong/Chi hand, keep Dragon tiles, and if it should prioritise any suits etc.
+Note that 'bot' here is not an AI but simply several scripts run to execute actions and progress the game. The bot functions by assessing its own hand, tiles show on the table, and what it has already melded. It then sets several goals, including whether it should go for Pong/Chi hand, keep Dragon tiles, and if it should prioritise any suits etc.
 
 When given the opportunity to meld a tile, it will only do so if melding aligns with its pre-determined goals. When discarding tiles, it prioritises tiles that do not align with its goals and tiles it is not likely to meld. The bot does not aim for any specific combination but rather to 'keep its options open'. It does not play defensively and will Hu when the opportunity arises.
 
