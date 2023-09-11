@@ -53,7 +53,6 @@ function newMuiTheme(
 	highlightColor: string
 ) {
 	const accordionWidth = {
-		// ref: misc.scss content-width
 		minWidth: '200px',
 		width: '80vw',
 		maxWidth: '450px'

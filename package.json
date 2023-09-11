@@ -38,7 +38,7 @@
 	},
 	"scripts": {
 		"build": "GENERATE_SOURCEMAP=false react-scripts build",
-		"dev": "REACT_APP_FLAG=dev react-scripts start",
+		"dev": "REACT_APP_FLAG=dev NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
 		"start": "react-scripts start",
 		"start-docker": "react-scripts --openssl-legacy-provider start",
 		"test": "jest",

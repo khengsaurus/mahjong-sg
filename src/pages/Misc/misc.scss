@@ -1,13 +1,5 @@
 @import '../../App.scss';
 
-@mixin content-width($o) {
-	// Clamp doesn't seem to be playing well with older native webviews...
-	// ref: MuiStyles Accordion styles
-	min-width: 200px;
-	width: calc(80vw - $o);
-	max-width: 450px - $o;
-}
-
 @mixin li-style {
 	font-size: 15px;
 	margin: 5px;
@@ -15,10 +7,10 @@
 
 .content {
 	@include flow(column wrap);
-	@include content-width(0px);
 	-webkit-text-size-adjust: 100%;
 	text-align: left;
-	max-width: 380px;
+	max-width: 90vw;
+
 	&.centered {
 		text-align: center;
 	}
@@ -71,7 +63,7 @@
 }
 
 .content-wrapper {
-	@include content-width(12px);
+	max-width: 90vw;
 	max-height: calc(100vh - 84px);
 	// ref-home-title 40px ref-bottom-home-buttons 24px ref-decoration 20px
 	max-height: calc(
