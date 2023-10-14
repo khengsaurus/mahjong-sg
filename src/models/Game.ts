@@ -25,7 +25,7 @@ import {
 	Suits,
 	Winds
 } from 'handEnums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { User } from 'models';
 import { ControlsTextEng, ScreenTextChi, ScreenTextEng } from 'screenTexts';
 import {

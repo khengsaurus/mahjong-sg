@@ -1,8 +1,19 @@
+import { RedirectNotice } from 'components';
 import { Page } from 'enums';
 import { AppContextProvider } from 'hooks';
-import { About, Help, Home, JoinGame, Login, NewGame, NewUser, Policy, Table } from 'pages';
+import {
+	About,
+	Help,
+	Home,
+	JoinGame,
+	Login,
+	NewGame,
+	NewUser,
+	Policy,
+	Table
+} from 'pages';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from 'store';
 import { Styled } from 'style/StyledComponents';
@@ -10,7 +21,8 @@ import './App.scss';
 
 function App() {
 	return (
-		<BrowserRouter>
+		<HashRouter>
+			{/* @ts-ignore */}
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persistor}>
 					<AppContextProvider>
@@ -27,11 +39,12 @@ function App() {
 								<Route path={Page.POLICY} element={<Policy />} />
 								<Route path={Page.TABLE} element={<Table />} />
 							</Routes>
+							<RedirectNotice />
 						</Styled>
 					</AppContextProvider>
 				</PersistGate>
 			</Provider>
-		</BrowserRouter>
+		</HashRouter>
 	);
 }
 

@@ -1,7 +1,7 @@
 import { CustomFade, HandTile } from 'components';
 import { Size, Transition } from 'enums';
 import { AppContext } from 'hooks';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { IStore } from 'store';

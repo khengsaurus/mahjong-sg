@@ -1,7 +1,7 @@
 import SendIcon from '@mui/icons-material/Send';
 import { FormControl, IconButton, MenuItem, Select } from '@mui/material';
 import { Amounts, Size } from 'enums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { Game } from 'models';
 import { useMemo, useState } from 'react';
 import { ScreenTextEng } from 'screenTexts';

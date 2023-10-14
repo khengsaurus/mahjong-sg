@@ -1,6 +1,6 @@
 import { getBotEval } from 'bot';
 import { Exec } from 'enums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { useContext, useEffect, useMemo, useRef } from 'react';
 import { findLeft, findOpp, findRight, isBot } from 'utility';
 import { AppContext } from './AppContext';

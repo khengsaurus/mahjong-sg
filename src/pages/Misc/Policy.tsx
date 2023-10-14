@@ -1,8 +1,7 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import parse from 'html-react-parser';
-import isArray from 'lodash.isarray';
-import isEmpty from 'lodash.isempty';
+import { isArray, isEmpty } from 'lodash';
 import { HomePage } from 'pages';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';

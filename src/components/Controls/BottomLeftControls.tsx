@@ -1,6 +1,6 @@
 import { ControlButton, CustomFade } from 'components';
 import { Size, Transition } from 'enums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { useSelector } from 'react-redux';
 import { ControlsTextChi, ControlsTextEng } from 'screenTexts';
 import { IStore } from 'store';

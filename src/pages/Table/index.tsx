@@ -12,7 +12,7 @@ import {
 import { LocalFlag, Page, Status } from 'enums';
 import { AppContext, useLocalSession, usePreLoadAssets } from 'hooks';
 import $ from 'jquery';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { Game } from 'models';
 import { isDev } from 'platform';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';

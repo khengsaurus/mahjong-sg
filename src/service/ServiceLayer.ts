@@ -1,6 +1,6 @@
 import { LocalFlag, PaymentType, UserActivity } from 'enums';
 import { ScoringHand } from 'handEnums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { ErrorMessage, InfoMessage } from 'messages';
 import { Game, User } from 'models';
 import { isDev } from 'platform';

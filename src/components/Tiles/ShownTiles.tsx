@@ -1,6 +1,6 @@
 import { forwardRef, memo, MutableRefObject } from 'react';
-import ColumnFlexWrap from 'react-column-flex-wrap';
 import { Segment, Size, Suit } from 'enums';
+import { FlexColumn } from 'components';
 import ShownTile from './ShownTile';
 
 interface IShownTilesP {
@@ -28,7 +28,12 @@ function compare(prev: IShownTilesP, next: IShownTilesP) {
 	);
 }
 
-function renderTiles(nonFlowers: IShownTile[], flowers: IShownTile[], segment: Segment, lastThrownId: string) {
+function renderTiles(
+	nonFlowers: IShownTile[],
+	flowers: IShownTile[],
+	segment: Segment,
+	lastThrownId: string
+) {
 	return (
 		<>
 			{nonFlowers.map(tile => (
@@ -46,7 +51,13 @@ function renderTiles(nonFlowers: IShownTile[], flowers: IShownTile[], segment: S
 					tileRef={tile?.r}
 					tileCard={tile?.c}
 					segment={segment}
-					classSuffix={tile?.v ? (tile?.s === Suit.ANIMAL ? 'flower animal' : 'hts flower') : ''}
+					classSuffix={
+						tile?.v
+							? tile?.s === Suit.ANIMAL
+								? 'flower animal'
+								: 'hts flower'
+							: ''
+					}
 				/>
 			))}
 		</>
@@ -55,10 +66,11 @@ function renderTiles(nonFlowers: IShownTile[], flowers: IShownTile[], segment: S
 
 const ShownTiles = forwardRef<MutableRefObject<any>, IShownTilesP>(
 	(props: IShownTilesP, ref?: MutableRefObject<any>) => {
-		const { className, nonFlowers, flowers, segment, lastThrownId, dependencies } = props;
+		const { className, nonFlowers, flowers, segment, lastThrownId, dependencies } =
+			props;
 
 		return segment === Segment.LEFT || segment === Segment.RIGHT ? (
-			<ColumnFlexWrap
+			<FlexColumn
 				id={segment + '-shown'}
 				className={className}
 				constantHeight
@@ -67,7 +79,7 @@ const ShownTiles = forwardRef<MutableRefObject<any>, IShownTilesP>(
 				ref={ref}
 			>
 				{renderTiles(nonFlowers, flowers, segment, lastThrownId)}
-			</ColumnFlexWrap>
+			</FlexColumn>
 		) : (
 			<div id={segment + '-shown'} className={className} ref={ref}>
 				{renderTiles(nonFlowers, flowers, segment, lastThrownId)}
