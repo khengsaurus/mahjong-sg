@@ -1,5 +1,5 @@
 import { BackgroundColor, MeldType, Size, Suit, TableColor, TileColor } from 'enums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { indexOfCard, revealTile, sortTiles, tilesCanBePong } from 'utility';
 
 /**

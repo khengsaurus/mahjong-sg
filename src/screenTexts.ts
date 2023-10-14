@@ -18,7 +18,10 @@ export enum HomeScreenText {
 	NO_AVAIL_GAMES = 'No available games',
 	AVAIL_GAMES = 'Available games',
 	GAME_NOT_STARTED = 'Game has not started',
-	NO_ONGOING_GAME = 'No ongoing game'
+	NO_ONGOING_GAME = 'No ongoing game',
+
+	REDIRECT_TITLE = 'We are moving!',
+	REDIRECT_BODY = 'Hello, thanks for dropping by. Our new website will be:'
 }
 
 export enum ButtonText {

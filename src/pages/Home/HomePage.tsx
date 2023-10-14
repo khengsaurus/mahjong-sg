@@ -11,8 +11,8 @@ import {
 } from 'components';
 import { Status } from 'enums';
 import { AppContext, useLocalSession } from 'hooks';
-import isEmpty from 'lodash.isempty';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { isEmpty } from 'lodash';
+import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HomeScreenText } from 'screenTexts';
 import { IStore } from 'store';
@@ -21,7 +21,7 @@ import { BottomSpecs, Centered, Main } from 'style/StyledComponents';
 import { StyledCenterText, StyledText } from 'style/StyledMui';
 
 interface IHomePageP {
-	markup: () => React.FC | JSX.Element;
+	markup: () => ReactNode;
 	title?: string | JSX.Element;
 	ready?: boolean;
 	timeout?: number;
@@ -92,53 +92,55 @@ const HomePage = ({
 	return (
 		<HomeTheme>
 			<Main>
-				{(skipVerification ||
-					(!isEmpty(user) && verifyingSession !== Status.PENDING)) &&
-				ready ? (
-					<>
-						{!!title &&
-							(typeof title === 'string'
-								? renderDefaultTitle(title)
-								: title)}
-						<Centered>{markup()}</Centered>
-						<Overlay />
-					</>
-				) : (
-					pendingScreen
-				)}
-				{misc !== 3 && (
-					<BottomSpecs id="bottom-specs">
-						{misc === 1 ? (
-							<>
-								<DecorButton
-									Button={PrivacyButton}
-									showOnHover={['', 'dh', '']}
+				<>
+					{ready &&
+					(skipVerification ||
+						(!isEmpty(user) && verifyingSession !== Status.PENDING)) ? (
+						<>
+							{title &&
+								(typeof title === 'string'
+									? renderDefaultTitle(title)
+									: title)}
+							<Centered>{markup()}</Centered>
+							<Overlay />
+						</>
+					) : (
+						pendingScreen
+					)}
+					{misc !== 3 && (
+						<BottomSpecs id="bottom-specs">
+							{misc === 1 ? (
+								<>
+									<DecorButton
+										Button={PrivacyButton}
+										showOnHover={['', 'dh', '']}
+									/>
+									<DecorButton
+										Button={AboutButton}
+										showOnHover={['', 'db', '']}
+									/>
+									<DecorButton
+										Button={HelpButton}
+										showOnHover={['', 'df', '']}
+									/>
+								</>
+							) : (
+								<BackButton
+									style={{ fontSize: 13, padding: 0 }}
+									callback={customBack}
 								/>
-								<DecorButton
-									Button={AboutButton}
-									showOnHover={['', 'db', '']}
-								/>
-								<DecorButton
-									Button={HelpButton}
-									showOnHover={['', 'df', '']}
-								/>
-							</>
-						) : (
-							<BackButton
-								style={{ fontSize: 13, padding: 0 }}
-								callback={customBack}
-							/>
-						)}
-					</BottomSpecs>
-				)}
-				{showHomeAlert && (
-					<SingleActionModal
-						show={showHomeAlert}
-						text={homeAlert}
-						buttonText={HomeScreenText.OK}
-						action={() => setShowHomeAlert(false)}
-					/>
-				)}
+							)}
+						</BottomSpecs>
+					)}
+					{showHomeAlert && (
+						<SingleActionModal
+							show={showHomeAlert}
+							text={homeAlert}
+							buttonText={HomeScreenText.OK}
+							action={() => setShowHomeAlert(false)}
+						/>
+					)}
+				</>
 			</Main>
 		</HomeTheme>
 	);

@@ -11,7 +11,7 @@ import {
 	skipPongHBF,
 	skipWinds
 } from 'handEnums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { Game } from 'models';
 import { isDev } from 'platform';
 import { IHWPx, IPoint } from 'typesPlus';

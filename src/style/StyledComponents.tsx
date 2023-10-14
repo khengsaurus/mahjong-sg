@@ -15,6 +15,7 @@ export const Styled = (props: any) => {
 		mainTextColor
 	};
 
+	// @ts-ignore
 	return <ThemeProvider theme={colorTheme} {...props} />;
 };
 

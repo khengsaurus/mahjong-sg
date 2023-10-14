@@ -24,8 +24,8 @@ import {
 	useNotifs,
 	useTAvail
 } from 'hooks';
-import isEmpty from 'lodash.isempty';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'lodash';
+import { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText, ScreenTextEng } from 'screenTexts';
 import { ServiceInstance } from 'service';
@@ -42,7 +42,7 @@ import './controls.scss';
 
 interface IFadeWrapperP {
 	show: boolean;
-	Component: JSX.Element | React.FC;
+	Component: ReactNode;
 	unmountOnExit?: boolean;
 	wrapperClass?: string;
 }

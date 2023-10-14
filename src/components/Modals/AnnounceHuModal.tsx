@@ -2,7 +2,7 @@ import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import { HomeButton, PaymentModalInline, SentLogs } from 'components';
 import { LocalFlag, PaymentType } from 'enums';
 import { AppContext } from 'hooks';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { useContext, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText, PaymentLabel, ScreenTextChi, ScreenTextEng } from 'screenTexts';

@@ -271,11 +271,8 @@ const SettingsWindow = ({ onClose, show, accActions = false }: ISettingsWindowP)
 				<Dialog
 					open={show}
 					BackdropProps={{ invisible: true }}
+					PaperProps={{ style: MuiStyles.large_dialog }}
 					onClose={handleClose}
-					PaperProps={{
-						style: MuiStyles.large_dialog
-					}}
-					// style={{ transform }}
 				>
 					<DialogContent style={{ paddingBottom: '10px' }}>
 						<FormControl component="fieldset">

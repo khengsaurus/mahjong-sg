@@ -16,7 +16,7 @@ import {
 	skipTerminals,
 	skipThirteen
 } from 'handEnums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { IPoint } from 'typesPlus';
 import { excludes, isNewInSet, tilesCanBeChi, tilesCanBePong } from 'utility';
 import {

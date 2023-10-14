@@ -1,4 +1,4 @@
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { Game } from 'models';
 import { isDev } from 'platform';
 import { useCallback, useContext, useMemo, useState } from 'react';

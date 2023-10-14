@@ -6,7 +6,7 @@ import {
 	RadioGroup
 } from '@mui/material';
 import { CheckBox } from 'components';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ButtonText, ScreenTextChi, ScreenTextEng } from 'screenTexts';

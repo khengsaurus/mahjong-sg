@@ -66,8 +66,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// ['sc', '', 'fm']
-// ['sx', '', 'fl']
-// ['sq', '', 'fj']
-// ['sd', '', 'fl']

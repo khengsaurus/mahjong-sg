@@ -1,9 +1,9 @@
 import { Highlight } from '@mui/icons-material';
 import CasinoIcon from '@mui/icons-material/Casino';
+import { FlexColumn } from 'components';
 import { Segment, Size } from 'enums';
-import isEmpty from 'lodash.isempty';
-import { forwardRef, memo, MutableRefObject } from 'react';
-import ColumnFlexWrap from 'react-column-flex-wrap';
+import { isEmpty } from 'lodash';
+import { MutableRefObject, forwardRef, memo } from 'react';
 import { revealTile } from 'utility';
 import ShownTile from './ShownTile';
 
@@ -45,7 +45,14 @@ function renderTiles(
 		<>
 			{hTs.map((tile: IHiddenTile) => {
 				const revT = revealTile(tile, tHK);
-				return <ShownTile key={revT.i} tileRef={tile.r} tileCard={revT.c} segment={segment} />;
+				return (
+					<ShownTile
+						key={revT.i}
+						tileRef={tile.r}
+						tileCard={revT.c}
+						segment={segment}
+					/>
+				);
 			})}
 			{revLTT && (
 				<ShownTile
@@ -64,16 +71,45 @@ function renderTiles(
 
 const ShownHiddenHand = forwardRef<MutableRefObject<any>, IShownHHP>(
 	(props: IShownHHP, ref?: MutableRefObject<any>) => {
-		const { className, hTs, lTa, dealer, tHK, segment, lastSuffix, dependencies } = props;
-		const revLTT: IShownTile = !isEmpty(lTa) ? (!Number(lTa?.x) ? revealTile(lTa, tHK) : lTa) : null;
+		const { className, hTs, lTa, dealer, tHK, segment, lastSuffix, dependencies } =
+			props;
+		const revLTT: IShownTile = !isEmpty(lTa)
+			? !Number(lTa?.x)
+				? revealTile(lTa, tHK)
+				: lTa
+			: null;
 
 		return segment === Segment.LEFT || segment === Segment.RIGHT ? (
-			<ColumnFlexWrap className={className} constantHeight constantWidth dependencies={dependencies} ref={ref}>
-				{renderTiles(hTs, revLTT, lTa, dealer, segment, lastSuffix, Highlight, tHK)}
-			</ColumnFlexWrap>
+			<FlexColumn
+				className={className}
+				constantHeight
+				constantWidth
+				dependencies={dependencies}
+				ref={ref}
+			>
+				{renderTiles(
+					hTs,
+					revLTT,
+					lTa,
+					dealer,
+					segment,
+					lastSuffix,
+					Highlight,
+					tHK
+				)}
+			</FlexColumn>
 		) : (
 			<div className={className} ref={ref}>
-				{renderTiles(hTs, revLTT, lTa, dealer, segment, lastSuffix, Highlight, tHK)}
+				{renderTiles(
+					hTs,
+					revLTT,
+					lTa,
+					dealer,
+					segment,
+					lastSuffix,
+					Highlight,
+					tHK
+				)}
 			</div>
 		);
 	}

@@ -159,6 +159,10 @@ export class FirebaseService {
 		return getDoc(doc(this.staticRef, 'cms'));
 	}
 
+	readWebsite() {
+		return getDoc(doc(this.staticRef, 'website'));
+	}
+
 	/* ------------------------- Auth related ------------------------- */
 
 	async authRegisterEmailPass(email: string, password: string): Promise<string> {

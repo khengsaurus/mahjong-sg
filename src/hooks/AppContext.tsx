@@ -1,6 +1,6 @@
 import { BotIds, Content, LocalFlag, Page, Size, StorageKey } from 'enums';
 import { useFirstEffect, useInitMobile, useLocalObj, usePreLoadAssets } from 'hooks';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import { ErrorMessage } from 'messages';
 import { Game, User } from 'models';
 import { isDev } from 'platform';

@@ -7,7 +7,7 @@ import {
 	thirteen,
 	Winds
 } from 'handEnums';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'lodash';
 import {
 	containsPongOrKang,
 	containsX,
