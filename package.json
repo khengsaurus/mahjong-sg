@@ -4,9 +4,9 @@
 	"private": true,
 	"homepage": "./",
 	"scripts": {
-		"build": "GENERATE_SOURCEMAP=false react-scripts --openssl-legacy-provider build",
+		"build": "GENERATE_SOURCEMAP=false react-scripts build",
 		"dev": "REACT_APP_FLAG=dev NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
-		"start": "react-scripts --openssl-legacy-provider start",
+		"start": "react-scripts start",
 		"test": "jest",
 		"eject": "react-scripts eject"
 	},
