@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { HomeScreenText } from 'screenTexts';
 import AxiosService from 'service/AxiosService';
-import { TableTheme } from 'style/MuiStyles';
+import { HomeTheme } from 'style/MuiStyles';
 import { StyledButton } from 'style/StyledMui';
 import './redirectNotice.scss';
 
@@ -28,7 +28,7 @@ const RedirectNotice = () => {
 	}
 
 	return (
-		<TableTheme>
+		<HomeTheme>
 			<Dialog
 				className="redirect-prompt-modal"
 				open={Boolean(promptRedirectTo)}
@@ -46,7 +46,7 @@ const RedirectNotice = () => {
 				</DialogContent>
 				<StyledButton onClick={handleClose} label="Ok" />
 			</Dialog>
-		</TableTheme>
+		</HomeTheme>
 	);
 };
 
